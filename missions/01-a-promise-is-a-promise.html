@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Promise is a Promise — P.O.R.T.A.L Mission 01</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* KEEPER NAV */
+  .keeper-nav {
+    background: #080c0a;
+    border-bottom: 1px solid #4a1d7a;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+  }
+  .keeper-nav a {
+    color: #a855f7;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .keeper-nav a:hover { color: #c084fc; }
+  .keeper-nav .crumb { color: #4a1d7a; }
+  .keeper-nav .warning {
+    color: #7a5200;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+  }
+
+  body {
+    background: #0f0a05;
+    color: #3d2612;
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.75;
+    padding: 0;
+  }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    background: #f7f0e3;
+    padding: 28px 22px 60px;
+  }
+
+  /* TITLE */
+  .title-block {
+    text-align: center;
+    padding: 36px 0 24px;
+    border-bottom: 2px solid #c8a97e;
+    margin-bottom: 28px;
+  }
+  .title-block h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    color: #5c1f0a;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .title-block .subtitle {
+    font-style: italic;
+    color: #8b5e3c;
+    font-size: 1rem;
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    background: #2a1506;
+    color: #f0ddb8;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    padding: 10px 16px;
+    margin: 40px -22px 22px;
+  }
+
+  h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    color: #5c1f0a;
+    margin: 28px 0 10px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #e0c898;
+  }
+
+  h3 {
+    font-family: 'Crimson Text', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #8b5e3c;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.82rem;
+    margin: 22px 0 8px;
+  }
+
+  p {
+    margin-bottom: 12px;
+    color: #3d2612;
+  }
+
+  /* FLAVOUR TEXT */
+  .flavour {
+    border-left: 4px solid #c8a97e;
+    padding: 8px 14px;
+    margin: 16px 0;
+    font-style: italic;
+    color: #6b3e1a;
+    background: #f2e8d0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* LABEL + VALUE */
+  .label-row {
+    margin: 10px 0;
+  }
+  .label-row strong {
+    color: #5c1f0a;
+    display: block;
+    font-size: 0.88rem;
+    font-family: 'Cinzel', serif;
+    margin-bottom: 2px;
+  }
+
+  /* NPC BOXES */
+  .npc-box {
+    border: 1px solid #c8a97e;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 18px 0;
+  }
+  .npc-header {
+    background: #2a1506;
+    color: #f0ddb8;
+    padding: 10px 14px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.88rem;
+  }
+  .npc-header span {
+    color: #c8a97e;
+    font-family: 'Crimson Text', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    font-weight: 400;
+    display: block;
+    margin-top: 2px;
+  }
+  .npc-body {
+    padding: 12px 14px;
+    background: #faf3e8;
+  }
+  .npc-motivation {
+    font-style: italic;
+    color: #5c1f0a;
+    margin-bottom: 10px;
+    font-size: 0.92rem;
+  }
+  .npc-body p {
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+  }
+
+  /* BULLETS */
+  ul {
+    padding-left: 20px;
+    margin: 8px 0 12px;
+  }
+  ul li {
+    margin-bottom: 7px;
+    color: #3d2612;
+    font-size: 0.97rem;
+  }
+
+  /* ROBOT STATS */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 16px;
+    margin: 12px 0;
+    background: #f2e8d0;
+    border: 1px solid #c8a97e;
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+  .stat-item strong {
+    display: block;
+    font-size: 0.78rem;
+    font-family: 'Cinzel', serif;
+    color: #8b5e3c;
+    letter-spacing: 0.06em;
+    margin-bottom: 2px;
+  }
+  .stat-item {
+    font-size: 0.93rem;
+    color: #3d2612;
+  }
+  .stat-item.full { grid-column: 1 / -1; }
+
+  /* RESOLUTION TABLE */
+  .resolution {
+    margin: 12px 0;
+  }
+  .resolution-row {
+    border-left: 4px solid #c8a97e;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    background: #faf3e8;
+  }
+  .resolution-row.best   { border-color: #6b8c5a; }
+  .resolution-row.bad    { border-color: #8c2a1a; }
+  .resolution-row.partial { border-color: #6a6030; }
+  .resolution-row strong {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    color: #5c1f0a;
+    margin-bottom: 4px;
+  }
+
+  /* DIVIDER */
+  hr {
+    border: none;
+    border-top: 1px solid #c8a97e;
+    margin: 28px 0;
+  }
+
+  /* CLOCK */
+  .clock {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 10px 0;
+  }
+  .clock-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px 12px;
+    background: #1a0e06;
+    border-radius: 4px;
+    color: #c8a97e;
+    font-size: 0.9rem;
+  }
+  .clock-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .clock-label { color: #f0ddb8; }
+  .clock-label strong { color: #c8a97e; font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.06em; }
+
+  /* QUICK REF */
+  .quick-ref {
+    background: #2a1506;
+    border-radius: 4px;
+    padding: 16px 18px;
+    margin: 14px 0;
+    color: #f0ddb8;
+  }
+  .quick-ref h3 { color: #c8a97e; }
+  .quick-ref ul { padding-left: 18px; }
+  .quick-ref ul li { color: #e8d8b8; margin-bottom: 6px; font-size: 0.93rem; }
+
+  /* ORNAMENT */
+  .ornament {
+    text-align: center;
+    color: #c8a97e;
+    font-size: 1.1rem;
+    letter-spacing: 0.4em;
+    margin: 40px 0 10px;
+  }
+
+  /* AI TERMINAL READOUT */
+  .terminal {
+    background: #080f08;
+    border: 1px solid #3a6b3a;
+    border-radius: 4px;
+    padding: 16px 18px;
+    margin: 18px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.82rem;
+    color: #7ecf7e;
+    line-height: 1.8;
+  }
+  .terminal .t-label {
+    color: #4a9a4a;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #1e3d1e;
+    padding-bottom: 6px;
+  }
+  .terminal .t-key { color: #a0dfa0; }
+  .terminal .t-alert { color: #e8c050; }
+  .terminal .t-red { color: #e05050; }
+  .terminal .t-dim { color: #4a7a4a; }
+
+  /* LAB TENSION BOX */
+  .tension-box {
+    border: 1px solid #8b5e3c;
+    border-left: 4px solid #5c1f0a;
+    background: #fdf5e8;
+    border-radius: 0 4px 4px 0;
+    padding: 14px 16px;
+    margin: 16px 0;
+  }
+  .tension-box strong {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    color: #5c1f0a;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+  }
+  .tension-box p { margin-bottom: 6px; font-size: 0.95rem; }
+
+  @media (max-width: 480px) {
+    .stat-grid { grid-template-columns: 1fr; }
+    .title-block h1 { font-size: 1.5rem; }
+    .section-header { margin-left: -22px; margin-right: -22px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="keeper-nav">
+  <div>
+    <a href="../index.html">P.O.R.T.A.L</a>
+    <span class="crumb"> / </span>
+    <a href="keeper.html">Mission Index</a>
+    <span class="crumb"> / </span>
+    <span style="color:#7a5200">Mission 01</span>
+  </div>
+  <div class="warning">⚠ KEEPER ACCESS ONLY — DO NOT SHARE</div>
+</nav>
+
+<div class="page">
+
+  <div class="title-block">
+    <h1>A Promise is a Promise</h1>
+    <div class="subtitle">A Monster of the Week One-Shot<br>Scene Preparation for the Keeper</div>
+  </div>
+
+  <div class="flavour">
+    She died on a Tuesday in October. He carried her ashes home in a gold locket. A promise is a promise — and she never forgot the people who made him miserable.
+  </div>
+
+  <h2>Premise &amp; Scene Structure</h2>
+  <p>The hunters arrive at a mid-sized American university town following a string of deaths. The victims share no obvious connection — until the hunters look closer. All of them were bullies. All of them crossed the same quiet Hungarian student. None of them deserved to die. The question is whether the hunters can reach that conclusion before they do something irreversible.</p>
+  <p><strong>Scene sequence:</strong> Hook (Lab Briefing) → Cold Open → Scene 1 (University) → Scene 2 (Dorm Room) → Interlude (Bálint) → Scene 3 (Robotics Lab)</p>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section-header">THE HOOK — ORACLE Flags an Anomaly</div>
+
+  <p><strong>Tone:</strong> <em>Clinical urgency with an uncomfortable undercurrent. The lab has an agenda. So do the hunters.</em></p>
+
+  <h2>Setup for the Keeper</h2>
+  <p>The hunters' lab runs a proprietary AI system — call it <strong>ORACLE</strong>, or whatever fits your table's naming conventions — that continuously cross-references public data feeds (police reports, hospital admissions, academic publications, social media) against a classified index of known supernatural signatures. It is very good at its job. It found this one three weeks ago and rated it low-priority. Nobody read the report until today.</p>
+  <p>This session opens not with the cold open, but in the lab. Read or paraphrase the following briefing, then let the hunters react before cutting to Marcus Webb.</p>
+
+  <h2>The ORACLE Briefing</h2>
+  <p>The hunters are called into a briefing room — or pinged on their devices, depending on your lab's vibe. The screen shows the following readout:</p>
+
+  <div class="terminal">
+    <div class="t-label">ORACLE // ANOMALY REPORT #0047-C // FLAGGED FOR REVIEW</div>
+    <span class="t-key">ORIGIN:</span> Keller University, Dept. of Campus Security — incident reports (public)<br>
+    <span class="t-key">CROSS-REF:</span> Ash sample analysis, Keller PD evidence log #KU-2291<br>
+    <span class="t-key">DATE FLAGGED:</span> 23 days ago &nbsp;<span class="t-dim">// review queue: low priority</span><br>
+    <span class="t-key">DATE READ:</span> Today &nbsp;<span class="t-alert">// 3 incidents since flagging. 1 critical (last night).</span><br>
+    <br>
+    <span class="t-key">SUBSTANCE IDENTIFIED:</span> Unknown particulate, grey, non-reactive to standard solvents.<br>
+    <span class="t-key">ORACLE CLASSIFICATION:</span> <span class="t-alert">Class 2 Ectoplasmic Residue — spirit-origin, high purity.</span><br>
+    <span class="t-key">RARITY INDEX:</span> <span class="t-alert">99th percentile. No matching sample in existing database.</span><br>
+    <br>
+    <span class="t-key">DIRECTOR'S NOTE (appended 06:14 this morning):</span><br>
+    <span class="t-red">A sample of this substance could advance Project Veil by 18–24 months. Acquire if possible. Standard field protocols apply. Three incidents suggest active entity — assess threat level and contain or neutralise as appropriate.</span><br>
+    <br>
+    <span class="t-dim">// End of report. Assign to field team? Y/N</span>
+  </div>
+
+  <p>The hunters have their orders. They are going to Keller University to investigate a string of supernatural incidents — and to come back with a sample of whatever is leaving that ash.</p>
+
+  <h2>The Lab's Agenda — Active Tension</h2>
+  <p>The lab's interest is genuine and not entirely cynical: Class 2 ectoplasmic residue of this purity is extraordinarily rare, and ORACLE's assessment is correct — a sample could unlock real advances in Project Veil (or whatever your lab's main research thread is). The Director is not a villain. But the directive to "contain or neutralise as appropriate" will sit badly once the hunters understand what Eszter actually is.</p>
+
+  <p>Use the following pressure points across the session to keep the lab's agenda alive:</p>
+
+  <div class="tension-box">
+    <strong>PRESSURE POINT 1 — The Check-In Call</strong>
+    <p>Midway through Scene 1, the Director (or a lab liaison) calls for a status update. They are professionally warm and genuinely curious. They ask: "Any sign of the source? ORACLE thinks it might be a tethered spirit — if so, the residue will be concentrated near the anchor object." They are, unknowingly, describing the locket.</p>
+    <p>This is the moment the hunters realise the lab wants the thing that is also Bálint's only connection to Eszter.</p>
+  </div>
+
+  <div class="tension-box">
+    <strong>PRESSURE POINT 2 — The Sample Request</strong>
+    <p>After Scene 2, if a hunter collected ash from the dorm room or the incident sites, they'll receive a message: <em>"If you have a sample, courier it back now — don't wait for the case to close. We can run analysis in parallel."</em> Complying doesn't end the adventure, but it's a small betrayal of Bálint that a thoughtful hunter might balk at.</p>
+  </div>
+
+  <div class="tension-box">
+    <strong>PRESSURE POINT 3 — The Endgame Directive</strong>
+    <p>Before or during Scene 3, the Director sends a final message. The tone depends on how much the hunters have shared: if they've been transparent about Bálint, the Director is sympathetic but firm — <em>"I understand the situation is sensitive. But if the entity disperses naturally, the residue disperses with it. The locket needs to come back to the lab."</em> If the hunters have been cagey, the message is more clipped: <em>"ORACLE is tracking increased activity. Secure the anchor object before you resolve anything. That's an order."</em></p>
+    <p>The hunters must now decide: do they follow the directive, or do they let Bálint say goodbye?</p>
+  </div>
+
+  <h2>Resolution — The Lab's Stake</h2>
+  <p>At the end of the session, there are three ways the lab's agenda can resolve, each with consequences for future sessions:</p>
+  <div class="resolution">
+    <div class="resolution-row best"><strong>THE LAB GETS NOTHING — AND UNDERSTANDS WHY</strong>The hunters let Bálint say goodbye. The ash disperses. They explain to the Director what happened and why they made the call. The Director is unhappy but respects it. Project Veil stalls. The hunters have made an enemy of no one — but they've established that they will sometimes choose people over the mission.</div>
+    <div class="resolution-row"><strong>THE LAB GETS THE LOCKET</strong>The hunters bring back the locket (with or without Bálint's consent). The lab is delighted. Analysis begins. But the locket still has Bálint's fingerprints on it, and someone on the team knows they took something that wasn't theirs to take. Good seed for future sessions.</div>
+    <div class="resolution-row partial"><strong>THE LAB GETS A PARTIAL SAMPLE</strong>The hunters collected some ash during the investigation and send it back, but let the final dispersal happen naturally. The lab gets something — enough to matter — and no one had to make a terrible choice. The Director calls it a good outcome. The hunters aren't sure.</div>
+  </div>
+
+  <h3>Keeper Note — Playing the Director</h3>
+  <p>The Director should never feel like a cartoon villain giving sinister orders. They genuinely believe the research matters — and they're probably right that it does. The moral weight comes from the fact that two good things are in conflict: scientific progress that could help people, and one boy's right to grieve properly. Don't let the players off the hook by making the lab obviously wrong.</p>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section-header">COLD OPEN — The Last Night of Marcus Webb</div>
+
+  <p><strong>Tone:</strong> <em>Atmospheric dread → sudden violence → grieving silence.</em></p>
+  <p>Read or paraphrase the following to open the session. Players do not act here. Its job is to establish Eszter as a threat before they learn to feel sorry for her.</p>
+
+  <div class="flavour">It's 11 PM on a Wednesday. The engineering building is mostly empty. Marcus Webb, twenty years old, a little drunk, is crossing the parking lot behind the science block. He's texting. He doesn't notice the temperature drop until his breath starts coming out white.</div>
+
+  <div class="flavour">The lights in the parking lot flicker — once, twice — and die. His phone screen goes dark. He taps it. Nothing. Then the ash starts falling.</div>
+
+  <div class="flavour">It drifts down like grey snow, settling on his shoulders and his upturned face. He looks up. There is a figure standing at the far end of the lot, maybe fifteen metres away. A girl. She is wearing a jacket too light for the season. She is not moving.</div>
+
+  <div class="flavour">He calls out. She doesn't answer. He takes a step toward her and the air goes cold enough to hurt. She raises one hand — almost gently, like she's waving — and the shriek that comes out of his phone when it suddenly reactivates at full volume isn't a ringtone. It's static. Then screaming. Then nothing.</div>
+
+  <p>Cut to: a campus security guard finds Marcus twenty minutes later. He is alive, barely, slumped against a car. His phone is cracked in half. Both hands show deep bruising in the shape of fingerprints — as if someone gripped them from the inside. His hair has gone slightly grey at the temples. The ash on his jacket won't brush off.</p>
+  <p><em>He will be the third victim this month. He is not the last.</em></p>
+
+  <h3>Keeper Notes</h3>
+  <ul>
+    <li>Marcus is not dead. Eszter chose to leave him alive — worth noticing later.</li>
+    <li>The grey hair and handprint bruising are physical evidence hunters can find in Scene 1.</li>
+    <li>Do not name Eszter or Bálint here. Let the mystery sit.</li>
+    <li>The ash is the key physical signature. Seed it early and return to it often.</li>
+  </ul>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section-header">SCENE 1 — Keller University Campus</div>
+
+  <p><strong>Tone:</strong> <em>Procedural and social. The campus feels normal during the day — which is the unsettling part.</em></p>
+  <p>The hunters arrive in the aftermath of the Marcus Webb incident. Police have attributed the first two deaths to a gas leak and a cardiac event. The university is nervous but not panicking.</p>
+
+  <h2>Clues Available</h2>
+
+  <div class="label-row"><strong>CLUE 1 — The Pattern</strong>All three recent victims are linked by campus disciplinary records. Each was reported for bullying or harassment in the last academic year. None of the reports resulted in action.</div>
+  <div class="label-row"><strong>CLUE 2 — The Ash</strong>Grey ash at all three incident scenes. Campus groundskeeping has flagged it as an unknown substance — it does not match any known compound and will not wash away with ordinary water.</div>
+  <div class="label-row"><strong>CLUE 3 — The Cold</strong>Students near incidents describe an unnatural cold, even indoors. Two reported seeing a girl in an autumn jacket standing very still before events occurred.</div>
+  <div class="label-row"><strong>CLUE 4 — The Disciplinary File</strong>Cross-referencing victims with complaint records surfaces one recurring name: Bálint Kovács, first-year Computer Science. Requires Investigate a Mystery roll or talking to admin staff.</div>
+  <div class="label-row"><strong>CLUE 5 — The Locket (rumour)</strong>A campus counsellor will mention, if pressed, that Bálint lost his girlfriend in a car accident before arriving in the US. He wears a gold locket that he says contains her ashes.</div>
+
+  <h2>Key NPCs</h2>
+
+  <div class="npc-box">
+    <div class="npc-header">Detective Renata Vasquez <span>Bystander — Witness</span></div>
+    <div class="npc-body">
+      <p class="npc-motivation">Motivation: to get a rational explanation before her captain stops her investigation.</p>
+      <p>The lead officer on the case. Sharp, sceptical, but not dismissive. She's already noticed the pattern and is quietly troubled by it. Will share the disciplinary connection if hunters establish credibility.</p>
+      <p><em>"All three had complaints filed against them. All three for the same kid. I pulled his record — straight-A student, no priors, barely leaves his dorm. I don't know what to do with that."</em></p>
+    </div>
+  </div>
+
+  <div class="npc-box">
+    <div class="npc-header">Professor Andrés Morales <span>Bystander — Witness</span></div>
+    <div class="npc-body">
+      <p class="npc-motivation">Motivation: to protect his department from scandal.</p>
+      <p>Bálint's robotics lecturer. Genuinely fond of the kid. Noticed Bálint's isolation but attributed it to grief. Will mention the locket unprompted — Bálint apparently talked about Eszter once, during a late lab session.</p>
+      <p><em>"He told me she was the one who made him want to study robotics. Said she'd told him that if he could build something that lasts, part of him would last with it."</em></p>
+    </div>
+  </div>
+
+  <div class="npc-box">
+    <div class="npc-header">Priya Anand <span>Bystander — Bystander</span></div>
+    <div class="npc-body">
+      <p class="npc-motivation">Motivation: to stay out of it, but feels guilty she didn't do more.</p>
+      <p>A second-year who witnessed the harassment but didn't report it. Knows more about what the victims did to Bálint than anyone. Won't talk easily — needs a Manipulate Someone roll or genuine empathy.</p>
+      <p>What she knows: the bullying included destroying Bálint's laptop (his primary way to contact his mother in Hungary), mocking his accent, and physically surrounding him in the car park — the same car park from the cold open.</p>
+      <p><em>"I should have reported it. But they were the kind of people you don't report, you know? And he never fought back. He just… went quiet."</em></p>
+    </div>
+  </div>
+
+  <h3>Atmosphere Notes</h3>
+  <ul>
+    <li>Between conversations: grey smear on a locker, cracked phone screen in a bin, a noticeboard photo of Bálint at orientation where he is visibly the only person standing alone.</li>
+    <li>If hunters look for Bálint on campus, he is not in any of his scheduled classes today.</li>
+    <li>Cold spot near the disciplinary office. Faint smell of ash. It clears if anyone speaks Bálint's name aloud.</li>
+  </ul>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section-header">SCENE 2 — Bálint's Dorm Room, Pemberton Hall Room 114</div>
+
+  <p><strong>Tone:</strong> <em>Quiet grief. This is where the hunters stop seeing a suspect and start seeing a victim.</em></p>
+  <p>Bálint is not here. The door is unlocked — the handle is slightly frosted.</p>
+
+  <h2>What's in the Room</h2>
+
+  <div class="label-row"><strong>The shrine</strong>On the desk: a printed photograph of a young woman (dark hair, laughing, wearing Bálint's jacket), a dried flower, a hand-drawn birthday card in Hungarian. In the centre, on a folded cloth, is the gold locket. It is warm to the touch despite the cold in the room.</div>
+
+  <div class="flavour">If a hunter opens the locket, they find a small quantity of grey ash and a tiny handwritten note: "Itt vagyok. — E" (Hungarian: "I am here.")</div>
+
+  <div class="label-row"><strong>The laptop</strong>Open and on standby. When touched, it wakes to show a Skype call with an unsent message half-typed in Hungarian: "Anya, valami rosszat csinált Eszter. Nem tudom, hogyan állítsam meg." — "Mum, Eszter did something bad. I don't know how to stop her." He already knows.</div>
+
+  <div class="label-row"><strong>The wall</strong>A printed Google Maps satellite image of the road where the accident happened. Annotated with a red circle and the word "miért" ("why") in marker.</div>
+
+  <div class="label-row"><strong>The physics notes</strong>Scattered on the floor. Routine robotics notes — except one page has the same phrase written in the margin over and over in increasingly shaky handwriting: "Eszter, kérlek, menj el." — "Eszter, please go away."</div>
+
+  <div class="label-row"><strong>The cold</strong>Temperature noticeably lower near the locket. A thin frost ring has formed on the desk around the cloth it sits on. Touching the locket causes the photo on the desk to fall face-down.</div>
+
+  <h3>What the Room Tells Them</h3>
+  <ul>
+    <li>Bálint is not the monster. He is a grieving nineteen-year-old watching her do something terrible in his name.</li>
+    <li>The locket is the anchor — hunters should understand its importance but feel reluctant to destroy it.</li>
+    <li>Bálint knows what's happening and has been trying to stop it. He needs help, not a confrontation.</li>
+  </ul>
+
+  <h3>Optional: The Voicemail (10+ Investigate roll)</h3>
+  <p>A saved voicemail from his mother. Read slowly, in English:</p>
+  <div class="flavour">"Bálintkám. I'm worried about you. Your grandmother says to tell you — if Eszter is still there, it is because she is afraid to leave you alone. You must tell her you will be all right. She cannot hear it from me. It has to come from you. She only ever listened to you. I love you. Please call me back."</div>
+  <p><em>He has not called back.</em></p>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section-header">INTERLUDE — Bálint on the Footbridge</div>
+
+  <p><strong>Tone:</strong> <em>Fragile. He is not a suspect. He is exhausted. Treat him gently.</em></p>
+  <p>The hunters find Bálint on the small footbridge between the science and engineering blocks. He's sitting on the railing — not dangerously, just perched. Staring at nothing. He sees the hunters coming and doesn't run.</p>
+
+  <div class="npc-box">
+    <div class="npc-header">Bálint Kovács <span>Bystander — Victim</span></div>
+    <div class="npc-body">
+      <p class="npc-motivation">Motivation: to hold on — but he is beginning to understand that holding on is hurting her.</p>
+      <p>19 years old. First-year CS and robotics. Hungarian immigrant, arrived eight months ago. Quiet, precise, not unfriendly — just unreachable. His English is good but formal; he apologises for it constantly.</p>
+      <p>He knows Eszter is responsible. He does not know how to stop her. He is terrified of the hunters but also, quietly, relieved someone else knows.</p>
+      <p>He will not give up the locket willingly. If hunters try to take it by force, Eszter arrives immediately.</p>
+      <p>He will ask only one thing: <em>"If you have to end this — please let me be the one to say goodbye to her. She deserves that. She deserves to hear it from me."</em></p>
+    </div>
+  </div>
+
+  <h3>Bálint's Key Lines</h3>
+  <ul>
+    <li>"I did not ask her to do this. I want you to know that. I never asked her."</li>
+    <li>"She used to say — a promise between two people is the only real magic. I thought she was being poetic."</li>
+    <li>"She has been with me since the accident. I knew. I just… I did not want her to go."</li>
+    <li>"The robotics lab — she goes there at night. The machines, she uses them to talk to me. She types. I read. We talk, like we used to, almost." [He pauses.] "It is not enough for either of us."</li>
+    <li>"If you destroy the locket, she will not go peacefully. She will be lost. Please. Let me do this right."</li>
+  </ul>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section-header">SCENE 3 — The Robotics Lab, Engineering Block Basement</div>
+
+  <p><strong>Tone:</strong> <em>Tense, emotionally complex. Physical danger is real but the real crisis is the choice the hunters have to make.</em></p>
+  <p>A wide basement room lit by the blue glow of standby monitors. Smells of solder and, faintly, ash. Thin frost across the floor. Four student-competition robots (each roughly the size of a large dog) are arranged in a loose circle, facing inward, motionless. The main screen on the back wall is on. It shows a cursor, blinking.</p>
+  <p><em>If the hunters enter without Bálint, the robots activate within sixty seconds.</em></p>
+
+  <h2>Phases of the Confrontation</h2>
+
+  <div class="label-row"><strong>PHASE 1 — Eszter Communicates</strong>Before any combat, the screen types. Slowly, one character at a time:</div>
+  <div class="flavour">they hurt him</div>
+  <div class="flavour">i only wanted to protect him</div>
+  <div class="flavour">i promised</div>
+  <p>If the hunters respond — speak aloud, type, anything — she responds. She can hold a conversation through the screen. She is not hostile yet. She is confused by their presence and frightened of what she's become. This is the window to de-escalate.</p>
+
+  <div class="label-row"><strong>PHASE 2 — If Hunters Attack or Seize the Locket</strong>The robots activate. Eszter stops typing. The screen goes dark. She moves intelligently, herding rather than immediately striking, trying to keep hunters away from Bálint or the locket. Only if a hunter directly attacks do they escalate to physical harm.</div>
+
+  <h2>The Robots as Minions</h2>
+  <div class="stat-grid">
+    <div class="stat-item"><strong>Type</strong>Minion (Right Hand)</div>
+    <div class="stat-item"><strong>Harm Capacity</strong>5 harm each</div>
+    <div class="stat-item full"><strong>Attack</strong>Chassis Slam: 2-harm close forceful — or Drill Attachment: 3-harm intimate slow messy (only if hunter already restrained)</div>
+    <div class="stat-item"><strong>Armour</strong>Metal frame: 1-armour</div>
+    <div class="stat-item"><strong>Weakness</strong>Shared wireless signal with Eszter. Destroy the screen or cut the room's power — they go offline immediately.</div>
+    <div class="stat-item full"><strong>Special</strong>On a miss against a robot, Eszter can choose to restrain rather than harm. She does not want to kill the hunters. She wants them to stop.</div>
+  </div>
+
+  <h2>If Bálint is Present</h2>
+  <p>When he walks in, the robots freeze. The screen flickers. Then it types, faster:</p>
+  <div class="flavour">bálint</div>
+  <div class="flavour">bálintkám</div>
+  <div class="flavour">you came</div>
+  <p>Bálint walks to the keyboard. If the hunters let him, he types. What he types is private — the Keeper does not read it aloud. The hunters see him type for a long time. They see his shoulders shake once. They see him press enter.</p>
+  <p>The screen shows one word in response: <strong>"megyek"</strong> — "I'm going."</p>
+  <p>The locket opens on its own. The ash rises — floats briefly in the shape of something like a figure. Then it disperses. The temperature normalises. The frost melts. The robots settle to the floor, inert.</p>
+  <p><em>Bálint picks up the empty locket. He does not speak for a long time.</em></p>
+
+  <h2>Resolution Paths</h2>
+  <div class="resolution">
+    <div class="resolution-row best"><strong>BEST ENDING</strong>Bálint says goodbye. Eszter departs peacefully. The hunters leave behind a boy who is genuinely, finally, alone — but free.</div>
+    <div class="resolution-row"><strong>DIFFICULT ENDING</strong>The hunters destroy the locket without Bálint's consent. Eszter is dispersed, not rested. Bálint is furious and grief-struck. The case is "solved" but no one feels good about it.</div>
+    <div class="resolution-row bad"><strong>BAD ENDING</strong>A hunter kills or seriously injures Bálint. Eszter's grief curdles into rage. She escalates to Doom on the countdown clock and cannot be reasoned with.</div>
+    <div class="resolution-row partial"><strong>PARTIAL ENDING</strong>The locket is destroyed in the fight before Bálint can say goodbye. Eszter is gone, but the hunters saw her last message before the screen died: "tell him i'm sorry i scared him." Bálint never knows.</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section-header">KEEPER QUICK REFERENCE</div>
+
+  <h2>Countdown Clock</h2>
+  <div class="clock">
+    <div class="clock-step"><div class="clock-icon">🌫️</div><div class="clock-label"><strong>DAY</strong> Cold drafts and ash near victims. Their phones malfunction.</div></div>
+    <div class="clock-step"><div class="clock-icon">📱</div><div class="clock-label"><strong>SHADOWS</strong> Marked victims experience dread, insomnia, handprint bruises forming slowly.</div></div>
+    <div class="clock-step"><div class="clock-icon">🩹</div><div class="clock-label"><strong>SUNSET</strong> First victim seriously injured (Marcus Webb). Hunters arrive.</div></div>
+    <div class="clock-step"><div class="clock-icon">👁️</div><div class="clock-label"><strong>DUSK</strong> Bálint knows. He is avoiding people so Eszter has no new targets.</div></div>
+    <div class="clock-step"><div class="clock-icon">💀</div><div class="clock-label"><strong>MIDNIGHT</strong> A victim dies. Eszter appears visibly, standing over the body, weeping.</div></div>
+    <div class="clock-step"><div class="clock-icon">🔥</div><div class="clock-label"><strong>DOOM</strong> Eszter can no longer distinguish protection from possession. Bálint is in danger.</div></div>
+  </div>
+
+  <div class="quick-ref">
+    <h3>The Locket — Rules</h3>
+    <ul>
+      <li>Cannot be destroyed by mundane means while Eszter is fully incorporeal.</li>
+      <li>Can be destroyed in the robotics lab while she is partially manifest — but this is the "difficult ending."</li>
+      <li>If Bálint holds the locket and sincerely asks Eszter to leave, all hunters gain +1 forward on moves to put her to rest. This window lasts one scene.</li>
+    </ul>
+  </div>
+
+  <div class="quick-ref">
+    <h3>Clue Checklist</h3>
+    <ul>
+      <li>Ash at all three incident sites</li>
+      <li>Handprint bruising on Marcus Webb</li>
+      <li>All victims linked by disciplinary complaints against Bálint</li>
+      <li>Bálint not in class, dorm room cold and unlocked</li>
+      <li>Unsent message on Bálint's laptop (he already knows)</li>
+      <li>Notes in robotics folder: "Eszter, please go away"</li>
+      <li>Bálint on the footbridge — he's been waiting for someone to find him</li>
+      <li>Voicemail from his mother (optional, 10+ roll)</li>
+    </ul>
+  </div>
+
+  <div class="quick-ref">
+    <h3>Tone Reminders</h3>
+    <ul>
+      <li>Eszter is never the villain. She is a person who loved someone and couldn't let go. Play her with dignity.</li>
+      <li>Bálint is never the threat. Do not let the hunters bully him — Eszter will arrive if they try.</li>
+      <li>The real antagonist is grief. The hunt is a race against the countdown clock, not a combat puzzle.</li>
+      <li>The best sessions end with at least one hunter feeling genuinely sad. That's the goal.</li>
+    </ul>
+  </div>
+
+  <div class="ornament">· · · ✦ · · ·</div>
+
+</div>
+</body>
+</html>

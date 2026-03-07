@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Keeper Mission Index</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #080c0a;
+  --bg2:       #0d1410;
+  --bg3:       #0a0f0d;
+  --green:     #2ecc71;
+  --green-dim: #1a7a43;
+  --green-glow:#2ecc7133;
+  --amber:     #f0a500;
+  --amber-dim: #7a5200;
+  --red:       #e05050;
+  --red-dim:   #5c1f1f;
+  --text:      #c8ddd0;
+  --text-dim:  #5a7a62;
+  --border:    #1e3428;
+  --border-bright: #2ecc7155;
+  --keeper:    #a855f7;
+  --keeper-dim:#4a1d7a;
+  --keeper-glow:#a855f722;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px);
+  pointer-events: none; z-index: 1000;
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.4;
+  pointer-events: none; z-index: 0;
+}
+
+/* keeper stripe at top */
+.keeper-banner {
+  position: relative;
+  z-index: 20;
+  background: rgba(168,85,247,0.08);
+  border-bottom: 1px solid var(--keeper-dim);
+  padding: 8px 24px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--keeper);
+  letter-spacing: 0.2em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.keeper-banner::before {
+  content: '⚠';
+  font-size: 0.9rem;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid var(--keeper-dim);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  background: rgba(8,12,10,0.97);
+  backdrop-filter: blur(8px);
+}
+.logo {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.1rem;
+  color: var(--keeper);
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 20px var(--keeper-glow);
+  text-decoration: none;
+}
+.logo span { color: var(--text-dim); }
+nav { display: flex; gap: 24px; align-items: center; }
+nav a {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+nav a:hover { color: var(--keeper); }
+nav a.active { color: var(--keeper); }
+
+.keeper-dot {
+  width: 8px; height: 8px;
+  background: var(--keeper);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--keeper);
+  animation: pulse 2s ease-in-out infinite;
+  display: inline-block;
+  margin-right: 8px;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+.hero {
+  position: relative; z-index: 10;
+  padding: 60px 24px 50px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.hero-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  color: var(--keeper-dim);
+  margin-bottom: 14px;
+  animation: fadeUp 0.8s ease both;
+}
+.hero-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.2rem, 7vw, 4.5rem);
+  line-height: 0.95;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  animation: fadeUp 0.8s 0.1s ease both;
+}
+.hero-title .accent { color: var(--keeper); text-shadow: 0 0 30px var(--keeper-glow); }
+.hero-desc {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  max-width: 600px;
+  line-height: 1.8;
+  animation: fadeUp 0.8s 0.2s ease both;
+  margin-bottom: 28px;
+}
+
+/* STATS ROW */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-bottom: 48px;
+  animation: fadeUp 0.8s 0.3s ease both;
+}
+.stat-box {
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  padding: 16px 18px;
+  font-family: 'Share Tech Mono', monospace;
+}
+.stat-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+  display: block;
+  margin-bottom: 6px;
+}
+.stat-val {
+  font-size: 1.6rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.stat-val.green { color: var(--green); }
+.stat-val.amber { color: var(--amber); }
+.stat-val.red   { color: var(--red); }
+.stat-val.purple{ color: var(--keeper); }
+
+main {
+  position: relative; z-index: 10;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--keeper-dim);
+}
+.section-header h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  text-transform: uppercase;
+}
+.section-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--keeper-dim);
+  letter-spacing: 0.18em;
+}
+
+/* KEEPER MISSION CARDS */
+.missions-list { display: grid; gap: 2px; margin-bottom: 48px; }
+
+.kmission {
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.kmission:hover { border-color: var(--keeper-dim); }
+.kmission::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--keeper-dim);
+  transition: background 0.2s;
+}
+.kmission:hover::before { background: var(--keeper); }
+
+.kmission-header {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 24px;
+  align-items: start;
+  padding: 22px 28px;
+  cursor: pointer;
+  user-select: none;
+}
+.kmission-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--keeper-dim);
+  line-height: 1;
+  padding-top: 4px;
+}
+.kmission-title-block {}
+.kmission-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.kmission-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--keeper-dim);
+  letter-spacing: 0.14em;
+  margin-bottom: 10px;
+}
+.kmission-tags {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.ktag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  padding: 2px 7px;
+  border: 1px solid;
+  letter-spacing: 0.08em;
+}
+.ktag.green  { color: var(--green);   border-color: var(--green-dim); }
+.ktag.amber  { color: var(--amber);   border-color: var(--amber-dim); }
+.ktag.red    { color: var(--red);     border-color: var(--red-dim); }
+.ktag.purple { color: var(--keeper);  border-color: var(--keeper-dim); }
+.ktag.grey   { color: var(--text-dim);border-color: var(--border); }
+
+.kmission-toggle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--keeper-dim);
+  letter-spacing: 0.1em;
+  padding-top: 6px;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+.kmission:hover .kmission-toggle { color: var(--keeper); }
+
+/* EXPANDABLE BODY */
+.kmission-body {
+  display: none;
+  border-top: 1px solid var(--border);
+  padding: 24px 28px 28px;
+  gap: 24px;
+}
+.kmission-body.open { display: grid; grid-template-columns: 1fr 1fr; }
+
+.kbody-section { }
+.kbody-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: var(--keeper-dim);
+  display: block;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.kbody-text {
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  line-height: 1.75;
+}
+.kbody-text strong {
+  color: var(--text);
+  font-weight: 400;
+}
+
+.resolution-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin-top: 8px;
+}
+.resolution-table th {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  text-align: left;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 400;
+}
+.resolution-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dim);
+  vertical-align: top;
+  line-height: 1.5;
+}
+.resolution-table tr:last-child td { border-bottom: none; }
+.resolution-table td:first-child { color: var(--text); font-weight: 400; white-space: nowrap; }
+
+.full-link {
+  display: inline-block;
+  margin-top: 16px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  color: var(--keeper);
+  border: 1px solid var(--keeper-dim);
+  padding: 7px 16px;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  background: transparent;
+}
+.full-link:hover {
+  background: rgba(168,85,247,0.08);
+}
+
+.kmission-body.open .full-col {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+  margin-top: 4px;
+}
+
+/* POST SESSION NOTES */
+.post-session {
+  margin-top: 2px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  padding: 20px 28px;
+}
+.post-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  display: block;
+  margin-bottom: 12px;
+}
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.post-field label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  color: var(--text-dim);
+  display: block;
+  margin-bottom: 4px;
+}
+.post-field .fill {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  font-style: italic;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  min-height: 28px;
+}
+
+footer {
+  position: relative; z-index: 10;
+  border-top: 1px solid var(--border);
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 700px) {
+  .stats-row { grid-template-columns: repeat(2,1fr); }
+  .kmission-header { grid-template-columns: 50px 1fr; }
+  .kmission-toggle { display: none; }
+  .kmission-body.open { grid-template-columns: 1fr; }
+  .post-grid { grid-template-columns: 1fr; }
+  nav { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="keeper-banner">KEEPER ACCESS ONLY — DO NOT SHARE THIS URL WITH PLAYERS</div>
+
+<header>
+  <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L <span style="font-size:0.7rem;color:var(--keeper-dim);margin-left:8px;">// KEEPER</span></a>
+  <nav>
+    <a href="../index.html">Player Site</a>
+    <a href="index.html">Public Missions</a>
+    <a href="keeper.html" class="active">Keeper Index</a>
+  </nav>
+  <div><span class="keeper-dot"></span><span style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--keeper-dim)">RESTRICTED ACCESS</span></div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">// KEEPER — FULL MISSION PREP INDEX</div>
+  <h1 class="hero-title">Mission<br><span class="accent">Control</span></h1>
+  <p class="hero-desc">
+    Full prep summaries for all P.O.R.T.A.L missions. Click any mission to expand scene notes, resolution paths, and lab directive outcomes. Full one-shot documents linked below each entry.
+  </p>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <span class="stat-label">// MISSIONS TOTAL</span>
+      <div class="stat-val purple">01</div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">// ACTIVE NOW</span>
+      <div class="stat-val amber">01</div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">// COMPLETED</span>
+      <div class="stat-val green">00</div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">// ENTITIES LOGGED</span>
+      <div class="stat-val">01</div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <div class="section-header">
+    <h2>All Missions</h2>
+    <span class="section-tag">// CLICK TO EXPAND — FULL PREP INSIDE</span>
+  </div>
+
+  <div class="missions-list">
+
+    <!-- MISSION 01 -->
+    <div class="kmission" id="m01">
+      <div class="kmission-header" onclick="toggleMission('m01')">
+        <div class="kmission-num">01</div>
+        <div class="kmission-title-block">
+          <div class="kmission-title">A Promise is a Promise</div>
+          <div class="kmission-sub">// KELLER UNIVERSITY · CAMPBELL REPORT #0047-C · CLASS 2 ECTOPLASMIC RESIDUE</div>
+          <div class="kmission-tags">
+            <span class="ktag amber">ACTIVE</span>
+            <span class="ktag red">ENTITY: ESZTER — EXECUTIONER</span>
+            <span class="ktag purple">DIRECTIVE: ACQUIRE SAMPLE</span>
+            <span class="ktag grey">MORAL TENSION: HIGH</span>
+            <span class="ktag green">ONE-SHOT</span>
+          </div>
+        </div>
+        <div class="kmission-toggle">[ EXPAND ▾ ]</div>
+      </div>
+
+      <div class="kmission-body" id="m01-body">
+
+        <div class="kbody-section">
+          <span class="kbody-label">// HOOK &amp; DIRECTIVE</span>
+          <div class="kbody-text">
+            CAMPBELL flagged an unknown particulate at three Keller University incident scenes 23 days ago — rated low priority, sat unread. Marcus Webb is now in hospital (alive — Eszter chose to leave him that way). CAMPBELL classification: Class 2 Ectoplasmic Residue, spirit-origin, 99th percentile purity. No database match.<br><br>
+            <strong>Lab directive:</strong> Acquire a sample. The Director believes it could advance Project Veil by 18–24 months. Escalating pressure across three checkpoints: mid Scene 1 (Director calls), after Scene 2 (requests courier), before Scene 3 (orders the locket returned).<br><br>
+            <strong>The moral weight:</strong> The sample is the locket. The locket belongs to a grieving boy. Two good things in genuine conflict.
+          </div>
+        </div>
+
+        <div class="kbody-section">
+          <span class="kbody-label">// SCENE SEQUENCE</span>
+          <div class="kbody-text">
+            <strong>Cold Open:</strong> Marcus Webb in the car park. Atmospheric dread → violence → silence. Sets the stakes. No player action.<br><br>
+            <strong>Scene 1 — Campus:</strong> Procedural. Victim pattern links to Bálint. Ash signature, cold spots, disciplinary file. Key NPCs: Vasquez (cop, wants rational answers), Morales (professor, fond of Bálint), Priya (witness, needs empathy to open up).<br><br>
+            <strong>Scene 2 — Dorm Room:</strong> Grief inventory. Shrine, warm locket, unsent message to his mother, wall map annotated "miért" (why), physics notes with "Eszter please go away" in the margins. Hunters stop seeing a suspect.<br><br>
+            <strong>Interlude — Footbridge:</strong> Bálint. He knows. He's been waiting. His ask: let him say goodbye.<br><br>
+            <strong>Scene 3 — Robotics Lab:</strong> Four robots in a circle. Screen types before anything attacks. De-escalation window first. If Bálint present: robots freeze, goodbye scene, megyek.
+          </div>
+        </div>
+
+        <div class="kbody-section">
+          <span class="kbody-label">// ESZTER — QUICK STATS</span>
+          <div class="kbody-text">
+            <strong>Type:</strong> Executioner · <strong>Harm:</strong> 10 · <strong>Armour:</strong> 2 (incorporeal)<br><br>
+            <strong>Attacks:</strong> Spectral Embrace 2-harm close cold intimate / Haunting Surge 3-harm far ignore-armour (through electronics)<br><br>
+            <strong>Weakness:</strong> Locket destroyed or ashes scattered with proper farewell. Bálint sincerely asking her to stop → hunters gain +1 forward, one scene window.<br><br>
+            <strong>Robots:</strong> 4 minions · 5 harm each · 1-armour · Chassis Slam 2-harm close / Drill 3-harm intimate (restrained only) · Weakness: shared wireless, cut power.
+          </div>
+        </div>
+
+        <div class="kbody-section">
+          <span class="kbody-label">// RESOLUTION PATHS</span>
+          <table class="resolution-table">
+            <tr><th>ENDING</th><th>CONDITION</th><th>CONSEQUENCE</th></tr>
+            <tr><td>Best</td><td>Bálint says goodbye</td><td>Peaceful. Lab gets nothing. Hollow victory for the directive.</td></tr>
+            <tr><td>Difficult</td><td>Locket destroyed without consent</td><td>Eszter dispersed, not rested. Bálint furious. Case "solved."</td></tr>
+            <tr><td>Partial</td><td>Locket destroyed in fight</td><td>Last message: "tell him i'm sorry." Bálint never knows.</td></tr>
+            <tr><td>Lab Win</td><td>Locket brought back</td><td>Project Veil advances. His fingerprints are on it.</td></tr>
+            <tr><td>Bad</td><td>Bálint harmed</td><td>Doom. Eszter uncontrollable.</td></tr>
+          </table>
+        </div>
+
+        <div class="full-col">
+          <a href="01-a-promise-is-a-promise.html" class="full-link">→ OPEN FULL ONE-SHOT PREP DOCUMENT</a>
+        </div>
+
+      </div>
+    </div><!-- /m01 -->
+
+    <!-- MISSION 02 PLACEHOLDER -->
+    <div class="kmission" id="m02" style="opacity:0.4;">
+      <div class="kmission-header">
+        <div class="kmission-num" style="color:var(--text-dim)">02</div>
+        <div class="kmission-title-block">
+          <div class="kmission-title" style="color:var(--text-dim)">— Not Yet Prepared —</div>
+          <div class="kmission-sub">// CAMPBELL MONITORING — DETAILS PENDING</div>
+          <div class="kmission-tags">
+            <span class="ktag grey">UPCOMING</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /missions-list -->
+
+  <!-- POST SESSION NOTES -->
+  <div class="section-header">
+    <h2>Post-Session Log</h2>
+    <span class="section-tag">// FILL IN AFTER EACH SESSION</span>
+  </div>
+
+  <div class="post-session">
+    <span class="post-label">// SESSION 01 — A PROMISE IS A PROMISE — POST-SESSION NOTES</span>
+    <div class="post-grid">
+      <div class="post-field">
+        <label>RESOLUTION TYPE</label>
+        <div class="fill">—</div>
+      </div>
+      <div class="post-field">
+        <label>LAB DIRECTIVE OUTCOME</label>
+        <div class="fill">—</div>
+      </div>
+      <div class="post-field">
+        <label>PROJECT VEIL STATUS</label>
+        <div class="fill">Unchanged</div>
+      </div>
+      <div class="post-field">
+        <label>LOOSE THREADS</label>
+        <div class="fill">—</div>
+      </div>
+      <div class="post-field">
+        <label>BÁLINT — WHAT HAPPENED</label>
+        <div class="fill">—</div>
+      </div>
+      <div class="post-field">
+        <label>SEED FOR SESSION 02</label>
+        <div class="fill">—</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span>P.O.R.T.A.L — KEEPER MISSION INDEX // RESTRICTED</span>
+  <span>CAMPBELL v<span id="ver"></span></span>
+</footer>
+
+<script>
+  document.getElementById('ver').textContent =
+    '2.' + (Math.floor(Math.random()*9)+1) + '.' + (Math.floor(Math.random()*89)+10);
+
+  function toggleMission(id) {
+    const body = document.getElementById(id + '-body');
+    const toggle = document.querySelector('#' + id + ' .kmission-toggle');
+    if (body.classList.contains('open')) {
+      body.classList.remove('open');
+      if (toggle) toggle.textContent = '[ EXPAND ▾ ]';
+    } else {
+      body.classList.add('open');
+      if (toggle) toggle.textContent = '[ COLLAPSE ▴ ]';
+    }
+  }
+</script>
+
+</body>
+</html>

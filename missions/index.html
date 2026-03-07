@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Mission Archive</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #080c0a;
+  --bg2:       #0d1410;
+  --bg3:       #111a14;
+  --green:     #2ecc71;
+  --green-dim: #1a7a43;
+  --green-glow:#2ecc7133;
+  --amber:     #f0a500;
+  --amber-dim: #7a5200;
+  --red:       #e05050;
+  --text:      #c8ddd0;
+  --text-dim:  #5a7a62;
+  --border:    #1e3428;
+  --border-bright: #2ecc7155;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px);
+  pointer-events: none;
+  z-index: 1000;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* HEADER */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid var(--border-bright);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  background: rgba(8,12,10,0.97);
+  backdrop-filter: blur(8px);
+}
+.logo {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.1rem;
+  color: var(--green);
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 20px var(--green-glow);
+  text-decoration: none;
+}
+.logo span { color: var(--text-dim); }
+nav { display: flex; gap: 24px; align-items: center; }
+nav a {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+nav a:hover, nav a.active { color: var(--green); }
+.status-dot {
+  width: 8px; height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse 2s ease-in-out infinite;
+  display: inline-block;
+  margin-right: 8px;
+}
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* HERO */
+.hero {
+  position: relative;
+  z-index: 10;
+  padding: 80px 24px 60px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.hero-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  color: var(--green-dim);
+  margin-bottom: 16px;
+  animation: fadeUp 0.8s ease both;
+}
+.hero-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  animation: fadeUp 0.8s 0.1s ease both;
+}
+.hero-title .accent { color: var(--green); text-shadow: 0 0 30px var(--green-glow); }
+.hero-desc {
+  font-size: 1rem;
+  color: var(--text-dim);
+  max-width: 560px;
+  line-height: 1.8;
+  animation: fadeUp 0.8s 0.2s ease both;
+  margin-bottom: 32px;
+}
+.campbell-note {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--green-dim);
+  border-left: 2px solid var(--green-dim);
+  padding: 10px 16px;
+  background: rgba(46,204,113,0.03);
+  max-width: 480px;
+  line-height: 1.9;
+  animation: fadeUp 0.8s 0.3s ease both;
+}
+.campbell-note .c-label {
+  color: var(--text-dim);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  display: block;
+  margin-bottom: 6px;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+/* MAIN CONTENT */
+main {
+  position: relative;
+  z-index: 10;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-bright);
+}
+.section-header h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.6rem;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  text-transform: uppercase;
+}
+.section-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--green-dim);
+  letter-spacing: 0.18em;
+}
+
+/* MISSION CARDS */
+.missions-list { display: grid; gap: 2px; }
+
+.mission-card {
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  padding: 28px 32px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, background 0.2s;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.mission-card:hover { border-color: var(--border-bright); background: var(--bg3); }
+.mission-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--green-dim);
+  transition: background 0.2s;
+}
+.mission-card:hover::before { background: var(--green); }
+.mission-card.upcoming { opacity: 0.45; }
+.mission-card.upcoming::before { background: var(--amber-dim); }
+
+.mission-id-col {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  line-height: 2;
+  border-right: 1px solid var(--border);
+  padding-right: 32px;
+}
+.mission-id-col .m-num {
+  font-size: 1.8rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  color: var(--green-dim);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  display: block;
+  margin-bottom: 8px;
+}
+.mission-status {
+  display: inline-block;
+  padding: 2px 7px;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  border: 1px solid;
+  margin-top: 6px;
+}
+.mission-status.active    { color: var(--green); border-color: var(--green-dim); background: rgba(46,204,113,0.06); }
+.mission-status.completed { color: var(--text-dim); border-color: var(--border); }
+.mission-status.upcoming  { color: var(--amber-dim); border-color: var(--amber-dim); }
+
+.mission-body {}
+.mission-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.mission-subtitle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--green-dim);
+  letter-spacing: 0.14em;
+  margin-bottom: 14px;
+}
+.mission-summary {
+  font-size: 0.93rem;
+  color: var(--text-dim);
+  line-height: 1.75;
+  font-style: italic;
+  margin-bottom: 16px;
+}
+.mission-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+}
+.meta-tag {
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  background: var(--bg);
+}
+.meta-tag.red { border-color: #5c2020; color: #e05050; }
+.meta-tag.amber { border-color: var(--amber-dim); color: var(--amber); }
+.meta-tag.green { border-color: var(--green-dim); color: var(--green); }
+
+.mission-redacted {
+  margin-top: 14px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+}
+.redact {
+  background: var(--text-dim);
+  color: var(--text-dim);
+  user-select: none;
+  border-radius: 2px;
+  padding: 0 3px;
+}
+
+/* OUTCOME BLOCK (post-session) */
+.mission-outcome {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: rgba(46,204,113,0.04);
+  border: 1px solid var(--green-dim);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--green-dim);
+  letter-spacing: 0.08em;
+  line-height: 1.8;
+  display: none; /* show after session is complete */
+}
+
+/* FOOTER */
+footer {
+  position: relative;
+  z-index: 10;
+  border-top: 1px solid var(--border);
+  padding: 24px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 600px) {
+  .mission-card { grid-template-columns: 1fr; gap: 16px; }
+  .mission-id-col { border-right: none; border-bottom: 1px solid var(--border); padding-right: 0; padding-bottom: 12px; display: flex; gap: 16px; align-items: center; }
+  nav { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</a>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="index.html" class="active">Missions</a>
+    <a href="../index.html#bestiary">Bestiary</a>
+    <a href="../index.html#lab">The Lab</a>
+  </nav>
+  <div><span class="status-dot"></span><span style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--green-dim)">CAMPBELL ONLINE</span></div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">// MISSION ARCHIVE — FIELD OPERATIONS LOG</div>
+  <h1 class="hero-title">Mission<br><span class="accent">Archive</span></h1>
+  <p class="hero-desc">
+    Documented field deployments. Each entry reflects what CAMPBELL flagged, what the team found, and what it cost. Classified details are withheld pending full debrief.
+  </p>
+  <div class="campbell-note">
+    <span class="c-label">// CAMPBELL — ARCHIVE STATUS</span>
+    TOTAL MISSIONS LOGGED: 1<br>
+    ACTIVE DEPLOYMENTS: 1<br>
+    ENTITIES CONFIRMED: 1<br>
+    DIRECTIVES PENDING RESOLUTION: <span style="color:var(--amber)">1</span>
+  </div>
+</div>
+
+<main>
+  <div class="section-header">
+    <h2>Field Deployments</h2>
+    <span class="section-tag">// CHRONOLOGICAL — MOST RECENT FIRST</span>
+  </div>
+
+  <div class="missions-list">
+
+    <!-- MISSION 01 -->
+    <div class="mission-card">
+      <div class="mission-id-col">
+        <span class="m-num">01</span>
+        KELLER UNIV.<br>
+        STATUS:<br>
+        <span class="mission-status active">ACTIVE</span>
+      </div>
+      <div class="mission-body">
+        <div class="mission-title">A Promise is a Promise</div>
+        <div class="mission-subtitle">// CAMPBELL ANOMALY REPORT #0047-C — CLASS 2 ECTOPLASMIC RESIDUE</div>
+        <div class="mission-summary">
+          Three incidents at Keller University in four weeks. One critical. CAMPBELL flagged an unclassified particulate at all three scenes — a substance it has never encountered before, rated 99th percentile rarity. The field team deployed. What they found was not what the briefing suggested. The source is not what the victims deserved.
+        </div>
+        <div class="mission-meta">
+          <span class="meta-tag">LOCATION: KELLER UNIVERSITY</span>
+          <span class="meta-tag red">ENTITY: INCORPOREAL SPIRIT</span>
+          <span class="meta-tag amber">DIRECTIVE: ACTIVE</span>
+          <span class="meta-tag">CASUALTIES: 1 CRITICAL (NON-FATAL)</span>
+        </div>
+        <div class="mission-redacted">
+          ENTITY IDENTITY: <span class="redact">████████████████████</span> &nbsp;·&nbsp;
+          ANCHOR OBJECT: <span class="redact">████████████</span> &nbsp;·&nbsp;
+          DIRECTIVE OUTCOME: <span class="redact">███ PENDING RESOLUTION</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MISSION 02 PLACEHOLDER -->
+    <div class="mission-card upcoming">
+      <div class="mission-id-col">
+        <span class="m-num" style="color:var(--amber-dim)">02</span>
+        LOCATION:<br>UNKNOWN<br>
+        <span class="mission-status upcoming">PENDING</span>
+      </div>
+      <div class="mission-body">
+        <div class="mission-title" style="color:var(--text-dim)">— Classification Pending —</div>
+        <div class="mission-subtitle">// CAMPBELL HAS FLAGGED A NEW ANOMALY</div>
+        <div class="mission-summary">
+          Details available post-deployment. CAMPBELL continues monitoring.
+        </div>
+        <div class="mission-meta">
+          <span class="meta-tag">ENTITY: UNCLASSIFIED</span>
+          <span class="meta-tag">DIRECTIVE: AWAITING BRIEFING</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <span>P.O.R.T.A.L — MISSION ARCHIVE</span>
+  <span>CAMPBELL v<span id="ver"></span> // FIELD OPERATIONS LOG</span>
+</footer>
+
+<script>
+  document.getElementById('ver').textContent =
+    '2.' + (Math.floor(Math.random()*9)+1) + '.' + (Math.floor(Math.random()*89)+10);
+</script>
+</body>
+</html>
