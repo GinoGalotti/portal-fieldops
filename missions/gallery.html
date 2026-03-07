@@ -229,6 +229,46 @@ main {
   text-overflow: ellipsis;
 }
 
+/* GRAVEYARD */
+.graveyard {
+  border: 1px solid var(--border);
+  margin-bottom: 48px;
+}
+.graveyard-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid transparent;
+  transition: background 0.2s, border-color 0.2s;
+  list-style: none;
+}
+.graveyard-header::-webkit-details-marker { display: none; }
+.graveyard:hover .graveyard-header { background: var(--bg2); }
+.graveyard[open] .graveyard-header { border-bottom-color: var(--border); }
+.graveyard-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.graveyard-header .section-tag { color: var(--text-dim); }
+.graveyard-desc {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.graveyard .image-grid { padding: 16px; }
+.graveyard .image-tile { opacity: 0.6; }
+.graveyard .image-tile:hover { opacity: 1; }
+
 /* FOOTER */
 footer {
   position: relative; z-index: 10;
@@ -308,6 +348,13 @@ footer {
           <img src="../images/lab-campbell-screen.png" alt="lab-campbell-screen">
         </a>
         <div class="image-caption">lab-campbell-screen</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images/lab-campbell.png" target="_blank">
+          <img src="../images/lab-campbell.png" alt="lab-campbell">
+        </a>
+        <div class="image-caption">lab-campbell</div>
       </div>
 
     </div>
@@ -412,8 +459,188 @@ footer {
         <div class="image-caption">M1-roboticslab-goodbye</div>
       </div>
 
+      <div class="image-tile">
+        <a href="../images/M1-campus-collage.png" target="_blank">
+          <img src="../images/M1-campus-collage.png" alt="M1-campus-collage">
+        </a>
+        <div class="image-caption">M1-campus-collage</div>
+      </div>
+
     </div>
   </div>
+
+  <!-- ── GRAVEYARD ── -->
+  <details class="graveyard">
+    <summary class="graveyard-header">
+      <span class="graveyard-title">Discarded Generations</span>
+      <span class="section-tag">// images-graveyard/ — CLICK TO EXPAND</span>
+    </summary>
+    <p class="graveyard-desc">Previous iterations that didn't make the cut. Kept for reference.</p>
+    <div class="image-grid">
+
+      <div class="image-tile">
+        <a href="../images-graveyard/lab-exterior.png" target="_blank">
+          <img src="../images-graveyard/lab-exterior.png" alt="lab-exterior">
+        </a>
+        <div class="image-caption">lab-exterior</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/lab-exterior-old.png" target="_blank">
+          <img src="../images-graveyard/lab-exterior-old.png" alt="lab-exterior-old">
+        </a>
+        <div class="image-caption">lab-exterior-old</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/lab-briefing-room.png" target="_blank">
+          <img src="../images-graveyard/lab-briefing-room.png" alt="lab-briefing-room">
+        </a>
+        <div class="image-caption">lab-briefing-room</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/lab-campbell-core.png" target="_blank">
+          <img src="../images-graveyard/lab-campbell-core.png" alt="lab-campbell-core">
+        </a>
+        <div class="image-caption">lab-campbell-core</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/lab-campbell-screen.png" target="_blank">
+          <img src="../images-graveyard/lab-campbell-screen.png" alt="lab-campbell-screen">
+        </a>
+        <div class="image-caption">lab-campbell-screen</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/lab-CAMBELL.png" target="_blank">
+          <img src="../images-graveyard/lab-CAMBELL.png" alt="lab-CAMBELL">
+        </a>
+        <div class="image-caption">lab-CAMBELL</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/lab-collage.png" target="_blank">
+          <img src="../images-graveyard/lab-collage.png" alt="lab-collage">
+        </a>
+        <div class="image-caption">lab-collage</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/lab-ectoplasmic.png" target="_blank">
+          <img src="../images-graveyard/lab-ectoplasmic.png" alt="lab-ectoplasmic">
+        </a>
+        <div class="image-caption">lab-ectoplasmic</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/lab-meeting.png" target="_blank">
+          <img src="../images-graveyard/lab-meeting.png" alt="lab-meeting">
+        </a>
+        <div class="image-caption">lab-meeting</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/M1-Campus.png" target="_blank">
+          <img src="../images-graveyard/M1-Campus.png" alt="M1-Campus">
+        </a>
+        <div class="image-caption">M1-Campus</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/M1-campus-coldspot.png" target="_blank">
+          <img src="../images-graveyard/M1-campus-coldspot.png" alt="M1-campus-coldspot">
+        </a>
+        <div class="image-caption">M1-campus-coldspot</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/M1-campus-noticeboard.png" target="_blank">
+          <img src="../images-graveyard/M1-campus-noticeboard.png" alt="M1-campus-noticeboard">
+        </a>
+        <div class="image-caption">M1-campus-noticeboard</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/M1-carpark-before.png" target="_blank">
+          <img src="../images-graveyard/M1-carpark-before.png" alt="M1-carpark-before">
+        </a>
+        <div class="image-caption">M1-carpark-before</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/M1-carpark-figure.png" target="_blank">
+          <img src="../images-graveyard/M1-carpark-figure.png" alt="M1-carpark-figure">
+        </a>
+        <div class="image-caption">M1-carpark-figure</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/M1-carpark-aftermath.png" target="_blank">
+          <img src="../images-graveyard/M1-carpark-aftermath.png" alt="M1-carpark-aftermath">
+        </a>
+        <div class="image-caption">M1-carpark-aftermath</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/M1-balint-footbridge.png" target="_blank">
+          <img src="../images-graveyard/M1-balint-footbridge.png" alt="M1-balint-footbridge">
+        </a>
+        <div class="image-caption">M1-balint-footbridge</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/M1-dorm-locket.png" target="_blank">
+          <img src="../images-graveyard/M1-dorm-locket.png" alt="M1-dorm-locket">
+        </a>
+        <div class="image-caption">M1-dorm-locket</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/M1-dorm-notes.png" target="_blank">
+          <img src="../images-graveyard/M1-dorm-notes.png" alt="M1-dorm-notes">
+        </a>
+        <div class="image-caption">M1-dorm-notes</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/M1-dorm-shrine.png" target="_blank">
+          <img src="../images-graveyard/M1-dorm-shrine.png" alt="M1-dorm-shrine">
+        </a>
+        <div class="image-caption">M1-dorm-shrine</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/M1-dorm-wallmap.png" target="_blank">
+          <img src="../images-graveyard/M1-dorm-wallmap.png" alt="M1-dorm-wallmap">
+        </a>
+        <div class="image-caption">M1-dorm-wallmap</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/M1-roboticslab-empty.png" target="_blank">
+          <img src="../images-graveyard/M1-roboticslab-empty.png" alt="M1-roboticslab-empty">
+        </a>
+        <div class="image-caption">M1-roboticslab-empty</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/M1-roboticslab-goodbye.png" target="_blank">
+          <img src="../images-graveyard/M1-roboticslab-goodbye.png" alt="M1-roboticslab-goodbye">
+        </a>
+        <div class="image-caption">M1-roboticslab-goodbye</div>
+      </div>
+
+      <div class="image-tile">
+        <a href="../images-graveyard/M1-roboticslab-screen.png" target="_blank">
+          <img src="../images-graveyard/M1-roboticslab-screen.png" alt="M1-roboticslab-screen">
+        </a>
+        <div class="image-caption">M1-roboticslab-screen</div>
+      </div>
+
+    </div>
+  </details>
 
 </main>
 
