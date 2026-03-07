@@ -65,13 +65,12 @@ PROMPTS = [
      "cool and amber colour grade, no gore."),
 
     ("M1-carpark-aftermath",
-     "A young man slumped against a concrete wall in a university "
-     "car park, alive but shaking, phone shattered beside him, "
-     "deep bruise-like handprints visible on both forearms, "
-     "fine grey ash on his jacket that will not brush off, "
-     "temples of his hair slightly greyed. Eyes wide open, "
-     "staring at nothing. Security torch beam in the distance. "
-     "Cinematic, cold, still. Drama photography style."),
+     "A young man sitting against a concrete wall in a university "
+     "car park at night, visibly shaken, cracked phone beside him, "
+     "fine grey ash dusted across his jacket, temples of his hair "
+     "slightly greyed. Eyes wide open, staring at nothing. "
+     "A distant security torch beam cuts through the fog. "
+     "Cinematic, cold, still. Drama photography style. No violence."),
 
     # ── SCENE 1 — Keller University Campus ───────────────────────
 
