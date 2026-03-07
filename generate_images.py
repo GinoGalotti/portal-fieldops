@@ -16,11 +16,16 @@ import os
 import time
 import requests
 from openai import OpenAI
+from dotenv import load_dotenv
 from prompts import PROMPTS
+
+load_dotenv()
 
 # ── CONFIGURATION ──────────────────────────────────────────────────────────────
 
-API_KEY = "YOUR_OPENAI_API_KEY_HERE"   # ← paste your key here
+API_KEY = os.getenv("OPENAI_API_KEY")
+if not API_KEY:
+    raise SystemExit("ERROR: OPENAI_API_KEY not found. Add it to your .env file.")
 
 IMAGE_SIZE    = "1792x1024"   # landscape — good for scene reference art
                                # other options: "1024x1024" or "1024x1792"
