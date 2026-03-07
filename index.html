@@ -68,8 +68,9 @@ body::after {
 
 /* ── HEADER ── */
 header {
-  position: relative;
-  z-index: 10;
+  position: sticky;
+  top: 0;
+  z-index: 100;
   border-bottom: 1px solid var(--border-bright);
   padding: 0 24px;
   display: flex;
@@ -78,8 +79,6 @@ header {
   height: 64px;
   background: rgba(8,12,10,0.95);
   backdrop-filter: blur(8px);
-  position: sticky;
-  top: 0;
 }
 
 .logo {
@@ -223,6 +222,7 @@ section {
   max-width: 960px;
   margin: 0 auto;
   padding: 80px 24px;
+  scroll-margin-top: 64px;
 }
 
 .section-header {
@@ -711,7 +711,7 @@ footer {
 
     <div class="operative-card">
       <div class="operative-id">// OP-005</div>
-      <div class="operative-name">Cristian</div>
+      <div class="operative-name">Alan Frazier</div>
       <div class="operative-status">● ACTIVE — FIELD</div>
     </div>
 
