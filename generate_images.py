@@ -1,18 +1,19 @@
 """
 P.O.R.T.A.L — Image Generator
 -------------------------------
-Reads prompts from prompts.py and generates images using DALL-E 3.
+Reads prompts from prompts.py and generates images using gpt-image-1.
 Images are saved to /images/ and named exactly as specified in prompts.py.
 
 SETUP (one time):
-  1. pip install openai requests
-  2. Paste your OpenAI API key below (get it from platform.openai.com)
+  1. pip install requests python-dotenv
+  2. Add your OpenAI API key to .env as OPENAI_API_KEY
   3. python generate_images.py
 
 Already-generated images are skipped automatically, so re-running is safe.
 """
 
 import os
+import base64
 import time
 import requests
 from dotenv import load_dotenv
@@ -26,10 +27,10 @@ API_KEY = os.getenv("OPENAI_API_KEY")
 if not API_KEY:
     raise SystemExit("ERROR: OPENAI_API_KEY not found. Add it to your .env file.")
 
-IMAGE_SIZE    = "1792x1024"   # landscape — good for scene reference art
-                               # other options: "1024x1024" or "1024x1792"
-IMAGE_QUALITY = "standard"    # "standard" ($0.04/img) or "hd" ($0.08/img)
-DELAY_SECONDS = 13             # pause between requests (DALL-E 3: 5/min limit)
+IMAGE_SIZE    = "1536x1024"   # landscape — gpt-image-1 supported size
+                               # other options: "1024x1024" or "1024x1536"
+IMAGE_QUALITY = "medium"      # "low", "medium", or "high"
+DELAY_SECONDS = 0              # gpt-image-1 has higher rate limits
 
 # -- PATHS ----------------------------------------------------------------------
 
@@ -72,17 +73,16 @@ for i, (filename, prompt) in enumerate(PROMPTS, 1):
             "https://api.openai.com/v1/images/generations",
             headers=HEADERS,
             json={
-                "model": "dall-e-3",
+                "model": "gpt-image-1",
                 "prompt": prompt,
                 "size": IMAGE_SIZE,
                 "quality": IMAGE_QUALITY,
                 "n": 1,
-                "response_format": "url",
             },
         )
         response.raise_for_status()
-        image_url = response.json()["data"][0]["url"]
-        image_data = requests.get(image_url).content
+        image_b64 = response.json()["data"][0]["b64_json"]
+        image_data = base64.b64decode(image_b64)
 
         with open(filepath, "wb") as f:
             f.write(image_data)
@@ -104,6 +104,7 @@ print(f"\n{'-' * 40}")
 print(f"  Generated : {generated}")
 print(f"  Skipped   : {skipped}")
 print(f"  Failed    : {failed}")
-cost = generated * (0.08 if IMAGE_QUALITY == "hd" else 0.04)
+cost_per_img = {"low": 0.011, "medium": 0.042, "high": 0.167}.get(IMAGE_QUALITY, 0.042)
+cost = generated * cost_per_img
 print(f"  Est. cost : ${cost:.2f}")
 print(f"{'-' * 40}\n")
