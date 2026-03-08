@@ -463,7 +463,7 @@ footer {
   <div class="stats-row">
     <div class="stat-box">
       <span class="stat-label">// MISSIONS TOTAL</span>
-      <div class="stat-val purple">01</div>
+      <div class="stat-val purple">02</div>
     </div>
     <div class="stat-box">
       <span class="stat-label">// ACTIVE NOW</span>
@@ -471,11 +471,11 @@ footer {
     </div>
     <div class="stat-box">
       <span class="stat-label">// COMPLETED</span>
-      <div class="stat-val green">00</div>
+      <div class="stat-val green">01</div>
     </div>
     <div class="stat-box">
       <span class="stat-label">// ENTITIES LOGGED</span>
-      <div class="stat-val">01</div>
+      <div class="stat-val">02</div>
     </div>
   </div>
 </div>
@@ -497,9 +497,9 @@ footer {
           <div class="kmission-title">A Promise is a Promise</div>
           <div class="kmission-sub">// KELLER UNIVERSITY · CAMPBELL REPORT #0047-C · CLASS 2 ECTOPLASMIC RESIDUE</div>
           <div class="kmission-tags">
-            <span class="ktag amber">ACTIVE</span>
+            <span class="ktag green">COMPLETED</span>
             <span class="ktag red">ENTITY: ESZTER — EXECUTIONER</span>
-            <span class="ktag purple">DIRECTIVE: ACQUIRE SAMPLE</span>
+            <span class="ktag grey">DIRECTIVE: PARTIAL — ASH RECOVERED</span>
             <span class="ktag grey">MORAL TENSION: HIGH</span>
             <span class="ktag green">ONE-SHOT</span>
           </div>
@@ -558,19 +558,70 @@ footer {
       </div>
     </div><!-- /m01 -->
 
-    <!-- MISSION 02 PLACEHOLDER -->
-    <div class="kmission" id="m02" style="opacity:0.4;">
-      <div class="kmission-header">
-        <div class="kmission-num" style="color:var(--text-dim)">02</div>
+    <!-- MISSION 02 -->
+    <div class="kmission" id="m02">
+      <div class="kmission-header" onclick="toggleMission('m02')">
+        <div class="kmission-num">02</div>
         <div class="kmission-title-block">
-          <div class="kmission-title" style="color:var(--text-dim)">— Not Yet Prepared —</div>
-          <div class="kmission-sub">// CAMPBELL MONITORING — DETAILS PENDING</div>
+          <div class="kmission-title">— Title TBD —</div>
+          <div class="kmission-sub">// ALDERMOOR DISTRICT · CAMPBELL REPORT #0094-B · TOPOGRAPHICAL DISTORTION CLASS 2</div>
           <div class="kmission-tags">
-            <span class="ktag grey">UPCOMING</span>
+            <span class="ktag amber">ACTIVE</span>
+            <span class="ktag red">ENTITY: UNCLASSIFIED — SPATIAL</span>
+            <span class="ktag purple">DIRECTIVE: ESTABLISH PERIMETER · IDENTIFY ENTITY</span>
+            <span class="ktag grey">MORAL TENSION: MEDIUM</span>
+            <span class="ktag grey">RIVAL FACTION THREAD</span>
           </div>
         </div>
+        <div class="kmission-toggle">[ EXPAND ▾ ]</div>
       </div>
-    </div>
+
+      <div class="kmission-body" id="m02-body">
+
+        <div class="kbody-section">
+          <span class="kbody-label">// HOOK &amp; DIRECTIVE</span>
+          <div class="kbody-text">
+            Seven navigation failure reports in Aldermoor District over 14 days. One missing person (day 9). One hospitalisation (dissociative episode). CAMPBELL flags topographical distortion expanding at ~0.02mi/week. Epicentre: 14 Aldermoor Crescent — resident uncontactable for 9 days.<br><br>
+            <strong>Lab directive:</strong> Do not enter affected zone without anchor protocol. Identify entity. Assess containment. The Director has a secondary ask: find out who has been buying up the district — 34% of addresses changed hands in 18 months, via shell companies, before the first incident was reported.<br><br>
+            <strong>The rival thread:</strong> The property acquisitions trace back to the same group behind Meridian BioSciences. They knew this was coming. They were waiting for the district to empty.
+          </div>
+        </div>
+
+        <div class="kbody-section">
+          <span class="kbody-label">// THE ENTITY</span>
+          <div class="kbody-text">
+            Urban Sprawler reskin (Deck of Monsters #49). Not an entity that arrived — one that <em>grew</em> from a disturbance during construction work 18 months ago. Feeds on familiarity. Rewrites the felt geography — the instinctive mental map residents carry — without altering physical streets.<br><br>
+            <strong>Key tone note:</strong> It does not intend harm. It is lonely. It wants to be known. It is mapping itself onto the neighbourhood the way the neighbourhood was once mapped onto the people who lived there. Whether the hunters understand this before they try to destroy it is the moral weight of the session.<br><br>
+            <strong>Project Veil flag:</strong> CAMPBELL's private note to Dr. Leech: <em>"Topographical anchoring. If controllable, this is a delivery mechanism."</em> Leech has not shared this with the field team.
+          </div>
+        </div>
+
+        <div class="kbody-section">
+          <span class="kbody-label">// SCENE IDEAS — TO BE FLESHED OUT</span>
+          <div class="kbody-text">
+            <strong>Entry point:</strong> Hunters must establish an anchor — a person, object, or memory strong enough to orient them inside the zone. If they lose it, they're lost too.<br><br>
+            <strong>Residents:</strong> Long-term locals who can't leave (get lost trying), new arrivals unaffected (no familiarity to steal yet), and the person at 14 Aldermoor Crescent who has been at the epicentre longest.<br><br>
+            <strong>Shell company thread:</strong> A recently vacated estate agent's office. Files left behind. Someone was tracking the distortion's expansion and buying ahead of it.<br><br>
+            <strong>The missing person:</strong> Are they lost in the zone, or did the entity absorb them into its map?
+          </div>
+        </div>
+
+        <div class="kbody-section">
+          <span class="kbody-label">// RESOLUTION PATHS — DRAFT</span>
+          <div class="kbody-text">
+            <strong>Destroy it:</strong> Possible — but the entity may be the only thing that knows where the missing person is.<br><br>
+            <strong>Communicate with it:</strong> High difficulty. Requires someone willing to go deep into the zone without an anchor.<br><br>
+            <strong>Contain it:</strong> Lab directive preference. CAMPBELL believes it could be studied. The Director believes it could be useful.<br><br>
+            <strong>Lab wins:</strong> Entity somehow anchored or sampled. Project Veil advances. The rival group notices PORTAL has the same asset they've been waiting to acquire.
+          </div>
+        </div>
+
+        <div class="full-col">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--keeper-dim);letter-spacing:0.12em;">// FULL PREP DOCUMENT NOT YET WRITTEN — EXPAND ABOVE FOR WORKING NOTES</span>
+        </div>
+
+      </div>
+    </div><!-- /m02 -->
 
   </div><!-- /missions-list -->
 
@@ -585,6 +636,36 @@ footer {
     <div class="post-grid">
       <div class="post-field">
         <label>RESOLUTION TYPE</label>
+        <div class="fill">HUMANE — Entity allowed to disperse. Bálint's wellbeing prioritised over directive.</div>
+      </div>
+      <div class="post-field">
+        <label>LAB DIRECTIVE OUTCOME</label>
+        <div class="fill">PARTIAL — Lab gets sample. Ash locket not retrieved. Trace particulate recovered incidentally from scene.</div>
+      </div>
+      <div class="post-field">
+        <label>PROJECT VEIL STATUS</label>
+        <div class="fill">ADVANCED — Ash analysis reveals anomalous interaction with electronic systems. New understanding of electronic-supernatural signal connections. Unknown to field team.</div>
+      </div>
+      <div class="post-field">
+        <label>LOOSE THREADS</label>
+        <div class="fill">Authorities noticed — Detective Vasquez has questions the team didn't fully answer. Bálint needs ongoing support — no family nearby, lost his anchor.</div>
+      </div>
+      <div class="post-field">
+        <label>BÁLINT — STATUS</label>
+        <div class="fill">ALIVE. Grieving. Locket gone. Whether any operative maintained contact is unresolved — worth tracking.</div>
+      </div>
+      <div class="post-field">
+        <label>SEED FOR SESSION 02</label>
+        <div class="fill">— None planted directly. Aldermoor case pre-existed session 01.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-session" style="margin-top:2px;">
+    <span class="post-label">// SESSION 02 — ALDERMOOR DISTRICT — POST-SESSION NOTES</span>
+    <div class="post-grid">
+      <div class="post-field">
+        <label>RESOLUTION TYPE</label>
         <div class="fill">—</div>
       </div>
       <div class="post-field">
@@ -593,18 +674,18 @@ footer {
       </div>
       <div class="post-field">
         <label>PROJECT VEIL STATUS</label>
-        <div class="fill">Unchanged</div>
+        <div class="fill">—</div>
       </div>
       <div class="post-field">
         <label>LOOSE THREADS</label>
         <div class="fill">—</div>
       </div>
       <div class="post-field">
-        <label>BÁLINT — WHAT HAPPENED</label>
+        <label>MISSING PERSON — STATUS</label>
         <div class="fill">—</div>
       </div>
       <div class="post-field">
-        <label>SEED FOR SESSION 02</label>
+        <label>SEED FOR SESSION 03</label>
         <div class="fill">—</div>
       </div>
     </div>

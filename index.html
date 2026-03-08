@@ -631,11 +631,11 @@ footer {
   </p>
   <div class="oracle-readout">
     <span class="o-label">// CAMPBELL — SYSTEM STATUS</span>
-    ACTIVE CASES: <span class="o-amber">1</span><br>
-    ANOMALIES FLAGGED THIS MONTH: <span class="o-green">1</span><br>
+    ACTIVE CASES: <span class="o-amber">3</span><br>
+    ANOMALIES FLAGGED THIS MONTH: <span class="o-green">4</span><br>
     FIELD TEAMS DEPLOYED: <span class="o-green">1</span><br>
-    SUBSTANCES UNCLASSIFIED: <span class="o-amber">1</span> &nbsp;<span style="color:var(--text-dim)">// review pending</span><br>
-    LAST DIRECTIVE ISSUED: <span class="o-green">ACTIVE</span>
+    SUBSTANCES UNDER ANALYSIS: <span class="o-amber">1</span> &nbsp;<span style="color:var(--text-dim)">// findings pending</span><br>
+    LAST DIRECTIVE ISSUED: <span class="o-amber">ACTIVE — ALDERMOOR DISTRICT</span>
   </div>
 </div>
 
@@ -650,22 +650,38 @@ footer {
     <div class="session-card">
       <div class="session-meta">
         <span class="session-num">// SESSION 01</span>
-        <span class="session-status active">ACTIVE</span>
+        <span class="session-status completed">COMPLETED</span>
       </div>
       <div class="session-title">A Promise is a Promise</div>
       <div class="session-excerpt">
-        CAMPBELL flagged an unclassified particulate at Keller University — three incidents, one critical. The field team deployed. The substance is not what the briefing suggested. The source is not what the victims deserved.
+        CAMPBELL flagged an unclassified particulate at Keller University — three incidents, one critical. The field team deployed. The substance was not what the briefing suggested. The source was not what the victims deserved.
       </div>
       <div class="session-redacted">
         LOCATION: Keller University &nbsp;·&nbsp;
-        ENTITY TYPE: <span class="redact">████████████</span> &nbsp;·&nbsp;
-        DIRECTIVE STATUS: <span class="redact">███ PENDING</span>
+        ENTITY TYPE: Incorporeal Spirit — Executioner &nbsp;·&nbsp;
+        DIRECTIVE STATUS: Partial Recovery — Ash Locket not retrieved
+      </div>
+    </div>
+
+    <div class="session-card">
+      <div class="session-meta">
+        <span class="session-num">// SESSION 02</span>
+        <span class="session-status active">ACTIVE</span>
+      </div>
+      <div class="session-title">The Cartographer</div>
+      <div class="session-excerpt">
+        CAMPBELL flagged a cluster of navigation failures in a residential district — seven reports in fourteen days, one missing person, one hospitalisation. The streets haven't changed. The people who live on them no longer know where they are. The field team is en route. They have been advised not to enter the affected zone without an anchor protocol.
+      </div>
+      <div class="session-redacted">
+        LOCATION: Aldermoor District &nbsp;·&nbsp;
+        ENTITY TYPE: <span class="redact">████████████████</span> &nbsp;·&nbsp;
+        DIRECTIVE STATUS: <span class="redact">██████ PENDING</span>
       </div>
     </div>
 
     <div class="session-card" style="opacity:0.5;">
       <div class="session-meta">
-        <span class="session-num">// SESSION 02</span>
+        <span class="session-num">// SESSION 03</span>
         <span class="session-status upcoming">UPCOMING</span>
       </div>
       <div class="session-title">— CLASSIFIED —</div>
@@ -732,23 +748,26 @@ footer {
     <div class="beast-card" data-threat="THREAT LEVEL: 2">
       <div class="beast-name">Eszter</div>
       <div class="beast-type">// CLASS: INCORPOREAL SPIRIT — EXECUTIONER</div>
+      <div class="beast-desc">
+        An incorporeal entity tethered to a physical anchor object. Manifests as a young woman. Leaves a grey ash residue that cannot be removed by conventional means. Drawn to protect a specific individual. Her grief made her dangerous — but she never harmed someone who did not first harm her charge.
+      </div>
+      <div class="beast-classified">
+        ⚠ WEAKNESSES: ANCHOR OBJECT DESTRUCTION WITH PROPER FAREWELL / CHARGE SINCERELY REQUESTING CESSATION<br>
+        ANCHOR OBJECT: Not recovered — entity dispersed at scene. Trace ash submitted for lab analysis.
+      </div>
+    </div>
+
+    <div class="beast-card" data-threat="THREAT LEVEL: ?">
+      <div class="beast-name blurred">The Cartographer</div>
+      <div class="beast-type blurred">// CLASS: SPATIAL ENTITY — COLLECTOR</div>
       <div class="beast-desc blurred">
-        An incorporeal entity tethered to a physical anchor object. Manifests as a young woman. Leaves a grey ash residue that cannot be removed by conventional means. Drawn to protect a specific individual. Her grief has made her dangerous — but she has never harmed someone who did not first harm her charge.
+        An entity that rewrites felt geography — the instinctive mental map residents carry of their own neighbourhood. Does not alter physical streets. Alters the consciousness that reads them. Grows from a point of disturbance. Feeds on familiarity. Does not appear to intend harm. It wants to be known. It is mapping itself onto the neighbourhood the way the neighbourhood was once mapped onto the people who lived there.
       </div>
       <div class="beast-classified blurred">
         ⚠ WEAKNESSES: CLASSIFIED — FIELD TEAM ONLY<br>
-        ANCHOR OBJECT: UNDER REVIEW
+        EPICENTRE: UNDER INVESTIGATION — 14 Aldermoor Crescent
       </div>
-      <div class="blur-notice">⚠ FULL PROFILE UNLOCKS POST-SESSION 01</div>
-    </div>
-
-    <div class="beast-card" data-threat="THREAT LEVEL: ?" style="opacity:0.45;">
-      <div class="beast-name">— REDACTED —</div>
-      <div class="beast-type">// CLASS: UNCLASSIFIED</div>
-      <div class="beast-desc" style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.08em;line-height:1.9;">
-        ENCOUNTER NOT YET LOGGED.<br>
-        ENTRY WILL POPULATE POST-CONFIRMATION.
-      </div>
+      <div class="blur-notice">⚠ FULL PROFILE UNLOCKS POST-SESSION 02</div>
     </div>
 
   </div>
@@ -788,6 +807,9 @@ footer {
       <div class="lore-text">
         The lab's primary long-term research thread. Details are above most field team clearance levels. What is known: certain materials recovered from field operations have the potential to accelerate it significantly. The Director considers it the most important work the lab is doing.
       </div>
+      <div class="lore-classified">
+        ⚠ UPDATE — POST SESSION 01: Trace particulate recovered from the Keller University incident is currently under analysis. Early results are of significant interest to this project. The field team is not required to be informed at this stage.
+      </div>
     </div>
   </div>
 
@@ -815,14 +837,32 @@ footer {
       <div class="artefact-id">
         ART-001<br>
         SESSION 01<br>
-        STATUS:<br>ACTIVE
+        STATUS:<br>NOT RECOVERED
       </div>
       <div>
         <div class="artefact-name">The Ash Locket</div>
-        <div class="artefact-desc blurred">
-          A small gold locket, origin Hungary. Contains an unclassified grey particulate (Class 2 Ectoplasmic Residue, per CAMPBELL). Warm to the touch at all ambient temperatures. Leaves a frost ring on any surface it rests on. Inside: a handwritten note in Hungarian. Translation on file.
+        <div class="artefact-desc">
+          A small gold locket, origin Hungary. Contained an unclassified grey particulate (Class 2 Ectoplasmic Residue, per CAMPBELL). Warm to the touch at all ambient temperatures. Left a frost ring on any surface it rested on. Inside: a handwritten note in Hungarian. Translation on file. The locket was not retrieved — the entity dispersed at scene. Trace ash recovered incidentally by field team and submitted for analysis.
         </div>
-        <span class="blur-notice">⚠ FULL REPORT UNLOCKS POST-SESSION 01</span>
+        <div class="artefact-desc" style="margin-top:10px;font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.08em;line-height:1.9;color:var(--green-dim);">
+          // LAB ANALYSIS — ONGOING<br>
+          Residue exhibits anomalous interaction with active electronic systems. Preliminary findings suggest the particulate acts as a conductive medium for signals outside the standard electromagnetic spectrum. Research continues. Implications for Project Veil: under assessment.
+        </div>
+      </div>
+    </div>
+
+    <div class="artefact-card">
+      <div class="artefact-id">
+        ART-002<br>
+        SESSION 02<br>
+        STATUS:<br><span class="blurred">ACTIVE</span>
+      </div>
+      <div>
+        <div class="artefact-name blurred">— PENDING FIELD RECOVERY —</div>
+        <div class="artefact-desc blurred">
+          CAMPBELL has flagged a probable anchor object associated with the Aldermoor District anomaly. Origin of disturbance traced to a construction site excavation 18 months prior. Physical object, if recovered, would constitute first confirmed spatial-anchoring artefact. Lab has requested priority acquisition. Field team advised: object may be unstable outside affected zone.
+        </div>
+        <span class="blur-notice">⚠ ARTEFACT LOG UPDATES POST-SESSION 02</span>
       </div>
     </div>
 
@@ -835,7 +875,7 @@ footer {
       <div>
         <div class="artefact-name">— PENDING —</div>
         <div class="artefact-desc" style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.08em;line-height:2;">
-          NO ARTEFACTS RECOVERED YET.<br>LOG WILL UPDATE POST-SESSION.
+          NO FURTHER ARTEFACTS LOGGED.<br>LOG WILL UPDATE POST-SESSION.
         </div>
       </div>
     </div>
