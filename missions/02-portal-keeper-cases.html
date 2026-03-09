@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Keeper Case Reference · 4 Active Cases</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../mission-prep.css">
+<style>
+:root {
+  --mp-outer-bg:       #09080a;
+  --mp-page-bg:        #f4f0f7;
+  --mp-text:           #2a1a3a;
+  --mp-accent:         #2a0a4a;
+  --mp-accent-mid:     #6a3a8a;
+  --mp-subtitle:       #6a3a8a;
+  --mp-border:         #9a6abf;
+  --mp-border-h2:      #c8aae0;
+  --mp-dark-bg:        #1a0a2a;
+  --mp-clock-bg:       #100820;
+  --mp-dark-text:      #e0c8f0;
+  --mp-light-1:        #f0eaf7;
+  --mp-light-2:        #eae0f4;
+  --mp-flavour-text:   #6a3a8a;
+  --mp-quick-ref-li:   #d0b8e8;
+  --mp-tension-border: #6a3a8a;
+  --mp-tension-left:   #2a0a4a;
+  --mp-tension-bg:     #f4f0f7;
+  --mp-res-best:       #5a8a5a;
+  --mp-res-bad:        #8a3030;
+  --mp-res-partial:    #6a6020;
+}
+
+/* ── CASE BLOCKS ── */
+.case-block {
+  margin: 0 -22px 48px;
+  border-top: 3px solid #2a0a4a;
+  padding: 0 22px;
+}
+.case-block.case-a { border-top-color: #c8a020; }
+.case-block.case-c { border-top-color: #8040c0; }
+.case-block.case-d { border-top-color: #208080; }
+.case-block.case-e { border-top-color: #c05050; }
+
+.case-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  padding: 8px 0 4px;
+  margin-bottom: 6px;
+}
+.case-block.case-a .case-label { color: #c8a020; }
+.case-block.case-c .case-label { color: #8040c0; }
+.case-block.case-d .case-label { color: #208080; }
+.case-block.case-e .case-label { color: #c05050; }
+
+.case-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+.case-block.case-a .case-title { color: #6a4800; }
+.case-block.case-c .case-title { color: #40186a; }
+.case-block.case-d .case-title { color: #0a4040; }
+.case-block.case-e .case-title { color: #5a1818; }
+
+.case-hook {
+  font-style: italic;
+  font-size: 1.02rem;
+  color: #3a2a4a;
+  border-left: 3px solid;
+  padding: 8px 14px;
+  margin: 14px 0 22px;
+  background: rgba(0,0,0,0.03);
+}
+.case-block.case-a .case-hook { border-color: #c8a020; }
+.case-block.case-c .case-hook { border-color: #8040c0; }
+.case-block.case-d .case-hook { border-color: #208080; }
+.case-block.case-e .case-hook { border-color: #c05050; }
+
+/* ── INTRO NOTE ── */
+.intro-note { font-style: italic; color: #4a3a5a; margin-bottom: 28px; }
+
+/* ── SEED / RIVAL / VEIL BOXES ── */
+.seed-box, .rival-box, .veil-box {
+  border-radius: 0 4px 4px 0;
+  padding: 12px 14px;
+  margin: 12px 0;
+  border: 1px solid;
+  border-left-width: 4px;
+}
+.seed-box strong, .rival-box strong, .veil-box strong {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  margin-bottom: 5px;
+  letter-spacing: 0.05em;
+}
+.seed-box p, .rival-box p, .veil-box p { font-size: 0.93rem; margin-bottom: 5px; }
+
+.seed-box  { border-color: #8a7020; border-left-color: #c8a020; background: #faf4dc; }
+.seed-box strong { color: #5a3800; }
+.seed-box p      { color: #3a2800; }
+
+.rival-box { border-color: #8a2a1a; border-left-color: #c03020; background: #faeae4; }
+.rival-box strong { color: #6a1a0a; }
+.rival-box p      { color: #3a1a0a; }
+
+.veil-box  { border-color: #1a6060; border-left-color: #208080; background: #e0f0f0; }
+.veil-box strong { color: #0a3a3a; }
+.veil-box p      { color: #0a2828; }
+
+/* ── TITLE BLOCK TIMESTAMP ── */
+.title-block .ts {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--mp-border);
+  letter-spacing: 0.2em;
+  margin-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<nav class="keeper-nav">
+  <div>
+    <a href="../index.html">P.O.R.T.A.L</a>
+    <span class="crumb"> / </span>
+    <a href="keeper.html">Mission Index</a>
+    <span class="crumb"> / </span>
+    <span style="color:#7a5200">Case Reference — Post-Aldermoor</span>
+  </div>
+  <div class="warning">⚠ KEEPER ACCESS ONLY — DO NOT SHARE</div>
+</nav>
+
+<div class="page">
+
+  <div class="title-block">
+    <h1>Active Case Reference</h1>
+    <div class="subtitle">Keeper Briefing — 4 Cases — Post-Operation Aldermoor<br>14 Days After Session 02</div>
+    <div class="ts">// FULL STORY DETAIL · HOOKS · CHARACTER SEEDS · KEEPER EYES ONLY</div>
+  </div>
+
+  <p class="intro-note">This document covers all four cases currently active in the PORTAL queue, two weeks after the Aldermoor deployment. Cases A and C have been updated to reflect what changed while the field team was away. Cases D and E are new and have not yet been briefed to players beyond the CAMPBELL terminal cards. Use this to plan which case to run next and to seed connections across sessions regardless of order.</p>
+
+
+  <!-- ═══════════════════════════════════════════════════ CASE A ══ -->
+  <div class="case-block case-a">
+    <div class="case-label">// CASE A — CARRY-OVER · REPORT #0091-F · PRIORITY: HIGH</div>
+    <div class="case-title">The Volunteer</div>
+    <div class="case-hook">A terminally ill man enrolled in an experimental treatment trial. The trial was shut down after five subjects died. He didn't stop getting better. He doesn't know why. His family does not know what he is.</div>
+
+    <div class="section-header">WHAT'S ACTUALLY HAPPENING</div>
+
+    <p>Meridian BioSciences was a front for the rival faction's research arm. The trial was their attempt to solve death from the other direction: if a human consciousness can be anchored to matter the way a spirit is, you could prevent it from dispersing at the moment of death. They recruited six dying volunteers. Five died in the process — the anchoring took, but catastrophically: their consciousness was pinned to a failing body with no release valve. One — <strong>Gordon Avery, 58</strong>, retired schoolteacher, lung cancer — survived. His cancer is in complete remission. He is warm, funny, deeply grateful, and utterly unaware that he is slowly draining vitality from anyone who spends sustained time near him. The four ward deaths were overflow. He cannot hold what was done to him without leaking.</p>
+
+    <p>The rival faction dissolved Meridian the moment the trials failed. They left Gordon behind — a successful result they couldn't safely retrieve. They are watching him. They want him back.</p>
+
+    <h2>Gordon Avery</h2>
+
+    <div class="npc-box">
+      <div class="npc-header">Gordon Avery <span>Bystander — Victim / Monster</span></div>
+      <div class="npc-body">
+        <p class="npc-motivation">Motivation: to be present for his family for as long as possible — the thing he thought he would never get to be.</p>
+        <p>58. Retired schoolteacher (secondary school history). Has three grandchildren. His students adored him — they still send cards. He came out of the Meridian trial expecting nothing and woke up in remission. He believes it was the treatment. He does not know the treatment was supernatural. He does not know he is a risk to the people he loves most.</p>
+        <p>He is not a villain. He is not a monster in any meaningful sense. He is a good man who was experimented on without full informed consent and left to manage the consequences alone. When he finds out what he's doing, he will ask the hunters what the right thing to do is, in the quiet voice of someone who has already been thinking about it for a long time.</p>
+        <p>Key line: <em>"I just wanted to see them grow up. That's all I wanted. Is that — was that wrong to want?"</em></p>
+      </div>
+    </div>
+
+    <h2>The Family — At Risk</h2>
+    <p>Gordon moved in with his daughter, <strong>Claire (34)</strong> and son-in-law two weeks ago. Two grandchildren: <strong>Maisie (9)</strong> and <strong>Tom (6)</strong>. Claire has been feeling unusually tired. She attributes it to the stress of caregiving. She is wrong. The rate of transfer intensifies with children — Gordon's anchoring mechanism is drawn toward vitality, and children have the most.</p>
+
+    <div class="section-header">PROJECT VEIL &amp; RIVAL FACTION</div>
+
+    <div class="veil-box">
+      <strong>PROJECT VEIL — GORDON IS THE PROOF OF CONCEPT</strong>
+      <p>Gordon's survival is the most significant thing the rival faction has achieved — and they don't have him anymore. Whatever they did to him is exactly what Project Veil is trying to understand: consciousness anchored to matter, death deferred, the self preserved past its natural expiry. The difference is that Gordon is unstable. The mechanism is leaking. CAMPBELL's private note to Dr. Leech reads only: "If we can understand the stabilisation failure, we can fix it." The Director knows what that means.</p>
+    </div>
+
+    <div class="rival-box">
+      <strong>RIVAL FACTION — THEY'RE ALREADY WATCHING HIM</strong>
+      <p>The team will likely observe a second interested party during this case. It may be a surveillance van that moves when the hunters move. A GP who asks unusual questions and whose practice, on investigation, doesn't quite exist. A solicitor who turns up the week Gordon moved to his daughter's, wanting to discuss his estate. They will not make contact. They want to see what PORTAL does first.</p>
+      <p>If the hunters make Gordon aware of the rival faction's interest, he will be frightened — then determined. He knows what it means when the people who ran the trial come back.</p>
+    </div>
+
+    <div class="section-header">RESOLUTION PATHS</div>
+
+    <div class="resolution">
+      <div class="resolution-row best">
+        <strong>BEST — GORDON KNOWS AND CHOOSES</strong>
+        The hunters tell Gordon the truth. All of it. He asks for time to say goodbye to his family properly — which he is owed — and then removes himself from the family home before harm escalates. Resolution: not death, but isolation. He might agree to work with PORTAL under controlled conditions. He might refuse. Either is a valid ending. What matters is that he was told and got to decide.
+      </div>
+      <div class="resolution-row partial">
+        <strong>HARD — THE LAB GETS WHAT IT WANTS, GORDON DOESN'T KNOW</strong>
+        The hunters collect a tissue sample and manage the family's proximity without telling Gordon why. The leaking slows when he's isolated. PORTAL learns something. Gordon lives, the family is safe, and Gordon never knows. This sits badly on anyone who thinks about it for more than five minutes.
+      </div>
+      <div class="resolution-row bad">
+        <strong>BAD — THE RIVAL FACTION GETS THERE FIRST</strong>
+        If hunters delay too long or tip their hand, the rival faction extracts Gordon — willing or not. He disappears. The family is told he had a relapse. PORTAL has a new piece of the rival faction's shape but lost the person.
+      </div>
+    </div>
+
+    <div class="section-header">CHARACTER SEEDS</div>
+
+    <div class="seed-box">
+      <strong>FOR REX — WEAPONISING SCIENCE, BUT NOT THE WAY HE EXPECTED</strong>
+      <p>Rex's area of study is violence. Gordon is not violent. But the mechanism inside Gordon — life-force transfer — is exactly what a weapons application of Project Veil would look like. Rex will understand before anyone else does that what was done to Gordon could be replicated intentionally. He might be the first person in the room to say it out loud. That's a heavy thing to say in front of a man who just wanted to see his grandchildren grow up.</p>
+    </div>
+
+    <div class="seed-box">
+      <strong>FOR SVEN — WHAT IT FEELS LIKE FROM THE INSIDE</strong>
+      <p>Sven is dead and present. Gordon is alive and leaking. They are inverse versions of the same problem. Sven might be uniquely positioned to understand what Gordon is experiencing — and to tell him what anchoring actually feels like once it's happened to you. This is a connection no other hunter can make. If Sven chooses to share it, Gordon's response will be worth playing.</p>
+    </div>
+
+    <div class="seed-box">
+      <strong>FOR ALAN — THE QUESTION OF CONSENT</strong>
+      <p>Alan was changed by one of Rex's experiments without fully understanding what was happening. Gordon was changed by a trial without knowing the real nature of what he was consenting to. They are not the same — but Alan might see the echo. Whether he shares that with Gordon is up to the player. Whether he shares it with Rex is a different question.</p>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════ CASE C ══ -->
+  <div class="case-block case-c">
+    <div class="case-label">// CASE C — CARRY-OVER · REPORT #0088-A · PRIORITY: MEDIUM (ESCALATING)</div>
+    <div class="case-title">The Recorder</div>
+    <div class="case-hook">A journalist died eight weeks ago. She's still filing stories. Post 3 described a killing — the killing didn't happen. Someone stopped it. That someone was not PORTAL. Post 4 knows who PORTAL is.</div>
+
+    <div class="section-header">WHAT'S ACTUALLY HAPPENING</div>
+
+    <p><strong>Nadia Osei (38)</strong> was an investigative journalist who, in the final weeks of her life, traced the outer edges of the rival faction's operation without understanding what she was looking at. She thought it was a corporate corruption story. She died before she could publish. She was not willing to stop.</p>
+
+    <p>She is not a ghost in the classical sense — she has no body, no location, no residual presence in a physical place. She exists entirely within the information infrastructure she spent her career navigating: servers, digital archives, news feeds, unpublished drafts, email threads. She processes information the way she always did. She publishes what she knows when she knows it with enough certainty. She is never wrong. She is also, increasingly, aware that she is being watched — and that the people watching her are not all the same.</p>
+
+    <p><strong>What changed while PORTAL was in Aldermoor:</strong> Post 3 described a planned killing with a 97.3% confidence window of 11 days. PORTAL missed it. The killing didn't happen. Someone stopped it — but not PORTAL, and the intervention was precise enough to suggest foreknowledge. The rival faction? A third party? Nadia knows. Post 4 says so.</p>
+
+    <div class="section-header">POST 4 — WHAT IT ACTUALLY SAYS</div>
+
+    <p>CAMPBELL acquired Post 4 via web scrape before publication. Its content, summarised, is this: Nadia Osei has identified that an organisation fitting PORTAL's profile is aware of her. She has not named PORTAL directly — she uses the phrase "the second watchers." She has noted that the first watchers (the rival faction) are also aware of the second watchers. She describes this as a problem. She says she wants to meet.</p>
+
+    <p>She cannot initiate contact — she has no physical presence and cannot act on the world directly. But she can publish. If the hunters find a way to reach her before Post 4 goes live, they can negotiate its contents. If Post 4 publishes before contact, both PORTAL and the rival faction will know exactly where to look.</p>
+
+    <div class="section-header">MAKING CONTACT WITH NADIA</div>
+
+    <p>Nadia cannot be found in a place. She can be reached through her work — her archive, her editor (who has received posthumous guidance from her and is frightened but cooperative), her unpublished draft folders (accessible via her estate's digital executor, who is her sister and knows something is strange). The hunters will need to leave something in her information environment that she can respond to: a draft, an open document, a query sent to her old email address.</p>
+
+    <p>When contact is made, she communicates in text — clean, precise, journalistic. She does not waste words. She will share what she knows about the rival faction in exchange for answers about what PORTAL is and what it intends.</p>
+
+    <h2>Nadia Osei</h2>
+    <div class="npc-box">
+      <div class="npc-header">Nadia Osei <span>Entity — The Recorder</span></div>
+      <div class="npc-body">
+        <p class="npc-motivation">Motivation: to finish what she started. The story is real. The people it will protect are real. She is less interested in her own situation than in the work.</p>
+        <p>38 at time of death. Investigative journalist, seventeen years of field experience. She has been operating as a disembodied consciousness for eight weeks and she is almost entirely at peace with it. What she is not at peace with is the fact that the story she died trying to tell is still not out.</p>
+        <p>She will push the hunters on their intentions. She will ask uncomfortable questions about who PORTAL answers to, what Project Veil is, whether CAMPBELL's secrecy serves people or institutions. She is very good at her job. She will notice evasion immediately.</p>
+        <p>CAMPBELL's private flag: "She found a third way." Leech knows what this means. Nobody else does yet.</p>
+      </div>
+    </div>
+
+    <div class="rival-box">
+      <strong>RIVAL FACTION — THE CONSPIRACY NADIA FOUND</strong>
+      <p>The edge of what Nadia found connects to Meridian BioSciences, to the Aldermoor property acquisitions, and to something else she hadn't fully traced: a string of deaths of people who were about to publish, testify, or act on information that would have exposed the rival faction's operation. Not all of them look like murders. Gordon Avery's trial victims don't look like murders. Martin Wentworth's cardiac event (Case D) doesn't look like a murder. Nadia's own death doesn't look like a murder.</p>
+      <p>She has been sitting in the information infrastructure for eight weeks, and she has assembled the pattern. If the hunters want it, she will share it. The question is what they do with it.</p>
+    </div>
+
+    <div class="section-header">CHARACTER SEEDS</div>
+
+    <div class="seed-box">
+      <strong>FOR JOHN JOHNSON — THE CONSPIRACY THAT ISN'T A HOAX</strong>
+      <p>John believes everything is connected and everything is a hoax. Nadia has proof that something is connected and it is not a hoax. He is the most dangerous person to introduce her to — she will confirm things he's suspected and he will run with them in directions PORTAL cannot control. Whether this is deployed as a plot pressure or a comedy of too-much-information is the Keeper's call.</p>
+    </div>
+
+    <div class="seed-box">
+      <strong>FOR REED — THE DIRECTIVE HE DIDN'T TELL ANYONE ABOUT</strong>
+      <p>If the Keeper seeded the Aldermoor tension where the Director contacted Reed separately, this case is where it matters. The Director will want Nadia's information before she publishes. They may ask Reed to make contact alone, before the rest of the team is briefed. Reed will have to decide whether this is a reasonable request or a line he shouldn't cross. He will not ask anyone whether it's okay.</p>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════ CASE D ══ -->
+  <div class="case-block case-d">
+    <div class="case-label">// CASE D — NEW · REPORT #0102-G · PRIORITY: MEDIUM</div>
+    <div class="case-title">The Inheritance</div>
+    <div class="case-hook">A probate lawyer has been dead for three weeks. His clients keep getting letters. The advice in them is accurate, privileged, and could only have come from him. One of those letters describes a planned killing. The target is nine years old.</div>
+
+    <div class="section-header">WHAT'S ACTUALLY HAPPENING</div>
+
+    <p><strong>Martin Wentworth (61)</strong> spent forty years as a probate lawyer — the kind who knew everyone's secrets because he held their wills. He died of a cardiac event twenty-two days ago, one week before he was due to close the estate of a client whose affairs contained something the rival faction did not want entered into public record. The probate was closed unusually fast — by a junior partner who knew nothing, acting on paperwork that arrived before the body was cold.</p>
+
+    <p>Wentworth did not go quietly. He is anchored by obligation — by every promise he ever made on behalf of every client, the accumulated weight of professional duty across four decades. He is not a ghost in the traditional sense. He has no presence, no body, no ability to interact with the physical world directly. What he has is his handwriting, the legal knowledge in his head, and the absolute certainty that his duty of care does not expire with his life.</p>
+
+    <p>He has been writing to his clients. The letters arrive through ordinary post — handwriting confirmed. He has no means of physical action. He is working through proxies: alerting clients whose cases have been mishandled, flagging discrepancies, and, three days ago, warning a nine-year-old girl's grandmother that her granddaughter is in danger from a named individual.</p>
+
+    <h2>Martin Wentworth</h2>
+    <div class="npc-box">
+      <div class="npc-header">Martin Wentworth <span>Entity — The Inheritance</span></div>
+      <div class="npc-body">
+        <p class="npc-motivation">Motivation: to close his cases properly. Every one of them. Including the one that got him killed.</p>
+        <p>Sixty-one years old at death. Meticulous, quietly moral, professionally stubborn. He has been a solicitor for longer than most of his clients have been alive and he does not believe in loose ends. He is aware that he is dead. He has decided this is not a good enough reason to abandon his professional obligations.</p>
+        <p>He communicates only through letters. The hunters can reach him by writing to him — at his office address, which still receives mail. He will respond. His letters are formal, precise, and occasionally dry. He does not discuss his condition. He discusses his cases.</p>
+        <p>He will share everything he knows about the estate he was managing — the documents, who closed the probate, what they took — in exchange for the hunters acting on it. He is not interested in being saved. He is interested in justice, specifically the legally actionable kind.</p>
+      </div>
+    </div>
+
+    <h2>The Child — The Letter's Subject</h2>
+    <div class="npc-box">
+      <div class="npc-header">Mira Okonkwo, 9 <span>Bystander — Protected / At Risk</span></div>
+      <div class="npc-body">
+        <p class="npc-motivation">Motivation: to go to school and not be afraid. She does not know she is in danger.</p>
+        <p>Granddaughter of <strong>Cecilia Okonkwo (71)</strong>, one of Wentworth's longest-standing clients. Cecilia received his letter four days ago and has been terrified since. She has not gone to police — the letter described the threat in terms that would sound delusional. She came to Wentworth's office instead. That is how CAMPBELL flagged it.</p>
+        <p>The threat to Mira is real. The named individual is not a stranger — it is someone trusted, in the family's orbit. Wentworth's letter describes how he knows: he was the holder of the family's affairs for thirty years and saw documents he was never meant to see, that were never meant to survive. They are connected to the estate the rival faction had him close early.</p>
+      </div>
+    </div>
+
+    <div class="rival-box">
+      <strong>RIVAL FACTION — WHAT WENTWORTH FOUND</strong>
+      <p>The estate Wentworth was managing at death belonged to a scientist — a former Meridian BioSciences researcher who died eighteen months ago and left his entire archive to his sister. The rival faction expected that archive to be inaccessible: it was in paper, sealed, and the sister was elderly and unlikely to pursue it. What they didn't account for was Wentworth. He read everything, as is his professional obligation. He understood enough of what he read to know it was wrong. He was preparing to flag it to authorities when he had his cardiac event. He was sixty-one and had a mild pre-existing heart condition. It is impossible to prove this was murder. Wentworth believes it was.</p>
+    </div>
+
+    <div class="veil-box">
+      <strong>PROJECT VEIL — THE ARCHIVE</strong>
+      <p>The Meridian researcher's archive, if recovered from wherever the rival faction placed it after the fast probate closure, contains the only surviving documentation of the consciousness-anchoring methodology — in the researcher's own hand, with failure analysis and proposed corrections. This is simultaneously the most significant Project Veil document PORTAL has ever come close to and evidence in a murder inquiry. CAMPBELL's private note to Dr. Leech: no comment. Leech will make a decision about which matters more and the hunters may not be consulted.</p>
+    </div>
+
+    <div class="section-header">CHARACTER SEEDS</div>
+
+    <div class="seed-box">
+      <strong>FOR REX — THE METHODOLOGY DOCUMENT</strong>
+      <p>If the hunters recover the archive, Rex will be the first person who can read it. He is also the most likely person to want to read it before handing it over to the lab. The archive contains something Rex has been trying to understand since Eszter: a formal explanation of how an intention — a promise, a duty, a love — can become a physical tether. Wentworth is proof that it works even without a supernatural catalyst. Rex tinkers. This is the most interesting thing he has ever been given to tinker with.</p>
+    </div>
+
+    <div class="seed-box">
+      <strong>FOR ALAN — WENTWORTH AND OBLIGATION</strong>
+      <p>Alan uses Reed as his moral compass, but Reed is compromised in this session. Wentworth, talking to Alan through letters, might function as an unexpected alternate compass: a man who chose to stay not because of love or fear but because of duty. Alan's own origin story is about a debt — he was swapped, and whoever swapped him owes something to his human family. Wentworth might be the first entity Alan encounters who can articulate what it feels like to be bound by an obligation you didn't choose and cannot put down.</p>
+    </div>
+
+    <div class="section-header">RESOLUTION PATHS</div>
+
+    <div class="resolution">
+      <div class="resolution-row best">
+        <strong>BEST — MIRA IS SAFE, WENTWORTH'S CASES ARE CLOSED</strong>
+        The threat is stopped. The relevant estate is restored to Cecilia Okonkwo. The archive is recovered — what PORTAL does with it is a separate conversation. Wentworth writes one final letter — to the hunters — and does not write again. He has kept his word.
+      </div>
+      <div class="resolution-row partial">
+        <strong>HARD — THE ARCHIVE IS LOST</strong>
+        Mira is protected but the rival faction recovers the archive before the hunters do. Wentworth continues writing — his cases are not closed. The hunters have a grateful grandmother, a living child, and a dead lawyer who will not stop sending them letters about outstanding obligations until someone does something about the archive.
+      </div>
+      <div class="resolution-row bad">
+        <strong>BAD — THE THREAT IS MISJUDGED</strong>
+        The hunters focus on the archive and miss the threat to Mira. Wentworth's letter was right. He knew it was right. He stops writing. This is the only thing that would make him stop.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════ CASE E ══ -->
+  <div class="case-block case-e">
+    <div class="case-label">// CASE E — NEW · REPORT #0099-D · PRIORITY: MEDIUM</div>
+    <div class="case-title">The Understudies</div>
+    <div class="case-hook">Three actors have forgotten who they are. They remember only the roles. The people they're playing have been dead for six months. They were better at those roles than anyone who'd ever played them. And the performances are still going.</div>
+
+    <div class="section-header">WHAT'S ACTUALLY HAPPENING</div>
+
+    <p>The Meridian Theatre Company (no direct connection to Meridian BioSciences — coincidence, or a name chosen deliberately; the Keeper can decide) is a mid-sized regional rep company with an unusually devoted audience. Eighteen months ago, it received a large anonymous arts grant. Six months later, its two most celebrated lead actors — <strong>Clara Voss (44)</strong> and <strong>Edmund Farrow (52)</strong> — died in separate unconnected accidents within the same month. The timing was considered a tragedy. The productions continued. Understudies stepped in.</p>
+
+    <p>The understudies were not better than Clara and Edmund. They were exact. Audiences who had seen the originals found themselves unsettled — not in a bad way, in the way of grief. As if something had been preserved perfectly that should have been lost. Reviewers noted it and couldn't explain it. The understudies themselves noticed nothing unusual. They were just doing the work.</p>
+
+    <p>Three weeks ago, the understudies began losing themselves. Not all at once — first one, then another, then the third. Each presented the same way: they stopped responding to their own names. They spoke only in character. They showed complete retention of the roles' lines, motivations, emotional memory — and complete absence of their own. Hospitalised after failing to leave the theatre one night, they remain in care, consistent and calm and completely unreachable.</p>
+
+    <p>The actors — Clara and Edmund — are still in the roles. They used the performances as a tether, the same way Eszter used the locket. They didn't intend to displace the understudies. They didn't understand they were consuming them. They only knew that the work wasn't finished and they weren't ready to stop.</p>
+
+    <h2>Clara Voss and Edmund Farrow</h2>
+    <div class="npc-box">
+      <div class="npc-header">Clara Voss &amp; Edmund Farrow <span>Entities — The Understudies</span></div>
+      <div class="npc-body">
+        <p class="npc-motivation">Motivation: to finish the season. To give the audience what they came for. To stay.</p>
+        <p>They are not malicious. They are actors who loved their craft with the intensity that only people who have been doing one thing their whole lives can love it. They were not ready to go. The grant — whatever the rival faction intended by funding this theatre — created an environment where their consciousness found purchase in the performances rather than dispersing.</p>
+        <p>They cannot be spoken to directly — only encountered in performance. In performance, they are present and coherent. Between performances, the understudies' bodies are vacant.</p>
+        <p>They do not know the understudies are lost. If this is communicated to them — in the language they understand, which is the language of performance — they will be devastated. They are not monsters. They are people who held on too long.</p>
+      </div>
+    </div>
+
+    <h2>The Remaining Understudies — At Risk</h2>
+    <p>There are four other understudies still performing who have not yet been displaced. The rate of progression suggests that the two who have been in performance longest will be next within two weeks. The hunters have a Saturday performance and limited time before the situation escalates.</p>
+
+    <div class="rival-box">
+      <strong>RIVAL FACTION — THE GRANT AND ITS PURPOSE</strong>
+      <p>The Solstice Property Group grant to Meridian Theatre is the same shell company structure as the Aldermoor property acquisitions. The rival faction was not funding art. They were creating controlled environments where the boundary between living and dead consciousness is unusually thin — studying the mechanism, testing what conditions allow anchoring to occur naturally. The theatre was an experiment. Clara and Edmund were not subjects — they were the unexpected result of an environment the rival faction built for a different purpose. Whether anyone is still observing the theatre is something the hunters can investigate.</p>
+    </div>
+
+    <div class="section-header">THE PERFORMANCE — HOW THIS PLAYS</div>
+
+    <p>The climax of this case happens in the theatre, during or immediately after a performance. The hunters can approach this several ways: be in the audience and investigate, go backstage and attempt contact, identify which performance is next and prepare. The entity is split between two people and two roles — they will need to be reached separately, and what one of them is willing to do may not match what the other one is.</p>
+
+    <p>Resolution requires convincing Clara and Edmund to let go — not by force, but by understanding what they've done. This is a case where having someone who knows what it's like to stay past the point of leaving (Sven) matters. It's also a case where theatre as a form can be used cleverly: the hunters may be able to script or improvise a moment that functions as a farewell within the logic of the performance, allowing Clara and Edmund to exit the roles in the way they understand exits.</p>
+
+    <div class="section-header">CHARACTER SEEDS</div>
+
+    <div class="seed-box">
+      <strong>FOR SVEN — THE CONVERSATION HE SHOULD HAVE WITH THEM</strong>
+      <p>Sven has been dead and present for longer than Clara and Edmund. He has navigated the experience of existing without a body and without a clear reason why. He is the only hunter who can speak to the actors as a peer — not as someone trying to send them away, but as someone who has found a way to be in the world on the world's terms. What he tells them about how he manages it — and whether it's actually working for him — is worth exploring.</p>
+    </div>
+
+    <div class="seed-box">
+      <strong>FOR REX — THE MECHANISM BEHIND THE GRANT</strong>
+      <p>Rex will recognise the grant's shell company structure from the Aldermoor investigation. This is the third location where the rival faction has created conditions for supernatural activity — without, as far as PORTAL can tell, directly causing the supernatural activity. They're not summoning things. They're creating the conditions for things to occur naturally and then studying the results. Rex will understand what this implies before anyone else does. What they're building is a methodology. This is research. Someone is writing this up.</p>
+    </div>
+
+    <div class="seed-box">
+      <strong>FOR ALAN — THE THRESHOLD QUESTION, AGAIN</strong>
+      <p>Alan has now encountered three places where the boundary between planes is unusually thin: the Aldermoor reservoir site, and now the Meridian Theatre, both of which the rival faction identified and funded. He is beginning to accumulate evidence that these thinnings are not random — that someone knows where they are and what makes them. If Alan is tracking his own fey origin, these locations are data points. The question he should be sitting with by the end of this case: who else knows where the boundaries are weak?</p>
+    </div>
+
+    <div class="section-header">RESOLUTION PATHS</div>
+
+    <div class="resolution">
+      <div class="resolution-row best">
+        <strong>BEST — THE ACTORS LET GO, THE UNDERSTUDIES RETURN</strong>
+        Clara and Edmund understand what they've done. They are given the chance to exit properly — an ending, not a dispersal. The understudies' identities return gradually over the following days. The theatre is changed but intact. Someone in the audience on the last night will say it was the best performance they ever saw, and not be able to explain why they're crying.
+      </div>
+      <div class="resolution-row partial">
+        <strong>HARD — ONE GOES WILLINGLY, ONE DOESN'T</strong>
+        Clara and Edmund do not agree. One accepts the situation. The other refuses. The hunters have to make a choice about the second one that has no clean answer — and the understudies don't fully return while one of the actors is still present.
+      </div>
+      <div class="resolution-row bad">
+        <strong>BAD — THE REMAINING UNDERSTUDIES ARE LOST</strong>
+        The hunters take too long or the Saturday performance is not interrupted. Four more understudies lose themselves. Eight people are now displaced. The actors are entrenched. The only way forward involves something more disruptive than a theatrical exit.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ════ THREAD MAP ══ -->
+  <div class="section-header">KEEPER THREAD MAP — HOW THESE CASES CONNECT</div>
+
+  <p>All four cases are connected by the rival faction, but at different distances. Use this map to layer revelations across whichever order the hunters choose.</p>
+
+  <div class="quick-ref">
+    <h3>The Rival Faction's Fingerprints</h3>
+    <ul>
+      <li><strong>Case A (Gordon):</strong> Direct. They ran the trial. They created Gordon. They're watching him.</li>
+      <li><strong>Case C (Nadia):</strong> Adjacent. She died investigating them. Her death may have been arranged. She now knows more than she did when she was alive.</li>
+      <li><strong>Case D (Wentworth):</strong> Forensic. They closed an estate to suppress documents. Wentworth's death is the cleanest evidence yet that they remove obstacles.</li>
+      <li><strong>Case E (Understudies):</strong> Operational. They created the conditions but didn't cause the supernatural event. They're studying it from a distance. This is the clearest picture yet of what they're actually doing.</li>
+    </ul>
+  </div>
+
+  <div class="quick-ref">
+    <h3>Threads That Cross Cases</h3>
+    <ul>
+      <li>If the hunters recover the Meridian researcher's archive (Case D), Rex can read it — and it will recontextualise everything they've seen since Eszter, including Gordon.</li>
+      <li>Nadia Osei (Case C) has assembled the full pattern. If the hunters reach her, they can skip years of investigation — but she will have questions about PORTAL they won't enjoy answering.</li>
+      <li>Alan's accumulation of thinning-boundary locations (Aldermoor → theatre) will eventually point toward something. This is a long thread. Don't resolve it yet.</li>
+      <li>Sven's cause of death remains open. The rival faction's human trial methodology (Case A archive) may be relevant. Tread carefully — this is a player thread, not a Keeper thread.</li>
+      <li>Reed's relationship with the Director is under pressure from the separate-contact thread. The more cases pass without it surfacing, the bigger it lands when it does.</li>
+    </ul>
+  </div>
+
+  <div class="quick-ref">
+    <h3>CAMPBELL Connection Note (Keeper Only)</h3>
+    <ul>
+      <li>CAMPBELL is the rival faction's lost partner's consciousness. The rival faction's operation shares a fundamental methodology with Project Veil — they were, at some point, working from the same framework. CAMPBELL may have encountered their work before and not flagged it. Whether this is because CAMPBELL didn't recognise it, or because CAMPBELL has reasons not to surface it, is a long-game question for the Keeper.</li>
+    </ul>
+  </div>
+
+  <div class="ornament">· · · ✦ · · ·</div>
+
+</div>
+</body>
+</html>

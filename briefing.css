@@ -1,0 +1,341 @@
+/* briefing.css — shared styles for CAMPBELL briefing card pages
+ * Player-facing terminal documents. Full monospace aesthetic.
+ * NOT a keeper page — no keeper-banner, no sticky header, no .page wrapper.
+ * Each card uses .briefing.case-X to set its colour accent.
+ */
+
+:root {
+  --bg:            #050807;
+  --card:          #080f08;
+  --card2:         #0a110a;
+  --green:         #6fcf6f;
+  --green-dim:     #3a6b3a;
+  --green-bright:  #a0dfa0;
+  --green-glow:    #6fcf6f22;
+  --amber:         #e8c050;
+  --amber-dim:     #7a6020;
+  --red:           #e05050;
+  --red-dim:       #7a2020;
+  --text-dim:      #4a7a4a;
+  --border:        #1e3d1e;
+  --border-bright: #3a6b3a;
+  --purple:        #a855f7;
+  --purple-dim:    #4a1d7a;
+  --teal:          #50c8c8;
+  --teal-dim:      #1a5a5a;
+  --rose:          #e87070;
+  --rose-dim:      #7a3030;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  font-family: 'Share Tech Mono', monospace;
+  padding: 40px 20px 80px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── SCANLINES ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 4px);
+  pointer-events: none; z-index: 100;
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  max-width: 860px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+.page-header .portal-logo {
+  font-size: 0.75rem;
+  letter-spacing: 0.4em;
+  color: var(--green-dim);
+  margin-bottom: 10px;
+}
+.page-header h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--green);
+  text-shadow: 0 0 30px var(--green-glow);
+  margin-bottom: 6px;
+}
+.page-header .sub {
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+}
+.page-header .divider {
+  margin: 20px auto;
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--green-dim), transparent);
+}
+.page-header .note {
+  font-size: 0.65rem;
+  color: var(--amber-dim);
+  letter-spacing: 0.14em;
+  border: 1px solid var(--amber-dim);
+  display: inline-block;
+  padding: 4px 12px;
+}
+.page-header .timestamp {
+  margin-top: 10px;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 0.18em;
+}
+
+/* ── BRIEFING CARD ── */
+.briefing {
+  max-width: 860px;
+  margin: 0 auto 32px;
+  border: 1px solid var(--border-bright);
+  background: var(--card);
+  position: relative;
+  overflow: hidden;
+}
+
+/* top accent line */
+.briefing::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.briefing.case-a::before { background: linear-gradient(90deg, transparent, var(--amber),  transparent); }
+.briefing.case-b::before { background: linear-gradient(90deg, transparent, var(--green),  transparent); }
+.briefing.case-c::before { background: linear-gradient(90deg, transparent, var(--purple), transparent); }
+.briefing.case-d::before { background: linear-gradient(90deg, transparent, var(--teal),   transparent); }
+.briefing.case-e::before { background: linear-gradient(90deg, transparent, var(--rose),   transparent); }
+
+/* ghost watermark letter */
+.briefing::after {
+  content: attr(data-case);
+  position: absolute;
+  top: 16px; right: 20px;
+  font-size: 4rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  opacity: 0.04;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: white;
+}
+
+/* ── CARD HEADER ── */
+.card-header {
+  padding: 20px 28px 16px;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: start;
+}
+.report-id {
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  letter-spacing: 0.18em;
+  margin-bottom: 6px;
+}
+.report-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.1;
+}
+.briefing.case-a .report-title { color: var(--amber); }
+.briefing.case-b .report-title { color: var(--green); }
+.briefing.case-c .report-title { color: var(--purple); }
+.briefing.case-d .report-title { color: var(--teal); }
+.briefing.case-e .report-title { color: var(--rose); }
+
+.report-subtitle {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 0.14em;
+  margin-top: 4px;
+}
+
+/* ── PRIORITY BADGE ── */
+.priority-badge {
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  padding: 4px 10px;
+  border: 1px solid;
+  white-space: nowrap;
+  align-self: start;
+}
+.priority-badge.high   { color: var(--red);    border-color: var(--red-dim);    background: rgba(224,80,80,0.06); }
+.priority-badge.medium { color: var(--amber);  border-color: var(--amber-dim);  background: rgba(232,192,80,0.06); }
+.priority-badge.info   { color: var(--purple); border-color: var(--purple-dim); background: rgba(168,85,247,0.06); }
+.priority-badge.new    { color: var(--teal);   border-color: var(--teal-dim);   background: rgba(80,200,200,0.06); }
+.priority-badge.new-b  { color: var(--rose);   border-color: var(--rose-dim);   background: rgba(232,112,112,0.06); }
+
+/* ── TERMINAL BLOCK ── */
+.terminal {
+  padding: 20px 28px;
+  font-size: 0.78rem;
+  color: var(--green);
+  line-height: 2;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+}
+.t-label {
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  letter-spacing: 0.2em;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.t-label .blink {
+  display: inline-block;
+  width: 8px; height: 8px;
+  background: var(--green-dim);
+  border-radius: 50%;
+  animation: blink 1.4s step-end infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* inline colour spans */
+.t-key    { color: var(--green-bright); }
+.t-alert  { color: var(--amber); }
+.t-red    { color: var(--red); }
+.t-dim    { color: var(--text-dim); }
+.t-purple { color: var(--purple); }
+.t-teal   { color: var(--teal); }
+.t-rose   { color: var(--rose); }
+
+/* ── DATA ROW ── */
+.data-row {
+  display: flex;
+  gap: 8px;
+  line-height: 1.8;
+  margin: 2px 0;
+}
+.data-row .k          { color: var(--green-bright); white-space: nowrap; flex-shrink: 0; }
+.data-row .v          { color: var(--green); }
+.data-row .v.alert    { color: var(--amber); }
+.data-row .v.red      { color: var(--red); }
+.data-row .v.dim      { color: var(--text-dim); }
+.data-row .v.purple   { color: var(--purple); }
+.data-row .v.teal     { color: var(--teal); }
+.data-row .v.rose     { color: var(--rose); }
+
+.t-divider { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
+
+/* ── DIRECTIVE ── */
+.directive {
+  margin: 14px 0 0;
+  padding: 12px 16px;
+  border: 1px solid;
+  font-size: 0.76rem;
+  line-height: 1.75;
+}
+.briefing.case-a .directive { border-color: var(--amber-dim);  background: rgba(232,192,80,0.04);  color: var(--amber); }
+.briefing.case-b .directive { border-color: var(--green-dim);  background: rgba(111,207,111,0.04); color: var(--green); }
+.briefing.case-c .directive { border-color: var(--purple-dim); background: rgba(168,85,247,0.04);  color: var(--purple); }
+.briefing.case-d .directive { border-color: var(--teal-dim);   background: rgba(80,200,200,0.04);  color: var(--teal); }
+.briefing.case-e .directive { border-color: var(--rose-dim);   background: rgba(232,112,112,0.04); color: var(--rose); }
+
+.directive-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  opacity: 0.7;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* ── CARD FOOTER ── */
+.card-footer {
+  padding: 10px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 0.12em;
+  background: var(--card2);
+}
+.card-footer .status-dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.briefing.case-a .card-footer .status-dot { background: var(--amber);  box-shadow: 0 0 6px var(--amber); }
+.briefing.case-b .card-footer .status-dot { background: var(--green);  box-shadow: 0 0 6px var(--green); }
+.briefing.case-c .card-footer .status-dot { background: var(--purple); box-shadow: 0 0 6px var(--purple); }
+.briefing.case-d .card-footer .status-dot { background: var(--teal);   box-shadow: 0 0 6px var(--teal); }
+.briefing.case-e .card-footer .status-dot { background: var(--rose);   box-shadow: 0 0 6px var(--rose); }
+
+/* ── SECTION LABELS (between card groups) ── */
+.carry-over {
+  max-width: 860px;
+  margin: 0 auto 16px;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 0.2em;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.new-cases-label {
+  max-width: 860px;
+  margin: 40px auto 16px;
+  font-size: 0.6rem;
+  color: var(--teal);
+  letter-spacing: 0.2em;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--teal-dim);
+}
+
+/* ── CAMPBELL CLOSING NOTE ── */
+.campbell-note {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 20px 28px;
+  border: 1px solid var(--border);
+  background: var(--card2);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  line-height: 1.9;
+  letter-spacing: 0.06em;
+}
+.campbell-note .cn-header {
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  color: var(--green-dim);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+.campbell-note .cn-text { color: var(--green-dim); line-height: 2; }
+.campbell-note .cn-sig {
+  margin-top: 12px;
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  letter-spacing: 0.18em;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 600px) {
+  body { padding: 20px 12px 60px; }
+  .card-header { grid-template-columns: 1fr; }
+  .priority-badge { display: inline-block; }
+  .card-footer { flex-direction: column; gap: 4px; text-align: center; }
+}

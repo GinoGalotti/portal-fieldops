@@ -4,337 +4,44 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>A Promise is a Promise — P.O.R.T.A.L Mission 01</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../mission-prep.css">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  /* KEEPER NAV */
-  .keeper-nav {
-    background: #080c0a;
-    border-bottom: 1px solid #4a1d7a;
-    padding: 10px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.14em;
-  }
-  .keeper-nav a {
-    color: #a855f7;
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .keeper-nav a:hover { color: #c084fc; }
-  .keeper-nav .crumb { color: #4a1d7a; }
-  .keeper-nav .warning {
-    color: #7a5200;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-  }
-
-  body {
-    background: #0f0a05;
-    color: #3d2612;
-    font-family: 'Crimson Text', Georgia, serif;
-    font-size: 17px;
-    line-height: 1.75;
-    padding: 0;
-  }
-
-  .page {
-    max-width: 720px;
-    margin: 0 auto;
-    background: #f7f0e3;
-    padding: 28px 22px 60px;
-  }
-
-  /* TITLE */
-  .title-block {
-    text-align: center;
-    padding: 36px 0 24px;
-    border-bottom: 2px solid #c8a97e;
-    margin-bottom: 28px;
-  }
-  .title-block h1 {
-    font-family: 'Cinzel', serif;
-    font-size: 2rem;
-    color: #5c1f0a;
-    line-height: 1.2;
-    margin-bottom: 8px;
-  }
-  .title-block .subtitle {
-    font-style: italic;
-    color: #8b5e3c;
-    font-size: 1rem;
-  }
-
-  /* SECTION HEADERS */
-  .section-header {
-    background: #2a1506;
-    color: #f0ddb8;
-    font-family: 'Cinzel', serif;
-    font-size: 0.85rem;
-    letter-spacing: 0.12em;
-    padding: 10px 16px;
-    margin: 40px -22px 22px;
-  }
-
-  h2 {
-    font-family: 'Cinzel', serif;
-    font-size: 1.05rem;
-    color: #5c1f0a;
-    margin: 28px 0 10px;
-    padding-bottom: 4px;
-    border-bottom: 1px solid #e0c898;
-  }
-
-  h3 {
-    font-family: 'Crimson Text', serif;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #8b5e3c;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 0.82rem;
-    margin: 22px 0 8px;
-  }
-
-  p {
-    margin-bottom: 12px;
-    color: #3d2612;
-  }
-
-  /* FLAVOUR TEXT */
-  .flavour {
-    border-left: 4px solid #c8a97e;
-    padding: 8px 14px;
-    margin: 16px 0;
-    font-style: italic;
-    color: #6b3e1a;
-    background: #f2e8d0;
-    border-radius: 0 4px 4px 0;
-  }
-
-  /* LABEL + VALUE */
-  .label-row {
-    margin: 10px 0;
-  }
-  .label-row strong {
-    color: #5c1f0a;
-    display: block;
-    font-size: 0.88rem;
-    font-family: 'Cinzel', serif;
-    margin-bottom: 2px;
-  }
-
-  /* NPC BOXES */
-  .npc-box {
-    border: 1px solid #c8a97e;
-    border-radius: 4px;
-    overflow: hidden;
-    margin: 18px 0;
-  }
-  .npc-header {
-    background: #2a1506;
-    color: #f0ddb8;
-    padding: 10px 14px;
-    font-family: 'Cinzel', serif;
-    font-size: 0.88rem;
-  }
-  .npc-header span {
-    color: #c8a97e;
-    font-family: 'Crimson Text', serif;
-    font-style: italic;
-    font-size: 0.85rem;
-    font-weight: 400;
-    display: block;
-    margin-top: 2px;
-  }
-  .npc-body {
-    padding: 12px 14px;
-    background: #faf3e8;
-  }
-  .npc-motivation {
-    font-style: italic;
-    color: #5c1f0a;
-    margin-bottom: 10px;
-    font-size: 0.92rem;
-  }
-  .npc-body p {
-    font-size: 0.95rem;
-    margin-bottom: 8px;
-  }
-
-  /* BULLETS */
-  ul {
-    padding-left: 20px;
-    margin: 8px 0 12px;
-  }
-  ul li {
-    margin-bottom: 7px;
-    color: #3d2612;
-    font-size: 0.97rem;
-  }
-
-  /* ROBOT STATS */
-  .stat-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px 16px;
-    margin: 12px 0;
-    background: #f2e8d0;
-    border: 1px solid #c8a97e;
-    border-radius: 4px;
-    padding: 12px 14px;
-  }
-  .stat-item strong {
-    display: block;
-    font-size: 0.78rem;
-    font-family: 'Cinzel', serif;
-    color: #8b5e3c;
-    letter-spacing: 0.06em;
-    margin-bottom: 2px;
-  }
-  .stat-item {
-    font-size: 0.93rem;
-    color: #3d2612;
-  }
-  .stat-item.full { grid-column: 1 / -1; }
-
-  /* RESOLUTION TABLE */
-  .resolution {
-    margin: 12px 0;
-  }
-  .resolution-row {
-    border-left: 4px solid #c8a97e;
-    padding: 8px 12px;
-    margin-bottom: 10px;
-    background: #faf3e8;
-  }
-  .resolution-row.best   { border-color: #6b8c5a; }
-  .resolution-row.bad    { border-color: #8c2a1a; }
-  .resolution-row.partial { border-color: #6a6030; }
-  .resolution-row strong {
-    display: block;
-    font-family: 'Cinzel', serif;
-    font-size: 0.82rem;
-    color: #5c1f0a;
-    margin-bottom: 4px;
-  }
-
-  /* DIVIDER */
-  hr {
-    border: none;
-    border-top: 1px solid #c8a97e;
-    margin: 28px 0;
-  }
-
-  /* CLOCK */
-  .clock {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin: 10px 0;
-  }
-  .clock-step {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 8px 12px;
-    background: #1a0e06;
-    border-radius: 4px;
-    color: #c8a97e;
-    font-size: 0.9rem;
-  }
-  .clock-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
-  .clock-label { color: #f0ddb8; }
-  .clock-label strong { color: #c8a97e; font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.06em; }
-
-  /* QUICK REF */
-  .quick-ref {
-    background: #2a1506;
-    border-radius: 4px;
-    padding: 16px 18px;
-    margin: 14px 0;
-    color: #f0ddb8;
-  }
-  .quick-ref h3 { color: #c8a97e; }
-  .quick-ref ul { padding-left: 18px; }
-  .quick-ref ul li { color: #e8d8b8; margin-bottom: 6px; font-size: 0.93rem; }
-
-  /* ORNAMENT */
-  .ornament {
-    text-align: center;
-    color: #c8a97e;
-    font-size: 1.1rem;
-    letter-spacing: 0.4em;
-    margin: 40px 0 10px;
-  }
-
-  /* AI TERMINAL READOUT */
-  .terminal {
-    background: #080f08;
-    border: 1px solid #3a6b3a;
-    border-radius: 4px;
-    padding: 16px 18px;
-    margin: 18px 0;
-    font-family: 'Courier New', monospace;
-    font-size: 0.82rem;
-    color: #7ecf7e;
-    line-height: 1.8;
-  }
-  .terminal .t-label {
-    color: #4a9a4a;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    margin-bottom: 8px;
-    border-bottom: 1px solid #1e3d1e;
-    padding-bottom: 6px;
-  }
-  .terminal .t-key { color: #a0dfa0; }
-  .terminal .t-alert { color: #e8c050; }
-  .terminal .t-red { color: #e05050; }
-  .terminal .t-dim { color: #4a7a4a; }
-
-  /* LAB TENSION BOX */
-  .tension-box {
-    border: 1px solid #8b5e3c;
-    border-left: 4px solid #5c1f0a;
-    background: #fdf5e8;
-    border-radius: 0 4px 4px 0;
-    padding: 14px 16px;
-    margin: 16px 0;
-  }
-  .tension-box strong {
-    display: block;
-    font-family: 'Cinzel', serif;
-    font-size: 0.82rem;
-    color: #5c1f0a;
-    margin-bottom: 6px;
-    letter-spacing: 0.05em;
-  }
-  .tension-box p { margin-bottom: 6px; font-size: 0.95rem; }
-
-  @media (max-width: 480px) {
-    .stat-grid { grid-template-columns: 1fr; }
-    .title-block h1 { font-size: 1.5rem; }
-    .section-header { margin-left: -22px; margin-right: -22px; }
+  :root {
+    --mp-outer-bg:       #0f0a05;
+    --mp-page-bg:        #f7f0e3;
+    --mp-text:           #3d2612;
+    --mp-accent:         #5c1f0a;
+    --mp-accent-mid:     #8b5e3c;
+    --mp-subtitle:       #8b5e3c;
+    --mp-border:         #c8a97e;
+    --mp-border-h2:      #e0c898;
+    --mp-dark-bg:        #2a1506;
+    --mp-clock-bg:       #1a0e06;
+    --mp-dark-text:      #f0ddb8;
+    --mp-light-1:        #faf3e8;
+    --mp-light-2:        #f2e8d0;
+    --mp-flavour-text:   #6b3e1a;
+    --mp-quick-ref-li:   #e8d8b8;
+    --mp-tension-border: #8b5e3c;
+    --mp-tension-left:   #5c1f0a;
+    --mp-tension-bg:     #fdf5e8;
+    --mp-res-best:       #6b8c5a;
+    --mp-res-bad:        #8c2a1a;
+    --mp-res-partial:    #6a6030;
   }
 </style>
 </head>
 <body>
 
-<nav class="keeper-nav">
-  <div>
-    <a href="../index.html">P.O.R.T.A.L</a>
+<div class="keeper-nav">
+  <span>
+    <a href="keeper.html">KEEPER INDEX</a>
     <span class="crumb"> / </span>
-    <a href="keeper.html">Mission Index</a>
-    <span class="crumb"> / </span>
-    <span style="color:#7a5200">Mission 01</span>
-  </div>
-  <div class="warning">⚠ KEEPER ACCESS ONLY — DO NOT SHARE</div>
-</nav>
+    A Promise is a Promise
+  </span>
+  <span class="warning">KEEPER ONLY — DO NOT SHARE</span>
+</div>
 
 <div class="page">
 
@@ -507,7 +214,9 @@
 
   <div class="label-row"><strong>The wall</strong>A printed Google Maps satellite image of the road where the accident happened. Annotated with a red circle and the word "miért" ("why") in marker.</div>
 
-  <div class="label-row"><strong>The physics notes</strong>Scattered on the floor. Routine robotics notes — except one page has the same phrase written in the margin over and over in increasingly shaky handwriting: "Eszter, kérlek, menj el." — "Eszter, please go away."</div>
+  <div class="label-row"><strong>The physics notes</strong>Scattered on the floor. Routine robotics notes — except one page has the same phrase written in the margin over and over in increasingly shaky handwriting: "Eszter, kérlek, menj el." — "Eszter, please go away." The notes are from a robotics lab session. <em>At the top of the page: ENGR B-04, Wednesday 21:00.</em></div>
+
+  <div class="label-row"><strong>The timetable</strong>Pinned above the desk. Bálint's weekly schedule, handwritten. Three evening slots are circled in red pen: all marked ROBOTICS LAB (ENGR B-04). The next one is tonight. A sticky note below reads: <em>"she comes when it's quiet"</em> — in English, as if written for someone else to find.</div>
 
   <div class="label-row"><strong>The cold</strong>Temperature noticeably lower near the locket. A thin frost ring has formed on the desk around the cloth it sits on. Touching the locket causes the photo on the desk to fall face-down.</div>
 
@@ -518,6 +227,20 @@
     <li>Bálint knows what's happening and has been trying to stop it. He needs help, not a confrontation.</li>
   </ul>
 
+  <h2>If a Hunter Takes the Locket</h2>
+  <p>The hunters may take the locket — Bálint is not here to stop them, and it is the obvious anchor object. Eszter lets them take it. For now. But she does not want anyone else to have it, and this will become clear.</p>
+  <div class="quick-ref">
+    <h3>Carrying the Locket — Escalating Effects</h3>
+    <ul class="escalation-list">
+      <li><strong>Immediately:</strong> The locket is heavier than it should be. Noticeably. A small object with the weight of something carried too long.</li>
+      <li><strong>After 10 minutes:</strong> The bag or pocket containing it becomes cold. Not unpleasant — just wrong. Frost begins forming on the fabric around it.</li>
+      <li><strong>After 30 minutes / once hunters are moving toward the lab:</strong> Any screen near the hunter carrying the locket — phone, laptop, a passing monitor — briefly displays text. All caps. One message, repeating: <em>DROP IT.</em></li>
+      <li><strong>If hunters ignore the message:</strong> The locket grows heavier still. The frost spreads. A phone in the same bag dies. Eszter is not threatening them — she is trying to stop them taking the only thing of Bálint's she has left.</li>
+      <li><strong>If hunters reach the robotics lab with the locket:</strong> Eszter stops the escalation immediately. They came to her. The locket returns to room temperature. The screens go dark. Then the cursor begins to blink.</li>
+    </ul>
+    <p class="keeper-note">Keeper note: the escalation is not punishment — it's character. Eszter is frightened someone will take the locket away from Bálint before he can say goodbye. The ALL CAPS message is the most human thing about her.</p>
+  </div>
+
   <h3>Optional: The Voicemail (10+ Investigate roll)</h3>
   <p>A saved voicemail from his mother. Read slowly, in English:</p>
   <div class="flavour">"Bálintkám. I'm worried about you. Your grandmother says to tell you — if Eszter is still there, it is because she is afraid to leave you alone. You must tell her you will be all right. She cannot hear it from me. It has to come from you. She only ever listened to you. I love you. Please call me back."</div>
@@ -527,7 +250,17 @@
   <div class="section-header">INTERLUDE — Bálint on the Footbridge</div>
 
   <p><strong>Tone:</strong> <em>Fragile. He is not a suspect. He is exhausted. Treat him gently.</em></p>
-  <p>The hunters find Bálint on the small footbridge between the science and engineering blocks. He's sitting on the railing — not dangerously, just perched. Staring at nothing. He sees the hunters coming and doesn't run.</p>
+
+  <h3>How to Get Here</h3>
+  <p>This interlude can be triggered in several ways — don't require hunters to stumble on it by accident:</p>
+  <ul>
+    <li><strong>Via the dorm room:</strong> The timetable says the robotics lab session is tonight. The footbridge is the only route from Pemberton Hall to the Engineering Block. If hunters go to find the lab, they cross it — and he's there.</li>
+    <li><strong>Via Scene 1 NPCs:</strong> Dr. Vasárnap or the second-year witness can mention that Bálint spends evenings on the footbridge since the accident. "He used to meet her there after her shifts. I think he goes back."</li>
+    <li><strong>Via the locket:</strong> If hunters are carrying the locket and passing through campus, Eszter leads them — screens near the path glitch briefly, frost forms on a railing ahead, pointing the way. She wants them to find him.</li>
+    <li><strong>As a fallback:</strong> If hunters head to the engineering block without finding Bálint, he's sitting on the railing as they arrive. He sees them before they see him. He does not run.</li>
+  </ul>
+
+  <p>Bálint Kovács is on the small footbridge between the science and engineering blocks. He's sitting on the railing — not dangerously, just perched. Staring at nothing. He sees the hunters coming and doesn't run.</p>
 
   <div class="npc-box">
     <div class="npc-header">Bálint Kovács <span>Bystander — Victim</span></div>
@@ -597,6 +330,20 @@
   <!-- ═══════════════════════════════════════════ -->
   <div class="section-header">KEEPER QUICK REFERENCE</div>
 
+  <h2>Eszter — Monster Stats</h2>
+  <div class="stat-grid">
+    <div class="stat-item"><strong>Type</strong>Executioner</div>
+    <div class="stat-item"><strong>Motivation</strong>To protect Bálint — and, underneath that, to hold on</div>
+    <div class="stat-item"><strong>Harm Capacity</strong>10</div>
+    <div class="stat-item"><strong>Armour</strong>2 (incorporeal — physical attacks pass through; only moves that target the spirit directly apply)</div>
+    <div class="stat-item full"><strong>Attack — Cold Grasp</strong>3-harm intimate — direct contact, drains warmth and vitality. Side effect: 1d3 strands of the target's hair turn grey. Not lethal on a single hit — she escalates slowly.</div>
+    <div class="stat-item full"><strong>Attack — Static Scream</strong>2-harm near — any electronic device in range emits violent static at full volume simultaneously. Disorienting rather than physically damaging. Used to drive people away from Bálint.</div>
+    <div class="stat-item full"><strong>Attack — Possession (Robots)</strong>Uses the robots as an extension of herself when partially manifest. See Robot Minion stats. She is always in control — when Bálint enters the room, she releases them immediately.</div>
+    <div class="stat-item full"><strong>Weakness</strong>Bálint sincerely asking her to stop gives all hunters +1 forward. The locket destroyed with a proper farewell spoken aloud disperses her peacefully. The locket destroyed without farewell disperses her violently — she cannot be bargained with after this.</div>
+    <div class="stat-item full"><strong>Special — She Does Not Kill</strong>Eszter has never killed anyone, and this is a choice. All her attacks cap at 5-harm on the countdown clock unless she reaches DOOM. She escalates when cornered or when the locket is threatened — but even then she herds rather than strikes. A hunter who goes still and does not fight back will not be harmed. She will type instead.</div>
+    <div class="stat-item full"><strong>Special — Presence</strong>While incorporeal, Eszter can manifest on any screen within line of sight of the locket. She communicates in typed text — Hungarian when emotional, English when she is trying to be understood. She always types Bálint's name with the accent marks correct.</div>
+  </div>
+
   <h2>Countdown Clock</h2>
   <div class="clock">
     <div class="clock-step"><div class="clock-icon">🌫️</div><div class="clock-label"><strong>DAY</strong> Cold drafts and ash near victims. Their phones malfunction.</div></div>
@@ -624,8 +371,10 @@
       <li>All victims linked by disciplinary complaints against Bálint</li>
       <li>Bálint not in class, dorm room cold and unlocked</li>
       <li>Unsent message on Bálint's laptop (he already knows)</li>
-      <li>Notes in robotics folder: "Eszter, please go away"</li>
-      <li>Bálint on the footbridge — he's been waiting for someone to find him</li>
+      <li>Notes in robotics folder with ENGR B-04 heading: "Eszter, please go away"</li>
+      <li>Timetable on dorm wall — robotics lab circled, sticky note: "she comes when it's quiet"</li>
+      <li>Locket escalation: weight, frost, ALL CAPS DROP IT on nearby screens</li>
+      <li>Bálint on the footbridge — findable via timetable route, NPC mention, locket trail, or arrival at lab</li>
       <li>Voicemail from his mother (optional, 10+ roll)</li>
     </ul>
   </div>

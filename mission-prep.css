@@ -1,0 +1,347 @@
+/* mission-prep.css — shared structure for mission prep documents
+ * Each HTML file defines :root color variables to set its theme.
+ * Amber/brown theme: 01-a-promise-is-a-promise.html
+ * Green/forest theme: 02-something-that-wants-to-be-known.html
+ */
+
+/*
+  Required :root variables (set in each HTML file's <style> block):
+  --mp-outer-bg         body background
+  --mp-page-bg          .page background
+  --mp-text             default text (p, li)
+  --mp-accent           h1, h2, strong headings
+  --mp-accent-mid       h3
+  --mp-subtitle         .title-block .subtitle
+  --mp-border           borders, ornament, accent-on-dark
+  --mp-border-h2        h2 bottom border
+  --mp-dark-bg          npc-header, section-header, quick-ref bg
+  --mp-clock-bg         clock-step bg
+  --mp-dark-text        text on dark backgrounds
+  --mp-light-1          npc-body, resolution-row bg
+  --mp-light-2          stat-grid, flavour bg
+  --mp-flavour-text     .flavour text
+  --mp-quick-ref-li     .quick-ref li color
+  --mp-tension-border   tension-box border
+  --mp-tension-left     tension-box left accent
+  --mp-tension-bg       tension-box background
+  --mp-res-best         resolution best border
+  --mp-res-bad          resolution bad border
+  --mp-res-partial      resolution partial border
+*/
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── KEEPER NAV ── */
+.keeper-nav {
+  background: #080c0a;
+  border-bottom: 1px solid #4a1d7a;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+}
+.keeper-nav a { color: #a855f7; text-decoration: none; transition: color 0.2s; }
+.keeper-nav a:hover { color: #c084fc; }
+.keeper-nav .crumb { color: #4a1d7a; }
+.keeper-nav .warning { color: #7a5200; font-size: 0.6rem; letter-spacing: 0.1em; }
+
+/* ── BODY & PAGE ── */
+body {
+  background: var(--mp-outer-bg);
+  color: var(--mp-text);
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 17px;
+  line-height: 1.75;
+  padding: 0;
+}
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--mp-page-bg);
+  padding: 28px 22px 60px;
+}
+
+/* ── TITLE BLOCK ── */
+.title-block {
+  text-align: center;
+  padding: 36px 0 24px;
+  border-bottom: 2px solid var(--mp-border);
+  margin-bottom: 28px;
+}
+.title-block h1 {
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  color: var(--mp-accent);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.title-block .subtitle {
+  font-style: italic;
+  color: var(--mp-subtitle);
+  font-size: 1rem;
+}
+
+/* ── SECTION HEADERS ── */
+.section-header {
+  background: var(--mp-dark-bg);
+  color: var(--mp-dark-text);
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  padding: 10px 16px;
+  margin: 40px -22px 22px;
+}
+
+h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.05rem;
+  color: var(--mp-accent);
+  margin: 28px 0 10px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--mp-border-h2);
+}
+
+h3 {
+  font-family: 'Crimson Text', serif;
+  font-weight: 600;
+  color: var(--mp-accent-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.82rem;
+  margin: 22px 0 8px;
+}
+
+p { margin-bottom: 12px; color: var(--mp-text); }
+
+/* ── FLAVOUR TEXT ── */
+.flavour {
+  border-left: 4px solid var(--mp-border);
+  padding: 8px 14px;
+  margin: 16px 0;
+  font-style: italic;
+  color: var(--mp-flavour-text);
+  background: var(--mp-light-2);
+  border-radius: 0 4px 4px 0;
+}
+
+/* ── LABEL ROW ── */
+.label-row { margin: 10px 0; }
+.label-row strong {
+  color: var(--mp-accent);
+  display: block;
+  font-size: 0.88rem;
+  font-family: 'Cinzel', serif;
+  margin-bottom: 2px;
+}
+
+/* ── NPC BOXES ── */
+.npc-box {
+  border: 1px solid var(--mp-border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 18px 0;
+}
+.npc-header {
+  background: var(--mp-dark-bg);
+  color: var(--mp-dark-text);
+  padding: 10px 14px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.88rem;
+}
+.npc-header span {
+  color: var(--mp-border);
+  font-family: 'Crimson Text', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  font-weight: 400;
+  display: block;
+  margin-top: 2px;
+}
+.npc-body { padding: 12px 14px; background: var(--mp-light-1); }
+.npc-motivation { font-style: italic; color: var(--mp-accent); margin-bottom: 10px; font-size: 0.92rem; }
+.npc-body p { font-size: 0.95rem; margin-bottom: 8px; }
+
+/* ── BULLETS ── */
+ul { padding-left: 20px; margin: 8px 0 12px; }
+ul li { margin-bottom: 7px; color: var(--mp-text); font-size: 0.97rem; }
+
+/* ── STAT GRID ── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  margin: 12px 0;
+  background: var(--mp-light-2);
+  border: 1px solid var(--mp-border);
+  border-radius: 4px;
+  padding: 12px 14px;
+}
+.stat-item strong {
+  display: block;
+  font-size: 0.78rem;
+  font-family: 'Cinzel', serif;
+  color: var(--mp-accent-mid);
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+.stat-item { font-size: 0.93rem; color: var(--mp-text); }
+.stat-item.full { grid-column: 1 / -1; }
+
+/* ── RESOLUTION ── */
+.resolution { margin: 12px 0; }
+.resolution-row {
+  border-left: 4px solid var(--mp-border);
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  background: var(--mp-light-1);
+}
+.resolution-row.best    { border-color: var(--mp-res-best); }
+.resolution-row.bad     { border-color: var(--mp-res-bad); }
+.resolution-row.partial { border-color: var(--mp-res-partial); }
+.resolution-row strong {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  color: var(--mp-accent);
+  margin-bottom: 4px;
+}
+
+/* ── DIVIDER ── */
+hr { border: none; border-top: 1px solid var(--mp-border); margin: 28px 0; }
+
+/* ── COUNTDOWN CLOCK ── */
+.clock { display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
+.clock-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--mp-clock-bg);
+  border-radius: 4px;
+  color: var(--mp-border);
+  font-size: 0.9rem;
+}
+.clock-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+.clock-label { color: var(--mp-dark-text); }
+.clock-label strong { color: var(--mp-border); font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.06em; }
+
+/* ── QUICK REF ── */
+.quick-ref {
+  background: var(--mp-dark-bg);
+  border-radius: 4px;
+  padding: 16px 18px;
+  margin: 14px 0;
+  color: var(--mp-dark-text);
+}
+.quick-ref h3 { color: var(--mp-border); }
+.quick-ref ul { padding-left: 18px; }
+.quick-ref ul li { color: var(--mp-quick-ref-li); margin-bottom: 6px; font-size: 0.93rem; }
+
+/* ── ESCALATION LIST ── */
+/* Ordered/unordered list for mechanic sequences: bold trigger → description.
+   Use for "if X → then Y → then Z" beats. Works standalone or inside .quick-ref. */
+.escalation-list {
+  padding-left: 0;
+  list-style: none;
+  margin: 10px 0;
+}
+.escalation-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--mp-border-h2);
+  font-size: 0.93rem;
+  color: var(--mp-text);
+  margin-bottom: 0;
+}
+.escalation-list li:last-child { border-bottom: none; }
+.escalation-list li strong {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: var(--mp-accent-mid);
+  margin-bottom: 3px;
+}
+.quick-ref .escalation-list li        { color: var(--mp-quick-ref-li); }
+.quick-ref .escalation-list li strong { color: var(--mp-border); }
+
+/* ── KEEPER NOTE ── */
+/* Closing italic meta-note for the Keeper. Use as the final <p class="keeper-note">
+   inside a .quick-ref or at the end of a keeper-only section. */
+.keeper-note {
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--mp-accent-mid);
+  margin-top: 12px;
+  margin-bottom: 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--mp-border-h2);
+}
+.quick-ref .keeper-note {
+  color: var(--mp-quick-ref-li);
+  border-top-color: var(--mp-border);
+  opacity: 0.8;
+}
+
+/* ── TERMINAL (green on black — same for all mission prep docs) ── */
+.terminal {
+  background: #080f08;
+  border: 1px solid #3a6b3a;
+  border-radius: 4px;
+  padding: 16px 18px;
+  margin: 18px 0;
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  color: #7ecf7e;
+  line-height: 1.8;
+}
+.terminal .t-label {
+  color: #4a9a4a;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #1e3d1e;
+  padding-bottom: 6px;
+}
+.t-key   { color: #a0dfa0; }
+.t-alert { color: #e8c050; }
+.t-red   { color: #e05050; }
+.t-dim   { color: #4a7a4a; }
+
+/* ── TENSION BOX ── */
+.tension-box {
+  border: 1px solid var(--mp-tension-border);
+  border-left: 4px solid var(--mp-tension-left);
+  background: var(--mp-tension-bg);
+  border-radius: 0 4px 4px 0;
+  padding: 14px 16px;
+  margin: 16px 0;
+}
+.tension-box strong {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  color: var(--mp-accent);
+  margin-bottom: 6px;
+  letter-spacing: 0.05em;
+}
+.tension-box p { margin-bottom: 6px; font-size: 0.95rem; }
+
+/* ── ORNAMENT ── */
+.ornament {
+  text-align: center;
+  color: var(--mp-border);
+  font-size: 1.1rem;
+  letter-spacing: 0.4em;
+  margin: 40px 0 10px;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 480px) {
+  .stat-grid { grid-template-columns: 1fr; }
+  .title-block h1 { font-size: 1.5rem; }
+  .section-header { margin-left: -22px; margin-right: -22px; }
+}
