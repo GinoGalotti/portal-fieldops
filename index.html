@@ -194,7 +194,7 @@ section {
     <a href="#artefacts">Artefacts</a>
     <a href="#mood">Atmosphere</a>
   </nav>
-  <div><span class="status-dot"></span><span style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--green-dim)">CAMPBELL ONLINE</span></div>
+  <div><span class="status-dot"></span><span id="campbell-status" style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--green-dim);cursor:default;user-select:none;">CAMPBELL ONLINE</span></div>
 </header>
 
 <!-- ── HERO ── -->
@@ -509,6 +509,11 @@ section {
   // Fake version number for flavour
   document.getElementById('ver').textContent =
     '2.' + Math.floor(Math.random()*9+1) + '.' + Math.floor(Math.random()*99+10);
+
+  // Double-click CAMPBELL ONLINE to enter keeper mode
+  document.getElementById('campbell-status').addEventListener('dblclick', function () {
+    window.location.href = 'missions/keeper.html';
+  });
 </script>
 
 </body>

@@ -74,7 +74,7 @@ PROMPTS = [
 
     # ── THE HOOK — Lab Briefing ───────────────────────────────────
 
-    ("S2-lab-campbell-briefing", build(
+    ("M2-lab-campbell-briefing", build(
         "Interior of a private research lab briefing room.\n"
         "A long dark table dominates the centre.\n"
         "A large central monitor on the wall displays a topographic street map\n"
@@ -86,7 +86,7 @@ PROMPTS = [
         "Wide symmetrical shot from the doorway.",
     )),
 
-    ("S2-lab-anchor-objects", build(
+    ("M2-lab-anchor-objects", build(
         "A dark wooden table surface.\n"
         "Four small personal objects laid out in a row, slightly spaced apart.\n"
         "A worn cassette tape. A printed photograph folded once.\n"
@@ -101,7 +101,7 @@ PROMPTS = [
 
     # ── COLD OPEN — Arthur Okafor ─────────────────────────────────
 
-    ("S2-arthur-morning-walk", build(
+    ("M2-arthur-morning-walk", build(
         "A quiet residential street in a British suburb, early morning.\n"
         "Terraced Victorian houses line both sides.\n"
         "An older Black man, seventies, walks a slow old greyhound on a lead.\n"
@@ -115,7 +115,7 @@ PROMPTS = [
         "outdoor_day",
     )),
 
-    ("S2-arthur-lost", build(
+    ("M2-arthur-lost", build(
         "A quiet residential street in a British suburb.\n"
         "An older Black man, seventies, stands perfectly still on the pavement.\n"
         "He is looking around him with an expression of patient, bewildered concentration.\n"
@@ -129,7 +129,7 @@ PROMPTS = [
         "supernatural",
     )),
 
-    ("S2-arthur-on-the-wall", build(
+    ("M2-arthur-on-the-wall", build(
         "A quiet residential street. Mid-morning.\n\n"
         "An older Black man, seventies, sits on a low garden wall\n"
         "outside an unfamiliar front garden.\n"
@@ -144,7 +144,7 @@ PROMPTS = [
 
     # ── SCENE 1 — The Perimeter ───────────────────────────────────
 
-    ("S2-aldermoor-exterior", build(
+    ("M2-aldermoor-exterior", build(
         "Establishing shot of a British residential district on an overcast day.\n"
         "Victorian terraced houses, parked cars, a corner shop with shutters half-down.\n"
         "Normal in every visible detail.\n\n"
@@ -156,7 +156,7 @@ PROMPTS = [
         "outdoor_day",
     )),
 
-    ("S2-boundary-felt", build(
+    ("M2-boundary-felt", build(
         "A residential pavement in a British suburb. Overcast day.\n\n"
         "A person has stopped walking at the edge of the pavement\n"
         "and is standing very still.\n"
@@ -171,7 +171,7 @@ PROMPTS = [
         "supernatural",
     )),
 
-    ("S2-estate-agent-exterior", build(
+    ("M2-estate-agent-exterior", build(
         "A vacant estate agent's shopfront on a British high street.\n"
         "Glass frontage with old property listings still in the window, faded by sun.\n"
         "The signage reads: ALDERMOOR PROPERTY SERVICES.\n"
@@ -182,7 +182,7 @@ PROMPTS = [
         "outdoor_day",
     )),
 
-    ("S2-estate-agent-whiteboard", build(
+    ("M2-estate-agent-whiteboard", build(
         "Interior of a vacated estate agent's office.\n\n"
         "A large whiteboard on the wall, covered in a hand-drawn street map.\n"
         "Streets are labelled. At each address, a date has been written in marker pen.\n"
@@ -195,7 +195,7 @@ PROMPTS = [
         "indoor",
     )),
 
-    ("S2-shredded-email", build(
+    ("M2-shredded-email", build(
         "Extreme close-up of a document in a jammed office shredder.\n\n"
         "The paper is partially shredded — the top quarter remains legible.\n"
         "Text is visible in plain business email format.\n"
@@ -209,7 +209,7 @@ PROMPTS = [
 
     # ── SCENE 2 — Deep In ────────────────────────────────────────
 
-    ("S2-zone-interior", build(
+    ("M2-zone-interior", build(
         "A residential street in a British suburb. Overcast day.\n\n"
         "The street looks completely ordinary — terraced houses, cars, pavements.\n"
         "But the perspective is subtly wrong.\n"
@@ -221,7 +221,7 @@ PROMPTS = [
         "supernatural",
     )),
 
-    ("S2-string-lines", build(
+    ("M2-string-lines", build(
         "A residential street in a British suburb.\n\n"
         "A length of white string runs along the pavement,\n"
         "tied at intervals to front garden gates and railings.\n"
@@ -233,7 +233,7 @@ PROMPTS = [
         "outdoor_day",
     )),
 
-    ("S2-palimpsest-street", build(
+    ("M2-palimpsest-street", build(
         "A residential street in a British suburb, late afternoon.\n\n"
         "The street is physically real and present.\n"
         "But faintly overlaid on it — like a double exposure, or a reflection in still water —\n"
@@ -248,7 +248,7 @@ PROMPTS = [
         "supernatural",
     )),
 
-    ("S2-chalk-arrow", build(
+    ("M2-chalk-arrow", build(
         "Extreme close-up of chalk writing on a British pavement.\n\n"
         "A single arrow, drawn in white chalk, pointing in a clear direction.\n"
         "The chalk is recent but not fresh — a few days old, still legible.\n"
@@ -259,7 +259,7 @@ PROMPTS = [
         "closeup",
     )),
 
-    ("S2-vera-doorstep", build(
+    ("M2-vera-doorstep", build(
         "A front doorstep of a Victorian terraced house.\n\n"
         "A woman in her sixties stands in the doorway.\n"
         "She is holding a ball of string — one end trailing behind her into the house,\n"
@@ -275,7 +275,7 @@ PROMPTS = [
 
     # ── SCENE 3 — 14 Aldermoor Crescent ──────────────────────────
 
-    ("S2-margaret-house-exterior", build(
+    ("M2-margaret-house-exterior", build(
         "A semi-detached Victorian house on a quiet residential street.\n"
         "Aldermoor Crescent — the house number 14 just visible on the gate.\n\n"
         "The house is tidy and clearly inhabited: curtains drawn but not shut,\n"
@@ -288,7 +288,7 @@ PROMPTS = [
         "supernatural",
     )),
 
-    ("S2-margaret-interior", build(
+    ("M2-margaret-interior", build(
         "Interior of a lived-in Victorian sitting room. Evening.\n\n"
         "A woman in her seventies sits in an armchair by a window.\n"
         "She is reading — or has been reading; the book is closed on her lap.\n"
@@ -301,7 +301,7 @@ PROMPTS = [
         "indoor",
     )),
 
-    ("S2-construction-site-fence", build(
+    ("M2-construction-site-fence", build(
         "The perimeter fence of an abandoned urban construction site. Dusk.\n\n"
         "Metal hoarding panels, grey and weathered.\n"
         "A handwritten notice: DANGER — EXCAVATION — NO UNAUTHORISED ENTRY.\n\n"
@@ -314,7 +314,7 @@ PROMPTS = [
         "dusk",
     )),
 
-    ("S2-diane-site-office", build(
+    ("M2-diane-site-office", build(
         "Interior of a small portable construction site office. Night.\n\n"
         "A woman in her fifties sits at a folding table.\n"
         "She is writing in a notebook — a dense, careful hand.\n"
@@ -327,7 +327,7 @@ PROMPTS = [
         "indoor",
     )),
 
-    ("S2-diane-notebook", build(
+    ("M2-diane-notebook", build(
         "Extreme close-up of a handwritten notebook, open on a table.\n\n"
         "Left page: a detailed hand-drawn map of a residential street grid.\n"
         "Streets are marked with times and brief notes:\n"
@@ -340,7 +340,7 @@ PROMPTS = [
         "closeup",
     )),
 
-    ("S2-excavation-substrate", build(
+    ("M2-excavation-substrate", build(
         "A construction site excavation at night.\n\n"
         "A deep trench cut through British soil and clay.\n"
         "The upper layers are ordinary — dark soil, rubble, Victorian foundations.\n"
@@ -358,7 +358,7 @@ PROMPTS = [
 
     # ── CLIMAX — The Entity and the Contact ───────────────────────
 
-    ("S2-entity-felt", build(
+    ("M2-entity-felt", build(
         "A residential street in a British suburb at dusk.\n\n"
         "The street is empty and completely still.\n"
         "No wind. No movement.\n\n"
@@ -372,7 +372,7 @@ PROMPTS = [
         "supernatural",
     )),
 
-    ("S2-contact-moment", build(
+    ("M2-contact-moment", build(
         "A residential street at dusk.\n\n"
         "A person stands alone in the middle of the road.\n"
         "They have stopped walking. Their anchor object — a small thing, held loosely —\n"
@@ -387,7 +387,7 @@ PROMPTS = [
         "supernatural",
     )),
 
-    ("S2-entity-neighbourhood", build(
+    ("M2-entity-neighbourhood", build(
         "A residential district seen from above — rooftops, gardens, streets.\n\n"
         "The neighbourhood is ordinary in every detail.\n"
         "Victorian terraces, a park, a corner shop, parked cars.\n\n"
@@ -405,7 +405,7 @@ PROMPTS = [
 
     # ── RESOLUTION ───────────────────────────────────────────────
 
-    ("S2-diane-found", build(
+    ("M2-diane-found", build(
         "A residential street in a British suburb. Early morning.\n\n"
         "A woman in her fifties walks along the pavement.\n"
         "She is carrying a notebook under one arm and a sleeping bag under the other.\n"
@@ -418,7 +418,7 @@ PROMPTS = [
         "outdoor_day",
     )),
 
-    ("S2-margaret-stays", build(
+    ("M2-margaret-stays", build(
         "Interior of a Victorian sitting room. Evening.\n\n"
         "A woman in her seventies stands at her front window.\n"
         "The street outside is quiet. The streetlights are on.\n"
@@ -430,7 +430,7 @@ PROMPTS = [
         "indoor",
     )),
 
-    ("S2-arthur-home", build(
+    ("M2-arthur-home", build(
         "A residential street in a British suburb. Morning.\n\n"
         "An older Black man, seventies, walks his greyhound\n"
         "along a pavement he has walked for forty-one years.\n"

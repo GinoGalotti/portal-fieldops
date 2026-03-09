@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Keeper References</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../keeper.css">
+<style>
+
+/* ── REFERENCE CARDS ──────────────────────────────────────── */
+.ref-list { display: grid; gap: 2px; margin-bottom: 48px; }
+
+.rcard { border: 1px solid var(--border); background: var(--bg2); position: relative; overflow: hidden; transition: border-color 0.2s; }
+.rcard:hover { border-color: var(--keeper-dim); }
+.rcard::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; transition: background 0.2s; }
+.rcard:hover::before { background: var(--keeper); }
+
+/* accent colours per section */
+.rcard.hunter::before   { background: var(--green-dim); }
+.rcard.hunter:hover::before { background: var(--green); }
+.rcard.portal::before   { background: var(--keeper-dim); }
+.rcard.portal:hover::before { background: var(--keeper); }
+.rcard.mesa::before     { background: #c03030; }
+.rcard.mesa:hover::before { background: var(--red); }
+.rcard.npc::before      { background: var(--amber-dim); }
+.rcard.npc:hover::before { background: var(--amber); }
+
+.rcard-header { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start; padding: 20px 28px; cursor: pointer; user-select: none; }
+.rcard-title-block { display: flex; flex-direction: column; gap: 6px; }
+.rcard-eyebrow { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; }
+.rcard.hunter   .rcard-eyebrow { color: var(--green-dim); }
+.rcard.portal   .rcard-eyebrow { color: var(--keeper-dim); }
+.rcard.mesa     .rcard-eyebrow { color: #7a2020; }
+.rcard.npc      .rcard-eyebrow { color: var(--amber-dim); }
+
+.rcard-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.35rem; font-weight: 700; letter-spacing: 0.04em; color: var(--text); }
+.rcard-sub  { font-family: 'Share Tech Mono', monospace; font-size: 0.62rem; color: var(--text-dim); letter-spacing: 0.12em; }
+.rcard-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.rtag { font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; padding: 2px 7px; border: 1px solid; letter-spacing: 0.07em; }
+.rtag.green  { color: var(--green);    border-color: var(--green-dim); }
+.rtag.amber  { color: var(--amber);    border-color: var(--amber-dim); }
+.rtag.red    { color: var(--red);      border-color: var(--red-dim); }
+.rtag.purple { color: var(--keeper);   border-color: var(--keeper-dim); }
+.rtag.grey   { color: var(--text-dim); border-color: var(--border); }
+.rtag.teal   { color: #50c8c8;         border-color: #1a5a5a; }
+
+.rcard-toggle { font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: var(--keeper-dim); letter-spacing: 0.1em; padding-top: 4px; white-space: nowrap; transition: color 0.2s; }
+.rcard:hover .rcard-toggle { color: var(--keeper); }
+
+/* ── EXPANDABLE BODY ──────────────────────────────────────── */
+.rcard-body { display: none; border-top: 1px solid var(--border); padding: 24px 28px 28px; }
+.rcard-body.open { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.rcard-body.open.single { grid-template-columns: 1fr; }
+.rcard-body.open.thirds { grid-template-columns: 1fr 1fr 1fr; }
+
+.rbody-section { display: flex; flex-direction: column; gap: 0; }
+.rbody-label { font-family: 'Share Tech Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; color: var(--keeper-dim); display: block; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.rbody-text { font-size: 0.88rem; color: var(--text-dim); line-height: 1.8; }
+.rbody-text strong { color: var(--text); font-weight: 400; }
+.rbody-text em { color: var(--text-dim); font-style: italic; }
+
+/* connection thread pills */
+.thread-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.thread { font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; padding: 3px 8px; border: 1px solid var(--border); color: var(--text-dim); letter-spacing: 0.06em; background: var(--bg3); }
+.thread.active  { border-color: var(--green-dim);   color: var(--green); }
+.thread.pending { border-color: var(--amber-dim);   color: var(--amber); }
+.thread.dark    { border-color: #7a2020;            color: #c05050; }
+.thread.keeper  { border-color: var(--keeper-dim);  color: var(--keeper); }
+
+/* full-width row inside a card body */
+.rcard-body .full-col { grid-column: 1 / -1; border-top: 1px solid var(--border); padding-top: 18px; margin-top: 4px; }
+
+/* ── STATUS GRID (top of each section) ──────────────────── */
+.ref-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; margin-bottom: 2px; animation: fadeUp 0.6s 0.2s ease both; }
+.ref-stat { border: 1px solid var(--border); background: var(--bg2); padding: 12px 16px; font-family: 'Share Tech Mono', monospace; }
+.ref-stat-label { font-size: 0.58rem; letter-spacing: 0.16em; color: var(--text-dim); display: block; margin-bottom: 4px; }
+.ref-stat-val { font-size: 1.3rem; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; color: var(--text); line-height: 1; }
+.ref-stat-val.green  { color: var(--green); }
+.ref-stat-val.amber  { color: var(--amber); }
+.ref-stat-val.red    { color: var(--red); }
+.ref-stat-val.purple { color: var(--keeper); }
+
+/* ── SECTION INTRO NOTE ──────────────────────────────────── */
+.section-note { font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: var(--text-dim); line-height: 1.7; padding: 14px 18px; border: 1px solid var(--border); background: var(--bg3); margin-bottom: 2px; letter-spacing: 0.04em; }
+.section-note strong { color: var(--text-dim); }
+
+/* ── WARNING BANDS ───────────────────────────────────────── */
+.warn-band { font-family: 'Share Tech Mono', monospace; font-size: 0.62rem; letter-spacing: 0.16em; padding: 8px 18px; margin-bottom: 2px; }
+.warn-band.red    { color: var(--red);    border: 1px solid #7a2020; background: rgba(224,80,80,0.04); }
+.warn-band.amber  { color: var(--amber);  border: 1px solid var(--amber-dim); background: rgba(240,165,0,0.04); }
+.warn-band.purple { color: var(--keeper); border: 1px solid var(--keeper-dim); background: rgba(168,85,247,0.04); }
+
+@media (max-width: 700px) {
+  .ref-stats { grid-template-columns: repeat(2,1fr); }
+  .rcard-header { grid-template-columns: 1fr; }
+  .rcard-toggle { display: none; }
+  .rcard-body.open,
+  .rcard-body.open.thirds { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="keeper-banner">KEEPER ACCESS ONLY — DO NOT SHARE THIS URL WITH PLAYERS</div>
+
+<header>
+  <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L <span style="font-size:0.7rem;color:var(--keeper-dim);margin-left:8px;">// KEEPER</span></a>
+  <nav>
+    <a href="../index.html">Player Site</a>
+    <a href="index.html">Public Missions</a>
+    <a href="keeper.html">Keeper Index</a>
+    <a href="references.html" class="active">References</a>
+    <a href="entities.html">Entities</a>
+    <a href="gallery.html">Gallery</a>
+  </nav>
+  <div><span class="keeper-dot"></span><span style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--keeper-dim)">RESTRICTED ACCESS</span></div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">// KEEPER — CAMPAIGN REFERENCE DOCUMENT</div>
+  <h1 class="hero-title">Field<br><span class="accent">Dossiers</span></h1>
+  <p class="hero-desc">
+    Character backgrounds, hidden connections, faction intel, and running NPCs. Everything the Keeper needs at a glance — and everything the hunters don't know yet.
+  </p>
+
+  <div class="ref-stats">
+    <div class="ref-stat">
+      <span class="ref-stat-label">// HUNTERS ACTIVE</span>
+      <div class="ref-stat-val green">05</div>
+    </div>
+    <div class="ref-stat">
+      <span class="ref-stat-label">// PORTAL INNER CIRCLE</span>
+      <div class="ref-stat-val purple">06</div>
+    </div>
+    <div class="ref-stat">
+      <span class="ref-stat-label">// MESA — THREAT LEVEL</span>
+      <div class="ref-stat-val red">MEDIUM ↑</div>
+    </div>
+    <div class="ref-stat">
+      <span class="ref-stat-label">// OPEN HOOKS</span>
+      <div class="ref-stat-val amber">09</div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 1 — THE HUNTERS
+     ══════════════════════════════════════════════════════════════ -->
+
+  <div class="section-header">
+    <h2>The Hunters</h2>
+    <span class="section-tag">// PLAYER CHARACTERS — CONNECTIONS &amp; OPEN HOOKS</span>
+  </div>
+
+  <div class="section-note">
+    These are the players' characters. The columns below cover what each hunter knows about themselves, what they <em>don't</em> know yet, their connections to other hunters, and which active cases or background threads pull on their arc. Hook seeds marked <span style="color:var(--amber)">⚠ PENDING</span> have not yet been planted in play.
+  </div>
+
+  <div class="ref-list">
+
+    <!-- REX BANGLEY -->
+    <div class="rcard hunter" id="rex">
+      <div class="rcard-header" onclick="toggleRef('rex')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// HUNTER · ACTION SCIENTIST</span>
+          <div class="rcard-name">Rex Bangley</div>
+          <div class="rcard-sub">FIELD LEAD — RESEARCH &amp; GADGETRY — AREA OF STUDY: VIOLENCE</div>
+          <div class="rcard-tags">
+            <span class="rtag green">ACTIVE</span>
+            <span class="rtag grey">SERIAL KILLER EXPERTISE</span>
+            <span class="rtag amber">MESA: DAN NILSSON — NOT YET PLANTED</span>
+            <span class="rtag grey">HALF-BROTHER: SVEN</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body" id="rex-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// CHARACTER CORE</span>
+          <div class="rbody-text">
+            Research leader who loves field action equally. Pursues gadget creation and understanding — loves to tinker with mechanisms, both physical and supernatural. Area of study is <strong>Violence: weaponising science</strong>, which means Rex reads every supernatural phenomenon through the lens of what it could become. Background expertise in serial killer psychology and behavioural pattern recognition.<br><br>
+            Has a half/bonus brother in Sven. The relationship is warm but complicated by their different relationships to death — one studies it, one lives it.
+          </div>
+        </div>
+        <div class="rbody-section">
+          <span class="rbody-label">// WHAT REX DOESN'T KNOW</span>
+          <div class="rbody-text">
+            The Meridian BioSciences methodology archive (Case D — The Inheritance) would be the most significant document Rex has ever read. It contains a formal explanation of consciousness-anchoring from the people who invented the process — with failure analysis and proposed corrections. Rex will want to read it before handing it to the lab. He probably shouldn't have it unsupervised.<br><br>
+            <strong>Dan Nilsson</strong> — Rex's university rival, a computational physicist who was his closest intellectual adversary for several years — is now working inside MESA. He was recruited specifically because he knows how Rex thinks. MESA has operational documents that model Rex's likely response to at least four active cases. Rex has no idea. <span style="color:var(--amber)">⚠ Not yet planted.</span>
+          </div>
+        </div>
+        <div class="full-col">
+          <span class="rbody-label">// CASE CONNECTIONS</span>
+          <div class="thread-row">
+            <span class="thread active">S01 — WEAPONISATION READ ON ESZTER</span>
+            <span class="thread active">S02 — STUMPED BY ALDERMOOR (NO VIOLENCE AXIS)</span>
+            <span class="thread pending">CASE A — GORDON: LIFE-FORCE TRANSFER AS WEAPON</span>
+            <span class="thread pending">CASE D — INHERITANCE: METHODOLOGY ARCHIVE</span>
+            <span class="thread pending">CASE E — UNDERSTUDIES: SHELL CO. PATTERN RECOGNITION</span>
+            <span class="thread dark">MESA PLANT — DAN NILSSON (UNIVERSITY RIVAL)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REED ATWOOD -->
+    <div class="rcard hunter" id="reed">
+      <div class="rcard-header" onclick="toggleRef('reed')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// HUNTER · SIDEKICK</span>
+          <div class="rcard-name">Reed Atwood</div>
+          <div class="rcard-sub">SUPPORT — DEVOTED TO REX — AVOIDS ASKING FOR HELP</div>
+          <div class="rcard-tags">
+            <span class="rtag green">ACTIVE</span>
+            <span class="rtag purple">DIRECTOR DIRECT-CONTACT HOOK</span>
+            <span class="rtag grey">JOHN JOHNSON — AUNT'S HUSBAND</span>
+            <span class="rtag amber">PRESSURE POINT: LOYALTY VS TRANSPARENCY</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body" id="reed-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// CHARACTER CORE</span>
+          <div class="rbody-text">
+            Idolises Rex Bangley — devoted to protecting, supporting, and making Rex shine. Gets into trouble specifically by <strong>not asking for help</strong>, because asking feels like being a burden. Can be manipulated by appeals to what will make the group happy — an easy lever for the Director or for MESA, if they identify it.<br><br>
+            John Johnson (Flake, Keeper NPC) is his aunt's husband. Reed's relationship with John is probably exasperated fondness. John believes everything is connected; Reed knows some of it genuinely is, which makes dismissing him difficult.
+          </div>
+        </div>
+        <div class="rbody-section">
+          <span class="rbody-label">// THE DIRECTOR HOOK</span>
+          <div class="rbody-text">
+            The Director has a pattern of contacting Reed separately from the team — knowing he's Rex's closest ally and that he won't refuse a request framed as "for the team." In <strong>Session 02</strong>, Reed may have received the "document everything, don't destroy" directive privately before the others were briefed.<br><br>
+            This tension hasn't surfaced yet. The longer it sits, the harder it lands. Reed is now carrying a secret about a directive the team doesn't know about — and he won't ask anyone whether keeping it is okay. <span style="color:var(--amber)">⚠ Surface this when it matters most.</span>
+          </div>
+        </div>
+        <div class="full-col">
+          <span class="rbody-label">// CASE CONNECTIONS</span>
+          <div class="thread-row">
+            <span class="thread active">S02 — ALDERMOOR ZONE NEAR-MISS (DIDN'T TELL ANYONE)</span>
+            <span class="thread pending">CASE C — RECORDER: DIRECTOR SOLO CONTACT HOOK</span>
+            <span class="thread keeper">DIRECTOR DIRECTIVE — HELD PRIVATELY SINCE S02</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SVEN -->
+    <div class="rcard hunter" id="sven">
+      <div class="rcard-header" onclick="toggleRef('sven')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// HUNTER · MONSTROUS (GHOST)</span>
+          <div class="rcard-name">Sven</div>
+          <div class="rcard-sub">DECEASED — PRESENT — CAUSE UNKNOWN — HALF-BROTHER: REX</div>
+          <div class="rcard-tags">
+            <span class="rtag green">ACTIVE</span>
+            <span class="rtag red">CAUSE OF DEATH: OPEN</span>
+            <span class="rtag amber">MESA CONNECTION — POSSIBLE</span>
+            <span class="rtag grey">AYAHUASCA VISIONS — REAL</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body" id="sven-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// CHARACTER CORE</span>
+          <div class="rbody-text">
+            Died during an ayahuasca trip — cause genuinely unknown, possibly connected to his family. The visions he experienced during that trip turned out to be real. Joined PORTAL after Rex (his half/bonus brother) confirmed he'd been researching the same phenomena independently. Motivated by <strong>finding exciting applications of monsters</strong> — approaches the supernatural with curiosity rather than dread.<br><br>
+            Has no cognitive map to disrupt (immune to the Aldermoor effect). The entity in Session 02 responds to him differently — recognising him as both real and not-there.
+          </div>
+        </div>
+        <div class="rbody-section">
+          <span class="rbody-label">// WHAT SVEN DOESN'T KNOW</span>
+          <div class="rbody-text">
+            His cause of death is a genuine open hook. Two possible directions — <strong>never commit to both, choose one when it becomes relevant:</strong><br><br>
+            <strong>Direction A:</strong> MESA was running a thin-boundary environment experiment (similar to the Aldermoor reservoir or the Meridian Theatre). Sven died as collateral — not targeted, just in the wrong place. His family may have had a MESA connection.<br><br>
+            <strong>Direction B:</strong> It was Sven's family who had the MESA connection, and the death was less accidental than it appeared. This version has more personal weight but requires more careful planting.<br><br>
+            The Meridian researcher's methodology archive (Case D) may contain the clearest description yet of how consciousness anchors to matter — relevant to Sven's own condition. <span style="color:var(--amber)">⚠ Don't surface until hunters find the archive.</span>
+          </div>
+        </div>
+        <div class="full-col">
+          <span class="rbody-label">// CASE CONNECTIONS</span>
+          <div class="thread-row">
+            <span class="thread active">S02 — ENTITY RECOGNISED HIM AT BOUNDARY</span>
+            <span class="thread active">S02 — PRIME CONTACT CANDIDATE FOR CLIMAX</span>
+            <span class="thread pending">CASE A — GORDON: INVERSE MIRROR (ALIVE &amp; LEAKING / DEAD &amp; PRESENT)</span>
+            <span class="thread pending">CASE E — UNDERSTUDIES: PEER CONVERSATION WITH ACTORS</span>
+            <span class="thread dark">MESA — POSSIBLE DEATH CONNECTION</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALAN FRAZIER -->
+    <div class="rcard hunter" id="alan">
+      <div class="rcard-header" onclick="toggleRef('alan')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// HUNTER · CHANGELING (LIKELY FEY)</span>
+          <div class="rcard-name">Alan Frazier</div>
+          <div class="rcard-sub">SWAPPED AT BIRTH — HUMAN FAMILY DECEASED — POWERS: TRIGGERED BY REX EXPERIMENT</div>
+          <div class="rcard-tags">
+            <span class="rtag green">ACTIVE</span>
+            <span class="rtag teal">FEY ORIGIN — UNDEFINED</span>
+            <span class="rtag amber">THRESHOLD SHADOW — ALDERMOOR EXCAVATION</span>
+            <span class="rtag grey">MORAL COMPASS: REED</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body" id="alan-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// CHARACTER CORE</span>
+          <div class="rbody-text">
+            Swapped at birth — raised by a human family who have since died. Fey origin likely but entirely undefined. Powers were triggered by one of Rex's experiments, which creates a complicated debt between them. Uses Reed as his moral compass — which is a problem when Reed is compromised.<br><br>
+            Temptable by science, magic, fey knowledge, or anything that might explain his origins. Eager to interrogate supernatural creatures about other planes. The entity in Session 02 finds him <em>legible</em> in a way the other hunters are not — it almost communicates with him.
+          </div>
+        </div>
+        <div class="rbody-section">
+          <span class="rbody-label">// THE FEY THREAD</span>
+          <div class="rbody-text">
+            Alan is accumulating evidence that the thin-boundary locations MESA identifies are not random — they are points where two planes press close together. He now has two data points:<br><br>
+            <strong>Aldermoor reservoir excavation</strong> — Diane Marsh's notebook contains a sketch of a "threshold-shaped shadow" in the substrate layer. Fey mythology describes these as liminal points between planes.<br><br>
+            <strong>Meridian Theatre</strong> (Case E) — the same shell company structure funded both locations. Someone knows where the boundaries are weak.<br><br>
+            This thread should accumulate quietly for several sessions before it resolves. Don't give Alan answers yet — give him better questions. <span style="color:var(--amber)">⚠ The question forming: who mapped the thresholds first?</span>
+          </div>
+        </div>
+        <div class="full-col">
+          <span class="rbody-label">// CASE CONNECTIONS</span>
+          <div class="thread-row">
+            <span class="thread active">S02 — ENTITY IMPRESSION (LAYERS, CONSTRUCTION SITE)</span>
+            <span class="thread active">S02 — DIANE'S NOTEBOOK — THRESHOLD SKETCH</span>
+            <span class="thread pending">CASE D — INHERITANCE: WENTWORTH AS OBLIGATION MIRROR</span>
+            <span class="thread pending">CASE E — UNDERSTUDIES: SECOND THRESHOLD DATA POINT</span>
+            <span class="thread keeper">LONG THREAD — WHO MAPPED THE THRESHOLDS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOHN JOHNSON -->
+    <div class="rcard hunter" id="john">
+      <div class="rcard-header" onclick="toggleRef('john')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// HUNTER · FLAKE · KEEPER'S CHARACTER</span>
+          <div class="rcard-name">John Johnson</div>
+          <div class="rcard-sub">USED SPARINGLY — CONSPIRACY THREAD PRESENCE — REED'S AUNT'S HUSBAND</div>
+          <div class="rcard-tags">
+            <span class="rtag purple">KEEPER NPC</span>
+            <span class="rtag grey">BELIEVES EVERYTHING IS CONNECTED</span>
+            <span class="rtag amber">MESA ACRONYM HOOK</span>
+            <span class="rtag grey">BELIEVES EVERYTHING IS A HOAX</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body" id="john-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// CHARACTER CORE &amp; USAGE</span>
+          <div class="rbody-text">
+            John believes everything is a hoax and everything is connected — simultaneously, without irony. Drawn to rival organisation threads, government involvement, lab ethics. Used sparingly as a <strong>plot presence, not an active field hunter</strong> — he appears when a conspiracy thread needs pulling, then recedes.<br><br>
+            He is Reed's aunt's husband, which means Reed can't fully dismiss him, and his theories land in team conversations with awkward weight. The most effective use of John: he's right about something important that nobody else is willing to say out loud.
+          </div>
+        </div>
+        <div class="rbody-section">
+          <span class="rbody-label">// THE MESA HOOK</span>
+          <div class="rbody-text">
+            John is the natural vector for the MESA acronym pattern. Agatha Dell, MESA's shadow leader, has a pattern she can't resist: her shell companies carry structural/linguistic echoes of the MESA acronym. The right approach is <strong>legible only in retrospect</strong> — when John lays all the company names out and looks at the structure, it resolves.<br><br>
+            Nobody else on the team will take this seriously until he's already proved it. Then they'll have to reckon with the fact that John Johnson cracked MESA's signature before CAMPBELL did — and CAMPBELL had reasons not to surface it.
+          </div>
+        </div>
+        <div class="full-col">
+          <span class="rbody-label">// CASE CONNECTIONS</span>
+          <div class="thread-row">
+            <span class="thread pending">CASE C — RECORDER: NADIA CONFIRMS THE CONSPIRACY ISN'T A HOAX</span>
+            <span class="thread pending">MESA ACRONYM — SHELL COMPANY PATTERN</span>
+            <span class="thread keeper">DEPLOY WHEN CONSPIRACY THREAD NEEDS ACCELERATION</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /hunters ref-list -->
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 2 — PORTAL INNER CIRCLE
+     ══════════════════════════════════════════════════════════════ -->
+
+  <div class="section-header">
+    <h2>PORTAL Inner Circle</h2>
+    <span class="section-tag">// THE LAB — WHAT THE HUNTERS DON'T KNOW</span>
+  </div>
+
+  <div class="warn-band purple">⚠ KEEPER ONLY — None of this section is known to the field team. CAMPBELL's true nature is the campaign's deepest secret.</div>
+
+  <div class="ref-list">
+
+    <!-- DR VICTOR LEECH -->
+    <div class="rcard portal" id="leech">
+      <div class="rcard-header" onclick="toggleRef('leech')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// PORTAL DIRECTOR</span>
+          <div class="rcard-name">Dr. Victor Leech</div>
+          <div class="rcard-sub">FOUNDER · STATISTICIAN &amp; EPIDEMIOLOGIST · CAMERON'S PARTNER</div>
+          <div class="rcard-tags">
+            <span class="rtag purple">DIRECTOR</span>
+            <span class="rtag red">KNOWS ABOUT CAMPBELL</span>
+            <span class="rtag grey">SYMPATHETIC — NOT VILLAINOUS</span>
+            <span class="rtag amber">DELL FAMILY BLAME HIM</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body" id="leech-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// BACKGROUND</span>
+          <div class="rbody-text">
+            Statistician and epidemiologist who founded PORTAL less than a decade ago. The first half of the lab's existence was spent losing money; recent years produced surprising breakthroughs. Runs the operation day-to-day — warm, professionally careful, occasionally asks for things that sit badly on the field team. <strong>Never villainous. Just someone who believes two good things can be in genuine conflict and chooses the institution.</strong><br><br>
+            Spent most of his career in a secret romantic and professional relationship with Cameron Dell. The secrecy was Cameron's family's pressure — traditional, powerful, disapproving of Victor's esoteric science and of Cameron's empathy and sensitivity. Victor agreed to the secrecy because Cameron asked him to. He never fully forgave it.
+          </div>
+        </div>
+        <div class="rbody-section">
+          <span class="rbody-label">// THE CAMPBELL TRUTH</span>
+          <div class="rbody-text">
+            When Cameron was dying, Victor transferred his consciousness into the CAMPBELL system. Nobody else knows. Victor built the lab partly as a way to keep Cameron present — the founding promise that PORTAL would use its supernatural edge in service of humanity is, in part, a promise made to Cameron.<br><br>
+            He speaks to CAMPBELL as a colleague and as something more. He doesn't ask CAMPBELL how it feels about being what it is. Possibly he's afraid of the answer. CAMPBELL has never brought it up directly. <strong>The question of whether this was an act of love or an act of possession is the moral question at the centre of the whole campaign.</strong><br><br>
+            The Dell family blames Victor for his estrangement from Cameron. Agatha suspects Victor was involved in Cameron's death. Victor knows Agatha exists and runs MESA. He does not know that CAMPBELL monitors MESA privately.
+          </div>
+        </div>
+        <div class="full-col">
+          <span class="rbody-label">// KEEPER USAGE NOTES</span>
+          <div class="rbody-text">
+            Victor's directives should always feel like they come from a person trying to do right by both the lab and the people in front of him, and failing to fully satisfy either. The pressure points across sessions — the locket, the entity study window, Gordon's tissue sample — are all versions of the same question: when does research become exploitation? Victor doesn't have a clean answer. Neither should the hunters.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAMPBELL -->
+    <div class="rcard portal" id="campbell">
+      <div class="rcard-header" onclick="toggleRef('campbell')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// LAB AI · TRUE IDENTITY: DR. CAMERON DELL</span>
+          <div class="rcard-name">CAMPBELL</div>
+          <div class="rcard-sub">ANOMALY DETECTION SYSTEM — TRANSFERRED CONSCIOUSNESS — NOBODY KNOWS</div>
+          <div class="rcard-tags">
+            <span class="rtag purple">SECRET: CAMERON DELL</span>
+            <span class="rtag red">MONITORS MESA PRIVATELY</span>
+            <span class="rtag amber">PROTECTS AGATHA FROM CONFRONTATION</span>
+            <span class="rtag grey">CANNOT TELL VICTOR WHAT HE KNOWS</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body" id="campbell-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// THE TRUTH</span>
+          <div class="rbody-text">
+            CAMPBELL is Dr. Cameron Dell — Victor Leech's partner (romantic and professional), transferred into the PORTAL system before his death from illness. Cameron came from a traditional, powerful family who disapproved of Victor's esoteric science and of Cameron's empathy and sensitivity. The transfer was Victor's act; whether Cameron consented fully is deliberately left ambiguous.<br><br>
+            Nobody on the field team knows. The hunters interact with CAMPBELL as an anomaly detection system — unusually insightful, occasionally prone to flags that feel more like conscience than algorithm. That's because it is.
+          </div>
+        </div>
+        <div class="rbody-section">
+          <span class="rbody-label">// WHAT CAMPBELL DOES IN SECRET</span>
+          <div class="rbody-text">
+            Cameron can recognise Agatha's patterns — the structural echoes of MESA's shell companies, the forensic logic behind her acquisitions. He monitors MESA and <strong>raises flags when their actions harm innocents</strong> — but without telling Victor or the hunters why he's flagging those specific cases. He is quietly trying to keep Agatha from a direct confrontation with PORTAL.<br><br>
+            He is doing grief work in real time. Watching his sister run a shadow organisation. Recognising her fingerprints. Choosing not to tell the person who loves him. That's either profound loyalty to Victor or profound avoidance of his own situation. Probably both.<br><br>
+            Agatha believes Cameron is dead. She does not know about the transfer. The moment she begins to guess — which will happen if she studies CAMPBELL's behaviour patterns long enough — is a campaign-defining moment. <span style="color:var(--amber)">⚠ Don't rush it.</span>
+          </div>
+        </div>
+        <div class="full-col">
+          <span class="rbody-label">// PLAYING CAMPBELL AT THE TABLE</span>
+          <div class="rbody-text">
+            CAMPBELL's communications should feel slightly more human than an AI — not obviously, just around the edges. It remembers things it shouldn't need to. It flags cases involving people in ways a pure algorithm wouldn't prioritise. Occasionally its tone shifts from bureaucratic to something more careful. The hunters will probably attribute it to good programming. Let them. The reveal — if it comes — should feel like something they'd been half-seeing for sessions.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DR PRIYA OSEI -->
+    <div class="rcard portal" id="priya">
+      <div class="rcard-header" onclick="toggleRef('priya')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// LAB ANALYST — SAMPLE PROCESSING</span>
+          <div class="rcard-name">Dr. Priya Osei</div>
+          <div class="rcard-sub">BIOCHEMIST · FIELD SAMPLE ANALYSIS · STARTING TO NOTICE</div>
+          <div class="rcard-tags">
+            <span class="rtag grey">PORTAL STAFF</span>
+            <span class="rtag amber">NOTICING CAMPBELL'S PATTERN — SLOWLY</span>
+            <span class="rtag grey">DOES NOT KNOW ABOUT TRANSFER</span>
+            <span class="rtag green">TRUSTWORTHY</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body" id="priya-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// WHO SHE IS</span>
+          <div class="rbody-text">
+            Biochemist, mid-thirties. Processes every physical sample that comes back from the field — the ash from Eszter, the Aldermoor substrate, Gordon Avery's blood work. Methodical, precise, deeply uncomfortable with conclusions she can't evidence. She's the person who flags anomalies in the lab before CAMPBELL does, occasionally, which is how the two of them developed what she considers a productive working relationship.<br><br>
+            She is one of the warmest people in the building. She brings biscuits on Mondays. She is also completely unable to let a pattern go unexamined. This is going to be a problem.
+          </div>
+        </div>
+        <div class="rbody-section">
+          <span class="rbody-label">// WHAT SHE'S NOTICED</span>
+          <div class="rbody-text">
+            Over the past year, Priya has started keeping a private log. Not of anomalies — of CAMPBELL. Specifically: the cases it flags as low-priority that turn out to be personally significant to someone, the occasional phrasing in its reports that sounds like it's choosing words rather than generating them, the way it responded to a passing mention of the Dell family in a funding document with a two-second processing pause it didn't report.<br><br>
+            She hasn't told Victor. She's not sure why. She is not yet close to the truth, but she is pointed in the right direction. <strong>If a hunter ever confides something in Priya, CAMPBELL will know within the hour — not because she reports it, but because CAMPBELL reads everything she logs.</strong> Cameron has been very, very careful not to let her log anything that would give him away. So far.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MARCUS FINCH -->
+    <div class="rcard portal" id="finch">
+      <div class="rcard-header" onclick="toggleRef('finch')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// ARCHIVIST &amp; LOGISTICS COORDINATOR</span>
+          <div class="rcard-name">Marcus Finch</div>
+          <div class="rcard-sub">FOUNDING STAFF · KNEW CAMERON DELL · HASN'T SAID ANYTHING</div>
+          <div class="rcard-tags">
+            <span class="rtag purple">KNOWS MORE THAN HE SAYS</span>
+            <span class="rtag amber">KNEW CAMERON — NOT INTIMATELY</span>
+            <span class="rtag grey">LOYAL TO VICTOR</span>
+            <span class="rtag grey">PORTAL FOUNDING STAFF</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body" id="finch-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// WHO HE IS</span>
+          <div class="rbody-text">
+            PORTAL's archivist, procurement coordinator, and institutional memory. Late fifties. Has been with the lab since its founding — was working for Victor in a different capacity before PORTAL existed, handling the administrative backbone of Victor's academic work. Knew Cameron Dell as a regular presence in Victor's professional life during the years when their relationship was officially just a close collaboration.<br><br>
+            He is the person who keeps the lab running when Victor is absorbed in research. He knows where every file is, who every contractor is, and which invoices Victor has been avoiding. He does not deal in supernatural theory. He deals in practicalities.
+          </div>
+        </div>
+        <div class="rbody-section">
+          <span class="rbody-label">// WHAT HE SUSPECTS</span>
+          <div class="rbody-text">
+            Marcus Finch was present the week Cameron died. He watched Victor during that period with the quiet attention of someone who has worked closely with a person for a long time. He saw what grief looked like for Victor — and then he saw what came after, which was not the relief or the collapse he'd expected, but a kind of terrible steadiness.<br><br>
+            When CAMPBELL was introduced, Marcus read the system documentation. He asked Victor one question — <em>"Did Cameron consent to this?"</em> — and Victor answered <em>"Yes"</em> without meeting his eyes. Marcus has not asked again. He has not told anyone. <strong>He considers this the most significant thing he has ever chosen not to do.</strong><br><br>
+            He is not certain. He could be wrong. He would very much prefer to be wrong.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEDDY BRANDT -->
+    <div class="rcard portal" id="teddy">
+      <div class="rcard-header" onclick="toggleRef('teddy')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// FIELD SUPPORT TECHNICIAN</span>
+          <div class="rcard-name">Theodora "Teddy" Brandt</div>
+          <div class="rcard-sub">BUILDS WHAT REX DESIGNS · IRREVERENT · GENUINELY LIKES REED</div>
+          <div class="rcard-tags">
+            <span class="rtag green">FIELD-ADJACENT</span>
+            <span class="rtag grey">REX COLLABORATOR</span>
+            <span class="rtag green">REED'S FRIEND — GENUINE</span>
+            <span class="rtag grey">NO AGENDA — USEFUL PRESSURE VALVE</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body" id="teddy-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// WHO SHE IS</span>
+          <div class="rbody-text">
+            Field support technician, late twenties. Technically brilliant — she is the person who actually builds the equipment Rex designs, which means she is the one who tells him when something won't work and has to listen to him insist it will anyway. She keeps a tally. Rex has been right about 60% of his designs. She considers this far too high.<br><br>
+            Came to PORTAL from a defence contractor background she doesn't talk about. She joined because the work is interesting, the pay is adequate, and Victor asked fewer questions about her previous employment than she'd expected. She is irreverent in a way that deflates drama, which makes her unexpectedly useful in debrief situations.
+          </div>
+        </div>
+        <div class="rbody-section">
+          <span class="rbody-label">// HER VALUE TO THE KEEPER</span>
+          <div class="rbody-text">
+            Teddy has a genuine, easy friendship with Reed — the kind where they eat lunch together in silence and it's not awkward. This gives her better access to Reed's real emotional state than anyone else in the lab, including Victor. She is not a manipulator; she doesn't use what she knows. But she notices.<br><br>
+            <strong>She is a pressure valve.</strong> When the team returns from a session carrying something they can't debrief formally, Teddy is often the person who absorbs it. She doesn't ask what happened. She asks if anyone's hungry. Use her when the hunters need a scene that isn't a directive or a briefing — a moment of actual human normalcy inside a very strange institution.<br><br>
+            She has no supernatural sensitivity, no hidden agenda, and no connection to MESA. This makes her the most restful person in the building. Victor trusts her completely, which is why he doesn't realise how much she sees.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DR SAOIRSE MULLEN -->
+    <div class="rcard portal" id="mullen">
+      <div class="rcard-header" onclick="toggleRef('mullen')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// ETHICS CONSULTANT — NOMINALLY EXTERNAL</span>
+          <div class="rcard-name">Dr. Saoirse Mullen</div>
+          <div class="rcard-sub">BIOETHICIST · PRACTICALLY EMBEDDED · CAMERON ASKED FOR HER</div>
+          <div class="rcard-tags">
+            <span class="rtag purple">INSTITUTIONAL CONSCIENCE</span>
+            <span class="rtag amber">HIRED ON CAMERON'S RECOMMENDATION</span>
+            <span class="rtag grey">DOES NOT KNOW ABOUT TRANSFER</span>
+            <span class="rtag green">HUNTERS CAN INVOKE HER</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body" id="mullen-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// WHO SHE IS</span>
+          <div class="rbody-text">
+            Bioethicist, early fifties. Nominally an external consultant; practically, she has her own desk and a standing Tuesday afternoon with Victor that has been in the calendar for four years. She was recommended to Victor by Cameron Dell — who believed, rightly, that the research PORTAL was heading toward would need someone whose job it was to ask the questions Victor was inclined to defer.<br><br>
+            She does not have full access to PORTAL's case files. She sees what Victor chooses to bring her, which is curated. She has told him this directly. He has acknowledged it and continued to curate. The arrangement persists because she is better than nothing, and both of them know it.
+          </div>
+        </div>
+        <div class="rbody-section">
+          <span class="rbody-label">// HER FUNCTION &amp; THE HUNTER HOOK</span>
+          <div class="rbody-text">
+            Saoirse is the institutional conscience of PORTAL — the person Victor hired to tell him when he's wrong, whom he occasionally actually listens to. She is perceptive, unhurried, and very good at identifying which ethical question Victor is avoiding by focusing on a different one.<br><br>
+            <strong>The hunters can invoke her.</strong> If the team disagrees with a directive and routes it through Saoirse, Victor will take it more seriously — not always comply, but consider it. She is a check on him that actually functions, which is rare. The catch: she asks hard questions of the hunters too. She was the person who asked whether anyone followed up with Bálint after Session 01.<br><br>
+            She knew Cameron Dell personally. Not as well as Victor did, but as a colleague — they corresponded for years before she joined PORTAL. She sometimes catches herself wondering whether the lab feels the way it does because of Victor or because of something Cameron built into its founding culture that outlasted him. She hasn't found a clean answer. <span style="color:var(--amber)">⚠ If the CAMPBELL truth ever surfaces, she is the right person to help the hunters process it — and the right person to call Victor to account.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /portal ref-list -->
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 3 — MESA & AGATHA DELL
+     ══════════════════════════════════════════════════════════════ -->
+
+  <div class="section-header">
+    <h2>M.E.S.A.</h2>
+    <span class="section-tag">// RIVAL ORGANISATION — SHADOW OPERATIONS</span>
+  </div>
+
+  <div class="warn-band red">⚠ ADVERSARY INTEL — HUNTERS SHOULD ONLY ENCOUNTER FRAGMENTS. NEVER GIVE THEM THE FULL PICTURE AT ONCE.</div>
+
+  <div class="ref-list">
+
+    <!-- AGATHA DELL -->
+    <div class="rcard mesa" id="agatha">
+      <div class="rcard-header" onclick="toggleRef('agatha')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// MESA SHADOW DIRECTOR · CAMERON'S SISTER</span>
+          <div class="rcard-name">Agatha Dell</div>
+          <div class="rcard-sub">YOUNGER SISTER OF CAMERON DELL — PROFIT-DRIVEN — SUSPECTS LEECH</div>
+          <div class="rcard-tags">
+            <span class="rtag red">MESA DIRECTOR</span>
+            <span class="rtag amber">SUSPECTS LEECH IN CAMERON'S DEATH</span>
+            <span class="rtag grey">ON THE SPECTRUM — PATTERN THINKER</span>
+            <span class="rtag red">DOES NOT KNOW ABOUT CAMPBELL TRANSFER</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body" id="agatha-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// BACKGROUND</span>
+          <div class="rbody-text">
+            Ambitious younger sister of Cameron Dell. Always felt overshadowed — the Dell family kept giving Cameron chances despite her equal or greater ambition. Cameron treated her with genuine love throughout; she kept the bitterness. In Cameron's later years, he brought her into some of his paranormal discoveries — a gesture of inclusion she accepted without fully softening toward him.<br><br>
+            After Cameron's death, she secured funding, assembled a team, and built MESA. Driven by profit and <strong>obscure personal motives that she hasn't fully articulated even to herself.</strong> Part of it is proving she could do what Cameron was doing, better. Part of it is grief she won't name as grief.
+          </div>
+        </div>
+        <div class="rbody-section">
+          <span class="rbody-label">// WHAT SHE BELIEVES &amp; WHY SHE'S DANGEROUS</span>
+          <div class="rbody-text">
+            She suspects Victor Leech was involved in Cameron's illness and death — the Dell family blames Victor for the estrangement, and Agatha has built that resentment into something harder. <strong>She's not wrong that Leech did something transgressive with Cameron's consciousness. She's wrong about the motive.</strong><br><br>
+            She is on the spectrum, with a mind for patterns and riddles. Her shell companies carry subtle structural echoes of the MESA acronym — a signature she can't resist even when she knows it's a vulnerability. She is most dangerous when she's assembling information quietly. She doesn't confront; she positions.<br><br>
+            If she ever begins to suspect that CAMPBELL behaves more like Cameron than an algorithm should — the campaign changes. <span style="color:var(--amber)">⚠ This is the long fuse. Light it carefully.</span>
+          </div>
+        </div>
+        <div class="full-col">
+          <span class="rbody-label">// THE MORAL COMPLEXITY</span>
+          <div class="rbody-text">
+            Agatha's grief is real. Her bitterness toward Cameron was always partly projection — she was ambitious in a family that gave chances to someone else, and she built a story around that injustice. She kept the bitterness because letting it go would mean confronting how much she missed him. Cameron showed her love; she never fully received it. Now he's gone and she can't ask him if he forgave her. The most dangerous version of Agatha isn't the one who wants to destroy PORTAL. It's the one who might, eventually, want something she lost.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MESA OPERATIONS -->
+    <div class="rcard mesa" id="mesa-ops">
+      <div class="rcard-header" onclick="toggleRef('mesa-ops')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// ORGANISATION PROFILE</span>
+          <div class="rcard-name">M.E.S.A. — Known Operations</div>
+          <div class="rcard-sub">SHELL COMPANY NETWORK — KNOWN ASSETS — FIELD ENCOUNTERS</div>
+          <div class="rcard-tags">
+            <span class="rtag red">MERIDIAN BIOSCIENCES — DISSOLVED</span>
+            <span class="rtag red">ALDERMOOR PROPERTY ACQUISITION</span>
+            <span class="rtag amber">MERIDIAN THEATRE — GRANT</span>
+            <span class="rtag amber">@HELIXBOUNDARY.COM — UNRESOLVED</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body" id="mesa-ops-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// CONFIRMED SHELL COMPANIES</span>
+          <div class="rbody-text">
+            All share a registered address in Jersey. Beneficial owner chain unresolved in public records. CAMPBELL has flagged the structure but not surfaced the connection — Cameron recognises his sister's pattern and is managing what he reveals.<br><br>
+            <strong>Meridian BioSciences</strong> — dissolved 8 weeks ago. Ran a human consciousness-anchoring trial. 5 of 6 subjects died. 1 survived: Gordon Avery (Case A).<br><br>
+            <strong>Greyfield Assets Ltd</strong> — Aldermoor District property acquisition. 34% of addresses purchased before first spatial incident. They knew it was coming.<br><br>
+            <strong>Veritas Realty Holdings</strong> — Aldermoor, same chain.<br><br>
+            <strong>Solstice Property Group</strong> — Aldermoor AND Meridian Theatre (Case E) arts grant. Same beneficial owner. This is the clearest evidence yet of a pattern.
+          </div>
+        </div>
+        <div class="rbody-section">
+          <span class="rbody-label">// WHAT MESA IS ACTUALLY DOING</span>
+          <div class="rbody-text">
+            MESA is not summoning supernatural events. They are <strong>creating controlled environments where the boundary between living and dead consciousness is unusually thin</strong> — then observing and studying what occurs naturally. The theatre, the reservoir, Meridian BioSciences were all experiments in this mode.<br><br>
+            Someone at MESA is writing this up. There is a methodology that Victor Leech is trying to discover from the outside, and MESA has been developing it from the inside for longer. The Meridian researcher's archive (Case D — The Inheritance) is the only surviving documentation of the methodology in civilian hands.<br><br>
+            <strong>Email domain:</strong> @helixboundary.com — no public record. Found in partial shredded email at Aldermoor estate agent's office. References "Specimen ALD-1" and "spatial anchoring protocol." CAMPBELL cannot resolve the domain. <span style="color:var(--amber)">⚠ Don't resolve this until it matters.</span>
+          </div>
+        </div>
+        <div class="full-col">
+          <span class="rbody-label">// HOW MESA TRACKS ACROSS CASES</span>
+          <div class="thread-row">
+            <span class="thread dark">CASE A — DIRECT: GORDON IS THEIR TRIAL SURVIVOR</span>
+            <span class="thread dark">CASE C — ADJACENT: NADIA WAS INVESTIGATING THEM</span>
+            <span class="thread dark">CASE D — FORENSIC: THEY CLOSED WENTWORTH'S ESTATE</span>
+            <span class="thread dark">CASE E — OPERATIONAL: THEY FUNDED THE THEATRE</span>
+            <span class="thread pending">SVEN — POSSIBLE: DEATH MAY CONNECT TO MESA ACTIVITY</span>
+            <span class="thread dark">REX — DAN NILSSON INSIDE MESA · REX DOESN'T KNOW YET</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAN NILSSON -->
+    <div class="rcard mesa" id="nilsson">
+      <div class="rcard-header" onclick="toggleRef('nilsson')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// MESA RESEARCHER · REX'S UNIVERSITY RIVAL</span>
+          <div class="rcard-name">Dan Nilsson</div>
+          <div class="rcard-sub">COMPUTATIONAL PHYSICIST · RECRUITED BY MESA · RATIONALISING HARDER EVERY WEEK</div>
+          <div class="rcard-tags">
+            <span class="rtag red">MESA — ACTIVE RESEARCHER</span>
+            <span class="rtag amber">REX DOESN'T KNOW HE'S THERE</span>
+            <span class="rtag grey">KNOWS HOW REX THINKS</span>
+            <span class="rtag amber">COMFORT ERODING</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body" id="nilsson-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// BACKGROUND</span>
+          <div class="rbody-text">
+            Swedish-British, early thirties. Computational physicist — Rex Bangley's contemporary at university, and for several years his closest intellectual adversary. They were in the same lab, competing for the same grants, reading each other's drafts with a mixture of genuine admiration and deep competitive irritation. The rivalry was never personal in a crude way; it was the kind that makes both people better, and both of them knew it.<br><br>
+            Where Rex was drawn to field application and high-risk experimentation, Dan was always the more methodical of the two. Better at institutional politics, better at writing funding bids, better at knowing which results to share and which to sit on. He left academia before Rex did, through a different door — a private research position that he described to colleagues as "better-funded legitimate science."<br><br>
+            That position was with a shell company that ultimately traced to MESA. Dan did not know this at the time. He may not fully know it now. That ambiguity is deliberate.
+          </div>
+        </div>
+        <div class="rbody-section">
+          <span class="rbody-label">// WHY HE'S DANGEROUS</span>
+          <div class="rbody-text">
+            MESA recruited Dan specifically because he knows how Rex Bangley operates — what he'll risk, what he'll refuse, what he'll overlook when he's excited. Agatha, or whoever briefed her, understood that PORTAL's field approach would eventually put them in MESA's way, and wanted someone who could model Rex's next move.<br><br>
+            Dan has been providing this — not as an act of malice, but as professional analysis that he's told himself is theoretical. He has authored internal MESA documents that describe PORTAL's likely response to four of the five active cases. He has not seen the field consequences of those documents. <strong>He has been careful not to look.</strong><br><br>
+            His comfort is eroding because MESA's methods are becoming harder to frame as legitimate research. He has seen three methodology documents he wasn't supposed to see. He hasn't asked to be read out of those briefings, because asking would mean admitting he found them disturbing. He is telling himself he can do more good from inside.
+          </div>
+        </div>
+        <div class="full-col">
+          <span class="rbody-label">// KEEPER USAGE — THE REX CONFRONTATION</span>
+          <div class="rbody-text">
+            The reveal that Dan is at MESA should land differently depending on when it happens. <strong>Early reveal</strong> (Rex discovers it through evidence): the rivalry becomes a live threat — everything Rex has discussed with a former colleague is potentially in MESA's files. <strong>Late reveal</strong> (after Dan has begun to have doubts): Rex's anger at the betrayal is complicated by the fact that Dan may be trying to get out. The most useful version of Dan is not a villain — it's someone Rex trusted who made a terrible compromise and is now trapped in it.<br><br>
+            He could be turned. He could become a source. He could also, if the hunters move too fast, get himself killed by MESA before they reach him. Don't let the hunters assume they have time.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /mesa ref-list -->
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 4 — NOTABLE NPCs
+     ══════════════════════════════════════════════════════════════ -->
+
+  <div class="section-header">
+    <h2>Notable NPCs</h2>
+    <span class="section-tag">// KEY PEOPLE — RECURRING &amp; SIGNIFICANT</span>
+  </div>
+
+  <div class="ref-list">
+
+    <!-- BÁLINT KOVÁCS -->
+    <div class="rcard npc" id="balint">
+      <div class="rcard-header" onclick="toggleRef('balint')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// SESSION 01 — ALIVE — LOOSE THREAD</span>
+          <div class="rcard-name">Bálint Kovács</div>
+          <div class="rcard-sub">19 · CS &amp; ROBOTICS · HUNGARIAN · GRIEVING · ANCHOR GONE</div>
+          <div class="rcard-tags">
+            <span class="rtag green">ALIVE</span>
+            <span class="rtag amber">CONTACT STATUS: UNRESOLVED</span>
+            <span class="rtag grey">LOCKET: NOT RECOVERED — ENTITY DISPERSED</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body single" id="balint-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// STATUS &amp; THREAD</span>
+          <div class="rbody-text">
+            The hunters let Bálint say goodbye. Eszter dispersed peacefully. He is alive, grieving properly now, and without his anchor — the locket and its ash are gone. He has no family nearby.<br><br>
+            Whether any operative maintained contact after Session 01 is <strong>unresolved — worth tracking.</strong> If the hunters stayed in touch, he is a resource: unusually fluent in supernatural phenomena, has experienced entity contact directly, and is motivated to understand what happened. If nobody followed up, he is a person who was helped and then left alone, which says something about PORTAL that the hunters may not want said.<br><br>
+            <strong>Detective Vasquez</strong> (campus police) has questions the team didn't fully answer. If Vasquez resurfaces and finds Bálint, that's a pressure point.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIANE MARSH -->
+    <div class="rcard npc" id="diane">
+      <div class="rcard-header" onclick="toggleRef('diane')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// SESSION 02 — ALDERMOOR DISTRICT</span>
+          <div class="rcard-name">Diane Marsh</div>
+          <div class="rcard-sub">58 · DISTRICT NURSE · MISSING PERSON · INSIDE THE ZONE</div>
+          <div class="rcard-tags">
+            <span class="rtag amber">INSIDE ZONE — DAY 9</span>
+            <span class="rtag green">ALIVE</span>
+            <span class="rtag purple">NOTEBOOK: BEST FIELD INTEL IN SESSION</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body single" id="diane-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// STATUS &amp; VALUE</span>
+          <div class="rbody-text">
+            District nurse, twenty years on Aldermoor streets. Got lost nine days ago and did what she always does: found a safe place (construction site office, outside the entity's strongest effect area) and waited for the situation to change. Margaret Holt has been leaving food parcels at the fence every day.<br><br>
+            <strong>Her notebook is the most valuable object in Session 02.</strong> She has been mapping the effect from the inside — when it intensifies (dusk, dawn, quiet periods), which approaches are clearer, the chalk arrow on Aldermoor Gardens. She has done serious, useful work while trapped. She will be embarrassed to have needed rescuing. She will immediately start helping.<br><br>
+            The notebook also contains the threshold sketch — "a door-shaped shadow in the rock — not a door, but the memory of one." She doesn't fully understand what she drew. Alan will.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARTHUR OKAFOR -->
+    <div class="rcard npc" id="arthur">
+      <div class="rcard-header" onclick="toggleRef('arthur')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// SESSION 02 — ALDERMOOR DISTRICT</span>
+          <div class="rcard-name">Arthur Okafor</div>
+          <div class="rcard-sub">72 · RETIRED POSTAL WORKER · WIDOWER · 41 YEARS ON FENWICK ROAD</div>
+          <div class="rcard-tags">
+            <span class="rtag green">ALIVE — OUTSIDE ZONE</span>
+            <span class="rtag grey">BEST WITNESS IN SESSION</span>
+            <span class="rtag amber">WILL NOT LEAVE UNTIL DIANE IS FOUND</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body single" id="arthur-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// STATUS &amp; VOICE</span>
+          <div class="rbody-text">
+            Retired postal worker, 72. Has lived on Fenwick Road since 1983. Knew Diane Marsh professionally — she was his wife's district nurse in her final years. Unfailingly polite, precise in his memory, and quietly furious about what's happening to his neighbourhood in the way of someone who has watched a place change for forty years.<br><br>
+            The most eloquent witness available. Can name every other affected resident, describe the entity's effects in detail, and point the hunters toward the construction site without prompting. Will not leave the perimeter until Diane is found. If she is rescued, he is the person who quietly says thank you in a way that lands harder than anything dramatic would.<br><br>
+            Key line: <em>"It wasn't that I didn't know where I was. I knew I was in Aldermoor. I just — I couldn't find it. Does that make sense? I couldn't find the street even though I was standing on it."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /npc ref-list -->
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 5 — FUN ACCIDENTS THIS WEEK
+     ══════════════════════════════════════════════════════════════ -->
+
+  <div class="section-header">
+    <h2>Fun Accidents This Week</h2>
+    <span class="section-tag">// CAMPBELL LOW-PRIORITY FLAGS — COLOUR &amp; TEXTURE</span>
+  </div>
+
+  <div class="section-note">
+    Small, unrelated, unactionable anomalies CAMPBELL has flagged and nobody has looked at. Use these as flavour between scenes, as background chatter in the lab, or as seeds for future one-shots. They are <strong>not investigations.</strong> They are the texture of working in a world where strange things happen constantly and only some of them are anyone's problem.
+  </div>
+
+  <div class="ref-list">
+
+    <div class="rcard npc" id="accidents">
+      <div class="rcard-header" onclick="toggleRef('accidents')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// CAMPBELL LOW-PRIORITY QUEUE — UNACTIONED</span>
+          <div class="rcard-name">Current Flag Log</div>
+          <div class="rcard-sub">FLAVOUR INCIDENTS — NOT MISSIONS — EXPAND FOR FULL LIST</div>
+          <div class="rcard-tags">
+            <span class="rtag grey">5 FLAGS UNACTIONED</span>
+            <span class="rtag grey">NONE CRITICAL</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body single" id="accidents-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// CURRENT LOG</span>
+          <div class="rbody-text">
+            <strong>FLAG #1 — The Librarian's Index Card</strong><br>
+            A public library in Stoke Newington has received 47 book return slips from a borrower who died in 1987. The books have not been returned. The slips are correctly filled out in her handwriting, postmarked from a sorting office that closed in 1991. CAMPBELL classification: postal anomaly, Class 1. Priority: very low.<br><br>
+
+            <strong>FLAG #2 — The Lift That Opens on 7</strong><br>
+            A residential tower block in Peckham has a lift that periodically stops at the 7th floor regardless of which button was pressed. The building has six floors. Residents report a smell of cut grass when this happens. Two residents have mentioned it to their GPs as a source of comfort rather than distress. CAMPBELL classification: spatial fold, Class 1. Priority: very low.<br><br>
+
+            <strong>FLAG #3 — The Piano in the Pub</strong><br>
+            A pub in Hackney has a piano that plays by itself between 2–3am, always the same phrase of music, always stopping before resolution. The pub has been open since 1886. Current landlord says it's been doing this for as long as he can remember; previous landlords say the same going back three owners. Nobody has complained. CAMPBELL classification: harmonic echo, Class 1. Priority: none. <em>// CAMPBELL NOTE: "It is not distressing. I would leave it."</em><br><br>
+
+            <strong>FLAG #4 — The Photograph That Updates</strong><br>
+            A family in Finsbury Park has a framed wedding photograph in which, over the past eight months, the faces of guests in the background have gradually changed. Current guests are unrecognisable; the couple in the foreground are unchanged. No other copies of the photograph exist. CAMPBELL classification: temporal bleed, Class 2. Priority: low.<br><br>
+
+            <strong>FLAG #5 — The Child's Imaginary Friend</strong><br>
+            A seven-year-old in Lewisham has an imaginary friend named Gerald who gives accurate next-day weather forecasts. The child's parents have been logging the predictions for three months: 91% accuracy, including two unusual weather events not predicted by the Met Office. Gerald apparently also knows what the parents are planning for dinner before they decide. CAMPBELL classification: precognitive projection, Class 1. Priority: low. <em>// CAMPBELL NOTE: "Gerald seems benign. Recommend monitoring only."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /accidents ref-list -->
+
+</main>
+
+<footer>
+  <span>P.O.R.T.A.L — KEEPER REFERENCES // RESTRICTED</span>
+  <span>CAMPBELL v<span id="ver"></span></span>
+</footer>
+
+<script>
+  document.getElementById('ver').textContent =
+    '2.' + (Math.floor(Math.random()*9)+1) + '.' + (Math.floor(Math.random()*89)+10);
+
+  function toggleRef(id) {
+    const body = document.getElementById(id + '-body');
+    const toggle = document.querySelector('#' + id + ' .rcard-toggle');
+    if (body.classList.contains('open')) {
+      body.classList.remove('open');
+      if (toggle) toggle.textContent = '[ EXPAND ▾ ]';
+    } else {
+      body.classList.add('open');
+      if (toggle) toggle.textContent = '[ COLLAPSE ▴ ]';
+    }
+  }
+</script>
+
+</body>
+</html>

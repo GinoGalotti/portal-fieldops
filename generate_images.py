@@ -13,11 +13,18 @@ Already-generated images are skipped automatically, so re-running is safe.
 """
 
 import os
+import sys
 import base64
 import time
+import importlib
 import requests
 from dotenv import load_dotenv
-from prompts import PROMPTS
+
+# Optional: pass a prompts module name as the first argument.
+# Defaults to "prompts" (the original prompts.py).
+# Example: python generate_images.py S2-prompts
+_prompts_module = sys.argv[1].replace(".py", "") if len(sys.argv) > 1 else "prompts"
+PROMPTS = importlib.import_module(_prompts_module).PROMPTS
 
 load_dotenv()
 
