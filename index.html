@@ -169,6 +169,11 @@ section {
 .operative-id { font-family: 'Share Tech Mono', monospace; font-size: 0.62rem; color: var(--text-dim); letter-spacing: 0.12em; margin-bottom: 8px; }
 .operative-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 600; color: var(--text); letter-spacing: 0.04em; margin-bottom: 4px; }
 .operative-status { font-family: 'Share Tech Mono', monospace; font-size: 0.62rem; color: var(--green-dim); letter-spacing: 0.1em; }
+a.operative-card { display: block; text-decoration: none; color: inherit; transition: border-color 0.2s, background 0.2s; }
+a.operative-card:hover { border-color: var(--border-bright); background: var(--bg3); }
+a.operative-card:hover::before { background: var(--green); }
+.operative-arc { font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; color: var(--green-dim); letter-spacing: 0.1em; margin-top: 8px; opacity: 0.7; }
+a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
 
 /* ── MOBILE ── */
 @media (max-width: 600px) {
@@ -186,7 +191,7 @@ section {
 <header>
   <div class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</div>
   <nav>
-    <a href="#sessions">Sessions</a>
+    <a href="#sessions">Briefing</a>
     <a href="missions/index.html">Missions</a>
     <a href="#operatives">Operatives</a>
     <a href="#bestiary">Bestiary</a>
@@ -277,23 +282,26 @@ section {
   </div>
   <div class="operatives-grid">
 
-    <div class="operative-card">
+    <a href="hunters/reed-hunter-stories.html" class="operative-card">
       <div class="operative-id">// OP-001</div>
       <div class="operative-name">Reed Atwood</div>
       <div class="operative-status">● ACTIVE — FIELD</div>
-    </div>
+      <div class="operative-arc">// HUNTER STORIES ↗</div>
+    </a>
 
-    <div class="operative-card">
+    <a href="hunters/sven-hunter-stories.html" class="operative-card">
       <div class="operative-id">// OP-002</div>
       <div class="operative-name">Sven</div>
       <div class="operative-status">● ACTIVE — FIELD</div>
-    </div>
+      <div class="operative-arc">// HUNTER STORIES ↗</div>
+    </a>
 
-    <div class="operative-card">
+    <a href="hunters/rex-hunter-stories.html" class="operative-card">
       <div class="operative-id">// OP-003</div>
       <div class="operative-name">Rex Bangley</div>
       <div class="operative-status">● ACTIVE — FIELD</div>
-    </div>
+      <div class="operative-arc">// HUNTER STORIES ↗</div>
+    </a>
 
     <div class="operative-card">
       <div class="operative-id">// OP-004</div>
@@ -301,11 +309,12 @@ section {
       <div class="operative-status">● ACTIVE — FIELD</div>
     </div>
 
-    <div class="operative-card">
+    <a href="hunters/alan-hunter-stories.html" class="operative-card">
       <div class="operative-id">// OP-005</div>
       <div class="operative-name">Alan Frazier</div>
       <div class="operative-status">● ACTIVE — FIELD</div>
-    </div>
+      <div class="operative-arc">// HUNTER STORIES ↗</div>
+    </a>
 
   </div>
   <div style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);letter-spacing:0.1em;margin-top:10px;padding:10px 14px;border:1px solid var(--border);background:var(--bg2);">

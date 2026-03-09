@@ -5,16 +5,17 @@
 
 ## 1. Centralised CSS Files
 
-There are four stylesheets. Every page uses exactly **one** of them.
+There are five stylesheets. Every page uses exactly **one** of them.
 
-| File | Purpose | Link path from `/missions/` | Link path from root `/` |
-|---|---|---|---|
-| `player.css` | Player-facing nav pages | `../player.css` | `player.css` |
-| `keeper.css` | Keeper-facing nav/index pages | `../keeper.css` | `keeper.css` |
-| `mission-prep.css` | Mission prep documents (keeper) | `../mission-prep.css` | `mission-prep.css` |
-| `briefing.css` | CAMPBELL briefing card pages (player) | `../briefing.css` | `briefing.css` |
+| File | Purpose | Link path from `/missions/` | Link path from `/hunters/` | Link path from root `/` |
+|---|---|---|---|---|
+| `player.css` | Player-facing nav pages | `../player.css` | — | `player.css` |
+| `keeper.css` | Keeper-facing nav/index pages | `../keeper.css` | — | `keeper.css` |
+| `mission-prep.css` | Mission prep documents (keeper) | `../mission-prep.css` | — | `mission-prep.css` |
+| `briefing.css` | CAMPBELL briefing card pages (player) | `../briefing.css` | — | `briefing.css` |
+| `hunters/hunter.css` | Hunter story arc pages (player) | — | `hunter.css` | `hunters/hunter.css` |
 
-**Important:** `mission-prep.css` is colour-agnostic — it uses `--mp-*` CSS variables that each page defines in its own `<style>:root {}` block. Copy the full variable set from an existing mission prep page and adjust the colour values for the new mission's palette.
+**Important:** Both `mission-prep.css` and `hunters/hunter.css` are colour-agnostic — they use CSS variables that each page defines in its own `<style>:root {}` block. See §3 for the variable sets.
 
 Reference theme implementations:
 - **Amber/brown:** `01-a-promise-is-a-promise.html`
@@ -66,6 +67,22 @@ Reference theme implementations:
 | `--keeper` | `#a855f7` | Keeper accent — replaces green as primary |
 | `--keeper-dim` | `#4a1d7a` | Subdued keeper purple |
 | `--keeper-glow` | `#a855f722` | Keeper glow shadows |
+
+### `hunters/hunter.css` — required `:root` variables (per page)
+
+All base site colours are built in. Only override the 7 accent variables to give a character their own colour identity. Alan Frazier's teal is the default (no override needed).
+
+| Variable | Role | Alan (default) | Reed | Rex | Sven |
+|---|---|---|---|---|---|
+| `--accent` | Borders, fills, active states | `#2ec4b6` | `#3ab5b0` | `#2ecc71` | `#9b59b6` |
+| `--accent-dim` | Eyebrows, labels, dim borders | `#1a6e68` | `#1a5a58` | `#1a7a43` | `#6c3483` |
+| `--accent-glow` | Text-shadow, box-shadow | `#2ec4b633` | `#3ab5b022` | `#2ecc7133` | `#9b59b633` |
+| `--accent-a03` | Faint tinted backgrounds | `rgba(46,196,182,0.03)` | `rgba(58,181,176,0.03)` | `rgba(46,204,113,0.03)` | `rgba(155,89,182,0.03)` |
+| `--accent-a04` | Hover backgrounds | `rgba(46,196,182,0.04)` | `rgba(58,181,176,0.04)` | `rgba(46,204,113,0.04)` | `rgba(155,89,182,0.04)` |
+| `--accent-a06` | Selected backgrounds | `rgba(46,196,182,0.06)` | `rgba(58,181,176,0.06)` | `rgba(46,204,113,0.06)` | `rgba(155,89,182,0.06)` |
+| `--accent-a08` | Button hover backgrounds | `rgba(46,196,182,0.08)` | `rgba(58,181,176,0.08)` | `rgba(46,204,113,0.08)` | `rgba(155,89,182,0.08)` |
+
+**To add a new character:** pick a colour, derive its rgba variants at 0.03/0.04/0.06/0.08, and paste the 7-variable block below into the page `<head>`.
 
 ### `mission-prep.css` — required `:root` variables (per page)
 
@@ -151,6 +168,9 @@ All `.logo`, `.section-header`, `.section-tag` exist with keeper-purple equivale
 | `.hero-title` | Large condensed bold title | Page title in hero |
 | `.hero-title .accent` | Purple glowing text | Highlighted word inside `.hero-title` |
 | `.hero-desc` | Dim body text, max-width 600px | Subtitle paragraph in hero |
+| `.ktag` | Tiny mono badge with coloured border | Status/category tags on keeper cards. Variants: `.green`, `.amber`, `.red`, `.purple`, `.grey`, `.teal` |
+| `.section-note` | Dark inset mono text block, bordered | Inline contextual notes within a section (not a rules callout) |
+| `.warn-band` | Thin full-width mono alert stripe | Short single-line warnings between content blocks. Variants: `.red`, `.amber`, `.purple` |
 
 ### `mission-prep.css`
 
@@ -252,7 +272,219 @@ All `.logo`, `.section-header`, `.section-tag` exist with keeper-purple equivale
 - All sections use `scroll-margin-top: 64px` to account for the sticky 64px header.
 - Nav links from `missions/index.html` back to the main site use `../index.html#section`.
 
-### 6b. Keeper nav page (e.g., `keeper.html`, `gallery.html`)
+### 6b. Hunter story arc page (e.g., `hunters/alan-hunter-stories.html`)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>P.O.R.T.A.L — [Character Name] · Hunter Stories</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="hunter.css">
+  <style>
+  :root {
+    --accent:     #[hex];
+    --accent-dim: #[hex];
+    --accent-glow: #[hex+alpha];
+    --accent-a03: rgba([r],[g],[b],0.03);
+    --accent-a04: rgba([r],[g],[b],0.04);
+    --accent-a06: rgba([r],[g],[b],0.06);
+    --accent-a08: rgba([r],[g],[b],0.08);
+  }
+  </style>
+  <!-- Omit the <style> block entirely for Alan Frazier (teal is the default). -->
+</head>
+<body>
+
+<header>
+  <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</a>
+  <nav>
+    <span class="status-dot"></span>
+    <a href="../index.html">Home</a>
+    <a href="../index.html#operatives" class="active">Operatives</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">// HUNTER DOSSIER · [PLAYBOOK] · HUNTER STORIES</div>
+  <h1 class="hero-title">[FIRST NAME] <span class="accent">[LAST NAME]</span></h1>
+  <p class="hero-desc">[One-paragraph character description.]</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">PLAYBOOK: <span>[Playbook]</span></div>
+    <div class="hero-meta-item">[KEY]: <span>[VALUE]</span></div>
+    <div class="hero-meta-item">STATUS: <span>Active · PORTAL Field Operative</span></div>
+  </div>
+  <div class="campbell-note">
+    <span class="c-label">// CAMPBELL — OPERATIVE NOTE</span>
+    [Brief CAMPBELL note explaining how hunter stories work.]
+  </div>
+</div>
+
+<main>
+<div class="arc-nav">
+  <a href="#arc-[id]" class="active">Arc I — [Title]</a>
+  <a href="#arc-[id]">Arc II — [Title]</a>
+  <a href="#arc-[id]" class="custom">Arc III — [Title] ✦ PORTAL</a>
+</div>
+
+<div class="how-it-works">
+  <div class="how-title">// ABOUT HUNTER STORIES</div>
+  <div class="how-grid">
+    <div class="how-item"><strong>Starting a Story</strong><p>Tell the Keeper you want to begin a hunter story. They'll weave its pressures into the campaign alongside active cases.</p></div>
+    <div class="how-item"><strong>Story Beats</strong><p>Mark a beat when you do something that fits it. Mark five and you gain a benefit.</p></div>
+    <div class="how-item"><strong>Resolution</strong><p>When the story concludes — resolved, failed, or transformed — take one resolution move.</p></div>
+  </div>
+</div>
+
+<!-- ARC BLOCK — repeat for each arc -->
+<div id="arc-[id]" class="arc">  <!-- add class="arc arc-custom" for PORTAL-original arcs -->
+  <div class="arc-header">
+    <div class="arc-eyebrow">// ARC [N] — [ADAPTED FROM HUNTER'S JOURNAL / ORIGINAL · P.O.R.T.A.L CAMPAIGN]</div>
+    <div class="arc-name">[Arc Title]</div>
+    <p class="arc-intro">[2–3 sentence arc premise.]</p>
+  </div>
+
+  <!-- PLAYER SECTION -->
+  <div class="arc-player">
+    <div class="arc-section-label">// FOR [CHARACTER] — PLAYER SECTION</div>
+
+    <div class="entry-points">
+      <h3>When to Start This Arc</h3>
+      <ul class="entry-list">
+        <li>[Trigger condition]</li>
+      </ul>
+    </div>
+
+    <div class="choices-block">
+      <div class="choice-group">
+        <h3>[Choice Question]</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">[Option text]</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="[Prompt]"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="beats-block">
+      <h3>Story Beats <span style="font-weight:300;font-size:0.8rem;color:var(--text-dim)">&nbsp;— mark five to gain a benefit</span></h3>
+      <div class="beats-track" id="beats-[arc-id]">
+        <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
+      </div>
+      <ul class="beats-list">
+        <li>[Beat description]</li>
+      </ul>
+    </div>
+
+    <div class="resolution-block">
+      <h3>Resolution Moves</h3>
+      <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
+      <div class="resolution-moves">
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>[Move Name]</div>
+          <p>[Move text with <strong>mechanical terms bolded</strong>.]</p>
+        </div>
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>[Move Name]</div>
+          <p>[Move text.]</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-note">// PORTAL HOOK: [Connection to wider campaign.]</div>
+  </div>
+
+  <!-- KEEPER SECTION (blurred) -->
+  <div class="blur-wrap">
+    <div class="blur-notice">// KEEPER ACCESS ONLY — DO NOT READ</div>
+    <div class="arc-keeper blurred">
+      <div class="keeper-label">// FOR THE KEEPER — ARC: [TITLE]</div>
+      <p class="keeper-intro">[Keeper guidance paragraph.]</p>
+
+      <p class="keeper-intro" style="margin-bottom:16px"><strong style="color:var(--text)">Countdown — [Arc Title]</strong></p>
+      <table class="countdown-table">
+        <tr><td>Day</td><td>[Description]</td></tr>
+        <tr><td>Shadows</td><td>[Description]</td></tr>
+        <tr><td>Sunset</td><td>[Description]</td></tr>
+        <tr><td>Dusk</td><td>[Description]</td></tr>
+        <tr><td>Nightfall</td><td>[Description]</td></tr>
+        <tr><td>Midnight</td><td>[Description]</td></tr>
+      </table>
+
+      <div class="threats-grid">
+        <div class="threat-card">
+          <div class="threat-name">[Threat Name]</div>
+          <div class="threat-type">[Type — motivation]</div>
+          <p class="threat-desc">[Description]</p>
+          <ul class="threat-moves"><li>[Move]</li></ul>
+        </div>
+        <div class="threat-card full">
+          <div class="threat-name">[Threat Name]</div>
+          <div class="threat-type">[Type]</div>
+          <p class="threat-desc">[Description]</p>
+          <ul class="threat-moves"><li>[Move]</li></ul>
+          <div class="custom-move"><strong>Custom Move — [Name]:</strong> [Text]</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end arc block -->
+
+</main>
+
+<div class="page-actions">
+  <button class="action-btn" onclick="window.print()">// PRINT</button>
+  <button class="action-btn" onclick="resetAll()">// RESET CHOICES</button>
+</div>
+
+<script>
+document.querySelectorAll('.choice-opt').forEach(opt => {
+  opt.addEventListener('click', function() { this.classList.toggle('selected'); });
+});
+function toggleRes(el) {
+  el.parentElement.querySelectorAll('.res-move').forEach(m => m.classList.remove('selected'));
+  el.classList.add('selected');
+}
+document.querySelectorAll('.beats-track').forEach(track => {
+  const boxes = track.querySelectorAll('.beat-box');
+  boxes.forEach((box, i) => {
+    box.addEventListener('click', function() {
+      if (this.classList.contains('filled')) {
+        boxes.forEach((b, j) => { if (j >= i) b.classList.remove('filled'); });
+      } else {
+        boxes.forEach((b, j) => { if (j <= i) b.classList.add('filled'); });
+      }
+    });
+  });
+});
+function resetAll() {
+  if (!confirm('Reset all choices on this page?')) return;
+  document.querySelectorAll('.choice-opt').forEach(o => o.classList.remove('selected'));
+  document.querySelectorAll('.res-move').forEach(o => o.classList.remove('selected'));
+  document.querySelectorAll('.beat-box').forEach(o => o.classList.remove('filled'));
+  document.querySelectorAll('.choice-open input').forEach(i => i.value = '');
+}
+document.querySelectorAll('.arc-nav a').forEach(a => {
+  a.addEventListener('click', function(e) {
+    const href = this.getAttribute('href');
+    if (href.startsWith('#')) { e.preventDefault(); document.querySelector(href).scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+</script>
+</body>
+</html>
+```
+
+**Notes:**
+- File lives in `hunters/[name]-hunter-stories.html`. Link path for CSS is `hunter.css` (same directory).
+- Alan's teal is the default — omit `<style>` block entirely for Alan. All others need the 7-variable override. See §3 for all four character palettes.
+- Arc III (the PORTAL-original arc) gets `class="arc arc-custom"` — this shifts the accent stripe and `.portal-note` to amber.
+- `.beats-track` elements need unique `id` attributes (`beats-[arc-id]`) if you want the scroll-active nav highlighting script to work.
+- The Keeper section is blurred by default. The `.blur-wrap` / `.blur-notice` / `.arc-keeper.blurred` pattern is already in `hunter.css`.
+
+### 6c. Keeper nav page (e.g., `keeper.html`, `gallery.html`)
 
 ```html
 <!DOCTYPE html>
@@ -277,6 +509,8 @@ All `.logo`, `.section-header`, `.section-tag` exist with keeper-purple equivale
     <a href="../index.html">Player Site</a>
     <a href="index.html">Public Missions</a>
     <a href="keeper.html">Keeper Index</a>
+    <a href="references.html">References</a>
+    <a href="entities.html">Entities</a>
     <a href="gallery.html">Gallery</a>
   </nav>
   <div><span class="keeper-dot"></span><span style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--keeper-dim)">RESTRICTED ACCESS</span></div>
@@ -460,6 +694,39 @@ All `.logo`, `.section-header`, `.section-tag` exist with keeper-purple equivale
 
 These are defined in inline `<style>` blocks inside individual pages. They are not available in any shared stylesheet.
 
+### `hunters/hunter.css` classes (available on all hunter pages)
+
+| Class | Visual effect | When to use |
+|---|---|---|
+| `.hero-eyebrow` | Tiny mono label in `--accent-dim` | Pre-title line in hunter hero |
+| `.hero-title .accent` | Accent-coloured glowing text | Character surname in hero title |
+| `.hero-meta` / `.hero-meta-item` | Mono badge row | Playbook, origin, status tags in hero |
+| `.campbell-note` / `.c-label` | Accent-bordered terminal note | CAMPBELL operative note in hero |
+| `.how-it-works` / `.how-grid` / `.how-item` | 3-column explainer card | "About Hunter Stories" block |
+| `.arc` | Bordered card, accent top stripe | One hunter story arc container |
+| `.arc.arc-custom` | Amber top stripe instead of accent | PORTAL-original arcs (Arc III) |
+| `.arc-header` / `.arc-eyebrow` / `.arc-name` / `.arc-intro` | Arc title block | Top section of an arc card |
+| `.arc-player` / `.arc-section-label` | Player section with labelled divider | Player-facing content in an arc |
+| `.entry-points` / `.entry-list` | `//`-prefixed bullet list | "When to Start This Arc" |
+| `.choices-block` / `.choice-group` / `.choice-options` | Choice grid | Player choice questions |
+| `.choice-opt` / `.choice-box` / `.choice-text` | Toggleable choice card | Individual player choice |
+| `.choice-open` | Free-text input row (`grid-column: 1/-1`) | "Something else:" custom field |
+| `.beats-block` / `.beats-track` / `.beat-box` | Row of 5 clickable progress boxes | Story beat tracker |
+| `.beats-list` | `◇`-prefixed bullet list | Beat descriptions |
+| `.resolution-block` / `.resolution-moves` | 2-column resolution grid | Arc resolution move choices |
+| `.res-move` / `.res-move-name` / `.check` | Clickable resolution card | Single resolution move (one active at a time) |
+| `.portal-note` | Mono callout, accent left border | P.O.R.T.A.L campaign hook note |
+| `.arc-keeper` / `.arc-keeper.blurred` | Keeper section, blurred by default | Keeper-only arc notes |
+| `.blur-wrap` / `.blur-notice` | Overlay label on blurred region | "KEEPER ACCESS ONLY" badge |
+| `.keeper-label` / `.keeper-intro` | Amber label + body text | Inside keeper section |
+| `.countdown-table` | 6-row Day→Midnight table | Arc countdown clock |
+| `.threats-grid` / `.threat-card` / `.threat-card.full` | 2-column threat cards | Threats/NPCs in keeper section |
+| `.threat-name` / `.threat-type` / `.threat-desc` / `.threat-moves` | Threat card internals | Name, type, description, move list |
+| `.custom-move` | Amber left-bordered callout | Custom mechanic move inside threat card |
+| `.arc-nav` / `.arc-nav a` / `.arc-nav a.active` / `.arc-nav a.custom` | Sticky arc navigation pills | Jump links at top of `<main>` |
+| `.page-actions` / `.action-btn` | Fixed bottom-right button group | Print + Reset buttons |
+| `.arc-divider` | 1px gradient line | Optional visual separator inside arc |
+
 ### In `missions/keeper.html`
 - `.stats-row`, `.stat-box`, `.stat-label`, `.stat-val` — keeper index dashboard stats
 - `.kmission`, `.kmission-header`, `.kmission-num`, `.kmission-title`, `.kmission-sub`, `.kmission-tags` — mission card layout
@@ -502,6 +769,12 @@ Before a new HTML page is considered integrated, verify all five of these: **(1)
 | `missions/01-portal-campbell-briefings.html` | `../briefing.css` | ✅ Converted | Briefing card format. Cases A/B/C. |
 | `missions/02-portal-campbell-briefings.html` | `../briefing.css` | ✅ Converted | Briefing card format. Cases A/C/D/E (post-Aldermoor). |
 | `missions/02-portal-keeper-cases.html` | `../mission-prep.css` | ✅ Converted | Purple theme. Page-specific: `.case-block`, `.case-hook`, `.seed-box`, `.rival-box`, `.veil-box`. |
+| `missions/references.html` | `../keeper.css` | ✅ Compliant | Page-specific: `.rcard` system, `.thread-row`, `.ref-stats`/`.ref-stat`. |
+| `missions/entities.html` | `../keeper.css` | ✅ Compliant | Page-specific: `.ecard`, `.tcard`, `.dbcard`, `.stat-block`, `.harm-row`, `.moves-block`, `.notes-block`, `.entity-stats`, `.class-badge`. |
+| `hunters/alan-hunter-stories.html` | `hunters/hunter.css` | ✅ Compliant | No accent override (default teal). |
+| `hunters/reed-hunter-stories.html` | `hunters/hunter.css` | ✅ Compliant | Accent override: `#3ab5b0` teal. |
+| `hunters/rex-hunter-stories.html` | `hunters/hunter.css` | ✅ Compliant | Accent override: `#2ecc71` green. |
+| `hunters/sven-hunter-stories.html` | `hunters/hunter.css` | ✅ Compliant | Accent override: `#9b59b6` violet. |
 
 ---
 
@@ -766,11 +1039,37 @@ When asking an AI assistant to generate or modify a page, include the following 
 **For player pages, also include:**
 > "This is a player-facing page. Use `player.css` (or `../player.css` if inside `/missions/`). Nav links go to `index.html#section-id`. All sections need `scroll-margin-top: 64px`."
 
+**For hunter story arc pages, also include:**
+> "This is a hunter story arc page inside `hunters/`. Use `hunter.css` (same directory — no path prefix). Add a `<style>:root{}` block overriding the 7 `--accent-*` variables for [character name]'s colour: `--accent`, `--accent-dim`, `--accent-glow`, `--accent-a03` through `--accent-a08`. See integration-reference.md §3 for all four existing palettes. Nav links: Home → `../index.html`, Operatives → `../index.html#operatives`. Arc III (PORTAL-original) gets `class='arc arc-custom'`. Include the standard JS block for choice toggles, beat tracking, resolution moves, and arc-nav smooth scroll."
+
 **When the page introduces new CSS classes not in the shared stylesheets:**
 > "List any new CSS classes you defined that are not in `mission-prep.css` / `player.css` / `keeper.css`, so they can be reviewed for promotion to the shared stylesheet."
 
 **When modifying an existing page:**
 > "Here is the current file. Preserve the CSS link structure — do not switch from the linked stylesheet to inline styles. Only add new page-specific classes in the `<style>` block."
+
+---
+
+## 15. Hidden Keeper Access — Double-Click Pattern
+
+Both player-facing pages (`index.html` and `missions/index.html`) have a hidden double-click shortcut on the "CAMPBELL ONLINE" status span that navigates to `keeper.html`. This is invisible to players.
+
+**Required attributes on the span:**
+```html
+<span id="campbell-status" style="cursor:default;user-select:none;">CAMPBELL ONLINE</span>
+```
+- `cursor: default` — no pointer cursor hint
+- `user-select: none` — no text selection on double-click
+
+**Script (in existing `<script>` block):**
+```javascript
+// Double-click CAMPBELL ONLINE to enter keeper mode
+document.getElementById('campbell-status').addEventListener('dblclick', function () {
+  window.location.href = 'missions/keeper.html'; // or 'keeper.html' if already in /missions/
+});
+```
+
+This works on GitHub Pages — only server-side code is blocked, not browser JavaScript.
 
 ---
 

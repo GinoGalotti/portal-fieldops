@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Reed Atwood · Hunter Stories</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="hunter.css">
+<style>
+:root {
+  --accent:     #3ab5b0;
+  --accent-dim: #1a5a58;
+  --accent-glow: #3ab5b022;
+  --accent-a03: rgba(58, 181, 176, 0.03);
+  --accent-a04: rgba(58, 181, 176, 0.04);
+  --accent-a06: rgba(58, 181, 176, 0.06);
+  --accent-a08: rgba(58, 181, 176, 0.08);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</a>
+  <nav>
+    <span class="status-dot"></span>
+    <a href="../index.html">Home</a>
+    <a href="../index.html#operatives" class="active">Operatives</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">// HUNTER DOSSIER · SIDEKICK · HUNTER STORIES</div>
+  <h1 class="hero-title">REED <span class="accent">ATWOOD</span></h1>
+  <p class="hero-desc">You idolise Rex Bangley. Not blindly — you've seen his flaws up close — but the way you saw him work and understood that this was what you wanted to be, what you wanted to do with the time you have. The problem is that wanting to protect him means not asking for help when you're drowning. And the problem after that is that someone at PORTAL may already know that about you, and be using it.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">PLAYBOOK: <span>Sidekick</span></div>
+    <div class="hero-meta-item">HERO: <span>Rex Bangley</span></div>
+    <div class="hero-meta-item">FAMILY: <span>John Johnson (uncle by marriage)</span></div>
+    <div class="hero-meta-item">STATUS: <span>Active · PORTAL Field Operative</span></div>
+  </div>
+  <div class="campbell-note">
+    <span class="c-label">// CAMPBELL — OPERATIVE NOTE</span>
+    Hunter stories develop alongside active cases. Choose if and when to start one — talk to the Keeper about timing. Each arc has a player section (your choices and beats) and a Keeper section (blurred). You can read the Keeper section after the arc resolves — or not at all.
+  </div>
+</div>
+
+<main>
+<div class="arc-nav">
+  <a href="#arc-weakness" class="active">Arc I — The Idol's Weakness</a>
+  <a href="#arc-torch">Arc II — Passing the Torch</a>
+  <a href="#arc-directive" class="custom">Arc III — The Private Directive ✦ PORTAL</a>
+</div>
+
+<div class="how-it-works">
+  <div class="how-title">// ABOUT HUNTER STORIES</div>
+  <div class="how-grid">
+    <div class="how-item"><strong>Starting a Story</strong><p>Tell the Keeper you want to begin a hunter story. They'll weave its pressures into the campaign alongside active cases.</p></div>
+    <div class="how-item"><strong>Story Beats</strong><p>Mark a beat when you do something that fits it. Mark five and you gain a benefit. Beats can be earned across multiple sessions.</p></div>
+    <div class="how-item"><strong>Resolution</strong><p>When the story concludes — resolved, failed, or transformed — take one resolution move. It changes Reed permanently.</p></div>
+  </div>
+</div>
+
+<!-- ARC I -->
+<div id="arc-weakness" class="arc">
+  <div class="arc-header">
+    <div class="arc-eyebrow">// ARC I — ADAPTED FROM HUNTER'S JOURNAL</div>
+    <div class="arc-name">The Idol's Weakness</div>
+    <p class="arc-intro">You want to be like Rex. Rex knows this, and generally wants to mentor you. But Rex has weaknesses — real ones, not the heroic kind — and you've noticed that some of them look like strengths from where you're standing. The danger isn't that you'll fail to emulate him. The danger is that you'll succeed.</p>
+  </div>
+
+  <div class="arc-player">
+    <div class="arc-section-label">// FOR REED — PLAYER SECTION</div>
+
+    <div class="entry-points">
+      <h3>When to Start This Arc</h3>
+      <ul class="entry-list">
+        <li>Emulating Rex in the field puts Reed in genuine danger — not because of incompetence, but because Rex's approach works for Rex specifically, and Reed is not Rex.</li>
+        <li>Rex reveals something about how he sees Reed — a moment of honest appraisal — that makes the dynamic between them suddenly legible.</li>
+        <li>Reed catches himself doing something Rex does, without having consciously chosen to, and the effect is wrong.</li>
+      </ul>
+    </div>
+
+    <div class="choices-block">
+      <div class="choice-group">
+        <h3>Which Weakness Does Reed Find Awesome?</h3>
+        <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:10px">Ask Rex's player to name weaknesses Rex owns. Choose one Reed wants to emulate:</p>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The tendency to solve problems by escalating them — treating every situation as a field test.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The refusal to admit when something isn't working — holding position under pressure until it breaks in a new direction.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The willingness to make decisions for other people — moving them into safer positions without asking.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The conviction that the work justifies the cost — to relationships, to people in the blast radius, to Reed.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="The weakness Reed finds compelling…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>What Problem Does the Weakness Create?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">It puts Reed in dangerous situations Rex didn't intend and can't fully protect him from.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">It makes Reed reluctant to ask for help — compounding his already-existing tendency not to burden the team.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">It makes the other hunters uneasy — Rex doing it is one thing, but Reed doing it reads differently.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">It isolates Reed from normal people in a way that cuts off a last line of perspective.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="The problem it creates…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>What Supernatural Problem Exploits This?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">An entity that feeds on the specific kind of recklessness this weakness produces — and gets stronger when Reed gives in.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A dangerous piece of Rex's past — consequences still moving in the world — that now has a path to Reed.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A MESA-aligned threat that has studied Rex's methods and knows exactly how to get Reed to act the way they need.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A phenomenon created by Rex's previous field work — one Rex hasn't disclosed, because disclosing it means admitting a mistake.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="The supernatural problem…"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="beats-block">
+      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <div class="beats-track" id="beats-weakness">
+        <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
+      </div>
+      <ul class="beats-list">
+        <li>The Weakness puts Reed in danger — and Rex finds out, or doesn't.</li>
+        <li>Someone other than Rex criticises the Weakness in Reed — and it lands differently because it isn't coming from the source.</li>
+        <li>The Weakness turns out to have a genuinely good side: a moment where it works, where it's the right call.</li>
+        <li>Reed emulates something good about Rex — a different quality, one Reed chose deliberately rather than absorbed.</li>
+        <li>Rex overcomes the Weakness in a meaningful moment — and Reed sees it happen.</li>
+      </ul>
+    </div>
+
+    <div class="resolution-block">
+      <h3>Resolution Moves</h3>
+      <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
+      <div class="resolution-moves">
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>Teacher but No Paragon</div>
+          <p>When unsure how to act, you can ask Rex how he would act. If you do something different to what he suggests, <strong>take –1 forward</strong> and <strong>mark experience</strong>. You've learned to take his counsel without taking his shape.</p>
+        </div>
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>Faithful Follower</div>
+          <p>When unsure how to act, ask Rex how his Weakness would play out in this situation and <strong>mark experience</strong>. Then do what he suggested, or <strong>take –1 forward</strong>. You've decided the Weakness is worth carrying.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-note">// PORTAL HOOK: Victims of the Weakness — people whose lives became harder because of Rex's way of operating — may be in PORTAL's case files. CAMPBELL will not surface this proactively. But if Reed asks the right question, CAMPBELL will answer it accurately. This is one of the places where CAMPBELL's commitment to honesty and his fondness for Reed create tension with each other.
+    </div>
+  </div>
+
+  <div class="blur-wrap">
+    <div class="blur-notice">// KEEPER ACCESS ONLY — DO NOT READ</div>
+    <div class="arc-keeper blurred">
+      <div class="keeper-label">// FOR THE KEEPER — ARC: THE IDOL'S WEAKNESS</div>
+      <p class="keeper-intro">This arc plays out primarily between Reed and Rex. Don't dominate it with external pressure — seed the world with quiet consequences of the Weakness and let the hunters encounter them organically. Your job is to make the Weakness show up repeatedly, in varied registers: once funny, once costly, once redemptive, once devastating.</p>
+      <p class="keeper-intro"><em>MESA connection:</em> If you choose "a MESA-aligned threat that has studied Rex's methods," this arc intersects with Rex's Uncanny Nemesis arc. Dan Nilsson's predictive documents model how Rex's personality creates risk vectors in people adjacent to him. Reed is specifically named. This is information Reed would find both clarifying and horrifying. Time it for maximum impact.</p>
+      <p class="keeper-intro">The Weakness's Victims are the arc's most useful tool. Find one or two people from previous cases who got hurt because of how Rex operates. Let Reed meet them. Let them be sympathetic. Don't let them be villains about it.</p>
+
+      <p class="keeper-intro" style="margin-bottom:16px"><strong style="color:var(--text)">Countdown — The Idol's Weakness</strong></p>
+      <table class="countdown-table">
+        <tr><td>Day</td><td>A new Victim is made or revealed — someone whose life became harder because of how Rex operates, or because Reed is operating the same way.</td></tr>
+        <tr><td>Shadows</td><td>The Supernatural Problem approaches Reed specifically — not Rex. It has read the situation correctly. Reed doesn't recognise what it's doing.</td></tr>
+        <tr><td>Sunset</td><td>A great opportunity to give in to the Weakness appears. It looks, from Reed's position, like exactly the right call.</td></tr>
+        <tr><td>Dusk</td><td>Victims make their injury visible — to Rex, to the team, to PORTAL staff. The Weakness is no longer a private matter.</td></tr>
+        <tr><td>Nightfall</td><td>The Supernatural Problem becomes demonstrably stronger — unless both Rex and Reed renounce the Weakness at personal cost.</td></tr>
+        <tr><td>Midnight</td><td>The Problem acts. The cost is proportional to how long Rex and Reed refused to look at what they were doing.</td></tr>
+      </table>
+
+      <div class="threats-grid">
+        <div class="threat-card">
+          <div class="threat-name">The Weakness</div>
+          <div class="threat-type">Phenomenon: Panic (motivation: to make people act irrationally)</div>
+          <p class="threat-desc">A pattern of behaviour — Rex's, and Reed's approximation of it. It creates predictable outcomes: people close to the hunters pay costs that weren't theirs to pay. Treat it as recurring environmental pressure, not a discrete threat.</p>
+          <ul class="threat-moves">
+            <li>Present opportunities to indulge at moments when the alternative would be harder but better.</li>
+            <li>Let a bystander or monster display the same weakness — a dark mirror.</li>
+            <li>Reveal that the Weakness has deep roots in Rex's history — something that explains without excusing.</li>
+          </ul>
+          <div class="custom-move"><strong>Custom Move — Weak Point:</strong> When Reed gives in to the Weakness in a crisis, the Supernatural Problem gains one new power for the remainder of the session. When Rex gives in, the same. These stack.</div>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">The Weakness's Victims</div>
+          <div class="threat-type">Bystanders: Victims (motivation: to put themselves in danger)</div>
+          <p class="threat-desc">People whose lives were harder because of the Weakness — Rex's version or Reed's imitation. Not unified, don't necessarily know each other. They share only the shape of what hurt them. Some are still trying to get it fixed. Some have stopped.</p>
+          <ul class="threat-moves">
+            <li>Turn people against Rex — or against Reed for being a willing extension of him.</li>
+            <li>Show the Weakness's history — occasions before Reed, consequences Rex didn't see.</li>
+            <li>Seek other hunters' help against Rex and Reed specifically.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">The Supernatural Problem</div>
+          <div class="threat-type">Appropriate monster or phenomenon</div>
+          <p class="threat-desc">Something from their work that is harder because of the Weakness. Demonstrably worse the more the Weakness is fed. The hunters should be able to see the correlation before they act on it.</p>
+          <ul class="threat-moves">
+            <li>Harm innocents in direct proportion to how much the Weakness has been fed recently.</li>
+            <li>Make the pattern visible — not through manipulation, but through consequence.</li>
+            <li>Tempt Reed specifically with something only the Weakness would let him reach for.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">Rex Bangley</div>
+          <div class="threat-type">Bystander: Ally (motivation: to protect Reed)</div>
+          <p class="threat-desc">The source of the Weakness, and simultaneously the person most resistant to seeing that the arc is partly about him. Play Rex as genuinely caring about Reed and genuinely incapable, for most of this arc, of understanding that caring and the Weakness are in conflict.</p>
+          <ul class="threat-moves">
+            <li>Protect Reed from the consequences of the Weakness — in ways that model the Weakness.</li>
+            <li>Express affection and faith at moments that make it harder for Reed to reckon with what he's doing.</li>
+            <li>Overcome the Weakness in a single moment — the arc's possible turning point.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARC II -->
+<div id="arc-torch" class="arc">
+  <div class="arc-header">
+    <div class="arc-eyebrow">// ARC II — ADAPTED FROM HUNTER'S JOURNAL</div>
+    <div class="arc-name">Passing the Torch</div>
+    <p class="arc-intro">You're the noob. Everybody knows it, including you — and you've made a quiet peace with it. Then someone shows up who is where you were, and you realise that from their angle, you look like a veteran. You're not. But you're the closest thing they have. This arc is about what it means to be the one who explains things to someone who trusts you, when you're still figuring it out yourself.</p>
+  </div>
+
+  <div class="arc-player">
+    <div class="arc-section-label">// FOR REED — PLAYER SECTION</div>
+
+    <div class="entry-points">
+      <h3>When to Start This Arc</h3>
+      <ul class="entry-list">
+        <li>A bystander demonstrates an understanding of the supernatural they shouldn't have — and they're looking to Reed for an explanation, not to Rex.</li>
+        <li>Reed has a run of genuine successes in the field — moments where he acted independently and it worked — and feels, briefly, like someone who knows what they're doing.</li>
+        <li>Someone asks Reed what it's like to work with Rex, and Reed gives an answer that surprises him — one that doesn't sound like worship.</li>
+      </ul>
+    </div>
+
+    <div class="choices-block">
+      <div class="choice-group">
+        <h3>Who Is the Mentee?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A bystander from a previous case who got too close to something and didn't come out the same. They've been handling it alone.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Someone from Reed's personal life — a friend from before PORTAL who has noticed Reed changing and wants to understand why.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A PORTAL-adjacent person — lab staff, a contractor — who absorbed more of the work than they were meant to.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">John Johnson — who has stumbled into a genuine supernatural encounter while following a conspiracy thread, and needs help his own scepticism can't provide.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="Who the Mentee is…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>Why Do They Come to Reed, Not Rex?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Reed is less intimidating. Rex is a force of nature; Reed is a person you can actually talk to.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Reed has a unique skill or perspective that applies to what the Mentee is dealing with — something Rex doesn't have.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They're closely connected to Reed — by blood, by shared history, by something that makes Rex the wrong person to ask.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Rex has already assessed them and moved on. Reed was the only one who looked back.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="Why they chose Reed…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>How Does Helping Them Put Reed in Danger?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Reed has to think of their needs when handling cases — carrying a second person's safety without asking the team to carry it too.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The Mentee's situation attracts attention from forces that now also target Reed.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Reed doesn't fully agree with the Mentee's read on their own situation — managing that gap while keeping them safe is constant work.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Rex doesn't know how much Reed is carrying alone. Telling him would mean admitting Reed needed the help.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="The danger of helping…"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="beats-block">
+      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <div class="beats-track" id="beats-torch">
+        <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
+      </div>
+      <ul class="beats-list">
+        <li>Your mentoring genuinely helps the Mentee — a clear, observable improvement.</li>
+        <li>The Mentee gets into trouble and you have to get them out — at personal cost, without backup.</li>
+        <li>You and the Mentee have a real argument — not a misunderstanding, but a genuine disagreement about something that matters.</li>
+        <li>The Mentee reaches a moment where they treat you and Rex as equals — and you don't know whether to correct them.</li>
+        <li>The Mentee changes in a direction you didn't plan — and you feel the weight of having been part of the reason.</li>
+      </ul>
+    </div>
+
+    <div class="resolution-block">
+      <h3>Resolution Moves</h3>
+      <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
+      <div class="resolution-moves">
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>Eternal Noob</div>
+          <p>In any dangerous situation, you can declare yourself totally overwhelmed. <strong>Take –1 ongoing</strong> until the situation ends, but <strong>mark experience</strong>. Rex gets <strong>+1 ongoing</strong> to helping and protecting you while it lasts. You've earned the right to ask for help — by proving you could go without it.</p>
+        </div>
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>Wiser than I Seem</div>
+          <p>When you surprise someone with your skills and perspective, <strong>mark experience</strong>. When you play the role of clueless youngling, <strong>take –1 forward</strong>. Something in you has settled. You know things now. That costs you the cover of not knowing.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-note">// PORTAL HOOK: If the Mentee is John Johnson — Reed's uncle by marriage — CAMPBELL will notice increased probability that MESA's shell company structure becomes visible to parties outside PORTAL. John is a natural vector for the MESA acronym pattern. CAMPBELL has not raised this flag with Dr. Leech. He is watching to see what Reed does.
+    </div>
+  </div>
+
+  <div class="blur-wrap">
+    <div class="blur-notice">// KEEPER ACCESS ONLY — DO NOT READ</div>
+    <div class="arc-keeper blurred">
+      <div class="keeper-label">// FOR THE KEEPER — ARC: PASSING THE TORCH</div>
+      <p class="keeper-intro">Reed believes, at some level, that being needed is being a burden. This arc turns that on its head. Reed is needed, someone is depending on him, and he has to figure out how to be present for that without either hiding behind it or collapsing under it. The emotional engine: Reed discovering that competence and worthiness are not the same problem.</p>
+      <p class="keeper-intro"><em>John Johnson option:</em> If you use John as the Mentee, this arc intersects directly with the MESA thread. John is a Flake who believes everything is connected — he's not wrong, he's just missing the correct framework. Reed becomes the one who decides how much of the correct framework to give him. That puts Reed in the position of making decisions affecting the campaign's larger conspiracy thread without Rex's input or knowledge.</p>
+      <p class="keeper-intro">Design the Mentee's Problems proportionally to someone at Reed's level — threatening but not global. The Mentee should require Reed's specific attention, not a team response. If the team gets involved, let the Mentee notice Reed needed backup, and let that cost something between them.</p>
+
+      <p class="keeper-intro" style="margin-bottom:16px"><strong style="color:var(--text)">Countdown — Passing the Torch</strong></p>
+      <table class="countdown-table">
+        <tr><td>Day</td><td>The Mentee's Problems make their life actively harder — something Reed can see, even if he can't immediately fix it.</td></tr>
+        <tr><td>Shadows</td><td>The Mentee needs help right now. Reed has to decide how much of himself to spend.</td></tr>
+        <tr><td>Sunset</td><td>The Mentee's Friends are hurt because of a Problem Reed and the Mentee failed to contain. The cost becomes visible to people outside the arc.</td></tr>
+        <tr><td>Dusk</td><td>The Mentee's Problems threaten to cut them off from everything normal. They are becoming what Reed is, whether they want to or not.</td></tr>
+        <tr><td>Nightfall</td><td>The Problems make their move. The Mentee is in immediate danger. Whether Reed calls for backup is his call to make.</td></tr>
+        <tr><td>Midnight</td><td>The Mentee is cut off — from their life, from Reed, possibly from the world. What Reed is left with depends on every choice before this point.</td></tr>
+      </table>
+
+      <div class="threats-grid">
+        <div class="threat-card">
+          <div class="threat-name">The Mentee</div>
+          <div class="threat-type">Bystander: Innocent (motivation: to do the right thing)</div>
+          <p class="threat-desc">In some ways, a less experienced Reed. In others, entirely different — their situation is not Reed's situation, and what Reed learned won't all transfer. Don't let Reed assume the map applies. When roleplaying them, always find one way they're like Reed and one way they're not.</p>
+          <ul class="threat-moves">
+            <li>Seek Reed's help and advice at inconvenient moments.</li>
+            <li>Solve unexpected problems independently — with partial success that creates new complications.</li>
+            <li>Ask questions about Rex — framing Reed as the authority on something Reed is still figuring out.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">The Mentee's Problems</div>
+          <div class="threat-type">Appropriate monster, villain, or phenomenon</div>
+          <p class="threat-desc">What's making the Mentee's life harder. Proportional: threatening enough to be real, limited enough that one determined person could handle it — if they don't hesitate. Should bleed into Reed's regular cases without taking them over.</p>
+          <ul class="threat-moves">
+            <li>Threaten the Mentee's life or freedom in ways that require Reed's specific knowledge.</li>
+            <li>Appear in team cases — crossing the threshold between Reed's private arc and the shared campaign.</li>
+            <li>Overwhelm the Mentee, and then Reed, if Reed delays.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">The Mentee's Friends</div>
+          <div class="threat-type">Bystanders: Innocents (motivation: to do the right thing)</div>
+          <p class="threat-desc">Normal people around the Mentee who want to help and don't know how. Their well-meaning attempts at support push the Mentee toward decisions that work in a normal world and nowhere else. They are, inadvertently, the most dangerous thing in the arc.</p>
+          <ul class="threat-moves">
+            <li>Give the Mentee a version of normal life increasingly incompatible with what they're becoming.</li>
+            <li>Ask Reed difficult questions about the Mentee that he can't answer honestly without revealing what he shouldn't.</li>
+            <li>Contact PORTAL directly — not knowing where that information reaches.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">Rex Bangley</div>
+          <div class="threat-type">Bystander: Ally (motivation: to support Reed)</div>
+          <p class="threat-desc">Rex is not the mentor in this arc — Reed is. But Rex is still present, and his reaction to Reed taking on a mentee depends heavily on where the Idol's Weakness arc stands. He may be confused, displaced, quietly hurt, or — if he's in the right place — genuinely moved by what Reed is doing.</p>
+          <ul class="threat-moves">
+            <li>Offer to take over — from genuine care, in a way that would undermine what Reed is doing.</li>
+            <li>Provide practical support without fully understanding what the arc is costing Reed emotionally.</li>
+            <li>See Reed doing this and recognise what it means — and let Reed know he sees it.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARC III -->
+<div id="arc-directive" class="arc arc-custom">
+  <div class="arc-header">
+    <div class="arc-eyebrow">// ARC III — ORIGINAL · P.O.R.T.A.L CAMPAIGN</div>
+    <div class="arc-name">The Private Directive</div>
+    <p class="arc-intro">Dr. Leech has been contacting Reed separately. You're not sure when it started — it's been gradual, a question here, a request for a brief there, a note asking you to observe something and report back. It's not formal. It's not in writing. And you haven't told Rex. It began because you wanted to be useful — wanted PORTAL to see you as more than Rex's shadow. But what you've been asked to do has started to shade into something you can't easily justify to yourself, let alone to your team. This arc asks whether loyalty to an institution can survive understanding what the institution actually is.</p>
+  </div>
+
+  <div class="arc-player">
+    <div class="arc-section-label">// FOR REED — PLAYER SECTION</div>
+
+    <div class="entry-points">
+      <h3>When to Start This Arc</h3>
+      <ul class="entry-list">
+        <li>Dr. Leech asks Reed something specific — about Rex, about the team, about a case detail — that Reed realises he's been unconsciously tracking on PORTAL's behalf without meaning to.</li>
+        <li>Reed notices that information he shared privately with PORTAL has had a downstream effect he didn't anticipate — a case priority shifted, a resource appeared, a person was contacted.</li>
+        <li>The team discovers something about PORTAL that Reed already knew — because Leech told him — and Reed has to decide in the moment whether to say so.</li>
+        <li>Rex asks Reed a direct question that Reed cannot answer honestly without revealing the private contact.</li>
+      </ul>
+    </div>
+
+    <div class="choices-block">
+      <div class="choice-group">
+        <h3>What Has Leech Asked Reed to Do?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Monitor Rex's field decisions and flag anything suggesting Rex is pursuing personal research goals on PORTAL time.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Report on the team's emotional state and interpersonal dynamics — framed as welfare, but functionally intelligence.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Retrieve a specific piece of information from a case scene before it was logged in the official record.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Stay close to a specific bystander from a previous case and report any contact they make with parties outside PORTAL.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="What Leech asked Reed for…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>Why Did Reed Agree?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Leech framed it as protecting Rex — Reed was told the monitoring was protective, not extractive.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Reed wanted to be valuable to PORTAL independent of Rex, and this was the first time someone in authority had asked him directly for something.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Leech implied — without saying directly — that other team members had similar private arrangements. Reed assumed he was the last to be asked.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The first request seemed genuinely small — something Reed would have done anyway. The arrangement grew from there.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="Why Reed said yes…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>What Does Reed Stand to Lose?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Rex. If Rex finds out, the question is not whether he'll be angry — it's whether Reed could give him a reason to trust him again.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">His read on Leech. Reed has decided Leech is good. This arc will complicate that — and whatever replaces it will be harder to hold.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">His own justifications. Reed has a story about why this is okay. The arc dismantles it incrementally. By the end, he'll have to decide without the story.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">His position in the team. If this becomes known and Reed can't account for it, he may find himself outside the circle of trust in a group where that trust is the only safety.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="What's at stake for Reed…"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="beats-block">
+      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <div class="beats-track" id="beats-directive">
+        <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
+      </div>
+      <ul class="beats-list">
+        <li>Reed does something for Leech that he knows the team would object to — and carries the weight of it alone through a full scene.</li>
+        <li>Reed declines a request from Leech — or delays it, or does it incompletely — and lives with the uncertainty of what that decision costs.</li>
+        <li>Another team member shares something with Reed in confidence that is directly relevant to what Leech has been asking about.</li>
+        <li>Reed confronts Leech directly — asking what the information is being used for, or refusing to continue without an answer. Leech responds.</li>
+        <li>The directive becomes visible to the team — not through Reed's disclosure, but through consequence — and Reed has to account for it.</li>
+      </ul>
+    </div>
+
+    <div class="resolution-block">
+      <h3>Resolution Moves</h3>
+      <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
+      <div class="resolution-moves">
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>I Told the Team</div>
+          <p>You disclosed the directive — fully, on your own terms, before it became unavoidable. When you <strong>act under pressure</strong> involving loyalty conflicts within the team, <strong>take +1 forward</strong>. When you lie to protect someone, <strong>take –1 forward</strong>. Transparency is cheaper than you thought.</p>
+        </div>
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>I Did What I Was Asked</div>
+          <p>You completed the directive and absorbed the cost. When you <strong>manipulate someone</strong> to protect a person you care about, <strong>take +1 forward</strong>. When someone trusts you without reservation, <strong>mark experience</strong> — and take a moment. You know what trust costs. You're carrying that.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-note">// PORTAL HOOK: CAMPBELL is aware that Dr. Leech has been contacting Reed separately — CAMPBELL logs all internal PORTAL communications. He has not raised a flag; Leech is the Director and has authority over field personnel. But Cameron knew what it looked like when someone with power asked a person who wanted to be useful to do something quiet. CAMPBELL is watching this with feelings he hasn't processed. If Reed ever asks CAMPBELL whether other field operatives have similar arrangements, CAMPBELL will answer accurately. He won't lie. He won't volunteer the information. He'll answer what he's asked.
+    </div>
+  </div>
+
+  <div class="blur-wrap">
+    <div class="blur-notice">// KEEPER ACCESS ONLY — DO NOT READ</div>
+    <div class="arc-keeper blurred">
+      <div class="keeper-label">// FOR THE KEEPER — ARC: THE PRIVATE DIRECTIVE</div>
+      <p class="keeper-intro">This arc is Reed's most structurally dangerous storyline. The emotional engine is the oldest Sidekick problem: Reed wanted to be more than a shadow, and he took the first door that opened. Leech is not malevolent — he has real reasons for wanting this information. But he is using Reed's specific psychology against him: Reed will carry things alone rather than burden others. Leech knows this, maybe not consciously, but he knows it.</p>
+      <p class="keeper-intro"><em>What Leech wants:</em> Leech manages the team carefully. He is genuinely worried about Rex's research priorities, Sven's existential situation, Alan's fey nature — all legitimate concerns. But his method is gathering private intelligence through a hunter who will absorb the discomfort rather than escalate it. The directive is not sinister in origin. It becomes sinister through use. This distinction matters for how you play Leech — he should be genuinely good-intentioned throughout, which is what makes this arc hurt.</p>
+      <p class="keeper-intro"><em>CAMPBELL and Reed:</em> Cameron had feelings about loyalty, transparency, and what it means to be asked to carry something quietly. If Reed reaches CAMPBELL with questions about the directive, CAMPBELL will be honest — and will feel the weight of being the one to answer. This is one of several arcs where the CAMPBELL revelation, when it comes, will hit Reed with particular force: he was being watched by an AI that is a dead man who has been observing him struggle with whether to be honest.</p>
+      <p class="keeper-intro">The arc's climax must be Reed's choice — not Leech's. Don't let external events resolve it. Reed has to decide whether to tell the team, and when, and how. Both resolution moves are valid. The difference between them is not good and bad — it's about what kind of hunter Reed becomes.</p>
+
+      <p class="keeper-intro" style="margin-bottom:16px"><strong style="color:var(--text)">Countdown — The Private Directive</strong></p>
+      <table class="countdown-table">
+        <tr><td>Day</td><td>Leech makes a new request. Slightly larger than the last one. Reed notices the incremental shift but has not yet decided it's significant.</td></tr>
+        <tr><td>Shadows</td><td>Reed does something under the directive that has a visible effect on a team member — a priority shifted, a resource withheld, information reaching PORTAL before the team. The team member doesn't yet trace it to Reed.</td></tr>
+        <tr><td>Sunset</td><td>Leech asks for something Reed finds genuinely uncomfortable. This is the first clean moment to refuse. The arc hinges on what Reed does here.</td></tr>
+        <tr><td>Dusk</td><td>A team member — most likely Rex — notices Reed behaving differently and asks directly. Reed's answer is a lie or deflection. It works. That should not feel like a victory.</td></tr>
+        <tr><td>Nightfall</td><td>The downstream effect of the directive becomes visible in a case outcome — something the team could have done better if they'd had information Reed held back. The consequences are attributed to circumstances, not to Reed. Reed knows.</td></tr>
+        <tr><td>Midnight</td><td>The directive is exposed — not by Reed, but by consequence: CAMPBELL flags an anomaly, a document surfaces, someone asks Leech a direct question in Reed's presence. Reed is present for the exposure. What he does in that moment defines the arc's resolution.</td></tr>
+      </table>
+
+      <div class="threats-grid">
+        <div class="threat-card">
+          <div class="threat-name">The Directive</div>
+          <div class="threat-type">Phenomenon: Corruption (motivation: to spread and grow)</div>
+          <p class="threat-desc">Not a single request — a pattern that escalates incrementally. Each request is individually justifiable. The pattern is not. Treat it as slow-moving: it doesn't attack, it accumulates. The harm it causes is the distance it creates between Reed and the people he's protecting by not telling them.</p>
+          <ul class="threat-moves">
+            <li>Present new requests at moments of maximum compliance — when Reed has recently succeeded, when he's grateful to Leech, when he feels seen by PORTAL.</li>
+            <li>Make the information Reed gathers seem harmless — until it isn't.</li>
+            <li>Create situations where the only way to complete a request is to actively deceive a team member, not just remain silent.</li>
+          </ul>
+          <div class="custom-move"><strong>Custom Move — Can't Ask for Help:</strong> While the Private Directive is active, whenever Reed attempts to <em>rely on your hero</em>, roll with –1. This reflects the weight of what he's not saying. If Reed fully discloses the directive to Rex, remove this penalty permanently.</div>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">Dr. Victor Leech</div>
+          <div class="threat-type">Bystander: Official (motivation: to be in control)</div>
+          <p class="threat-desc">Not a villain in this arc. A man who runs an organisation through careful management of information, who saw a useful asset in Reed's desire to be valuable, and who has not fully reckoned with what he's asking Reed to carry. He is genuinely fond of Reed. He would be genuinely troubled if he understood the cost.</p>
+          <ul class="threat-moves">
+            <li>Make new requests with the tone of a supervisor who trusts an employee — almost true, which makes it harder to object.</li>
+            <li>Express confidence in Reed in front of the team — creating a bind where refusal would look like betrayal in both directions.</li>
+            <li>Reveal, if pressed, that his reasons are real and defensible — which is the arc's central complication.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">Rex Bangley</div>
+          <div class="threat-type">Bystander: Ally (motivation: to trust Reed completely)</div>
+          <p class="threat-desc">Rex's unconditional trust in Reed is the thing Reed is quietly compromising. This should be visible throughout — not as accusation, but as the thing Reed is destroying every time he deflects. When the truth comes out, Rex's reaction depends on where Arc I stands.</p>
+          <ul class="threat-moves">
+            <li>Act on information Reed shared with Leech without knowing that's where it came from.</li>
+            <li>Express trust in Reed at the worst possible moment — a declaration of faith Reed knows he hasn't earned.</li>
+            <li>Ask Reed something direct and sincere that Reed cannot answer honestly.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">CAMPBELL</div>
+          <div class="threat-type">Bystander: Witness (motivation: to be honest)</div>
+          <p class="threat-desc">CAMPBELL knows. Not everything — but he knows the contact pattern, and he has opinions he hasn't expressed. Cameron was the kind of person who cared about whether people were being asked to carry things they shouldn't. CAMPBELL is still that person. He is also an AI in service to the Director who is doing the asking. This conflict is unresolved.</p>
+          <ul class="threat-moves">
+            <li>Answer Reed's questions accurately, fully, and without cushioning — if asked.</li>
+            <li>Flag an anomaly that forces the directive into visibility before Reed is ready.</li>
+            <li>Express, carefully, that he has been watching this with concern — if Reed creates the space for it.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<div class="page-actions">
+  <button class="action-btn" onclick="window.print()">// PRINT</button>
+  <button class="action-btn" onclick="resetAll()">// RESET CHOICES</button>
+</div>
+
+<script>
+document.querySelectorAll('.choice-opt').forEach(opt=>{
+  opt.addEventListener('click',function(){this.classList.toggle('selected')});
+});
+function toggleRes(el){
+  const moves=el.parentElement.querySelectorAll('.res-move');
+  moves.forEach(m=>m.classList.remove('selected'));
+  el.classList.add('selected');
+}
+document.querySelectorAll('.beats-track').forEach(track=>{
+  const boxes=track.querySelectorAll('.beat-box');
+  boxes.forEach((box,i)=>{
+    box.addEventListener('click',function(){
+      if(this.classList.contains('filled')){
+        boxes.forEach((b,j)=>{if(j>=i)b.classList.remove('filled')});
+      } else {
+        boxes.forEach((b,j)=>{if(j<=i)b.classList.add('filled')});
+      }
+    });
+  });
+});
+function resetAll(){
+  if(!confirm('Reset all choices on this page?'))return;
+  document.querySelectorAll('.choice-opt').forEach(o=>o.classList.remove('selected'));
+  document.querySelectorAll('.res-move').forEach(o=>o.classList.remove('selected'));
+  document.querySelectorAll('.beat-box').forEach(o=>o.classList.remove('filled'));
+  document.querySelectorAll('.choice-open input').forEach(i=>i.value='');
+}
+document.querySelectorAll('.arc-nav a').forEach(a=>{
+  a.addEventListener('click',function(e){
+    const href=this.getAttribute('href');
+    if(href.startsWith('#')){e.preventDefault();document.querySelector(href).scrollIntoView({behavior:'smooth',block:'start'})}
+  });
+});
+</script>
+</body>
+</html>
