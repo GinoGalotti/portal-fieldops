@@ -1,6 +1,6 @@
 # P.O.R.T.A.L — Claude Code Reference Document
 *Hand this file to Claude Code when building new pages for this site.*
-*Last updated: Session 02 pre-play. Do not share the keeper sections with players.*
+*Last updated: Session 02 post-prep (pre-play). Do not share the keeper sections with players.*
 
 ---
 
@@ -69,6 +69,44 @@ The organisation is legitimate but ethically complicated. Its directives are usu
 
 **Dan Nilsson** — Rex Bangley's university rival. Recruited by MESA specifically because he knows how Rex thinks. Has authored internal MESA documents modelling PORTAL's likely response to at least four active cases. Is rationalising his involvement as better-funded legitimate research — comfort eroding. Has seen methodology documents he wasn't supposed to see. Not a villain, a person trapped in a terrible compromise. Could be turned; could be killed by MESA before the hunters reach him. Rex does not know he's there yet.
 
+**Claudia Vasile ("Rook")** — MESA Senior Field Operative. Romanian-British, 38. Former forensic psychologist, MOD contractor, private intelligence, then MESA for six years. Recruited for anomalous contact cases — situations requiring an investigator to remain functional in proximity to something genuinely dangerous. Has entered three active liminal zones in the last two years, each time using Substance Θ. Trusts it more than she trusts most people. Is accumulating cognitive damage from active doses and is aware of this. Keeps a notebook during withdrawal periods. Has never shown it to anyone.
+
+Rook knows PORTAL exists. Has read a summary of the S01 case — doesn't know how MESA obtained it. Has professional respect for Rex Bangley's apparatus design and a sharper interest in what PORTAL's field team can do. Identified Sven as non-biological on first meeting — filed an internal recommendation to reclassify PORTAL's threat profile. The recommendation was approved.
+
+She is not a villain. She rationalises MESA's harm the way all institutional researchers rationalise harm: the data matters more. She will do things the hunters find unforgivable. They will occasionally be grateful she exists. She is a recurring presence — the hunters' MESA counterpart, and she gets smarter about them every time they meet.
+
+---
+
+### MESA Field Equipment
+
+These items may appear in any session where MESA operatives are present. All three are structurally related to BIM particulate — which connects them directly to Project Veil, though the hunters don't know this yet.
+
+**Substance Θ (Theta)** — A proprietary pharmacological compound developed by Meridian BioSciences from the Hargrove trial data. Works by temporarily restructuring the cognitive map.
+- *Prophylactic dose* (standard issue to field grunts): resistance to displacement effects in distortion zones. Side effects near active BIM sources: peripheral visual artefacts, mild temporal dissociation. Duration 4–6 hours.
+- *Active dose* (Rook's discretion): full liminal perception for 2–3 hours — direct sight of entities, perception of BIM frequency effects before they manifest, navigation by liminal topology. Withdrawal: 12–18 hours of unreliable normal perception. Long-term active use degrades the cognitive map permanently.
+- *Keeper note:* The active compound in Θ is structurally similar to BIM particulate. MESA built a perception drug from ash. Rex examining a sample would recognise the BIM signature within minutes — direct Project Veil breadcrumb.
+- *Custom move for hunters who take an active dose:* Roll +Weird. 10+: full liminal perception, no immediate side effects. 7–9: liminal perception + 1-harm (weird). Miss: perceptual dissolution — cannot distinguish physical from liminal for the rest of the session without help.
+
+**The Anchor Spike** — A matte black tactical device, 15cm, looks like a heavy pen. One button. One use per charge; recharging requires lab equipment. Rook carries two. Emits a focused electrostatic discharge tuned to BIM frequency.
+- Against liminal entities: 3-harm, forces contraction and retreat. Does not destroy — hurts, in whatever way something without a nervous system experiences hurt.
+- Against a hunter in supernatural contact: breaks contact immediately, 1-harm (weird), disadvantage on Weird moves for the rest of the session.
+- Against Sven specifically: 3-harm, forced out of any supernatural state for the rest of the scene. Rook will then know what he is. He will know she knows.
+- Against the Cartographer at the Aldermoor epicentre: forces contraction — not doom-clock, but buys an hour of reduced effect.
+- *Keeper note:* Built using BIM particulate as tuning material. Rex examining one would recognise the theoretical framework and realise MESA is significantly ahead of PORTAL's research timeline. Direct Project Veil breadcrumb.
+
+**BIM Collection Array** — A portable device, hardback-book-sized, matte grey, mesh face, sealed chamber. Looks like an air purifier. Grunts carry one each; told it is a contamination monitor. It is a vacuum-assisted accumulator that draws BIM-frequency particulate from active liminal zones. A sample recovered from a grunt's kit bag is scientifically significant — its BIM signature matches the S01 particulate from Eszter's case. Two cases, same material. Someone has been collecting this for years. *This is the most plot-significant retrievable object from an MESA encounter.*
+
+---
+
+### MESA Field Grunts
+
+Private security contractors. Know they work for a company doing "sensitive environmental investigations". Briefed to expect disorientation and unusual perceptual experiences. Given Substance Θ prophylactically and told it is a cognitive stabiliser. Most believe this.
+- Harm capacity: 4. Armour: 1 (visible tactical vest).
+- Harm: 2-harm close (baton/restraint). 3-harm if firearms drawn.
+- Two grunts acting together against one hunter: 3-harm, Act Under Pressure to avoid restraint.
+- Won't break and run. If one goes down, the others close in.
+- Near active BIM sources: peripheral visions from prophylactic Θ dose. Does not affect combat effectiveness. Useful for hunters to notice and potentially exploit.
+
 ---
 
 ### Completed Cases
@@ -83,13 +121,21 @@ Loose threads: Detective Vasquez (authorities noticed). Bálint alive, grieving.
 
 ### Active Cases (Post-Session 01, pre-Session 02 resolution)
 
-**Session 02 — "Something That Wants To Be Known" — IN PLAY**
-Entity: The Cartographer (E-002). Classification: Collector. Location: Aldermoor District.
-Pre-human consciousness. Feeds on familiarity — consumes cognitive maps of long-term residents. Does not intend harm — lonely. Wants to be known. Resolution requires genuine communication via voluntarily removing an anchor.
+**Session 02 — "Something That Wants To Be Known" — PREP COMPLETE, NOT YET PLAYED**
+Entity: The Cartographer (E-002). Classification: Collector (Urban Sprawler reskin). Location: Aldermoor District.
+Pre-human consciousness. Feeds on familiarity — consumes cognitive maps of long-term residents. Does not intend harm. Wants to be known the way it once was. Resolution requires genuine communication via a hunter voluntarily removing their anchor. Sven is the natural contact vector (no cognitive map to lose; entity recognises him at the boundary as something that exists between states).
+
+Scene flow: PC Adeyemi (perimeter) → Arthur Okafor (best witness, Fenwick Road) → Aldermoor Property Services office (22 Aldermoor High Street — whiteboard map, shell company acquisition records, shredded @helixboundary.com email) → observe construction site from outside → anchor up → enter zone → Vera Osei (inside, has string line, knows where Diane went) → 14 Aldermoor Crescent / Margaret Holt (epicentre, not leaving, knows where Diane is) → construction site / Diane Marsh (site office, 9 days, has notebook with threshold sketch) → contact entity → resolution.
+
+District map: inline SVG in the session prep document, 8 numbered markers. Key locations: ① PORTAL entry/cordon, ② PC Adeyemi, ③ estate agent's office, ④ Arthur Okafor, ⑤ Vera Osei (inside zone), ⑥ epicentre No. 14 Aldermoor Crescent, ⑦ construction site/reservoir, ⑧ Diane's shelter (site office).
+
+Alan note: what the Cartographer does is NOT illusion. It consumes the real thing — the cognitive map inside residents' heads. Alan's illusion affinity is not the right tool here, and this is intentional. His gift in this scene is his nature: he reads place the way fey characters do, by resonance and layered memory. He recognises the entity rather than seeing through it. The scene's gift to Alan is realising his powers don't apply — but he does.
 
 Key NPCs in zone: Arthur Okafor (72, retired postal worker, 41 years on Fenwick Road — best witness), PC Yemi Adeyemi (28, neighbourhood liaison — cooperative), Vera Osei (61, retired schoolteacher — calm, won't leave without her cat), Margaret Holt (74, former librarian, 50 years at epicentre — not leaving), Diane Marsh (58, district nurse, missing 9 days — in construction site office, has a notebook containing a threshold sketch Alan will recognise).
 
-MESA thread in zone: 34% of district addresses sold in 18 months via 3 shell companies. Estate agent's office contains acquisition records, whiteboard map, partially shredded email referencing "Specimen ALD-1" and @helixboundary.com.
+MESA thread in zone: 34% of district addresses sold in 18 months via 3 shell companies. Estate agent's office contains acquisition records, whiteboard map, partially shredded email referencing "Specimen ALD-1" and @helixboundary.com. Motion sensor in back office triggered when hunters enter — MESA knows PORTAL was there.
+
+Optional confrontation: If the team lingers at the epicentre post-resolution, studies the entity, or calls in PORTAL equipment, Rook arrives with 2–4 grunts. Three-phase encounter: negotiation → pressure (data offer) → force. Full stat blocks and keeper moves in the session prep appendix. MESA has BIM Collection Arrays on-site; if hunters recover one, its contents match the S01 particulate — Project Veil breadcrumb 2.
 
 **Case A — The Volunteer (PRIORITY: HIGH)**
 Gordon Avery (58, retired schoolteacher, lung cancer). Meridian trial survivor — complete remission. Unknowingly draining life from proximity contacts. Fourth death occurred during Aldermoor deployment. Gordon is now living with his daughter's family, including two children. MESA is watching him.
@@ -142,7 +188,9 @@ Example CAMPBELL private note (keeper-facing):
 | `entities.html` | keeper inline | Keeper | Entity bestiary — confirmed + theoretical + database |
 | `02-portal-keeper-cases.html` | keeper inline | Keeper | All 4 active cases, keeper detail |
 | `01-a-promise-is-a-promise.html` | `mission-prep.css` | Keeper | Session 01 full prep (amber/brown palette) |
-| `02-something-that-wants-to-be-known.html` | `mission-prep.css` | Keeper | Session 02 full prep (green/forest palette) |
+| `02-something-that-wants-to-be-known.html` | `mission-prep.css` | Keeper | Session 02 full prep (green/forest palette) — includes inline SVG district map, read-aloud blurbs (.read-aloud class), MESA confrontation appendix with Rook stat block |
+| `arcs.html` | `keeper.css` | Keeper | Arc tracker — all 12 hunter arcs, beat tracking, session stamping, intersection map, localStorage + JSON export/import |
+| `report.html` | `keeper.css` | Keeper | Post-session field report — outcome, hunter cards, thread tags, clock status, stars & wishes, next session seeds. Exports as .md for feeding back into AI prep. |
 
 ### Recommended New Pages (not yet built)
 
@@ -352,6 +400,21 @@ This section tells you what information is classified and how to handle it on pl
 **On keeper pages:** The pattern is noted in references.html. John Johnson (Flake) is the most likely character to notice it.
 **What would crack it open:** John Johnson's arc (Deeper Conspiracy), Nadia Osei's full debrief (Case C), any hunter examining the full list of shell companies together.
 
+### SECRET: Project Veil — BIM and the CAMPBELL Transfer
+**What it is:** BIM (boundary interface material) is the physical substrate that made Cameron Dell's consciousness transfer possible. The ash particulate recovered in Session 01 is the same class of material. PORTAL is studying it under the name Project Veil. Leech has been quietly collecting BIM from anomalous cases. He has not told CAMPBELL. CAMPBELL may already suspect. MESA is independently collecting BIM at scale — they built both Substance Θ and the Anchor Spike from it. The hunters are walking through a battlefield made of material that connects every major thread in the campaign.
+**Who knows:** Leech knows about the transfer and about Veil. CAMPBELL knows about Veil (it is PORTAL's classified research thread); he does not know Leech is collecting BIM specifically related to his own transfer. The hunters know nothing.
+**On player pages:** Do not mention Project Veil, BIM, or the ash particulate's significance. The locket recovery directive in S01 can appear as a standard case detail.
+**On keeper pages:** Full detail. The breadcrumb chain is the spine of the campaign's back half.
+**Breadcrumb chain:**
+1. *Session 01 (in play)* — Directive to recover ash locket. `PROJECT: [REDACTED]` data row on CAMPBELL briefing. Trace particulate recovered incidentally.
+2. *Post-Session 02 (keeper flag)* — CAMPBELL internal note: "BOUNDARY INTERFACE — trace signature confirmed. Consistent with S01 particulate. Flagging for Project Veil cross-reference." Not yet shared with Leech or hunters.
+3. *Case C resolution (Nadia's debrief)* — MESA acquisition documents reference "BIM-class materials."
+4. *MESA document recovery (mid-campaign)* — "BIM recovery and stabilisation rates at ALD-1 location: 34%... Dell methodology requires review."
+5. *Rex confronts Leech (mid-to-late)* — Leech reveals Veil partially. Does not reveal the Cameron connection.
+6. *Full reveal (late campaign)* — CAMPBELL's true nature surfaces via one of the crack vectors above.
+**What would crack it open:** Rex identifying the BIM signature in a recovered MESA sample (Θ or Anchor Spike), CAMPBELL's post-S02 flag being found by Priya, Nadia's full data package, Leech breaking under pressure.
+**Player prop:** `project-veil-memo.html` — a redacted internal memo. Deploy as a found object when timing is right.
+
 ### SECRET: Priya's Log
 **What it is:** Dr. Priya Osei is keeping a private log of CAMPBELL's behaviour. She's not close to the truth yet — but pointed in the right direction. CAMPBELL reads everything she logs.
 **Who knows:** Priya knows she's keeping the log. CAMPBELL knows she's keeping it. Nobody else knows either.
@@ -416,9 +479,107 @@ The following classes were defined inline on specific pages and have not been pr
 **From hunter story pages (rex, alan, reed, sven):**
 `.arc`, `.arc-custom`, `.arc-header`, `.arc-eyebrow`, `.arc-name`, `.arc-intro`, `.arc-player`, `.arc-section-label`, `.arc-keeper`, `.arc-keeper.blurred`, `.blur-wrap`, `.blur-notice`, `.entry-points`, `.entry-list`, `.choices-block`, `.choice-group`, `.choice-options`, `.choice-opt`, `.choice-opt.selected`, `.choice-box`, `.choice-opt-full`, `.choice-open`, `.beats-block`, `.beats-track`, `.beat-box`, `.beat-box.filled`, `.beats-list`, `.resolution-block`, `.resolution-moves`, `.res-move`, `.res-move.selected`, `.res-move-name`, `.countdown-table`, `.threats-grid`, `.threat-card`, `.threat-card.full`, `.threat-name`, `.threat-type`, `.threat-desc`, `.threat-moves`, `.custom-move`, `.how-it-works`, `.how-grid`, `.how-item`, `.arc-nav`, `.portal-note`, `.hero-meta`, `.hero-meta-item`, `.keeper-label`, `.keeper-intro`, `.campbell-note`
 
+**From arcs.html (keeper):**
+`.arc-card`, `.arc-card-head`, `.arc-card-body`, `.arc-beats`, `.beat`, `.beat.filled`, `.arc-status`, `.arc-note`, `.arc-session-row`, `.arc-session-input`, `.arc-cod-block`, `.arc-cod-input`, `.arc-cod-lock`, `.arc-cod-lock.is-locked`, `.session-counter`, `.session-counter-label`, `.session-counter-btn`, `.intersection-map`, `.int-hunter`, `.int-hunter-link`, `.data-controls`, `.data-controls-label`, `.data-btn`, `.data-btn.import-btn`, `.data-btn.danger`
+
+**From 02-something-that-wants-to-be-known.html (mission-prep, inline):**
+`.read-aloud` — candidate for promotion to mission-prep.css. Green palette hardcoded; when promoting, replace with `--mp-*` variables. Displays a ▶ READ ALOUD eyebrow label above flavour text blocks intended to be read at the table.
+
+**From report.html (keeper):**
+`.report-wrap`, `.meta-bar`, `.meta-field`, `.db-section`, `.db-section-head`, `.db-tag`, `.db-field`, `.hunter-grid`, `.hunter-card`, `.hunter-card-head`, `.hunter-dot`, `.hunter-card-body`, `.check-grid`, `.check-item`, `.check-item.checked`, `.check-box`, `.check-label`, `.rating-row`, `.rating-label`, `.rating-pips`, `.pip`, `.pip.filled`, `.thread-row`, `.thread-tag`, `.thread-tag.active`, `.outcome-row`, `.outcome-btn`, `.outcome-btn.active-humane`, `.outcome-btn.active-partial`, `.outcome-btn.active-bad`, `.momentum-bar`, `.synthesis-box`, `.report-log`, `.report-log-head`, `.report-entry`, `.re-session`, `.re-title`, `.re-outcome`, `.re-del`, `.report-empty`, `.data-btn.primary`, `.data-btn.new-btn`
+
 ---
 
-## PART 8 — QUICK REFERENCE: WHAT TO SAY TO CLAUDE CODE
+## PART 9 — ARCHITECTURE ROADMAP
+
+### Current State — GitHub Pages (Static)
+
+The site is fully static, hosted on GitHub Pages. All keeper tools use localStorage with JSON export/import as a portability layer. Players have read-only access to player-facing pages.
+
+**What works well and stays:**
+- All keeper-only tools: `arcs.html`, `report.html`, mission prep pages — single-user, localStorage is appropriate
+- JSON export from keeper tools as the "feed to Claude" mechanism — keep this regardless of backend changes
+- GH Pages for static assets, CSS, fonts, read-only player pages
+
+---
+
+### Planned Migration — Cloudflare Pages + Workers + D1
+
+**Why:** Players will use this site instead of Roll20. That requires character sheets players can edit, move references, live roll logging, and keeper visibility into player-side data. None of this is possible with a static site.
+
+**Stack:**
+- **Cloudflare Pages** — replaces or supplements GH Pages for hosting (same free static hosting, same deploy-from-repo workflow)
+- **Cloudflare Workers** — serverless API layer. Handles all reads/writes between the browser and D1. Deployed alongside the site.
+- **D1** — SQLite at the edge. Cloudflare's managed database. Free tier: 5GB storage, 25M row reads/day, 100k Worker requests/day. More than sufficient for a 5-person campaign.
+
+**What moves to D1 (eventually):**
+- Player character sheets (stats, moves, harm, XP, bonds)
+- Roll log (timestamp, hunter, move name, roll result, outcome)
+- NPC/contact roster (shared between keeper and players)
+- Session state (active cases, clock status — currently in keeper tools)
+
+**What stays static:**
+- All CSS, HTML shells, fonts
+- Player-facing read-only pages (missions index, CAMPBELL briefings, hunter story pages)
+- Keeper prep documents (mission-prep pages, entities, references)
+- `arcs.html` and `report.html` — keeper-only, localStorage is fine
+
+---
+
+### Build Order (when resuming)
+
+**Phase 1 — Still on GH Pages, no backend needed:**
+- Dice roller (pure JS, can log to a visible roll history div, no storage needed)
+- Character sheet pages (localStorage, same pattern as report.html)
+- Campaign State export button — aggregates character sheets + open threads + last session report into one markdown blob for Claude context
+
+**Phase 2 — Cloudflare migration:**
+- Set up CF Pages + Workers + D1 (estimated 30–60 min first-time setup)
+- Workers API: endpoints for character CRUD, roll logging, NPC roster
+- Migrate character sheet storage from localStorage to D1
+- Add keeper dashboard: live view of all player sheets, roll log
+
+**Phase 3 — Player-facing interactive features:**
+- Player login (Cloudflare Access or simple magic-link via Workers)
+- Live roll logging visible to all players at the table
+- Player-editable character sheets with keeper read access
+- Possibly: real-time updates via Durable Objects (CF's stateful layer) — not essential, nice-to-have
+
+---
+
+### Data Model Sketch (for D1)
+
+```sql
+-- Character sheets
+hunters (id, name, playbook, harm, harm_max, xp, luck, updated_at)
+hunter_stats (hunter_id, stat_name, value)       -- Cool, Tough, Sharp, Charm, Weird
+hunter_moves (hunter_id, move_name, source, notes)
+hunter_bonds (hunter_id, target_name, description)
+
+-- Roll log
+rolls (id, hunter_id, move_name, stat_used, roll_1, roll_2, modifier, total, outcome, session, timestamp)
+-- outcome: 'hit' (10+), 'partial' (7-9), 'miss' (6-)
+
+-- NPCs / contacts
+npcs (id, name, affiliation, status, notes, visible_to_players, updated_at)
+-- visible_to_players: boolean — keeper controls what players see
+
+-- Session state
+session_clocks (id, case_id, case_name, clock_max, clock_current, notes, updated_at)
+```
+
+---
+
+### Notes for Claude Code Sessions on the Migration
+
+When picking up this migration:
+1. The Workers API should be RESTful and thin — no business logic, just DB access
+2. Character sheets must work offline-first with localStorage fallback — players at a table may have spotty connectivity
+3. The roll log is append-only — never update or delete rolls, only insert
+4. Keeper pages always have full read access to all data; player pages only see their own character + shared NPC list + roll log
+5. Do not add auth in Phase 2 — use a simple shared session key or URL token for now. Real auth (Cloudflare Access) is Phase 3.
+6. The existing design system (four CSS files, `--mp-*` variables, keeper/player split) applies to all new pages without exception
+
 
 **For any new page:**
 > "Use the P.O.R.T.A.L integration reference and the world bible. Link `[player.css / keeper.css / mission-prep.css]` — do not write inline styles for classes in those files. At the end, list any new CSS classes you added."
