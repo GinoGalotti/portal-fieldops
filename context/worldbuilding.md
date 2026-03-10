@@ -182,7 +182,10 @@ Example CAMPBELL private note (keeper-facing):
 | `alan-hunter-stories.html` | player inline | Player | Alan Frazier arcs — 3 arcs, keeper sections blurred |
 | `reed-hunter-stories.html` | player inline | Player | Reed Atwood arcs — 3 arcs, keeper sections blurred |
 | `sven-hunter-stories.html` | player inline | Player | Sven arcs — 3 arcs, keeper sections blurred |
-| `02-portal-campbell-briefings.html` | `briefing.css` | Player | CAMPBELL briefings — 4 active cases |
+| `campbell-briefings.html` | `briefing.css` | Player | CAMPBELL priority queue — week switcher, fetches fragments from `briefings/` |
+| `briefings/index.json` | — | — | Week registry: id, label, title, status, summary. Add one entry per week. |
+| `briefings/w01.html` | fragment | Player | Week 01 briefing fragment (no doctype/head/body — injected by campbell-briefings.html) |
+| `briefings/w02.html` | fragment | Player | Week 02 briefing fragment |
 | `keeper.html` | `keeper.css` | Keeper | Keeper mission index |
 | `references.html` | keeper inline | Keeper | Keeper dossiers — hunters, PORTAL, MESA, NPCs |
 | `entities.html` | keeper inline | Keeper | Entity bestiary — confirmed + theoretical + database |
@@ -211,6 +214,38 @@ Example CAMPBELL private note (keeper-facing):
 | `session-template.html` | `mission-prep.css` | MEDIUM | Reusable session prep template |
 | `countdowns.html` | `keeper.css` | MEDIUM | All active countdowns in one dashboard view |
 | `npc-status.html` | `keeper.css` | LOW | Current status cards for recurring NPCs |
+
+---
+
+### Adding a New CAMPBELL Queue Week
+
+The queue page (`missions/campbell-briefings.html`) fetches HTML fragments from `missions/briefings/`. To add Week 03 after a session:
+
+1. Create `missions/briefings/w03.html` — copy `w02.html` as a starting point
+2. Add one entry to `missions/briefings/index.json`:
+   ```json
+   { "id": "w03", "label": "WEEK 03", "title": "Post-Operation #XXXX (Location)", "status": "active", "summary": "N cases active · N high · N medium" }
+   ```
+3. Set the previous week's `"status"` to `"closed"` in `index.json`
+4. That's it — the new tab appears automatically
+
+**Fragment file rules:**
+- No `<!DOCTYPE>`, `<html>`, `<head>`, or `<body>` — just the content divs
+- Must start with a `<!-- WEEK XX -->` comment block (see w01.html for template)
+- Always include a `.page-header` div at the top with the week's specific note and optional `.timestamp`
+- Use `.carry-over` label before cases that were open in the prior week
+- Use `.new-cases-label` before cases first introduced this week
+- Use `.ver` spans inside `.card-footer` for the CAMPBELL version number (filled automatically)
+- End with a `.campbell-note` closing block
+- Do **not** include a `<script>` tag — version filling is handled by the main page
+
+**Case colour assignments (briefing.css):**
+- Case A → amber (`case-a`)
+- Case B → green (`case-b`)
+- Case C → purple (`case-c`)
+- Case D → teal (`case-d`)
+- Case E → rose (`case-e`)
+- If a case is resolved in a new week, omit the card entirely — its absence is the signal
 
 ---
 

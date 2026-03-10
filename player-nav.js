@@ -22,7 +22,7 @@
     { label: 'Artefacts',  href: b + 'index.html#artefacts' },
     { label: 'Missions',   href: m + 'missions.html',  match: 'missions.html' },
     { label: 'Contacts',   href: m + 'contacts.html',  match: 'contacts.html' },
-    { label: 'Queue',      href: m + '01-portal-campbell-briefings.html', match: '01-portal-campbell-briefings.html' },
+    { label: 'Queue',      href: m + 'campbell-briefings.html', match: 'campbell-briefings.html' },
   ];
 
   // Status dot

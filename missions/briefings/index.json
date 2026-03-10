@@ -1,0 +1,16 @@
+[
+  {
+    "id": "w01",
+    "label": "WEEK 01",
+    "title": "Post-Operation #0047-C (Keller University)",
+    "status": "closed",
+    "summary": "3 cases flagged · 1 high · 2 medium"
+  },
+  {
+    "id": "w02",
+    "label": "WEEK 02",
+    "title": "Post-Operation #0094-B (Aldermoor District)",
+    "status": "active",
+    "summary": "4 cases active · 1 high · 3 medium"
+  }
+]
