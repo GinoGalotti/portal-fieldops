@@ -8,7 +8,6 @@
 
   var items = [
     { label: 'Player Site',     href: '../index.html' },
-    { label: 'Public Missions', href: 'missions.html',   match: 'missions.html' },
     { label: 'Keeper Index',    href: 'keeper.html',     match: 'keeper.html' },
     { label: 'Field Report',    href: 'report.html',     match: 'report.html' },
     { label: 'References',      href: 'references.html', match: 'references.html' },
