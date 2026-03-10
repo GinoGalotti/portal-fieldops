@@ -62,8 +62,15 @@ portal-fieldops/
 │   ├── portal-npcs.json           # Full NPC roster with player/keeper description split
 │   └── portal-entities.json       # Entity/threat database for keeper command board
 │
-├── workers/                   # Cloudflare Workers API
+├── functions/                 # CF Pages Functions (serverless API, auto-routed)
+│   └── api/v1/hunters/
+│       └── [id]/
+│           └── arc-state.js   # GET + PUT hunter arc state → D1
+│
+├── workers/                   # Cloudflare Workers API (Phase 3+)
 │   ├── schema.sql             # D1 schema — already applied to remote DB
+│   ├── migrations/            # Numbered SQL migration files
+│   │   └── 001_arc_state.sql  # hunter_arc_state table (applied remote + local)
 │   └── src/                   # (Phase 3) Workers source
 │       ├── index.ts           # Main router
 │       └── routes/
@@ -85,7 +92,9 @@ portal-fieldops/
 ├── index.html                 # Player-facing site
 ├── missions/                  # Keeper + player mission pages
 ├── reports/                   # Post-session player-facing reports
-├── hunters/                   # Hunter story pages
+├── hunters/                   # Hunter story pages (arc choices + beats persist to D1)
+│   ├── hunter.js              # Shared script: keeper toggle, D1 save/load, all interactions
+│   └── *-hunter-stories.html  # One page per hunter — no inline scripts, just <script src="hunter.js">
 ├── images/                    # Active reference images
 ├── player-nav.js              # Shared player nav
 └── missions/keeper-nav.js     # Shared keeper nav
@@ -107,7 +116,23 @@ portal-fieldops/
 
 Schema is in `workers/schema.sql` and has been applied to the remote D1 database. All 13 tables created.
 
+Migrations are numbered files in `workers/migrations/`. Each must be applied to **both** remote and local D1:
+```bash
+wrangler d1 execute portal-db --file=workers/migrations/001_arc_state.sql          # local
+wrangler d1 execute portal-db --file=workers/migrations/001_arc_state.sql --remote # remote
+```
+
+**Migration 001 — `hunter_arc_state`** (applied ✅)
+
 ```sql
+-- ─── HUNTER ARC STATE (migration 001) ──────────────────────────────────────
+CREATE TABLE IF NOT EXISTS hunter_arc_state (
+  hunter_id  TEXT PRIMARY KEY,   -- 'alan' | 'reed' | 'rex' | 'sven'
+  state      TEXT NOT NULL,      -- JSON blob matching hunter.js data model (see below)
+  updated_at TEXT DEFAULT (datetime('now'))
+);
+-- JSON blob schema: { "arc-id": { choices: {"gi-oi": true}, texts: {"i": "val"}, beats: N, resolution: N|null } }
+
 -- ─── HUNTERS ───────────────────────────────────────────────────────────────
 CREATE TABLE hunters (
   id           TEXT PRIMARY KEY,        -- 'rex' | 'reed' | 'alan' | 'sven'
@@ -250,6 +275,13 @@ CREATE TABLE player_tokens (
 
 All endpoints under `/api/v1/`. Keeper endpoints require a header token; player endpoints require a session URL token.
 
+**Live endpoints (CF Pages Functions in `functions/`):**
+```
+GET  /api/v1/hunters/:id/arc-state      → hunter arc state JSON (no auth — all players can read)
+PUT  /api/v1/hunters/:id/arc-state      → upsert arc state (no auth — all players can write)
+```
+
+**Planned (Phase 3, Workers):**
 ```
 GET  /api/v1/hunters                    → all hunters (public fields)
 GET  /api/v1/hunters/:id                → single hunter sheet
@@ -366,10 +398,23 @@ All seven static data files built from source (MOTW hardcover, Slayer's Survival
 ### Phase 2 — Cloudflare Setup ✅ COMPLETE
 - CF account created (gino.galotti@gmail.com)
 - CF Pages connected to GitHub repo, deploying from `dev` branch
-- D1 database `portal-db` created and schema applied (13 tables)
+- D1 database `portal-db` created and schema applied (13 tables + migration 001)
 - `wrangler.jsonc` configured at repo root with D1 binding
 - Node.js v24.14.0, npm 11.11.0, Wrangler 4.71.0 installed locally
 - GH Pages still serves `main` for players during development
+
+### Phase 2.5 — Hunter Arc Persistence ✅ COMPLETE
+- **`functions/api/v1/hunters/[id]/arc-state.js`** — live CF Pages Function
+  - `GET /api/v1/hunters/:id/arc-state` → returns state JSON from D1 (or `{}`)
+  - `PUT /api/v1/hunters/:id/arc-state` → upserts state JSON to D1
+- **`hunters/hunter.js`** — shared script for all hunter pages
+  - `load()`: fetches from D1 on page open; falls back to localStorage if offline/file://
+  - `save()`: writes localStorage immediately + fires background PUT to D1
+  - `saveNow(btn)`: explicit save with button feedback (SAVING → SAVED ✓ / ERROR / OFFLINE)
+  - `resetAll()`: clears DOM, localStorage, and sends `PUT {}` to D1
+  - Keeper toggle (double-click/double-tap top-right corner)
+- All four hunter pages (alan, reed, rex, sven): inline scripts removed, `// SAVE` button replaces `// PRINT`
+- State shared across all users/browsers in real time via D1
 
 ### Phase 3 — Workers API + Character Sheets to D1
 - Scaffold Workers router with the routes listed above
@@ -519,7 +564,9 @@ When picking this up:
 - Workers use TypeScript; client-side JS in `app/` pages is vanilla JS (no framework)
 - The existing design system (four CSS files, `--mp-*` variables, keeper/player split, terminal aesthetic) applies to all new pages — read `context/worldbuilding.md` Part 4
 - Roll log is append-only: INSERT only, never UPDATE or DELETE
-- Player pages are offline-first: always check localStorage before fetching from API, write to both on save
+- Player pages use D1-first persistence: on load fetch from API, fall back to localStorage if offline; on save write localStorage immediately then PUT to API in background
+- Hunter arc state pattern is the reference implementation — see `hunters/hunter.js` and `functions/api/v1/hunters/[id]/arc-state.js`
+- New migrations go in `workers/migrations/` as `NNN_description.sql`; apply to both local and remote D1 (see migration command above)
 - Keeper pages write directly to D1; player pages write their own data only
 - CAMPBELL's voice rules are in `context/worldbuilding.md` Part 2 — any generated message must sound like CAMPBELL
 - Never add passwords or a signup flow — keeper uses CF Access (Google), players use URL tokens

@@ -525,45 +525,10 @@
 </main>
 
 <div class="page-actions">
-  <button class="action-btn" onclick="window.print()">// PRINT</button>
+  <button class="action-btn" id="save-btn" onclick="saveNow(this)">// SAVE</button>
   <button class="action-btn" onclick="resetAll()">// RESET CHOICES</button>
 </div>
 
-<script>
-document.querySelectorAll('.choice-opt').forEach(opt=>{
-  opt.addEventListener('click',function(){this.classList.toggle('selected')});
-});
-function toggleRes(el){
-  const moves=el.parentElement.querySelectorAll('.res-move');
-  moves.forEach(m=>m.classList.remove('selected'));
-  el.classList.add('selected');
-}
-document.querySelectorAll('.beats-track').forEach(track=>{
-  const boxes=track.querySelectorAll('.beat-box');
-  boxes.forEach((box,i)=>{
-    box.addEventListener('click',function(){
-      if(this.classList.contains('filled')){
-        boxes.forEach((b,j)=>{if(j>=i)b.classList.remove('filled')});
-      } else {
-        boxes.forEach((b,j)=>{if(j<=i)b.classList.add('filled')});
-      }
-    });
-  });
-});
-function resetAll(){
-  if(!confirm('Reset all choices on this page?'))return;
-  document.querySelectorAll('.choice-opt').forEach(o=>o.classList.remove('selected'));
-  document.querySelectorAll('.res-move').forEach(o=>o.classList.remove('selected'));
-  document.querySelectorAll('.beat-box').forEach(o=>o.classList.remove('filled'));
-  document.querySelectorAll('.choice-open input').forEach(i=>i.value='');
-}
-document.querySelectorAll('.arc-nav a').forEach(a=>{
-  a.addEventListener('click',function(e){
-    const href=this.getAttribute('href');
-    if(href.startsWith('#')){e.preventDefault();document.querySelector(href).scrollIntoView({behavior:'smooth',block:'start'})}
-  });
-});
-</script>
 <script src="hunter.js"></script>
 </body>
 </html>
