@@ -196,7 +196,13 @@ Example CAMPBELL private note (keeper-facing):
 | `report.html` | `keeper.css` | Keeper | Keeper post-session field report — session tab switcher (S01/S02), outcome, hunter cards, per-session scene notes, thread tags, clock status, seeds. Saves to D1. "Copy for Claude" exports Markdown. |
 | `reports/player-report.html` | `player.css` | Player | Operative Field Report — week + hunter selector, 5 rating pips, general feedback, per-week scene questions. Unique save per week+hunter, D1-backed. Linked from player nav as "Report". |
 
-### Recommended New Pages (not yet built)
+### Upcoming Pages (planned, not yet built)
+
+**Immediate priority:**
+
+| Page | CSS | Description |
+|------|-----|-------------|
+| `app/feed.html` | custom | Live Feed — split-screen session tool. Left: rolling feed of rolls + CAMPBELL messages. Right: playbook panel (sheet, NPCs, handouts). Keeper mode via double-click. First version uses D1 polling; real-time via Durable Objects later. |
 
 **Player-facing:**
 
@@ -205,16 +211,14 @@ Example CAMPBELL private note (keeper-facing):
 | `hunters.html` | `player.css` | HIGH | Hunter index — all 4 hunters, one-liners, links to story pages |
 | `case-archive.html` | `player.css` | MEDIUM | Chronological closed case log — grows each session |
 | `glossary.html` | `player.css` | MEDIUM | In-universe PORTAL terminology, written in CAMPBELL's voice |
-| `connections.html` | `player.css` | LOW | Known connections — what each hunter knows about NPCs and orgs |
 
 **Keeper-facing:**
 
 | Page | CSS | Priority | Description |
 |------|-----|----------|-------------|
-| `secrets.html` | `keeper.css` | HIGH | Active secrets tracker — what's hidden, what would crack it open |
-| `session-template.html` | `mission-prep.css` | MEDIUM | Reusable session prep template |
+| `missions/player-reports-review.html` | `keeper.css` | HIGH | Review all player field reports for a given week — aggregated ratings + notes side by side |
+| `secrets.html` | `keeper.css` | MEDIUM | Active secrets tracker — what's hidden, what would crack it open |
 | `countdowns.html` | `keeper.css` | MEDIUM | All active countdowns in one dashboard view |
-| `npc-status.html` | `keeper.css` | LOW | Current status cards for recurring NPCs |
 
 ---
 

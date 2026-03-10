@@ -458,26 +458,91 @@ All seven static data files built from source (MOTW hardcover, Slayer's Survival
 - **`reports/player-report.html`** — player-facing Operative Field Report
   - Week selector (Week 01 / Week 02, etc.) + Hunter selector (Alan / Reed / Rex / Sven / John)
   - State is unique per week+hunter; loads from D1 on selection, Save button persists to D1
-  - **Ratings** (5 sliders, 0–5): Story Quality, Atmosphere & Tone, Operative's Role, Emotional Impact, Overall
+  - **Ratings** (5 pip selectors, 1–5): Story Quality, Atmosphere & Tone, Operative's Role, Emotional Impact, Overall
   - **General feedback** textareas: favourite moment, something different, operative's feelings, other
   - **Scene by Scene** section — per-week prompts about specific events (dynamic, config-driven)
   - D1 via `/api/v1/player-reports/:week/:hunter/state`; localStorage fallback
-  - Linked from player nav as "Debrief"
+  - Linked from player nav as "Report" (before Queue)
 - **Session config pattern** (used by both reports): threads, clocks, and scenes defined in a JS `SESSIONS`/`WEEKS` object at the top of the script — add new sessions by extending the config
 - **Future**: keeper review view for all player debriefs (read all rows for a given week, display aggregated ratings + notes)
 
-### Phase 3 — Workers API + Character Sheets to D1
-- Scaffold Workers router with the routes listed above
-- Migrate character sheets from localStorage to D1 (keep localStorage as offline fallback)
-- NPC roster API + `contacts.html` player page
-- Leads API + dynamic leads display per session
-- Seed D1 from `hunters.json` and `portal-npcs.json`
+### Phase 2.7 — Hunter Playbook Sections + Character Data in D1 (NEXT)
 
-### Phase 4 — Live Session Tool
-- Durable Object for session room (WebSocket)
-- Player `session.html`: character sheet, move picker, roll interface, feed
-- Keeper `command.html`: command board, message composer, handout uploader, reveal controls
-- CAMPBELL terminal + Director PDA message display
+Each hunter page (`hunters/[name]-hunter-stories.html`) will gain a **Playbook** section above the existing arc content, showing their full character sheet. Data is entered by the player directly in the browser and persisted to D1 — this replaces the `FILL_FROM_SESSION` placeholders in `data/hunters.json`.
+
+**Playbook section contains:**
+- Stats (Cool, Tough, Sharp, Charm, Weird) — editable number inputs
+- Harm track (0–7) and Luck track (0–7) — pip selectors
+- XP track — pip selector
+- Active moves list (from `data/motw-playbooks.json`) — checkboxes to mark which are taken
+- Gear list — editable text fields
+- Bonds — editable text fields
+
+**Persistence:**
+- New API endpoint: `GET/PUT /api/v1/hunters/:id/sheet` — stores structured JSON to D1
+- Table: `hunter_sheets` (migration 004) — `hunter_id TEXT PRIMARY KEY, state TEXT, updated_at TEXT`
+- Same D1-first pattern as arc state: load on page open, explicit Save button with feedback
+- Once populated, this data feeds the Live Feed view (Phase 4) — no more static JSON
+
+**Page rename consideration:**
+- Current: `[name]-hunter-stories.html` (describes arc content)
+- With playbook added, the page becomes a full character hub — may rename to `[name]-hunter.html` or keep and update nav label
+- Decision deferred to implementation session
+
+**Data model for `hunter_sheet` state:**
+```json
+{
+  "stats": { "cool": 1, "tough": 2, "sharp": 0, "charm": 1, "weird": 2 },
+  "harm": 0,
+  "luck": 7,
+  "xp": 0,
+  "moves": ["move-id-1", "move-id-2"],
+  "gear": ["Item one", "Item two"],
+  "bonds": ["Bond with Reed: ...", "Bond with Alan: ..."]
+}
+```
+
+### Phase 3 — Workers API + NPC/Lead Data
+- NPC roster API + dynamic `contacts.html`
+- Leads API + dynamic leads display per session
+- Seed D1 `hunters` table from `hunters.json` once playbook sheets are populated
+
+### Phase 4 — Live Feed (NEXT AFTER 2.7)
+
+Split-screen session tool. Single page at `app/feed.html` (or `session.html`).
+
+**Layout:**
+- **Left half:** Feed/chat — scrolling log of rolls, CAMPBELL messages, Director dispatches, handout reveals, system events. Styled like a terminal. New entries append at the bottom.
+- **Right half:** Tabbed panel —
+  - **Sheet tab:** Player selects their operative → sees playbook (stats, moves, harm/luck). Clickable moves trigger a roll.
+  - **NPCs tab:** Active NPCs for the current session (from `portal-npcs.json`, filtered by `visible_to_players`). Always-available lab contacts shown separately.
+  - **Handouts tab:** Revealed documents/images for the session.
+- **Keeper mode:** Double-click top-right corner (same pattern as hunter pages) → reveals keeper overlay on Sheet tab (all hunters visible, not just one), NPC tab shows hidden NPCs, extra Keeper tools panel.
+
+**First version scope (no Durable Objects yet):**
+- No WebSockets — feed built from D1 `rolls` table, polled every 3 seconds
+- Roll flow: player clicks move → selects stat → rolls 2d6+stat locally → result shown → PUT to `/api/v1/rolls` → appears in feed for all players on next poll
+- CAMPBELL messages: Keeper types in a text field → POST to `/api/v1/messages` → appears in feed
+- Handouts: static for now (link to existing report files)
+- New D1 tables needed: `rolls` (already in schema), `messages` (already in schema), `session_state` (which session is active, which NPCs visible)
+
+**New API endpoints needed:**
+```
+POST /api/v1/rolls              → log a roll, returns the saved roll with id
+GET  /api/v1/rolls?session=S02  → all rolls for active session (feed poll)
+POST /api/v1/messages           → keeper sends CAMPBELL/Director message
+GET  /api/v1/messages?session=S02 → delivered messages for session (feed poll)
+GET  /api/v1/session/active     → which session is live, active NPC list
+PUT  /api/v1/session/active     → keeper sets active session (keeper mode only)
+```
+
+**Real-time upgrade path:** Once first version works, replace polling with Cloudflare Durable Objects (WebSocket room per session). The API surface stays the same — just the delivery mechanism changes.
+
+### Phase 5 — Dynamic CAMPBELL Briefings
+- Briefing data model in D1
+- Keeper briefing editor
+- Player briefing history view
+- Integration with session report export
 
 ### Phase 5 — Dynamic CAMPBELL Briefings
 - Briefing data model in D1
