@@ -8,1360 +8,1152 @@
 <link rel="stylesheet" href="../keeper.css">
 <style>
 
-  /* ─── REPORT PAGE LAYOUT ─── */
   .report-wrap {
     max-width: 860px;
     margin: 0 auto;
     padding: 0 20px 80px;
   }
 
-  /* ─── TOP META BAR ─── */
-  .meta-bar {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 32px;
-    padding: 16px;
-    border: 1px solid var(--border, #1e3428);
-    background: var(--bg2, #0d1410);
-    border-radius: 4px;
-  }
-  .meta-field label {
-    display: block;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    color: var(--text-dim, #5a7a62);
-    margin-bottom: 5px;
-  }
-  .meta-field input, .meta-field select {
-    width: 100%;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--border, #1e3428);
-    color: var(--text, #c8ddd0);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.8rem;
-    padding: 3px 0;
-    outline: none;
-    letter-spacing: 0.06em;
-    box-sizing: border-box;
-  }
-  .meta-field input:focus, .meta-field select:focus {
-    border-bottom-color: var(--green, #2ecc71);
-  }
-  .meta-field select option { background: var(--bg2, #0d1410); }
-
-  /* ─── SECTION HEADERS ─── */
-  .db-section {
-    margin: 36px 0 16px;
-  }
-  .db-section-head {
+  /* ─── SESSION TABS ─── */
+  .session-tabs {
     display: flex;
-    align-items: baseline;
-    gap: 12px;
-    border-bottom: 1px solid var(--border-bright, #2ecc7155);
-    padding-bottom: 6px;
-    margin-bottom: 16px;
-  }
-  .db-section-head h2 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--green, #2ecc71);
-    margin: 0;
-  }
-  .db-section-head .db-tag {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.15em;
-    color: var(--text-dim, #5a7a62);
-  }
-
-  /* ─── TEXT AREAS ─── */
-  .db-field {
-    margin-bottom: 18px;
-  }
-  .db-field label {
-    display: block;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.18em;
-    color: var(--text-dim, #5a7a62);
+    gap: 4px;
     margin-bottom: 6px;
   }
-  .db-field label em {
-    font-style: italic;
-    color: #3a5a42;
-    letter-spacing: 0.06em;
-    font-size: 0.6rem;
-  }
-  .db-field textarea {
-    width: 100%;
-    background: var(--bg2, #0d1410);
-    border: 1px solid var(--border, #1e3428);
-    border-radius: 3px;
-    color: var(--text, #c8ddd0);
-    font-family: 'Barlow', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 300;
-    line-height: 1.7;
-    padding: 10px 12px;
-    outline: none;
-    resize: vertical;
-    box-sizing: border-box;
-    transition: border-color 0.2s;
-  }
-  .db-field textarea:focus { border-color: var(--green-dim, #1a7a43); }
-  .db-field textarea::placeholder { color: #2a4a32; font-style: italic; }
-
-  /* ─── HUNTER CARDS ─── */
-  .hunter-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin-bottom: 8px;
-  }
-  @media (max-width: 600px) { .hunter-grid { grid-template-columns: 1fr; } }
-
-  .hunter-card {
-    border: 1px solid var(--border, #1e3428);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .hunter-card-head {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 10px;
-    background: var(--bg3, #0a0f0d);
-    border-bottom: 1px solid var(--border, #1e3428);
-  }
-  .hunter-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .hunter-card-head span {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-  .hunter-card-body { padding: 10px; }
-  .hunter-card-body label {
-    display: block;
+  .stab {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.58rem;
+    font-size: 0.72rem;
     letter-spacing: 0.15em;
-    color: var(--text-dim, #5a7a62);
-    margin: 10px 0 4px;
-  }
-  .hunter-card-body label:first-child { margin-top: 0; }
-  .hunter-card-body textarea {
-    width: 100%;
+    padding: 7px 22px;
     background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--border, #1e3428);
-    color: var(--text, #c8ddd0);
-    font-family: 'Barlow', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 300;
-    line-height: 1.6;
-    padding: 3px 0;
-    outline: none;
-    resize: none;
-    box-sizing: border-box;
-    transition: border-color 0.2s;
-  }
-  .hunter-card-body textarea:focus { border-bottom-color: var(--green-dim, #1a7a43); }
-  .hunter-card-body textarea::placeholder { color: #2a4a32; font-style: italic; }
-
-  /* ─── CHECKLIST GRID ─── */
-  .check-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 8px;
-  }
-  @media (max-width: 500px) { .check-grid { grid-template-columns: 1fr; } }
-  .check-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 9px;
-    padding: 8px 10px;
-    border: 1px solid var(--border, #1e3428);
-    border-radius: 3px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
     cursor: pointer;
-    background: var(--bg2, #0d1410);
-    transition: border-color 0.15s, background 0.15s;
-    user-select: none;
-  }
-  .check-item:hover { border-color: var(--green-dim, #1a7a43); }
-  .check-item.checked {
-    border-color: var(--green-dim, #1a7a43);
-    background: rgba(46,204,113,0.05);
-  }
-  .check-item.checked .check-box { background: var(--green, #2ecc71); border-color: var(--green, #2ecc71); }
-  .check-item.checked .check-box::after { opacity: 1; }
-  .check-box {
-    width: 14px; height: 14px;
-    border: 1px solid var(--border-bright, #2ecc7155);
     border-radius: 2px;
-    flex-shrink: 0;
-    margin-top: 2px;
-    position: relative;
-    transition: background 0.15s, border-color 0.15s;
+    transition: all 0.15s;
   }
-  .check-box::after {
-    content: '';
-    position: absolute;
-    top: 2px; left: 4px;
-    width: 4px; height: 7px;
-    border-right: 2px solid #080c0a;
-    border-bottom: 2px solid #080c0a;
-    transform: rotate(45deg);
-    opacity: 0;
-    transition: opacity 0.1s;
-  }
-  .check-label {
-    font-family: 'Barlow', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 300;
-    color: var(--text, #c8ddd0);
-    line-height: 1.4;
-  }
-  .check-item.checked .check-label { color: var(--text-dim, #5a7a62); text-decoration: line-through; text-decoration-color: var(--green-dim, #1a7a43); }
+  .stab:hover { border-color: var(--keeper); color: var(--text); }
+  .stab.active { background: var(--keeper); border-color: var(--keeper); color: #fff; }
 
-  /* ─── RATING ROW ─── */
-  .rating-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-  }
-  .rating-label {
+  .session-title-bar {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.15em;
-    color: var(--text-dim, #5a7a62);
-    flex-shrink: 0;
-  }
-  .rating-pips {
-    display: flex;
-    gap: 5px;
-  }
-  .pip {
-    width: 22px; height: 22px;
-    border: 1px solid var(--border-bright, #2ecc7155);
-    border-radius: 2px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.62rem;
-    color: var(--text-dim, #5a7a62);
-    transition: background 0.12s, border-color 0.12s, color 0.12s;
-  }
-  .pip:hover { border-color: var(--green, #2ecc71); color: var(--green, #2ecc71); }
-  .pip.filled { background: var(--green, #2ecc71); border-color: var(--green, #2ecc71); color: #080c0a; font-weight: 700; }
-  .pip.filled ~ .pip { background: transparent; border-color: var(--border-bright, #2ecc7155); color: var(--text-dim, #5a7a62); }
-
-  /* ─── THREAD TAGS ─── */
-  .thread-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-    margin-bottom: 8px;
-  }
-  .thread-tag {
-    border: 1px solid var(--border-bright, #2ecc7155);
-    border-radius: 2px;
-    padding: 4px 9px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    color: var(--text-dim, #5a7a62);
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s, color 0.15s;
-    user-select: none;
-  }
-  .thread-tag:hover { border-color: var(--green-dim, #1a7a43); color: var(--text, #c8ddd0); }
-  .thread-tag.active { background: rgba(46,204,113,0.08); border-color: var(--green, #2ecc71); color: var(--green, #2ecc71); }
-
-  /* ─── OUTCOME BOX ─── */
-  .outcome-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 8px;
-  }
-  .outcome-btn {
-    padding: 10px;
-    border-radius: 3px;
-    border: 1px solid var(--border, #1e3428);
-    background: var(--bg2, #0d1410);
-    cursor: pointer;
-    text-align: center;
-    transition: background 0.15s, border-color 0.15s;
-    user-select: none;
-  }
-  .outcome-btn .ob-label {
-    display: block;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    color: var(--text-dim, #5a7a62);
-    margin-bottom: 3px;
-  }
-  .outcome-btn .ob-val {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    color: var(--text, #c8ddd0);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
     text-transform: uppercase;
+    margin-bottom: 20px;
+    padding-left: 1px;
   }
-  .outcome-btn.active-humane { border-color: var(--green, #2ecc71); background: rgba(46,204,113,0.07); }
-  .outcome-btn.active-humane .ob-val { color: var(--green, #2ecc71); }
-  .outcome-btn.active-partial { border-color: var(--amber, #f0a500); background: rgba(240,165,0,0.07); }
-  .outcome-btn.active-partial .ob-val { color: var(--amber, #f0a500); }
-  .outcome-btn.active-bad { border-color: var(--red, #e05050); background: rgba(224,80,80,0.07); }
-  .outcome-btn.active-bad .ob-val { color: var(--red, #e05050); }
-
-  /* ─── MOMENTUM INDICATOR ─── */
-  .momentum-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 14px;
-    border: 1px solid var(--border, #1e3428);
-    background: var(--bg2, #0d1410);
-    border-radius: 3px;
-    margin-bottom: 18px;
-    flex-wrap: wrap;
-    row-gap: 8px;
-  }
-  .momentum-bar .rating-label { flex-shrink: 0; }
 
   /* ─── DATA CONTROLS ─── */
   .data-controls {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
     flex-wrap: wrap;
   }
-  .data-controls-label {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.18em;
-    color: var(--text-dim, #5a7a62);
-  }
   .data-btn {
-    background: none;
-    border: 1px solid var(--border, #1e3428);
-    border-radius: 3px;
-    color: var(--text-dim, #5a7a62);
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    padding: 5px 11px;
-    cursor: pointer;
-    transition: color 0.15s, border-color 0.15s, background 0.15s;
-  }
-  .data-btn:hover { color: var(--green, #2ecc71); border-color: var(--green, #2ecc71); }
-  .data-btn.primary { color: var(--green-dim, #1a7a43); border-color: var(--green-dim, #1a7a43); }
-  .data-btn.primary:hover { color: var(--green, #2ecc71); border-color: var(--green, #2ecc71); background: rgba(46,204,113,0.06); }
-  .data-btn.import-btn { position: relative; overflow: hidden; }
-  .data-btn.import-btn input[type="file"] {
-    position: absolute; inset: 0; opacity: 0; cursor: pointer; font-size: 0;
-  }
-  .data-btn.new-btn { color: var(--green, #2ecc71); border-color: var(--green-dim, #1a7a43); }
-  .data-btn.new-btn:hover { background: rgba(46,204,113,0.08); }
-  /* "Copy for Claude" — keeper purple to signal AI handoff */
-  .data-btn.claude-btn {
-    color: var(--keeper, #a855f7);
-    border-color: var(--keeper-dim, #4a1d7a);
-  }
-  .data-btn.claude-btn:hover {
-    color: #c084fc;
-    border-color: var(--keeper, #a855f7);
-    background: rgba(168,85,247,0.06);
-  }
-  #db-save-flash {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     letter-spacing: 0.12em;
-    color: var(--green, #2ecc71);
+    padding: 8px 18px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  .data-btn:hover { border-color: var(--text-dim); color: var(--text); }
+  .data-btn--primary {
+    border-color: var(--keeper);
+    color: var(--keeper);
+  }
+  .data-btn--primary:hover { background: var(--keeper); color: #fff; }
+  .data-btn--primary:disabled { opacity: 0.6; cursor: default; }
+  .data-btn--claude {
+    border-color: var(--keeper-dim);
+    color: var(--keeper-dim);
+  }
+  .data-btn--claude:hover { border-color: var(--keeper); color: var(--keeper); }
+  .save-flash {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--green);
     opacity: 0;
     transition: opacity 0.3s;
+    margin-left: 4px;
   }
-  #db-save-flash.show { opacity: 1; }
+  .save-flash.visible { opacity: 1; }
 
-  /* ─── REPORT LOG ─── */
-  .report-log {
-    border: 1px solid var(--border, #1e3428);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .report-log-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 12px;
-    background: var(--bg3, #0a0f0d);
-    border-bottom: 1px solid var(--border, #1e3428);
-  }
-  .report-log-head span {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.15em;
-    color: var(--text-dim, #5a7a62);
-  }
-  .report-log-head button {
-    background: none;
-    border: none;
-    color: var(--text-dim, #5a7a62);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    padding: 0;
-    transition: color 0.15s;
-  }
-  .report-log-head button:hover { color: var(--green, #2ecc71); }
-  .report-entry {
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--border, #1e3428);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: background 0.12s;
-  }
-  .report-entry:last-child { border-bottom: none; }
-  .report-entry:hover { background: rgba(46,204,113,0.03); }
-  .report-entry .re-session {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--green, #2ecc71);
-    letter-spacing: 0.1em;
-    min-width: 44px;
-  }
-  .report-entry .re-title {
-    font-family: 'Barlow', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 300;
-    color: var(--text, #c8ddd0);
-    flex: 1;
-    padding: 0 14px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .report-entry .re-outcome {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    padding: 2px 7px;
+  /* ─── META BAR ─── */
+  .meta-bar {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 12px;
+    margin-bottom: 32px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    background: var(--bg2);
     border-radius: 2px;
-    border: 1px solid;
   }
-  .re-outcome.humane { color: var(--green, #2ecc71); border-color: var(--green-dim, #1a7a43); }
-  .re-outcome.partial { color: var(--amber, #f0a500); border-color: #7a5200; }
-  .re-outcome.bad { color: var(--red, #e05050); border-color: #5a2020; }
-  .re-outcome.none { color: var(--text-dim, #5a7a62); border-color: var(--border, #1e3428); }
-  .re-del {
-    background: none;
-    border: none;
-    color: #3a3a3a;
-    font-size: 0.9rem;
-    cursor: pointer;
-    padding: 0 0 0 10px;
-    line-height: 1;
-    transition: color 0.15s;
-  }
-  .re-del:hover { color: var(--red, #e05050); }
-  .report-empty {
-    padding: 20px;
-    text-align: center;
+  .meta-field label {
+    display: block;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.12em;
-    color: #2a4a32;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    margin-bottom: 5px;
+  }
+  .meta-field input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    padding: 3px 0;
+    outline: none;
+    letter-spacing: 0.06em;
+    box-sizing: border-box;
+  }
+  .meta-field input:focus { border-bottom-color: var(--green); }
+  .meta-field input[readonly] { color: var(--text-dim); cursor: default; }
+
+  /* ─── SECTIONS ─── */
+  .db-section {
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .db-section-head {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--keeper);
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--keeper-dim);
   }
 
-  /* ─── KEEPER SYNTHESIS ─── */
-  .synthesis-box {
-    border: 1px solid var(--border-bright, #2ecc7155);
-    border-left: 3px solid var(--green-dim, #1a7a43);
-    border-radius: 0 4px 4px 0;
-    padding: 14px 16px;
-    background: rgba(46,204,113,0.03);
-    margin-bottom: 18px;
+  /* ─── FIELDS ─── */
+  .db-field {
+    margin-bottom: 16px;
   }
-  .synthesis-box .syn-label {
+  .db-field label {
+    display: block;
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.6rem;
     letter-spacing: 0.18em;
-    color: var(--green-dim, #1a7a43);
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .db-field textarea {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    padding: 10px 12px;
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+  }
+  .db-field textarea:focus { border-color: var(--keeper-dim); }
+
+  /* ─── OUTCOME BUTTONS ─── */
+  .outcome-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .outcome-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  .outcome-btn.outcome-humane.active  { border-color: var(--green); color: var(--green); background: rgba(46,204,113,0.08); }
+  .outcome-btn.outcome-partial.active { border-color: var(--amber); color: var(--amber); background: rgba(240,165,0,0.08); }
+  .outcome-btn.outcome-bad.active     { border-color: var(--red);   color: var(--red);   background: rgba(231,76,60,0.08); }
+  .outcome-btn:not(.active):hover { border-color: var(--text-dim); color: var(--text); }
+
+  /* ─── RATINGS ─── */
+  .rating-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  .rating-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    color: var(--text-dim);
+    width: 160px;
+    flex-shrink: 0;
+  }
+  .momentum-bar { display: flex; gap: 5px; }
+  .pip {
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .pip:hover { border-color: var(--keeper-dim); }
+  .pip.filled { background: var(--keeper); border-color: var(--keeper); }
+
+  /* ─── HUNTERS ─── */
+  .hunter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .hunter-card {
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--h-color, var(--border));
+    background: var(--bg2);
+    padding: 14px;
+    border-radius: 2px;
+  }
+  .hunter-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--h-color, var(--text));
+    margin-bottom: 10px;
+  }
+  .hunter-field-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+    margin-top: 8px;
+  }
+  .hunter-card textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    padding: 4px 0;
+    outline: none;
+    resize: none;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+  }
+  .hunter-card textarea:focus { border-bottom-color: var(--h-color, var(--keeper)); }
+
+  /* ─── SCENE NOTES ─── */
+  .scene-note { margin-bottom: 20px; }
+  .scene-note label {
     display: block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    color: var(--keeper-dim);
+    margin-bottom: 5px;
+  }
+  .scene-note .scene-prompt {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.75rem;
+    font-style: italic;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+  .scene-note textarea {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--keeper-dim);
+    border-radius: 2px;
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    padding: 10px 12px;
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+  }
+  .scene-note textarea:focus { border-color: var(--keeper); border-left-color: var(--keeper); }
+
+  /* ─── THREADS ─── */
+  .thread-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+  .thread-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.12s;
+  }
+  .thread-tag:hover { border-color: var(--keeper-dim); color: var(--text); }
+  .thread-tag.active { border-color: var(--keeper); color: var(--keeper); background: rgba(168,85,247,0.1); }
+
+  /* ─── COUNTDOWNS ─── */
+  .check-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    cursor: pointer;
+    border-radius: 2px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    transition: all 0.12s;
+    user-select: none;
+  }
+  .check-item:hover { border-color: var(--keeper-dim); color: var(--text); }
+  .check-item.checked { border-color: var(--amber); color: var(--amber); background: rgba(240,165,0,0.06); }
+  .check-mark {
+    font-size: 0.75rem;
+    opacity: 0;
+    transition: opacity 0.12s;
+    flex-shrink: 0;
+  }
+  .check-item.checked .check-mark { opacity: 1; }
+
+  /* ─── SYNTHESIS BOX ─── */
+  .synthesis-box {
+    border: 1px solid var(--keeper-dim);
+    background: rgba(168,85,247,0.05);
+    padding: 16px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+  .synthesis-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    color: var(--keeper);
     margin-bottom: 10px;
   }
   .synthesis-box textarea {
     width: 100%;
     background: transparent;
     border: none;
-    color: var(--text, #c8ddd0);
+    border-bottom: 1px solid var(--keeper-dim);
+    color: var(--text);
     font-family: 'Barlow', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 300;
-    line-height: 1.7;
-    padding: 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    padding: 6px 0;
     outline: none;
     resize: vertical;
     box-sizing: border-box;
   }
-  .synthesis-box textarea::placeholder { color: #2a4a32; font-style: italic; }
+  .synthesis-box textarea:focus { border-bottom-color: var(--keeper); }
+
+  /* ─── BOTTOM ACTIONS ─── */
+  .page-actions {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    z-index: 50;
+  }
+  .action-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    padding: 9px 22px;
+    border: 1px solid var(--keeper);
+    background: transparent;
+    color: var(--keeper);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  .action-btn:hover { background: var(--keeper); color: #fff; }
+  .action-btn:disabled { opacity: 0.5; cursor: default; }
+
+  @media (max-width: 600px) {
+    .hunter-grid { grid-template-columns: 1fr; }
+    .check-grid  { grid-template-columns: 1fr; }
+    .meta-bar    { grid-template-columns: 1fr; }
+  }
 
 </style>
 </head>
 <body>
 
-<div class="keeper-banner">KEEPER ACCESS ONLY — DO NOT SHARE THIS URL WITH PLAYERS</div>
-
-<header>
-  <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L <span style="font-size:0.7rem;color:var(--keeper-dim);margin-left:8px;">// KEEPER</span></a>
-  <nav id="keeper-nav"></nav><script src="keeper-nav.js"></script>
-  <div><span class="keeper-dot"></span><span style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--keeper-dim)">RESTRICTED ACCESS</span></div>
+<header class="site-header">
+  <div class="keeper-banner">KEEPER ACCESS ONLY</div>
+  <div class="header-inner">
+    <div class="logo">P.O.R.T.A.L <span class="logo-sep">//</span> <span class="logo-sub">KEEPER</span></div>
+    <nav id="keeper-nav"></nav>
+  </div>
+  <div class="header-tag">RESTRICTED ACCESS</div>
 </header>
 
-<div class="hero">
-  <div class="hero-eyebrow">// KEEPER — POST-SESSION</div>
-  <h1 class="hero-title">Field<br><span class="accent">Report</span></h1>
-  <p class="hero-desc">Fill in after each session while it's fresh. The report becomes the seed for next session's prep — loose threads, character moments, and what the table felt.</p>
-</div>
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">// KEEPER — POST-SESSION</div>
+    <h1 class="hero-title">Field<strong>Report</strong></h1>
+    <p class="hero-desc">Post-session record. Capture what happened, what landed, and what seeds the next play.</p>
+  </div>
+</section>
 
+<main>
 <div class="report-wrap">
+
+  <!-- SESSION TABS -->
+  <div class="session-tabs" id="session-tabs">
+    <!-- built by JS from SESSIONS config -->
+  </div>
+  <div class="session-title-bar" id="session-title"></div>
 
   <!-- DATA CONTROLS -->
   <div class="data-controls">
-    <span class="data-controls-label">// REPORTS</span>
-    <button class="data-btn new-btn" id="btn-new">+ NEW REPORT</button>
-    <button class="data-btn primary" id="btn-save">SAVE</button>
-    <button class="data-btn claude-btn" id="btn-copy-claude" title="Copy report as Markdown — paste straight into Claude">⬡ COPY FOR CLAUDE</button>
-    <button class="data-btn primary" id="btn-export-md" title="Export as Markdown file">EXPORT .MD</button>
-    <button class="data-btn" id="btn-export-json" title="Export all reports as JSON backup">BACKUP JSON</button>
-    <button class="data-btn import-btn">
-      RESTORE JSON
-      <input type="file" id="import-file" accept=".json">
-    </button>
-    <span id="db-save-flash">✓ SAVED</span>
+    <button class="data-btn data-btn--primary" id="btn-save">// SAVE REPORT</button>
+    <button class="data-btn data-btn--claude" id="btn-copy-claude">⬡ COPY FOR CLAUDE</button>
+    <span class="save-flash" id="save-flash"></span>
   </div>
 
-  <!-- PAST REPORTS LOG -->
-  <div class="report-log" id="report-log">
-    <div class="report-log-head">
-      <span>// FILED REPORTS</span>
-      <button id="btn-collapse-log">COLLAPSE</button>
-    </div>
-    <div id="report-log-body">
-      <div class="report-empty">No reports filed yet.</div>
-    </div>
-  </div>
-
-  <div style="margin-top:32px;"></div>
-
-  <!-- ═══════════ META ═══════════ -->
+  <!-- META BAR -->
   <div class="meta-bar">
     <div class="meta-field">
-      <label>// SESSION</label>
-      <input type="text" id="db-session" placeholder="S01" maxlength="8">
+      <label>SESSION</label>
+      <input id="db-session" readonly>
     </div>
     <div class="meta-field">
-      <label>// MISSION TITLE</label>
-      <input type="text" id="db-mission" placeholder="Something That Wants To Be Known">
+      <label>MISSION TITLE</label>
+      <input id="db-mission" placeholder="A Promise is a Promise">
     </div>
     <div class="meta-field">
-      <label>// DATE</label>
-      <input type="text" id="db-date" placeholder="auto">
+      <label>DATE PLAYED</label>
+      <input id="db-date" type="date">
     </div>
   </div>
 
-  <!-- ═══════════ MISSION OUTCOME ═══════════ -->
-  <div class="db-section">
-    <div class="db-section-head">
-      <h2>Mission Outcome</h2>
-      <span class="db-tag">// HOW DID IT END</span>
+  <!-- MISSION OUTCOME -->
+  <section class="db-section">
+    <div class="db-section-head">// MISSION OUTCOME</div>
+    <div class="outcome-row">
+      <button class="outcome-btn outcome-humane" data-outcome="humane">HUMANE ENDING</button>
+      <button class="outcome-btn outcome-partial" data-outcome="partial">PARTIAL RESOLUTION</button>
+      <button class="outcome-btn outcome-bad" data-outcome="bad">BAD ENDING</button>
     </div>
-
-    <div class="outcome-row" id="outcome-row">
-      <div class="outcome-btn" data-outcome="humane">
-        <span class="ob-label">// ENDING</span>
-        <span class="ob-val">Humane</span>
-      </div>
-      <div class="outcome-btn" data-outcome="partial">
-        <span class="ob-label">// ENDING</span>
-        <span class="ob-val">Partial / Complicated</span>
-      </div>
-      <div class="outcome-btn" data-outcome="bad">
-        <span class="ob-label">// ENDING</span>
-        <span class="ob-val">Bad Ending</span>
-      </div>
-    </div>
-
     <div class="db-field">
-      <label>// DIRECTIVE RESULT <em>— did the team meet PORTAL's stated objective?</em></label>
-      <textarea id="db-directive" rows="2" placeholder="e.g. Full / Partial / Failed — and why"></textarea>
+      <label>DID THE TEAM MEET PORTAL'S DIRECTIVE?</label>
+      <textarea id="db-directive" rows="2" placeholder="What was the objective? Did they achieve it, partially, or fail?"></textarea>
     </div>
-
     <div class="db-field">
-      <label>// WHAT ACTUALLY HAPPENED <em>— 2–4 sentences, plain summary</em></label>
-      <textarea id="db-summary" rows="4" placeholder="The team arrived at Aldermoor, found Arthur, located the estate agent's office…"></textarea>
+      <label>SESSION SUMMARY — 2 TO 4 SENTENCES</label>
+      <textarea id="db-summary" rows="4" placeholder="Plain language recap. What happened, in order."></textarea>
     </div>
-  </div>
+  </section>
 
-  <!-- ═══════════ WHAT LANDED ═══════════ -->
-  <div class="db-section">
-    <div class="db-section-head">
-      <h2>What Landed</h2>
-      <span class="db-tag">// TABLE TEMPERATURE</span>
-    </div>
-
-    <div class="momentum-bar">
-      <span class="rating-label">// ENERGY AT THE TABLE</span>
-      <div class="rating-pips" id="energy-pips">
-        <div class="pip" data-val="1">1</div>
-        <div class="pip" data-val="2">2</div>
-        <div class="pip" data-val="3">3</div>
-        <div class="pip" data-val="4">4</div>
-        <div class="pip" data-val="5">5</div>
-      </div>
-      <span class="rating-label" style="margin-left:18px;">// EMOTIONAL INTENSITY</span>
-      <div class="rating-pips" id="intensity-pips">
-        <div class="pip" data-val="1">1</div>
-        <div class="pip" data-val="2">2</div>
-        <div class="pip" data-val="3">3</div>
-        <div class="pip" data-val="4">4</div>
-        <div class="pip" data-val="5">5</div>
+  <!-- WHAT LANDED -->
+  <section class="db-section">
+    <div class="db-section-head">// WHAT LANDED</div>
+    <div class="rating-row">
+      <span class="rating-label">ENERGY</span>
+      <div class="momentum-bar" id="energy-pips">
+        <div class="pip" data-val="1"></div>
+        <div class="pip" data-val="2"></div>
+        <div class="pip" data-val="3"></div>
+        <div class="pip" data-val="4"></div>
+        <div class="pip" data-val="5"></div>
       </div>
     </div>
-
+    <div class="rating-row">
+      <span class="rating-label">EMOTIONAL INTENSITY</span>
+      <div class="momentum-bar" id="intensity-pips">
+        <div class="pip" data-val="1"></div>
+        <div class="pip" data-val="2"></div>
+        <div class="pip" data-val="3"></div>
+        <div class="pip" data-val="4"></div>
+        <div class="pip" data-val="5"></div>
+      </div>
+    </div>
     <div class="db-field">
-      <label>// BEST MOMENT <em>— the scene, exchange, or decision everyone will remember</em></label>
-      <textarea id="db-best" rows="3" placeholder="The moment when…"></textarea>
+      <label>BEST MOMENT / SCENE</label>
+      <textarea id="db-best" rows="2" placeholder="The scene or moment you'd rewatch if you could."></textarea>
     </div>
-
     <div class="db-field">
-      <label>// WHAT SURPRISED YOU <em>— player choices, NPC reactions, anything that went off-script</em></label>
-      <textarea id="db-surprise" rows="3" placeholder="Nobody expected…"></textarea>
+      <label>OFF-SCRIPT SURPRISES</label>
+      <textarea id="db-surprise" rows="2" placeholder="What did the players do that you didn't expect? What did they invent?"></textarea>
     </div>
-
     <div class="db-field">
-      <label>// WHAT FELL FLAT <em>— honest note, keeper-only. What didn't land and why</em></label>
-      <textarea id="db-flat" rows="2" placeholder="The — scene dragged / the NPC felt thin / the pacing broke at…"></textarea>
+      <label>HONEST KEEPER NOTE — WHAT DIDN'T LAND?</label>
+      <textarea id="db-flat" rows="2" placeholder="No notes here means you're lying to yourself."></textarea>
     </div>
-  </div>
+  </section>
 
-  <!-- ═══════════ THE HUNTERS ═══════════ -->
-  <div class="db-section">
-    <div class="db-section-head">
-      <h2>The Hunters</h2>
-      <span class="db-tag">// PER-CHARACTER RECORD</span>
-    </div>
-
+  <!-- THE HUNTERS -->
+  <section class="db-section">
+    <div class="db-section-head">// THE HUNTERS</div>
     <div class="hunter-grid">
 
-      <div class="hunter-card">
-        <div class="hunter-card-head">
-          <div class="hunter-dot" style="background:#f0a500;"></div>
-          <span style="color:#f0a500;">Rex Bangley</span>
-        </div>
-        <div class="hunter-card-body">
-          <label>// KEY ACTION OR DECISION</label>
-          <textarea data-hunter="rex" data-field="action" rows="2" placeholder="What Rex did that mattered…"></textarea>
-          <label>// ARC MOVEMENT</label>
-          <textarea data-hunter="rex" data-field="arc" rows="2" placeholder="Any arc beats that moved? Anything that set one up?"></textarea>
-          <label>// KEEPER NOTE</label>
-          <textarea data-hunter="rex" data-field="note" rows="2" placeholder="Something to use next session…"></textarea>
-        </div>
+      <div class="hunter-card" style="--h-color: #f0a500">
+        <div class="hunter-name">Rex Bangley</div>
+        <div class="hunter-field-label">KEY ACTION</div>
+        <textarea data-hunter="rex" data-field="action" rows="2" placeholder="What did Rex do this session?"></textarea>
+        <div class="hunter-field-label">ARC MOVEMENT</div>
+        <textarea data-hunter="rex" data-field="arc" rows="2" placeholder="Any arc beats triggered or moved?"></textarea>
+        <div class="hunter-field-label">KEEPER NOTE</div>
+        <textarea data-hunter="rex" data-field="note" rows="2" placeholder="What to set up or follow up for Rex."></textarea>
       </div>
 
-      <div class="hunter-card">
-        <div class="hunter-card-head">
-          <div class="hunter-dot" style="background:#3ab5b0;"></div>
-          <span style="color:#3ab5b0;">Reed Atwood</span>
-        </div>
-        <div class="hunter-card-body">
-          <label>// KEY ACTION OR DECISION</label>
-          <textarea data-hunter="reed" data-field="action" rows="2" placeholder="What Reed did that mattered…"></textarea>
-          <label>// ARC MOVEMENT</label>
-          <textarea data-hunter="reed" data-field="arc" rows="2" placeholder="Any arc beats that moved? Anything that set one up?"></textarea>
-          <label>// KEEPER NOTE</label>
-          <textarea data-hunter="reed" data-field="note" rows="2" placeholder="Something to use next session…"></textarea>
-        </div>
+      <div class="hunter-card" style="--h-color: #3ab5b0">
+        <div class="hunter-name">Reed Atwood</div>
+        <div class="hunter-field-label">KEY ACTION</div>
+        <textarea data-hunter="reed" data-field="action" rows="2" placeholder="What did Reed do this session?"></textarea>
+        <div class="hunter-field-label">ARC MOVEMENT</div>
+        <textarea data-hunter="reed" data-field="arc" rows="2" placeholder="Any arc beats triggered or moved?"></textarea>
+        <div class="hunter-field-label">KEEPER NOTE</div>
+        <textarea data-hunter="reed" data-field="note" rows="2" placeholder="What to set up or follow up for Reed."></textarea>
       </div>
 
-      <div class="hunter-card">
-        <div class="hunter-card-head">
-          <div class="hunter-dot" style="background:#2ec4b6;"></div>
-          <span style="color:#2ec4b6;">Alan Frazier</span>
-        </div>
-        <div class="hunter-card-body">
-          <label>// KEY ACTION OR DECISION</label>
-          <textarea data-hunter="alan" data-field="action" rows="2" placeholder="What Alan did that mattered…"></textarea>
-          <label>// ARC MOVEMENT</label>
-          <textarea data-hunter="alan" data-field="arc" rows="2" placeholder="Any arc beats that moved? Anything that set one up?"></textarea>
-          <label>// KEEPER NOTE</label>
-          <textarea data-hunter="alan" data-field="note" rows="2" placeholder="Something to use next session…"></textarea>
-        </div>
+      <div class="hunter-card" style="--h-color: #2ec4b6">
+        <div class="hunter-name">Alan Frazier</div>
+        <div class="hunter-field-label">KEY ACTION</div>
+        <textarea data-hunter="alan" data-field="action" rows="2" placeholder="What did Alan do this session?"></textarea>
+        <div class="hunter-field-label">ARC MOVEMENT</div>
+        <textarea data-hunter="alan" data-field="arc" rows="2" placeholder="Any arc beats triggered or moved?"></textarea>
+        <div class="hunter-field-label">KEEPER NOTE</div>
+        <textarea data-hunter="alan" data-field="note" rows="2" placeholder="What to set up or follow up for Alan."></textarea>
       </div>
 
-      <div class="hunter-card">
-        <div class="hunter-card-head">
-          <div class="hunter-dot" style="background:#a78bfa;"></div>
-          <span style="color:#a78bfa;">Sven</span>
-        </div>
-        <div class="hunter-card-body">
-          <label>// KEY ACTION OR DECISION</label>
-          <textarea data-hunter="sven" data-field="action" rows="2" placeholder="What Sven did that mattered…"></textarea>
-          <label>// ARC MOVEMENT</label>
-          <textarea data-hunter="sven" data-field="arc" rows="2" placeholder="Any arc beats that moved? Anything that set one up?"></textarea>
-          <label>// KEEPER NOTE</label>
-          <textarea data-hunter="sven" data-field="note" rows="2" placeholder="Something to use next session…"></textarea>
-        </div>
+      <div class="hunter-card" style="--h-color: #a78bfa">
+        <div class="hunter-name">Sven</div>
+        <div class="hunter-field-label">KEY ACTION</div>
+        <textarea data-hunter="sven" data-field="action" rows="2" placeholder="What did Sven do this session?"></textarea>
+        <div class="hunter-field-label">ARC MOVEMENT</div>
+        <textarea data-hunter="sven" data-field="arc" rows="2" placeholder="Any arc beats triggered or moved?"></textarea>
+        <div class="hunter-field-label">KEEPER NOTE</div>
+        <textarea data-hunter="sven" data-field="note" rows="2" placeholder="What to set up or follow up for Sven."></textarea>
       </div>
 
     </div>
-  </div>
+  </section>
 
-  <!-- ═══════════ THREADS ═══════════ -->
-  <div class="db-section">
-    <div class="db-section-head">
-      <h2>Active Threads</h2>
-      <span class="db-tag">// WHAT'S LIVE AFTER THIS SESSION</span>
-    </div>
+  <!-- SCENE NOTES — dynamic per session -->
+  <section class="db-section">
+    <div class="db-section-head">// SCENE NOTES</div>
+    <div id="scenes-container"></div>
+  </section>
 
-    <div style="margin-bottom:10px;">
-      <div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;color:var(--text-dim);margin-bottom:8px;">// TAG THREADS THAT MOVED OR OPENED THIS SESSION</div>
-      <div class="thread-row" id="thread-tags">
-        <div class="thread-tag" data-thread="project-veil">PROJECT VEIL</div>
-        <div class="thread-tag" data-thread="mesa">MESA</div>
-        <div class="thread-tag" data-thread="rook">ROOK</div>
-        <div class="thread-tag" data-thread="dan-nilsson">DAN NILSSON</div>
-        <div class="thread-tag" data-thread="campbell">CAMPBELL</div>
-        <div class="thread-tag" data-thread="sven-death">SVEN'S DEATH</div>
-        <div class="thread-tag" data-thread="alan-fey">ALAN'S ORIGIN</div>
-        <div class="thread-tag" data-thread="reed-directive">REED'S DIRECTIVE</div>
-        <div class="thread-tag" data-thread="leech">DR. LEECH</div>
-        <div class="thread-tag" data-thread="bim">BIM / ASH</div>
-        <div class="thread-tag" data-thread="cartographer">THE CARTOGRAPHER</div>
-        <div class="thread-tag" data-thread="mesa-samples">MESA SAMPLES</div>
-      </div>
-    </div>
-
+  <!-- ACTIVE THREADS — dynamic per session -->
+  <section class="db-section">
+    <div class="db-section-head">// ACTIVE THREADS</div>
+    <div class="thread-grid" id="threads-container"></div>
     <div class="db-field">
-      <label>// UNRESOLVED — what did the team leave open, unasked, or deliberately avoided?</label>
-      <textarea id="db-unresolved" rows="3" placeholder="They never asked about the whiteboard dates. Reed didn't tell Rex about…"></textarea>
+      <label>WHAT DID THE TEAM LEAVE OPEN?</label>
+      <textarea id="db-unresolved" rows="3" placeholder="Unresolved questions, promises unkept, monsters still out there."></textarea>
     </div>
-
     <div class="db-field">
-      <label>// NEW QUESTIONS — what does this session make the players curious about?</label>
-      <textarea id="db-questions" rows="3" placeholder="Who owns @helixboundary.com? Why did the entity recognise Sven?…"></textarea>
+      <label>NEW PLAYER CURIOSITIES / QUESTIONS</label>
+      <textarea id="db-questions" rows="2" placeholder="What did players ask about? What do they want to know next?"></textarea>
     </div>
-
     <div class="db-field">
-      <label>// NPCS WHO MADE AN IMPRESSION — names and one line on why they landed</label>
-      <textarea id="db-npcs" rows="3" placeholder="Arthur — his patience made the stakes human. Rook — the moment she looked at Sven…"></textarea>
+      <label>NPCs WHO MADE AN IMPRESSION</label>
+      <textarea id="db-npcs" rows="2" placeholder="Who did players respond to, fear, trust, or want to find again?"></textarea>
     </div>
-  </div>
+  </section>
 
-  <!-- ═══════════ CLOCK STATUS ═══════════ -->
-  <div class="db-section">
-    <div class="db-section-head">
-      <h2>Countdowns</h2>
-      <span class="db-tag">// CLOCK STATUS AFTER SESSION</span>
+  <!-- COUNTDOWNS — dynamic per session -->
+  <section class="db-section">
+    <div class="db-section-head">// COUNTDOWNS &amp; CLOCKS</div>
+    <div class="check-grid" id="clocks-container"></div>
+    <div class="db-field">
+      <label>CLOCK NOTES</label>
+      <textarea id="db-clocks" rows="3" placeholder="Status updates on each active clock. What ticked forward? What was frozen?"></textarea>
     </div>
+  </section>
 
-    <div class="check-grid" id="clock-grid">
-      <div class="check-item" data-clock="gordon-avery">
-        <div class="check-box"></div>
-        <span class="check-label"><strong>Case A — Gordon Avery</strong> clock advanced</span>
-      </div>
-      <div class="check-item" data-clock="nadia">
-        <div class="check-box"></div>
-        <span class="check-label"><strong>Case C — Nadia (9-day window)</strong> — days elapsed?</span>
-      </div>
-      <div class="check-item" data-clock="martin">
-        <div class="check-box"></div>
-        <span class="check-label"><strong>Case D — Martin / Mira</strong> 14-day window advanced</span>
-      </div>
-      <div class="check-item" data-clock="theatre">
-        <div class="check-box"></div>
-        <span class="check-label"><strong>Case E — Meridian Theatre</strong> Saturday closing in</span>
-      </div>
-      <div class="check-item" data-clock="mesa-presence">
-        <div class="check-box"></div>
-        <span class="check-label"><strong>MESA</strong> increased presence / new intel</span>
-      </div>
-      <div class="check-item" data-clock="campbell-flag">
-        <div class="check-box"></div>
-        <span class="check-label"><strong>CAMPBELL</strong> flagged something internally</span>
-      </div>
-    </div>
-
-    <div class="db-field" style="margin-top:12px;">
-      <label>// CLOCK NOTES</label>
-      <textarea id="db-clocks" rows="2" placeholder="Nadia down to 6 days. Martin letter sent — Mira has 10 days…"></textarea>
-    </div>
-  </div>
-
-  <!-- ═══════════ NEXT SESSION SEEDS ═══════════ -->
-  <div class="db-section">
-    <div class="db-section-head">
-      <h2>Next Session Seeds</h2>
-      <span class="db-tag">// KEEPER ONLY — PREP NOTES</span>
-    </div>
-
+  <!-- NEXT SESSION SEEDS -->
+  <section class="db-section">
+    <div class="db-section-head">// NEXT SESSION SEEDS</div>
     <div class="synthesis-box">
-      <span class="syn-label">// KEEPER SYNTHESIS — what thread deserves to be the spine of next session?</span>
-      <textarea id="db-spine" rows="3" placeholder="The most live thing coming out of this session is…"></textarea>
+      <div class="synthesis-label">THREAD SPINE FOR NEXT SESSION</div>
+      <textarea id="db-spine" rows="4" placeholder="One paragraph. What is the central dramatic question the next session answers? Which threads converge?"></textarea>
     </div>
-
     <div class="db-field">
-      <label>// ★ STARS — what players leaned into, what they clearly wanted more of</label>
-      <textarea id="db-stars" rows="3" placeholder="Rex's moment with the substrate layer — he lit up. Sven going silent at the boundary. The team arguing about whether to call Leech…"></textarea>
+      <label>★ WHAT PLAYERS LEANED INTO — GIVE THEM MORE</label>
+      <textarea id="db-stars" rows="3" placeholder="Moments, tones, NPCs, or dynamics the players clearly loved."></textarea>
     </div>
-
     <div class="db-field">
-      <label>// ✦ WISHES — what players seemed to want that didn't happen yet</label>
-      <textarea id="db-wishes" rows="3" placeholder="Nobody got to confront Rook directly. Reed clearly wants to tell Rex about the directive but keeps pulling back. More Vera — players liked her…"></textarea>
+      <label>✦ WHAT PLAYERS WANTED THAT DIDN'T HAPPEN</label>
+      <textarea id="db-wishes" rows="3" placeholder="Things players reached for but didn't get. Save these — they're gold."></textarea>
     </div>
-
     <div class="db-field">
-      <label>// WHAT CAMPBELL KNOWS THAT THE HUNTERS DON'T — update after each session</label>
-      <textarea id="db-campbell" rows="3" placeholder="CAMPBELL registered the BIM signature match between Aldermoor and S01. Has not flagged it yet. Waiting for…"></textarea>
+      <label>WHAT CAMPBELL KNOWS THAT THE HUNTERS DON'T</label>
+      <textarea id="db-campbell" rows="3" placeholder="Information asymmetry. What is CAMPBELL holding back, and why?"></textarea>
     </div>
-
     <div class="db-field">
-      <label>// THINGS TO SET UP SOON — breadcrumbs to plant in upcoming sessions</label>
-      <textarea id="db-setup" rows="3" placeholder="Dan Nilsson mention. Reed's private directive needs to surface. Sven's encounter at the boundary…"></textarea>
+      <label>BREADCRUMBS TO PLANT SOON</label>
+      <textarea id="db-setup" rows="3" placeholder="Foreshadowing, recurring NPCs, objects, locations to seed before next session."></textarea>
     </div>
-
     <div class="db-field">
-      <label>// QUESTIONS FOR THE AI — when using this report to generate next session, ask about…</label>
-      <textarea id="db-ai-prompt" rows="3" placeholder="How does Rook's observation of Sven affect MESA's intel on PORTAL? What case should the next mission be built around given…"></textarea>
+      <label>QUESTIONS FOR AI WHEN DRAFTING NEXT SESSION</label>
+      <textarea id="db-ai-prompt" rows="3" placeholder="What do you want Claude to help you figure out? What's still murky?"></textarea>
     </div>
-  </div>
+  </section>
 
-  <!-- SAVE -->
-  <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:12px;">
-    <button class="data-btn" id="btn-discard" style="color:#5a2a2a;">DISCARD</button>
-    <button class="data-btn primary" id="btn-save-bottom">SAVE REPORT</button>
-  </div>
+</div>
+</main>
 
-</div><!-- /report-wrap -->
+<div class="page-actions">
+  <button class="action-btn" id="btn-save-bottom">// SAVE REPORT</button>
+</div>
 
-<footer>
+<footer class="site-footer">
   <span>// P.O.R.T.A.L — KEEPER DOCUMENT — FIELD REPORT</span>
-  <span>PROGRESS SAVES LOCALLY — EXPORT TO BACK UP</span>
 </footer>
 
+<script src="keeper-nav.js"></script>
 <script>
-// ─────────────────────────────────────────────
-//  STORAGE
-// ─────────────────────────────────────────────
-const STORE = 'portal-report-v1';
+(function () {
 
-function loadAll() {
-  try { return JSON.parse(localStorage.getItem(STORE)) || { reports: [], current: null }; }
-  catch(e) { return { reports: [], current: null }; }
-}
-function saveAll(data) {
-  try { localStorage.setItem(STORE, JSON.stringify(data)); } catch(e) {}
-}
-
-// ─────────────────────────────────────────────
-//  GENERATE BLANK REPORT
-// ─────────────────────────────────────────────
-function blankReport() {
-  return {
-    id: Date.now(),
-    session: '', mission: '',
-    date: new Date().toISOString().slice(0,10),
-    outcome: null,
-    directive: '', summary: '',
-    energy: 0, intensity: 0,
-    best: '', surprise: '', flat: '',
-    hunters: {
-      rex:  { action:'', arc:'', note:'' },
-      reed: { action:'', arc:'', note:'' },
-      alan: { action:'', arc:'', note:'' },
-      sven: { action:'', arc:'', note:'' }
+  // ── SESSION CONFIG ────────────────────────────────────────────────────────
+  var SESSIONS = {
+    S01: {
+      title: 'A Promise is a Promise',
+      threads: [
+        'PROJECT VEIL', 'MESA', 'CAMPBELL', "SVEN'S DEATH",
+        "ALAN'S ORIGIN", "REED'S DIRECTIVE", 'DR. LEECH',
+        'BIM / ASH', 'ESZTER', 'BÁLINT', 'KELLER UNIVERSITY', 'GORDON AVERY'
+      ],
+      clocks: [
+        { id: 'gordon-avery',     label: 'Gordon Avery clock' },
+        { id: 'nadia',            label: 'Nadia — 9-day window' },
+        { id: 'martin-mira',      label: 'Martin / Mira — 14-day window' },
+        { id: 'meridian-theatre', label: 'Meridian Theatre (Saturday)' },
+        { id: 'mesa-presence',    label: 'MESA presence at Keller' },
+        { id: 'campbell-flag',    label: 'CAMPBELL internal flag' }
+      ],
+      scenes: [
+        {
+          id: 'eszter-resolution',
+          label: 'ESZTER RESOLUTION',
+          prompt: "How did the team resolve Eszter's haunting? What did they promise Bálint? What remains unfinished or ambiguous?"
+        },
+        {
+          id: 'mesa-keller',
+          label: 'MESA AT KELLER',
+          prompt: "What did MESA want at Keller University? Did they interfere directly? What did the team learn, gain, or lose in that encounter?"
+        },
+        {
+          id: 'bim-usage',
+          label: 'BIM COLLECTION ARRAY',
+          prompt: "Was the BIM used? What was collected? Any unexpected readings, effects, or side-consequences?"
+        }
+      ]
     },
-    threads: [],
-    unresolved: '', questions: '', npcs: '',
-    clocks: [],
-    clockNotes: '',
-    spine: '', stars: '', wishes: '', campbell: '', setup: '', aiPrompt: ''
-  };
-}
-
-// ─────────────────────────────────────────────
-//  READ FORM → REPORT OBJECT
-// ─────────────────────────────────────────────
-function formToReport(base) {
-  var r = Object.assign({}, base);
-  r.session  = document.getElementById('db-session').value.trim();
-  r.mission  = document.getElementById('db-mission').value.trim();
-  r.date     = document.getElementById('db-date').value.trim();
-  r.directive = document.getElementById('db-directive').value;
-  r.summary   = document.getElementById('db-summary').value;
-  r.best      = document.getElementById('db-best').value;
-  r.surprise  = document.getElementById('db-surprise').value;
-  r.flat      = document.getElementById('db-flat').value;
-  r.unresolved= document.getElementById('db-unresolved').value;
-  r.questions = document.getElementById('db-questions').value;
-  r.npcs      = document.getElementById('db-npcs').value;
-  r.clockNotes= document.getElementById('db-clocks').value;
-  r.spine     = document.getElementById('db-spine').value;
-  r.stars     = document.getElementById('db-stars').value;
-  r.wishes    = document.getElementById('db-wishes').value;
-  r.campbell  = document.getElementById('db-campbell').value;
-  r.setup     = document.getElementById('db-setup').value;
-  r.aiPrompt  = document.getElementById('db-ai-prompt').value;
-
-  // outcome
-  var activeOutcome = document.querySelector('.outcome-btn[class*="active-"]');
-  r.outcome = activeOutcome ? activeOutcome.dataset.outcome : null;
-
-  // pips
-  var ep = document.querySelector('#energy-pips .pip.filled:last-of-type');
-  r.energy = ep ? parseInt(ep.dataset.val) : 0;
-  var ip = document.querySelector('#intensity-pips .pip.filled:last-of-type');
-  r.intensity = ip ? parseInt(ip.dataset.val) : 0;
-
-  // threads
-  r.threads = Array.from(document.querySelectorAll('.thread-tag.active')).map(function(t){ return t.dataset.thread; });
-
-  // clocks
-  r.clocks = Array.from(document.querySelectorAll('.check-item.checked')).map(function(c){ return c.dataset.clock; });
-
-  // hunters
-  document.querySelectorAll('[data-hunter]').forEach(function(ta) {
-    var h = ta.dataset.hunter; var f = ta.dataset.field;
-    if (!r.hunters[h]) r.hunters[h] = {};
-    r.hunters[h][f] = ta.value;
-  });
-
-  return r;
-}
-
-// ─────────────────────────────────────────────
-//  LOAD REPORT → FORM
-// ─────────────────────────────────────────────
-function reportToForm(r) {
-  document.getElementById('db-session').value  = r.session  || '';
-  document.getElementById('db-mission').value  = r.mission  || '';
-  document.getElementById('db-date').value     = r.date     || '';
-  document.getElementById('db-directive').value= r.directive|| '';
-  document.getElementById('db-summary').value  = r.summary  || '';
-  document.getElementById('db-best').value     = r.best     || '';
-  document.getElementById('db-surprise').value = r.surprise || '';
-  document.getElementById('db-flat').value     = r.flat     || '';
-  document.getElementById('db-unresolved').value= r.unresolved||'';
-  document.getElementById('db-questions').value = r.questions||'';
-  document.getElementById('db-npcs').value     = r.npcs     || '';
-  document.getElementById('db-clocks').value   = r.clockNotes||'';
-  document.getElementById('db-spine').value    = r.spine    || '';
-  document.getElementById('db-stars').value    = r.stars    || '';
-  document.getElementById('db-wishes').value   = r.wishes   || '';
-  document.getElementById('db-campbell').value = r.campbell || '';
-  document.getElementById('db-setup').value    = r.setup    || '';
-  document.getElementById('db-ai-prompt').value= r.aiPrompt || '';
-
-  // outcome
-  document.querySelectorAll('.outcome-btn').forEach(function(b) {
-    b.className = 'outcome-btn';
-    if (r.outcome && b.dataset.outcome === r.outcome) b.classList.add('active-' + r.outcome);
-  });
-
-  // pips
-  setPips('energy-pips', r.energy || 0);
-  setPips('intensity-pips', r.intensity || 0);
-
-  // threads
-  document.querySelectorAll('.thread-tag').forEach(function(t) {
-    t.classList.toggle('active', r.threads && r.threads.indexOf(t.dataset.thread) > -1);
-  });
-
-  // clocks
-  document.querySelectorAll('.check-item').forEach(function(c) {
-    c.classList.toggle('checked', r.clocks && r.clocks.indexOf(c.dataset.clock) > -1);
-  });
-
-  // hunters
-  document.querySelectorAll('[data-hunter]').forEach(function(ta) {
-    var h = ta.dataset.hunter; var f = ta.dataset.field;
-    ta.value = (r.hunters && r.hunters[h] && r.hunters[h][f]) ? r.hunters[h][f] : '';
-  });
-}
-
-function setPips(id, val) {
-  var pips = document.querySelectorAll('#' + id + ' .pip');
-  pips.forEach(function(p) { p.classList.toggle('filled', parseInt(p.dataset.val) <= val); });
-}
-
-// ─────────────────────────────────────────────
-//  RENDER REPORT LOG
-// ─────────────────────────────────────────────
-function renderLog() {
-  var data = loadAll();
-  var body = document.getElementById('report-log-body');
-  if (!data.reports || !data.reports.length) {
-    body.innerHTML = '<div class="report-empty">No reports filed yet.</div>';
-    return;
-  }
-  body.innerHTML = '';
-  var sorted = data.reports.slice().reverse();
-  sorted.forEach(function(r) {
-    var div = document.createElement('div');
-    div.className = 'report-entry';
-    div.dataset.id = r.id;
-    var oc = r.outcome || 'none';
-    div.innerHTML =
-      '<span class="re-session">' + (r.session || '—') + '</span>' +
-      '<span class="re-title">' + (r.mission || 'Untitled') + '</span>' +
-      '<span class="re-outcome ' + oc + '">' + (oc === 'none' ? '—' : oc.toUpperCase()) + '</span>' +
-      '<button class="re-del" data-id="' + r.id + '" title="Delete">×</button>';
-    div.addEventListener('click', function(e) {
-      if (e.target.classList.contains('re-del')) return;
-      loadReport(r.id);
-    });
-    div.querySelector('.re-del').addEventListener('click', function(e) {
-      e.stopPropagation();
-      if (confirm('Delete this report?')) { deleteReport(r.id); }
-    });
-    body.appendChild(div);
-  });
-}
-
-// ─────────────────────────────────────────────
-//  CURRENT REPORT STATE
-// ─────────────────────────────────────────────
-var currentReport = blankReport();
-
-function loadReport(id) {
-  var data = loadAll();
-  var r = data.reports.find(function(x){ return x.id === id; });
-  if (r) { currentReport = Object.assign({}, r); reportToForm(currentReport); }
-}
-
-function saveReport() {
-  currentReport = formToReport(currentReport);
-  var data = loadAll();
-  var idx = data.reports.findIndex(function(x){ return x.id === currentReport.id; });
-  if (idx > -1) { data.reports[idx] = currentReport; }
-  else { data.reports.push(currentReport); }
-  saveAll(data);
-  renderLog();
-  flash();
-}
-
-function deleteReport(id) {
-  var data = loadAll();
-  data.reports = data.reports.filter(function(x){ return x.id !== id; });
-  saveAll(data);
-  renderLog();
-}
-
-function flash() {
-  var el = document.getElementById('db-save-flash');
-  el.classList.add('show');
-  setTimeout(function(){ el.classList.remove('show'); }, 1800);
-}
-
-// ─────────────────────────────────────────────
-//  BUTTON WIRING
-// ─────────────────────────────────────────────
-document.getElementById('btn-new').addEventListener('click', function() {
-  currentReport = blankReport();
-  reportToForm(currentReport);
-});
-
-document.getElementById('btn-save').addEventListener('click', saveReport);
-document.getElementById('btn-save-bottom').addEventListener('click', saveReport);
-
-document.getElementById('btn-discard').addEventListener('click', function() {
-  if (confirm('Discard current form? Unsaved changes will be lost.')) {
-    currentReport = blankReport();
-    reportToForm(currentReport);
-  }
-});
-
-document.getElementById('btn-collapse-log').addEventListener('click', function() {
-  var body = document.getElementById('report-log-body');
-  var hidden = body.style.display === 'none';
-  body.style.display = hidden ? '' : 'none';
-  this.textContent = hidden ? 'COLLAPSE' : 'EXPAND';
-});
-
-// Outcome buttons
-document.querySelectorAll('.outcome-btn').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    var oc = btn.dataset.outcome;
-    document.querySelectorAll('.outcome-btn').forEach(function(b){ b.className = 'outcome-btn'; });
-    btn.classList.add('active-' + oc);
-  });
-});
-
-// Pip ratings
-function initPips(id) {
-  document.querySelectorAll('#' + id + ' .pip').forEach(function(pip) {
-    pip.addEventListener('click', function() {
-      var val = parseInt(pip.dataset.val);
-      var pips = document.querySelectorAll('#' + id + ' .pip');
-      // clicking filled pip at current max = toggle off
-      var curMax = 0;
-      pips.forEach(function(p){ if(p.classList.contains('filled')) curMax = parseInt(p.dataset.val); });
-      var newVal = (val === curMax) ? 0 : val;
-      pips.forEach(function(p){ p.classList.toggle('filled', parseInt(p.dataset.val) <= newVal); });
-    });
-  });
-}
-initPips('energy-pips');
-initPips('intensity-pips');
-
-// Thread tags
-document.querySelectorAll('.thread-tag').forEach(function(tag) {
-  tag.addEventListener('click', function() { tag.classList.toggle('active'); });
-});
-
-// Clock checkboxes
-document.querySelectorAll('.check-item').forEach(function(item) {
-  item.addEventListener('click', function() { item.classList.toggle('checked'); });
-});
-
-// Auto-fill date
-var dateInput = document.getElementById('db-date');
-if (!dateInput.value) dateInput.value = new Date().toISOString().slice(0,10);
-
-// ─────────────────────────────────────────────
-//  MARKDOWN EXPORT
-// ─────────────────────────────────────────────
-function reportToMarkdown(r) {
-  var hunterNames = { rex: 'Rex Bangley', reed: 'Reed Atwood', alan: 'Alan Frazier', sven: 'Sven' };
-  var outcomeLabel = { humane: 'HUMANE', partial: 'PARTIAL / COMPLICATED', bad: 'BAD ENDING' };
-  var threadLabels = {
-    'project-veil': 'Project Veil', 'mesa': 'MESA', 'rook': 'Rook',
-    'dan-nilsson': 'Dan Nilsson', 'campbell': 'CAMPBELL', 'sven-death': "Sven's Death",
-    'alan-fey': "Alan's Fey Origin", 'reed-directive': "Reed's Private Directive",
-    'leech': 'Dr. Leech', 'bim': 'BIM / Ash', 'cartographer': 'The Cartographer',
-    'mesa-samples': 'MESA Samples'
-  };
-  var clockLabels = {
-    'gordon-avery': 'Case A — Gordon Avery',
-    'nadia': 'Case C — Nadia (9-day window)',
-    'martin': 'Case D — Martin / Mira (14-day window)',
-    'theatre': 'Case E — Meridian Theatre (Saturday)',
-    'mesa-presence': 'MESA — increased presence',
-    'campbell-flag': 'CAMPBELL — internal flag'
-  };
-
-  var pip = function(n) { return '★'.repeat(n || 0) + '☆'.repeat(5 - (n || 0)); };
-  var val = function(v) { return (v && v.trim()) ? v.trim() : '—'; };
-  var threads = (r.threads && r.threads.length)
-    ? r.threads.map(function(t){ return threadLabels[t] || t; }).join(', ')
-    : '—';
-  var clocks = (r.clocks && r.clocks.length)
-    ? r.clocks.map(function(c){ return '- ' + (clockLabels[c] || c); }).join('\n')
-    : '— none ticked';
-
-  var md = [];
-  md.push('# P.O.R.T.A.L — Field Report');
-  md.push('');
-  md.push('| Field | Value |');
-  md.push('|---|---|');
-  md.push('| **Session** | ' + val(r.session) + ' |');
-  md.push('| **Mission** | ' + val(r.mission) + ' |');
-  md.push('| **Date** | ' + val(r.date) + ' |');
-  md.push('| **Outcome** | ' + (r.outcome ? outcomeLabel[r.outcome] : '—') + ' |');
-  md.push('| **Energy** | ' + pip(r.energy) + ' |');
-  md.push('| **Intensity** | ' + pip(r.intensity) + ' |');
-  md.push('');
-
-  md.push('## Mission Outcome');
-  md.push('');
-  md.push('**Directive result:** ' + val(r.directive));
-  md.push('');
-  md.push('**Summary:**');
-  md.push(val(r.summary));
-  md.push('');
-
-  md.push('## What Landed');
-  md.push('');
-  md.push('**Best moment:**');
-  md.push(val(r.best));
-  md.push('');
-  md.push('**Surprise:**');
-  md.push(val(r.surprise));
-  md.push('');
-  md.push('**What fell flat** *(keeper note)*:');
-  md.push(val(r.flat));
-  md.push('');
-
-  md.push('## The Hunters');
-  md.push('');
-  ['rex','reed','alan','sven'].forEach(function(h) {
-    var hd = (r.hunters && r.hunters[h]) ? r.hunters[h] : {};
-    md.push('### ' + hunterNames[h]);
-    md.push('- **Key action/decision:** ' + val(hd.action));
-    md.push('- **Arc movement:** ' + val(hd.arc));
-    md.push('- **Keeper note:** ' + val(hd.note));
-    md.push('');
-  });
-
-  md.push('## Active Threads');
-  md.push('');
-  md.push('**Threads touched this session:** ' + threads);
-  md.push('');
-  md.push('**Unresolved:**');
-  md.push(val(r.unresolved));
-  md.push('');
-  md.push('**New questions raised:**');
-  md.push(val(r.questions));
-  md.push('');
-  md.push('**NPCs who made an impression:**');
-  md.push(val(r.npcs));
-  md.push('');
-
-  md.push('## Countdowns');
-  md.push('');
-  md.push('**Clocks advanced:**');
-  md.push(clocks);
-  md.push('');
-  md.push('**Clock notes:**');
-  md.push(val(r.clockNotes));
-  md.push('');
-
-  md.push('## Next Session Seeds');
-  md.push('');
-  md.push('**Keeper synthesis — spine of next session:**');
-  md.push(val(r.spine));
-  md.push('');
-  md.push('**★ Stars — what players leaned into:**');
-  md.push(val(r.stars));
-  md.push('');
-  md.push('**✦ Wishes — what players seemed to want:**');
-  md.push(val(r.wishes));
-  md.push('');
-  md.push('**What CAMPBELL knows that the hunters don\'t:**');
-  md.push(val(r.campbell));
-  md.push('');
-  md.push('**Breadcrumbs to set up soon:**');
-  md.push(val(r.setup));
-  md.push('');
-  md.push('## Questions for the AI');
-  md.push('');
-  md.push(val(r.aiPrompt));
-  md.push('');
-  md.push('---');
-  md.push('*P.O.R.T.A.L Field Report — exported ' + new Date().toISOString().slice(0,10) + '*');
-
-  return md.join('\n');
-}
-
-// ─────────────────────────────────────────────
-//  EXPORT / IMPORT / BACKUP
-// ─────────────────────────────────────────────
-// Copy for Claude — clipboard copy, no file download needed.
-// On GH Pages there's no server-side storage; localStorage handles persistence
-// within the same browser. Use BACKUP JSON / RESTORE JSON to move reports
-// between devices. "Copy for Claude" is the fastest path to AI handoff.
-document.getElementById('btn-copy-claude').addEventListener('click', function() {
-  var r = formToReport(Object.assign({}, currentReport));
-  var md = reportToMarkdown(r);
-  var btn = this;
-  var original = btn.textContent;
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(md).then(function() {
-      btn.textContent = '✓ COPIED';
-      setTimeout(function() { btn.textContent = original; }, 2000);
-    }).catch(function() { fallbackCopy(md, btn, original); });
-  } else {
-    fallbackCopy(md, btn, original);
-  }
-});
-
-function fallbackCopy(text, btn, original) {
-  var ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
-  document.body.appendChild(ta);
-  ta.focus(); ta.select();
-  try {
-    document.execCommand('copy');
-    btn.textContent = '✓ COPIED';
-    setTimeout(function() { btn.textContent = original; }, 2000);
-  } catch(e) {
-    btn.textContent = '✗ FAILED — USE EXPORT .MD';
-    setTimeout(function() { btn.textContent = original; }, 3000);
-  }
-  document.body.removeChild(ta);
-}
-
-document.getElementById('btn-export-md').addEventListener('click', function() {
-  var r = formToReport(Object.assign({}, currentReport));
-  var md = reportToMarkdown(r);
-  var blob = new Blob([md], { type: 'text/markdown' });
-  var url  = URL.createObjectURL(blob);
-  var a    = document.createElement('a');
-  a.href     = url;
-  a.download = 'portal-report-' + (r.session || 'draft') + '.md';
-  a.click();
-  URL.revokeObjectURL(url);
-});
-
-document.getElementById('btn-export-json').addEventListener('click', function() {
-  var data = loadAll();
-  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  var url  = URL.createObjectURL(blob);
-  var a    = document.createElement('a');
-  a.href     = url;
-  a.download = 'portal-reports-backup.json';
-  a.click();
-  URL.revokeObjectURL(url);
-});
-
-document.getElementById('import-file').addEventListener('change', function(e) {
-  var file = e.target.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(ev) {
-    try {
-      var imported = JSON.parse(ev.target.result);
-      saveAll(imported);
-      renderLog();
-      flash();
-    } catch(err) {
-      alert('Could not read file — make sure it is a valid PORTAL report backup.');
+    S02: {
+      title: 'Something That Wants to Be Known',
+      threads: [
+        'PROJECT VEIL', 'MESA', 'ROOK', 'DAN NILSSON',
+        'CAMPBELL', "SVEN'S DEATH", "ALAN'S ORIGIN", "REED'S DIRECTIVE",
+        'DR. LEECH', 'BIM / ASH', 'THE CARTOGRAPHER', 'MESA SAMPLES'
+      ],
+      clocks: [
+        { id: 'gordon-avery',     label: 'Gordon Avery clock' },
+        { id: 'nadia',            label: 'Nadia — 9-day window' },
+        { id: 'martin-mira',      label: 'Martin / Mira — 14-day window' },
+        { id: 'meridian-theatre', label: 'Meridian Theatre (Saturday)' },
+        { id: 'mesa-presence',    label: 'MESA presence in Aldermoor' },
+        { id: 'campbell-flag',    label: 'CAMPBELL internal flag' }
+      ],
+      scenes: [
+        {
+          id: 'cartographer',
+          label: 'THE CARTOGRAPHER',
+          prompt: "How did the team encounter the Cartographer? What did it reveal, take, or change? Who did it affect most, and how?"
+        },
+        {
+          id: 'aldermoor',
+          label: 'ALDERMOOR DISTRICT',
+          prompt: "Key events in Aldermoor. What changed about the location itself? What did the team leave behind — physically or otherwise?"
+        },
+        {
+          id: 'veil-thread',
+          label: 'PROJECT VEIL THREAD',
+          prompt: "Any new Project Veil breadcrumbs discovered? What do the hunters now suspect, fear, or know that they didn't before?"
+        }
+      ]
     }
   };
-  reader.readAsText(file);
-  e.target.value = '';
-});
 
-// ─────────────────────────────────────────────
-//  INIT
-// ─────────────────────────────────────────────
-renderLog();
-reportToForm(currentReport);
+  // ── STATE ─────────────────────────────────────────────────────────────────
+  var currentSid = 'S01';
+  var memCache   = {};   // sid → state object, held in memory while page is open
+
+  var LS_PREFIX = 'portal_report_';
+
+  function blank(sid) {
+    var cfg = SESSIONS[sid];
+    return {
+      session: sid,
+      mission: cfg.title,
+      date: '',
+      outcome: null,
+      directive: '', summary: '',
+      energy: 0, intensity: 0,
+      best: '', surprise: '', flat: '',
+      hunters: {
+        rex:  { action: '', arc: '', note: '' },
+        reed: { action: '', arc: '', note: '' },
+        alan: { action: '', arc: '', note: '' },
+        sven: { action: '', arc: '', note: '' }
+      },
+      threads: [],
+      unresolved: '', questions: '', npcs: '',
+      clocks: [], clockNotes: '',
+      scenes: {},
+      spine: '', stars: '', wishes: '',
+      campbell: '', setup: '', aiPrompt: ''
+    };
+  }
+
+  // ── API ───────────────────────────────────────────────────────────────────
+  function apiUrl(sid) { return '/api/v1/reports/' + sid + '/state'; }
+
+  function fetchState(sid, cb) {
+    fetch(apiUrl(sid))
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (data && Object.keys(data).length > 0) { cb(data); return; }
+        // Fall back to localStorage
+        var raw; try { raw = localStorage.getItem(LS_PREFIX + sid); } catch (e) {}
+        cb(raw ? (JSON.parse(raw) || blank(sid)) : blank(sid));
+      })
+      .catch(function () {
+        var raw; try { raw = localStorage.getItem(LS_PREFIX + sid); } catch (e) {}
+        cb(raw ? (JSON.parse(raw) || blank(sid)) : blank(sid));
+      });
+  }
+
+  // ── DOM BUILDERS (dynamic sections) ──────────────────────────────────────
+
+  function buildTabs() {
+    var container = document.getElementById('session-tabs');
+    container.innerHTML = '';
+    Object.keys(SESSIONS).forEach(function (sid) {
+      var btn = document.createElement('button');
+      btn.className = 'stab';
+      btn.dataset.sid = sid;
+      btn.textContent = '// ' + sid;
+      btn.addEventListener('click', function () { switchSession(sid); });
+      container.appendChild(btn);
+    });
+  }
+
+  function buildThreads(sid) {
+    var container = document.getElementById('threads-container');
+    container.innerHTML = '';
+    SESSIONS[sid].threads.forEach(function (t) {
+      var btn = document.createElement('button');
+      btn.className = 'thread-tag';
+      btn.dataset.thread = t;
+      btn.textContent = t;
+      btn.addEventListener('click', function () { this.classList.toggle('active'); });
+      container.appendChild(btn);
+    });
+  }
+
+  function buildClocks(sid) {
+    var container = document.getElementById('clocks-container');
+    container.innerHTML = '';
+    SESSIONS[sid].clocks.forEach(function (c) {
+      var div = document.createElement('div');
+      div.className = 'check-item';
+      div.dataset.clock = c.id;
+      div.innerHTML = '<span class="check-mark">✓</span>' + c.label;
+      div.addEventListener('click', function () { this.classList.toggle('checked'); });
+      container.appendChild(div);
+    });
+  }
+
+  function buildScenes(sid) {
+    var container = document.getElementById('scenes-container');
+    container.innerHTML = '';
+    SESSIONS[sid].scenes.forEach(function (s) {
+      var div = document.createElement('div');
+      div.className = 'scene-note';
+      div.innerHTML =
+        '<label>' + s.label + '</label>' +
+        '<div class="scene-prompt">' + s.prompt + '</div>' +
+        '<textarea data-scene="' + s.id + '" rows="3"></textarea>';
+      container.appendChild(div);
+    });
+  }
+
+  function buildDynamic(sid) {
+    buildThreads(sid);
+    buildClocks(sid);
+    buildScenes(sid);
+  }
+
+  // ── SERIALISE / APPLY ─────────────────────────────────────────────────────
+
+  function serialise() {
+    var r = {
+      session:   currentSid,
+      mission:   document.getElementById('db-mission').value,
+      date:      document.getElementById('db-date').value,
+      outcome:   null,
+      directive: document.getElementById('db-directive').value,
+      summary:   document.getElementById('db-summary').value,
+      energy:    pipCount('energy-pips'),
+      intensity: pipCount('intensity-pips'),
+      best:      document.getElementById('db-best').value,
+      surprise:  document.getElementById('db-surprise').value,
+      flat:      document.getElementById('db-flat').value,
+      hunters:   {},
+      threads:   [],
+      unresolved: document.getElementById('db-unresolved').value,
+      questions:  document.getElementById('db-questions').value,
+      npcs:       document.getElementById('db-npcs').value,
+      clocks:    [],
+      clockNotes: document.getElementById('db-clocks').value,
+      scenes:    {},
+      spine:     document.getElementById('db-spine').value,
+      stars:     document.getElementById('db-stars').value,
+      wishes:    document.getElementById('db-wishes').value,
+      campbell:  document.getElementById('db-campbell').value,
+      setup:     document.getElementById('db-setup').value,
+      aiPrompt:  document.getElementById('db-ai-prompt').value
+    };
+
+    document.querySelectorAll('.outcome-btn').forEach(function (btn) {
+      if (btn.classList.contains('active')) r.outcome = btn.dataset.outcome;
+    });
+    document.querySelectorAll('[data-hunter]').forEach(function (el) {
+      var h = el.dataset.hunter, f = el.dataset.field;
+      if (!r.hunters[h]) r.hunters[h] = {};
+      r.hunters[h][f] = el.value;
+    });
+    document.querySelectorAll('.thread-tag.active').forEach(function (t) {
+      r.threads.push(t.dataset.thread);
+    });
+    document.querySelectorAll('.check-item.checked').forEach(function (c) {
+      r.clocks.push(c.dataset.clock);
+    });
+    document.querySelectorAll('[data-scene]').forEach(function (el) {
+      r.scenes[el.dataset.scene] = el.value;
+    });
+
+    return r;
+  }
+
+  function applyState(r) {
+    document.getElementById('db-session').value  = r.session || currentSid;
+    document.getElementById('db-mission').value  = r.mission || '';
+    document.getElementById('db-date').value     = r.date    || '';
+    document.getElementById('db-directive').value = r.directive || '';
+    document.getElementById('db-summary').value   = r.summary   || '';
+    document.getElementById('db-best').value      = r.best      || '';
+    document.getElementById('db-surprise').value  = r.surprise  || '';
+    document.getElementById('db-flat').value      = r.flat      || '';
+    document.getElementById('db-unresolved').value = r.unresolved || '';
+    document.getElementById('db-questions').value  = r.questions  || '';
+    document.getElementById('db-npcs').value       = r.npcs       || '';
+    document.getElementById('db-clocks').value     = r.clockNotes || '';
+    document.getElementById('db-spine').value     = r.spine    || '';
+    document.getElementById('db-stars').value     = r.stars    || '';
+    document.getElementById('db-wishes').value    = r.wishes   || '';
+    document.getElementById('db-campbell').value  = r.campbell || '';
+    document.getElementById('db-setup').value     = r.setup    || '';
+    document.getElementById('db-ai-prompt').value = r.aiPrompt || '';
+
+    document.querySelectorAll('.outcome-btn').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.outcome === r.outcome);
+    });
+    setPips('energy-pips',    r.energy    || 0);
+    setPips('intensity-pips', r.intensity || 0);
+
+    document.querySelectorAll('[data-hunter]').forEach(function (el) {
+      var h = el.dataset.hunter, f = el.dataset.field;
+      el.value = (r.hunters && r.hunters[h] && r.hunters[h][f]) || '';
+    });
+    document.querySelectorAll('.thread-tag').forEach(function (t) {
+      t.classList.toggle('active', (r.threads || []).indexOf(t.dataset.thread) !== -1);
+    });
+    document.querySelectorAll('.check-item').forEach(function (c) {
+      c.classList.toggle('checked', (r.clocks || []).indexOf(c.dataset.clock) !== -1);
+    });
+    document.querySelectorAll('[data-scene]').forEach(function (el) {
+      el.value = (r.scenes && r.scenes[el.dataset.scene]) || '';
+    });
+  }
+
+  // ── PIPS ──────────────────────────────────────────────────────────────────
+
+  function setPips(id, val) {
+    document.querySelectorAll('#' + id + ' .pip').forEach(function (pip) {
+      pip.classList.toggle('filled', parseInt(pip.dataset.val) <= val);
+    });
+  }
+
+  function pipCount(id) {
+    return document.querySelectorAll('#' + id + ' .pip.filled').length;
+  }
+
+  document.querySelectorAll('.momentum-bar').forEach(function (bar) {
+    var pips = bar.querySelectorAll('.pip');
+    pips.forEach(function (pip) {
+      pip.addEventListener('click', function () {
+        var v = parseInt(this.dataset.val);
+        var current = bar.querySelectorAll('.pip.filled').length;
+        setPips(bar.id, current === v ? v - 1 : v);
+      });
+    });
+  });
+
+  // ── OUTCOME BUTTONS ───────────────────────────────────────────────────────
+
+  document.querySelectorAll('.outcome-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var already = this.classList.contains('active');
+      document.querySelectorAll('.outcome-btn').forEach(function (b) { b.classList.remove('active'); });
+      if (!already) this.classList.add('active');
+    });
+  });
+
+  // ── SESSION SWITCH ────────────────────────────────────────────────────────
+
+  function switchSession(sid) {
+    if (sid === currentSid) return;
+    // Snapshot current form into cache before leaving
+    memCache[currentSid] = serialise();
+    try { localStorage.setItem(LS_PREFIX + currentSid, JSON.stringify(memCache[currentSid])); } catch (e) {}
+
+    currentSid = sid;
+    document.querySelectorAll('.stab').forEach(function (t) {
+      t.classList.toggle('active', t.dataset.sid === sid);
+    });
+    document.getElementById('session-title').textContent = SESSIONS[sid].title;
+
+    buildDynamic(sid);
+
+    if (memCache[sid]) {
+      applyState(memCache[sid]);
+    } else {
+      fetchState(sid, function (state) {
+        memCache[sid] = state;
+        applyState(state);
+      });
+    }
+  }
+
+  // ── SAVE ──────────────────────────────────────────────────────────────────
+
+  function saveReport(btn) {
+    var state = serialise();
+    var json  = JSON.stringify(state);
+
+    memCache[currentSid] = state;
+    try { localStorage.setItem(LS_PREFIX + currentSid, json); } catch (e) {}
+
+    if (btn) {
+      var original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = btn.classList.contains('action-btn') ? '// SAVING…' : '// SAVING…';
+    }
+
+    var flash = document.getElementById('save-flash');
+
+    fetch(apiUrl(currentSid), {
+      method: 'PUT',
+      body: json,
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then(function (r) {
+        flash.textContent = r.ok ? '✓ SAVED TO SERVER' : '⚠ SAVE ERROR';
+        flash.classList.add('visible');
+      })
+      .catch(function () {
+        flash.textContent = '⚠ OFFLINE — SAVED LOCALLY';
+        flash.classList.add('visible');
+      })
+      .finally(function () {
+        if (btn) { btn.disabled = false; btn.textContent = original; }
+        setTimeout(function () { flash.classList.remove('visible'); }, 2500);
+      });
+  }
+
+  document.getElementById('btn-save').addEventListener('click', function () { saveReport(this); });
+  document.getElementById('btn-save-bottom').addEventListener('click', function () { saveReport(this); });
+
+  // ── COPY FOR CLAUDE ───────────────────────────────────────────────────────
+
+  function toMarkdown(r, sid) {
+    var cfg = SESSIONS[sid];
+    var OUTCOME = { humane: 'Humane Ending', partial: 'Partial Resolution', bad: 'Bad Ending' };
+    var HUNTERS  = { rex: 'Rex Bangley', reed: 'Reed Atwood', alan: 'Alan Frazier', sven: 'Sven' };
+    var v = function (s) { return (s && s.trim()) ? s.trim() : '—'; };
+    var pips = function (n) { return '★'.repeat(n || 0) + '☆'.repeat(5 - (n || 0)); };
+
+    var lines = [
+      '# P.O.R.T.A.L — Field Report',
+      '## ' + r.session + ' — ' + v(r.mission),
+      '',
+      '| | |',
+      '|---|---|',
+      '| Date | ' + v(r.date) + ' |',
+      '| Outcome | ' + (r.outcome ? OUTCOME[r.outcome] : '—') + ' |',
+      '| Energy | ' + pips(r.energy) + ' |',
+      '| Emotional Intensity | ' + pips(r.intensity) + ' |',
+      '',
+      '## Mission Outcome',
+      '**Directive:** ' + v(r.directive),
+      '',
+      '**Summary:**',
+      v(r.summary),
+      '',
+      '## What Landed',
+      '**Best moment:** ' + v(r.best),
+      '',
+      '**Surprise:** ' + v(r.surprise),
+      '',
+      "**Didn't land:** " + v(r.flat),
+      '',
+      '## The Hunters',
+    ];
+
+    ['rex', 'reed', 'alan', 'sven'].forEach(function (h) {
+      var hd = (r.hunters && r.hunters[h]) || {};
+      lines.push('### ' + HUNTERS[h]);
+      lines.push('**Action:** '       + v(hd.action));
+      lines.push('**Arc:** '          + v(hd.arc));
+      lines.push('**Keeper note:** '  + v(hd.note));
+      lines.push('');
+    });
+
+    if (cfg.scenes.length > 0) {
+      lines.push('## Scene Notes');
+      cfg.scenes.forEach(function (s) {
+        lines.push('### ' + s.label);
+        lines.push(v(r.scenes && r.scenes[s.id]));
+        lines.push('');
+      });
+    }
+
+    lines.push('## Active Threads');
+    lines.push((r.threads && r.threads.length) ? r.threads.join(' · ') : '—');
+    lines.push('');
+    lines.push('**Unresolved:** ' + v(r.unresolved));
+    lines.push('**Player questions:** ' + v(r.questions));
+    lines.push('**NPCs:** ' + v(r.npcs));
+    lines.push('');
+
+    lines.push('## Countdowns');
+    var activeClocks = (r.clocks || []).map(function (cid) {
+      var found = cfg.clocks.filter(function (c) { return c.id === cid; })[0];
+      return found ? ('- ' + found.label) : ('- ' + cid);
+    });
+    lines.push(activeClocks.length ? activeClocks.join('\n') : '— none ticked');
+    if (r.clockNotes && r.clockNotes.trim()) {
+      lines.push('');
+      lines.push('**Notes:** ' + r.clockNotes.trim());
+    }
+    lines.push('');
+
+    lines.push('## Next Session Seeds');
+    lines.push('**Thread spine:**');
+    lines.push(v(r.spine));
+    lines.push('');
+    lines.push('**★ Give them more:** ' + v(r.stars));
+    lines.push('**✦ Wanted, didn\'t happen:** ' + v(r.wishes));
+    lines.push('**CAMPBELL knows:** ' + v(r.campbell));
+    lines.push('**Breadcrumbs:** ' + v(r.setup));
+    lines.push('**AI prompts:** ' + v(r.aiPrompt));
+
+    return lines.join('\n');
+  }
+
+  document.getElementById('btn-copy-claude').addEventListener('click', function () {
+    var state = serialise();
+    var md = toMarkdown(state, currentSid);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(md).then(function () { flash('✓ COPIED'); }, function () { fallbackCopy(md); });
+    } else {
+      fallbackCopy(md);
+    }
+  });
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    flash('✓ COPIED');
+  }
+
+  function flash(msg) {
+    var el = document.getElementById('save-flash');
+    el.textContent = msg;
+    el.classList.add('visible');
+    setTimeout(function () { el.classList.remove('visible'); }, 2000);
+  }
+
+  // ── BOOT ──────────────────────────────────────────────────────────────────
+
+  buildTabs();
+  buildDynamic('S01');
+  document.getElementById('session-title').textContent = SESSIONS['S01'].title;
+  document.querySelector('.stab').classList.add('active');
+
+  fetchState('S01', function (state) {
+    memCache['S01'] = state;
+    applyState(state);
+    if (!state.date) document.getElementById('db-date').value = new Date().toISOString().slice(0, 10);
+  });
+
+}());
 </script>
 </body>
 </html>
