@@ -38,186 +38,209 @@ These share the same data layer. The async hub feeds the live tool. A session re
 
 ### Why Cloudflare over alternatives
 
-- **vs Supabase:** No free-tier project pauses. No external dependency. Everything — hosting, API, database, realtime — in one CF account with one billing relationship (currently $0).
+- **vs Supabase:** No free-tier project pauses. No external dependency. Everything in one CF account (currently $0).
 - **vs GitHub API as backend:** Works for one keeper. Breaks for multi-user, real-time, player sheets.
 - **vs Vercel + PlanetScale / Neon:** More moving parts, more potential costs, more configuration.
 - **vs self-hosted:** Zero ops burden.
 
 ---
 
-## Repository Structure (Target)
+## Repository Structure (Actual)
 
 ```
-portal-campaign/
-├── public/                    # All current static pages — unchanged
-│   ├── index.html
-│   ├── keeper.html
-│   ├── arcs.html
-│   ├── report.html
-│   ├── missions/
-│   ├── player.css
-│   ├── keeper.css
-│   └── ...
+portal-fieldops/
+├── context/                   # Claude reference docs — hand these at session start
+│   ├── worldbuilding.md       # World, voice, design system (for new pages)
+│   └── portal-architecture.md # This file — technical stack, schema, build phases
 │
-├── app/                       # New interactive pages (also static HTML)
+├── data/                      # Static game data (not in DB) — see "Static Data Files" section
+│   ├── motw-basic-moves.json      # All basic moves, alternate Weird moves, new Weird moves
+│   ├── motw-playbooks.json        # Active hunter playbooks (Action Scientist, Sidekick, Changeling, Monstrous, Flake)
+│   ├── motw-teambooks.json        # Research Lab team playbook (PORTAL's active team book)
+│   ├── portal-custom-moves.json   # MESA equipment moves + house rules
+│   ├── hunters.json               # Hunter starting states + player choices seed data
+│   ├── portal-npcs.json           # Full NPC roster with player/keeper description split
+│   └── portal-entities.json       # Entity/threat database for keeper command board
+│
+├── workers/                   # Cloudflare Workers API
+│   ├── schema.sql             # D1 schema — already applied to remote DB
+│   └── src/                   # (Phase 3) Workers source
+│       ├── index.ts           # Main router
+│       └── routes/
+│           ├── characters.ts
+│           ├── rolls.ts
+│           ├── session.ts
+│           ├── npcs.ts
+│           ├── messages.ts
+│           └── leads.ts
+│
+├── app/                       # (Phase 3+) New interactive pages
 │   ├── session.html           # Live session tool (player view)
 │   ├── command.html           # Live session tool (keeper command board)
 │   ├── sheet.html             # Character sheet (player-editable)
 │   ├── hub.html               # Campaign hub (combined dashboard)
 │   └── contacts.html          # NPC contact list (player-facing)
 │
-├── workers/                   # Cloudflare Workers API
-│   ├── src/
-│   │   ├── index.ts           # Main router
-│   │   ├── routes/
-│   │   │   ├── characters.ts  # GET/POST/PUT character sheets
-│   │   │   ├── rolls.ts       # POST roll log entries
-│   │   │   ├── session.ts     # Session state, clock status
-│   │   │   ├── npcs.ts        # NPC roster
-│   │   │   ├── messages.ts    # CAMPBELL/Director message queue
-│   │   │   └── leads.ts       # Open leads per session
-│   │   └── realtime/
-│   │       └── session-room.ts  # Durable Object for live session
-│   └── wrangler.toml          # CF Workers config
-│
-├── data/                      # Static game data (not in DB)
-│   ├── motw-basic-moves.json
-│   ├── motw-playbooks.json    # All playbook moves for PORTAL's active hunters
-│   └── portal-custom-moves.json  # Any house rules / custom moves
-│
-└── wrangler.toml              # Root CF Pages config
+├── wrangler.jsonc             # CF Pages + D1 config (root)
+├── index.html                 # Player-facing site
+├── missions/                  # Keeper + player mission pages
+├── reports/                   # Post-session player-facing reports
+├── hunters/                   # Hunter story pages
+├── images/                    # Active reference images
+├── player-nav.js              # Shared player nav
+└── missions/keeper-nav.js     # Shared keeper nav
 ```
+
+---
+
+## Cloudflare Configuration (Live)
+
+- **CF account:** gino.galotti@gmail.com | Account ID: `16173cc8b08eab625480fc137852403b`
+- **CF Pages:** Connected to GitHub repo, deploying from `dev` branch
+- **D1 database:** `portal-db` | ID: `aa558dc0-96c4-4c88-ab54-a79611d161d2` | binding: `portal_db`
+- **wrangler.jsonc** at repo root — binding already configured
+- **GitHub Pages** still serves `main` for players while `dev` / CF Pages is in development
 
 ---
 
 ## Database Schema (D1 / SQLite)
 
+Schema is in `workers/schema.sql` and has been applied to the remote D1 database. All 13 tables created.
+
 ```sql
 -- ─── HUNTERS ───────────────────────────────────────────────────────────────
 CREATE TABLE hunters (
-  id          TEXT PRIMARY KEY,        -- 'rex' | 'reed' | 'alan' | 'sven'
-  name        TEXT NOT NULL,
-  playbook    TEXT NOT NULL,
-  harm        INTEGER DEFAULT 0,
-  harm_max    INTEGER DEFAULT 7,
-  stability   INTEGER DEFAULT 7,       -- for Monstrous/Changeling
-  luck        INTEGER DEFAULT 7,       -- MOTW luck track (7 = full)
-  xp          INTEGER DEFAULT 0,
+  id           TEXT PRIMARY KEY,        -- 'rex' | 'reed' | 'alan' | 'sven'
+  name         TEXT NOT NULL,
+  playbook     TEXT NOT NULL,
+  harm         INTEGER DEFAULT 0,
+  harm_max     INTEGER DEFAULT 7,
+  stability    INTEGER DEFAULT 7,       -- for Monstrous/Changeling
+  luck         INTEGER DEFAULT 7,
+  xp           INTEGER DEFAULT 0,
   xp_threshold INTEGER DEFAULT 5,
-  updated_at  TEXT DEFAULT (datetime('now'))
+  updated_at   TEXT DEFAULT (datetime('now'))
 );
 
 CREATE TABLE hunter_stats (
-  hunter_id   TEXT REFERENCES hunters(id),
-  stat        TEXT NOT NULL,           -- cool | tough | sharp | charm | weird
-  value       INTEGER NOT NULL,
+  hunter_id TEXT REFERENCES hunters(id),
+  stat      TEXT NOT NULL,             -- cool | tough | sharp | charm | weird
+  value     INTEGER NOT NULL,
   PRIMARY KEY (hunter_id, stat)
 );
 
 CREATE TABLE hunter_moves (
-  id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  hunter_id   TEXT REFERENCES hunters(id),
-  move_name   TEXT NOT NULL,
-  source      TEXT,                    -- 'basic' | 'playbook' | 'advanced' | 'custom'
-  notes       TEXT
+  id        INTEGER PRIMARY KEY AUTOINCREMENT,
+  hunter_id TEXT REFERENCES hunters(id),
+  move_name TEXT NOT NULL,
+  source    TEXT,                       -- 'basic' | 'playbook' | 'advanced' | 'custom'
+  notes     TEXT
 );
 
 CREATE TABLE hunter_bonds (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
   hunter_id   TEXT REFERENCES hunters(id),
-  target      TEXT NOT NULL,           -- name of person/hunter
+  target      TEXT NOT NULL,
   description TEXT
 );
 
 CREATE TABLE hunter_gear (
-  id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  hunter_id   TEXT REFERENCES hunters(id),
-  name        TEXT NOT NULL,
-  tags        TEXT,                    -- JSON array: ["hand", "2-harm", "loud"]
-  notes       TEXT
+  id        INTEGER PRIMARY KEY AUTOINCREMENT,
+  hunter_id TEXT REFERENCES hunters(id),
+  name      TEXT NOT NULL,
+  tags      TEXT,                       -- JSON array: ["hand", "2-harm", "loud"]
+  notes     TEXT
 );
 
 -- ─── ROLL LOG ──────────────────────────────────────────────────────────────
 CREATE TABLE rolls (
-  id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  hunter_id   TEXT REFERENCES hunters(id),
-  session     TEXT NOT NULL,           -- 'S01' | 'S02' etc
-  move_name   TEXT NOT NULL,
-  stat_used   TEXT,                    -- cool | tough | sharp | charm | weird
-  roll_1      INTEGER NOT NULL,
-  roll_2      INTEGER NOT NULL,
-  modifier    INTEGER DEFAULT 0,
-  total       INTEGER NOT NULL,
-  outcome     TEXT NOT NULL,           -- 'hit' (10+) | 'partial' (7-9) | 'miss' (6-)
-  note        TEXT,                    -- optional context
-  timestamp   TEXT DEFAULT (datetime('now'))
+  id        INTEGER PRIMARY KEY AUTOINCREMENT,
+  hunter_id TEXT REFERENCES hunters(id),
+  session   TEXT NOT NULL,             -- 'S01' | 'S02' etc
+  move_name TEXT NOT NULL,
+  stat_used TEXT,
+  roll_1    INTEGER NOT NULL,
+  roll_2    INTEGER NOT NULL,
+  modifier  INTEGER DEFAULT 0,
+  total     INTEGER NOT NULL,
+  outcome   TEXT NOT NULL,             -- 'hit' (10+) | 'partial' (7-9) | 'miss' (6-)
+  note      TEXT,
+  timestamp TEXT DEFAULT (datetime('now'))
   -- append-only: never UPDATE or DELETE rows
 );
 
 -- ─── SESSION STATE ──────────────────────────────────────────────────────────
 CREATE TABLE sessions (
-  id          TEXT PRIMARY KEY,        -- 'S01' | 'S02' etc
-  title       TEXT,
-  status      TEXT DEFAULT 'upcoming', -- 'upcoming' | 'live' | 'closed'
-  outcome     TEXT,                    -- 'humane' | 'partial' | 'bad'
-  created_at  TEXT DEFAULT (datetime('now'))
+  id         TEXT PRIMARY KEY,         -- 'S01' | 'S02' etc
+  title      TEXT,
+  status     TEXT DEFAULT 'upcoming',  -- 'upcoming' | 'live' | 'closed'
+  outcome    TEXT,                     -- 'humane' | 'partial' | 'bad'
+  created_at TEXT DEFAULT (datetime('now'))
 );
 
 CREATE TABLE clocks (
-  id          TEXT PRIMARY KEY,
-  session_id  TEXT REFERENCES sessions(id),
-  case_name   TEXT NOT NULL,
-  clock_max   INTEGER DEFAULT 6,
+  id            TEXT PRIMARY KEY,
+  session_id    TEXT REFERENCES sessions(id),
+  case_name     TEXT NOT NULL,
+  clock_max     INTEGER DEFAULT 6,
   clock_current INTEGER DEFAULT 0,
-  notes       TEXT,
-  updated_at  TEXT DEFAULT (datetime('now'))
+  notes         TEXT,
+  updated_at    TEXT DEFAULT (datetime('now'))
 );
 
 CREATE TABLE leads (
-  id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  session_id  TEXT REFERENCES sessions(id),   -- session when lead opened
-  closed_session TEXT,                         -- session when resolved (null = open)
-  title       TEXT NOT NULL,
-  description TEXT,
-  priority    TEXT DEFAULT 'medium',           -- 'high' | 'medium' | 'low'
-  tags        TEXT                             -- JSON: ["MESA", "Project Veil"]
+  id             INTEGER PRIMARY KEY AUTOINCREMENT,
+  session_id     TEXT REFERENCES sessions(id),
+  closed_session TEXT,
+  title          TEXT NOT NULL,
+  description    TEXT,
+  priority       TEXT DEFAULT 'medium', -- 'high' | 'medium' | 'low'
+  tags           TEXT                   -- JSON: ["MESA", "Project Veil"]
 );
 
 -- ─── NPCS ──────────────────────────────────────────────────────────────────
 CREATE TABLE npcs (
-  id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  name        TEXT NOT NULL,
-  affiliation TEXT,                    -- 'PORTAL' | 'MESA' | 'civilian' | 'unknown'
-  status      TEXT DEFAULT 'alive',   -- 'alive' | 'dead' | 'missing' | 'unknown'
-  first_seen  TEXT,                   -- session ID: 'S01'
+  id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+  name               TEXT NOT NULL,
+  affiliation        TEXT,             -- 'PORTAL' | 'MESA' | 'civilian' | 'unknown'
+  status             TEXT DEFAULT 'alive',
+  first_seen         TEXT,
   visible_to_players BOOLEAN DEFAULT false,
-  player_notes TEXT,                  -- what players know (shown on player pages)
-  keeper_notes TEXT,                  -- full truth (keeper only)
-  updated_at  TEXT DEFAULT (datetime('now'))
+  player_notes       TEXT,
+  keeper_notes       TEXT,
+  updated_at         TEXT DEFAULT (datetime('now'))
 );
 
--- ─── MESSAGES (CAMPBELL / DIRECTOR) ────────────────────────────────────────
+-- ─── MESSAGES ───────────────────────────────────────────────────────────────
 CREATE TABLE messages (
-  id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  session_id  TEXT REFERENCES sessions(id),
-  sender      TEXT NOT NULL,           -- 'CAMPBELL' | 'DIRECTOR' | 'MESA' | 'SYSTEM'
-  recipient   TEXT DEFAULT 'all',      -- 'all' | hunter_id
-  subject     TEXT,
-  body        TEXT NOT NULL,
-  delivered   BOOLEAN DEFAULT false,   -- keeper controls when players see it
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  session_id   TEXT REFERENCES sessions(id),
+  sender       TEXT NOT NULL,          -- 'CAMPBELL' | 'DIRECTOR' | 'MESA' | 'SYSTEM'
+  recipient    TEXT DEFAULT 'all',
+  subject      TEXT,
+  body         TEXT NOT NULL,
+  delivered    BOOLEAN DEFAULT false,
   delivered_at TEXT,
-  created_at  TEXT DEFAULT (datetime('now'))
+  created_at   TEXT DEFAULT (datetime('now'))
 );
 
 -- ─── HANDOUTS ───────────────────────────────────────────────────────────────
 CREATE TABLE handouts (
-  id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  session_id  TEXT REFERENCES sessions(id),
-  title       TEXT NOT NULL,
-  type        TEXT DEFAULT 'text',     -- 'text' | 'image' | 'document'
-  content     TEXT,                    -- text content or image URL
+  id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+  session_id         TEXT REFERENCES sessions(id),
+  title              TEXT NOT NULL,
+  type               TEXT DEFAULT 'text', -- 'text' | 'image' | 'document'
+  content            TEXT,
   visible_to_players BOOLEAN DEFAULT false,
-  revealed_at TEXT
+  revealed_at        TEXT
+);
+
+-- ─── AUTH ───────────────────────────────────────────────────────────────────
+CREATE TABLE player_tokens (
+  token      TEXT PRIMARY KEY,
+  hunter_id  TEXT REFERENCES hunters(id),
+  created_at TEXT DEFAULT (datetime('now')),
+  revoked    BOOLEAN DEFAULT false
 );
 ```
 
@@ -225,7 +248,7 @@ CREATE TABLE handouts (
 
 ## Workers API (Routes)
 
-All endpoints under `/api/v1/`. Keeper endpoints require a header token; player endpoints require a session URL token (see Auth).
+All endpoints under `/api/v1/`. Keeper endpoints require a header token; player endpoints require a session URL token.
 
 ```
 GET  /api/v1/hunters                    → all hunters (public fields)
@@ -263,19 +286,15 @@ GET  /api/v1/handouts?session=S02&visible=true  → revealed handouts (players)
 
 ## Auth Strategy (No Passwords)
 
-**Keeper access:** Cloudflare Access with Google SSO. One-time setup, zero maintenance. Your Google account is the key. Protects all `/command.html`, `/api/v1/` write endpoints, and keeper pages.
+**Keeper access:** Cloudflare Access with Google SSO. Your Google account is the key. Protects all `/command.html`, `/api/v1/` write endpoints, and keeper pages.
 
-**Player access:** URL tokens. You generate a session link like:
-`https://portal-campaign.pages.dev/session.html?token=rex-s02-a8f3k2`
-Players bookmark it. Same token works across all sessions (it identifies who they are, not what session it is). Tokens live in a `player_tokens` table, checked by Workers on every request. No login screen, no password, no account. If a token leaks, you revoke it and send a new link.
-
-This means: players arrive at a URL, they're in. Keeper arrives at keeper pages, Google login appears once. That's the entire auth UX.
+**Player access:** URL tokens. Generate a session link like:
+`https://portal-fieldops.pages.dev/session.html?token=rex-s02-a8f3k2`
+Players bookmark it. Same token works across all sessions. Tokens live in `player_tokens` table. If a token leaks, revoke it and send a new link.
 
 ---
 
 ## The Live Session Tool (Durable Objects)
-
-This is the technically distinct piece. Durable Objects give you a persistent WebSocket room that all connected clients (keeper + players) share.
 
 **How it works:**
 1. Keeper opens `/command.html`, starts a session → creates/connects to a Durable Object room keyed by session ID
@@ -288,18 +307,18 @@ This is the technically distinct piece. Durable Objects give you a persistent We
    - `clock_update` → keeper's clock ticks, players can optionally see it
 4. Player rolls fire from the player's browser → logged to D1 via Worker → broadcast to all clients as `roll_result`
 
-**What the keeper command board contains:**
-- Hunter sheets (read-only overview of all 4)
+**Keeper command board contains:**
+- Hunter sheets (read-only overview of all hunters)
 - Active case clocks
 - Message composer (CAMPBELL / Director / custom sender)
 - Handout/image uploader with reveal button
 - NPC reveal panel
 - Move reference for current session (from JSON, not DB)
-- Monster/entity stat block (from current session's keeper prep data)
+- Monster/entity stat block (from `portal-entities.json`)
 - Roll log feed (live, all hunters)
 - Scene flavour text blocks (pre-loaded from session prep)
 
-**What the player session view contains:**
+**Player session view contains:**
 - Their own character sheet (harm, luck, stats, moves)
 - Roll interface: move picker → stat auto-filled → roll 2d6+stat → result shown → logged
 - Roll feed (all players visible, real-time)
@@ -310,112 +329,62 @@ This is the technically distinct piece. Durable Objects give you a persistent We
 
 ---
 
-## The MOTW Moves JSON (No Scraping Required)
-
-Roll20's content is licensed and cannot be scraped or redistributed. The correct approach:
-
-**Source:** Monster of the Week SRD (Creative Commons, legally free). All basic moves and playbook move descriptions are available as plain text in the published PDF/book.
-
-**Format for our use:**
-```json
-{
-  "version": "motw-revised-2022",
-  "basic_moves": [
-    {
-      "id": "kick-some-ass",
-      "name": "Kick Some Ass",
-      "trigger": "When you fight to harm someone",
-      "roll": "tough",
-      "outcomes": {
-        "10_plus": "You exchange harm — you deal your harm to them, they deal their harm to you. Choose: press the attack (deal +1 harm) or protect yourself (-1 harm taken).",
-        "7_9": "You exchange harm. You may choose to take -1 harm by pulling back — but if you do, you also deal -1 harm.",
-        "miss": "You get your ass kicked. The monster deals its harm to you."
-      }
-    }
-  ],
-  "playbooks": [
-    {
-      "id": "action-scientist",
-      "name": "Action Scientist",
-      "hunter": "rex",
-      "starting_moves": ["i-know-that", "preparedness"],
-      "moves": [
-        {
-          "id": "i-know-that",
-          "name": "I Know That",
-          "description": "When you first encounter a monster, phenomenon or location...",
-          "roll": "sharp",
-          "outcomes": { "10_plus": "...", "7_9": "...", "miss": "..." }
-        }
-      ]
-    }
-  ]
-}
-```
-
-**Build process:** Copy move text from the MOTW book/SRD into this JSON file. ~2–3 hours for all active playbooks. Store in `data/` in the repo — it's a static asset, no database needed, served directly by CF Pages.
-
-The roll interface in `session.html` reads this JSON to populate the move picker. When a player selects a move, the stat auto-fills, they roll, and the result + outcome text is shown immediately.
-
----
-
 ## Dynamic CAMPBELL Briefings
 
 Currently: static HTML files, one per session.
 
-**Target:** CAMPBELL briefings are generated from live data and session reports.
+**Target:** CAMPBELL briefings generated from live data and session reports.
+- Case data, NPC status, clock readings, and open leads fetched from D1 at page load
+- Keeper drafts briefing text, previews, and publishes (`delivered = true` in a `briefings` table)
+- Players see the briefing once published; prior briefings accessible in history view
 
-**How it works:**
-- Briefing template stays as HTML (preserving the existing design)
-- Case data, NPC status, clock readings, and open leads are fetched from D1 at page load
-- Keeper can draft the briefing text in a simple form, preview it, and publish it (setting `delivered = true` in a `briefings` table)
-- Players see the briefing once published; prior session briefings are accessible in a history view
-
-**The "feed to Claude" moment:** After a session, the keeper files the report in `report.html`, exports the `.md`, and drops it here. That report + the current D1 state (leads, clocks, NPC updates) becomes the context for the next briefing draft. Claude generates the CAMPBELL voice briefing; keeper edits and publishes.
+**The "feed to Claude" moment:** After a session, keeper files the report, exports `.md`, and drops it here. That report + the current D1 state becomes context for the next briefing draft. Claude generates the CAMPBELL voice briefing; keeper edits and publishes.
 
 ---
 
 ## Build Phases
 
-### Phase 0 — Data Foundation (do first, no UI)
-**~2 hours**
-- Write `data/motw-basic-moves.json` and `data/motw-playbooks.json` from the SRD
-- Write `data/portal-custom-moves.json` for any house rules
-- Write initial `data/hunters.json` seed (Rex, Reed, Alan, Sven starting states)
-- These are static files, no backend needed yet
+### Phase 0 — Data Foundation ✅ COMPLETE
+All seven static data files built from source (MOTW hardcover, Slayer's Survival Kit, worldbuilding.md). Live in `data/`, ready to serve. No backend required to use them.
+
+**Files delivered:**
+- `data/motw-basic-moves.json` — all basic moves + alternate/new Weird moves
+- `data/motw-playbooks.json` — Action Scientist, Sidekick, Changeling, Monstrous, Flake
+- `data/motw-teambooks.json` — Research Lab team playbook
+- `data/portal-custom-moves.json` — Substance Θ, Anchor Spike, BIM Collection Array + house_rules
+- `data/hunters.json` — all 5 hunters seeded; `FILL_FROM_SESSION` markers for unrecorded picks
+- `data/portal-npcs.json` — 21 NPCs with player/keeper description split
+- `data/portal-entities.json` — 7 entities (E-001 through E-006 + T-006)
+
+**Outstanding:** Fill `FILL_FROM_SESSION` fields in `hunters.json` from actual character sheets (stat lines, gear picks, second/third moves, Sven's curse).
 
 ### Phase 1 — Still on GH Pages (no Cloudflare yet)
-**~1–2 days**
 - Dice roller component (pure JS, reads from moves JSON, displays result + outcome text)
-- Embed roller into existing pages or as a standalone `roller.html`
 - Character sheet pages (localStorage, same pattern as `report.html`)
 - Campaign State export: single button aggregating sheets + open leads + last report into one markdown blob
 
-### Phase 2 — Cloudflare Setup
-**~1–2 hours one-time setup**
-1. Create CF account (free)
-2. `npm install -g wrangler` — CF's CLI
-3. `wrangler pages project create portal-campaign` — connects to GitHub repo
-4. `wrangler d1 create portal-db` — creates the D1 database
-5. Run schema migrations
-6. Deploy: every git push to main auto-deploys
+### Phase 2 — Cloudflare Setup ✅ COMPLETE
+- CF account created (gino.galotti@gmail.com)
+- CF Pages connected to GitHub repo, deploying from `dev` branch
+- D1 database `portal-db` created and schema applied (13 tables)
+- `wrangler.jsonc` configured at repo root with D1 binding
+- Node.js v24.14.0, npm 11.11.0, Wrangler 4.71.0 installed locally
+- GH Pages still serves `main` for players during development
 
 ### Phase 3 — Workers API + Character Sheets to D1
-**~1–2 days**
 - Scaffold Workers router with the routes listed above
 - Migrate character sheets from localStorage to D1 (keep localStorage as offline fallback)
 - NPC roster API + `contacts.html` player page
 - Leads API + dynamic leads display per session
+- Seed D1 from `hunters.json` and `portal-npcs.json`
 
 ### Phase 4 — Live Session Tool
-**~2–3 days**
 - Durable Object for session room (WebSocket)
 - Player `session.html`: character sheet, move picker, roll interface, feed
 - Keeper `command.html`: command board, message composer, handout uploader, reveal controls
 - CAMPBELL terminal + Director PDA message display
 
 ### Phase 5 — Dynamic CAMPBELL Briefings
-**~1 day**
 - Briefing data model in D1
 - Keeper briefing editor
 - Player briefing history view
@@ -425,52 +394,134 @@ Currently: static HTML files, one per session.
 
 ## Versioning / GitHub
 
-**Yes, keep GitHub.** It does three things in this setup:
-1. Source of truth for all code
-2. Deploy trigger for Cloudflare Pages (push to main → auto-deploy)
-3. History for static assets and design files
+- `main` → GitHub Pages (current player-facing site, unchanged)
+- `dev` → Cloudflare Pages (all new development, auto-deploys on push)
 
-D1 handles the campaign data. GitHub handles the code. They are separate concerns and that's correct.
+When everything works on CF, players are pointed to the new URL and GH Pages is retired.
 
-**Recommended branches:**
-- `main` → production (what players see)
-- `dev` → staging (Cloudflare Pages can deploy a preview URL from any branch)
+**What goes in the repo:** All HTML, CSS, JS; `data/` JSON files; Workers code; schema migrations.
 
-**What goes in the repo (and therefore git history):**
-- All HTML, CSS, JS
-- `data/` JSON files (moves, playbooks)
-- Workers code
-- Schema migrations
+**What does NOT go in the repo:** CF API tokens or secrets; player session tokens; D1 data.
 
-**What does NOT go in the repo:**
-- `wrangler.toml` API tokens or secrets (use CF environment variables)
-- Player session tokens
-- Any D1 data (it's in the database, not the repo)
+---
+
+## Static Data Files Reference
+
+All files in `data/` are static assets served by CF Pages. Never written to at runtime — all campaign state goes in D1. Read from browser via `fetch('/data/<filename>.json')`.
+
+**General rules:**
+- Fields marked `FILL_FROM_SESSION` are genuine unknowns — treat as `null` at runtime, show placeholder in UI
+- All `id` fields use kebab-case — stable as DOM IDs, map keys, and D1 foreign keys
+- `keeper_description` / `keeper_notes` fields must **never** be sent to player-facing endpoints or rendered on player pages
+
+---
+
+### `motw-basic-moves.json`
+
+**Purpose:** Complete MOTW move reference for the roll interface.
+
+**Top-level:** `version`, `source`, `note`, `basic_moves` (10 moves), `alternate_weird_moves` (8), `new_weird_moves` (7 from SSK).
+
+**Each move:** `id`, `name`, `trigger` ("When you..."), `roll` (stat or null), `outcomes` (keys: `12_plus`, `10_plus`, `7_9`, `miss` or `general`), optional `choices` array and `choices_note`.
+
+**Roll interface:** Filter `basic_moves` by `roll !== null`. Read `roll` to auto-fill stat. Select outcome key after rolling; render `choices` as pick list if present.
+
+**Weird move:** Each hunter has one active Weird move. Check `hunters.json` → `hunter.weird_move`.
+
+---
+
+### `motw-playbooks.json`
+
+**Purpose:** Playbook move reference for each active hunter. Used by roll interface, character sheet display, and keeper command board move reference panel.
+
+**Each playbook:** `id`, `name`, `hunter`, `moves`, `stats`, `gear`, `improvements`, `player_choices`.
+
+**`player_choices`:** Confirmed picks are set; unrecorded fields are `FILL_FROM_SESSION`. Use to initialise hunter's sheet in D1.
+
+**Confirmed picks:**
+- Rex: `area_of_study: Violence`, `weird_move: weird-science`
+- Reed: `hero: rex`, mandatory move `there's-no-i-in-team`
+- Sven: `breed: ghost`, `curse: vulnerability (rock salt suggested)`, `attacks: magical force + hand range`, `moves: incorporeal + immortal`
+
+---
+
+### `motw-teambooks.json`
+
+**Purpose:** Reference for the Research Lab team playbook.
+
+**Key fields:** `campaign_style: action-science`, end-of-session question: "Did we defeat extreme danger with science?" (yes = +1 mark, yes and prominent = +2), `improvement_track.marks_to_advance: 5`.
+
+---
+
+### `portal-custom-moves.json`
+
+**Purpose:** Campaign-specific moves merged with standard move lists at runtime.
+
+**Current entries:**
+- `substance-theta-active-dose` — roll+Weird; Project Veil breadcrumb
+- `anchor-spike-discharge` — no roll; `target_effects` covers liminal entities, hunters, Sven (revelation moment), and the Cartographer
+- `bim-collection-array-recovery` — no roll; most plot-significant retrievable object in a MESA encounter
+
+**Adding house rules:** Push to `house_rules` array using the same structure.
+
+---
+
+### `hunters.json`
+
+**Purpose:** Seed data for D1 hunter tables. Also used as offline fallback in Phase 1.
+
+**Each hunter:** `id`, `playbook`, `accent_colour`, `stats` (confirmed or `FILL_FROM_SESSION`), `active_moves` (with `confirmed` flag), `gear`, `bonds`, `keeper_notes` (arc_hooks, secrets_involved).
+
+**D1 seeding:** Map stats → `hunter_stats`; active_moves → `hunter_moves`; gear → `hunter_gear`; bonds → `hunter_bonds`. Skip `FILL_FROM_SESSION` rows.
+
+---
+
+### `portal-npcs.json`
+
+**Purpose:** Seed data for D1 `npcs` table. Static source for `contacts.html` and keeper NPC reveal panel.
+
+**Each NPC:** `id`, `affiliation`, `visible_to_players`, `player_description` (safe for players), `keeper_description` (never send to player endpoints), `secrets_involved`.
+
+**Player contacts flow:** Filter `visible_to_players === true`, render only `player_description`. Toggling `visible_to_players` pushes to D1 and broadcasts via Durable Object.
+
+**Counts:** 21 NPCs — 6 PORTAL, 4 MESA, 11 civilian. 12 visible to players; 9 keeper-only.
+
+---
+
+### `portal-entities.json`
+
+**Purpose:** Entity/threat database for keeper command board.
+
+**Each entity:** `id`, `designation` (E-001 etc.), `classification`, `case`, `status`, `player_description`, `keeper_description`, `powers`, `harm`, `harm_capacity`, `armour`, `weakness`, `bim_connection`, `bim_note` (highlight in command board — Project Veil thread), `keeper_moves`, optional `keeper_only`.
+
+**Command board:** Load entity by case ID when session is active. Highlight `bim_note` — keeper's reminder of which Project Veil breadcrumbs are live in this scene.
+
+**Current state:** E-001 (Eszter) resolved. E-002 (Cartographer) active — Session 02. E-003–E-006 active. T-006 (The Hollow) theoretical/keeper-only.
 
 ---
 
 ## Immediate Next Steps (In Order)
 
-1. **Write the moves JSON** — open the MOTW book, copy the 4 active playbooks + basic moves into `data/`. This unblocks everything else and requires no infrastructure.
+1. **Fill `FILL_FROM_SESSION` fields in `hunters.json`** — stat lines, gear picks, second/third move choices, Sven's curse. Requires actual character sheets.
 
-2. **Build the dice roller** — pure JS component, reads moves JSON, embeds into existing pages. Test it. This is Phase 1 and takes an afternoon.
+2. **Build the dice roller** — pure JS, reads `motw-basic-moves.json` + `motw-playbooks.json`, auto-fills stat, displays result + outcome text. Phase 1, one afternoon.
 
-3. **Create Cloudflare account and run Phase 2 setup** — one-time, ~1 hour. Once D1 exists, all subsequent development can target it.
+3. **Scaffold the Workers API** — start with `/hunters` and `/rolls`. Seed D1 from `hunters.json` and `portal-npcs.json` once Workers are up.
 
-4. **Scaffold the Workers API** — start with `/hunters` and `/rolls` endpoints. Character sheets and roll logging are the most immediately useful features.
-
-5. **Build `session.html` and `command.html`** — this is the ambitious piece and should come after the data layer is working.
+4. **Build `session.html` and `command.html`** — comes after data layer is working. Command board entity panel reads from `portal-entities.json`; NPC reveal panel reads from `portal-npcs.json`.
 
 ---
 
 ## Notes for Claude Code Sessions
 
 When picking this up:
-- Always check `workers/wrangler.toml` first — it tells you the D1 binding name and environment
+- Check `wrangler.jsonc` at repo root — has D1 binding name (`portal_db`) and database ID
 - Workers use TypeScript; client-side JS in `app/` pages is vanilla JS (no framework)
-- The existing design system (four CSS files, `--mp-*` variables, keeper/player split, terminal aesthetic) applies to all new pages — read `worldbuilding.md` Part 4
+- The existing design system (four CSS files, `--mp-*` variables, keeper/player split, terminal aesthetic) applies to all new pages — read `context/worldbuilding.md` Part 4
 - Roll log is append-only: INSERT only, never UPDATE or DELETE
 - Player pages are offline-first: always check localStorage before fetching from API, write to both on save
 - Keeper pages write directly to D1; player pages write their own data only
-- CAMPBELL's voice rules are in `worldbuilding.md` Part 2 — any generated message must sound like CAMPBELL
+- CAMPBELL's voice rules are in `context/worldbuilding.md` Part 2 — any generated message must sound like CAMPBELL
 - Never add passwords or a signup flow — keeper uses CF Access (Google), players use URL tokens
+- All seven `data/` JSON files are built and ready — read the "Static Data Files Reference" section above before writing any code that touches moves, hunters, NPCs, or entities. Do not reconstruct data that already exists in those files.
+- `keeper_description` and `keeper_notes` fields must never appear in player-facing API responses or page renders

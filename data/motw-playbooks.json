@@ -1,0 +1,1236 @@
+{
+  "version": "motw-revised-2nd-edition",
+  "note": "Active hunter playbooks for the PORTAL campaign. Move text sourced from Monster of the Week hardcover (2nd edition) and Slayer's Survival Kit. Do not redistribute \u2014 move text is proprietary content from Evil Hat / Generic Games.",
+  "playbooks": [
+    {
+      "id": "action-scientist",
+      "name": "The Action Scientist",
+      "hunter": "rex",
+      "source": "full-book",
+      "description": "You may call it the supernatural, but all that means is we don't understand it yet. We'll soon discover what makes it tick. And then I know you'll want to destroy it, but consider how much more we have to learn! I'll keep it in my lab. Perfectly contained.",
+      "stats": {
+        "picks_at_start": 1,
+        "options": [
+          {
+            "charm": -1,
+            "cool": 1,
+            "sharp": 2,
+            "tough": 1,
+            "weird": 0
+          },
+          {
+            "charm": 2,
+            "cool": -1,
+            "sharp": 2,
+            "tough": 0,
+            "weird": -1
+          },
+          {
+            "charm": -1,
+            "cool": 0,
+            "sharp": 2,
+            "tough": -1,
+            "weird": 2
+          },
+          {
+            "charm": 0,
+            "cool": 1,
+            "sharp": 2,
+            "tough": -1,
+            "weird": 1
+          },
+          {
+            "charm": 0,
+            "cool": 1,
+            "sharp": 2,
+            "tough": 1,
+            "weird": -1
+          }
+        ]
+      },
+      "harm": 7,
+      "luck": 7,
+      "experience_trigger": "Whenever you roll and get a total of 6 or less, or when a move tells you to, mark an experience box.",
+      "history_questions": [
+        "You are relations, most likely distant. Tell them what the connection is.",
+        "You were academic colleagues at some point in the past. Decide together where and when.",
+        "On-again, off-again romance. Decide together if it's off or on right now.",
+        "You've been friends ever since you had a Science Adventure a while ago. Decide which evil science nemesis you defeated together.",
+        "Just buddies. You get along well when it's time to relax after all the monsters have been dealt with.",
+        "They once helped you deal with an 'experiment' that got out of hand. Tell them what it was and let them decide how they helped you sort it out.",
+        "They were there when your career changed from scientist to action scientist. Decide together how they helped you out when you fought your first monster.",
+        "You used science to get them out of a jam, and they still owe you for it. Ask them what the jam was, then tell them what you did."
+      ],
+      "moves": [
+        {
+          "id": "action-scientist-test-hypothesis",
+          "name": "Test Hypothesis",
+          "starting": false,
+          "description": "When you test a potential explanation based on data gathered, roll +Sharp. The Keeper will tell you if you're on the right track, missing some critical data, or on the wrong track.",
+          "roll": "sharp",
+          "outcomes": {
+            "10_plus": "You can trust that answer.",
+            "7_9": "The Keeper answers honestly, but you wasted time or the testing process destroyed some evidence.",
+            "miss": "The Keeper's answer is unrelated to the facts."
+          }
+        },
+        {
+          "id": "action-scientist-sabotage",
+          "name": "Sabotage",
+          "starting": false,
+          "description": "When you quickly break a complicated gadget, roll +Sharp.",
+          "roll": "sharp",
+          "outcomes": {
+            "10_plus": "It's broken. Your choice if it's done quietly or left totally irreparable.",
+            "7_9": "It's broken, but not too hard to fix and you made a bit of a ruckus.",
+            "miss": "The worst thing possible happens\u2014usually explosions."
+          }
+        },
+        {
+          "id": "action-scientist-oblivious-to-danger",
+          "name": "Oblivious to Danger",
+          "starting": false,
+          "description": "As well as generally not looking out for danger, you are immune to all fear-based moves and powers. You never need to act under pressure to resist fear from any source.",
+          "roll": null,
+          "outcomes": {
+            "general": "You are immune to all fear-based moves and powers. You never need to act under pressure to resist fear from any source."
+          }
+        },
+        {
+          "id": "action-scientist-doors-of-perception",
+          "name": "The Doors of Perception",
+          "starting": false,
+          "description": "When you use psychological, pharmacological, or meditation techniques to open your mind to transcendental knowledge, roll +Weird.",
+          "roll": "weird",
+          "outcomes": {
+            "10_plus": "Pick two effects.",
+            "7_9": "Pick one effect, but your mind and perceptions are confused and foggy.",
+            "miss": "You get lost in altered states of consciousness."
+          },
+          "choices_note": "Effects available:",
+          "choices": [
+            "Communicate with someone or something that you normally couldn't.",
+            "See what is normally invisible: things like physical forces, ghosts and spirits, incursions of other dimensions, and magical effects.",
+            "Ask one question from the investigate a mystery list.",
+            "Clarity: Get +1 Cool, Sharp, or Weird for the next hour or so (maximum +3)."
+          ]
+        },
+        {
+          "id": "action-scientist-fieldwork",
+          "name": "Fieldwork",
+          "starting": false,
+          "description": "When you put yourself in danger to test a hypothesis, get +1 forward. When you confirm the hypothesis as true or false, mark experience.",
+          "roll": null,
+          "outcomes": {
+            "general": "When you put yourself in danger to test a hypothesis, get +1 forward. When you confirm the hypothesis as true or false, mark experience."
+          }
+        }
+      ],
+      "gear": {
+        "note": "You have toolkits containing everything you need for your normal science, engineering, and analysis tasks.",
+        "science_weapons": {
+          "picks": 2,
+          "options": [
+            "Lightning gun (3-harm close loud area electricity batteries)",
+            "Portable particle accelerator (3-harm close/far messy batteries)",
+            "Laser cannon (2-harm close/far quiet batteries)",
+            "Net launcher (0-harm close entangling)",
+            "Scalpel (1-harm intimate/hand)",
+            "Force knife (2-harm hand batteries)",
+            "Tranquiliser rifle (1-harm close/far sedating)",
+            "Stun-ray (0-harm close sedating)",
+            "Autonomous drone (2-harm far autonomous)",
+            "Atomic pistol (3-harm close radiation)"
+          ]
+        },
+        "protective_equipment": {
+          "picks": 1,
+          "options": [
+            "Biohazard suit (air-supply sealed)",
+            "Lab coat (chemical-resistant)",
+            "Engineering coveralls",
+            "Space suit (air-supply sealed climate-control)",
+            "Science armour (2-armour batteries heavy)"
+          ]
+        }
+      },
+      "rex_moves_taken": [
+        {
+          "note": "List which moves Rex has actually taken here \u2014 update after each session when XP is spent"
+        }
+      ],
+      "luck_special": "When you spend a point of Luck, some gadget or machine near you will soon malfunction, break down, or explode (what exactly is up to the Keeper).",
+      "area_of_study": {
+        "note": "Pick one focus for your research and training.",
+        "options": [
+          {
+            "id": "physics-cosmology",
+            "name": "Physics and Cosmology",
+            "description": "You can tell when something is altering the basic laws of reality around you. When you investigate a mystery, you may ask one of these as well as the usual questions: What direction is the source? Is this static or changing? What equipment would tell me more about this?"
+          },
+          {
+            "id": "biology-chemistry",
+            "name": "Biology and Chemistry",
+            "description": "When you examine a mysterious substance, ask the Keeper what the source is. They'll tell you if it's biological or not, and if the source is mundane, supernatural, extraterrestrial, or extra-dimensional."
+          },
+          {
+            "id": "neurology-psychology",
+            "name": "Neurology and Psychology",
+            "description": "When you're talking to someone and assessing their motives, roll +Sharp. On a 10+, the Keeper will tell you if they're really human and whether they're an ally, bystander, villain, minion, or monster. On a 7\u20139, the Keeper will tell you if there's something off about them but you're not sure what it is yet. On a miss, you reveal too much about yourself instead.",
+            "roll": "sharp"
+          },
+          {
+            "id": "computers-electronics",
+            "name": "Computers and Electronics",
+            "description": "When you access a secure computer system or electronic device, or change what it does, roll +Cool. On a 10+, you get access, or change it (within the limits of the system). On a 7\u20139, either it takes extra time or something unexpected happens. On a miss, it all goes wrong in the worst way possible.",
+            "roll": "cool"
+          },
+          {
+            "id": "violence",
+            "name": "Violence",
+            "description": "You may roll +Sharp to kick some ass instead of +Tough. When you make a scientific attack, either do +1 harm or take +1 forward.",
+            "roll": "sharp"
+          },
+          {
+            "id": "mechanics-engineering",
+            "name": "Mechanics and Engineering",
+            "description": "When you fix machinery, it takes much less time than expected. You also don't need all the proper tools to work on machines. You may also combine any two devices, rebuilding them together. The new gadget has all the abilities of each component, and is the size of the larger one. It has all the tags of both components. You may add, delete, or change one tag."
+          },
+          {
+            "id": "space",
+            "name": "Space",
+            "description": "You have +1 ongoing with rocketry or astronaut stuff. You have access to a space launch facility (including use of spacecraft)."
+          }
+        ]
+      },
+      "moves_note": "Pick 2 from 5 moves. Confirmed complete against SSK source \u2014 the playbook has exactly 5 optional moves (no missing entries). Rex uses Weird Science as his Weird move (recommended in book).",
+      "improvements": [
+        "Get +1 Sharp, max +3",
+        "Get +1 Cool, max +2",
+        "Get +1 Weird, max +2",
+        "Get +1 Tough, max +2",
+        "Take another Action Scientist move",
+        "Take another Action Scientist move",
+        "Get a laboratory with staff, facilities, and instruments suited to your area of study",
+        "Gain an ally team of action scientists",
+        "Take a move from another playbook",
+        "Take a move from another playbook"
+      ],
+      "advanced_improvements": [
+        "Get +1 Cool, max +3",
+        "Get +1 to any rating, max +3",
+        "Change this hunter to a new playbook",
+        "Create a second hunter to play in addition to this one",
+        "Mark two of the basic moves as advanced",
+        "Mark another two of the basic moves as advanced",
+        "Retire this hunter to safety",
+        "Erase one used Luck mark from your playbook",
+        "New interest: add a second area of study"
+      ],
+      "player_choices": {
+        "stats_line": "FILL_FROM_SESSION",
+        "area_of_study": "Violence",
+        "starting_moves": [
+          "FILL_FROM_SESSION",
+          "FILL_FROM_SESSION"
+        ],
+        "weird_move": "weird-science",
+        "science_weapons": [
+          "FILL_FROM_SESSION",
+          "FILL_FROM_SESSION"
+        ],
+        "protective_equipment": "FILL_FROM_SESSION",
+        "look": {
+          "type": "FILL_FROM_SESSION",
+          "eyes": "FILL_FROM_SESSION",
+          "clothes": "FILL_FROM_SESSION"
+        },
+        "notes": "Area of Study confirmed Violence per campaign notes. Other picks need recording from session 01 sheet."
+      }
+    },
+    {
+      "id": "sidekick",
+      "name": "The Sidekick",
+      "hunter": "reed",
+      "source": "full-book",
+      "description": "I don't know much about the occult or monsters, or this whole deal. But I found a Hero. Someone better than me. They need a hand now and then, to do the heroic stuff. Someday, maybe, I can be a big damn hero too.",
+      "stats": {
+        "note": "Pick one line. Also take +1 on your hero's best rating (ask their player which is highest).",
+        "options": [
+          {
+            "charm": 1,
+            "cool": 1,
+            "sharp": 0,
+            "tough": -1,
+            "weird": 1
+          },
+          {
+            "charm": 1,
+            "cool": 1,
+            "sharp": 1,
+            "tough": -1,
+            "weird": 0
+          },
+          {
+            "charm": 1,
+            "cool": 0,
+            "sharp": 1,
+            "tough": -1,
+            "weird": 1
+          },
+          {
+            "charm": 0,
+            "cool": 1,
+            "sharp": 1,
+            "tough": -1,
+            "weird": 1
+          },
+          {
+            "charm": 1,
+            "cool": 0,
+            "sharp": 1,
+            "tough": 1,
+            "weird": -1
+          }
+        ]
+      },
+      "harm": 7,
+      "luck": 7,
+      "experience_trigger": "Whenever you roll and get a total of 6 or less, or when a move tells you to, mark an experience box.",
+      "history_questions": [
+        "(For the hero) This hunter is your hero.",
+        "This hunter makes you a bit jealous of their relationship with your hero.",
+        "This hunter has been your friend for many years. Where did you meet?",
+        "This hunter bonded with you after defeating a monster together, the first time you worked as a team. What was it?",
+        "This hunter knew you back when you were a nobody. Tell them something about the person you used to be, something you're now ashamed of.",
+        "This hunter introduced you to your hero.",
+        "This hunter saved your life when you were distracted, so you owe them big time.",
+        "This hunter's pretty great, they could have almost been your hero. Tell them why they're not quite as good."
+      ],
+      "moves": [
+        {
+          "id": "sidekick-theres-no-i-in-team",
+          "name": "There's no \"I\" in \"team\"",
+          "starting": true,
+          "description": "You get +1 on all help out rolls, or +2 if it's for your hero.",
+          "roll": null,
+          "outcomes": {
+            "general": "You get +1 on all help out rolls, or +2 if it's for your hero."
+          }
+        },
+        {
+          "id": "sidekick-caddy",
+          "name": "Caddy",
+          "starting": false,
+          "description": "You carry all your hero's stuff around. That means you can use anything from their gear list, unless they are currently holding it. If it's something that there would be a bunch of, or some spares, you can use it even if they are.",
+          "roll": null,
+          "outcomes": {
+            "general": "You can use anything from your hero's gear list, unless they are currently holding it. If it's something that there would be a bunch of, or some spares, you can use it even if they are."
+          }
+        },
+        {
+          "id": "sidekick-as-you-wish",
+          "name": "As You Wish",
+          "starting": false,
+          "description": "Mark experience whenever your hero orders or requests that you do something you don't want to do, and you go ahead and do it anyway.",
+          "roll": null,
+          "outcomes": {
+            "general": "Mark experience whenever your hero orders or requests that you do something you don't want to do, and you go ahead and do it anyway."
+          }
+        },
+        {
+          "id": "sidekick-eek",
+          "name": "Eek!",
+          "starting": false,
+          "description": "When a monster (or anyone really) appears on the scene and you find a hiding spot, roll +Sharp.",
+          "roll": "sharp",
+          "outcomes": {
+            "10_plus": "You hide in the best nearby spot before the monster sees you.",
+            "7_9": "Pick one: you hide okay, but the monster is now between you and escape; you hide okay for now, but your hiding spot is bound to be spotted soon; you hide okay, but leave something important out in the open.",
+            "miss": "You fail to hide in time."
+          }
+        },
+        {
+          "id": "sidekick-bodyguard",
+          "name": "Bodyguard",
+          "starting": false,
+          "description": "If something bad is going to happen to your hero, your comrades, or a bystander, and you are right there, you may throw yourself in harm's way. Whatever was going to happen to them happens to you instead, and you mark experience.",
+          "roll": null,
+          "outcomes": {
+            "general": "You may throw yourself in harm's way. Whatever was going to happen to them happens to you instead, and you mark experience."
+          }
+        },
+        {
+          "id": "sidekick-me-too",
+          "name": "Me Too!",
+          "starting": false,
+          "description": "If your hero makes a roll for a move, and you copy what they did, making the same move, you may choose not to roll. Instead, use your hero's die roll (but adjusted with your own rating).",
+          "roll": null,
+          "outcomes": {
+            "general": "You may choose not to roll. Instead, use your hero's die roll, but adjusted with your own rating."
+          }
+        },
+        {
+          "id": "sidekick-i-can-make-you-look-good",
+          "name": "I Can Make You Look Good",
+          "starting": false,
+          "description": "If you are helping out your hero, you may swap one or both your dice with theirs, as long as you come out with the lowest total. Calculate your results as if you had each rolled the dice you now have in front of you.",
+          "roll": null,
+          "outcomes": {
+            "general": "You may swap one or both your dice with your hero's, as long as you come out with the lowest total. Calculate your results as if you had each rolled the dice you now have in front of you."
+          }
+        },
+        {
+          "id": "sidekick-apprentice",
+          "name": "Apprentice",
+          "starting": false,
+          "description": "Take a move that your hero has.",
+          "roll": null,
+          "outcomes": {
+            "general": "Take a move that your hero has."
+          }
+        }
+      ],
+      "gear": {
+        "hero_item": {
+          "note": "Pick one item from your hero's gear options.",
+          "picks": 1
+        },
+        "sidekick_weapons": {
+          "picks": 1,
+          "options": [
+            "Handgun (2-harm close reload loud)",
+            "Shotgun (3-harm close messy)",
+            "Baseball bat (2-harm hand)",
+            "Stun gun (1-harm hand stun)",
+            "Big knife (1-harm hand)"
+          ]
+        }
+      },
+      "reed_moves_taken": [
+        {
+          "note": "List which moves Reed has actually taken here"
+        }
+      ],
+      "luck_special": "Whenever you spend a Luck point, you'll get a chance to do something heroic.",
+      "hero_note": "Pick one of the other hunters to be your hero. Check with their player to confirm they're okay with it. Copy your look from their playbook (pick one from each line, copying at least one of their choices).",
+      "moves_note": "You get all the basic moves, plus three Sidekick moves. There's no 'I' in 'team' is mandatory; pick two more.",
+      "improvements": [
+        "Get +1 Sharp, max +3",
+        "Get +1 Charm, max +3",
+        "Get +1 Cool, max +2",
+        "Get +1 Tough, max +2",
+        "Take another Sidekick move",
+        "Take another Sidekick move",
+        "Gain an ally: another sidekick for your hero, but junior to you",
+        "Change playbooks to be the same as your hero. This overrides the general rule that only one of each playbook may be in use.",
+        "Take a move from another playbook",
+        "Take a move from another playbook"
+      ],
+      "advanced_improvements": [
+        "Get +1 to any rating, max +3",
+        "Change this hunter to a new type",
+        "Create a second hunter to play as well as this one",
+        "Mark two of the basic moves as advanced",
+        "Mark another two of the basic moves as advanced",
+        "Retire this hunter to safety",
+        "Get back one used Luck point",
+        "Pick a new hero. All moves that mention your hero now apply to the new hero."
+      ],
+      "player_choices": {
+        "stats_line": "FILL_FROM_SESSION",
+        "hero": "rex",
+        "hero_stat_bonus": "FILL_FROM_SESSION \u2014 +1 to Rex's highest stat (confirm which at table)",
+        "starting_moves": [
+          "sidekick-theres-no-i-in-team",
+          "FILL_FROM_SESSION",
+          "FILL_FROM_SESSION"
+        ],
+        "hero_item": "FILL_FROM_SESSION",
+        "sidekick_weapon": "FILL_FROM_SESSION",
+        "look": "FILL_FROM_SESSION \u2014 copied from Rex's playbook choices",
+        "notes": "Mandatory move is There's No I in Team. Two more picks from: Caddy, As You Wish, Eek!, Bodyguard, Me Too!, I Can Make You Look Good, Apprentice."
+      }
+    },
+    {
+      "id": "changeling",
+      "name": "The Changeling",
+      "hunter": "alan",
+      "source": "full-book",
+      "description": "Brought up as human, but not. Struggles with their two natures \u2014 neither world fully claims them.",
+      "stats": {
+        "picks_at_start": 1,
+        "options": [
+          {
+            "charm": 1,
+            "cool": -1,
+            "sharp": 1,
+            "tough": 0,
+            "weird": 2
+          },
+          {
+            "charm": -1,
+            "cool": 1,
+            "sharp": 0,
+            "tough": 1,
+            "weird": 2
+          },
+          {
+            "charm": 1,
+            "cool": 0,
+            "sharp": -1,
+            "tough": 1,
+            "weird": 2
+          },
+          {
+            "charm": 0,
+            "cool": 2,
+            "sharp": 1,
+            "tough": -1,
+            "weird": 1
+          },
+          {
+            "charm": 2,
+            "cool": 1,
+            "sharp": 1,
+            "tough": -1,
+            "weird": 0
+          }
+        ]
+      },
+      "harm": 7,
+      "luck": 7,
+      "experience_trigger": "Whenever you roll and get a total of 6 or less, or when a move tells you to, mark an experience box.",
+      "history_questions": [
+        "They discovered you aren't human. Ask them how they realised and how (if?) they told you.",
+        "You suspect they know more about your heritage than they're telling. Ask if your suspicion is correct.",
+        "They tried to slay you, but decided you were innocent\u2014or at least not evil. Ask what convinced them.",
+        "You see them as your anchor to humanity. Ask them what sort of example they set.",
+        "You are romantically involved with them, or a close relative of theirs. Decide together the exact relationship.",
+        "They are family in every way but blood. Decide together the details of your relationship.",
+        "They claim you and your people are part of their destiny. Ask them what they told you and tell them your reaction to this.",
+        "They see you as a prot\u00e9g\u00e9 to train for hunting. Ask them how persistent they are in this agenda."
+      ],
+      "origin": {
+        "note": "The Changeling has no fixed fey-type origin choice in the SSK edition. Heritage is defined through the Unknown Heritage tag system (see unknown_heritage field) and move picks. Alan's specific heritage is an open campaign question."
+      },
+      "moves": [
+        {
+          "id": "changeling-glamour",
+          "name": "Glamour",
+          "starting": true,
+          "description": "Your appearance is clearly inhuman, making regular interaction with bystanders difficult. However, when feeling calm, you can maintain an illusion of humanity. You may drop your glamour and display your supernatural power to turn any roll into a 10. Your unknown heritage stirs up trouble right away or soon after.",
+          "roll": null,
+          "outcomes": {
+            "general": "When feeling calm, you can maintain an illusion of humanity. You may drop your glamour and display your supernatural power to turn any roll into a 10. Your unknown heritage stirs up trouble right away or soon after."
+          }
+        },
+        {
+          "id": "changeling-inhuman-talent",
+          "name": "Inhuman Talent",
+          "starting": false,
+          "description": "You're naturally skilled with a specific type of magic\u2014perhaps plants, ice, illusions, or summer. You have +1 ongoing when you use a basic Weird move that uses these powers. In addition, at the start of each session, hold 2. Spend your hold for +1 forward on a move your powers can enhance.",
+          "roll": null,
+          "outcomes": {
+            "general": "+1 ongoing when you use a basic Weird move that uses your specific powers. At the start of each session, hold 2. Spend your hold for +1 forward on a move your powers can enhance."
+          }
+        },
+        {
+          "id": "changeling-they-are-my-people",
+          "name": "They Are My People",
+          "starting": false,
+          "description": "Once per session, when you protect someone, act as if you rolled a 12. You gain +1 forward when acting under pressure to resist instincts like your unknown heritage, other dark urges, and 'fight or flight' situations.",
+          "roll": null,
+          "outcomes": {
+            "general": "Once per session, when you protect someone, act as if you rolled a 12. You gain +1 forward when acting under pressure to resist instincts like your unknown heritage, other dark urges, and 'fight or flight' situations."
+          }
+        },
+        {
+          "id": "changeling-force-of-nature",
+          "name": "Force of Nature",
+          "starting": false,
+          "description": "You have a supernatural attack from your heritage. Choose its type: lightning, insect swarms, magical blades, or something else. When you unleash your power, roll +Weird.",
+          "roll": "weird",
+          "outcomes": {
+            "10_plus": "You summon a 1-harm close weapon for a short time. Pick two extras.",
+            "7_9": "You summon a 1-harm close weapon for a short time. Pick one extra.",
+            "miss": "The power turns against you."
+          },
+          "choices_note": "Extras: +1 harm, hand, far, autonomous, distracting, ignore-armour, area, grab, blind, stun"
+        },
+        {
+          "id": "changeling-lockdown",
+          "name": "Lockdown",
+          "starting": false,
+          "description": "You can stun people with a power like a petrifying gaze, overwhelming illusions, or bewildering moths. When you freeze someone, roll +Weird.",
+          "roll": "weird",
+          "outcomes": {
+            "10_plus": "The target is immobilised for a few minutes or until something snaps them out of it.",
+            "7_9": "The target is immobilised for as long as you focus your attention, or until something snaps them out of it.",
+            "miss": "It causes a magical backlash."
+          }
+        },
+        {
+          "id": "changeling-faerie-gossip",
+          "name": "Faerie Gossip",
+          "starting": false,
+          "description": "You can communicate with local spirits and mystical creatures. When you investigate a mystery by questioning these beings, you may roll +Weird instead of +Sharp, and may ask the following questions as well as the usual ones: Is anything affecting the supernatural environment? How long has __________ been in the area? When did __________ first arrive?",
+          "roll": "weird",
+          "outcomes": {
+            "10_plus": "Hold 2 (as investigate a mystery). May also ask: Is anything affecting the supernatural environment? How long has __________ been in the area? When did __________ first arrive?",
+            "7_9": "Hold 1 (as investigate a mystery). May also ask the additional questions.",
+            "miss": "As normal miss for investigate a mystery."
+          }
+        },
+        {
+          "id": "changeling-renewal",
+          "name": "Renewal",
+          "starting": false,
+          "description": "You can speed the healing of those around you. When teammates and allies in your presence recover harm by any means, they recover 1 extra harm.",
+          "roll": null,
+          "outcomes": {
+            "general": "When teammates and allies in your presence recover harm by any means, they recover 1 extra harm."
+          }
+        },
+        {
+          "id": "changeling-strange-paths",
+          "name": "Strange Paths",
+          "starting": false,
+          "description": "You can walk (or drive) between worlds. However, you don't know the way very well. When you take an otherworld shortcut, roll +Weird.",
+          "roll": "weird",
+          "outcomes": {
+            "10_plus": "You arrive quicker than otherwise possible.",
+            "7_9": "You find trouble along the way. Perhaps you get only partway, encounter locals, or only save a little time.",
+            "miss": "You arrive a little too late or have to deal with something blocking the way."
+          }
+        }
+      ],
+      "gear": {
+        "transportation": {
+          "picks": 1,
+          "options": [
+            "Skateboard",
+            "Roller skates",
+            "Bicycle",
+            "Old pickup truck",
+            "Motorcycle",
+            "Van",
+            "Fairly new car in decent condition",
+            "Classic car in poor condition"
+          ]
+        },
+        "weapon": {
+          "picks": 1,
+          "options": [
+            "Sport club (2-harm hand innocuous messy)",
+            "Pocket knife or multitool (1-harm hand useful small)",
+            "Small handgun (2-harm close loud)",
+            "Hunting rifle (3-harm far loud reload)",
+            "Sledgehammer (2-harm hand messy slow)",
+            "Fire axe (2-harm hand messy heavy)",
+            "Talisman or artifact (1-harm close magic ignore-armour)"
+          ]
+        },
+        "mementos": {
+          "picks": 2,
+          "options": [
+            "A childhood toy",
+            "A laptop",
+            "A knapsack, backpack, or purse",
+            "A smartphone, mobile game device, or music player",
+            "Old photos",
+            "Jewellery",
+            "A favourite piece of clothing",
+            "A journal",
+            "Letters or emails from home"
+          ]
+        }
+      },
+      "alan_moves_taken": [
+        {
+          "note": "List which moves Alan has actually taken here"
+        }
+      ],
+      "luck_special": "When you spend a point of Luck, something or someone related to your inhuman heritage or human upbringing shows up soon.",
+      "unknown_heritage": {
+        "note": "Your non-human heritage has pitfalls you were never taught about. Pick three. The Keeper may introduce obstacles or distractions based on these tags. If you push through or ignore them, things can spiral out of control and you may need to act under pressure. Alternatively, devote time to dealing with it and mark experience.",
+        "options": [
+          "Dietary restriction",
+          "Hygienic need",
+          "Unearned reputation",
+          "Erratic power",
+          "Strange thoughts",
+          "Sensory bombardment",
+          "Allergy to ___",
+          "Repulsion from ___",
+          "Attraction to ___",
+          "Obsession with ___"
+        ]
+      },
+      "moves_note": "You get all the basic moves, plus three Changeling moves. Glamour is mandatory; pick two more.",
+      "improvements": [
+        "Get +1 Weird, max +3",
+        "Get +1 Cool, max +2",
+        "Get +1 Sharp, max +2",
+        "Get +1 Charm, max +2",
+        "Take another Changeling move",
+        "Take another Changeling move",
+        "Gain an ally, associated with either the mortal or supernatural worlds",
+        "Mark use magic (or your alternate Weird move) as advanced",
+        "Take a move from another playbook",
+        "Take a move from another playbook"
+      ],
+      "advanced_improvements": [
+        "Get +1 to any rating, max +3",
+        "Change this hunter to a new playbook",
+        "Create a second hunter to play in addition to this one",
+        "Mark two of the basic moves as advanced",
+        "Mark another two of the basic moves as advanced",
+        "Retire this hunter to safety",
+        "Erase one used Luck mark from your playbook",
+        "Remove one Unknown Heritage tag. You've now integrated well enough to avoid issues.",
+        "Your character retires to a position of supernatural responsibility, preventing their involvement in mortal matters.",
+        "You find a home. Pick one: a human group that has accepted you (create as the Professional's Agency, one resource and one red tape); a group of your supernatural heritage (create as the Initiate's Sect, one good tradition and one bad tradition); or a supernatural realm (create as the Expert's haven, two options, accessible via use magic from any location)."
+      ],
+      "player_choices": {
+        "stats_line": "FILL_FROM_SESSION",
+        "starting_moves": [
+          "changeling-glamour",
+          "FILL_FROM_SESSION",
+          "FILL_FROM_SESSION"
+        ],
+        "unknown_heritage_tags": [
+          "FILL_FROM_SESSION",
+          "FILL_FROM_SESSION",
+          "FILL_FROM_SESSION"
+        ],
+        "transport": "FILL_FROM_SESSION",
+        "weapon": "FILL_FROM_SESSION",
+        "mementos": [
+          "FILL_FROM_SESSION",
+          "FILL_FROM_SESSION"
+        ],
+        "look": {
+          "gender_presentation": "FILL_FROM_SESSION",
+          "face": "FILL_FROM_SESSION",
+          "body": "FILL_FROM_SESSION",
+          "wear": "FILL_FROM_SESSION"
+        },
+        "notes": "Glamour is mandatory. Picks 2 more from: Inhuman Talent, They Are My People, Force of Nature, Lockdown, Faerie Gossip, Renewal, Strange Paths."
+      }
+    },
+    {
+      "id": "monstrous",
+      "name": "The Monstrous",
+      "hunter": "sven",
+      "source": "full-book",
+      "description": "I feel the hunger, the lust to destroy. But I fight it: I never give in. I'm not human any more, not really, but I have to protect those who still are. That way I can tell myself I'm different to the other monsters. Sometimes I can even believe it.",
+      "stats": {
+        "note": "The Monstrous always gets +3 Weird. Pick one line:",
+        "options": [
+          {
+            "charm": -1,
+            "cool": -1,
+            "sharp": 0,
+            "tough": 2,
+            "weird": 3
+          },
+          {
+            "charm": -1,
+            "cool": 1,
+            "sharp": 1,
+            "tough": 0,
+            "weird": 3
+          },
+          {
+            "charm": 2,
+            "cool": 0,
+            "sharp": -1,
+            "tough": -1,
+            "weird": 3
+          },
+          {
+            "charm": -2,
+            "cool": 2,
+            "sharp": 0,
+            "tough": 0,
+            "weird": 3
+          },
+          {
+            "charm": 0,
+            "cool": -1,
+            "sharp": 2,
+            "tough": -1,
+            "weird": 3
+          }
+        ]
+      },
+      "harm": 7,
+      "luck": 7,
+      "experience_trigger": "Whenever you roll and get a total of 6 or less, or when a move tells you to, mark an experience box.",
+      "history_questions": [
+        "You lost control one time, and almost killed them. Ask them how they stopped you.",
+        "They tried to slay you, but you proved you're on the side of good. Ask them what convinced them.",
+        "You are romantically obsessed with them. Ask them if they know, and if they reciprocate.",
+        "Close relations, or a distant descendant. Tell them which.",
+        "You saved them from another of your kind, and prevented reprisals against that individual creature (maybe it's another good one, or maybe it has a hold over you).",
+        "They are tied to your curse or origin. Tell them how.",
+        "You fought together against the odds, and prevailed.",
+        "They saved you from another hunter who was prepared to kill you. Ask them what happened."
+      ],
+      "monster_type": "ghost",
+      "curse": {
+        "note": "Pick one curse to define your breed.",
+        "options": [
+          {
+            "id": "feed",
+            "name": "Feed",
+            "description": "You must subsist on living humans\u2014it might take the form of blood, brains, or spiritual essence but it must be from people. You need to act under pressure to resist feeding whenever a perfect opportunity presents itself."
+          },
+          {
+            "id": "vulnerability",
+            "name": "Vulnerability",
+            "description": "Pick a substance. You suffer +1 harm when you suffer harm from it. If you are bound or surrounded by it, you must act under pressure to use your powers."
+          },
+          {
+            "id": "pure-drive",
+            "name": "Pure Drive",
+            "description": "One emotion rules you. Pick from: hunger, hate, anger, fear, jealousy, greed, joy, pride, envy, lust, or cruelty. Whenever you have a chance to indulge that emotion, you must do so immediately, or act under pressure to resist."
+          },
+          {
+            "id": "dark-master",
+            "name": "Dark Master",
+            "description": "You have an evil lord who doesn't know you changed sides. They still give you orders, and they do not tolerate refusal. Or failure."
+          }
+        ],
+        "sven_curse": "FILL_FROM_CAMPAIGN \u2014 note Sven's chosen curse here"
+      },
+      "moves": [
+        {
+          "id": "monstrous-immortal",
+          "name": "Immortal",
+          "starting": false,
+          "description": "You do not age or sicken, and whenever you suffer harm you suffer 1-harm less.",
+          "roll": null,
+          "outcomes": {
+            "general": "You do not age or sicken, and whenever you suffer harm you suffer 1-harm less."
+          }
+        },
+        {
+          "id": "monstrous-unnatural-appeal",
+          "name": "Unnatural Appeal",
+          "starting": false,
+          "description": "Roll +Weird instead of +Charm when you manipulate someone.",
+          "roll": null,
+          "outcomes": {
+            "general": "Roll +Weird instead of +Charm when you manipulate someone."
+          }
+        },
+        {
+          "id": "monstrous-unholy-strength",
+          "name": "Unholy Strength",
+          "starting": false,
+          "description": "Roll +Weird instead of +Tough when you kick some ass.",
+          "roll": null,
+          "outcomes": {
+            "general": "Roll +Weird instead of +Tough when you kick some ass."
+          }
+        },
+        {
+          "id": "monstrous-incorporeal",
+          "name": "Incorporeal",
+          "starting": false,
+          "description": "You may move freely through solid objects (but not people).",
+          "roll": null,
+          "outcomes": {
+            "general": "You may move freely through solid objects (but not people)."
+          }
+        },
+        {
+          "id": "monstrous-preternatural-speed",
+          "name": "Preternatural Speed",
+          "starting": false,
+          "description": "You go much faster than normal people. When you chase, flee, or run take +1 ongoing.",
+          "roll": null,
+          "outcomes": {
+            "general": "You go much faster than normal people. When you chase, flee, or run take +1 ongoing."
+          }
+        },
+        {
+          "id": "monstrous-claws-of-the-beast",
+          "name": "Claws of the Beast",
+          "starting": false,
+          "description": "All your natural attacks get +1 harm.",
+          "roll": null,
+          "outcomes": {
+            "general": "All your natural attacks get +1 harm."
+          }
+        },
+        {
+          "id": "monstrous-mental-dominion",
+          "name": "Mental Dominion",
+          "starting": false,
+          "description": "When you gaze into a normal human's eyes and exert your will over them, roll +Charm.",
+          "roll": "charm",
+          "outcomes": {
+            "10_plus": "Hold 3. You may spend your hold to give them an order. Regular people will follow your order, whatever it is. Hunters can choose whether they do it or not \u2014 if they do, they mark experience.",
+            "7_9": "Hold 1. You may spend your hold to give them an order. Regular people will follow your order, whatever it is. Hunters can choose whether they do it or not \u2014 if they do, they mark experience.",
+            "miss": "No hold."
+          }
+        },
+        {
+          "id": "monstrous-unquenchable-vitality",
+          "name": "Unquenchable Vitality",
+          "starting": false,
+          "description": "When you have taken harm, you can heal yourself. Roll +Cool.",
+          "roll": "cool",
+          "outcomes": {
+            "10_plus": "Heal 2-harm and stabilise your injuries.",
+            "7_9": "Heal 1-harm and stabilise your injuries.",
+            "miss": "Your injuries worsen."
+          }
+        },
+        {
+          "id": "monstrous-dark-negotiator",
+          "name": "Dark Negotiator",
+          "starting": false,
+          "description": "You can use the manipulate someone move on monsters as well as people, if they can reason and talk.",
+          "roll": null,
+          "outcomes": {
+            "general": "You can use the manipulate someone move on monsters as well as people, if they can reason and talk."
+          }
+        },
+        {
+          "id": "monstrous-flight",
+          "name": "Flight",
+          "starting": false,
+          "description": "You can fly.",
+          "roll": null,
+          "outcomes": {
+            "general": "You can fly."
+          }
+        },
+        {
+          "id": "monstrous-shapeshifter",
+          "name": "Shapeshifter",
+          "starting": false,
+          "description": "You may change your form (usually into an animal). Decide if you have just one alternate form or several, and detail them. You gain +1 to investigate a mystery when using an alternate form's superior senses (e.g. smell for a wolf, sight for an eagle).",
+          "roll": null,
+          "outcomes": {
+            "general": "You may change your form (usually into an animal). Decide if you have just one alternate form or several, and detail them. You gain +1 to investigate a mystery when using an alternate form's superior senses (e.g. smell for a wolf, sight for an eagle)."
+          }
+        },
+        {
+          "id": "monstrous-something-borrowed",
+          "name": "Something Borrowed",
+          "starting": false,
+          "description": "Take a move from a hunter playbook that is not currently in play.",
+          "roll": null,
+          "outcomes": {
+            "general": "Take a move from a hunter playbook that is not currently in play."
+          }
+        }
+      ],
+      "gear": {
+        "note": "If you want, you can take one handy weapon.",
+        "items": [
+          ".38 revolver (2-harm close reload loud)",
+          "9mm (2-harm close loud)",
+          "Magnum (3-harm close reload loud)",
+          "Shotgun (3-harm close messy)",
+          "Big knife (1-harm hand)",
+          "Brass knuckles (1-harm hand quiet small)",
+          "Sword (2-harm hand messy)",
+          "Huge sword (3-harm hand heavy)"
+        ]
+      },
+      "sven_moves_taken": [
+        {
+          "note": "List which moves Sven has actually taken here"
+        }
+      ],
+      "luck_special": "When you spend a Luck, your monster side gains power. Your Curse may temporarily become stronger, or another disadvantage of your Breed may manifest.",
+      "natural_attacks": {
+        "note": "Pick a Base and add an extra to it, or two Bases.",
+        "bases": [
+          "Base: teeth (3-harm intimate)",
+          "Base: claws (2-harm hand)",
+          "Base: magical force (1-harm magical close)",
+          "Base: life-drain (1-harm intimate life-drain)"
+        ],
+        "extras": [
+          "Extra: Add +1 harm to a base",
+          "Extra: Add ignore-armour to a base",
+          "Extra: Add an extra range to a base (add intimate, hand, or close)"
+        ]
+      },
+      "improvements": [
+        "Get +1 Charm, max +2",
+        "Get +1 Sharp, max +2",
+        "Get +1 Cool, max +2",
+        "Get +1 Tough, max +2",
+        "Take another Monstrous move",
+        "Take another Monstrous move",
+        "Gain a haven, like the Expert has, with two options",
+        "Take a natural attacks pick",
+        "Take a move from another playbook",
+        "Take a move from another playbook"
+      ],
+      "advanced_improvements": [
+        "Get +1 to any rating, max +3.",
+        "Change this hunter to a new type.",
+        "Create a second hunter to play as well as this one.",
+        "Mark two of the basic moves as advanced.",
+        "Mark another two of the basic moves as advanced.",
+        "Retire this hunter to safety.",
+        "Free yourself from the curse of your kind. Your curse no longer applies, but you lose 1 Weird.",
+        "You turn evil (again). Retire this character, they become one of the Keeper's threats.",
+        "Get back one used Luck point."
+      ],
+      "sven_curse": "FILL_FROM_SESSION \u2014 Sven's player picks one of the four curse options: feed, vulnerability, pure-drive, or dark-master. Campaign suggestion from worldbuilding notes: vulnerability (rock salt). Confirm with player.",
+      "player_choices": {
+        "stats_line": "FILL_FROM_SESSION",
+        "breed": "ghost",
+        "curse": "FILL_FROM_SESSION \u2014 campaign suggestion: vulnerability (rock salt)",
+        "natural_attack_base": "magical force",
+        "natural_attack_range": "hand",
+        "natural_attack_extras": [
+          "FILL_FROM_SESSION"
+        ],
+        "starting_moves": [
+          "monstrous-incorporeal",
+          "monstrous-immortal"
+        ],
+        "look": {
+          "gender_presentation": "FILL_FROM_SESSION",
+          "monstrous_tell": "FILL_FROM_SESSION",
+          "body": "FILL_FROM_SESSION",
+          "wear": "FILL_FROM_SESSION"
+        },
+        "notes": "Ghost breed confirmed. Starting moves Incorporeal + Immortal confirmed per campaign notes. Natural attack: magical force + hand range confirmed. Curse and extras need player confirmation."
+      }
+    },
+    {
+      "id": "flake",
+      "name": "The Flake",
+      "hunter": null,
+      "source": "revised-softcover",
+      "description": "Everything's connected. But not everyone can see the patterns, and most people don't even look that hard. But me, I can never stop looking deeper. I can never stop seeing the truth. I spot the patterns. That's how I found the monsters, and that's how I help kill them.",
+      "stats": {
+        "picks_at_start": 1,
+        "options": [
+          {
+            "charm": 1,
+            "cool": 1,
+            "sharp": 2,
+            "tough": -1,
+            "weird": 0
+          },
+          {
+            "charm": 0,
+            "cool": 1,
+            "sharp": 2,
+            "tough": -1,
+            "weird": 1
+          },
+          {
+            "charm": 1,
+            "cool": -1,
+            "sharp": 2,
+            "tough": 1,
+            "weird": 0
+          },
+          {
+            "charm": 1,
+            "cool": -1,
+            "sharp": 2,
+            "tough": 0,
+            "weird": 1
+          },
+          {
+            "charm": -1,
+            "cool": -1,
+            "sharp": 2,
+            "tough": 0,
+            "weird": 2
+          }
+        ]
+      },
+      "harm": 7,
+      "luck": 7,
+      "luck_special": "When you spend a point of Luck, pick an aspect of the current situation. The Keeper will tell you what other conspiracies that aspect connects to.",
+      "experience_trigger": "Whenever you roll and get a total of 6 or less, or when a move tells you to, mark an experience box.",
+      "history_questions": [
+        "They're somehow tied into it all. You've been keeping an eye on them.",
+        "They're a close relative. Ask them to decide exactly what.",
+        "Old friends, who originally met through a long chain of coincidences.",
+        "You went through hell together: maybe a monster, maybe military service, maybe time in an institution. Whatever it was, it bound you together, and you have total trust in each other.",
+        "Members of the same support group.",
+        "Fellow freaks.",
+        "The signs all pointed to working together. So you found them and now you work together.",
+        "You know each other through cryptozoology and conspiracy theory websites."
+      ],
+      "moves_note": "Pick three Flake moves to start. All eight are available at character creation.",
+      "moves": [
+        {
+          "id": "flake-connect-the-dots",
+          "name": "Connect the Dots",
+          "starting": false,
+          "description": "At the beginning of each mystery, if you look for the wider patterns that current events might be part of, roll +Sharp.",
+          "roll": "sharp",
+          "outcomes": {
+            "10_plus": "Hold 3.",
+            "7_9": "Hold 1.",
+            "miss": "No hold."
+          },
+          "choices_note": "Spend your hold during the mystery to ask the Keeper any one of the following questions:",
+          "choices": [
+            "Is this person connected to current events more than they are saying?",
+            "When and where will the next critical event occur?",
+            "What does the monster want from this person?",
+            "Is this connected to previous mysteries we have investigated?",
+            "How does this mystery connect to the bigger picture?"
+          ]
+        },
+        {
+          "id": "flake-crazy-eyes",
+          "name": "Crazy Eyes",
+          "starting": false,
+          "description": "You get +1 Weird (max +3).",
+          "roll": null,
+          "outcomes": {
+            "general": "You get +1 Weird (max +3)."
+          }
+        },
+        {
+          "id": "flake-see-it-all-fits-together",
+          "name": "See, It All Fits Together",
+          "starting": false,
+          "description": "You can use Sharp instead of Charm when you manipulate someone.",
+          "roll": null,
+          "outcomes": {
+            "general": "You can use Sharp instead of Charm when you manipulate someone."
+          }
+        },
+        {
+          "id": "flake-suspicious-mind",
+          "name": "Suspicious Mind",
+          "starting": false,
+          "description": "If someone lies to you, you know it.",
+          "roll": null,
+          "outcomes": {
+            "general": "If someone lies to you, you know it."
+          }
+        },
+        {
+          "id": "flake-often-overlooked",
+          "name": "Often Overlooked",
+          "starting": false,
+          "description": "When you act all crazy to avoid something, roll +Weird.",
+          "roll": "weird",
+          "outcomes": {
+            "10_plus": "You're regarded as unthreatening and unimportant.",
+            "7_9": "Pick one: unthreatening or unimportant.",
+            "miss": "You draw lots (but not all) of the attention."
+          }
+        },
+        {
+          "id": "flake-contrary",
+          "name": "Contrary",
+          "starting": false,
+          "description": "When you seek out and receive someone's honest advice on the best course of action for you and then do something else instead, mark experience. If you do exactly the opposite of their advice, you also take +1 ongoing on any moves you make pursuing that course.",
+          "roll": null,
+          "outcomes": {
+            "general": "Mark experience. If you do exactly the opposite of their advice, you also take +1 ongoing on any moves you make pursuing that course."
+          }
+        },
+        {
+          "id": "flake-net-friends",
+          "name": "Net Friends",
+          "starting": false,
+          "description": "You know a lot of people on the Internet. When you contact a net friend to help you with a mystery, roll +Charm.",
+          "roll": "charm",
+          "outcomes": {
+            "10_plus": "They're available and helpful\u2014they can fix something, break a code, hack a computer, or get you some special information.",
+            "7_9": "They're prepared to help, but it's either going to take some time or you're going to have to do part of it yourself.",
+            "miss": "You burn some bridges."
+          }
+        },
+        {
+          "id": "flake-sneaky",
+          "name": "Sneaky",
+          "starting": false,
+          "description": "When you attack from ambush, or from behind, inflict +2 harm.",
+          "roll": null,
+          "outcomes": {
+            "general": "When you attack from ambush, or from behind, inflict +2 harm."
+          }
+        }
+      ],
+      "gear": {
+        "normal_weapons": {
+          "picks": 1,
+          "options": [
+            ".38 revolver (2-harm close reload loud)",
+            "9mm (2-harm close loud)",
+            "Hunting rifle (2-harm far loud)",
+            "Magnum (3-harm close reload loud)",
+            "Shotgun (3-harm close messy loud)",
+            "Big knife (1-harm hand)"
+          ]
+        },
+        "hidden_weapons": {
+          "picks": 2,
+          "options": [
+            "Throwing knives (1-harm close many)",
+            "Holdout pistol (2-harm close loud reload)",
+            "Garrote (3-harm intimate)",
+            "Watchman's flashlight (1-harm hand)",
+            "Weighted gloves/brass knuckles (1-harm hand)",
+            "Butterfly knife/folding knife (1-harm hand)"
+          ]
+        }
+      },
+      "look": {
+        "eyes": [
+          "Wild eyes",
+          "Moving eyes",
+          "Focused eyes",
+          "Searching eyes",
+          "Suspicious eyes",
+          "Wide eyes",
+          "Guarded eyes"
+        ],
+        "clothes": [
+          "Ratty clothes",
+          "Casual clothes",
+          "Rumpled suit",
+          "Neat clothes",
+          "Comfortable clothes",
+          "Army surplus gear"
+        ]
+      },
+      "improvements": [
+        "Get +1 Sharp, max +3",
+        "Get +1 Charm, max +2",
+        "Get +1 Cool, max +2",
+        "Get +1 Weird, max +2",
+        "Take another Flake move",
+        "Take another Flake move",
+        "Get a haven, like the Expert has, with two options",
+        "Gain another option for your haven",
+        "Take a move from another playbook",
+        "Take a move from another playbook"
+      ],
+      "advanced_improvements": [
+        "Get +1 to any rating, max +3.",
+        "Change this hunter to a new type.",
+        "Create a second hunter to play as well as this one.",
+        "Mark two of the basic moves as advanced.",
+        "Mark another two of the basic moves as advanced.",
+        "Retire this hunter to safety.",
+        "Get back one used Luck point."
+      ]
+    }
+  ]
+}

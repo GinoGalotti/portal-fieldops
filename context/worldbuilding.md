@@ -490,6 +490,72 @@ The following classes were defined inline on specific pages and have not been pr
 
 ---
 
+## PART 8 — DATA FILES DIRECTORY
+
+Seven static JSON files live in `data/` and cover all game rules, campaign characters, NPCs, and entities. **Read this section before building any page or Worker that touches game data.** Full technical documentation for each file — field schemas, consumption patterns, D1 seeding notes — is in `portal-architecture.md` under "Static Data Files Reference".
+
+---
+
+### What lives in the data files (not in D1)
+
+These files are static assets served by Cloudflare Pages. They are read-only at runtime. Campaign state (current harm, XP, roll log, NPC visibility) lives in D1 — not here.
+
+| File | What it contains | Used by |
+|------|-----------------|---------|
+| `motw-basic-moves.json` | All 10 basic moves + 15 Weird move variants (hardcover + SSK). Each move has trigger, stat, and outcome text for 12+/10+/7-9/miss. | Roll interface, move reference panel |
+| `motw-playbooks.json` | The 5 active hunter playbooks with full move text, stat options, gear lists, improvements, and a `player_choices` block per hunter. | Roll interface, character sheet display, keeper move reference |
+| `motw-teambooks.json` | Research Lab team playbook — styles, team moves, assets, improvement track. PORTAL's active style: Action Science. | Keeper session reference, improvement tracker |
+| `portal-custom-moves.json` | Substance Θ (roll+Weird), Anchor Spike (situational, no roll), BIM Collection Array recovery (no roll). Plus an empty `house_rules` array. | Roll interface (merged with standard moves), keeper command board |
+| `hunters.json` | All 5 hunters — harm, luck, XP, stats, active moves, gear, bonds, background, keeper arc hooks. Confirmed fields locked; unrecorded picks marked `FILL_FROM_SESSION`. | D1 seed, character sheet pages, offline fallback |
+| `portal-npcs.json` | 21 NPCs — PORTAL inner circle, MESA operatives, case bystanders. Each has `player_description` / `keeper_description` split and `visible_to_players` flag. | D1 seed, `contacts.html`, keeper NPC reveal panel |
+| `portal-entities.json` | 7 entities (E-001 through E-006 + T-006). Status, stat blocks, powers, weaknesses, keeper moves, and BIM connection note per entity. | Keeper command board entity panel, case archive |
+
+---
+
+### Cross-file relationships
+
+```
+motw-playbooks.json
+  └── player_choices.starting_moves[] → ids reference moves within the same file
+  └── player_choices.weird_move       → id references motw-basic-moves.json alternate_weird_moves[]
+
+hunters.json
+  └── hunter.playbook          → matches motw-playbooks.json playbook.id
+  └── hunter.active_moves[].id → matches motw-playbooks.json move.id or motw-basic-moves.json move.id
+  └── hunter.weird_move        → matches motw-basic-moves.json alternate_weird_moves[].id
+
+portal-npcs.json
+  └── npc.secrets_involved[]   → references secret IDs from Part 5 of this document
+
+portal-entities.json
+  └── entity.case              → references session/case IDs ('S01', 'case-a', etc.)
+  └── entity.secrets_involved[]→ references secret IDs from Part 5 of this document
+```
+
+---
+
+### The keeper/player split in data files
+
+Three files have a dual-description pattern. **Never send the keeper side to player-facing endpoints or render it on player pages.**
+
+- `portal-npcs.json` — `player_description` vs `keeper_description` per NPC; `visible_to_players` boolean controls whether the NPC appears in `contacts.html` at all
+- `portal-entities.json` — `player_description` vs `keeper_description` per entity; `keeper_only: true` on T-006 means it must never surface in any player context
+- `hunters.json` — `keeper_notes` object per hunter (arc hooks, secrets involved) is keeper-only; all other fields are safe for player sheet display
+
+---
+
+### What is NOT in the data files
+
+The following lives in D1 only — do not try to read it from the static files:
+- Current harm, luck, and XP values (they change during play)
+- Roll log entries
+- Session state and clock progress
+- Which NPCs have been revealed to players (the *current* state — the initial state is in `portal-npcs.json`)
+- CAMPBELL messages and handouts
+- Open leads
+
+---
+
 ## PART 9 — ARCHITECTURE ROADMAP
 
 ### Current State — GitHub Pages (Static)

@@ -1,0 +1,271 @@
+{
+  "version": "motw-ssk-2023",
+  "source": "Monster of the Week: Slayer's Survival Kit (EHP0073)",
+  "note": "Team playbooks are shared resources for the whole group, not individual hunters. One team playbook is active per campaign. PORTAL uses Research Lab.",
+  "team_playbooks": [
+    {
+      "id": "research-lab",
+      "name": "Research Lab",
+      "active": true,
+      "campaign_style": "Action Science",
+      "description": "The hunters are staff and residents of a research lab, making them uniquely equipped to handle fringe science problems in the world around them.",
+      "recommended_playbooks": [
+        "Expert",
+        "Flake",
+        "Searcher",
+        "Action Scientist"
+      ],
+      "flavour_note": "Magic-focused hunters may need tweaking \u2014 frame their powers in a parapsychological way.",
+      "getting_started": [
+        "Pick your style (and associated advancement question).",
+        "Pick a starting team enemy, ally, move, and assets.",
+        "Join the group message server and brainstorm."
+      ],
+      "improvement_track": {
+        "marks_to_advance": 5,
+        "on_fill": [
+          "Gain a new team move.",
+          "Gain a new team ally.",
+          "Gain two new asset selections.",
+          "Make the next mystery about your team enemy, giving you a chance to interfere in their plans."
+        ]
+      },
+      "styles": [
+        {
+          "id": "middle-of-nowhere",
+          "name": "Middle of Nowhere",
+          "description": "There's nothing around you but a small town and weird stuff going on.",
+          "end_of_session_question": "Did we stop a threat from spreading beyond the town?"
+        },
+        {
+          "id": "zero-days-since-last-incident",
+          "name": "0 Days Since Last Incident",
+          "description": "There are constantly accidents here. At least, you hope they're accidents.",
+          "end_of_session_question": "Did we uncover or fix something our lab caused?"
+        },
+        {
+          "id": "explorers",
+          "name": "Explorers",
+          "description": "Your team and facility seek out and send expeditions to study strange events.",
+          "end_of_session_question": "Did we discover something that amazed the scientific community?"
+        },
+        {
+          "id": "hazardous-research",
+          "name": "Hazardous Research",
+          "description": "Your facility has discovered things with as much potential for evil as good.",
+          "end_of_session_question": "Did we find safe and beneficial applications for the dangerous things we learned about?"
+        },
+        {
+          "id": "action-science",
+          "name": "Action Science",
+          "description": "It's not real research if it can't bite you \u2014 or destroy the world!",
+          "end_of_session_question": "Did we defeat extreme danger with science?",
+          "portal_active": true
+        },
+        {
+          "id": "custom",
+          "name": "Custom",
+          "description": "Define your own team story and end-of-session question.",
+          "end_of_session_question": "FILL_FROM_SESSION"
+        }
+      ],
+      "enemies": [
+        "Dr J. Douglas, the former lab director who turned out to be evil.",
+        "Canopy Research, a shadowy corporation turning people into monsters.",
+        "Thaphaeth, an alien warlord trying to establish a beachhead on our world.",
+        "The mothman, an extra-dimensional entity sowing chaos.",
+        "All the aliens.",
+        "Muramasa Heavy Industries, a weapons company.",
+        "Custom: FILL_FROM_SESSION"
+      ],
+      "allies": [
+        {
+          "id": "kana-harlison",
+          "name": "Kana Harlison",
+          "description": "A cat burglar with a taste for helping out in a crisis. Stealth is their deal, but they can't resist stealing things if they get a chance."
+        },
+        {
+          "id": "dalia-amin",
+          "name": "Dalia Amin",
+          "description": "A local community leader. They'll get cooperation from locals, whether it's taking cover or getting some manual labour done. They want you to look after the community, too."
+        },
+        {
+          "id": "sergeant-qeb-gomez",
+          "name": "Sergeant Qeb Gomez",
+          "description": "Local law enforcement. He can keep the team aware of what the cops plan to do, and act as your liaison."
+        },
+        {
+          "id": "campbell-team-ally",
+          "name": "CAMBELL (sic), the lab AI",
+          "description": "Handles most background computation and maintenance tasks. Exceptionally good at creating virtual scenarios to test theories.",
+          "portal_note": "Intentional single-L spelling in source. In the PORTAL campaign this maps directly to CAMPBELL \u2014 the team's lab AI briefing system."
+        },
+        {
+          "id": "dr-yos-sokha",
+          "name": "Dr Yos Sokha",
+          "description": "A former colleague. Can provide research and data from different teams and different viewpoints."
+        },
+        {
+          "id": "questerr-and-wrexy",
+          "name": "Questerr and Wrexy",
+          "description": "Diplomats from a friendly alien civilisation. They're also concerned about your ongoing troubles, and sometimes provide you with rare resources or advanced technology."
+        },
+        {
+          "id": "custom",
+          "name": "Custom",
+          "description": "FILL_FROM_SESSION"
+        }
+      ],
+      "moves": [
+        {
+          "id": "rl-scientific-method",
+          "name": "Scientific Method",
+          "default_starting": true,
+          "description": "When the team investigates a mystery, they can ask one of the following questions in addition to the usual result.",
+          "choices": [
+            "Which of our ideas is wrong?",
+            "What weird energies or materials are present?"
+          ]
+        },
+        {
+          "id": "rl-trial-and-error",
+          "name": "Trial and Error",
+          "description": "When a team member rolls a 10+ on kick some ass or protect someone, you can choose to ask a question from investigate a mystery in addition to your normal option."
+        },
+        {
+          "id": "rl-repurpose-old-junk",
+          "name": "Repurpose Old Junk",
+          "description": "Once per session, ignore all but one requirement for weird science or any similar move."
+        },
+        {
+          "id": "rl-pattern-recognition",
+          "name": "Pattern Recognition",
+          "description": "Once per session, after a team member successfully reads a bad situation, they may ask a follow-up question about ensuring or preventing a specific outcome.",
+          "choices_note": "Fill in: 'How do I ensure or prevent _______ happening?'"
+        },
+        {
+          "id": "rl-button-mashing",
+          "name": "Button Mashing",
+          "description": "When presented with technology beyond your experience, work together to study it. Each team member who helps out gets +1 forward."
+        },
+        {
+          "id": "rl-something-different",
+          "name": "Something Different",
+          "description": "Take a move from another team playbook."
+        },
+        {
+          "id": "rl-change-team-style",
+          "name": "Change Team Style",
+          "description": "Pick a new team style. You now use that one instead of the one you first chose."
+        }
+      ],
+      "assets": {
+        "mandatory": {
+          "id": "rl-asset-the-lab",
+          "name": "The Lab",
+          "description": "A well-stocked and extensive laboratory complex that can be used for weird science and high-tech big magic, and has space for all your gear and instruments. There's even some crash space for when you need to pull an all-nighter."
+        },
+        "pick_one": [
+          {
+            "id": "rl-asset-sensor-array",
+            "name": "Sensor Array",
+            "marks_required": 1,
+            "description": "Instruments allowing you to keep track of weird phenomena in the area."
+          },
+          {
+            "id": "rl-asset-cutting-edge-analysis",
+            "name": "Cutting-Edge Analysis",
+            "marks_required": 1,
+            "description": "Access to any current device (no matter how expensive)."
+          },
+          {
+            "id": "rl-asset-manufacturing-bays",
+            "name": "Manufacturing Bays",
+            "marks_required": 2,
+            "description": "A blend of 3D printers and old-school assembly lines. You can build any test device or prototype you want (but no mass production)."
+          },
+          {
+            "id": "rl-asset-medical-bay",
+            "name": "Medical Bay",
+            "marks_required": 1,
+            "description": "High-tech medical facilities equivalent to staying in a hospital."
+          },
+          {
+            "id": "rl-asset-unobtanium",
+            "name": "Unobtanium",
+            "marks_required": 1,
+            "description": "Access to a unique resource, allowing extreme science. Pick a name and use for the resource, and a research area that it helps you with. All work in that area is enhanced.",
+            "fields": {
+              "resource_name": "FILL_FROM_SESSION",
+              "research_area": "FILL_FROM_SESSION"
+            }
+          },
+          {
+            "id": "rl-asset-more-unobtanium",
+            "name": "More Unobtanium",
+            "marks_required": 1,
+            "description": "Select another special resource and the research area it helps with.",
+            "fields": {
+              "resource_name": "FILL_FROM_SESSION",
+              "research_area": "FILL_FROM_SESSION"
+            }
+          },
+          {
+            "id": "rl-asset-even-more-unobtanium",
+            "name": "Even More Unobtanium",
+            "marks_required": 1,
+            "description": "Select another special resource and the research area it helps with.",
+            "fields": {
+              "resource_name": "FILL_FROM_SESSION",
+              "research_area": "FILL_FROM_SESSION"
+            }
+          },
+          {
+            "id": "rl-asset-vehicle-bay",
+            "name": "Vehicle Bay",
+            "marks_required": 1,
+            "description": "The lab has a small fleet of vehicles. Describe a standard sort of ground vehicle and a single air vehicle.",
+            "fields": {
+              "ground_vehicle": "FILL_FROM_SESSION",
+              "air_vehicle": "FILL_FROM_SESSION"
+            }
+          },
+          {
+            "id": "rl-asset-housing",
+            "name": "Housing",
+            "marks_required": 1,
+            "description": "Each team member has comfortable and secure housing, either a small house or a comfortable condo. Loaded with tech."
+          },
+          {
+            "id": "rl-asset-containment",
+            "name": "Containment",
+            "marks_required": 2,
+            "description": "The lab has facilities to keep live creatures or dangerous materials securely contained."
+          },
+          {
+            "id": "rl-asset-custom",
+            "name": "Custom",
+            "marks_required": 1,
+            "description": "FILL_FROM_SESSION"
+          }
+        ]
+      },
+      "player_choices": {
+        "style": "action-science",
+        "enemy": "FILL_FROM_SESSION",
+        "starting_ally": "FILL_FROM_SESSION",
+        "starting_move": "rl-scientific-method",
+        "starting_asset": "FILL_FROM_SESSION",
+        "notes": "Style confirmed: Action Science (end-of-session question: 'Did we defeat extreme danger with science?'). Starting move defaulting to Scientific Method per book recommendation. Enemy, ally, and asset picks need recording from session 01."
+      },
+      "keeper_notes": {
+        "tone": "Fieldwork and lab work should both feel important. 'You found a sample you need to get back to the lab' is a valid investigate-a-mystery answer. Lab equipment can be a requirement for weird science or science-based big magic.",
+        "variety_tips": [
+          "Set a mystery entirely within the lab \u2014 enemies lay siege to the facility.",
+          "Cut the team off from their lab entirely via natural disaster or sinister plot.",
+          "Let hunter precautions pay off later when the same threat returns."
+        ]
+      }
+    }
+  ]
+}

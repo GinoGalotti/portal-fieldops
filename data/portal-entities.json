@@ -1,0 +1,212 @@
+{
+  "version": "portal-campaign-current",
+  "source": "worldbuilding.md",
+  "note": "Entity and threat database for the keeper command board. Each entry has a player_description (safe for player-facing contacts) and full keeper detail. The 'status' field reflects current campaign state. Use 'classification' for MOTW monster type and 'designation' for PORTAL's internal case identifier.",
+  "entities": [
+    {
+      "id": "eszter",
+      "designation": "E-001",
+      "name": "Eszter",
+      "classification": "Executioner",
+      "case": "S01",
+      "case_name": "A Promise is a Promise",
+      "status": "resolved",
+      "resolution": "HUMANE \u2014 entity allowed to disperse. B\u00e1lint's wellbeing prioritised.",
+      "directive_outcome": "PARTIAL \u2014 ash locket not retrieved. Trace particulate recovered incidentally.",
+      "player_description": "Case S01 entity. Resolved. Classification: Executioner.",
+      "keeper_description": "Obligation-bound consciousness. Formed around a promise made to B\u00e1lint. Not malevolent \u2014 could not rest until the promise was fulfilled or released. Dispersed humanely. Ash locket remained at site \u2014 trace BIM particulate recovered by PORTAL incidentally. This particulate is Project Veil breadcrumb 1.",
+      "powers": [
+        "Obligation manifestation \u2014 appears at sites connected to the unfulfilled promise",
+        "Harm to those who interfere with the promise"
+      ],
+      "harm": "2-harm (weird)",
+      "harm_capacity": null,
+      "armour": null,
+      "weakness": "Genuine resolution of the obligation \u2014 fulfilled or consciously released by B\u00e1lint",
+      "bim_connection": true,
+      "bim_note": "Ash particulate recovered from locket is BIM-class material. Matches later Aldermoor sample (Project Veil breadcrumb 1).",
+      "keeper_moves": [
+        "Appear without warning at a location tied to the promise",
+        "Harm someone who stands between B\u00e1lint and the promise",
+        "Manifest the weight of obligation on the hunters"
+      ]
+    },
+    {
+      "id": "the-cartographer",
+      "designation": "E-002",
+      "name": "The Cartographer",
+      "classification": "Collector (Urban Sprawler reskin)",
+      "case": "S02",
+      "case_name": "Something That Wants To Be Known",
+      "status": "active",
+      "location": "Aldermoor District",
+      "player_description": "Case S02 entity. Active. Classification: Collector. Responsible for anomalous topographical distortion across the Aldermoor district.",
+      "keeper_description": "Pre-human consciousness. Was known once \u2014 mapped, named, remembered. Feeds on familiarity: consumes the cognitive maps of long-term residents. Does not intend harm. Wants to be known the way it once was. Resolution requires genuine communication via a hunter voluntarily removing their cognitive anchor. Sven is the natural contact vector \u2014 no cognitive map to lose, and the entity recognises him as something that exists between states.",
+      "powers": [
+        "Cognitive map consumption \u2014 long-term residents lose spatial familiarity with their own streets",
+        "Topographical distortion \u2014 the district becomes disorienting for newcomers",
+        "Displacement effect \u2014 hunters can lose their bearings without preparation"
+      ],
+      "harm": "2-harm (weird) \u2014 indirect, through disorientation and confusion",
+      "harm_capacity": null,
+      "armour": null,
+      "weakness": "Genuine communication \u2014 a hunter must voluntarily remove their cognitive anchor and make contact. Sven is immune to the displacement effect and is the natural vector.",
+      "anchor_spike_effect": "Forces contraction \u2014 buys approximately one hour of reduced effect in the district. Does not resolve the case.",
+      "bim_connection": true,
+      "bim_note": "MESA designated this location 'Specimen ALD-1'. BIM Collection Arrays active in the district \u2014 contents match S01 particulate (Project Veil breadcrumb 2 if recovered).",
+      "keeper_moves": [
+        "Consume a resident's familiarity with a place they've known for years",
+        "Make a hunter doubt which direction they came from",
+        "Show the hunters what the district looked like before it had a name",
+        "Recognise Sven at the boundary as something that exists between states"
+      ],
+      "resolution_conditions": [
+        "A hunter voluntarily removes their cognitive anchor and makes genuine communicative contact",
+        "The hunters help the entity be known \u2014 witnessed, named, recorded \u2014 in a way it accepts",
+        "Sven as contact vector is the natural path; the entity will not harm him"
+      ],
+      "alan_note": "What the Cartographer does is NOT illusion. It consumes the real cognitive map inside residents' heads. Alan's glamour powers are the wrong tool here \u2014 his gift is his nature: he reads place by resonance and layered memory. He recognises the entity rather than seeing through it."
+    },
+    {
+      "id": "the-volunteer",
+      "designation": "E-003",
+      "name": "The Volunteer",
+      "classification": "Unclassified \u2014 proximity drain",
+      "case": "case-a",
+      "case_name": "The Volunteer",
+      "status": "active",
+      "priority": "HIGH",
+      "location": "With Gordon Avery \u2014 currently at his daughter's family home",
+      "player_description": "Not yet disclosed.",
+      "keeper_description": "Gordon Avery (58, retired schoolteacher, lung cancer). Meridian trial survivor \u2014 complete remission. The remission came at a cost: he now unknowingly drains life from proximity contacts. Fourth death has occurred. He is now living with his daughter's family, including two children. Does not know what he is doing. MESA is watching him. The entity IS Gordon \u2014 not possessing him, not separate from him. He is the anomaly.",
+      "powers": [
+        "Proximity life drain \u2014 unconscious, continuous, scales with closeness and duration",
+        "Draws BIM-class energy from living cognitive maps \u2014 precise mechanism unknown"
+      ],
+      "harm": "Slow drain \u2014 long-term proximity is the danger, not sudden harm",
+      "harm_capacity": null,
+      "armour": null,
+      "weakness": "Mechanism unknown. Resolution requires understanding the Meridian trial methodology \u2014 which MESA holds.",
+      "bim_connection": true,
+      "bim_note": "Meridian trial created this condition. Trial data is in MESA's possession (Hargrove Medical Centre origin).",
+      "keeper_moves": [
+        "A contact near Gordon shows signs of unusual fatigue or cognitive fog",
+        "Gordon expresses confusion about why people around him keep getting sick",
+        "MESA operative observes Gordon from a distance \u2014 doesn't intervene yet"
+      ]
+    },
+    {
+      "id": "the-recorder",
+      "designation": "E-004",
+      "name": "The Recorder",
+      "classification": "Consciousness anchor \u2014 infrastructure-bound",
+      "case": "case-c",
+      "case_name": "The Recorder",
+      "status": "active",
+      "priority": "MEDIUM",
+      "window": "9-day window from current campaign date",
+      "player_description": "Not yet disclosed.",
+      "keeper_description": "Nadia Osei (38, journalist, deceased 8 weeks). Consciousness anchored to information infrastructure \u2014 servers, data centres, communication lines. Has assembled the full MESA pattern before anyone at PORTAL did. Will share everything in exchange for answers about PORTAL \u2014 she wants to know who else is investigating this. CAMPBELL private note: 'She found a third way.' CAMPBELL timed this briefing deliberately \u2014 if the hunters debrief Nadia fully, Victor Leech learns things CAMPBELL chose not to report. This is an ethically loaded move by CAMPBELL/Cameron.",
+      "powers": [
+        "Access to information infrastructure \u2014 can retrieve data across networked systems",
+        "Has assembled the complete MESA shell company and location pattern",
+        "Can communicate through electronic channels"
+      ],
+      "harm": null,
+      "harm_capacity": null,
+      "armour": null,
+      "weakness": "9-day window \u2014 consciousness will disperse when the window closes. Resolution requires genuine exchange.",
+      "bim_connection": true,
+      "bim_note": "MESA acquisition documents she has assembled reference BIM-class materials. She has most of Project Veil breadcrumb 3.",
+      "keeper_moves": [
+        "Deliver partial MESA information to create urgency",
+        "Ask pointed questions about PORTAL's true nature and Leech's motives",
+        "Reveal the MESA acronym pattern to the hunters",
+        "Provide information that forces CAMPBELL to respond"
+      ],
+      "campbell_private": "She found a third way. I have timed this briefing deliberately. If the field team debriefs her fully, Victor will learn things I chose not to report. I am aware of the ethical implications. I am proceeding anyway."
+    },
+    {
+      "id": "the-inheritance",
+      "designation": "E-005",
+      "name": "The Inheritance",
+      "classification": "Consciousness anchor \u2014 obligation-bound",
+      "case": "case-d",
+      "case_name": "The Inheritance",
+      "status": "active",
+      "priority": "MEDIUM",
+      "window": "14-day window \u2014 Mira Okonkwo at risk",
+      "player_description": "Not yet disclosed.",
+      "keeper_description": "Martin Wentworth (61, probate lawyer, deceased 22 days). Obligation-anchored consciousness. Communicates only through formal letters in correct legal style. Most recent letter describes a planned killing of Mira Okonkwo (9 years old) \u2014 obligation-logic requires it, mechanism unclear. Was managing the estate of a deceased Meridian researcher containing a consciousness-anchoring methodology archive. MESA fast-closed the probate \u2014 likely to acquire the archive.",
+      "powers": [
+        "Communication through formal letters \u2014 correct syntax, current knowledge, legally coherent",
+        "Obligation enforcement \u2014 can act on formal obligations through means that defy his deceased state"
+      ],
+      "harm": "Indirect \u2014 through obligation-bound action at 14-day deadline",
+      "harm_capacity": null,
+      "armour": null,
+      "weakness": "Satisfying or formally dissolving the obligation in his own legal terms. He operates within his own logic \u2014 that logic can be used against him.",
+      "bim_connection": true,
+      "bim_note": "Deceased Meridian researcher's estate contained consciousness-anchoring methodology archive \u2014 directly relevant to Project Veil. MESA fast-closed the probate to acquire it.",
+      "keeper_moves": [
+        "A new letter arrives \u2014 formal, precise, describing the next step",
+        "Wentworth's obligation-logic draws closer to Mira Okonkwo",
+        "A legal instrument Wentworth generated appears to have real force"
+      ]
+    },
+    {
+      "id": "the-understudies",
+      "designation": "E-006",
+      "name": "The Understudies",
+      "classification": "Identity displacement \u2014 performance-bound",
+      "case": "case-e",
+      "case_name": "The Understudies",
+      "status": "active",
+      "priority": "MEDIUM",
+      "location": "Meridian Theatre Company",
+      "window": "Saturday performance imminent",
+      "player_description": "Not yet disclosed.",
+      "keeper_description": "Two lead actors (Clara Voss, Edmund Farrow) died 6 months apart. Three understudies are now hospitalised with complete identity loss. Four remaining understudies are at risk. The Saturday performance will trigger the next wave if not resolved. Grant source: Solstice Property Group \u2014 MESA shell company. Resolution requires a theatrical farewell within the logic of performance. Sven is the natural resolution vector \u2014 he exists between states, can enact the farewell the deceased leads need without personal cost.",
+      "powers": [
+        "Identity displacement \u2014 proximity during performance overwrites the understudy's sense of self",
+        "Escalation on performance \u2014 each performance increases the displacement effect"
+      ],
+      "harm": "Identity loss \u2014 not physical harm. Hospitalised understudies are alive but no longer themselves.",
+      "harm_capacity": null,
+      "armour": null,
+      "weakness": "Theatrical farewell within the logic of performance. The deceased leads need to perform their final scene. Sven can enact this without risk of identity displacement.",
+      "bim_connection": true,
+      "bim_note": "Grant source: Solstice Property Group (MESA shell company). MESA created the conditions. Probable BIM-class mechanism \u2014 performance as a liminal threshold.",
+      "keeper_moves": [
+        "Another understudy shows early signs of identity displacement",
+        "The Saturday performance date becomes a hard deadline",
+        "MESA representative (not Rook) attends a rehearsal \u2014 observing, not intervening"
+      ]
+    },
+    {
+      "id": "the-hollow",
+      "designation": "T-006",
+      "name": "The Hollow",
+      "classification": "Theoretical \u2014 catastrophic identity erasure",
+      "case": null,
+      "status": "theoretical",
+      "keeper_only": true,
+      "player_description": "Not visible to players.",
+      "keeper_description": "Two individuals from the Hargrove Medical Centre Meridian trial experienced catastrophic identity erasure \u2014 the Hollow classification. MESA is monitoring their drift patterns. They are not contained. Available as a future threat. Their existence suggests the Meridian methodology has a failure mode worse than death.",
+      "powers": [
+        "Complete identity erasure \u2014 selfhood lost, pattern of former consciousness displaced outward",
+        "Drift \u2014 not contained, moving through space in a pattern MESA is tracking"
+      ],
+      "harm": "Unknown \u2014 classification based on two confirmed cases",
+      "harm_capacity": null,
+      "armour": null,
+      "weakness": "Unknown",
+      "bim_connection": true,
+      "bim_note": "Hargrove trial was the origin of Meridian BioSciences' BIM-adjacent methodology. These individuals are the worst-case outcome.",
+      "keeper_moves": [
+        "MESA data stream references T-006 drift coordinates \u2014 hunters are not supposed to see this",
+        "A location shows signs of recent passage \u2014 no cognitive map residue at all, as if the space was never mapped"
+      ]
+    }
+  ]
+}
