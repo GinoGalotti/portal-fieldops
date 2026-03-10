@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Operative Field Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../player.css">
+<style>
+
+  .debrief-wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 20px 100px;
+  }
+
+  /* ─── SELECTORS ─── */
+  .selector-group {
+    margin-bottom: 10px;
+  }
+  .selector-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .selector-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .sel-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    padding: 6px 16px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  .sel-btn:hover { border-color: var(--green-dim); color: var(--text); }
+  .sel-btn.active { border-color: var(--green); color: var(--green); background: var(--green-glow); }
+
+  .selection-summary {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin-top: 14px;
+    margin-bottom: 28px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    border-radius: 2px;
+  }
+  .selection-summary strong { color: var(--green); }
+  .selection-prompt {
+    display: none;
+    color: var(--amber);
+  }
+  .selection-prompt.visible { display: inline; }
+
+  /* ─── SAVE BAR ─── */
+  .save-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .save-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    padding: 8px 20px;
+    border: 1px solid var(--green);
+    background: transparent;
+    color: var(--green);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  .save-btn:hover { background: var(--green); color: var(--bg); }
+  .save-btn:disabled { opacity: 0.5; cursor: default; }
+  .save-flash {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    color: var(--green);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .save-flash.visible { opacity: 1; }
+
+  /* ─── SECTIONS ─── */
+  .db-section {
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .db-section-head {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.25em;
+    color: var(--green-dim);
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ─── RATING PIPS ─── */
+  .rating-block {
+    margin-bottom: 22px;
+  }
+  .rating-name {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .rating-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .rating-pips {
+    display: flex;
+    gap: 4px;
+  }
+  .rating-pip {
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.12s;
+    user-select: none;
+  }
+  .rating-pip:hover { border-color: var(--green-dim); color: var(--text); }
+  .rating-pip.selected { background: var(--green); border-color: var(--green); color: var(--bg); }
+  .rating-ends {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    opacity: 0.7;
+    margin-top: 5px;
+  }
+
+  /* ─── TEXT FIELDS ─── */
+  .db-field {
+    margin-bottom: 18px;
+  }
+  .db-field label {
+    display: block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .db-field textarea {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    padding: 10px 12px;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.15s;
+  }
+  .db-field textarea:focus { border-color: var(--green-dim); }
+
+  /* ─── SCENE NOTES ─── */
+  .scene-block {
+    margin-bottom: 24px;
+  }
+  .scene-block label {
+    display: block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    color: var(--green-dim);
+    margin-bottom: 5px;
+  }
+  .scene-prompt {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.78rem;
+    font-style: italic;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .scene-block textarea {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--green-dim);
+    border-radius: 2px;
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    padding: 10px 12px;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.15s;
+  }
+  .scene-block textarea:focus {
+    border-color: var(--green-dim);
+    border-left-color: var(--green);
+  }
+
+  /* ─── LOCKED STATE ─── */
+  .form-body { display: none; }
+  .form-body.unlocked { display: block; }
+
+  /* ─── BOTTOM ACTIONS ─── */
+  .page-actions {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    z-index: 50;
+  }
+  .action-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    padding: 9px 24px;
+    border: 1px solid var(--green);
+    background: transparent;
+    color: var(--green);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  .action-btn:hover { background: var(--green); color: var(--bg); }
+  .action-btn:disabled { opacity: 0.4; cursor: default; }
+
+  @media (max-width: 500px) {
+    .selector-row { gap: 3px; }
+    .sel-btn { padding: 5px 10px; font-size: 0.63rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">P.O.R.T.A.L</div>
+  <nav id="player-nav"></nav>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">// OPERATIVE — POST-MISSION</div>
+    <h1 class="hero-title">Field<strong>Report</strong></h1>
+    <p class="hero-desc">Your mission log. Select a week and your operative, then record what you experienced.</p>
+  </div>
+</section>
+
+<main>
+<div class="debrief-wrap">
+
+  <!-- WEEK SELECTOR -->
+  <div class="selector-group">
+    <span class="selector-label">SELECT WEEK</span>
+    <div class="selector-row" id="week-selector"></div>
+  </div>
+
+  <!-- HUNTER SELECTOR -->
+  <div class="selector-group">
+    <span class="selector-label">YOUR OPERATIVE</span>
+    <div class="selector-row" id="hunter-selector"></div>
+  </div>
+
+  <!-- SELECTION SUMMARY -->
+  <div class="selection-summary" id="selection-summary">
+    <span class="selection-prompt visible" id="sel-prompt">← Select a week and operative to begin.</span>
+    <span id="sel-status"></span>
+  </div>
+
+  <!-- FORM (hidden until week + hunter selected) -->
+  <div class="form-body" id="form-body">
+
+    <!-- RATINGS -->
+    <section class="db-section">
+      <div class="db-section-head">// HOW IT FELT</div>
+      <div id="ratings-container"></div>
+    </section>
+
+    <!-- YOUR TAKE -->
+    <section class="db-section">
+      <div class="db-section-head">// YOUR TAKE</div>
+      <div class="db-field">
+        <label>FAVOURITE MOMENT OR SCENE</label>
+        <textarea id="f-favourite" rows="3" placeholder="The moment you'd rewind and watch again."></textarea>
+      </div>
+      <div class="db-field">
+        <label>SOMETHING YOU'D DO DIFFERENTLY</label>
+        <textarea id="f-different" rows="3" placeholder="A choice, a beat, a path not taken. No wrong answers."></textarea>
+      </div>
+      <div class="db-field">
+        <label>HOW DID YOUR OPERATIVE FEEL ABOUT THE EVENTS?</label>
+        <textarea id="f-operative" rows="3" placeholder="In or out of character — how did they process what happened?"></textarea>
+      </div>
+      <div class="db-field">
+        <label>ANYTHING ELSE ON YOUR MIND</label>
+        <textarea id="f-other" rows="3" placeholder="Questions, theories, things you want to explore, feedback for the Keeper."></textarea>
+      </div>
+    </section>
+
+    <!-- SCENE BY SCENE — dynamic per week -->
+    <section class="db-section">
+      <div class="db-section-head">// SCENE BY SCENE</div>
+      <div id="scenes-container"></div>
+    </section>
+
+  </div><!-- /form-body -->
+
+</div>
+</main>
+
+<div class="page-actions">
+  <span class="save-flash" id="bottom-flash"></span>
+  <button class="action-btn" id="btn-save-bottom" disabled>// SAVE REPORT</button>
+</div>
+
+<script src="../player-nav.js"></script>
+<script>
+(function () {
+
+  // ── CONFIG ────────────────────────────────────────────────────────────────
+
+  var WEEKS = {
+    W01: {
+      label: 'Week 01',
+      subtitle: 'A Promise is a Promise',
+      scenes: [
+        {
+          id: 'eszter-balint',
+          label: 'ESZTER & BÁLINT',
+          prompt: "The ghost of Eszter protecting Bálint was the emotional heart of this week. How did that story land for you? Did the resolution feel right — and how did you feel about what Bálint asked of the team?"
+        },
+        {
+          id: 'portal-directive',
+          label: 'THE PORTAL DIRECTIVE',
+          prompt: "The lab wanted the ash sample — the locket. There was a tension between the mission objective and doing right by Bálint. How did your operative feel about that pull? What did the team decide, and did it sit right with you?"
+        },
+        {
+          id: 'your-moment',
+          label: 'YOUR OPERATIVE\'S MOMENT',
+          prompt: "Was there a specific moment — a choice, a line, a beat — where your operative really felt like themselves? What was it?"
+        }
+      ]
+    },
+    W02: {
+      label: 'Week 02',
+      subtitle: 'Something That Wants to Be Known',
+      scenes: [
+        {
+          id: 'cartographer',
+          label: 'THE CARTOGRAPHER',
+          prompt: "The Cartographer was the central entity this week. How did it land for you — frightening, fascinating, confusing, all of the above? What did you make of it?"
+        },
+        {
+          id: 'aldermoor',
+          label: 'ALDERMOOR DISTRICT',
+          prompt: "The investigation took you through Aldermoor. Did the location feel alive? What detail or moment from the district stuck with you?"
+        },
+        {
+          id: 'your-moment',
+          label: 'YOUR OPERATIVE\'S MOMENT',
+          prompt: "A moment this week where your operative surprised you, struggled with something, or changed. What was it?"
+        }
+      ]
+    }
+  };
+
+  var HUNTERS = [
+    { id: 'alan', label: 'Alan Frazier' },
+    { id: 'reed', label: 'Reed Atwood' },
+    { id: 'rex',  label: 'Rex Bangley' },
+    { id: 'sven', label: 'Sven' },
+    { id: 'john', label: 'John Johnson' }
+  ];
+
+  var RATINGS = [
+    { id: 'story',     label: 'Story Quality',          lo: 'Could be stronger', hi: 'Exceptional' },
+    { id: 'atmosphere',label: 'Atmosphere & Tone',       lo: "Didn't land",       hi: 'Perfectly immersive' },
+    { id: 'role',      label: 'Your Operative\'s Role',  lo: 'Felt sidelined',    hi: 'Felt central' },
+    { id: 'emotion',   label: 'Emotional Impact',        lo: 'Low investment',    hi: 'Deeply affecting' },
+    { id: 'overall',   label: 'Overall Session',         lo: 'Disappointing',     hi: 'Outstanding' }
+  ];
+
+  // ── STATE ─────────────────────────────────────────────────────────────────
+
+  var currentWeek   = null;
+  var currentHunter = null;
+  var memCache      = {};   // 'W01_alan' → state
+  var LS_PREFIX     = 'portal_player_report_';
+
+  function cacheKey() { return currentWeek + '_' + currentHunter; }
+  function apiUrl()   { return '/api/v1/player-reports/' + currentWeek + '/' + currentHunter + '/state'; }
+
+  function blank() {
+    var ratings = {};
+    RATINGS.forEach(function (r) { ratings[r.id] = 0; });
+    return {
+      week:      currentWeek,
+      hunter:    currentHunter,
+      ratings:   ratings,
+      favourite: '', different: '', operative: '', other: '',
+      scenes:    {}
+    };
+  }
+
+  // ── BUILD DOM ─────────────────────────────────────────────────────────────
+
+  function buildSelectors() {
+    var weekEl    = document.getElementById('week-selector');
+    var hunterEl  = document.getElementById('hunter-selector');
+
+    Object.keys(WEEKS).forEach(function (wk) {
+      var btn = document.createElement('button');
+      btn.className = 'sel-btn';
+      btn.dataset.week = wk;
+      btn.textContent = WEEKS[wk].label;
+      btn.addEventListener('click', function () { selectWeek(wk); });
+      weekEl.appendChild(btn);
+    });
+
+    HUNTERS.forEach(function (h) {
+      var btn = document.createElement('button');
+      btn.className = 'sel-btn';
+      btn.dataset.hunter = h.id;
+      btn.textContent = h.label;
+      btn.addEventListener('click', function () { selectHunter(h.id); });
+      hunterEl.appendChild(btn);
+    });
+  }
+
+  function buildRatings() {
+    var container = document.getElementById('ratings-container');
+    container.innerHTML = '';
+    RATINGS.forEach(function (r) {
+      var div = document.createElement('div');
+      div.className = 'rating-block';
+
+      var pipsHtml = '';
+      for (var i = 1; i <= 5; i++) {
+        pipsHtml += '<div class="rating-pip" data-rating="' + r.id + '" data-val="' + i + '">' + i + '</div>';
+      }
+
+      div.innerHTML =
+        '<div class="rating-name">' + r.label.toUpperCase() + '</div>' +
+        '<div class="rating-row">' +
+          '<div class="rating-pips">' + pipsHtml + '</div>' +
+        '</div>' +
+        '<div class="rating-ends"><span>' + r.lo + '</span><span>' + r.hi + '</span></div>';
+
+      container.appendChild(div);
+
+      div.querySelectorAll('.rating-pip').forEach(function (pip) {
+        pip.addEventListener('click', function () {
+          var rid = this.dataset.rating;
+          var val = parseInt(this.dataset.val);
+          var already = this.classList.contains('selected');
+          // deselect all in this group
+          div.querySelectorAll('.rating-pip').forEach(function (p) { p.classList.remove('selected'); });
+          // select clicked one, unless it was already selected (toggle off)
+          if (!already) this.classList.add('selected');
+        });
+      });
+    });
+  }
+
+  function buildScenes(wk) {
+    var container = document.getElementById('scenes-container');
+    container.innerHTML = '';
+    WEEKS[wk].scenes.forEach(function (s) {
+      var div = document.createElement('div');
+      div.className = 'scene-block';
+      div.innerHTML =
+        '<label>' + s.label + '</label>' +
+        '<div class="scene-prompt">' + s.prompt + '</div>' +
+        '<textarea data-scene="' + s.id + '" rows="4"></textarea>';
+      container.appendChild(div);
+    });
+  }
+
+  // ── SELECTION ─────────────────────────────────────────────────────────────
+
+  function selectWeek(wk) {
+    if (currentWeek === wk && currentHunter) return; // no-op if same
+    currentWeek = wk;
+    document.querySelectorAll('[data-week]').forEach(function (b) {
+      b.classList.toggle('active', b.dataset.week === wk);
+    });
+    buildScenes(wk);
+    updateSummary();
+    if (currentHunter) loadCurrent();
+  }
+
+  function selectHunter(hid) {
+    if (currentHunter === hid && currentWeek) return;
+    currentHunter = hid;
+    document.querySelectorAll('[data-hunter]').forEach(function (b) {
+      b.classList.toggle('active', b.dataset.hunter === hid);
+    });
+    updateSummary();
+    if (currentWeek) loadCurrent();
+  }
+
+  function updateSummary() {
+    var prompt = document.getElementById('sel-prompt');
+    var status = document.getElementById('sel-status');
+    var saveBtn = document.getElementById('btn-save-bottom');
+    var form = document.getElementById('form-body');
+
+    var ready = currentWeek && currentHunter;
+    prompt.classList.toggle('visible', !ready);
+
+    if (ready) {
+      var wLabel = WEEKS[currentWeek].label;
+      var hLabel = HUNTERS.filter(function (h) { return h.id === currentHunter; })[0].label;
+      status.innerHTML = 'Filing as <strong>' + hLabel + '</strong> · <strong>' + wLabel + '</strong> — ' + WEEKS[currentWeek].subtitle;
+      saveBtn.disabled = false;
+    } else {
+      var parts = [];
+      if (currentWeek) parts.push(WEEKS[currentWeek].label);
+      if (currentHunter) {
+        var h = HUNTERS.filter(function (x) { return x.id === currentHunter; })[0];
+        parts.push(h.label);
+      }
+      status.textContent = parts.length ? parts.join(' · ') : '';
+      saveBtn.disabled = true;
+    }
+
+    form.classList.toggle('unlocked', !!ready);
+  }
+
+  // ── LOAD / SAVE ───────────────────────────────────────────────────────────
+
+  function loadCurrent() {
+    var key = cacheKey();
+    if (memCache[key]) { applyState(memCache[key]); return; }
+
+    fetch(apiUrl())
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (data && Object.keys(data).length > 0) {
+          memCache[key] = data;
+        } else {
+          var raw; try { raw = localStorage.getItem(LS_PREFIX + key); } catch (e) {}
+          memCache[key] = raw ? (JSON.parse(raw) || blank()) : blank();
+        }
+        applyState(memCache[key]);
+      })
+      .catch(function () {
+        var raw; try { raw = localStorage.getItem(LS_PREFIX + key); } catch (e) {}
+        memCache[key] = raw ? (JSON.parse(raw) || blank()) : blank();
+        applyState(memCache[key]);
+      });
+  }
+
+  function serialise() {
+    var state = {
+      week:      currentWeek,
+      hunter:    currentHunter,
+      ratings:   {},
+      favourite: document.getElementById('f-favourite').value,
+      different: document.getElementById('f-different').value,
+      operative: document.getElementById('f-operative').value,
+      other:     document.getElementById('f-other').value,
+      scenes:    {}
+    };
+    document.querySelectorAll('.rating-pip.selected').forEach(function (pip) {
+      state.ratings[pip.dataset.rating] = parseInt(pip.dataset.val) || 0;
+    });
+    document.querySelectorAll('[data-scene]').forEach(function (el) {
+      state.scenes[el.dataset.scene] = el.value;
+    });
+    return state;
+  }
+
+  function applyState(s) {
+    document.getElementById('f-favourite').value = s.favourite || '';
+    document.getElementById('f-different').value = s.different || '';
+    document.getElementById('f-operative').value = s.operative || '';
+    document.getElementById('f-other').value     = s.other     || '';
+
+    document.querySelectorAll('.rating-pip').forEach(function (pip) {
+      var v = (s.ratings && s.ratings[pip.dataset.rating]) || 0;
+      pip.classList.toggle('selected', parseInt(pip.dataset.val) === v && v > 0);
+    });
+    document.querySelectorAll('[data-scene]').forEach(function (el) {
+      el.value = (s.scenes && s.scenes[el.dataset.scene]) || '';
+    });
+  }
+
+  function saveReport(btn) {
+    if (!currentWeek || !currentHunter) return;
+
+    var state = serialise();
+    var json  = JSON.stringify(state);
+
+    memCache[cacheKey()] = state;
+    try { localStorage.setItem(LS_PREFIX + cacheKey(), json); } catch (e) {}
+
+    var flash = document.getElementById('bottom-flash');
+    var original = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '// SAVING…';
+
+    fetch(apiUrl(), { method: 'PUT', body: json, headers: { 'Content-Type': 'application/json' } })
+      .then(function (r) {
+        flash.textContent = r.ok ? '✓ FILED' : '⚠ ERROR';
+        flash.classList.add('visible');
+      })
+      .catch(function () {
+        flash.textContent = '⚠ OFFLINE — SAVED LOCALLY';
+        flash.classList.add('visible');
+      })
+      .finally(function () {
+        btn.disabled = false;
+        btn.textContent = original;
+        setTimeout(function () { flash.classList.remove('visible'); }, 2500);
+      });
+  }
+
+  document.getElementById('btn-save-bottom').addEventListener('click', function () {
+    saveReport(this);
+  });
+
+  // ── BOOT ─────────────────────────────────────────────────────────────────
+  buildSelectors();
+  buildRatings();
+  updateSummary();
+
+}());
+</script>
+</body>
+</html>

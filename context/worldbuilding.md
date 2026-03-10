@@ -193,7 +193,8 @@ Example CAMPBELL private note (keeper-facing):
 | `01-a-promise-is-a-promise.html` | `mission-prep.css` | Keeper | Session 01 full prep (amber/brown palette) |
 | `02-something-that-wants-to-be-known.html` | `mission-prep.css` | Keeper | Session 02 full prep (green/forest palette) — includes inline SVG district map, read-aloud blurbs (.read-aloud class), MESA confrontation appendix with Rook stat block |
 | `arcs.html` | `keeper.css` | Keeper | Arc tracker — all 12 hunter arcs, beat tracking, session stamping, intersection map, localStorage + JSON export/import |
-| `report.html` | `keeper.css` | Keeper | Post-session field report — outcome, hunter cards, thread tags, clock status, stars & wishes, next session seeds. Exports as .md for feeding back into AI prep. |
+| `report.html` | `keeper.css` | Keeper | Keeper post-session field report — session tab switcher (S01/S02), outcome, hunter cards, per-session scene notes, thread tags, clock status, seeds. Saves to D1. "Copy for Claude" exports Markdown. |
+| `reports/player-report.html` | `player.css` | Player | Operative Field Report — week + hunter selector, 5 rating pips, general feedback, per-week scene questions. Unique save per week+hunter, D1-backed. Linked from player nav as "Report". |
 
 ### Recommended New Pages (not yet built)
 
@@ -249,9 +250,49 @@ The queue page (`missions/campbell-briefings.html`) fetches HTML fragments from 
 
 ---
 
+### Adding a New Session to the Reports
+
+After each session, two report config blocks need extending — one in each file. Both follow the same pattern: a JS object keyed by session/week ID.
+
+**Keeper Field Report** (`missions/report.html`) — extend `SESSIONS`:
+```js
+S03: {
+  title: 'Mission Title Here',
+  threads: ['THREAD ONE', 'THREAD TWO', ...],   // active story threads for this session
+  clocks: [
+    { id: 'clock-id', label: 'Clock description' },
+    ...
+  ],
+  scenes: [
+    { id: 'scene-id', label: 'SCENE LABEL', prompt: 'Keeper prompt for this scene.' },
+    ...  // 2–4 scenes, grounded in what actually happened
+  ]
+}
+```
+
+**Player Field Report** (`reports/player-report.html`) — extend `WEEKS`:
+```js
+W03: {
+  label: 'Week 03',
+  subtitle: 'Mission Title Here',
+  scenes: [
+    { id: 'scene-id', label: 'SCENE LABEL', prompt: 'Player-facing question about this scene.' },
+    { id: 'your-moment', label: "YOUR OPERATIVE'S MOMENT", prompt: 'Was there a moment where your operative really felt like themselves? What was it?' }
+  ]
+}
+```
+
+**Rules for scene prompts:**
+- Scene IDs and prompts must be grounded in what actually happened — never invent events
+- Player prompts should be open questions, not leading ones
+- The `your-moment` scene is recommended for every week as the last entry
+- Read the mission prep doc (`missions/NN-*.html`) before writing scene prompts — it is the source of truth
+
+---
+
 ### Navigation Conventions
 
-**Player pages nav links:** `index.html`, `hunters.html`, case briefings. Never link to keeper pages.
+**Player nav links (in order):** Briefing · Operatives · Bestiary · The Lab · Artefacts · Missions · Contacts · Report · Queue. Injected by `player-nav.js` into `#player-nav`. The script handles base-path from any subdirectory (`missions/`, `hunters/`, `reports/`). Never link to keeper pages from player nav.
 
 **Keeper pages:** Must open with `<div class="keeper-banner">KEEPER ACCESS ONLY — DO NOT SHARE THIS URL WITH PLAYERS</div>` as the first element in `<body>`. Nav links: Player Site → `../index.html`, Keeper Index → `keeper.html`.
 

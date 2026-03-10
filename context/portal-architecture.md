@@ -63,14 +63,17 @@ portal-fieldops/
 │   └── portal-entities.json       # Entity/threat database for keeper command board
 │
 ├── functions/                 # CF Pages Functions (serverless API, auto-routed)
-│   └── api/v1/hunters/
-│       └── [id]/
-│           └── arc-state.js   # GET + PUT hunter arc state → D1
+│   └── api/v1/
+│       ├── hunters/[id]/arc-state.js          # GET + PUT hunter arc state → D1
+│       ├── reports/[id]/state.js              # GET + PUT keeper field report per session → D1
+│       └── player-reports/[week]/[hunter]/state.js  # GET + PUT player debrief per week+hunter → D1
 │
 ├── workers/                   # Cloudflare Workers API (Phase 3+)
 │   ├── schema.sql             # D1 schema — already applied to remote DB
 │   ├── migrations/            # Numbered SQL migration files
-│   │   └── 001_arc_state.sql  # hunter_arc_state table (applied remote + local)
+│   │   ├── 001_arc_state.sql     # hunter_arc_state table (applied remote + local)
+│   │   ├── 002_field_reports.sql # field_reports table (applied local; remote needs wrangler login)
+│   │   └── 003_player_reports.sql # player_reports table (applied local)
 │   └── src/                   # (Phase 3) Workers source
 │       ├── index.ts           # Main router
 │       └── routes/
@@ -92,6 +95,8 @@ portal-fieldops/
 ├── index.html                 # Player-facing site
 ├── missions/                  # Keeper + player mission pages
 ├── reports/                   # Post-session player-facing reports
+│   ├── player-report.html     # Player debrief form (week + hunter selector, ratings, scene notes)
+│   └── s1-ash-veil-memo.html  # S01 redacted ash/veil lab report (static)
 ├── hunters/                   # Hunter story pages (arc choices + beats persist to D1)
 │   ├── hunter.js              # Shared script: keeper toggle, D1 save/load, all interactions
 │   └── *-hunter-stories.html  # One page per hunter — no inline scripts, just <script src="hunter.js">
@@ -125,6 +130,30 @@ wrangler d1 execute portal-db --file=workers/migrations/001_arc_state.sql --remo
 **Migration 001 — `hunter_arc_state`** (applied ✅)
 
 ```sql
+-- ─── FIELD REPORTS (migration 002) ────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS field_reports (
+  session_id TEXT PRIMARY KEY,   -- 'S01' | 'S02' etc (keeper report, one per session)
+  state      TEXT NOT NULL,      -- JSON blob: { session, mission, date, outcome, directive, summary,
+                                 --   energy, intensity, best, surprise, flat,
+                                 --   hunters: { rex/reed/alan/sven: { action, arc, note } },
+                                 --   threads: [], unresolved, questions, npcs,
+                                 --   clocks: [], clockNotes, scenes: { scene_id: text },
+                                 --   spine, stars, wishes, campbell, setup, aiPrompt }
+  updated_at TEXT DEFAULT (datetime('now'))
+);
+
+-- ─── PLAYER REPORTS (migration 003) ─────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS player_reports (
+  week       TEXT NOT NULL,   -- 'W01' | 'W02' etc (player-facing week numbering)
+  hunter_id  TEXT NOT NULL,   -- 'alan' | 'reed' | 'rex' | 'sven' | 'john'
+  state      TEXT NOT NULL,   -- JSON blob: { week, hunter,
+                              --   ratings: { story, atmosphere, role, emotion, overall } (0-5),
+                              --   favourite, different, operative, other,
+                              --   scenes: { scene_id: text } }
+  updated_at TEXT DEFAULT (datetime('now')),
+  PRIMARY KEY (week, hunter_id)
+);
+
 -- ─── HUNTER ARC STATE (migration 001) ──────────────────────────────────────
 CREATE TABLE IF NOT EXISTS hunter_arc_state (
   hunter_id  TEXT PRIMARY KEY,   -- 'alan' | 'reed' | 'rex' | 'sven'
@@ -277,8 +306,12 @@ All endpoints under `/api/v1/`. Keeper endpoints require a header token; player 
 
 **Live endpoints (CF Pages Functions in `functions/`):**
 ```
-GET  /api/v1/hunters/:id/arc-state      → hunter arc state JSON (no auth — all players can read)
-PUT  /api/v1/hunters/:id/arc-state      → upsert arc state (no auth — all players can write)
+GET  /api/v1/hunters/:id/arc-state                  → hunter arc state (no auth)
+PUT  /api/v1/hunters/:id/arc-state                  → upsert arc state (no auth)
+GET  /api/v1/reports/:id/state                      → keeper field report for session (no auth)
+PUT  /api/v1/reports/:id/state                      → upsert keeper field report (no auth)
+GET  /api/v1/player-reports/:week/:hunter/state     → player debrief for week+hunter (no auth)
+PUT  /api/v1/player-reports/:week/:hunter/state     → upsert player debrief (no auth)
 ```
 
 **Planned (Phase 3, Workers):**
@@ -415,6 +448,23 @@ All seven static data files built from source (MOTW hardcover, Slayer's Survival
   - Keeper toggle (double-click/double-tap top-right corner)
 - All four hunter pages (alan, reed, rex, sven): inline scripts removed, `// SAVE` button replaces `// PRINT`
 - State shared across all users/browsers in real time via D1
+
+### Phase 2.6 — Field Reports + Player Debrief ✅ COMPLETE
+- **`missions/report.html`** — rebuilt keeper field report
+  - Session tab switcher (S01/S02); each session has distinct threads, countdowns, and scene note prompts
+  - D1 via `/api/v1/reports/:id/state` (GET + PUT); localStorage fallback; explicit Save with feedback
+  - Copy for Claude exports full report as Markdown including scene notes
+  - Removed: report history log, Export MD, Backup JSON, Restore JSON
+- **`reports/player-report.html`** — player-facing Operative Field Report
+  - Week selector (Week 01 / Week 02, etc.) + Hunter selector (Alan / Reed / Rex / Sven / John)
+  - State is unique per week+hunter; loads from D1 on selection, Save button persists to D1
+  - **Ratings** (5 sliders, 0–5): Story Quality, Atmosphere & Tone, Operative's Role, Emotional Impact, Overall
+  - **General feedback** textareas: favourite moment, something different, operative's feelings, other
+  - **Scene by Scene** section — per-week prompts about specific events (dynamic, config-driven)
+  - D1 via `/api/v1/player-reports/:week/:hunter/state`; localStorage fallback
+  - Linked from player nav as "Debrief"
+- **Session config pattern** (used by both reports): threads, clocks, and scenes defined in a JS `SESSIONS`/`WEEKS` object at the top of the script — add new sessions by extending the config
+- **Future**: keeper review view for all player debriefs (read all rows for a given week, display aggregated ratings + notes)
 
 ### Phase 3 — Workers API + Character Sheets to D1
 - Scaffold Workers router with the routes listed above

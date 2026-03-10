@@ -11,7 +11,7 @@
   var dir   = parts[parts.length - 2] || '';
 
   // Base paths relative to current directory
-  var b = (dir === 'missions' || dir === 'hunters') ? '../' : '';
+  var b = (dir === 'missions' || dir === 'hunters' || dir === 'reports') ? '../' : '';
   var m = b + 'missions/';
 
   var items = [
@@ -22,7 +22,8 @@
     { label: 'Artefacts',  href: b + 'index.html#artefacts' },
     { label: 'Missions',   href: m + 'missions.html',  match: 'missions.html' },
     { label: 'Contacts',   href: m + 'contacts.html',  match: 'contacts.html' },
-    { label: 'Queue',      href: m + 'campbell-briefings.html', match: 'campbell-briefings.html' },
+    { label: 'Report',     href: b + 'reports/player-report.html',    match: 'player-report.html' },
+    { label: 'Queue',      href: m + 'campbell-briefings.html',        match: 'campbell-briefings.html' },
   ];
 
   // Status dot
