@@ -540,5 +540,27 @@ main { position: relative; z-index: 10; max-width: 1100px; margin: 0 auto; paddi
 /* ── MISC ── */
 .arc-divider { height: 1px; background: linear-gradient(90deg, var(--border-bright), transparent); margin: 8px 0; }
 
+/* ── KEEPER UNLOCK TRIGGER ── */
+/* Invisible 80×80 hit zone in the top-right corner.
+   Double-tap or double-click to reveal/re-blur keeper sections. */
+#keeper-trigger {
+  position: fixed;
+  top: 0; right: 0;
+  width: 80px; height: 80px;
+  z-index: 500;
+  cursor: default;
+}
+/* Subtle amber dot shown when keeper content is unlocked */
+#keeper-trigger.unlocked::after {
+  content: '';
+  position: absolute;
+  top: 18px; right: 18px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 8px var(--amber);
+  animation: pulse 2s ease-in-out infinite;
+}
+
 /* ── MOBILE ── */
 @media (max-width: 600px) { nav { display: none; } }
