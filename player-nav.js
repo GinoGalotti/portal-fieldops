@@ -54,4 +54,23 @@
   clabel.addEventListener('dblclick', function () {
     window.location.href = b + 'missions/keeper.html';
   });
+
+  // Mobile hamburger toggle — injected between nav and campbell
+  var toggle = document.createElement('button');
+  toggle.className = 'nav-toggle';
+  toggle.textContent = '≡';
+  toggle.setAttribute('aria-label', 'Toggle navigation');
+  toggle.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    toggle.textContent = open ? '✕' : '≡';
+  });
+  nav.parentNode.insertBefore(toggle, campbell);
+
+  // Close menu when a nav link is clicked
+  nav.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') {
+      nav.classList.remove('open');
+      toggle.textContent = '≡';
+    }
+  });
 }());

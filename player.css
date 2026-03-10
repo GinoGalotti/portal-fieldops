@@ -250,7 +250,46 @@ main { position: relative; z-index: 10; max-width: 1100px; margin: 0 auto; paddi
 .rel-tag.complicated .hunter { color: var(--amber); }
 .rel-tag.unknown { border-color: var(--border); color: var(--text-dim); }
 
+/* ── NAV TOGGLE (mobile hamburger) ── */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--border-bright);
+  color: var(--text-dim);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.nav-toggle:hover { color: var(--green); border-color: var(--green-dim); }
+
 /* ── MOBILE ── */
-@media (max-width: 600px) {
+@media (max-width: 640px) {
   nav { display: none; }
+  nav.open {
+    display: flex;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    flex-direction: column;
+    align-items: stretch;
+    background: rgba(8,12,10,0.97);
+    border-bottom: 1px solid var(--border-bright);
+    backdrop-filter: blur(8px);
+    padding: 0;
+    gap: 0;
+  }
+  nav.open .status-dot { display: none; }
+  nav.open a {
+    display: block;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+  nav.open a:last-child { border-bottom: none; }
+  .nav-toggle { display: block; }
 }

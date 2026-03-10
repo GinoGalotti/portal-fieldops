@@ -286,6 +286,79 @@ hr { border: none; border-top: 1px solid var(--mp-border); margin: 28px 0; }
   opacity: 0.8;
 }
 
+/* ── TITLE NOTE ── */
+.title-block .title-note {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--mp-border);
+  letter-spacing: 0.2em;
+  margin-top: 10px;
+}
+
+/* ── READ ALOUD ── */
+/* Say this out loud to players. Green label, italic serif block. */
+.read-aloud {
+  border: 1px solid var(--mp-border);
+  border-left: 5px solid var(--mp-accent);
+  padding: 14px 18px 14px 16px;
+  margin: 18px 0;
+  font-family: 'Crimson Text', Georgia, serif;
+  font-style: italic;
+  font-size: 1.02rem;
+  color: var(--mp-text);
+  background: var(--mp-light-1);
+  border-radius: 0 4px 4px 0;
+  line-height: 1.85;
+}
+.read-aloud::before {
+  content: '▶ READ ALOUD';
+  display: block;
+  font-family: 'Share Tech Mono', monospace;
+  font-style: normal;
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  color: var(--mp-accent-mid);
+  margin-bottom: 8px;
+}
+
+/* ── SEED BOXES (amber/gold — palette-agnostic, for hunter personal hooks) ── */
+.seed-box {
+  border: 1px solid #8a7a2a;
+  border-left: 4px solid #5a5010;
+  background: #f8f0d0;
+  border-radius: 0 4px 4px 0;
+  padding: 14px 16px;
+  margin: 16px 0;
+}
+.seed-box strong {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  color: #5a4010;
+  margin-bottom: 6px;
+  letter-spacing: 0.05em;
+}
+.seed-box p { margin-bottom: 6px; font-size: 0.95rem; color: #3a3010; }
+
+/* ── RIVAL BOXES (dark red — palette-agnostic, for antagonist factions) ── */
+.rival-box {
+  border: 1px solid #6a2a1a;
+  border-left: 4px solid #8a1a0a;
+  background: #f5e8e4;
+  border-radius: 0 4px 4px 0;
+  padding: 14px 16px;
+  margin: 16px 0;
+}
+.rival-box strong {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  color: #6a1a0a;
+  margin-bottom: 6px;
+  letter-spacing: 0.05em;
+}
+.rival-box p { margin-bottom: 6px; font-size: 0.95rem; color: #3a1a10; }
+
 /* ── TERMINAL (green on black — same for all mission prep docs) ── */
 .terminal {
   background: #080f08;
