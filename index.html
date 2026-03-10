@@ -190,16 +190,7 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
 
 <header>
   <div class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</div>
-  <nav>
-    <a href="#sessions">Briefing</a>
-    <a href="missions/missions.html">Missions</a>
-    <a href="#operatives">Operatives</a>
-    <a href="#bestiary">Bestiary</a>
-    <a href="#lab">The Lab</a>
-    <a href="#artefacts">Artefacts</a>
-    <a href="#mood">Atmosphere</a>
-  </nav>
-  <div><span class="status-dot"></span><span id="campbell-status" style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--green-dim);cursor:default;user-select:none;">CAMPBELL ONLINE</span></div>
+  <nav id="player-nav"></nav><script src="player-nav.js"></script>
 </header>
 
 <!-- ── HERO ── -->
@@ -431,7 +422,8 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
         </div>
         <div class="artefact-desc" style="margin-top:10px;font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.08em;line-height:1.9;color:var(--green-dim);">
           // LAB ANALYSIS — ONGOING<br>
-          Residue exhibits anomalous interaction with active electronic systems. Preliminary findings suggest the particulate acts as a conductive medium for signals outside the standard electromagnetic spectrum. Research continues. Implications for Project Veil: under assessment.
+          Residue exhibits anomalous interaction with active electronic systems. Preliminary findings suggest the particulate acts as a conductive medium for signals outside the standard electromagnetic spectrum. Research continues. Implications for Project Veil: under assessment.<br><br>
+          <a href="reports/s1-ash-veil-memo.html" style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:0.14em;color:var(--green-dim);text-decoration:none;border-bottom:1px solid var(--green-dim);padding-bottom:1px;">→ VIEW REDACTED LAB REPORT</a>
         </div>
       </div>
     </div>
@@ -519,10 +511,6 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
   document.getElementById('ver').textContent =
     '2.' + Math.floor(Math.random()*9+1) + '.' + Math.floor(Math.random()*99+10);
 
-  // Double-click CAMPBELL ONLINE to enter keeper mode
-  document.getElementById('campbell-status').addEventListener('dblclick', function () {
-    window.location.href = 'missions/keeper.html';
-  });
 </script>
 
 </body>

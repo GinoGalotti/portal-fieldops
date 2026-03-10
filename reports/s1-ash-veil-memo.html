@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — INTERNAL DOCUMENT [CLASSIFIED]</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#080c0a;--bg2:#0d1410;--bg3:#111a14;
+  --green:#2ecc71;--green-dim:#1a7a43;--green-glow:#2ecc7133;
+  --amber:#f0a500;--amber-dim:#7a5200;
+  --red:#e05050;--red-dim:#3a1010;
+  --text:#c8ddd0;--text-dim:#5a7a62;
+  --border:#1e3428;--border-bright:#2ecc7155;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Share Tech Mono',monospace;
+  font-size:14px;
+  line-height:1.8;
+  overflow-x:hidden;
+  min-height:100vh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:48px 20px 80px;
+}
+
+/* scanlines */
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.09) 2px,rgba(0,0,0,0.09) 4px);pointer-events:none;z-index:1000}
+
+/* subtle grid */
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:40px 40px;opacity:.3;pointer-events:none;z-index:0}
+
+.doc{
+  position:relative;
+  z-index:10;
+  width:100%;
+  max-width:720px;
+  background:var(--bg2);
+  border:1px solid var(--border-bright);
+  padding:48px 52px 52px;
+  box-shadow:0 0 80px rgba(0,0,0,.6), 0 0 1px var(--green-glow);
+}
+
+/* top edge accent */
+.doc::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--green),var(--green-dim),transparent);
+}
+
+/* paper texture overlay */
+.doc::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 28px,
+    rgba(46,204,113,0.015) 28px,
+    rgba(46,204,113,0.015) 29px
+  );
+  pointer-events:none;
+  z-index:0;
+}
+
+.doc > * { position:relative;z-index:1; }
+
+/* HEADER */
+.doc-header{
+  border-bottom:2px solid var(--border-bright);
+  padding-bottom:28px;
+  margin-bottom:32px;
+}
+
+.portal-mark{
+  font-size:.65rem;
+  letter-spacing:.35em;
+  color:var(--green-dim);
+  margin-bottom:20px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+.portal-mark::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:var(--border);
+}
+
+.classification-band{
+  background:var(--red-dim);
+  border:1px solid var(--red);
+  padding:8px 16px;
+  text-align:center;
+  margin-bottom:24px;
+  position:relative;
+  overflow:hidden;
+}
+.classification-band::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 8px,
+    rgba(224,80,80,0.06) 8px,
+    rgba(224,80,80,0.06) 16px
+  );
+}
+.classification-band span{
+  position:relative;
+  z-index:1;
+  font-size:.72rem;
+  letter-spacing:.3em;
+  color:var(--red);
+  text-transform:uppercase;
+}
+
+.doc-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:1.6rem;
+  letter-spacing:.1em;
+  color:var(--text);
+  text-transform:uppercase;
+  margin-bottom:6px;
+  line-height:1.1;
+}
+
+.doc-subtitle{
+  font-size:.72rem;
+  letter-spacing:.2em;
+  color:var(--text-dim);
+  margin-bottom:20px;
+}
+
+.meta-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  border:1px solid var(--border);
+}
+.meta-row{
+  display:contents;
+}
+.meta-row > *{
+  padding:7px 14px;
+  border-bottom:1px solid var(--border);
+  font-size:.7rem;
+  letter-spacing:.1em;
+}
+.meta-row:last-child > *{border-bottom:none}
+.meta-k{
+  color:var(--text-dim);
+  border-right:1px solid var(--border);
+  white-space:nowrap;
+}
+.meta-v{color:var(--text)}
+.meta-v.green{color:var(--green)}
+.meta-v.amber{color:var(--amber)}
+.meta-v.red{color:var(--red)}
+.meta-v.dim{color:var(--text-dim)}
+
+/* BODY */
+.doc-body{margin-bottom:32px}
+
+.section-label{
+  font-size:.65rem;
+  letter-spacing:.3em;
+  color:var(--green-dim);
+  margin-bottom:12px;
+  margin-top:28px;
+  padding-bottom:6px;
+  border-bottom:1px solid var(--border);
+  text-transform:uppercase;
+}
+.section-label:first-child{margin-top:0}
+
+p.doc-text{
+  font-family:'Barlow',sans-serif;
+  font-weight:300;
+  font-size:.9rem;
+  color:var(--text-dim);
+  line-height:1.85;
+  margin-bottom:14px;
+}
+
+/* FIELD ROWS */
+.field-row{
+  display:flex;
+  gap:20px;
+  padding:9px 0;
+  border-bottom:1px solid var(--border);
+  align-items:baseline;
+}
+.field-row:first-of-type{border-top:1px solid var(--border)}
+.field-k{
+  font-size:.68rem;
+  letter-spacing:.15em;
+  color:var(--text-dim);
+  white-space:nowrap;
+  min-width:160px;
+  flex-shrink:0;
+}
+.field-v{
+  font-size:.78rem;
+  color:var(--text);
+  letter-spacing:.05em;
+  flex:1;
+}
+.field-v.amber{color:var(--amber)}
+.field-v.green{color:var(--green)}
+.field-v.red{color:var(--red)}
+.field-v.dim{color:var(--text-dim)}
+
+/* REDACTION */
+.redact{
+  display:inline-block;
+  background:var(--text);
+  color:transparent;
+  user-select:none;
+  border-radius:1px;
+  letter-spacing:0;
+  font-size:.75em;
+  line-height:1.6;
+  vertical-align:middle;
+  cursor:default;
+  position:relative;
+}
+/* subtle shimmer on hover — suggests something underneath */
+.redact:hover{
+  background:linear-gradient(90deg,var(--text),#e0ede5,var(--text));
+  background-size:200% 100%;
+  animation:shimmer .8s ease;
+}
+@keyframes shimmer{from{background-position:200%}to{background-position:-200%}}
+
+/* PARTIAL REDACTION — shows some chars, blocks others */
+.partial{display:inline}
+.partial .r{
+  display:inline-block;
+  background:var(--text);
+  color:transparent;
+  width:0.62em;
+  height:1em;
+  vertical-align:middle;
+  border-radius:1px;
+  margin:0 0.5px;
+}
+
+/* ANNOTATION MARGIN */
+.annotated{
+  position:relative;
+  padding-left:20px;
+}
+.annotated::before{
+  content:'';
+  position:absolute;
+  left:0;top:4px;bottom:4px;
+  width:2px;
+  background:var(--amber-dim);
+}
+
+/* SUMMARY BOX */
+.summary-box{
+  border:1px solid var(--border);
+  background:var(--bg3);
+  padding:20px 24px;
+  margin:24px 0;
+  position:relative;
+}
+.summary-box::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,var(--green-dim),transparent);
+}
+.summary-box p{
+  font-family:'Barlow',sans-serif;
+  font-weight:300;
+  font-size:.88rem;
+  color:var(--text-dim);
+  line-height:1.9;
+  margin:0;
+}
+.summary-box p + p{margin-top:10px}
+.summary-box strong{color:var(--text);font-weight:400}
+
+/* SIGNATURE BLOCK */
+.sig-block{
+  border-top:1px solid var(--border);
+  padding-top:24px;
+  margin-top:32px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+.sig-item{}
+.sig-label{
+  font-size:.62rem;
+  letter-spacing:.25em;
+  color:var(--text-dim);
+  margin-bottom:6px;
+  text-transform:uppercase;
+}
+.sig-value{
+  font-size:.78rem;
+  color:var(--text);
+  border-bottom:1px solid var(--border);
+  padding-bottom:4px;
+  letter-spacing:.08em;
+}
+.sig-value.redacted{
+  color:transparent;
+  background:var(--text-dim);
+  border-radius:1px;
+  user-select:none;
+}
+
+/* FOOTER */
+.doc-footer{
+  margin-top:40px;
+  border-top:1px solid var(--border);
+  padding-top:16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:24px;
+}
+.footer-l{
+  font-size:.62rem;
+  letter-spacing:.15em;
+  color:var(--text-dim);
+  line-height:2;
+}
+.footer-r{
+  text-align:right;
+  font-size:.62rem;
+  letter-spacing:.12em;
+  color:var(--text-dim);
+  line-height:2;
+  flex-shrink:0;
+}
+.footer-r .doc-id{
+  color:var(--green-dim);
+  font-size:.72rem;
+  letter-spacing:.2em;
+}
+
+/* STAMP */
+.stamp{
+  position:absolute;
+  bottom:52px;
+  right:52px;
+  border:3px solid var(--red);
+  color:var(--red);
+  font-size:.65rem;
+  letter-spacing:.25em;
+  padding:6px 14px;
+  text-align:center;
+  opacity:.35;
+  transform:rotate(-8deg);
+  pointer-events:none;
+  z-index:2;
+  line-height:1.8;
+}
+
+/* WATERMARK */
+.watermark{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%) rotate(-35deg);
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:6rem;
+  letter-spacing:.3em;
+  color:rgba(46,204,113,0.025);
+  pointer-events:none;
+  z-index:0;
+  white-space:nowrap;
+  user-select:none;
+}
+
+/* PRINT */
+@media print{
+  body{background:white;padding:0}
+  .doc{box-shadow:none;border:1px solid #ccc;max-width:100%}
+  body::before,body::after{display:none}
+}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.doc{animation:fadeIn .6s ease both}
+</style>
+</head>
+<body>
+
+<div class="doc">
+
+  <div class="watermark">VEIL</div>
+
+  <div class="stamp">PARTIAL RECOVERY<br>AUTHORISED COPY</div>
+
+  <div class="doc-header">
+
+    <div class="portal-mark">// P · O · R · T · A · L — INTERNAL DOCUMENT</div>
+
+    <div class="classification-band">
+      <span>⚠ &nbsp; CLASSIFICATION: RESTRICTED — DIRECTOR AUTHORISATION REQUIRED &nbsp; ⚠</span>
+    </div>
+
+    <div class="doc-title">Project Veil</div>
+    <div class="doc-subtitle">// PHASE 1 SUMMARY — FIELD COLLECTION STATUS</div>
+
+    <div class="meta-grid">
+      <div class="meta-row">
+        <div class="meta-k">DOCUMENT REF</div>
+        <div class="meta-v green">PV-<span class="redact">███</span>-PHASE1</div>
+      </div>
+      <div class="meta-row">
+        <div class="meta-k">ORIGINATING OFFICE</div>
+        <div class="meta-v dim"><span class="redact">████████████</span></div>
+      </div>
+      <div class="meta-row">
+        <div class="meta-k">DATE OF ISSUE</div>
+        <div class="meta-v dim"><span class="redact">██ ████████ ████</span></div>
+      </div>
+      <div class="meta-row">
+        <div class="meta-k">AUTHORISED BY</div>
+        <div class="meta-v dim"><span class="redact">██████████████</span></div>
+      </div>
+      <div class="meta-row">
+        <div class="meta-k">DISTRIBUTION</div>
+        <div class="meta-v red">DIRECTOR ONLY</div>
+      </div>
+      <div class="meta-row">
+        <div class="meta-k">COPY NUMBER</div>
+        <div class="meta-v amber">1 OF 1</div>
+      </div>
+    </div>
+
+  </div><!-- /doc-header -->
+
+  <div class="doc-body">
+
+    <div class="section-label">// 1. BACKGROUND</div>
+
+    <p class="doc-text">Project Veil was initiated following <span class="redact">████████████████████████████████████████████████████████████████████████</span>. The primary objective is identification, recovery, and analysis of <strong>boundary interface material</strong> (BIM) — a particulate residue produced under conditions of <span class="redact">█████████████████████████████████</span>.</p>
+
+    <p class="doc-text">BIM is distinguished from standard organic ash or environmental particulate by its anomalous interaction with proximate electronic systems. In controlled conditions, BIM samples have demonstrated <span class="redact">███████████████████████████████████████████████████████</span>. The mechanism of this interaction is not yet understood.</p>
+
+    <div class="section-label">// 2. FIELD COLLECTION — CASE LOG</div>
+
+    <div class="field-row">
+      <div class="field-k">CASE REF</div>
+      <div class="field-v">S01 — <span class="redact">█████████████████████</span></div>
+    </div>
+    <div class="field-row">
+      <div class="field-k">COLLECTION STATUS</div>
+      <div class="field-v amber">PARTIAL — directive not fulfilled</div>
+    </div>
+    <div class="field-row">
+      <div class="field-k">MATERIAL RECOVERED</div>
+      <div class="field-v">Trace particulate, incidental. Sufficient for Phase 1 analysis.</div>
+    </div>
+    <div class="field-row">
+      <div class="field-k">PHASE 2 STATUS</div>
+      <div class="field-v amber">CONTINGENT — further field collection required</div>
+    </div>
+    <div class="field-row">
+      <div class="field-k">CROSS-REF</div>
+      <div class="field-v dim"><span class="redact">████████████████████████████████████████████</span></div>
+    </div>
+
+    <div class="section-label">// 3. PRELIMINARY ANALYSIS — SUMMARY</div>
+
+    <div class="summary-box">
+      <p>Phase 1 analysis confirms the presence of <strong>anomalous electrostatic properties</strong> in the recovered material. Samples exhibit measurable interaction with proximate electronic systems at a range of up to <span class="redact">██</span> metres under controlled conditions.</p>
+      <p>The material does not degrade under standard storage. Interaction with <span class="redact">████████████████████████████</span> produced a <strong>signal consistent with prior theoretical models</strong>. This result has not been replicated outside laboratory conditions.</p>
+      <p>Phase 1 conclusion: material is consistent with the <span class="redact">████████████</span> hypothesis. Phase 2 collection is warranted.</p>
+    </div>
+
+    <div class="section-label">// 4. PHASE 2 — COLLECTION TARGETS</div>
+
+    <p class="doc-text">The following site classifications have been identified as probable BIM sources based on <span class="redact">████████████████████████████████████████████</span>. Field operatives are not to be briefed on Project Veil. Collection directives should be embedded within standard operational objectives.</p>
+
+    <div class="field-row">
+      <div class="field-k">TARGET CLASS A</div>
+      <div class="field-v"><span class="redact">████████████████████████████████████████████████████</span></div>
+    </div>
+    <div class="field-row">
+      <div class="field-k">TARGET CLASS B</div>
+      <div class="field-v"><span class="redact">████████████████████████████████████████████████████</span></div>
+    </div>
+    <div class="field-row">
+      <div class="field-k">TARGET CLASS C</div>
+      <div class="field-v"><span class="redact">████████████████████████████████████████████████████</span></div>
+    </div>
+    <div class="field-row">
+      <div class="field-k">ESTIMATED YIELD</div>
+      <div class="field-v dim">Insufficient data. Dependent on <span class="redact">████████████████████████</span>.</div>
+    </div>
+
+    <div class="section-label">// 5. NOTES</div>
+
+    <div class="annotated">
+      <p class="doc-text">The relationship between BIM yield and <span class="redact">████████████████████████████████████████</span> requires further investigation. Current data suggests that <span class="redact">██████████████████████████████████████████████████████████████████████████████████████████</span>.</p>
+
+      <p class="doc-text">It is the author's recommendation that <span class="redact">████████████████████████████████████████████████████████████████████████████████████████████████████████████████</span>. This decision rests with the Director.</p>
+    </div>
+
+    <div class="section-label">// 6. ACCESS AND DISCLOSURE</div>
+
+    <p class="doc-text">This document is not to be reproduced, summarised, or discussed outside the authorised distribution list. Field operatives are <strong>not cleared</strong> for Project Veil disclosure at this stage. Any operative who demonstrates awareness of BIM properties through field observation should be <span class="redact">███████████████████████████████████████</span> without confirmation of the project's existence.</p>
+
+    <p class="doc-text">CAMPBELL system access to Project Veil files: <span class="redact">██████████████████</span>.</p>
+
+  </div><!-- /doc-body -->
+
+  <div class="sig-block">
+    <div class="sig-item">
+      <div class="sig-label">// Prepared by</div>
+      <div class="sig-value redacted">████████████████████</div>
+    </div>
+    <div class="sig-item">
+      <div class="sig-label">// Reviewed by</div>
+      <div class="sig-value redacted">████████████████████</div>
+    </div>
+    <div class="sig-item">
+      <div class="sig-label">// Date</div>
+      <div class="sig-value redacted">██████████</div>
+    </div>
+    <div class="sig-item">
+      <div class="sig-label">// Authorisation code</div>
+      <div class="sig-value redacted">██████████████</div>
+    </div>
+  </div>
+
+  <div style="position:relative;z-index:1;margin-top:32px;padding-top:16px;border-top:1px solid var(--border);">
+    <a href="../index.html" style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;color:var(--text-dim);text-decoration:none;">← RETURN TO PORTAL</a>
+  </div>
+
+  <div class="doc-footer">
+    <div class="footer-l">
+      P.O.R.T.A.L — INTERNAL USE ONLY<br>
+      UNAUTHORISED REPRODUCTION PROHIBITED<br>
+      IF FOUND, CONTACT <span class="redact">████████████████</span>
+    </div>
+    <div class="footer-r">
+      <div class="doc-id">DOC REF: PV-<span id="docref"></span></div>
+      <div>COPY: 1 OF 1</div>
+      <div>PAGE: 1 OF 1</div>
+    </div>
+  </div>
+
+</div><!-- /doc -->
+
+<script>
+// generate a plausible-looking doc reference on load
+const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+let ref = '';
+for(let i=0;i<3;i++) ref += chars[Math.floor(Math.random()*chars.length)];
+ref += '-';
+for(let i=0;i<4;i++) ref += Math.floor(Math.random()*9);
+document.getElementById('docref').textContent = ref;
+</script>
+
+</body>
+</html>

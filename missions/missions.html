@@ -63,16 +63,7 @@ footer { padding: 24px; }
 
 <header>
   <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</a>
-  <nav>
-    <a href="../index.html#sessions">Briefing</a>
-    <a href="missions.html" class="active">Missions</a>
-    <a href="../index.html#operatives">Operatives</a>
-    <a href="../index.html#bestiary">Bestiary</a>
-    <a href="../index.html#lab">The Lab</a>
-    <a href="../index.html#artefacts">Artefacts</a>
-    <a href="../index.html#mood">Atmosphere</a>
-  </nav>
-  <div><span class="status-dot"></span><span id="campbell-status" style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--green-dim);cursor:default;user-select:none;">CAMPBELL ONLINE</span></div>
+  <nav id="player-nav"></nav><script src="../player-nav.js"></script>
 </header>
 
 <div class="hero">
@@ -186,10 +177,6 @@ footer { padding: 24px; }
   document.getElementById('ver').textContent =
     '2.' + (Math.floor(Math.random()*9)+1) + '.' + (Math.floor(Math.random()*89)+10);
 
-  // Double-click CAMPBELL ONLINE to enter keeper mode
-  document.getElementById('campbell-status').addEventListener('dblclick', function () {
-    window.location.href = 'keeper.html';
-  });
 </script>
 </body>
 </html>

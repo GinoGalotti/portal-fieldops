@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Known Contacts</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../player.css">
+</head>
+<body>
+
+<header>
+  <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</a>
+  <nav id="player-nav"></nav><script src="../player-nav.js"></script>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">// KNOWN PERSONNEL & FIELD CONTACTS — PORTAL OPERATIONAL DATABASE</div>
+  <h1 class="hero-title">Known<br><span class="accent">Contacts</span></h1>
+  <p class="hero-desc">Documented individuals known to PORTAL field operatives. Status reflects last confirmed information. Relationship indicators are field operative assessments — not official PORTAL classifications.</p>
+  <div class="campbell-note">
+    <span class="c-label">// CAMPBELL — DATABASE NOTICE</span>
+    CONTACT RECORDS: PARTIAL — field-operative-verified only<br>
+    UNCONFIRMED CONTACTS: NOT LISTED<br>
+    STATUS ACCURACY: CURRENT AS OF LAST FIELD DEBRIEF
+  </div>
+</div>
+
+<main>
+
+  <!-- FILTER -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">// ALL</button>
+    <button class="filter-btn" data-filter="portal">// PORTAL PERSONNEL</button>
+    <button class="filter-btn" data-filter="s01">// S01 — A PROMISE IS A PROMISE</button>
+    <button class="filter-btn" data-filter="s02">// S02 — SOMETHING THAT WANTS TO BE KNOWN</button>
+  </div>
+
+  <!-- PORTAL PERSONNEL -->
+  <div class="section-header-sm">
+    <h2>PORTAL Personnel</h2>
+    <span class="section-tag">// INTERNAL STAFF — AUTHORISED ACCESS</span>
+  </div>
+  <div class="contact-grid">
+
+    <div class="ccard" data-cat="portal" data-status="ACTIVE">
+      <div class="ccard-top">
+        <span class="ccard-status active">ACTIVE</span>
+        <span class="ccard-case">PORTAL INTERNAL</span>
+      </div>
+      <div class="ccard-name">Dr. Victor Leech</div>
+      <div class="ccard-role">// DIRECTOR · FOUNDER · PORTAL</div>
+      <p class="ccard-note">Statistician and epidemiologist. Founded PORTAL. Issues directives — usually reasonable, occasionally uncomfortable, always with incomplete context. <em>Genuinely believes he is managing the team carefully.</em> Direct contact available to all operatives.</p>
+      <div class="ccard-rels">
+        <span class="rel-tag complicated"><span class="hunter">REX</span> — employer / complicated</span>
+        <span class="rel-tag complicated"><span class="hunter">REED</span> — employer / private contact</span>
+        <span class="rel-tag unknown"><span class="hunter">ALAN</span> — employer</span>
+        <span class="rel-tag unknown"><span class="hunter">SVEN</span> — employer</span>
+      </div>
+    </div>
+
+    <div class="ccard" data-cat="portal" data-status="ACTIVE">
+      <div class="ccard-top">
+        <span class="ccard-status operational">OPERATIONAL</span>
+        <span class="ccard-case">PORTAL INTERNAL</span>
+      </div>
+      <div class="ccard-name">CAMPBELL</div>
+      <div class="ccard-role">// AI BRIEFING SYSTEM · PORTAL LAB</div>
+      <p class="ccard-note">Primary briefing and analysis system. Precise and institutional. Issues case reports, anomaly classifications, and field directives. <em>Occasionally more precise than expected about things it shouldn't quite know.</em> Always available for query via lab terminal.</p>
+      <div class="ccard-rels">
+        <span class="rel-tag unknown"><span class="hunter">REX</span> — operational</span>
+        <span class="rel-tag unknown"><span class="hunter">REED</span> — operational</span>
+        <span class="rel-tag unknown"><span class="hunter">ALAN</span> — operational</span>
+        <span class="rel-tag unknown"><span class="hunter">SVEN</span> — operational / has asked it about existence</span>
+      </div>
+    </div>
+
+    <div class="ccard" data-cat="portal" data-status="ACTIVE">
+      <div class="ccard-top">
+        <span class="ccard-status active">ACTIVE</span>
+        <span class="ccard-case">PORTAL INTERNAL</span>
+      </div>
+      <div class="ccard-name">Teddy Brandt</div>
+      <div class="ccard-role">// FIELD SUPPORT TECHNICIAN · PORTAL LAB</div>
+      <p class="ccard-note">Builds what Rex designs. Irreverent and precise in equal measure. <em>Genuine friendship with Reed</em> — better read on the team's actual emotional state than anyone else at PORTAL. No hidden agenda. Functions as the lab's pressure valve.</p>
+      <div class="ccard-rels">
+        <span class="rel-tag unknown"><span class="hunter">REX</span> — collaborative</span>
+        <span class="rel-tag ally"><span class="hunter">REED</span> — friend</span>
+        <span class="rel-tag unknown"><span class="hunter">ALAN</span> — professional</span>
+        <span class="rel-tag unknown"><span class="hunter">SVEN</span> — professional</span>
+      </div>
+    </div>
+
+    <div class="ccard" data-cat="portal" data-status="ACTIVE">
+      <div class="ccard-top">
+        <span class="ccard-status active">ACTIVE</span>
+        <span class="ccard-case">PORTAL INTERNAL</span>
+      </div>
+      <div class="ccard-name">Dr. Priya Osei</div>
+      <div class="ccard-role">// LAB ANALYST · BIOCHEMIST · PORTAL</div>
+      <p class="ccard-note">Processes all field samples. Sharp and methodical. Handled the S01 ash particulate analysis. <em>More observant than her role requires.</em> If you want to know what the lab found, Priya is the person to ask directly.</p>
+      <div class="ccard-rels">
+        <span class="rel-tag unknown"><span class="hunter">REX</span> — professional / shared interest</span>
+        <span class="rel-tag unknown"><span class="hunter">REED</span> — professional</span>
+        <span class="rel-tag unknown"><span class="hunter">ALAN</span> — professional</span>
+        <span class="rel-tag unknown"><span class="hunter">SVEN</span> — professional</span>
+      </div>
+    </div>
+
+    <div class="ccard" data-cat="portal" data-status="ACTIVE">
+      <div class="ccard-top">
+        <span class="ccard-status active">ACTIVE</span>
+        <span class="ccard-case">PORTAL INTERNAL</span>
+      </div>
+      <div class="ccard-name">Marcus Finch</div>
+      <div class="ccard-role">// ARCHIVIST · LOGISTICS · FOUNDING STAFF</div>
+      <p class="ccard-note">Has been with PORTAL since it started. Manages the archive and coordinates field logistics. Knows the organisation's history better than anyone except Leech. <em>Does not volunteer information, but answers questions accurately.</em></p>
+      <div class="ccard-rels">
+        <span class="rel-tag unknown"><span class="hunter">REX</span> — resource</span>
+        <span class="rel-tag unknown"><span class="hunter">REED</span> — resource</span>
+        <span class="rel-tag unknown"><span class="hunter">ALAN</span> — resource</span>
+        <span class="rel-tag unknown"><span class="hunter">SVEN</span> — resource</span>
+      </div>
+    </div>
+
+    <div class="ccard" data-cat="portal" data-status="ACTIVE">
+      <div class="ccard-top">
+        <span class="ccard-status active">AVAILABLE</span>
+        <span class="ccard-case">PORTAL INTERNAL</span>
+      </div>
+      <div class="ccard-name">Dr. Saoirse Mullen</div>
+      <div class="ccard-role">// ETHICS CONSULTANT · NOMINALLY EXTERNAL</div>
+      <p class="ccard-note">Hired as external ethics oversight; practically embedded. Reviews cases and knows she sees a curated view. <em>Can be invoked by field operatives as a formal check on Leech's directives.</em> The right person to be in the room when something goes wrong at the institutional level.</p>
+      <div class="ccard-rels">
+        <span class="rel-tag unknown"><span class="hunter">REX</span> — available resource</span>
+        <span class="rel-tag unknown"><span class="hunter">REED</span> — available resource</span>
+        <span class="rel-tag unknown"><span class="hunter">ALAN</span> — available resource</span>
+        <span class="rel-tag unknown"><span class="hunter">SVEN</span> — available resource</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- S01 CONTACTS -->
+  <div class="section-header-sm section-gap">
+    <h2>S01 — A Promise is a Promise</h2>
+    <span class="section-tag">// KELLER UNIVERSITY · CASE CLOSED</span>
+  </div>
+  <div class="contact-grid">
+
+    <div class="ccard" data-cat="s01" data-status="ACTIVE">
+      <div class="ccard-top">
+        <span class="ccard-status active">ALIVE</span>
+        <span class="ccard-case">S01</span>
+      </div>
+      <div class="ccard-name">Bálint</div>
+      <div class="ccard-role">// KELLER UNIVERSITY STUDENT · GRIEVING</div>
+      <p class="ccard-note">Lost someone close — the case turned on his wellbeing. The resolution was humane. <em>Whether he ever got the closure he needed is a thread that isn't closed.</em> Last confirmed location: Keller University. Contact status: unresolved — no protocol established.</p>
+      <div class="ccard-rels">
+        <span class="rel-tag unknown"><span class="hunter">REX</span> — unknown</span>
+        <span class="rel-tag unknown"><span class="hunter">REED</span> — met briefly</span>
+        <span class="rel-tag unknown"><span class="hunter">ALAN</span> — unknown</span>
+        <span class="rel-tag unknown"><span class="hunter">SVEN</span> — unknown</span>
+      </div>
+    </div>
+
+    <div class="ccard" data-cat="s01" data-status="UNRESOLVED">
+      <div class="ccard-top">
+        <span class="ccard-status unresolved">STATUS UNKNOWN</span>
+        <span class="ccard-case">S01</span>
+      </div>
+      <div class="ccard-name">Detective Vasquez</div>
+      <div class="ccard-role">// DETECTIVE · LOCAL AUTHORITIES · KELLER AREA</div>
+      <p class="ccard-note">Noticed the S01 incident. How much they noticed, and whether they connected PORTAL operatives to the events, is unconfirmed. <em>A loose thread.</em> No contact established. Approach not recommended without a cover story.</p>
+      <div class="ccard-rels">
+        <span class="rel-tag unknown"><span class="hunter">REX</span> — unknown / potential complication</span>
+        <span class="rel-tag unknown"><span class="hunter">REED</span> — unknown</span>
+        <span class="rel-tag unknown"><span class="hunter">ALAN</span> — unknown</span>
+        <span class="rel-tag unknown"><span class="hunter">SVEN</span> — unknown</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- S02 CONTACTS -->
+  <div class="section-header-sm section-gap">
+    <h2>S02 — Something That Wants to Be Known</h2>
+    <span class="section-tag">// ALDERMOOR DISTRICT · ACTIVE DEPLOYMENT</span>
+  </div>
+  <div class="contact-grid">
+
+    <div class="ccard" data-cat="s02" data-status="ACTIVE">
+      <div class="ccard-top">
+        <span class="ccard-status active">ACTIVE — IN ZONE</span>
+        <span class="ccard-case">S02</span>
+      </div>
+      <div class="ccard-name">Arthur Okafor</div>
+      <div class="ccard-role">// RETIRED POSTAL WORKER · FENWICK ROAD · 41 YEARS</div>
+      <p class="ccard-note">72 years old. Best witness in the district — has lived on Fenwick Road long enough to know exactly when the geography stopped feeling right. <em>Clear, methodical, willing to talk.</em> Affected by the displacement but functioning. Primary point of contact for zone history.</p>
+      <div class="ccard-rels">
+        <span class="rel-tag ally"><span class="hunter">ALL</span> — cooperative witness</span>
+      </div>
+    </div>
+
+    <div class="ccard" data-cat="s02" data-status="ACTIVE">
+      <div class="ccard-top">
+        <span class="ccard-status cooperative">COOPERATIVE</span>
+        <span class="ccard-case">S02</span>
+      </div>
+      <div class="ccard-name">PC Yemi Adeyemi</div>
+      <div class="ccard-role">// POLICE CONSTABLE · NEIGHBOURHOOD LIAISON · 28</div>
+      <p class="ccard-note">Assigned as neighbourhood liaison for the Aldermoor incident. Cooperative, asking fewer questions than she could. <em>Trusts the team so far.</em> Useful for keeping official attention away from the zone perimeter. Has flagged the missing persons report for Diane Marsh.</p>
+      <div class="ccard-rels">
+        <span class="rel-tag ally"><span class="hunter">ALL</span> — cooperative / professional courtesy</span>
+      </div>
+    </div>
+
+    <div class="ccard" data-cat="s02" data-status="ACTIVE">
+      <div class="ccard-top">
+        <span class="ccard-status active">ACTIVE — IN ZONE</span>
+        <span class="ccard-case">S02</span>
+      </div>
+      <div class="ccard-name">Vera Osei</div>
+      <div class="ccard-role">// RETIRED SCHOOLTEACHER · ALDERMOOR · 61</div>
+      <p class="ccard-note">Has lived in Aldermoor for decades. Calm under pressure and unimpressed by PORTAL authority. <em>Will not leave without her cat.</em> This is not negotiable. Good at reading people; will notice if the team is lying to her about what's happening.</p>
+      <div class="ccard-rels">
+        <span class="rel-tag ally"><span class="hunter">ALL</span> — willing but not passive</span>
+      </div>
+    </div>
+
+    <div class="ccard" data-cat="s02" data-status="ACTIVE">
+      <div class="ccard-top">
+        <span class="ccard-status active">ACTIVE — EPICENTRE</span>
+        <span class="ccard-case">S02</span>
+      </div>
+      <div class="ccard-name">Margaret Holt</div>
+      <div class="ccard-role">// FORMER LIBRARIAN · 14 ALDERMOOR CRESCENT · 74</div>
+      <p class="ccard-note">50 years at the epicentre of the displacement zone. Has been there longer than the anomaly. <em>Is not leaving.</em> Her connection to the district — the depth of her familiarity — may be relevant to resolution. She knows the neighbourhood as a person, not just a resident.</p>
+      <div class="ccard-rels">
+        <span class="rel-tag ally"><span class="hunter">ALL</span> — key to resolution / non-negotiable</span>
+      </div>
+    </div>
+
+    <div class="ccard" data-cat="s02" data-status="MISSING">
+      <div class="ccard-top">
+        <span class="ccard-status missing">MISSING — 9+ DAYS</span>
+        <span class="ccard-case">S02</span>
+      </div>
+      <div class="ccard-name">Diane Marsh</div>
+      <div class="ccard-role">// DISTRICT NURSE · ALDERMOOR · 58</div>
+      <p class="ccard-note">District nurse, missing since early in the displacement event. <em>Last confirmed location: a construction site office near the zone edge.</em> Has a notebook with her. <strong style="color:var(--text)">Finding her is a priority objective.</strong> Her notebook may contain information the team needs to understand what's happening in the zone.</p>
+      <div class="ccard-rels">
+        <span class="rel-tag unknown"><span class="hunter">ALAN</span> — her notebook is significant / reason unconfirmed</span>
+        <span class="rel-tag unknown"><span class="hunter">ALL</span> — locate and extract</span>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+document.querySelectorAll('.filter-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var filter = btn.dataset.filter;
+    document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    document.querySelectorAll('.ccard').forEach(function(card) {
+      if (filter === 'all' || card.dataset.cat === filter) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    // show/hide section headers + grid gaps
+    document.querySelectorAll('.section-header, .section-gap').forEach(function(el) {
+      el.style.display = (filter === 'all') ? '' : '';
+    });
+  });
+});
+</script>
+</body>
+</html>

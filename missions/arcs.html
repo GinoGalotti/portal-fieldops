@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Keeper · Arc Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../keeper.css">
+</head>
+<body>
+
+<div class="keeper-banner">KEEPER ACCESS ONLY — DO NOT SHARE THIS URL WITH PLAYERS</div>
+
+<header>
+  <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L <span style="font-size:0.7rem;color:var(--keeper-dim);margin-left:8px;">// KEEPER</span></a>
+  <nav id="keeper-nav"></nav><script src="keeper-nav.js"></script>
+  <div><span class="keeper-dot"></span><span style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--keeper-dim)">RESTRICTED ACCESS</span></div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">// KEEPER — HUNTER PERSONAL ARCS</div>
+  <h1 class="hero-title">Arc<br><span class="accent">Tracker</span></h1>
+  <p class="hero-desc">Beat progress, status, and resolution notes for all active hunter arcs. Click beat boxes to mark progress. Click status to cycle. Notes persist in your browser.</p>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <span class="stat-label">// ACTIVE ARCS</span>
+      <div class="stat-val amber" id="stat-active">—</div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">// RESOLVED</span>
+      <div class="stat-val green" id="stat-resolved">—</div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">// DORMANT</span>
+      <div class="stat-val" id="stat-dormant">—</div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">// BEATS MARKED</span>
+      <div class="stat-val purple" id="stat-beats">—</div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- INTERSECTION MAP -->
+  <div class="section-header">
+    <h2>Arc Intersections</h2>
+    <span class="section-tag">// WHERE ARCS CREATE PRESSURE ON OTHER HUNTERS</span>
+  </div>
+
+  <div class="intersection" style="margin-bottom: 48px;">
+    <div class="int-label">// CROSS-HUNTER PRESSURE — ARCS THAT TOUCH ANOTHER OPERATIVE'S STORY</div>
+    <ul class="int-list">
+      <li class="int-row">
+        <div class="int-from"><strong style="color:#3ab5b0">REED</strong> Arc III — The Private Directive</div>
+        <div class="int-note">Revelation lands hardest on <strong>Rex</strong> — the person Reed has been simultaneously protecting and betraying. Alan's moral judgment is also in play: he uses Reed as his compass, and the needle will move.</div>
+      </li>
+      <li class="int-row">
+        <div class="int-from"><strong style="color:#2ec4b6">ALAN</strong> Arc III — The Map Before Territory</div>
+        <div class="int-note">Alan depends on <strong>Reed</strong> as moral compass before he can act on Diane Marsh's notebook. Reed's choices in Arc III bend Alan's options. If Reed is compromised, Alan's anchor is gone.</div>
+      </li>
+      <li class="int-row">
+        <div class="int-from"><strong style="color:#a78bfa">SVEN</strong> Arc III — What Killed Me</div>
+        <div class="int-note"><strong>Rex</strong> is researching the same thread from a different angle. They will converge before either is ready. Who discovers what first shapes whether this arc is Sven's triumph or Rex's grief.</div>
+      </li>
+      <li class="int-row">
+        <div class="int-from"><strong style="color:#f0a500">REX</strong> Arc I — Uncanny Nemesis</div>
+        <div class="int-note">Dan Nilsson is inside MESA, and MESA is connected to <strong>Sven's</strong> death. Rex's nemesis may hold the answer Sven has been quietly looking for. Neither knows this yet.</div>
+      </li>
+      <li class="int-row">
+        <div class="int-from"><strong style="color:#a78bfa">SVEN</strong> Arc II — The Misguided Hunter</div>
+        <div class="int-note">The target of this arc — an operative pursuing the wrong lead for the right reasons — is <strong>Keeper's call</strong>. Assign it once a candidate emerges in play. Rex and Reed are both viable.</div>
+      </li>
+      <li class="int-row">
+        <div class="int-from"><strong style="color:#f0a500">REX</strong> Arc III — What the Veil Costs</div>
+        <div class="int-note">Rex discovering Project Veil is a <strong>whole-team moment</strong>. How it lands depends on where Reed's Arc III, Alan's Arc III, and the CAMPBELL secret all stand at that point. Don't resolve this arc in isolation.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- REX -->
+  <div class="hunter-section hs-rex">
+    <div class="hunter-header">
+      <div class="hunter-name">Rex Bangley</div>
+      <div class="hunter-playbook">// ACTION SCIENTIST · HALF-BROTHER TO SVEN</div>
+      <a href="../hunters/rex-hunter-stories.html" class="hunter-link">→ STORY PAGE</a>
+    </div>
+    <div class="arc-grid">
+
+      <div class="arc-card" id="rex-1">
+        <div class="arc-top">
+          <span class="arc-num">// ARC I</span>
+          <span class="arc-type adapted">ADAPTED</span>
+        </div>
+        <div class="arc-title">Uncanny Nemesis</div>
+        <div class="arc-beats" data-arc="rex-1">
+          <div class="arc-beat">1</div><div class="arc-beat">2</div><div class="arc-beat">3</div><div class="arc-beat">4</div><div class="arc-beat">5</div>
+        </div>
+        <div class="arc-status dormant" data-arc="rex-1">DORMANT</div>
+        <div class="arc-desc">Someone is modelling Rex's field decisions in advance — and getting it right. Rex will recognise the pattern eventually. He doesn't know the person yet. Dan Nilsson, his university rival, is inside MESA specifically because he knows how Rex thinks.</div>
+        <div class="arc-pressure">// PRESSURE → SVEN: Dan Nilsson's MESA work connects to Sven's death investigation</div>
+        <div class="arc-res">
+          <span class="arc-res-label">// RESOLUTION NOTE</span>
+          <textarea class="arc-res-input" data-arc="rex-1" rows="2" placeholder="How it resolved…"></textarea>
+        </div>
+      </div>
+
+      <div class="arc-card" id="rex-2">
+        <div class="arc-top">
+          <span class="arc-num">// ARC II</span>
+          <span class="arc-type adapted">ADAPTED</span>
+        </div>
+        <div class="arc-title">The Greater Good?</div>
+        <div class="arc-beats" data-arc="rex-2">
+          <div class="arc-beat">1</div><div class="arc-beat">2</div><div class="arc-beat">3</div><div class="arc-beat">4</div><div class="arc-beat">5</div>
+        </div>
+        <div class="arc-status dormant" data-arc="rex-2">DORMANT</div>
+        <div class="arc-desc">Rex's work has always been dual-use. This arc surfaces the first time that becomes undeniable — when a tool Rex designed is turned against people he was trying to protect, and Rex has to decide whether the science or the harm comes first.</div>
+        <div class="arc-res">
+          <span class="arc-res-label">// RESOLUTION NOTE</span>
+          <textarea class="arc-res-input" data-arc="rex-2" rows="2" placeholder="How it resolved…"></textarea>
+        </div>
+      </div>
+
+      <div class="arc-card portal" id="rex-3">
+        <div class="arc-top">
+          <span class="arc-num">// ARC III</span>
+          <span class="arc-type portal">PORTAL ORIGINAL</span>
+        </div>
+        <div class="arc-title">What the Veil Costs</div>
+        <div class="arc-beats" data-arc="rex-3">
+          <div class="arc-beat">1</div><div class="arc-beat">2</div><div class="arc-beat">3</div><div class="arc-beat">4</div><div class="arc-beat">5</div>
+        </div>
+        <div class="arc-status dormant" data-arc="rex-3">DORMANT</div>
+        <div class="arc-desc">Rex is the most likely operative to independently discover Project Veil. The ash from S01 is in the lab. Rex has the instincts to ask the right questions. The arc ends with what he does when he understands what Leech has been doing — and why he didn't tell the team.</div>
+        <div class="arc-pressure">// PRESSURE → ALL: Don't resolve in isolation — where every other arc stands shapes the landing</div>
+        <div class="arc-res">
+          <span class="arc-res-label">// RESOLUTION NOTE</span>
+          <textarea class="arc-res-input" data-arc="rex-3" rows="2" placeholder="How it resolved…"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- REED -->
+  <div class="hunter-section hs-reed">
+    <div class="hunter-header">
+      <div class="hunter-name">Reed Atwood</div>
+      <div class="hunter-playbook">// SIDEKICK · IDOLISES REX · JOHN JOHNSON'S NEPHEW BY MARRIAGE</div>
+      <a href="../hunters/reed-hunter-stories.html" class="hunter-link">→ STORY PAGE</a>
+    </div>
+    <div class="arc-grid">
+
+      <div class="arc-card" id="reed-1">
+        <div class="arc-top">
+          <span class="arc-num">// ARC I</span>
+          <span class="arc-type adapted">ADAPTED</span>
+        </div>
+        <div class="arc-title">The Idol's Weakness</div>
+        <div class="arc-beats" data-arc="reed-1">
+          <div class="arc-beat">1</div><div class="arc-beat">2</div><div class="arc-beat">3</div><div class="arc-beat">4</div><div class="arc-beat">5</div>
+        </div>
+        <div class="arc-status dormant" data-arc="reed-1">DORMANT</div>
+        <div class="arc-desc">Rex is fallible. Reed knows this better than anyone. The arc asks whether protecting Rex from his own weaknesses is the same as enabling them — and what Reed becomes if he keeps absorbing the cost of that choice alone.</div>
+        <div class="arc-res">
+          <span class="arc-res-label">// RESOLUTION NOTE</span>
+          <textarea class="arc-res-input" data-arc="reed-1" rows="2" placeholder="How it resolved…"></textarea>
+        </div>
+      </div>
+
+      <div class="arc-card" id="reed-2">
+        <div class="arc-top">
+          <span class="arc-num">// ARC II</span>
+          <span class="arc-type adapted">ADAPTED</span>
+        </div>
+        <div class="arc-title">Passing the Torch</div>
+        <div class="arc-beats" data-arc="reed-2">
+          <div class="arc-beat">1</div><div class="arc-beat">2</div><div class="arc-beat">3</div><div class="arc-beat">4</div><div class="arc-beat">5</div>
+        </div>
+        <div class="arc-status dormant" data-arc="reed-2">DORMANT</div>
+        <div class="arc-desc">Reed is beginning to act as an operative in his own right — not as Rex's extension. Rex has noticed. The arc is about Reed learning to ask for what he needs, and Rex learning what it means to have a partner rather than a Sidekick.</div>
+        <div class="arc-res">
+          <span class="arc-res-label">// RESOLUTION NOTE</span>
+          <textarea class="arc-res-input" data-arc="reed-2" rows="2" placeholder="How it resolved…"></textarea>
+        </div>
+      </div>
+
+      <div class="arc-card portal" id="reed-3">
+        <div class="arc-top">
+          <span class="arc-num">// ARC III</span>
+          <span class="arc-type portal">PORTAL ORIGINAL</span>
+        </div>
+        <div class="arc-title">The Private Directive</div>
+        <div class="arc-beats" data-arc="reed-3">
+          <div class="arc-beat">1</div><div class="arc-beat">2</div><div class="arc-beat">3</div><div class="arc-beat">4</div><div class="arc-beat">5</div>
+        </div>
+        <div class="arc-status dormant" data-arc="reed-3">DORMANT</div>
+        <div class="arc-desc">Leech has been contacting Reed separately. Reed is carrying something the team doesn't know about. CAMPBELL knows, won't lie if asked directly, won't volunteer it. Teddy Brandt may have noticed something is off. This arc ends when containment fails — not if.</div>
+        <div class="arc-pressure">// PRESSURE → REX + ALAN: Rex takes the revelation hardest. Alan's moral compass depends on Reed being honest.</div>
+        <div class="arc-res">
+          <span class="arc-res-label">// RESOLUTION NOTE</span>
+          <textarea class="arc-res-input" data-arc="reed-3" rows="2" placeholder="How it resolved…"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ALAN -->
+  <div class="hunter-section hs-alan">
+    <div class="hunter-header">
+      <div class="hunter-name">Alan Frazier</div>
+      <div class="hunter-playbook">// CHANGELING (FEY ORIGIN, UNDEFINED) · USES REED AS MORAL COMPASS</div>
+      <a href="../hunters/alan-hunter-stories.html" class="hunter-link">→ STORY PAGE</a>
+    </div>
+    <div class="arc-grid">
+
+      <div class="arc-card" id="alan-1">
+        <div class="arc-top">
+          <span class="arc-num">// ARC I</span>
+          <span class="arc-type adapted">ADAPTED</span>
+        </div>
+        <div class="arc-title">Villains Like Myself</div>
+        <div class="arc-beats" data-arc="alan-1">
+          <div class="arc-beat">1</div><div class="arc-beat">2</div><div class="arc-beat">3</div><div class="arc-beat">4</div><div class="arc-beat">5</div>
+        </div>
+        <div class="arc-status dormant" data-arc="alan-1">DORMANT</div>
+        <div class="arc-desc">Alan's capabilities overlap with the things they hunt in ways that are difficult to explain away. The arc asks whether that overlap is coincidence, inheritance, or design — and whether it matters how the line was drawn if Alan keeps crossing it.</div>
+        <div class="arc-res">
+          <span class="arc-res-label">// RESOLUTION NOTE</span>
+          <textarea class="arc-res-input" data-arc="alan-1" rows="2" placeholder="How it resolved…"></textarea>
+        </div>
+      </div>
+
+      <div class="arc-card" id="alan-2">
+        <div class="arc-top">
+          <span class="arc-num">// ARC II</span>
+          <span class="arc-type adapted">ADAPTED</span>
+        </div>
+        <div class="arc-title">The Awakened One</div>
+        <div class="arc-beats" data-arc="alan-2">
+          <div class="arc-beat">1</div><div class="arc-beat">2</div><div class="arc-beat">3</div><div class="arc-beat">4</div><div class="arc-beat">5</div>
+        </div>
+        <div class="arc-status dormant" data-arc="alan-2">DORMANT</div>
+        <div class="arc-desc">Alan's fey nature was not random. Something chose him, or made him, or is waiting for him to understand what he is. Rex's experiment wasn't the beginning — it was the moment something that was always there became visible. What is watching Alan's development?</div>
+        <div class="arc-res">
+          <span class="arc-res-label">// RESOLUTION NOTE</span>
+          <textarea class="arc-res-input" data-arc="alan-2" rows="2" placeholder="How it resolved…"></textarea>
+        </div>
+      </div>
+
+      <div class="arc-card portal" id="alan-3">
+        <div class="arc-top">
+          <span class="arc-num">// ARC III</span>
+          <span class="arc-type portal">PORTAL ORIGINAL</span>
+        </div>
+        <div class="arc-title">The Map Before the Territory</div>
+        <div class="arc-beats" data-arc="alan-3">
+          <div class="arc-beat">1</div><div class="arc-beat">2</div><div class="arc-beat">3</div><div class="arc-beat">4</div><div class="arc-beat">5</div>
+        </div>
+        <div class="arc-status dormant" data-arc="alan-3">DORMANT</div>
+        <div class="arc-desc">Diane Marsh's notebook contains threshold sketches Alan recognises — not from training, from something older. Someone mapped the boundaries before PORTAL existed. Alan can read the map. The questions are: who made it first, why Alan can read it, and what it means that the map is still being updated.</div>
+        <div class="arc-pressure">// PRESSURE → REED: Alan uses Reed as moral compass — Reed's Arc III choices directly shape what Alan can do here</div>
+        <div class="arc-res">
+          <span class="arc-res-label">// RESOLUTION NOTE</span>
+          <textarea class="arc-res-input" data-arc="alan-3" rows="2" placeholder="How it resolved…"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SVEN -->
+  <div class="hunter-section hs-sven">
+    <div class="hunter-header">
+      <div class="hunter-name">Sven</div>
+      <div class="hunter-playbook">// MONSTROUS (GHOST) · HALF-BROTHER TO REX · IMMUNE TO ALDERMOOR DISPLACEMENT</div>
+      <a href="../hunters/sven-hunter-stories.html" class="hunter-link">→ STORY PAGE</a>
+    </div>
+    <div class="arc-grid">
+
+      <div class="arc-card" id="sven-1">
+        <div class="arc-top">
+          <span class="arc-num">// ARC I</span>
+          <span class="arc-type adapted">ADAPTED</span>
+        </div>
+        <div class="arc-title">In My Footsteps</div>
+        <div class="arc-beats" data-arc="sven-1">
+          <div class="arc-beat">1</div><div class="arc-beat">2</div><div class="arc-beat">3</div><div class="arc-beat">4</div><div class="arc-beat">5</div>
+        </div>
+        <div class="arc-status dormant" data-arc="sven-1">DORMANT</div>
+        <div class="arc-desc">Someone is trying to do what Sven was doing before he died — the same investigations, the same locations, the same questions. They don't know what they're walking into. Sven does. Whether he gets there in time is the arc.</div>
+        <div class="arc-res">
+          <span class="arc-res-label">// RESOLUTION NOTE</span>
+          <textarea class="arc-res-input" data-arc="sven-1" rows="2" placeholder="How it resolved…"></textarea>
+        </div>
+      </div>
+
+      <div class="arc-card" id="sven-2">
+        <div class="arc-top">
+          <span class="arc-num">// ARC II</span>
+          <span class="arc-type adapted">ADAPTED</span>
+        </div>
+        <div class="arc-title">The Misguided Hunter</div>
+        <div class="arc-beats" data-arc="sven-2">
+          <div class="arc-beat">1</div><div class="arc-beat">2</div><div class="arc-beat">3</div><div class="arc-beat">4</div><div class="arc-beat">5</div>
+        </div>
+        <div class="arc-status dormant" data-arc="sven-2">DORMANT</div>
+        <div class="arc-desc">One of the other operatives is pursuing the wrong thing for the right reasons. Sven can see it. The arc asks whether he says something, how he says it, and what it costs him either way. <em style="color:var(--keeper-dim)">Assign target operative when a candidate emerges in play.</em></div>
+        <div class="arc-pressure">// TARGET OPERATIVE: Keeper to determine — Rex and Reed both viable candidates</div>
+        <div class="arc-res">
+          <span class="arc-res-label">// RESOLUTION NOTE / TARGET</span>
+          <textarea class="arc-res-input" data-arc="sven-2" rows="2" placeholder="Target operative + how it resolved…"></textarea>
+        </div>
+      </div>
+
+      <div class="arc-card portal" id="sven-3">
+        <div class="arc-top">
+          <span class="arc-num">// ARC III</span>
+          <span class="arc-type portal">PORTAL ORIGINAL</span>
+        </div>
+        <div class="arc-title">What Killed Me</div>
+        <div class="arc-beats" data-arc="sven-3">
+          <div class="arc-beat">1</div><div class="arc-beat">2</div><div class="arc-beat">3</div><div class="arc-beat">4</div><div class="arc-beat">5</div>
+        </div>
+        <div class="arc-status dormant" data-arc="sven-3">DORMANT</div>
+        <div class="arc-desc">Sven died on an ayahuasca trip. The visions turned out to be real. The cause of death connects to at least one active campaign thread — Keeper to confirm which. Sven is the only one quietly investigating. An entity recognised him at a boundary during S02. That recognition is a data point.</div>
+        <div class="arc-pressure">// PRESSURE → REX: Same research thread, different angles. They converge. Who arrives first shapes everything.</div>
+        <div class="arc-res">
+          <span class="arc-res-label">// CAUSE OF DEATH + RESOLUTION NOTE</span>
+          <textarea class="arc-res-input" data-arc="sven-3" rows="2" placeholder="Cause of death (Keeper decision) + how it resolved…"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span>// P.O.R.T.A.L — KEEPER DOCUMENT — HUNTER PERSONAL ARC TRACKER</span>
+  <span>PROGRESS SAVED TO BROWSER — NOT SYNCED</span>
+</footer>
+
+<script>
+const STORE = 'portal-arcs-v1';
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(STORE)) || {}; } catch(e) { return {}; }
+}
+function save(data) {
+  try { localStorage.setItem(STORE, JSON.stringify(data)); } catch(e) {}
+}
+
+function getArcId(el) {
+  return el.closest('[id]') ? el.closest('[id]').id : null;
+}
+
+// ── Beat boxes ──
+document.querySelectorAll('.arc-beats').forEach(function(track) {
+  var boxes = track.querySelectorAll('.arc-beat');
+  var arcId = track.dataset.arc;
+  var data = load();
+  var saved = data[arcId] || {};
+  var beats = saved.beats || 0;
+  boxes.forEach(function(b, i) { if (i < beats) b.classList.add('filled'); });
+
+  boxes.forEach(function(box, i) {
+    box.addEventListener('click', function() {
+      var data = load();
+      if (!data[arcId]) data[arcId] = {};
+      if (box.classList.contains('filled')) {
+        boxes.forEach(function(b, j) { if (j >= i) b.classList.remove('filled'); });
+        data[arcId].beats = i;
+      } else {
+        boxes.forEach(function(b, j) { if (j <= i) b.classList.add('filled'); });
+        data[arcId].beats = i + 1;
+      }
+      save(data);
+      updateStats();
+    });
+  });
+});
+
+// ── Status badges ──
+var statusCycle = ['dormant', 'active', 'resolved'];
+document.querySelectorAll('.arc-status').forEach(function(badge) {
+  var arcId = badge.dataset.arc;
+  var data = load();
+  var saved = data[arcId] || {};
+  if (saved.status) {
+    badge.className = 'arc-status ' + saved.status;
+    badge.textContent = saved.status.toUpperCase();
+  }
+
+  badge.addEventListener('click', function() {
+    var cur = statusCycle.indexOf(badge.classList[1] || 'dormant');
+    var next = statusCycle[(cur + 1) % statusCycle.length];
+    badge.className = 'arc-status ' + next;
+    badge.textContent = next.toUpperCase();
+    var data = load();
+    if (!data[arcId]) data[arcId] = {};
+    data[arcId].status = next;
+    save(data);
+    updateStats();
+  });
+});
+
+// ── Resolution notes ──
+document.querySelectorAll('.arc-res-input').forEach(function(input) {
+  var arcId = input.dataset.arc;
+  var data = load();
+  var saved = data[arcId] || {};
+  if (saved.note) input.value = saved.note;
+
+  input.addEventListener('input', function() {
+    var data = load();
+    if (!data[arcId]) data[arcId] = {};
+    data[arcId].note = input.value;
+    save(data);
+  });
+});
+
+// ── Stats ──
+function updateStats() {
+  var active = 0, resolved = 0, dormant = 0, beats = 0;
+  document.querySelectorAll('.arc-status').forEach(function(b) {
+    var s = b.classList[1] || 'dormant';
+    if (s === 'active') active++;
+    else if (s === 'resolved') resolved++;
+    else dormant++;
+  });
+  document.querySelectorAll('.arc-beat.filled').forEach(function() { beats++; });
+  document.getElementById('stat-active').textContent   = active;
+  document.getElementById('stat-resolved').textContent = resolved;
+  document.getElementById('stat-dormant').textContent  = dormant;
+  document.getElementById('stat-beats').textContent    = beats;
+}
+
+updateStats();
+</script>
+</body>
+</html>

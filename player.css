@@ -187,6 +187,69 @@ footer {
   padding: 3px 8px;
 }
 
+/* ── MAIN ── */
+main { position: relative; z-index: 10; max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
+
+/* ── HERO (sub-pages) ── */
+/* index.html uses its own larger centred hero via inline style */
+.hero { position: relative; z-index: 10; padding: 80px 24px 60px; max-width: 1100px; margin: 0 auto; }
+.hero-eyebrow { font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; letter-spacing: 0.3em; color: var(--green-dim); margin-bottom: 16px; animation: fadeUp 0.8s ease both; }
+.hero-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(2.5rem, 8vw, 5rem); line-height: 0.95; letter-spacing: 0.06em; color: var(--text); text-transform: uppercase; margin-bottom: 16px; animation: fadeUp 0.8s 0.1s ease both; }
+.hero-title .accent { color: var(--green); text-shadow: 0 0 30px var(--green-glow); }
+.hero-desc { font-size: 1rem; color: var(--text-dim); max-width: 560px; line-height: 1.8; animation: fadeUp 0.8s 0.2s ease both; margin-bottom: 8px; }
+.campbell-note { font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; color: var(--green-dim); border-left: 2px solid var(--green-dim); padding: 10px 16px; background: rgba(46,204,113,0.03); max-width: 520px; line-height: 1.9; animation: fadeUp 0.8s 0.3s ease both; }
+.campbell-note .c-label { color: var(--text-dim); font-size: 0.65rem; letter-spacing: 0.2em; display: block; margin-bottom: 6px; }
+
+/* ── SECTION HEADER — COMPACT ── */
+/* Use .section-header-sm on sub-pages where headers divide card groups */
+.section-header-sm { display: flex; align-items: baseline; gap: 14px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border-bright); }
+.section-header-sm h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.4rem; letter-spacing: 0.1em; color: var(--text); text-transform: uppercase; }
+.section-header-sm .section-tag { font-size: 0.62rem; letter-spacing: 0.18em; }
+.section-gap { margin-top: 48px; }
+
+/* ── FILTER BAR ── */
+.filter-bar { display: flex; gap: 4px; margin-bottom: 28px; flex-wrap: wrap; animation: fadeUp 0.8s 0.4s ease both; }
+.filter-btn { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; padding: 6px 14px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); cursor: pointer; transition: all 0.15s; }
+.filter-btn:hover { border-color: var(--green-dim); color: var(--text); }
+.filter-btn.active { border-color: var(--green); color: var(--green); background: rgba(46,204,113,0.06); }
+
+/* ── CONTACT GRID ── */
+.contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+@media (max-width: 900px) { .contact-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 580px) { .contact-grid { grid-template-columns: 1fr; } }
+
+/* ── CONTACT CARD ── */
+.ccard { border: 1px solid var(--border); background: var(--bg2); padding: 22px 24px; position: relative; overflow: hidden; transition: border-color 0.2s; display: flex; flex-direction: column; }
+.ccard:hover { border-color: var(--border-bright); }
+.ccard::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--green-dim), transparent); }
+.ccard[data-status="MISSING"]::before    { background: linear-gradient(90deg, var(--amber-dim), transparent); }
+.ccard[data-status="DECEASED"]::before   { background: linear-gradient(90deg, #5c2020, transparent); }
+.ccard[data-status="UNRESOLVED"]::before { background: linear-gradient(90deg, var(--border), transparent); }
+
+.ccard-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+.ccard-status { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; letter-spacing: 0.12em; padding: 2px 7px; border: 1px solid; flex-shrink: 0; }
+.ccard-status.active      { color: var(--green);    border-color: var(--green-dim); }
+.ccard-status.operational { color: var(--green);    border-color: var(--green-dim); }
+.ccard-status.missing     { color: var(--amber);    border-color: var(--amber-dim); }
+.ccard-status.deceased    { color: var(--red);      border-color: #5c2020; }
+.ccard-status.unresolved  { color: var(--text-dim); border-color: var(--border); }
+.ccard-status.cooperative { color: #50c8c8;          border-color: #1a5a5a; }
+.ccard-case { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; color: var(--text-dim); border: 1px solid var(--border); padding: 2px 7px; }
+
+.ccard-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.2rem; letter-spacing: 0.06em; color: var(--text); text-transform: uppercase; margin-bottom: 3px; line-height: 1; }
+.ccard-role { font-family: 'Share Tech Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em; color: var(--green-dim); margin-bottom: 12px; }
+.ccard-note { font-size: 0.85rem; color: var(--text-dim); line-height: 1.65; flex: 1; margin-bottom: 14px; }
+.ccard-note em { color: var(--text); font-style: normal; }
+
+.ccard-rels { display: flex; flex-wrap: wrap; gap: 4px; border-top: 1px solid var(--border); padding-top: 10px; margin-top: auto; }
+.rel-tag { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; padding: 2px 7px; border: 1px solid var(--border); color: var(--text-dim); }
+.rel-tag .hunter { color: var(--text); }
+.rel-tag.ally         { border-color: var(--green-dim); color: var(--green-dim); }
+.rel-tag.ally .hunter { color: var(--green); }
+.rel-tag.complicated         { border-color: var(--amber-dim); color: var(--amber-dim); }
+.rel-tag.complicated .hunter { color: var(--amber); }
+.rel-tag.unknown { border-color: var(--border); color: var(--text-dim); }
+
 /* ── MOBILE ── */
 @media (max-width: 600px) {
   nav { display: none; }

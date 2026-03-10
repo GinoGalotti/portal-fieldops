@@ -239,6 +239,78 @@ footer {
   letter-spacing: 0.1em;
 }
 
+/* ── STATS ROW ── */
+/* Used on keeper.html, arcs.html */
+.stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; margin-bottom: 48px; animation: fadeUp 0.8s 0.3s ease both; }
+.stat-box { border: 1px solid var(--border); background: var(--bg2); padding: 16px 18px; font-family: 'Share Tech Mono', monospace; }
+.stat-label { font-size: 0.6rem; letter-spacing: 0.18em; color: var(--text-dim); display: block; margin-bottom: 6px; }
+.stat-val { font-size: 1.6rem; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; color: var(--text); letter-spacing: 0.04em; line-height: 1; }
+.stat-val.green  { color: var(--green); }
+.stat-val.amber  { color: var(--amber); }
+.stat-val.red    { color: var(--red); }
+.stat-val.purple { color: var(--keeper); }
+@media (max-width: 600px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+
+/* ── ARC TRACKER — HUNTER ACCENT VARIABLES ── */
+/* Applied as .hs-rex etc. on .hunter-section wrapper */
+.hs-rex  { --h: #f0a500; --h-dim: #7a5200; --h-bg: rgba(240,165,0,0.04); }
+.hs-reed { --h: #3ab5b0; --h-dim: #1a5a58; --h-bg: rgba(58,181,176,0.04); }
+.hs-alan { --h: #2ec4b6; --h-dim: #1a6e68; --h-bg: rgba(46,196,182,0.04); }
+.hs-sven { --h: #a78bfa; --h-dim: #4c1d95; --h-bg: rgba(167,139,250,0.04); }
+
+/* ── ARC TRACKER — INTERSECTION SECTION ── */
+.intersection { border: 1px solid var(--border); background: var(--bg2); padding: 24px 28px; margin-bottom: 48px; position: relative; overflow: hidden; }
+.intersection::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--keeper), transparent); }
+.int-label { font-family: 'Share Tech Mono', monospace; font-size: 0.62rem; letter-spacing: 0.22em; color: var(--keeper-dim); margin-bottom: 20px; text-transform: uppercase; }
+.int-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.int-row { display: grid; grid-template-columns: 220px 1fr; gap: 0; font-size: 0.85rem; border: 1px solid var(--border); }
+.int-from { font-family: 'Share Tech Mono', monospace; font-size: 0.63rem; letter-spacing: 0.08em; color: var(--text-dim); border-right: 1px solid var(--border); padding: 10px 14px; line-height: 1.7; }
+.int-from strong { display: block; font-size: 0.7rem; letter-spacing: 0.1em; margin-bottom: 2px; }
+.int-note { color: var(--text-dim); line-height: 1.6; padding: 10px 14px; font-size: 0.85rem; }
+.int-note strong { color: var(--text); font-weight: 400; }
+@media (max-width: 600px) {
+  .int-row { grid-template-columns: 1fr; }
+  .int-from { border-right: none; border-bottom: 1px solid var(--border); }
+}
+
+/* ── ARC TRACKER — HUNTER SECTION ── */
+.hunter-section { margin-bottom: 56px; }
+.hunter-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--h-dim); }
+.hunter-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--h); }
+.hunter-playbook { font-family: 'Share Tech Mono', monospace; font-size: 0.63rem; letter-spacing: 0.18em; color: var(--text-dim); }
+.hunter-link { font-family: 'Share Tech Mono', monospace; font-size: 0.63rem; letter-spacing: 0.15em; text-decoration: none; border: 1px solid var(--h-dim); padding: 4px 12px; margin-left: auto; color: var(--h-dim); transition: all 0.15s; }
+.hunter-link:hover { color: var(--h); border-color: var(--h); background: var(--h-bg); }
+@media (max-width: 600px) { .hunter-link { display: none; } }
+
+/* ── ARC TRACKER — ARC GRID & CARDS ── */
+.arc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+@media (max-width: 820px) { .arc-grid { grid-template-columns: 1fr; } }
+
+.arc-card { border: 1px solid var(--border); background: var(--bg2); padding: 20px 22px; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+.arc-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--h-dim), transparent); }
+.arc-card.portal::before { background: linear-gradient(90deg, var(--amber), transparent); }
+.arc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.arc-num { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.18em; color: var(--text-dim); }
+.arc-type { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; letter-spacing: 0.12em; padding: 2px 7px; border: 1px solid; }
+.arc-type.adapted { color: var(--text-dim); border-color: var(--border); }
+.arc-type.portal  { color: var(--amber); border-color: var(--amber-dim); }
+.arc-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 1.1rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text); margin-bottom: 14px; line-height: 1.1; }
+.arc-beats { display: flex; gap: 4px; margin-bottom: 8px; }
+.arc-beat { width: 28px; height: 28px; border: 1px solid var(--border-bright); display: flex; align-items: center; justify-content: center; font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--text-dim); cursor: pointer; transition: all 0.12s; flex-shrink: 0; user-select: none; }
+.arc-beat.filled { background: var(--h-dim); border-color: var(--h); color: var(--text); }
+.arc-beat:hover { border-color: var(--h); }
+.arc-status { display: inline-block; font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; padding: 3px 10px; border: 1px solid; cursor: pointer; margin-bottom: 12px; user-select: none; transition: all 0.15s; }
+.arc-status.dormant  { color: var(--text-dim); border-color: var(--border); }
+.arc-status.active   { color: var(--amber);    border-color: var(--amber-dim); background: rgba(240,165,0,0.04); }
+.arc-status.resolved { color: var(--green);    border-color: var(--green-dim); background: rgba(46,204,113,0.04); }
+.arc-desc { font-size: 0.83rem; color: var(--text-dim); line-height: 1.65; margin-bottom: 10px; flex: 1; }
+.arc-pressure { font-family: 'Share Tech Mono', monospace; font-size: 0.62rem; letter-spacing: 0.06em; color: var(--keeper-dim); border-left: 2px solid var(--keeper-dim); padding: 6px 10px; background: rgba(168,85,247,0.03); line-height: 1.6; margin-top: 8px; }
+.arc-res { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px; }
+.arc-res-label { font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; letter-spacing: 0.15em; color: var(--text-dim); display: block; margin-bottom: 4px; }
+.arc-res-input { width: 100%; background: var(--bg3); border: 1px solid var(--border); color: var(--text); font-family: 'Barlow', sans-serif; font-size: 0.8rem; padding: 5px 8px; outline: none; resize: none; line-height: 1.4; }
+.arc-res-input:focus { border-color: var(--keeper-dim); }
+.arc-res-input::placeholder { color: var(--text-dim); opacity: 0.5; }
+
 /* ── MOBILE ── */
 @media (max-width: 700px) {
   nav { display: none; }

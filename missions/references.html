@@ -106,14 +106,7 @@
 
 <header>
   <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L <span style="font-size:0.7rem;color:var(--keeper-dim);margin-left:8px;">// KEEPER</span></a>
-  <nav>
-    <a href="../index.html">Player Site</a>
-    <a href="index.html">Public Missions</a>
-    <a href="keeper.html">Keeper Index</a>
-    <a href="references.html" class="active">References</a>
-    <a href="entities.html">Entities</a>
-    <a href="gallery.html">Gallery</a>
-  </nav>
+  <nav id="keeper-nav"></nav><script src="keeper-nav.js"></script>
   <div><span class="keeper-dot"></span><span style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--keeper-dim)">RESTRICTED ACCESS</span></div>
 </header>
 
@@ -868,11 +861,11 @@
 
 
 <!-- ══════════════════════════════════════════════════════════════
-     SECTION 5 — FUN ACCIDENTS THIS WEEK
+     SECTION 5 — CAMPBELL ANOMALY DETECTION
      ══════════════════════════════════════════════════════════════ -->
 
   <div class="section-header">
-    <h2>Fun Accidents This Week</h2>
+    <h2>Campbell Anomaly Detection</h2>
     <span class="section-tag">// CAMPBELL LOW-PRIORITY FLAGS — COLOUR &amp; TEXTURE</span>
   </div>
 
@@ -886,7 +879,7 @@
       <div class="rcard-header" onclick="toggleRef('accidents')">
         <div class="rcard-title-block">
           <span class="rcard-eyebrow">// CAMPBELL LOW-PRIORITY QUEUE — UNACTIONED</span>
-          <div class="rcard-name">Current Flag Log</div>
+          <div class="rcard-name">Anomalies Flagged to Review - Week 1</div>
           <div class="rcard-sub">FLAVOUR INCIDENTS — NOT MISSIONS — EXPAND FOR FULL LIST</div>
           <div class="rcard-tags">
             <span class="rtag grey">5 FLAGS UNACTIONED</span>
@@ -919,6 +912,124 @@
     </div>
 
   </div><!-- /accidents ref-list -->
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 6 — LAB INCIDENTS
+     ══════════════════════════════════════════════════════════════ -->
+
+  <div class="section-header">
+    <h2>Lab Incidents</h2>
+    <span class="section-tag">// INTERNAL LOG — CAMPBELL OPERATIONAL FLAGS — NO FIELD DEPLOYMENT REQUIRED</span>
+  </div>
+
+  <div class="section-note">
+    Incidents logged by CAMPBELL that do not require field deployment but technically do require someone to fill in an incident report. Teddy has stopped doing those. Leech has stopped asking.
+  </div>
+
+  <div class="ref-list">
+
+    <div class="rcard portal" id="lab-inc-1">
+      <div class="rcard-header" onclick="toggleRef('lab-inc-1')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// CAMPBELL INTERNAL FLAG — EQUIPMENT ANOMALY</span>
+          <div class="rcard-name">The Coffee Machine</div>
+          <div class="rcard-sub">LAB BREAK ROOM — STATUS: ONGOING / TOLERATED</div>
+          <div class="rcard-tags">
+            <span class="rtag grey">PRIORITY: VERY LOW</span>
+            <span class="rtag grey">LEECH HAS INTERVENED</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body single" id="lab-inc-1-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// INCIDENT LOG</span>
+          <div class="rbody-text">
+            The lab break room coffee machine has been producing output at exactly 16°C above the requested temperature for the past three weeks. Dr. Osei sampled it. Composition: chemically identical to standard coffee. Temperature differential: consistent, unexplained, and strangely pleasant.<br><br>
+            CAMPBELL flagged this as a Class 1 thermal anomaly. Teddy proposed unplugging it. Leech issued a verbal directive prohibiting this. His reasoning, quoted verbatim: <em>"It is making better coffee than before. I don't see the problem."</em><br><br>
+            <em>// CAMPBELL NOTE: "The machine appears to have developed a preference. I recommend leaving it alone."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rcard portal" id="lab-inc-2">
+      <div class="rcard-header" onclick="toggleRef('lab-inc-2')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// CAMPBELL INTERNAL FLAG — EQUIPMENT ANOMALY</span>
+          <div class="rcard-name">Rex's EMF Scanner (Mark III)</div>
+          <div class="rcard-sub">LAB WORKBENCH — STATUS: OPERATIONAL / CONCERNING</div>
+          <div class="rcard-tags">
+            <span class="rtag grey">PRIORITY: LOW</span>
+            <span class="rtag grey">REX UNAWARE</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body single" id="lab-inc-2-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// INCIDENT LOG</span>
+          <div class="rbody-text">
+            Rex's prototype Mark III EMF scanner began rendering background electromagnetic static as audio output approximately ten days ago. This was intentional. What was not intentional: CAMPBELL's analysis of the audio output describes it as <em>"a mild but consistent complaint about the ambient lighting in Lab 2."</em><br><br>
+            Rex has been incrementally adjusting the lab's overhead lights ever since. He has not mentioned why. The scanner's output has shifted from complaint to what CAMPBELL classifies as "neutral acknowledgement." The lighting is now, objectively, better.<br><br>
+            Nobody has told Rex what is happening. There is some debate about whether anyone should.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rcard portal" id="lab-inc-3">
+      <div class="rcard-header" onclick="toggleRef('lab-inc-3')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// CAMPBELL INTERNAL FLAG — ARCHIVE ANOMALY</span>
+          <div class="rcard-name">Marcus's Filing System</div>
+          <div class="rcard-sub">ARCHIVE ROOM — STATUS: RESOLVED (SORT OF)</div>
+          <div class="rcard-tags">
+            <span class="rtag grey">PRIORITY: NONE</span>
+            <span class="rtag grey">MARCUS IS FINE WITH IT</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body single" id="lab-inc-3-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// INCIDENT LOG</span>
+          <div class="rbody-text">
+            At some point overnight on the 4th, the entire physical archive reorganised itself. All documents are present and correctly labelled. Nothing is missing. The new ordering does not follow alphabetical, chronological, or any other classifiable system — but Marcus, upon discovering it, spent forty minutes examining it in silence before declaring that it <em>"makes more sense this way."</em><br><br>
+            He has since updated his index to reflect the new arrangement. Nobody else can find anything without asking him directly. This is, per Finch, "not meaningfully different from before."<br><br>
+            <em>// CAMPBELL NOTE: "I did not do this. I want that on record."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rcard portal" id="lab-inc-4">
+      <div class="rcard-header" onclick="toggleRef('lab-inc-4')">
+        <div class="rcard-title-block">
+          <span class="rcard-eyebrow">// CAMPBELL INTERNAL FLAG — PERSONNEL ANOMALY</span>
+          <div class="rcard-name">Teddy's Containment Unit (Prototype)</div>
+          <div class="rcard-sub">LAB 2 — STATUS: DISASSEMBLED / INCIDENT REPORT OUTSTANDING</div>
+          <div class="rcard-tags">
+            <span class="rtag amber">PRIORITY: LOW</span>
+            <span class="rtag grey">REPORT OVERDUE: 11 DAYS</span>
+          </div>
+        </div>
+        <div class="rcard-toggle">[ EXPAND ▾ ]</div>
+      </div>
+      <div class="rcard-body single" id="lab-inc-4-body">
+        <div class="rbody-section">
+          <span class="rbody-label">// INCIDENT LOG</span>
+          <div class="rbody-text">
+            Teddy's prototype ectoplasmic residue containment unit activated at 3:17am with no input from any logged user. It ran a countdown from an undetermined starting value for approximately four hours, then stopped. CAMPBELL's diagnostic found no fault. Teddy's diagnostic found the same. Neither could explain the countdown's origin or what, if anything, it was counting toward.<br><br>
+            The unit has since been disassembled. Teddy describes this decision as "precautionary." Reed, who was in the lab at the time for unrelated reasons, describes it as "Teddy panicked." Teddy disputes this characterisation but has not filed the required incident report.<br><br>
+            <em>// CAMPBELL NOTE: "The countdown reached zero. Nothing happened. I remain curious about what was supposed to."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /lab-incidents ref-list -->
 
 </main>
 
