@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Field Debrief</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../keeper.css">
+<style>
+
+  /* ─── DEBRIEF PAGE LAYOUT ─── */
+  .debrief-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+
+  /* ─── TOP META BAR ─── */
+  .meta-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 32px;
+    padding: 16px;
+    border: 1px solid var(--border, #1e3428);
+    background: var(--bg2, #0d1410);
+    border-radius: 4px;
+  }
+  .meta-field label {
+    display: block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--text-dim, #5a7a62);
+    margin-bottom: 5px;
+  }
+  .meta-field input, .meta-field select {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border, #1e3428);
+    color: var(--text, #c8ddd0);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    padding: 3px 0;
+    outline: none;
+    letter-spacing: 0.06em;
+    box-sizing: border-box;
+  }
+  .meta-field input:focus, .meta-field select:focus {
+    border-bottom-color: var(--green, #2ecc71);
+  }
+  .meta-field select option { background: var(--bg2, #0d1410); }
+
+  /* ─── SECTION HEADERS ─── */
+  .db-section {
+    margin: 36px 0 16px;
+  }
+  .db-section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    border-bottom: 1px solid var(--border-bright, #2ecc7155);
+    padding-bottom: 6px;
+    margin-bottom: 16px;
+  }
+  .db-section-head h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--green, #2ecc71);
+    margin: 0;
+  }
+  .db-section-head .db-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    color: var(--text-dim, #5a7a62);
+  }
+
+  /* ─── TEXT AREAS ─── */
+  .db-field {
+    margin-bottom: 18px;
+  }
+  .db-field label {
+    display: block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    color: var(--text-dim, #5a7a62);
+    margin-bottom: 6px;
+  }
+  .db-field label em {
+    font-style: italic;
+    color: #3a5a42;
+    letter-spacing: 0.06em;
+    font-size: 0.6rem;
+  }
+  .db-field textarea {
+    width: 100%;
+    background: var(--bg2, #0d1410);
+    border: 1px solid var(--border, #1e3428);
+    border-radius: 3px;
+    color: var(--text, #c8ddd0);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 300;
+    line-height: 1.7;
+    padding: 10px 12px;
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+  }
+  .db-field textarea:focus { border-color: var(--green-dim, #1a7a43); }
+  .db-field textarea::placeholder { color: #2a4a32; font-style: italic; }
+
+  /* ─── HUNTER CARDS ─── */
+  .hunter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  @media (max-width: 600px) { .hunter-grid { grid-template-columns: 1fr; } }
+
+  .hunter-card {
+    border: 1px solid var(--border, #1e3428);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .hunter-card-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    background: var(--bg3, #0a0f0d);
+    border-bottom: 1px solid var(--border, #1e3428);
+  }
+  .hunter-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .hunter-card-head span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .hunter-card-body { padding: 10px; }
+  .hunter-card-body label {
+    display: block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    color: var(--text-dim, #5a7a62);
+    margin: 10px 0 4px;
+  }
+  .hunter-card-body label:first-child { margin-top: 0; }
+  .hunter-card-body textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border, #1e3428);
+    color: var(--text, #c8ddd0);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    line-height: 1.6;
+    padding: 3px 0;
+    outline: none;
+    resize: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+  }
+  .hunter-card-body textarea:focus { border-bottom-color: var(--green-dim, #1a7a43); }
+  .hunter-card-body textarea::placeholder { color: #2a4a32; font-style: italic; }
+
+  /* ─── CHECKLIST GRID ─── */
+  .check-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  @media (max-width: 500px) { .check-grid { grid-template-columns: 1fr; } }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 8px 10px;
+    border: 1px solid var(--border, #1e3428);
+    border-radius: 3px;
+    cursor: pointer;
+    background: var(--bg2, #0d1410);
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+  }
+  .check-item:hover { border-color: var(--green-dim, #1a7a43); }
+  .check-item.checked {
+    border-color: var(--green-dim, #1a7a43);
+    background: rgba(46,204,113,0.05);
+  }
+  .check-item.checked .check-box { background: var(--green, #2ecc71); border-color: var(--green, #2ecc71); }
+  .check-item.checked .check-box::after { opacity: 1; }
+  .check-box {
+    width: 14px; height: 14px;
+    border: 1px solid var(--border-bright, #2ecc7155);
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    position: relative;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .check-box::after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 4px;
+    width: 4px; height: 7px;
+    border-right: 2px solid #080c0a;
+    border-bottom: 2px solid #080c0a;
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: opacity 0.1s;
+  }
+  .check-label {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    color: var(--text, #c8ddd0);
+    line-height: 1.4;
+  }
+  .check-item.checked .check-label { color: var(--text-dim, #5a7a62); text-decoration: line-through; text-decoration-color: var(--green-dim, #1a7a43); }
+
+  /* ─── RATING ROW ─── */
+  .rating-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .rating-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    color: var(--text-dim, #5a7a62);
+    flex-shrink: 0;
+  }
+  .rating-pips {
+    display: flex;
+    gap: 5px;
+  }
+  .pip {
+    width: 22px; height: 22px;
+    border: 1px solid var(--border-bright, #2ecc7155);
+    border-radius: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text-dim, #5a7a62);
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+  }
+  .pip:hover { border-color: var(--green, #2ecc71); color: var(--green, #2ecc71); }
+  .pip.filled { background: var(--green, #2ecc71); border-color: var(--green, #2ecc71); color: #080c0a; font-weight: 700; }
+  .pip.filled ~ .pip { background: transparent; border-color: var(--border-bright, #2ecc7155); color: var(--text-dim, #5a7a62); }
+
+  /* ─── THREAD TAGS ─── */
+  .thread-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 8px;
+  }
+  .thread-tag {
+    border: 1px solid var(--border-bright, #2ecc7155);
+    border-radius: 2px;
+    padding: 4px 9px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--text-dim, #5a7a62);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    user-select: none;
+  }
+  .thread-tag:hover { border-color: var(--green-dim, #1a7a43); color: var(--text, #c8ddd0); }
+  .thread-tag.active { background: rgba(46,204,113,0.08); border-color: var(--green, #2ecc71); color: var(--green, #2ecc71); }
+
+  /* ─── OUTCOME BOX ─── */
+  .outcome-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .outcome-btn {
+    padding: 10px;
+    border-radius: 3px;
+    border: 1px solid var(--border, #1e3428);
+    background: var(--bg2, #0d1410);
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.15s, border-color 0.15s;
+    user-select: none;
+  }
+  .outcome-btn .ob-label {
+    display: block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--text-dim, #5a7a62);
+    margin-bottom: 3px;
+  }
+  .outcome-btn .ob-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--text, #c8ddd0);
+    text-transform: uppercase;
+  }
+  .outcome-btn.active-humane { border-color: var(--green, #2ecc71); background: rgba(46,204,113,0.07); }
+  .outcome-btn.active-humane .ob-val { color: var(--green, #2ecc71); }
+  .outcome-btn.active-partial { border-color: var(--amber, #f0a500); background: rgba(240,165,0,0.07); }
+  .outcome-btn.active-partial .ob-val { color: var(--amber, #f0a500); }
+  .outcome-btn.active-bad { border-color: var(--red, #e05050); background: rgba(224,80,80,0.07); }
+  .outcome-btn.active-bad .ob-val { color: var(--red, #e05050); }
+
+  /* ─── MOMENTUM INDICATOR ─── */
+  .momentum-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid var(--border, #1e3428);
+    background: var(--bg2, #0d1410);
+    border-radius: 3px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+  .momentum-bar .rating-label { flex-shrink: 0; }
+
+  /* ─── DATA CONTROLS ─── */
+  .data-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .data-controls-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    color: var(--text-dim, #5a7a62);
+  }
+  .data-btn {
+    background: none;
+    border: 1px solid var(--border, #1e3428);
+    border-radius: 3px;
+    color: var(--text-dim, #5a7a62);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    padding: 5px 11px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .data-btn:hover { color: var(--green, #2ecc71); border-color: var(--green, #2ecc71); }
+  .data-btn.primary { color: var(--green-dim, #1a7a43); border-color: var(--green-dim, #1a7a43); }
+  .data-btn.primary:hover { color: var(--green, #2ecc71); border-color: var(--green, #2ecc71); background: rgba(46,204,113,0.06); }
+  .data-btn.import-btn { position: relative; overflow: hidden; }
+  .data-btn.import-btn input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; font-size: 0;
+  }
+  .data-btn.new-btn { color: var(--green, #2ecc71); border-color: var(--green-dim, #1a7a43); }
+  .data-btn.new-btn:hover { background: rgba(46,204,113,0.08); }
+  #db-save-flash {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--green, #2ecc71);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  #db-save-flash.show { opacity: 1; }
+
+  /* ─── REPORT LOG ─── */
+  .report-log {
+    border: 1px solid var(--border, #1e3428);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .report-log-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: var(--bg3, #0a0f0d);
+    border-bottom: 1px solid var(--border, #1e3428);
+  }
+  .report-log-head span {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    color: var(--text-dim, #5a7a62);
+  }
+  .report-log-head button {
+    background: none;
+    border: none;
+    color: var(--text-dim, #5a7a62);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.15s;
+  }
+  .report-log-head button:hover { color: var(--green, #2ecc71); }
+  .report-entry {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border, #1e3428);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.12s;
+  }
+  .report-entry:last-child { border-bottom: none; }
+  .report-entry:hover { background: rgba(46,204,113,0.03); }
+  .report-entry .re-session {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--green, #2ecc71);
+    letter-spacing: 0.1em;
+    min-width: 44px;
+  }
+  .report-entry .re-title {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    color: var(--text, #c8ddd0);
+    flex: 1;
+    padding: 0 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .report-entry .re-outcome {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    border: 1px solid;
+  }
+  .re-outcome.humane { color: var(--green, #2ecc71); border-color: var(--green-dim, #1a7a43); }
+  .re-outcome.partial { color: var(--amber, #f0a500); border-color: #7a5200; }
+  .re-outcome.bad { color: var(--red, #e05050); border-color: #5a2020; }
+  .re-outcome.none { color: var(--text-dim, #5a7a62); border-color: var(--border, #1e3428); }
+  .re-del {
+    background: none;
+    border: none;
+    color: #3a3a3a;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0 0 0 10px;
+    line-height: 1;
+    transition: color 0.15s;
+  }
+  .re-del:hover { color: var(--red, #e05050); }
+  .report-empty {
+    padding: 20px;
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    color: #2a4a32;
+  }
+
+  /* ─── KEEPER SYNTHESIS ─── */
+  .synthesis-box {
+    border: 1px solid var(--border-bright, #2ecc7155);
+    border-left: 3px solid var(--green-dim, #1a7a43);
+    border-radius: 0 4px 4px 0;
+    padding: 14px 16px;
+    background: rgba(46,204,113,0.03);
+    margin-bottom: 18px;
+  }
+  .synthesis-box .syn-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    color: var(--green-dim, #1a7a43);
+    display: block;
+    margin-bottom: 10px;
+  }
+  .synthesis-box textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text, #c8ddd0);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 300;
+    line-height: 1.7;
+    padding: 0;
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+  .synthesis-box textarea::placeholder { color: #2a4a32; font-style: italic; }
+
+</style>
+</head>
+<body>
+
+<div class="keeper-banner">KEEPER ACCESS ONLY — DO NOT SHARE THIS URL WITH PLAYERS</div>
+
+<header>
+  <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L <span style="font-size:0.7rem;color:var(--keeper-dim);margin-left:8px;">// KEEPER</span></a>
+  <nav id="keeper-nav"></nav><script src="keeper-nav.js"></script>
+  <div><span class="keeper-dot"></span><span style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--keeper-dim)">RESTRICTED ACCESS</span></div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">// KEEPER — POST-SESSION</div>
+  <h1 class="hero-title">Field<br><span class="accent">Debrief</span></h1>
+  <p class="hero-desc">Fill in after each session while it's fresh. The debrief becomes the seed for next session's prep — loose threads, character moments, and what the table felt.</p>
+</div>
+
+<div class="debrief-wrap">
+
+  <!-- DATA CONTROLS -->
+  <div class="data-controls">
+    <span class="data-controls-label">// REPORTS</span>
+    <button class="data-btn new-btn" id="btn-new">+ NEW DEBRIEF</button>
+    <button class="data-btn primary" id="btn-save">SAVE</button>
+    <button class="data-btn import-btn">
+      IMPORT JSON
+      <input type="file" id="import-file" accept=".json">
+    </button>
+    <button class="data-btn" id="btn-export">EXPORT JSON</button>
+    <span id="db-save-flash">✓ SAVED</span>
+  </div>
+
+  <!-- PAST REPORTS LOG -->
+  <div class="report-log" id="report-log">
+    <div class="report-log-head">
+      <span>// FILED REPORTS</span>
+      <button id="btn-collapse-log">COLLAPSE</button>
+    </div>
+    <div id="report-log-body">
+      <div class="report-empty">No reports filed yet.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:32px;"></div>
+
+  <!-- ═══════════ META ═══════════ -->
+  <div class="meta-bar">
+    <div class="meta-field">
+      <label>// SESSION</label>
+      <input type="text" id="db-session" placeholder="S01" maxlength="8">
+    </div>
+    <div class="meta-field">
+      <label>// MISSION TITLE</label>
+      <input type="text" id="db-mission" placeholder="Something That Wants To Be Known">
+    </div>
+    <div class="meta-field">
+      <label>// DATE</label>
+      <input type="text" id="db-date" placeholder="auto">
+    </div>
+  </div>
+
+  <!-- ═══════════ MISSION OUTCOME ═══════════ -->
+  <div class="db-section">
+    <div class="db-section-head">
+      <h2>Mission Outcome</h2>
+      <span class="db-tag">// HOW DID IT END</span>
+    </div>
+
+    <div class="outcome-row" id="outcome-row">
+      <div class="outcome-btn" data-outcome="humane">
+        <span class="ob-label">// ENDING</span>
+        <span class="ob-val">Humane</span>
+      </div>
+      <div class="outcome-btn" data-outcome="partial">
+        <span class="ob-label">// ENDING</span>
+        <span class="ob-val">Partial / Complicated</span>
+      </div>
+      <div class="outcome-btn" data-outcome="bad">
+        <span class="ob-label">// ENDING</span>
+        <span class="ob-val">Bad Ending</span>
+      </div>
+    </div>
+
+    <div class="db-field">
+      <label>// DIRECTIVE RESULT <em>— did the team meet PORTAL's stated objective?</em></label>
+      <textarea id="db-directive" rows="2" placeholder="e.g. Full / Partial / Failed — and why"></textarea>
+    </div>
+
+    <div class="db-field">
+      <label>// WHAT ACTUALLY HAPPENED <em>— 2–4 sentences, plain summary</em></label>
+      <textarea id="db-summary" rows="4" placeholder="The team arrived at Aldermoor, found Arthur, located the estate agent's office…"></textarea>
+    </div>
+  </div>
+
+  <!-- ═══════════ WHAT LANDED ═══════════ -->
+  <div class="db-section">
+    <div class="db-section-head">
+      <h2>What Landed</h2>
+      <span class="db-tag">// TABLE TEMPERATURE</span>
+    </div>
+
+    <div class="momentum-bar">
+      <span class="rating-label">// ENERGY AT THE TABLE</span>
+      <div class="rating-pips" id="energy-pips">
+        <div class="pip" data-val="1">1</div>
+        <div class="pip" data-val="2">2</div>
+        <div class="pip" data-val="3">3</div>
+        <div class="pip" data-val="4">4</div>
+        <div class="pip" data-val="5">5</div>
+      </div>
+      <span class="rating-label" style="margin-left:18px;">// EMOTIONAL INTENSITY</span>
+      <div class="rating-pips" id="intensity-pips">
+        <div class="pip" data-val="1">1</div>
+        <div class="pip" data-val="2">2</div>
+        <div class="pip" data-val="3">3</div>
+        <div class="pip" data-val="4">4</div>
+        <div class="pip" data-val="5">5</div>
+      </div>
+    </div>
+
+    <div class="db-field">
+      <label>// BEST MOMENT <em>— the scene, exchange, or decision everyone will remember</em></label>
+      <textarea id="db-best" rows="3" placeholder="The moment when…"></textarea>
+    </div>
+
+    <div class="db-field">
+      <label>// WHAT SURPRISED YOU <em>— player choices, NPC reactions, anything that went off-script</em></label>
+      <textarea id="db-surprise" rows="3" placeholder="Nobody expected…"></textarea>
+    </div>
+
+    <div class="db-field">
+      <label>// WHAT FELL FLAT <em>— honest note, keeper-only. What didn't land and why</em></label>
+      <textarea id="db-flat" rows="2" placeholder="The — scene dragged / the NPC felt thin / the pacing broke at…"></textarea>
+    </div>
+  </div>
+
+  <!-- ═══════════ THE HUNTERS ═══════════ -->
+  <div class="db-section">
+    <div class="db-section-head">
+      <h2>The Hunters</h2>
+      <span class="db-tag">// PER-CHARACTER RECORD</span>
+    </div>
+
+    <div class="hunter-grid">
+
+      <div class="hunter-card">
+        <div class="hunter-card-head">
+          <div class="hunter-dot" style="background:#f0a500;"></div>
+          <span style="color:#f0a500;">Rex Bangley</span>
+        </div>
+        <div class="hunter-card-body">
+          <label>// KEY ACTION OR DECISION</label>
+          <textarea data-hunter="rex" data-field="action" rows="2" placeholder="What Rex did that mattered…"></textarea>
+          <label>// ARC MOVEMENT</label>
+          <textarea data-hunter="rex" data-field="arc" rows="2" placeholder="Any arc beats that moved? Anything that set one up?"></textarea>
+          <label>// KEEPER NOTE</label>
+          <textarea data-hunter="rex" data-field="note" rows="2" placeholder="Something to use next session…"></textarea>
+        </div>
+      </div>
+
+      <div class="hunter-card">
+        <div class="hunter-card-head">
+          <div class="hunter-dot" style="background:#3ab5b0;"></div>
+          <span style="color:#3ab5b0;">Reed Atwood</span>
+        </div>
+        <div class="hunter-card-body">
+          <label>// KEY ACTION OR DECISION</label>
+          <textarea data-hunter="reed" data-field="action" rows="2" placeholder="What Reed did that mattered…"></textarea>
+          <label>// ARC MOVEMENT</label>
+          <textarea data-hunter="reed" data-field="arc" rows="2" placeholder="Any arc beats that moved? Anything that set one up?"></textarea>
+          <label>// KEEPER NOTE</label>
+          <textarea data-hunter="reed" data-field="note" rows="2" placeholder="Something to use next session…"></textarea>
+        </div>
+      </div>
+
+      <div class="hunter-card">
+        <div class="hunter-card-head">
+          <div class="hunter-dot" style="background:#2ec4b6;"></div>
+          <span style="color:#2ec4b6;">Alan Frazier</span>
+        </div>
+        <div class="hunter-card-body">
+          <label>// KEY ACTION OR DECISION</label>
+          <textarea data-hunter="alan" data-field="action" rows="2" placeholder="What Alan did that mattered…"></textarea>
+          <label>// ARC MOVEMENT</label>
+          <textarea data-hunter="alan" data-field="arc" rows="2" placeholder="Any arc beats that moved? Anything that set one up?"></textarea>
+          <label>// KEEPER NOTE</label>
+          <textarea data-hunter="alan" data-field="note" rows="2" placeholder="Something to use next session…"></textarea>
+        </div>
+      </div>
+
+      <div class="hunter-card">
+        <div class="hunter-card-head">
+          <div class="hunter-dot" style="background:#a78bfa;"></div>
+          <span style="color:#a78bfa;">Sven</span>
+        </div>
+        <div class="hunter-card-body">
+          <label>// KEY ACTION OR DECISION</label>
+          <textarea data-hunter="sven" data-field="action" rows="2" placeholder="What Sven did that mattered…"></textarea>
+          <label>// ARC MOVEMENT</label>
+          <textarea data-hunter="sven" data-field="arc" rows="2" placeholder="Any arc beats that moved? Anything that set one up?"></textarea>
+          <label>// KEEPER NOTE</label>
+          <textarea data-hunter="sven" data-field="note" rows="2" placeholder="Something to use next session…"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ THREADS ═══════════ -->
+  <div class="db-section">
+    <div class="db-section-head">
+      <h2>Active Threads</h2>
+      <span class="db-tag">// WHAT'S LIVE AFTER THIS SESSION</span>
+    </div>
+
+    <div style="margin-bottom:10px;">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;color:var(--text-dim);margin-bottom:8px;">// TAG THREADS THAT MOVED OR OPENED THIS SESSION</div>
+      <div class="thread-row" id="thread-tags">
+        <div class="thread-tag" data-thread="project-veil">PROJECT VEIL</div>
+        <div class="thread-tag" data-thread="mesa">MESA</div>
+        <div class="thread-tag" data-thread="rook">ROOK</div>
+        <div class="thread-tag" data-thread="dan-nilsson">DAN NILSSON</div>
+        <div class="thread-tag" data-thread="campbell">CAMPBELL</div>
+        <div class="thread-tag" data-thread="sven-death">SVEN'S DEATH</div>
+        <div class="thread-tag" data-thread="alan-fey">ALAN'S ORIGIN</div>
+        <div class="thread-tag" data-thread="reed-directive">REED'S DIRECTIVE</div>
+        <div class="thread-tag" data-thread="leech">DR. LEECH</div>
+        <div class="thread-tag" data-thread="bim">BIM / ASH</div>
+        <div class="thread-tag" data-thread="cartographer">THE CARTOGRAPHER</div>
+        <div class="thread-tag" data-thread="mesa-samples">MESA SAMPLES</div>
+      </div>
+    </div>
+
+    <div class="db-field">
+      <label>// UNRESOLVED — what did the team leave open, unasked, or deliberately avoided?</label>
+      <textarea id="db-unresolved" rows="3" placeholder="They never asked about the whiteboard dates. Reed didn't tell Rex about…"></textarea>
+    </div>
+
+    <div class="db-field">
+      <label>// NEW QUESTIONS — what does this session make the players curious about?</label>
+      <textarea id="db-questions" rows="3" placeholder="Who owns @helixboundary.com? Why did the entity recognise Sven?…"></textarea>
+    </div>
+
+    <div class="db-field">
+      <label>// NPCS WHO MADE AN IMPRESSION — names and one line on why they landed</label>
+      <textarea id="db-npcs" rows="3" placeholder="Arthur — his patience made the stakes human. Rook — the moment she looked at Sven…"></textarea>
+    </div>
+  </div>
+
+  <!-- ═══════════ CLOCK STATUS ═══════════ -->
+  <div class="db-section">
+    <div class="db-section-head">
+      <h2>Countdowns</h2>
+      <span class="db-tag">// CLOCK STATUS AFTER SESSION</span>
+    </div>
+
+    <div class="check-grid" id="clock-grid">
+      <div class="check-item" data-clock="gordon-avery">
+        <div class="check-box"></div>
+        <span class="check-label"><strong>Case A — Gordon Avery</strong> clock advanced</span>
+      </div>
+      <div class="check-item" data-clock="nadia">
+        <div class="check-box"></div>
+        <span class="check-label"><strong>Case C — Nadia (9-day window)</strong> — days elapsed?</span>
+      </div>
+      <div class="check-item" data-clock="martin">
+        <div class="check-box"></div>
+        <span class="check-label"><strong>Case D — Martin / Mira</strong> 14-day window advanced</span>
+      </div>
+      <div class="check-item" data-clock="theatre">
+        <div class="check-box"></div>
+        <span class="check-label"><strong>Case E — Meridian Theatre</strong> Saturday closing in</span>
+      </div>
+      <div class="check-item" data-clock="mesa-presence">
+        <div class="check-box"></div>
+        <span class="check-label"><strong>MESA</strong> increased presence / new intel</span>
+      </div>
+      <div class="check-item" data-clock="campbell-flag">
+        <div class="check-box"></div>
+        <span class="check-label"><strong>CAMPBELL</strong> flagged something internally</span>
+      </div>
+    </div>
+
+    <div class="db-field" style="margin-top:12px;">
+      <label>// CLOCK NOTES</label>
+      <textarea id="db-clocks" rows="2" placeholder="Nadia down to 6 days. Martin letter sent — Mira has 10 days…"></textarea>
+    </div>
+  </div>
+
+  <!-- ═══════════ NEXT SESSION SEEDS ═══════════ -->
+  <div class="db-section">
+    <div class="db-section-head">
+      <h2>Next Session Seeds</h2>
+      <span class="db-tag">// KEEPER ONLY — PREP NOTES</span>
+    </div>
+
+    <div class="synthesis-box">
+      <span class="syn-label">// KEEPER SYNTHESIS — what thread deserves to be the spine of next session?</span>
+      <textarea id="db-spine" rows="3" placeholder="The most live thing coming out of this session is…"></textarea>
+    </div>
+
+    <div class="db-field">
+      <label>// OPENING IMAGE — how does next session start? One concrete image or moment</label>
+      <textarea id="db-opening" rows="2" placeholder="Reed gets a call from a number he doesn't recognise. CAMPBELL's voice, but the phrasing is slightly off…"></textarea>
+    </div>
+
+    <div class="db-field">
+      <label>// WHAT CAMPBELL KNOWS THAT THE HUNTERS DON'T — update after each session</label>
+      <textarea id="db-campbell" rows="3" placeholder="CAMPBELL registered the BIM signature match between Aldermoor and S01. Has not flagged it yet. Waiting for…"></textarea>
+    </div>
+
+    <div class="db-field">
+      <label>// THINGS TO SET UP SOON — breadcrumbs to plant in upcoming sessions</label>
+      <textarea id="db-setup" rows="3" placeholder="Dan Nilsson mention. Reed's private directive needs to surface. Sven's encounter at the boundary…"></textarea>
+    </div>
+
+    <div class="db-field">
+      <label>// QUESTIONS FOR THE AI — when using this debrief to generate next session, ask about…</label>
+      <textarea id="db-ai-prompt" rows="3" placeholder="How does Rook's observation of Sven affect MESA's intel on PORTAL? What case should the next mission be built around given…"></textarea>
+    </div>
+  </div>
+
+  <!-- SAVE -->
+  <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:12px;">
+    <button class="data-btn" id="btn-discard" style="color:#5a2a2a;">DISCARD</button>
+    <button class="data-btn primary" id="btn-save-bottom">SAVE REPORT</button>
+  </div>
+
+</div><!-- /debrief-wrap -->
+
+<footer>
+  <span>// P.O.R.T.A.L — KEEPER DOCUMENT — FIELD DEBRIEF</span>
+  <span>PROGRESS SAVES LOCALLY — EXPORT TO BACK UP</span>
+</footer>
+
+<script>
+// ─────────────────────────────────────────────
+//  STORAGE
+// ─────────────────────────────────────────────
+const STORE = 'portal-debrief-v1';
+
+function loadAll() {
+  try { return JSON.parse(localStorage.getItem(STORE)) || { reports: [], current: null }; }
+  catch(e) { return { reports: [], current: null }; }
+}
+function saveAll(data) {
+  try { localStorage.setItem(STORE, JSON.stringify(data)); } catch(e) {}
+}
+
+// ─────────────────────────────────────────────
+//  GENERATE BLANK REPORT
+// ─────────────────────────────────────────────
+function blankReport() {
+  return {
+    id: Date.now(),
+    session: '', mission: '',
+    date: new Date().toISOString().slice(0,10),
+    outcome: null,
+    directive: '', summary: '',
+    energy: 0, intensity: 0,
+    best: '', surprise: '', flat: '',
+    hunters: {
+      rex:  { action:'', arc:'', note:'' },
+      reed: { action:'', arc:'', note:'' },
+      alan: { action:'', arc:'', note:'' },
+      sven: { action:'', arc:'', note:'' }
+    },
+    threads: [],
+    unresolved: '', questions: '', npcs: '',
+    clocks: [],
+    clockNotes: '',
+    spine: '', opening: '', campbell: '', setup: '', aiPrompt: ''
+  };
+}
+
+// ─────────────────────────────────────────────
+//  READ FORM → REPORT OBJECT
+// ─────────────────────────────────────────────
+function formToReport(base) {
+  var r = Object.assign({}, base);
+  r.session  = document.getElementById('db-session').value.trim();
+  r.mission  = document.getElementById('db-mission').value.trim();
+  r.date     = document.getElementById('db-date').value.trim();
+  r.directive = document.getElementById('db-directive').value;
+  r.summary   = document.getElementById('db-summary').value;
+  r.best      = document.getElementById('db-best').value;
+  r.surprise  = document.getElementById('db-surprise').value;
+  r.flat      = document.getElementById('db-flat').value;
+  r.unresolved= document.getElementById('db-unresolved').value;
+  r.questions = document.getElementById('db-questions').value;
+  r.npcs      = document.getElementById('db-npcs').value;
+  r.clockNotes= document.getElementById('db-clocks').value;
+  r.spine     = document.getElementById('db-spine').value;
+  r.opening   = document.getElementById('db-opening').value;
+  r.campbell  = document.getElementById('db-campbell').value;
+  r.setup     = document.getElementById('db-setup').value;
+  r.aiPrompt  = document.getElementById('db-ai-prompt').value;
+
+  // outcome
+  var activeOutcome = document.querySelector('.outcome-btn[class*="active-"]');
+  r.outcome = activeOutcome ? activeOutcome.dataset.outcome : null;
+
+  // pips
+  var ep = document.querySelector('#energy-pips .pip.filled:last-of-type');
+  r.energy = ep ? parseInt(ep.dataset.val) : 0;
+  var ip = document.querySelector('#intensity-pips .pip.filled:last-of-type');
+  r.intensity = ip ? parseInt(ip.dataset.val) : 0;
+
+  // threads
+  r.threads = Array.from(document.querySelectorAll('.thread-tag.active')).map(function(t){ return t.dataset.thread; });
+
+  // clocks
+  r.clocks = Array.from(document.querySelectorAll('.check-item.checked')).map(function(c){ return c.dataset.clock; });
+
+  // hunters
+  document.querySelectorAll('[data-hunter]').forEach(function(ta) {
+    var h = ta.dataset.hunter; var f = ta.dataset.field;
+    if (!r.hunters[h]) r.hunters[h] = {};
+    r.hunters[h][f] = ta.value;
+  });
+
+  return r;
+}
+
+// ─────────────────────────────────────────────
+//  LOAD REPORT → FORM
+// ─────────────────────────────────────────────
+function reportToForm(r) {
+  document.getElementById('db-session').value  = r.session  || '';
+  document.getElementById('db-mission').value  = r.mission  || '';
+  document.getElementById('db-date').value     = r.date     || '';
+  document.getElementById('db-directive').value= r.directive|| '';
+  document.getElementById('db-summary').value  = r.summary  || '';
+  document.getElementById('db-best').value     = r.best     || '';
+  document.getElementById('db-surprise').value = r.surprise || '';
+  document.getElementById('db-flat').value     = r.flat     || '';
+  document.getElementById('db-unresolved').value= r.unresolved||'';
+  document.getElementById('db-questions').value = r.questions||'';
+  document.getElementById('db-npcs').value     = r.npcs     || '';
+  document.getElementById('db-clocks').value   = r.clockNotes||'';
+  document.getElementById('db-spine').value    = r.spine    || '';
+  document.getElementById('db-opening').value  = r.opening  || '';
+  document.getElementById('db-campbell').value = r.campbell || '';
+  document.getElementById('db-setup').value    = r.setup    || '';
+  document.getElementById('db-ai-prompt').value= r.aiPrompt || '';
+
+  // outcome
+  document.querySelectorAll('.outcome-btn').forEach(function(b) {
+    b.className = 'outcome-btn';
+    if (r.outcome && b.dataset.outcome === r.outcome) b.classList.add('active-' + r.outcome);
+  });
+
+  // pips
+  setPips('energy-pips', r.energy || 0);
+  setPips('intensity-pips', r.intensity || 0);
+
+  // threads
+  document.querySelectorAll('.thread-tag').forEach(function(t) {
+    t.classList.toggle('active', r.threads && r.threads.indexOf(t.dataset.thread) > -1);
+  });
+
+  // clocks
+  document.querySelectorAll('.check-item').forEach(function(c) {
+    c.classList.toggle('checked', r.clocks && r.clocks.indexOf(c.dataset.clock) > -1);
+  });
+
+  // hunters
+  document.querySelectorAll('[data-hunter]').forEach(function(ta) {
+    var h = ta.dataset.hunter; var f = ta.dataset.field;
+    ta.value = (r.hunters && r.hunters[h] && r.hunters[h][f]) ? r.hunters[h][f] : '';
+  });
+}
+
+function setPips(id, val) {
+  var pips = document.querySelectorAll('#' + id + ' .pip');
+  pips.forEach(function(p) { p.classList.toggle('filled', parseInt(p.dataset.val) <= val); });
+}
+
+// ─────────────────────────────────────────────
+//  RENDER REPORT LOG
+// ─────────────────────────────────────────────
+function renderLog() {
+  var data = loadAll();
+  var body = document.getElementById('report-log-body');
+  if (!data.reports || !data.reports.length) {
+    body.innerHTML = '<div class="report-empty">No reports filed yet.</div>';
+    return;
+  }
+  body.innerHTML = '';
+  var sorted = data.reports.slice().reverse();
+  sorted.forEach(function(r) {
+    var div = document.createElement('div');
+    div.className = 'report-entry';
+    div.dataset.id = r.id;
+    var oc = r.outcome || 'none';
+    div.innerHTML =
+      '<span class="re-session">' + (r.session || '—') + '</span>' +
+      '<span class="re-title">' + (r.mission || 'Untitled') + '</span>' +
+      '<span class="re-outcome ' + oc + '">' + (oc === 'none' ? '—' : oc.toUpperCase()) + '</span>' +
+      '<button class="re-del" data-id="' + r.id + '" title="Delete">×</button>';
+    div.addEventListener('click', function(e) {
+      if (e.target.classList.contains('re-del')) return;
+      loadReport(r.id);
+    });
+    div.querySelector('.re-del').addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (confirm('Delete this report?')) { deleteReport(r.id); }
+    });
+    body.appendChild(div);
+  });
+}
+
+// ─────────────────────────────────────────────
+//  CURRENT REPORT STATE
+// ─────────────────────────────────────────────
+var currentReport = blankReport();
+
+function loadReport(id) {
+  var data = loadAll();
+  var r = data.reports.find(function(x){ return x.id === id; });
+  if (r) { currentReport = Object.assign({}, r); reportToForm(currentReport); }
+}
+
+function saveReport() {
+  currentReport = formToReport(currentReport);
+  var data = loadAll();
+  var idx = data.reports.findIndex(function(x){ return x.id === currentReport.id; });
+  if (idx > -1) { data.reports[idx] = currentReport; }
+  else { data.reports.push(currentReport); }
+  saveAll(data);
+  renderLog();
+  flash();
+}
+
+function deleteReport(id) {
+  var data = loadAll();
+  data.reports = data.reports.filter(function(x){ return x.id !== id; });
+  saveAll(data);
+  renderLog();
+}
+
+function flash() {
+  var el = document.getElementById('db-save-flash');
+  el.classList.add('show');
+  setTimeout(function(){ el.classList.remove('show'); }, 1800);
+}
+
+// ─────────────────────────────────────────────
+//  BUTTON WIRING
+// ─────────────────────────────────────────────
+document.getElementById('btn-new').addEventListener('click', function() {
+  currentReport = blankReport();
+  reportToForm(currentReport);
+});
+
+document.getElementById('btn-save').addEventListener('click', saveReport);
+document.getElementById('btn-save-bottom').addEventListener('click', saveReport);
+
+document.getElementById('btn-discard').addEventListener('click', function() {
+  if (confirm('Discard current form? Unsaved changes will be lost.')) {
+    currentReport = blankReport();
+    reportToForm(currentReport);
+  }
+});
+
+document.getElementById('btn-collapse-log').addEventListener('click', function() {
+  var body = document.getElementById('report-log-body');
+  var hidden = body.style.display === 'none';
+  body.style.display = hidden ? '' : 'none';
+  this.textContent = hidden ? 'COLLAPSE' : 'EXPAND';
+});
+
+// Outcome buttons
+document.querySelectorAll('.outcome-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var oc = btn.dataset.outcome;
+    document.querySelectorAll('.outcome-btn').forEach(function(b){ b.className = 'outcome-btn'; });
+    btn.classList.add('active-' + oc);
+  });
+});
+
+// Pip ratings
+function initPips(id) {
+  document.querySelectorAll('#' + id + ' .pip').forEach(function(pip) {
+    pip.addEventListener('click', function() {
+      var val = parseInt(pip.dataset.val);
+      var pips = document.querySelectorAll('#' + id + ' .pip');
+      // clicking filled pip at current max = toggle off
+      var curMax = 0;
+      pips.forEach(function(p){ if(p.classList.contains('filled')) curMax = parseInt(p.dataset.val); });
+      var newVal = (val === curMax) ? 0 : val;
+      pips.forEach(function(p){ p.classList.toggle('filled', parseInt(p.dataset.val) <= newVal); });
+    });
+  });
+}
+initPips('energy-pips');
+initPips('intensity-pips');
+
+// Thread tags
+document.querySelectorAll('.thread-tag').forEach(function(tag) {
+  tag.addEventListener('click', function() { tag.classList.toggle('active'); });
+});
+
+// Clock checkboxes
+document.querySelectorAll('.check-item').forEach(function(item) {
+  item.addEventListener('click', function() { item.classList.toggle('checked'); });
+});
+
+// Auto-fill date
+var dateInput = document.getElementById('db-date');
+if (!dateInput.value) dateInput.value = new Date().toISOString().slice(0,10);
+
+// ─────────────────────────────────────────────
+//  EXPORT / IMPORT
+// ─────────────────────────────────────────────
+document.getElementById('btn-export').addEventListener('click', function() {
+  var data = loadAll();
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'portal-debriefs.json';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('import-file').addEventListener('change', function(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      var imported = JSON.parse(ev.target.result);
+      saveAll(imported);
+      renderLog();
+      flash();
+    } catch(err) {
+      alert('Could not read file — make sure it is a valid PORTAL debrief export.');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+// ─────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────
+renderLog();
+reportToForm(currentReport);
+</script>
+</body>
+</html>
