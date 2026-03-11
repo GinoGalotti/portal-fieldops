@@ -21,9 +21,10 @@
     { label: 'The Lab',    href: b + 'the-lab.html',  match: 'the-lab.html' },
     { label: 'Artefacts',  href: b + 'index.html#artefacts' },
     { label: 'Missions',   href: m + 'missions.html',  match: 'missions.html' },
-    { label: 'Contacts',   href: m + 'contacts.html',  match: 'contacts.html' },
+    { label: 'Contacts',   href: b + 'contacts.html',   match: 'contacts.html' },
     { label: 'Report',     href: b + 'reports/player-report.html',    match: 'player-report.html' },
     { label: 'Queue',      href: m + 'campbell-briefings.html',        match: 'campbell-briefings.html' },
+    { label: 'Feed',       href: b + 'feed.html',       match: 'feed.html' },
   ];
 
   // Status dot

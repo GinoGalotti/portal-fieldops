@@ -62,22 +62,30 @@ portal-fieldops/
 │   ├── hunters.json               # Hunter identity layer: playbook, accent colour, lore, luck_special, area_of_study, keeper notes
 │   ├── playbook-moves.json        # Move definitions keyed by data-check-key → name, roll, description (feed layer)
 │   ├── portal-npcs.json           # Full NPC roster with player/keeper description split, session_overrides, keeper_scene_notes
-│   └── portal-entities.json       # Entity/threat database; session_overrides controls player bestiary visibility
+│   ├── portal-entities.json       # Entity/threat database; session_overrides controls player bestiary visibility
+│   └── session-data.json          # Per-session data for feed.html THREATS tab: doc path, entity_ids, threats[], equipment[], readaloud[]
 │
 ├── session-state.js           # Shared session resolution + DOM visibility + keeper toggle injection
 ├── functions/                 # CF Pages Functions (serverless API, auto-routed)
 │   └── api/v1/
 │       ├── hunters/[id]/arc-state.js          # GET + PUT hunter arc state → D1
+│       ├── hunters/[id]/sheet.js              # GET + PUT full hunter sheet (stats, harm, luck, xp, checks, bonds) → D1
 │       ├── reports/[id]/state.js              # GET + PUT keeper field report per session → D1
 │       ├── player-reports/[week]/[hunter]/state.js  # GET + PUT player debrief per week+hunter → D1
-│       └── session/active.js                 # GET active session from D1; PUT to set (keeper toggle)
+│       ├── session/active.js                 # GET active session from D1; PUT to set (keeper toggle)
+│       ├── rolls.js                           # GET (after= polling / offset= pagination) + POST → D1 rolls table
+│       └── messages.js                        # GET (after= polling / offset= pagination) + POST → D1 messages table
 │
 ├── workers/                   # Cloudflare Workers API (Phase 3+)
 │   ├── schema.sql             # D1 schema — already applied to remote DB
 │   ├── migrations/            # Numbered SQL migration files
-│   │   ├── 001_arc_state.sql     # hunter_arc_state table (applied remote + local)
-│   │   ├── 002_field_reports.sql # field_reports table (applied local; remote needs wrangler login)
-│   │   └── 003_player_reports.sql # player_reports table (applied local)
+│   │   ├── 001_arc_state.sql      # hunter_arc_state ✅ remote + local
+│   │   ├── 002_field_reports.sql  # field_reports ✅ remote + local
+│   │   ├── 003_player_reports.sql # player_reports ✅ remote + local
+│   │   ├── 004_active_session.sql # active_session ✅ remote + local
+│   │   ├── 005_hunter_sheets.sql  # hunter_sheets ✅ remote + local
+│   │   ├── 006_team_state.sql     # team_state ✅ remote + local
+│   │   └── 007_feed_tables.sql    # rolls + messages ✅ remote + local
 │   └── src/                   # (Phase 3) Workers source
 │       ├── index.ts           # Main router
 │       └── routes/
@@ -233,10 +241,21 @@ CREATE TABLE rolls (
   roll_2    INTEGER NOT NULL,
   modifier  INTEGER DEFAULT 0,
   total     INTEGER NOT NULL,
-  outcome   TEXT NOT NULL,             -- 'hit' (10+) | 'partial' (7-9) | 'miss' (6-)
+  outcome   TEXT NOT NULL,             -- custom thresholds: 'advanced' (13+) | 'hit' (11-12) | 'partial' (7-10) | 'miss' (6-)
   note      TEXT,
-  timestamp TEXT DEFAULT (datetime('now'))
+  rolled_at TEXT DEFAULT (datetime('now'))
   -- append-only: never UPDATE or DELETE rows
+);
+
+CREATE TABLE IF NOT EXISTS messages (
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  session_id   TEXT,
+  sender       TEXT DEFAULT 'CAMPBELL',  -- 'CAMPBELL' | 'DIRECTOR' | 'MESA' | 'SYSTEM' | operative name
+  recipient    TEXT DEFAULT 'all',
+  subject      TEXT,
+  body         TEXT NOT NULL,
+  delivered    INTEGER DEFAULT 1,
+  delivered_at TEXT DEFAULT (datetime('now'))
 );
 
 -- ─── SESSION STATE ──────────────────────────────────────────────────────────

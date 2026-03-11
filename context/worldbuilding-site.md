@@ -47,14 +47,12 @@ When the Keeper asks you to build a page:
 | `arcs.html` | `keeper.css` | Keeper | Arc tracker — all 12 hunter arcs, beat tracking, session stamping, intersection map, localStorage + JSON export/import |
 | `report.html` | `keeper.css` | Keeper | Keeper post-session field report — session tab switcher (S01/S02), outcome, hunter cards, per-session scene notes, thread tags, clock status, seeds. Saves to D1. "Copy for Claude" exports Markdown. |
 | `reports/player-report.html` | `player.css` | Player | Operative Field Report — week + hunter selector, 5 rating pips, general feedback, per-week scene questions. Unique save per week+hunter, D1-backed. Linked from player nav as "Report". |
+| `contacts.html` | `player.css` | Player | NPC Contact Directory — fetches `portal-npcs.json`, renders player-visible NPCs grouped by affiliation (PORTAL staff / field contacts / unknown). Static render, no D1 dependency. |
+| `feed.html` | `player.css` + inline | Player + Keeper | Live session tool — split layout (feed left, panel right). Hunter picker; **Moves tab** (always-active + playbook + basic moves, inline modifier + ROLL, hover shows description + outcome rows + questions for Investigate/Read); **Contacts tab** (player-visible NPCs, double-click to add per-hunter private note stored in `localStorage('portal_contact_notes')` as `{hunter_id:{npc_id:text}}`); **Handouts tab** (placeholder). Bottom composer for any player to post to the feed. Roll entries show breakdown `[d1 + d2 + stat + mod = total]`, hover shows specific outcome text + question list (for Investigate a Mystery / Read a Bad Situation). 3s D1 polling, 5s auto-save for harm/luck/xp changes. Keeper mode (5× logo click) replaces player UI with 4 tabs: **OPERATIVES** (click hunter to view sheet + moves), **CONTACTS** (session filter S01/S02/ALL + NPC visibility toggles persisted to localStorage), **REFERENCES** (MoTW rules cheat sheet: outcomes, harm moves, luck, XP, end-of-session, principles, keeper moves, monster moves, phenomena moves, investigate questions, keeper page links), **THREATS** (session selector, entity stat block from `portal-entities.json`, threats/minions/bystanders + equipment from `session-data.json`). |
 
 ### Upcoming Pages (planned, not yet built)
 
-**Immediate priority:**
-
-| Page | CSS | Description |
-|------|-----|-------------|
-| `app/feed.html` | custom | Live Feed — split-screen session tool. Left: rolling feed of rolls + CAMPBELL messages. Right: playbook panel (sheet, NPCs, handouts). Keeper mode via double-click. First version uses D1 polling; real-time via Durable Objects later. |
+**Immediate priority:** *(feed.html and contacts.html are now built — see Current Pages above)*
 
 **Player-facing:**
 
@@ -148,7 +146,7 @@ W03: {
 
 ### Navigation Conventions
 
-**Player nav links (in order):** Briefing · Operatives · Bestiary · The Lab · Artefacts · Missions · Contacts · Report · Queue. Injected by `player-nav.js` into `#player-nav`. The script handles base-path from any subdirectory (`missions/`, `hunters/`, `reports/`). Never link to keeper pages from player nav.
+**Player nav links (in order):** Briefing · Operatives · Bestiary · The Lab · Artefacts · Missions · Contacts · Report · Queue · **Feed**. Injected by `player-nav.js` into `#player-nav`. The script handles base-path from any subdirectory (`missions/`, `hunters/`, `reports/`). Never link to keeper pages from player nav. `contacts.html` is at the repo root (not inside `missions/`).
 
 **Keeper pages:** Must open with `<div class="keeper-banner">KEEPER ACCESS ONLY — DO NOT SHARE THIS URL WITH PLAYERS</div>` as the first element in `<body>`. Nav links: Player Site → `../index.html`, Keeper Index → `keeper.html`.
 

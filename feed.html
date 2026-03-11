@@ -1,0 +1,2156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Feed</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="player.css">
+<style>
+/* ── LAYOUT ──────────────────────────────────────────────────────────────── */
+body { overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+header { flex-shrink: 0; position: relative; }
+.feed-layout {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  flex: 1;
+  min-height: 0;
+  gap: 0;
+}
+
+/* ── FEED (LEFT) ─────────────────────────────────────────────────────────── */
+.feed-col {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--border);
+}
+.feed-header {
+  flex-shrink: 0;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.feed-header-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--green-dim);
+}
+
+.feed-entries {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* "Load earlier" lives at top of the scrollable feed area */
+.feed-load-more-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.feed-load-more {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.75rem;
+  border-radius: 2px;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  transition: color 0.15s, border-color 0.15s;
+}
+.feed-load-more:hover { color: var(--green); border-color: var(--green-dim); }
+.feed-load-more:disabled { opacity: 0.4; cursor: default; }
+
+/* ── FEED ENTRY ──────────────────────────────────────────────────────────── */
+.feed-entry {
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  cursor: default;
+  transition: background 0.1s;
+  position: relative;
+}
+.feed-entry:hover { background: rgba(255,255,255,0.02); }
+.feed-entry:hover .feed-outcome-detail { opacity: 1; max-height: 500px; }
+
+.feed-entry-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+.feed-hunter-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  padding: 0.1rem 0.35rem;
+  border-radius: 2px;
+  border: 1px solid transparent;
+}
+.feed-move-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-bright);
+  text-transform: uppercase;
+}
+.feed-time {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  color: var(--text-dim);
+  margin-left: auto;
+}
+
+.feed-roll-line {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.feed-breakdown {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+.feed-breakdown .die { color: var(--text); }
+.feed-breakdown .stat-val { color: var(--green-dim); }
+.feed-breakdown .mod-val { color: #7bafd4; }
+.feed-breakdown .total { color: var(--text-bright); font-weight: bold; }
+
+.feed-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 2px;
+  font-weight: bold;
+}
+.feed-badge.advanced { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.3); }
+.feed-badge.hit      { background: rgba(46,204,113,0.15);  color: #2ecc71; border: 1px solid rgba(46,204,113,0.3); }
+.feed-badge.partial  { background: rgba(241,196,15,0.12);  color: #f1c40f; border: 1px solid rgba(241,196,15,0.25); }
+.feed-badge.miss     { background: rgba(231,76,60,0.12);   color: #e74c3c; border: 1px solid rgba(231,76,60,0.25); }
+
+.feed-outcome-detail {
+  margin-top: 0.4rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.2s, max-height 0.3s;
+}
+.feed-detail-text {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+.feed-detail-questions {
+  margin-bottom: 0.45rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.feed-detail-qlabel {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  margin-bottom: 0.25rem;
+}
+.feed-detail-qlist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.feed-detail-qlist li {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--text);
+  line-height: 1.65;
+  padding-left: 0.9rem;
+  position: relative;
+}
+.feed-detail-qlist li::before { content: '·'; position: absolute; left: 0.15rem; color: #3ab5b0; }
+
+/* Message entries */
+.feed-entry.msg-entry { border-left: 2px solid var(--green-dim); padding-left: calc(1rem - 2px); }
+.feed-msg-sender {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--green-dim);
+  margin-bottom: 0.2rem;
+}
+.feed-msg-body {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* ── FEED COMPOSER ───────────────────────────────────────────────────────── */
+.feed-composer {
+  flex-shrink: 0;
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid var(--border);
+  background: rgba(0,0,0,0.1);
+}
+.composer-name {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.3rem 0.5rem;
+  border-radius: 3px;
+  width: 110px;
+  flex-shrink: 0;
+}
+.composer-msg {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.82rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.3rem 0.5rem;
+  border-radius: 3px;
+  flex: 1;
+}
+.composer-name:focus, .composer-msg:focus { outline: none; border-color: var(--green-dim); }
+.composer-send {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--green);
+  background: rgba(46,204,113,0.08);
+  border: 1px solid rgba(46,204,113,0.25);
+  padding: 0.3rem 0.65rem;
+  border-radius: 3px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.composer-send:hover { background: rgba(46,204,113,0.15); }
+
+/* ── RIGHT PANEL ─────────────────────────────────────────────────────────── */
+.panel-col {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--card-bg);
+}
+.panel-header {
+  flex-shrink: 0;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.hunter-select {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.3rem 0.5rem;
+  border-radius: 3px;
+  flex: 1;
+  cursor: pointer;
+}
+.hunter-select:focus { outline: none; border-color: var(--green-dim); }
+.hunter-select option { background: #0d1a13; }
+
+.panel-tabs {
+  flex-shrink: 0;
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+.panel-tab {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 0.85rem;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.panel-tab:hover { color: var(--text); }
+.panel-tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem 1rem;
+}
+
+/* ── MOVE CARDS ──────────────────────────────────────────────────────────── */
+.move-section-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--green-dim);
+  padding: 0.5rem 0 0.35rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.4rem;
+}
+.move-section-label:first-child { padding-top: 0; }
+
+.move-card {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-bottom: 0.4rem;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.move-card:hover { border-color: var(--green-dim); }
+
+.move-card-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.65rem;
+  user-select: none;
+}
+.move-card-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-bright);
+  text-transform: uppercase;
+  flex: 1;
+}
+.move-card-roll {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--green-dim);
+  background: rgba(46,204,113,0.07);
+  border: 1px solid rgba(46,204,113,0.15);
+  padding: 0.1rem 0.35rem;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.move-card-roll.passive {
+  color: var(--text-dim);
+  background: transparent;
+  border-color: var(--border);
+}
+
+/* Move description — shown on hover */
+.move-desc {
+  display: none;
+  padding: 0.5rem 0.65rem 0.6rem;
+  border-top: 1px solid var(--border);
+  background: rgba(0,0,0,0.12);
+}
+.move-card:hover .move-desc { display: block; }
+.move-desc-trigger {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-bottom: 0.45rem;
+  line-height: 1.45;
+}
+.move-desc-text {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+.move-outcomes { display: flex; flex-direction: column; gap: 0.25rem; }
+.move-outcome { display: flex; gap: 0.5rem; align-items: baseline; }
+.outcome-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.07em;
+  white-space: nowrap;
+  padding: 0.1rem 0.3rem;
+  border-radius: 2px;
+  flex-shrink: 0;
+  min-width: 3.8rem;
+  text-align: center;
+}
+.outcome-label.adv     { color: #f0a500; background: rgba(240,165,0,0.1);   border: 1px solid rgba(240,165,0,0.25); }
+.outcome-label.hit     { color: #3ab5b0; background: rgba(58,181,176,0.08); border: 1px solid rgba(58,181,176,0.2); }
+.outcome-label.partial { color: #a3a3a3; background: rgba(163,163,163,0.07); border: 1px solid rgba(163,163,163,0.18); }
+.outcome-label.miss    { color: #f87171; background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); }
+.outcome-text {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.73rem;
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+.move-questions { margin-top: 0.5rem; }
+.move-questions-label { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 0.25rem; }
+
+/* Roll UI — always visible for rollable moves */
+.move-roll-ui {
+  display: flex;
+  padding: 0.4rem 0.65rem 0.55rem;
+  border-top: 1px solid var(--border);
+  background: rgba(0,0,0,0.15);
+  gap: 0.5rem;
+  align-items: center;
+}
+.mod-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.mod-input {
+  width: 52px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  background: var(--input-bg, rgba(0,0,0,0.3));
+  border: 1px solid var(--border);
+  color: var(--text-bright);
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  text-align: center;
+}
+.mod-input:focus { outline: none; border-color: var(--green); }
+.roll-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--green);
+  background: rgba(46,204,113,0.08);
+  border: 1px solid rgba(46,204,113,0.3);
+  padding: 0.25rem 0.7rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.roll-btn:hover { background: rgba(46,204,113,0.15); border-color: var(--green); }
+.roll-btn.rolling-anim { opacity: 0.6; }
+
+/* Stats bar */
+.stats-bar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.85rem;
+}
+.stat-chip {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.stat-chip strong { color: var(--text-bright); }
+
+/* Harm / Luck / XP mini-track */
+.track-mini { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.5rem; }
+.track-mini-label { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--text-dim); width: 2.5rem; }
+.track-mini-pips { display: flex; gap: 3px; }
+.track-mini-pip {
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+}
+.track-mini-pip:hover { border-color: var(--text-dim); }
+.track-mini-pip.on-harm    { background: #e74c3c; border-color: #e74c3c; }
+.track-mini-pip.on-luck    { background: var(--green-dim); border-color: var(--green); }
+.track-mini-pip.on-xp      { background: #7bafd4; border-color: #5a9ab5; }
+.track-bump {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+.track-bump:hover { color: var(--text); border-color: var(--text-dim); }
+.xp-overflow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: #7bafd4;
+  background: rgba(123,175,212,0.1);
+  border: 1px solid rgba(123,175,212,0.25);
+  padding: 0.1rem 0.3rem;
+  border-radius: 2px;
+}
+
+/* Contacts tab */
+.contact-card {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.55rem 0.75rem;
+  margin-bottom: 0.4rem;
+  cursor: default;
+}
+.contact-card:not(.keeper-contact-card):hover { border-color: rgba(58,181,176,0.4); }
+.contact-name { font-family: 'Barlow Condensed', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--text-bright); text-transform: uppercase; letter-spacing: 0.04em; }
+.contact-role { font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; color: var(--text-dim); margin: 0.1rem 0 0.3rem; }
+.contact-desc { font-family: 'Barlow', sans-serif; font-size: 0.8rem; color: var(--text); line-height: 1.45; }
+.contact-note {
+  margin-top: 0.4rem;
+  padding: 0.3rem 0.5rem;
+  border-left: 2px solid rgba(58,181,176,0.5);
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  font-style: italic;
+  white-space: pre-wrap;
+}
+.contact-note-hint {
+  margin-top: 0.35rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  color: rgba(58,181,176,0.35);
+  letter-spacing: 0.06em;
+}
+.contact-note-editor {
+  margin-top: 0.4rem;
+  width: 100%;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(58,181,176,0.4);
+  border-radius: 3px;
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.78rem;
+  padding: 0.3rem 0.4rem;
+  resize: vertical;
+  min-height: 3.5rem;
+  box-sizing: border-box;
+}
+.contact-note-editor:focus { outline: none; border-color: rgba(58,181,176,0.7); }
+.contact-note-actions { display: flex; gap: 0.4rem; margin-top: 0.3rem; }
+.contact-note-save, .contact-note-cancel {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  border: 1px solid;
+  cursor: pointer;
+  background: none;
+  letter-spacing: 0.06em;
+}
+.contact-note-save   { border-color: rgba(58,181,176,0.6); color: #3ab5b0; }
+.contact-note-save:hover { background: rgba(58,181,176,0.15); }
+.contact-note-cancel { border-color: var(--border); color: var(--text-dim); }
+.contact-note-cancel:hover { background: rgba(255,255,255,0.05); }
+
+/* Keeper mode */
+.keeper-active .feed-header-label::after { content: ' [KEEPER]'; color: #a78bfa; }
+/* Hide player controls in keeper mode */
+.keeper-active .panel-header { display: none; }
+.keeper-active .panel-tabs   { display: none; }
+/* Show keeper controls only in keeper mode */
+.keeper-mode-header { display: none; flex-shrink: 0; padding: 0.55rem 1rem; border-bottom: 1px solid var(--border); background: rgba(167,139,250,0.04); align-items: center; gap: 0.5rem; }
+.keeper-active .keeper-mode-header { display: flex; }
+.keeper-mode-label { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; color: #a78bfa; flex: 1; }
+.keeper-mode-tabs { display: none; flex-shrink: 0; border-bottom: 1px solid var(--border); }
+.keeper-active .keeper-mode-tabs { display: flex; }
+.keeper-tab {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 0.85rem;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.keeper-tab:hover { color: var(--text); }
+.keeper-tab.active { color: #a78bfa; border-bottom-color: #a78bfa; }
+
+/* Keeper operative pills */
+.keeper-ops-row { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-bottom: 0.85rem; }
+.keeper-op-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.keeper-op-btn:hover { color: var(--text); border-color: var(--text-dim); }
+.keeper-op-btn.active { color: #a78bfa; border-color: #a78bfa; background: rgba(167,139,250,0.06); }
+
+/* Session filter pills */
+.session-filter { display: flex; gap: 0.3rem; margin-bottom: 0.85rem; }
+.session-pill {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.session-pill:hover { color: var(--text); border-color: var(--text-dim); }
+.session-pill.active { color: #a78bfa; border-color: #a78bfa; background: rgba(167,139,250,0.06); }
+
+/* NPC row in keeper contacts */
+.npc-row {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+.npc-row-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.65rem;
+}
+.npc-row-name { font-family: 'Barlow Condensed', sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text-bright); text-transform: uppercase; letter-spacing: 0.04em; flex: 1; }
+.npc-row-role { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: var(--text-dim); }
+.npc-vis-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+  padding: 0.15rem 0.4rem;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: transparent;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+}
+.npc-vis-btn.visible  { color: var(--green); border-color: rgba(46,204,113,0.3); }
+.npc-vis-btn.hidden   { color: var(--text-dim); border-color: var(--border); }
+.npc-vis-btn:hover    { opacity: 0.8; }
+.npc-row-desc {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  line-height: 1.45;
+  padding: 0 0.65rem 0.55rem;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  padding-top: 0.4rem;
+}
+
+/* Keeper references */
+.ref-section { margin-bottom: 1.1rem; }
+.ref-label { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; color: #a78bfa; margin-bottom: 0.4rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--border); }
+.ref-row { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--text-dim); line-height: 1.7; }
+.ref-row strong { color: var(--text); }
+.ref-list { margin: 0; padding: 0; list-style: none; }
+.ref-list li { font-family: 'Share Tech Mono', monospace; font-size: 0.63rem; color: var(--text-dim); line-height: 1.65; padding-left: 0.9rem; position: relative; }
+.ref-list li::before { content: '·'; position: absolute; left: 0.1rem; color: #a78bfa; }
+.ref-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; }
+.ref-note { font-family: 'Barlow', sans-serif; font-size: 0.72rem; color: var(--text-dim); font-style: italic; margin-top: 0.3rem; line-height: 1.45; }
+
+/* Data tab */
+.data-session-selector { display: flex; gap: 0.4rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.data-sess-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+.data-sess-btn:hover { color: var(--text); border-color: rgba(167,139,250,0.5); }
+.data-sess-btn.active { color: #a78bfa; border-color: #a78bfa; background: rgba(167,139,250,0.08); }
+.data-entity-block { border-left: 2px solid rgba(167,139,250,0.3); padding-left: 0.7rem; }
+.data-entity-desc { font-family: 'Barlow', sans-serif; font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; margin-bottom: 0.5rem; }
+.data-stat-row { font-family: 'Share Tech Mono', monospace; font-size: 0.63rem; color: var(--text); margin-bottom: 0.35rem; }
+.data-stat-label { font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; color: #a78bfa; }
+.data-field { font-family: 'Share Tech Mono', monospace; font-size: 0.63rem; color: var(--text-dim); line-height: 1.55; }
+.data-readaloud {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.8rem;
+  color: var(--text);
+  line-height: 1.6;
+  font-style: italic;
+  background: rgba(167,139,250,0.05);
+  border-left: 2px solid rgba(167,139,250,0.4);
+  padding: 0.5rem 0.7rem;
+  white-space: pre-wrap;
+}
+.data-threat-block { border-left: 2px solid rgba(248,113,113,0.35); padding-left: 0.7rem; }
+.data-threat-type { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; color: #f87171; margin-bottom: 0.25rem; }
+.data-equip-block { margin-bottom: 0.75rem; padding-left: 0.7rem; border-left: 1px solid var(--border); }
+.data-equip-block:last-child { margin-bottom: 0; }
+.data-equip-name { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 600; color: var(--text-bright); text-transform: uppercase; letter-spacing: 0.04em; }
+.data-equip-sub { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: var(--text-dim); font-weight: 400; text-transform: none; letter-spacing: 0.02em; }
+
+.keeper-panel-note {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  padding: 1rem 0;
+  text-align: center;
+}
+
+/* Keeper message composer */
+.msg-composer { margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.75rem; }
+.msg-composer-label { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--green-dim); margin-bottom: 0.4rem; letter-spacing: 0.1em; }
+.msg-sender-select, .msg-textarea {
+  width: 100%;
+  background: var(--input-bg, rgba(0,0,0,0.3));
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 3px;
+  box-sizing: border-box;
+  margin-bottom: 0.4rem;
+}
+.msg-sender-select:focus, .msg-textarea:focus { outline: none; border-color: var(--green-dim); }
+.msg-textarea { resize: vertical; min-height: 70px; font-family: 'Barlow', sans-serif; font-size: 0.82rem; }
+.msg-send-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: #a78bfa;
+  background: rgba(167,139,250,0.07);
+  border: 1px solid rgba(167,139,250,0.3);
+  padding: 0.35rem 0.85rem;
+  border-radius: 3px;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  transition: background 0.15s;
+}
+.msg-send-btn:hover { background: rgba(167,139,250,0.14); }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</a>
+  <nav id="player-nav"></nav>
+  <script src="player-nav.js"></script>
+</header>
+
+<div class="feed-layout">
+
+  <!-- ── LEFT: FEED ── -->
+  <div class="feed-col">
+    <div class="feed-header">
+      <span class="feed-header-label">// OPERATIONS FEED</span>
+    </div>
+    <div class="feed-entries" id="feed-entries">
+      <!-- "load earlier" at top of scroll area — click to page back in history -->
+      <div class="feed-load-more-wrap">
+        <button class="feed-load-more" id="load-more-btn" onclick="loadOlderEntries()">↑ LOAD EARLIER HISTORY</button>
+      </div>
+      <!-- entries injected here, oldest at top newest at bottom -->
+    </div>
+    <!-- anyone can post a message -->
+    <div class="feed-composer">
+      <input type="text" class="composer-name" id="composer-name" placeholder="Name…" maxlength="40">
+      <input type="text" class="composer-msg" id="composer-msg" placeholder="Write something to the feed…">
+      <button class="composer-send" onclick="sendFeedMessage()">↵</button>
+    </div>
+  </div>
+
+  <!-- ── RIGHT: PANEL ── -->
+  <div class="panel-col">
+    <!-- Player controls (hidden in keeper mode) -->
+    <div class="panel-header">
+      <select class="hunter-select" id="hunter-select" onchange="onHunterChange(this.value)">
+        <option value="">— Select operative —</option>
+        <option value="rex">Rex Bangley</option>
+        <option value="reed">Reed Atwood</option>
+        <option value="alan">Alan Frazier</option>
+        <option value="sven">Sven</option>
+        <option value="john-johnson">John Johnson</option>
+      </select>
+    </div>
+    <div class="panel-tabs" id="panel-tabs">
+      <button class="panel-tab active" data-tab="moves" onclick="switchTab('moves')">// MOVES</button>
+      <button class="panel-tab" data-tab="contacts" onclick="switchTab('contacts')">// CONTACTS</button>
+      <button class="panel-tab" data-tab="handouts" onclick="switchTab('handouts')">// HANDOUTS</button>
+    </div>
+
+    <!-- Keeper controls (hidden unless keeper-active) -->
+    <div class="keeper-mode-header">
+      <span class="keeper-mode-label">// KEEPER COMMAND</span>
+    </div>
+    <div class="keeper-mode-tabs" id="keeper-mode-tabs">
+      <button class="keeper-tab active" data-ktab="operatives" onclick="switchKeeperTab('operatives')">// OPERATIVES</button>
+      <button class="keeper-tab" data-ktab="contacts" onclick="switchKeeperTab('contacts')">// CONTACTS</button>
+      <button class="keeper-tab" data-ktab="references" onclick="switchKeeperTab('references')">// REFERENCES</button>
+      <button class="keeper-tab" data-ktab="threats" onclick="switchKeeperTab('threats')">// THREATS</button>
+    </div>
+
+    <div class="panel-body" id="panel-body">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);padding:2rem 0;text-align:center">
+        // SELECT OPERATIVE TO LOAD MOVES
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+
+  // ── STATE ─────────────────────────────────────────────────────────────────
+  var hunterId       = null;
+  var hunterSheet    = null;
+  var playbook_moves = null;
+  var basic_moves    = null;
+  var npcs_data      = null;
+  var entities_data  = null;
+  var session_data   = null;
+  var keeperDataSession = null;   // currently selected session in THREATS tab
+  var activeTab      = 'moves';
+  var keeperMode          = false;
+  var keeperClicks        = 0;
+  var keeperTimer         = null;
+  var keeperViewHunter    = null;
+  var keeperTab           = 'operatives';  // 'operatives' | 'contacts' | 'references'
+  var keeperSessionFilter = 'S02';         // 'S01' | 'S02' | 'ALL'
+  var npcVisibilityOverrides = {};         // { npc_id: bool } — loaded from localStorage
+  var contactNotes = {};                   // { npc_id: string } — loaded from localStorage
+
+  var feedEntries    = [];   // combined rolls + messages, sorted by timestamp
+  var lastRollId     = 0;
+  var lastMsgId      = 0;
+  var feedOffset     = 0;
+  var FEED_PAGE      = 200;
+  var pollTimer      = null;
+  var saveTimer      = null;
+  var sheetDirty     = false;
+  var autoScroll     = true;
+
+  var HUNTER_NAMES  = { rex: 'Rex Bangley', reed: 'Reed Atwood', alan: 'Alan Frazier', sven: 'Sven', 'john-johnson': 'John Johnson' };
+  var HUNTER_COLORS = { rex: '#f0a500', reed: '#3ab5b0', alan: '#3ab5b0', sven: '#a78bfa', 'john-johnson': '#c8ddd0' };
+  var STAT_NAMES    = { charm: 'CHM', cool: 'COL', sharp: 'SHP', tough: 'TGH', weird: 'WRD' };
+
+  // ── KEEPER TOGGLE ─────────────────────────────────────────────────────────
+  document.querySelector('.logo').addEventListener('click', function (e) {
+    e.preventDefault();
+    keeperClicks++;
+    clearTimeout(keeperTimer);
+    keeperTimer = setTimeout(function () { keeperClicks = 0; }, 1500);
+    if (keeperClicks >= 5) {
+      keeperClicks = 0;
+      keeperMode = !keeperMode;
+      document.body.classList.toggle('keeper-active', keeperMode);
+      if (keeperMode) {
+        // Sync keeper tab UI state
+        document.querySelectorAll('.keeper-tab').forEach(function (btn) {
+          btn.classList.toggle('active', btn.dataset.ktab === keeperTab);
+        });
+      }
+      renderPanel();
+    }
+  });
+
+  // ── HUNTER SELECTION ─────────────────────────────────────────────────────
+  try {
+    var saved = localStorage.getItem('portal_feed_hunter');
+    if (saved) {
+      document.getElementById('hunter-select').value = saved;
+      hunterId = saved;
+      var nameEl = document.getElementById('composer-name');
+      if (nameEl && saved) nameEl.value = HUNTER_NAMES[saved] || '';
+    }
+    var savedVis = localStorage.getItem('portal_npc_visibility');
+    if (savedVis) npcVisibilityOverrides = JSON.parse(savedVis);
+    var savedNotes = localStorage.getItem('portal_contact_notes');
+    if (savedNotes) contactNotes = JSON.parse(savedNotes);
+  } catch (e) {}
+
+  window.onHunterChange = function (id) {
+    hunterId = id || null;
+    try { if (id) localStorage.setItem('portal_feed_hunter', id); } catch (e) {}
+    var nameEl = document.getElementById('composer-name');
+    if (nameEl) nameEl.value = id ? (HUNTER_NAMES[id] || '') : '';
+    hunterSheet = null;
+    if (id) loadHunterSheet(id).then(renderPanel);
+    else renderPanel();
+  };
+
+  function loadHunterSheet(id) {
+    return fetch('/api/v1/hunters/' + id + '/sheet')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        hunterSheet = (data && Object.keys(data).length > 0) ? data : null;
+      })
+      .catch(function () { hunterSheet = null; });
+  }
+
+  // ── DATA LOADING ──────────────────────────────────────────────────────────
+  function loadStaticData() {
+    return Promise.all([
+      fetch('/data/playbook-moves.json').then(function (r) { return r.ok ? r.json() : null; }),
+      fetch('/data/motw-basic-moves.json').then(function (r) { return r.ok ? r.json() : null; }),
+      fetch('/data/portal-npcs.json').then(function (r) { return r.ok ? r.json() : null; }),
+      fetch('/data/portal-entities.json').then(function (r) { return r.ok ? r.json() : null; }),
+      fetch('/data/session-data.json').then(function (r) { return r.ok ? r.json() : null; })
+    ]).then(function (results) {
+      playbook_moves = results[0];
+      basic_moves    = results[1];
+      npcs_data      = results[2];
+      entities_data  = results[3];
+      session_data   = results[4];
+    });
+  }
+
+  // ── TAB SWITCHING ─────────────────────────────────────────────────────────
+  window.switchTab = function (tab) {
+    activeTab = tab;
+    document.querySelectorAll('.panel-tab').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.tab === tab);
+    });
+    renderPanel();
+  };
+
+  // ── PANEL RENDER ──────────────────────────────────────────────────────────
+  function renderPanel() {
+    if (keeperMode) { renderKeeperPanel(); return; }
+    if (activeTab === 'moves')    renderMovesPanel();
+    if (activeTab === 'contacts') renderContactsPanel();
+    if (activeTab === 'handouts') renderHandoutsPanel();
+  }
+
+  // ── MOVES PANEL ───────────────────────────────────────────────────────────
+  function renderMovesPanel() {
+    var body = document.getElementById('panel-body');
+    if (!hunterId) {
+      body.innerHTML = '<div style="font-family:\'Share Tech Mono\',monospace;font-size:0.7rem;color:var(--text-dim);padding:2rem 0;text-align:center">// SELECT OPERATIVE TO LOAD MOVES</div>';
+      return;
+    }
+
+    var html = '';
+
+    // Stats + tracks
+    if (hunterSheet && hunterSheet.stats) {
+      html += '<div class="stats-bar">';
+      ['charm','cool','sharp','tough','weird'].forEach(function (s) {
+        var v = hunterSheet.stats[s];
+        if (v === undefined || v === null || v === '') return;
+        var val = parseInt(v, 10);
+        var str = (val > 0 ? '+' : '') + val;
+        html += '<div class="stat-chip">' + STAT_NAMES[s] + ' <strong>' + str + '</strong></div>';
+      });
+      html += '</div>';
+
+      // Clickable harm / luck / xp tracks
+      html += renderTrack('harm', 7, 'on-harm', hunterSheet.harm || 0, false);
+      html += renderTrack('luck', 7, 'on-luck', hunterSheet.luck || 0, false);
+      html += renderTrack('xp',   5, 'on-xp',   hunterSheet.xp  || 0, true);
+      html += '<div style="margin-bottom:0.75rem"></div>';
+    }
+
+    // Always-active moves (e.g. Violence for Rex)
+    if (playbook_moves && playbook_moves.always_active_moves && playbook_moves.always_active_moves[hunterId]) {
+      var always = playbook_moves.always_active_moves[hunterId];
+      if (always.length > 0) {
+        html += '<div class="move-section-label">// ALWAYS ACTIVE</div>';
+        always.forEach(function (m) { html += renderMoveCard(m); });
+      }
+    }
+
+    // Playbook moves (checked in D1)
+    if (playbook_moves && hunterSheet && hunterSheet.checks) {
+      var checks = hunterSheet.checks;
+      var active = Object.keys(checks).filter(function (k) {
+        return checks[k] === true && playbook_moves.moves[k] && playbook_moves.moves[k].hunter === hunterId;
+      });
+      if (active.length > 0) {
+        html += '<div class="move-section-label">// PLAYBOOK MOVES</div>';
+        active.forEach(function (k) { html += renderMoveCard(playbook_moves.moves[k], k); });
+      }
+    }
+
+    // Basic moves
+    if (basic_moves && basic_moves.basic_moves) {
+      html += '<div class="move-section-label">// BASIC MOVES</div>';
+      basic_moves.basic_moves.forEach(function (m) {
+        if (!m.roll) return; // skip passive
+        html += renderMoveCard({
+          name: m.name,
+          roll: '+' + m.roll.charAt(0).toUpperCase() + m.roll.slice(1),
+          description: m.trigger,
+          outcomes: m.outcomes,
+          _basic_id: m.id
+        }, m.id);
+      });
+    }
+
+    body.innerHTML = html;
+    wireMoveCards(body);
+  }
+
+  // ── TRACK RENDERING ───────────────────────────────────────────────────────
+  function renderTrack(name, max, cls, value, showBump) {
+    var display  = Math.min(value, max);
+    var overflow = value > max ? value - max : 0;
+    var html = '<div class="track-mini"><span class="track-mini-label">' + name.toUpperCase() + '</span><div class="track-mini-pips">';
+    for (var i = 0; i < max; i++) {
+      html += '<div class="track-mini-pip' + (i < display ? ' ' + cls : '') +
+        '" onclick="setTrack(\'' + name + '\',' + i + ')"></div>';
+    }
+    html += '</div>';
+    if (showBump) {
+      html += '<button class="track-bump" onclick="bumpTrack(\'' + name + '\')">+</button>';
+    }
+    if (overflow > 0) {
+      html += '<span class="xp-overflow">+' + overflow + '</span>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  window.setTrack = function (name, pipIndex) {
+    if (!hunterId || !hunterSheet) return;
+    var current = hunterSheet[name] || 0;
+    hunterSheet[name] = current > pipIndex ? pipIndex : pipIndex + 1;
+    sheetDirty = true;
+    renderMovesPanel();
+  };
+
+  window.bumpTrack = function (name) {
+    if (!hunterId || !hunterSheet) return;
+    hunterSheet[name] = (hunterSheet[name] || 0) + 1;
+    sheetDirty = true;
+    renderMovesPanel();
+  };
+
+  function saveSheet() {
+    if (!hunterId || !hunterSheet || !sheetDirty) return;
+    sheetDirty = false; // clear before fetch; re-set on failure
+    fetch('/api/v1/hunters/' + hunterId + '/sheet', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(hunterSheet)
+    }).catch(function () { sheetDirty = true; });
+  }
+
+  // ── MOVE CARDS ────────────────────────────────────────────────────────────
+  function renderMoveCard(move, key) {
+    var hasRoll = move.roll && move.roll !== null;
+    var rollBadge = hasRoll
+      ? '<span class="move-card-roll">' + move.roll + '</span>'
+      : '<span class="move-card-roll passive">PASSIVE</span>';
+    var cardKey = key || move.id || move.name.replace(/\s+/g,'-').toLowerCase();
+
+    var rollUi = hasRoll ? (
+      '<div class="move-roll-ui">' +
+        '<span class="mod-label">mod</span>' +
+        '<input class="mod-input" type="number" value="0" min="-9" max="9">' +
+        '<button class="roll-btn" onclick="doRoll(this)">// ROLL</button>' +
+      '</div>'
+    ) : '';
+
+    // ── Description block ──
+    var descHtml = '';
+    var o = move.outcomes;   // structured outcomes (basic moves)
+    var d = move.description; // free-text description (playbook moves)
+
+    if (o && (o['12_plus'] || o['10_plus'] || o['7_9'] || o.miss)) {
+      // Basic move: trigger + structured outcomes
+      if (move.trigger || d) {
+        descHtml += '<div class="move-desc-trigger">' + escHtml(move.trigger || d) + '</div>';
+      }
+      // Custom thresholds: 12_plus→ADV(13+), 10_plus→HIT(11–12), 7_9→PARTIAL(7–10), miss→FAILURE(6–)
+      var rows = [
+        { cls: 'adv',     label: '⚡ 13+',    text: o['12_plus'] },
+        { cls: 'hit',     label: '✓ 11–12',  text: o['10_plus'] },
+        { cls: 'partial', label: '~ 7–10',   text: o['7_9']     },
+        { cls: 'miss',    label: '✗ 6–',     text: o.miss       }
+      ];
+      descHtml += '<div class="move-outcomes">';
+      rows.forEach(function (r) {
+        if (!r.text) return;
+        descHtml += '<div class="move-outcome">' +
+          '<span class="outcome-label ' + r.cls + '">' + r.label + '</span>' +
+          '<span class="outcome-text">' + escHtml(r.text) + '</span>' +
+        '</div>';
+      });
+      descHtml += '</div>';
+      // Questions list (Investigate a Mystery, Read a Bad Situation)
+      if (o.questions && o.questions.length) {
+        descHtml += '<div class="move-questions">' +
+          '<div class="move-questions-label">// QUESTIONS</div>' +
+          '<ul class="ref-list">';
+        o.questions.forEach(function (q) { descHtml += '<li>' + escHtml(q) + '</li>'; });
+        descHtml += '</ul></div>';
+      }
+    } else if (d) {
+      // Playbook / always-active move: free-text description covers everything
+      descHtml = '<div class="move-desc-text">' + escHtml(d) + '</div>';
+    }
+
+    var descBlock = descHtml ? '<div class="move-desc">' + descHtml + '</div>' : '';
+
+    return '<div class="move-card" data-move-key="' + cardKey + '" data-move-name="' + escHtml(move.name) + '" data-roll="' + (move.roll||'') + '">' +
+      '<div class="move-card-top">' +
+        '<span class="move-card-name">' + escHtml(move.name) + '</span>' +
+        rollBadge +
+      '</div>' +
+      rollUi +
+      descBlock +
+    '</div>';
+  }
+
+  function wireMoveCards(container) {
+    container.querySelectorAll('.move-card').forEach(function (card) {
+      var inp = card.querySelector('.mod-input');
+      if (inp) inp.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') card.querySelector('.roll-btn').click();
+      });
+    });
+  }
+
+  window.doRoll = function (btn) {
+    var card     = btn.closest('.move-card');
+    var moveName = card.dataset.moveName;
+    var rollStat = card.dataset.roll; // e.g. "+Sharp"
+    var modifier = parseInt(card.querySelector('.mod-input').value, 10) || 0;
+
+    // Determine stat value from sheet
+    var statKey = rollStat ? rollStat.replace(/[+-]/g, '').toLowerCase() : null;
+    var statVal = 0;
+    if (statKey && hunterSheet && hunterSheet.stats && hunterSheet.stats[statKey] !== undefined) {
+      statVal = parseInt(hunterSheet.stats[statKey], 10) || 0;
+    }
+
+    // Find outcomes for hover display
+    var outcomeData = findOutcomes(card.dataset.moveKey);
+
+    // Roll
+    var d1    = Math.ceil(Math.random() * 6);
+    var d2    = Math.ceil(Math.random() * 6);
+    var total = d1 + d2 + statVal + modifier;
+
+    // Custom thresholds: 13+ advanced, 11-12 success, 7-10 partial, 6- failure
+    var outcome = total >= 13 ? 'advanced' : total >= 11 ? 'hit' : total >= 7 ? 'partial' : 'miss';
+
+    // Brief animate
+    btn.textContent = d1 + ' + ' + d2 + '…';
+    btn.classList.add('rolling-anim');
+
+    setTimeout(function () {
+      btn.textContent = '// ROLL';
+      btn.classList.remove('rolling-anim');
+      // Reset modifier to 0 after rolling
+      card.querySelector('.mod-input').value = '0';
+
+      // Build feed entry locally
+      var entry = {
+        _local: true,
+        hunter_id: hunterId,
+        move_name: moveName,
+        stat_used: statKey,
+        stat_val: statVal,
+        roll_1: d1,
+        roll_2: d2,
+        modifier: modifier,
+        total: total,
+        outcome: outcome,
+        outcomes: outcomeData,
+        timestamp: new Date().toISOString()
+      };
+      appendFeedEntry(entry);
+      scrollFeedToBottom();
+
+      // POST to D1
+      var session = getCurrentSession();
+      fetch('/api/v1/rolls', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          hunter_id: hunterId,
+          session:   session,
+          move_name: moveName,
+          stat_used: statKey,
+          roll_1:    d1,
+          roll_2:    d2,
+          modifier:  modifier,
+          total:     total
+        })
+      }).then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data.id) entry._id = data.id;
+          if (data.id > lastRollId) lastRollId = data.id;
+        })
+        .catch(function () {});
+    }, 350);
+  };
+
+  function findOutcomes(moveKey) {
+    // Check always_active_moves — may have a basic_move_ref to delegate to
+    if (playbook_moves && playbook_moves.always_active_moves) {
+      for (var h in playbook_moves.always_active_moves) {
+        var list = playbook_moves.always_active_moves[h];
+        for (var i = 0; i < list.length; i++) {
+          if (list[i].id === moveKey) {
+            if (list[i].basic_move_ref) {
+              return findBasicMoveOutcomes(list[i].basic_move_ref);
+            }
+            return null;
+          }
+        }
+      }
+    }
+    // Check playbook moves — no structured outcomes
+    if (playbook_moves && playbook_moves.moves && playbook_moves.moves[moveKey]) {
+      return null;
+    }
+    // Check basic moves by id
+    return findBasicMoveOutcomes(moveKey);
+  }
+
+  function findBasicMoveOutcomes(id) {
+    if (!basic_moves || !basic_moves.basic_moves) return null;
+    var bm = basic_moves.basic_moves.filter(function (m) { return m.id === id; })[0];
+    return (bm && bm.outcomes) ? bm.outcomes : null;
+  }
+
+  // ── CONTACTS PANEL ────────────────────────────────────────────────────────
+  function renderContactsPanel() {
+    var body = document.getElementById('panel-body');
+    if (!npcs_data) { body.innerHTML = '<div class="keeper-panel-note">// LOADING…</div>'; return; }
+
+    var visible = npcs_data.npcs.filter(function (n) {
+      return keeperMode || n.visible_to_players;
+    });
+
+    if (visible.length === 0) { body.innerHTML = '<div class="keeper-panel-note">// NO CONTACTS CLEARED FOR DISPLAY</div>'; return; }
+
+    var groups = {};
+    visible.forEach(function (n) {
+      var a = n.affiliation || 'unknown';
+      if (!groups[a]) groups[a] = [];
+      groups[a].push(n);
+    });
+
+    var html = '';
+    ['PORTAL','civilian','MESA','unknown'].forEach(function (affil) {
+      if (!groups[affil]) return;
+      html += '<div class="move-section-label">// ' + affil.toUpperCase() + '</div>';
+      var hunterNotes = !keeperMode ? getHunterNotes() : {};
+      groups[affil].forEach(function (n) {
+        var note = hunterNotes[n.id] || '';
+        var noteHtml = note
+          ? '<div class="contact-note">' + escHtml(note) + '</div>'
+          : (!keeperMode && hunterId ? '<div class="contact-note-hint">// double-click to add a note</div>' : '');
+        var dblclick = (!keeperMode && hunterId) ? ' ondblclick="openContactNoteEditor(\'' + escHtml(n.id) + '\')"' : '';
+        html += '<div class="contact-card" id="cc-' + escHtml(n.id) + '"' + dblclick + '>' +
+          '<div class="contact-name">' + escHtml(n.name) + '</div>' +
+          '<div class="contact-role">' + escHtml(n.role) + '</div>' +
+          '<div class="contact-desc">' + escHtml(keeperMode && n.keeper_description ? n.keeper_description : n.player_description) + '</div>' +
+          noteHtml +
+        '</div>';
+      });
+    });
+    body.innerHTML = html;
+  }
+
+  // ── CONTACT NOTE EDITOR ───────────────────────────────────────────────────
+  // contactNotes shape: { hunter_id: { npc_id: "text" } }
+  function getHunterNotes() {
+    if (!hunterId) return {};
+    return contactNotes[hunterId] || {};
+  }
+  function persistContactNotes() {
+    try { localStorage.setItem('portal_contact_notes', JSON.stringify(contactNotes)); } catch (e) {}
+  }
+
+  window.openContactNoteEditor = function (npcId) {
+    if (!hunterId) return; // must have a hunter selected to take notes
+    var card = document.getElementById('cc-' + npcId);
+    if (!card) return;
+    // Remove any existing editor in other cards
+    document.querySelectorAll('.contact-note-editor-wrap').forEach(function (el) { el.remove(); });
+    // Remove hint/existing note display temporarily
+    card.querySelectorAll('.contact-note, .contact-note-hint').forEach(function (el) { el.remove(); });
+
+    var existing = getHunterNotes()[npcId] || '';
+    var wrap = document.createElement('div');
+    wrap.className = 'contact-note-editor-wrap';
+    wrap.innerHTML =
+      '<textarea class="contact-note-editor" id="cne-' + npcId + '" placeholder="Personal note…">' + escHtml(existing) + '</textarea>' +
+      '<div class="contact-note-actions">' +
+        '<button class="contact-note-save" onclick="saveContactNote(\'' + npcId + '\')">SAVE</button>' +
+        '<button class="contact-note-cancel" onclick="cancelContactNote(\'' + npcId + '\')">CANCEL</button>' +
+        (existing ? '<button class="contact-note-cancel" onclick="deleteContactNote(\'' + npcId + '\')" style="margin-left:auto;color:#f87171;border-color:rgba(248,113,113,0.4)">CLEAR</button>' : '') +
+      '</div>';
+    card.appendChild(wrap);
+    var ta = document.getElementById('cne-' + npcId);
+    if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
+    wrap.ondblclick = function (e) { e.stopPropagation(); };
+  };
+
+  window.saveContactNote = function (npcId) {
+    if (!hunterId) return;
+    var ta = document.getElementById('cne-' + npcId);
+    if (!ta) return;
+    var val = ta.value.trim();
+    if (!contactNotes[hunterId]) contactNotes[hunterId] = {};
+    if (val) contactNotes[hunterId][npcId] = val;
+    else delete contactNotes[hunterId][npcId];
+    persistContactNotes();
+    renderContactsPanel();
+  };
+
+  window.cancelContactNote = function (npcId) {
+    renderContactsPanel();
+  };
+
+  window.deleteContactNote = function (npcId) {
+    if (!hunterId) return;
+    if (contactNotes[hunterId]) delete contactNotes[hunterId][npcId];
+    persistContactNotes();
+    renderContactsPanel();
+  };
+
+  // ── HANDOUTS PANEL ────────────────────────────────────────────────────────
+  function renderHandoutsPanel() {
+    document.getElementById('panel-body').innerHTML =
+      '<div class="keeper-panel-note">// HANDOUTS — COMING SOON</div>';
+  }
+
+  // ── KEEPER TAB SWITCHING ─────────────────────────────────────────────────
+  window.switchKeeperTab = function (tab) {
+    keeperTab = tab;
+    document.querySelectorAll('.keeper-tab').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.ktab === tab);
+    });
+    renderKeeperPanel();
+  };
+
+  // ── KEEPER PANEL DISPATCHER ───────────────────────────────────────────────
+  function renderKeeperPanel() {
+    if (keeperTab === 'operatives') renderKeeperOperativesTab();
+    if (keeperTab === 'contacts')   renderKeeperContactsTab();
+    if (keeperTab === 'references') renderKeeperReferencesTab();
+    if (keeperTab === 'threats')    renderKeeperDataTab();
+  }
+
+  // ── KEEPER: OPERATIVES TAB ────────────────────────────────────────────────
+  var KEEPER_OP_LABELS = { rex: 'REX', reed: 'REED', alan: 'ALAN', sven: 'SVEN', 'john-johnson': 'JOHN' };
+
+  window.keeperSwitchHunter = function (id) {
+    keeperViewHunter = keeperViewHunter === id ? null : id;
+    if (keeperViewHunter) {
+      // Set global hunterId so renderMovesPanel + doRoll work correctly
+      hunterId   = keeperViewHunter;
+      hunterSheet = null;
+      loadHunterSheet(keeperViewHunter).then(function () { renderKeeperPanel(); });
+    } else {
+      renderKeeperPanel();
+    }
+  };
+
+  function renderKeeperOperativesTab() {
+    var body = document.getElementById('panel-body');
+
+    // Operative selector row
+    var html = '<div class="keeper-ops-row">';
+    Object.keys(KEEPER_OP_LABELS).forEach(function (id) {
+      var active = keeperViewHunter === id ? ' active' : '';
+      html += '<button class="keeper-op-btn' + active + '" onclick="keeperSwitchHunter(\'' + id + '\')">' + KEEPER_OP_LABELS[id] + '</button>';
+    });
+    html += '</div>';
+
+    // Transmit bar
+    html += '<div style="display:flex;gap:0.5rem;margin-bottom:0.85rem">' +
+      '<button class="cancel-btn" onclick="keeperClearFeed()" style="color:#e74c3c;border-color:rgba(231,76,60,0.3);font-size:0.6rem;letter-spacing:0.08em;padding:0.25rem 0.6rem">// CLEAR FEED VIEW</button>' +
+    '</div>';
+
+    // Message composer
+    html += '<div class="msg-composer">' +
+      '<div class="msg-composer-label">// SEND MESSAGE AS</div>' +
+      '<select class="msg-sender-select" id="msg-sender">' +
+        '<option value="CAMPBELL">CAMPBELL</option>' +
+        '<option value="DIRECTOR">DIRECTOR</option>' +
+        '<option value="MESA">MESA</option>' +
+        '<option value="SYSTEM">SYSTEM</option>' +
+      '</select>' +
+      '<textarea class="msg-textarea" id="msg-body" placeholder="Message text…"></textarea>' +
+      '<button class="msg-send-btn" onclick="sendKeeperMessage()">// TRANSMIT</button>' +
+    '</div>';
+
+    body.innerHTML = html;
+
+    // If an operative is selected, render their moves panel below the header
+    if (keeperViewHunter && hunterSheet) {
+      // Build moves panel HTML and append to body
+      var movesDiv = document.createElement('div');
+      movesDiv.style.borderTop = '1px solid var(--border)';
+      movesDiv.style.marginTop = '0.75rem';
+      movesDiv.style.paddingTop = '0.75rem';
+      // Temporarily render into body for wireMoveCards to work
+      var savedHtml = body.innerHTML;
+      body.innerHTML = '';
+      renderMovesPanel(); // renders into panel-body
+      movesDiv.innerHTML = body.innerHTML;
+      body.innerHTML = savedHtml;
+      body.appendChild(movesDiv);
+      wireMoveCards(movesDiv);
+    } else if (keeperViewHunter && !hunterSheet) {
+      var note = document.createElement('div');
+      note.className = 'keeper-panel-note';
+      note.textContent = '// NO SHEET DATA FOR THIS OPERATIVE';
+      body.appendChild(note);
+    }
+  }
+
+  // ── KEEPER: CONTACTS TAB ──────────────────────────────────────────────────
+  window.setKeeperSession = function (s) {
+    keeperSessionFilter = s;
+    renderKeeperContactsTab();
+  };
+
+  window.toggleNpcVisibility = function (id) {
+    var current = npcIsVisible(id);
+    npcVisibilityOverrides[id] = !current;
+    try { localStorage.setItem('portal_npc_visibility', JSON.stringify(npcVisibilityOverrides)); } catch (e) {}
+    renderKeeperContactsTab();
+  };
+
+  function npcIsVisible(id) {
+    if (npcVisibilityOverrides.hasOwnProperty(id)) return npcVisibilityOverrides[id];
+    if (!npcs_data) return false;
+    var npc = npcs_data.npcs.filter(function (n) { return n.id === id; })[0];
+    return npc ? !!npc.visible_to_players : false;
+  }
+
+  function npcMatchesSession(npc) {
+    if (keeperSessionFilter === 'ALL') return true;
+    if (npc.affiliation === 'PORTAL') return true; // Lab contacts always shown
+    return npc.first_session === keeperSessionFilter;
+  }
+
+  function renderKeeperContactsTab() {
+    var body = document.getElementById('panel-body');
+    if (!npcs_data) { body.innerHTML = '<div class="keeper-panel-note">// LOADING…</div>'; return; }
+
+    // Session filter pills
+    var html = '<div class="session-filter">';
+    ['S01','S02','ALL'].forEach(function (s) {
+      html += '<button class="session-pill' + (keeperSessionFilter === s ? ' active' : '') +
+        '" onclick="setKeeperSession(\'' + s + '\')">' + s + '</button>';
+    });
+    html += '</div>';
+
+    var filtered = npcs_data.npcs.filter(npcMatchesSession);
+    var groups = {};
+    filtered.forEach(function (n) {
+      var a = n.affiliation || 'unknown';
+      if (!groups[a]) groups[a] = [];
+      groups[a].push(n);
+    });
+
+    ['PORTAL','civilian','MESA','unknown'].forEach(function (affil) {
+      if (!groups[affil]) return;
+      html += '<div class="move-section-label">// ' + affil.toUpperCase() + '</div>';
+      groups[affil].forEach(function (n) {
+        var vis = npcIsVisible(n.id);
+        html += '<div class="npc-row">' +
+          '<div class="npc-row-head">' +
+            '<span class="npc-row-name">' + escHtml(n.name) + '</span>' +
+            '<span class="npc-row-role">' + escHtml(n.role) + '</span>' +
+            '<button class="npc-vis-btn ' + (vis ? 'visible' : 'hidden') + '" onclick="toggleNpcVisibility(\'' + n.id + '\')">' +
+              (vis ? '● VISIBLE' : '○ HIDDEN') +
+            '</button>' +
+          '</div>' +
+          '<div class="npc-row-desc">' + escHtml(n.keeper_description || n.player_description || '') + '</div>' +
+        '</div>';
+      });
+    });
+
+    body.innerHTML = html;
+  }
+
+  // ── KEEPER: REFERENCES TAB ────────────────────────────────────────────────
+  function renderKeeperReferencesTab() {
+    var body = document.getElementById('panel-body');
+    body.innerHTML =
+
+      // ── ROLL OUTCOMES ──────────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// ROLL OUTCOMES</div>' +
+        '<div class="ref-row"><strong>13+</strong> &nbsp;Advanced success — best possible result</div>' +
+        '<div class="ref-row"><strong>11–12</strong> Success — full effect, no strings</div>' +
+        '<div class="ref-row"><strong>7–10</strong> &nbsp;Partial — succeed with cost or complication</div>' +
+        '<div class="ref-row"><strong>6–</strong> &nbsp;&nbsp;&nbsp;Failure — suffer harm or things go wrong</div>' +
+      '</div>' +
+
+      // ── HARM ──────────────────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// HARM MOVES — use one every time anyone is hurt</div>' +
+        '<div class="ref-row" style="color:var(--text);margin-bottom:0.2rem">0-harm or more</div>' +
+        '<ul class="ref-list">' +
+          '<li>Momentarily inhibited</li>' +
+          '<li>Drop something</li>' +
+          '<li>Take −1 forward</li>' +
+        '</ul>' +
+        '<div class="ref-row" style="color:var(--text);margin:0.35rem 0 0.2rem">1-harm or more</div>' +
+        '<ul class="ref-list">' +
+          '<li>Fall down</li>' +
+          '<li>Take −1 ongoing</li>' +
+          '<li>Pass out</li>' +
+          '<li>Intense pain</li>' +
+        '</ul>' +
+        '<div class="ref-row" style="color:var(--text);margin:0.35rem 0 0.2rem">Unstable wounds</div>' +
+        '<ul class="ref-list"><li>+1 harm</li></ul>' +
+        '<div class="ref-row" style="color:var(--text);margin:0.35rem 0 0.2rem">8-harm or more</div>' +
+        '<ul class="ref-list"><li>Dying or dead</li></ul>' +
+      '</div>' +
+
+      // ── LUCK ──────────────────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// LUCK (max 7)</div>' +
+        '<ul class="ref-list">' +
+          '<li>Spend to change a miss → 7–9, or 7–9 → 10+</li>' +
+          '<li>Spend to survive what should kill you</li>' +
+          '<li>Each hunter\'s luck special triggers on spend</li>' +
+          '<li><strong style="color:var(--text)">0 luck</strong> = doomed — Keeper can kill you at any time</li>' +
+        '</ul>' +
+      '</div>' +
+
+      // ── XP ────────────────────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// XP &amp; ADVANCES</div>' +
+        '<ul class="ref-list">' +
+          '<li>Mark XP when a highlighted stat is used on a roll</li>' +
+          '<li>At 5 XP → choose an advance, reset to 0</li>' +
+          '<li>FOR THE LAB: "Did we find safe and beneficial applications for the dangerous things we learned about?"</li>' +
+        '</ul>' +
+      '</div>' +
+
+      // ── END OF SESSION ────────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// END OF SESSION — ask each question, mark XP</div>' +
+        '<ul class="ref-list">' +
+          '<li>Did we conclude the current mystery?</li>' +
+          '<li>Did we save someone from certain death (or worse)?</li>' +
+          '<li>Did we learn something new and important about the world?</li>' +
+          '<li>Did we learn something new and important about one of the hunters?</li>' +
+        '</ul>' +
+        '<div class="ref-note">1–2 yes → mark 1 XP &nbsp;|&nbsp; 3–4 yes → mark 2 XP</div>' +
+      '</div>' +
+
+      // ── KEEPER PRINCIPLES ─────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// KEEPER PRINCIPLES</div>' +
+        '<ul class="ref-list">' +
+          '<li>Put horror in everyday situations</li>' +
+          '<li>Address the hunters, not the players</li>' +
+          '<li>Use the Keeper moves, without names</li>' +
+          '<li>Be a fan of the hunters</li>' +
+          '<li>Build a coherent mythology in play</li>' +
+          '<li>Nothing is safe</li>' +
+          '<li>Name everyone they meet — make them seem like normal folks</li>' +
+          '<li>Ask questions and build on the answers</li>' +
+          '<li>Sometimes give them exactly what they earned, rather than all they wanted</li>' +
+          '<li>What\'s happening off-screen?</li>' +
+          '<li>Don\'t always decide what happens</li>' +
+          '<li>Everything is a threat</li>' +
+        '</ul>' +
+      '</div>' +
+
+      // ── BASIC KEEPER MOVES ────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// BASIC KEEPER MOVES — after every move, ask what they do next</div>' +
+        '<div class="ref-two-col">' +
+          '<ul class="ref-list">' +
+            '<li>Separate them</li>' +
+            '<li>Reveal future badness</li>' +
+            '<li>Reveal off-screen badness</li>' +
+            '<li>Inflict harm, as established</li>' +
+            '<li>Make them investigate</li>' +
+            '<li>Make them acquire stuff</li>' +
+            '<li>Tell the possible consequences, ask if they proceed</li>' +
+          '</ul>' +
+          '<ul class="ref-list">' +
+            '<li>Turn their move back on them</li>' +
+            '<li>Offer an opportunity, &amp; maybe a cost</li>' +
+            '<li>Take away some of their stuff</li>' +
+            '<li>Put someone in trouble</li>' +
+            '<li>Make a threat move</li>' +
+          '</ul>' +
+        '</div>' +
+      '</div>' +
+
+      // ── MONSTER MOVES ─────────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// MONSTER MOVES</div>' +
+        '<div class="ref-two-col">' +
+          '<ul class="ref-list">' +
+            '<li>Hint at its presence</li>' +
+            '<li>Display its full might</li>' +
+            '<li>Appear suddenly</li>' +
+            '<li>Attack with great force and fury</li>' +
+            '<li>Seize someone or something</li>' +
+            '<li>Attack with stealth and calculation</li>' +
+          '</ul>' +
+          '<ul class="ref-list">' +
+            '<li>Order underlings to terrible acts</li>' +
+            '<li>Destroy something</li>' +
+            '<li>Escape, no matter how contained</li>' +
+            '<li>Give chase</li>' +
+            '<li>Return to home ground</li>' +
+            '<li>Boast and gloat, maybe revealing a secret</li>' +
+          '</ul>' +
+        '</div>' +
+      '</div>' +
+
+      // ── PHENOMENA MOVES ───────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// PHENOMENA THREAT MOVES</div>' +
+        '<div class="ref-two-col">' +
+          '<ul class="ref-list">' +
+            '<li>Hint at its effects</li>' +
+            '<li>Show its effects directly and undeniably</li>' +
+            '<li>Break the world\'s laws</li>' +
+            '<li>Increase or decrease in size or intensity</li>' +
+            '<li>Create some new weirdness</li>' +
+            '<li>Harm or destroy someone or something</li>' +
+          '</ul>' +
+          '<ul class="ref-list">' +
+            '<li>React unexpectedly</li>' +
+            '<li>Escape from containment</li>' +
+            '<li>Hold something in place</li>' +
+            '<li>Grant an unnatural ability</li>' +
+            '<li>Hinder movement</li>' +
+            '<li>Subvert a bystander\'s motivation</li>' +
+          '</ul>' +
+        '</div>' +
+      '</div>' +
+
+      // ── INVESTIGATE A MYSTERY ─────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// INVESTIGATING PHENOMENA — extra questions</div>' +
+        '<ul class="ref-list">' +
+          '<li>How is this phenomenon doing this?</li>' +
+          '<li>What could fix it, cure it, or slow it down?</li>' +
+          '<li>How far does the effect reach?</li>' +
+          '<li>What will be affected next?</li>' +
+        '</ul>' +
+      '</div>' +
+
+      // ── KEEPER PAGES ──────────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// KEEPER PAGES</div>' +
+        '<div class="ref-row"><a href="missions/keeper.html" target="_blank" style="color:#a78bfa">Keeper Index →</a></div>' +
+        '<div class="ref-row"><a href="missions/report.html" target="_blank" style="color:#a78bfa">Field Report →</a></div>' +
+        '<div class="ref-row"><a href="missions/entities.html" target="_blank" style="color:#a78bfa">Entity Bestiary →</a></div>' +
+      '</div>';
+  }
+
+  // ── KEEPER: THREATS TAB ───────────────────────────────────────────────────
+  window.keeperSelectDataSession = function (id) {
+    keeperDataSession = id;
+    renderKeeperDataTab();
+  };
+
+  function renderKeeperDataTab() {
+    var body = document.getElementById('panel-body');
+    if (!session_data) { body.innerHTML = '<div class="keeper-panel-note">// LOADING…</div>'; return; }
+
+    // default to first session
+    if (!keeperDataSession) keeperDataSession = session_data[0].id;
+
+    // ── session selector ──
+    var selHtml = '<div class="data-session-selector">';
+    session_data.forEach(function (s) {
+      var active = s.id === keeperDataSession ? ' active' : '';
+      selHtml += '<button class="data-sess-btn' + active + '" onclick="keeperSelectDataSession(\'' + s.id + '\')">' + escHtml(s.session_key) + '</button>';
+    });
+    selHtml += '</div>';
+
+    var sess = session_data.filter(function (s) { return s.id === keeperDataSession; })[0];
+    if (!sess) { body.innerHTML = selHtml + '<div class="keeper-panel-note">// NO DATA</div>'; return; }
+
+    var html = selHtml;
+
+    // ── session title + doc link ──
+    html += '<div class="ref-section">' +
+      '<div class="ref-label">// ' + escHtml(sess.label) + '</div>' +
+      '<div class="ref-row"><a href="' + escHtml(sess.doc) + '" target="_blank" style="color:#a78bfa">Session Document →</a></div>' +
+    '</div>';
+
+    // ── entities ──
+    if (sess.entity_ids && sess.entity_ids.length && entities_data) {
+      sess.entity_ids.forEach(function (eid) {
+        var e = entities_data.entities.filter(function (x) { return x.id === eid; })[0];
+        if (!e) return;
+
+        html += '<div class="ref-section data-entity-block">';
+
+        // header
+        html += '<div class="ref-label">// ' + escHtml(e.name).toUpperCase() +
+          ' &nbsp;<span style="opacity:0.55;font-weight:400">' + escHtml(e.designation) + ' · ' + escHtml(e.classification) + '</span></div>';
+
+        // description
+        html += '<div class="data-entity-desc">' + escHtml(e.keeper_description) + '</div>';
+
+        // stat row
+        var statParts = [];
+        if (e.harm)          statParts.push('<span class="data-stat-label">HARM</span> ' + escHtml(e.harm));
+        if (e.armour)        statParts.push('<span class="data-stat-label">ARMOUR</span> ' + escHtml(e.armour));
+        if (e.harm_capacity) statParts.push('<span class="data-stat-label">HP</span> ' + escHtml(String(e.harm_capacity)));
+        if (statParts.length) html += '<div class="data-stat-row">' + statParts.join(' &nbsp;·&nbsp; ') + '</div>';
+
+        // weakness
+        if (e.weakness) {
+          html += '<div class="data-field"><span class="data-stat-label">WEAKNESS</span> ' + escHtml(e.weakness) + '</div>';
+        }
+
+        // powers
+        if (e.powers && e.powers.length) {
+          html += '<div class="data-stat-label" style="margin-top:0.45rem">POWERS</div>';
+          html += '<ul class="ref-list">';
+          e.powers.forEach(function (p) { html += '<li>' + escHtml(p) + '</li>'; });
+          html += '</ul>';
+        }
+
+        // keeper moves
+        if (e.keeper_moves && e.keeper_moves.length) {
+          html += '<div class="data-stat-label" style="margin-top:0.45rem">MOVES</div>';
+          html += '<ul class="ref-list">';
+          e.keeper_moves.forEach(function (m) { html += '<li>' + escHtml(m) + '</li>'; });
+          html += '</ul>';
+        }
+
+        // resolution conditions
+        if (e.resolution_conditions && e.resolution_conditions.length) {
+          html += '<div class="data-stat-label" style="margin-top:0.45rem">RESOLUTION</div>';
+          html += '<ul class="ref-list">';
+          e.resolution_conditions.forEach(function (r) { html += '<li>' + escHtml(r) + '</li>'; });
+          html += '</ul>';
+        }
+
+        // extra notes (bim, anchor spike, alan note, etc.)
+        ['bim_note','anchor_spike_effect','alan_note','campbell_private'].forEach(function (key) {
+          if (!e[key]) return;
+          var labels = { bim_note: 'BIM NOTE', anchor_spike_effect: 'ANCHOR SPIKE', alan_note: 'ALAN NOTE', campbell_private: 'CAMPBELL PRIVATE' };
+          html += '<div class="data-field" style="margin-top:0.3rem"><span class="data-stat-label">' + labels[key] + '</span> ' + escHtml(e[key]) + '</div>';
+        });
+
+        html += '</div>'; // end entity block
+      });
+    }
+
+    // ── threats (minions, bystanders, villains) ──
+    if (sess.threats && sess.threats.length) {
+      sess.threats.forEach(function (t) {
+        html += '<div class="ref-section data-threat-block">';
+
+        // header
+        html += '<div class="ref-label">// ' + escHtml(t.name).toUpperCase();
+        if (t.subtitle) html += ' &nbsp;<span style="opacity:0.55;font-weight:400">' + escHtml(t.subtitle) + '</span>';
+        html += '</div>';
+
+        // type + motivation
+        html += '<div class="data-threat-type">' + escHtml(t.type) + '</div>';
+        if (t.motivation) html += '<div class="data-field"><span class="data-stat-label">MOTIVATION</span> ' + escHtml(t.motivation) + '</div>';
+
+        // stat row
+        var statParts = [];
+        if (t.harm)          statParts.push('<span class="data-stat-label">HARM</span> ' + escHtml(t.harm));
+        if (t.armour)        statParts.push('<span class="data-stat-label">ARMOUR</span> ' + escHtml(String(t.armour)));
+        if (t.harm_capacity) statParts.push('<span class="data-stat-label">HP</span> ' + escHtml(String(t.harm_capacity)));
+        if (statParts.length) html += '<div class="data-stat-row" style="margin-top:0.35rem">' + statParts.join(' &nbsp;·&nbsp; ') + '</div>';
+
+        // moves
+        if (t.moves && t.moves.length) {
+          html += '<div class="data-stat-label" style="margin-top:0.45rem">MOVES</div>';
+          html += '<ul class="ref-list">';
+          t.moves.forEach(function (m) { html += '<li>' + escHtml(m) + '</li>'; });
+          html += '</ul>';
+        }
+
+        // notes
+        if (t.notes) html += '<div class="data-field" style="margin-top:0.4rem"><span class="data-stat-label">NOTES</span> ' + escHtml(t.notes) + '</div>';
+
+        html += '</div>';
+      });
+    }
+
+    // ── equipment ──
+    if (sess.equipment && sess.equipment.length) {
+      html += '<div class="ref-section">';
+      html += '<div class="ref-label">// FIELD EQUIPMENT</div>';
+      sess.equipment.forEach(function (eq) {
+        html += '<div class="data-equip-block">';
+        html += '<div class="data-equip-name">' + escHtml(eq.name);
+        if (eq.subtitle) html += ' <span class="data-equip-sub">' + escHtml(eq.subtitle) + '</span>';
+        html += '</div>';
+        if (eq.description)        html += '<div class="data-field" style="margin-top:0.2rem">' + escHtml(eq.description) + '</div>';
+        if (eq.hunter_interaction) html += '<div class="data-field" style="margin-top:0.25rem"><span class="data-stat-label">HUNTER USE</span> ' + escHtml(eq.hunter_interaction) + '</div>';
+        if (eq.plot_note)          html += '<div class="data-field" style="margin-top:0.25rem"><span class="data-stat-label">PLOT NOTE</span> ' + escHtml(eq.plot_note) + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    // ── readaloud ──
+    var reads = (sess.readaloud || []).filter(function (r) { return r.text && r.text.trim(); });
+    if (reads.length) {
+      reads.forEach(function (r) {
+        html += '<div class="ref-section">' +
+          '<div class="ref-label">// READALOUD — ' + escHtml(r.label).toUpperCase() + '</div>' +
+          '<div class="data-readaloud">' + escHtml(r.text) + '</div>' +
+        '</div>';
+      });
+    }
+
+    body.innerHTML = html;
+  }
+
+  // ── FEED MESSAGES ─────────────────────────────────────────────────────────
+  // Any player: text box at bottom of feed
+  window.sendFeedMessage = function () {
+    var nameEl = document.getElementById('composer-name');
+    var msgEl  = document.getElementById('composer-msg');
+    var name   = (nameEl.value.trim() || (hunterId ? HUNTER_NAMES[hunterId] : null) || 'OPERATIVE').toUpperCase();
+    var body   = msgEl.value.trim();
+    if (!body) return;
+
+    fetch('/api/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sender: name, body: body, session_id: getCurrentSession() })
+    }).then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.id) {
+          msgEl.value = '';
+          var entry = { _msg: true, id: data.id, sender: name, body: body, delivered_at: new Date().toISOString() };
+          appendFeedEntry(entry);
+          scrollFeedToBottom();
+          if (data.id > lastMsgId) lastMsgId = data.id;
+        }
+      }).catch(function () {});
+  };
+
+  // Keeper: clear the visible feed (DOM only — D1 data is preserved, "↑ LOAD EARLIER HISTORY" still works)
+  window.keeperClearFeed = function () {
+    if (!confirm('Clear the visible feed?\n\nThis only clears what\'s shown on screen. All history is preserved in D1 and can be loaded with "↑ LOAD EARLIER HISTORY".')) return;
+    var container = document.getElementById('feed-entries');
+    var loadWrap  = document.getElementById('feed-load-more-wrap');
+    // Remove all children except the load-more-wrap
+    while (container.lastChild && container.lastChild !== loadWrap) {
+      container.removeChild(container.lastChild);
+    }
+    feedEntries = [];
+    // Advance the feedOffset so "load earlier" still works from here
+    // lastRollId / lastMsgId stay as-is so polling picks up from current point
+  };
+
+  // Keeper: send as CAMPBELL / DIRECTOR / etc.
+  window.sendKeeperMessage = function () {
+    var sender = document.getElementById('msg-sender').value;
+    var body   = document.getElementById('msg-body').value.trim();
+    if (!body) return;
+    fetch('/api/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sender: sender, body: body, session_id: getCurrentSession() })
+    }).then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.id) {
+          document.getElementById('msg-body').value = '';
+          var entry = { _msg: true, id: data.id, sender: sender, body: body, delivered_at: new Date().toISOString() };
+          appendFeedEntry(entry);
+          scrollFeedToBottom();
+          if (data.id > lastMsgId) lastMsgId = data.id;
+        }
+      }).catch(function () {});
+  };
+
+  // Enter key in feed composer
+  document.getElementById('composer-msg').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendFeedMessage(); }
+  });
+
+  // ── FEED RENDERING ────────────────────────────────────────────────────────
+  function fmtTime(ts) {
+    if (!ts) return '';
+    try {
+      var d = new Date(ts.includes('T') ? ts : ts.replace(' ','T') + 'Z');
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } catch(e) { return ''; }
+  }
+
+  // Resolve the outcomes object for an entry — from the entry itself (local rolls)
+  // or by looking up the move name in loaded data (polled rolls from D1).
+  function resolveOutcomes(entry) {
+    if (entry.outcomes) return entry.outcomes;
+    var name = (entry.move_name || '').toLowerCase().trim();
+    if (!name) return null;
+    // Search basic moves by name
+    if (basic_moves && basic_moves.basic_moves) {
+      var bm = basic_moves.basic_moves.filter(function (m) {
+        return m.name.toLowerCase() === name;
+      })[0];
+      if (bm && bm.outcomes) return bm.outcomes;
+    }
+    // Search playbook moves by name
+    if (playbook_moves) {
+      if (playbook_moves.moves) {
+        var keys = Object.keys(playbook_moves.moves);
+        for (var i = 0; i < keys.length; i++) {
+          var pm = playbook_moves.moves[keys[i]];
+          if (pm.name.toLowerCase() === name) return pm;
+        }
+      }
+      if (playbook_moves.always_active_moves) {
+        var hunters = Object.keys(playbook_moves.always_active_moves);
+        for (var h = 0; h < hunters.length; h++) {
+          var list = playbook_moves.always_active_moves[hunters[h]];
+          for (var j = 0; j < list.length; j++) {
+            if (list[j].name.toLowerCase() === name) return list[j];
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  // Build the hover detail HTML: questions (if any) on top, then the specific outcome text.
+  function buildDetailHtml(entry) {
+    var outcomes = resolveOutcomes(entry);
+    if (!outcomes) return '';
+
+    var outcomeKey = entry.outcome === 'advanced' ? '12_plus'
+                   : entry.outcome === 'hit'      ? '10_plus'
+                   : entry.outcome === 'partial'  ? '7_9'
+                   : 'miss';
+    var text = outcomes[outcomeKey] || outcomes['general'] || outcomes['description'] || '';
+    if (!text && !outcomes.questions) return '';
+
+    var html = '';
+    // Questions list first (Investigate a Mystery, Read a Bad Situation)
+    if (outcomes.questions && outcomes.questions.length) {
+      html += '<div class="feed-detail-questions">';
+      html += '<div class="feed-detail-qlabel">// QUESTIONS — spend hold to ask one</div>';
+      html += '<ul class="feed-detail-qlist">';
+      outcomes.questions.forEach(function (q) {
+        html += '<li>' + escHtml(q) + '</li>';
+      });
+      html += '</ul></div>';
+    }
+    // Specific outcome text
+    if (text) {
+      html += '<div class="feed-detail-text">' + escHtml(text) + '</div>';
+    }
+    return html;
+  }
+
+  function buildBreakdown(entry) {
+    var parts = '[<span class="die">' + entry.roll_1 + '</span> + <span class="die">' + entry.roll_2 + '</span>';
+    if (entry.stat_val !== undefined && entry.stat_val !== null && entry.stat_val !== 0) {
+      parts += ' + <span class="stat-val">' + (entry.stat_val > 0 ? '+' : '') + entry.stat_val + '</span>';
+    } else if (entry.stat_used && hunterSheet && hunterSheet.stats) {
+      var sv = parseInt(hunterSheet.stats[entry.stat_used] || 0, 10);
+      if (sv !== 0) parts += ' + <span class="stat-val">' + (sv > 0 ? '+' : '') + sv + '</span>';
+    }
+    if (entry.modifier && entry.modifier !== 0) {
+      parts += ' + <span class="mod-val">' + (entry.modifier > 0 ? '+' : '') + entry.modifier + '</span>';
+    }
+    parts += ' = <span class="total">' + entry.total + '</span>]';
+    return parts;
+  }
+
+  function buildFeedEntryHtml(entry) {
+    if (entry._msg || entry.sender) {
+      return '<div class="feed-entry msg-entry">' +
+        '<div class="feed-msg-sender">// ' + escHtml(entry.sender || 'SYSTEM') + '</div>' +
+        '<div class="feed-msg-body">' + escHtml(entry.body || '') + '</div>' +
+        '<div class="feed-time">' + fmtTime(entry.delivered_at || entry.created_at || entry.timestamp) + '</div>' +
+      '</div>';
+    }
+
+    var hid      = entry.hunter_id || '?';
+    var color    = HUNTER_COLORS[hid] || '#aaa';
+    var hunterName = HUNTER_NAMES[hid] || hid;
+    var outcome  = entry.outcome || 'miss';
+    var badgeText = outcome === 'advanced' ? '⚡ ADVANCED'
+                  : outcome === 'hit'      ? '✓ SUCCESS'
+                  : outcome === 'partial'  ? '~ PARTIAL'
+                  : '✗ FAILURE';
+    var detail   = buildDetailHtml(entry);
+
+    return '<div class="feed-entry">' +
+      '<div class="feed-entry-meta">' +
+        '<span class="feed-hunter-tag" style="color:' + color + ';border-color:' + color + '30;background:' + color + '10">' + hunterName.toUpperCase() + '</span>' +
+        '<span class="feed-move-name">' + escHtml(entry.move_name || '') + '</span>' +
+        '<span class="feed-time">' + fmtTime(entry.rolled_at || entry.timestamp) + '</span>' +
+      '</div>' +
+      '<div class="feed-roll-line">' +
+        '<span class="feed-breakdown">' + buildBreakdown(entry) + '</span>' +
+        '<span class="feed-badge ' + outcome + '">' + badgeText + '</span>' +
+      '</div>' +
+      (detail ? '<div class="feed-outcome-detail">' + detail + '</div>' : '') +
+    '</div>';
+  }
+
+  function appendFeedEntry(entry) {
+    var container = document.getElementById('feed-entries');
+    var div = document.createElement('div');
+    div.innerHTML = buildFeedEntryHtml(entry);
+    container.appendChild(div.firstElementChild);
+    feedEntries.push(entry);
+  }
+
+  function prependFeedEntries(entries) {
+    var container = document.getElementById('feed-entries');
+    var loadWrap  = document.getElementById('feed-load-more-wrap');
+    var savedScroll = container.scrollHeight - container.scrollTop;
+    entries.forEach(function (entry) {
+      var div = document.createElement('div');
+      div.innerHTML = buildFeedEntryHtml(entry);
+      // Insert after the load-more-wrap (at position 1, not 0)
+      container.insertBefore(div.firstElementChild, loadWrap ? loadWrap.nextSibling : container.firstChild);
+    });
+    container.scrollTop = container.scrollHeight - savedScroll;
+  }
+
+  function scrollFeedToBottom() {
+    var c = document.getElementById('feed-entries');
+    c.scrollTop = c.scrollHeight;
+  }
+
+  document.getElementById('feed-entries').addEventListener('scroll', function () {
+    var c = this;
+    autoScroll = c.scrollTop + c.clientHeight >= c.scrollHeight - 40;
+  });
+
+  // ── FEED LOADING ──────────────────────────────────────────────────────────
+  function mergeAndSort(rolls, msgs) {
+    var all = [];
+    (rolls || []).forEach(function (r) { r._type = 'roll'; all.push(r); });
+    (msgs  || []).forEach(function (m) { m._type = 'msg';  all.push(m); });
+    all.sort(function (a, b) {
+      var ta = new Date(((a.rolled_at || a.delivered_at || a.timestamp || '')).replace(' ', 'T')).getTime();
+      var tb = new Date(((b.rolled_at || b.delivered_at || b.timestamp || '')).replace(' ', 'T')).getTime();
+      return ta - tb;
+    });
+    return all;
+  }
+
+  function initialLoad() {
+    Promise.all([
+      fetch('/api/v1/rolls?limit=' + FEED_PAGE).then(function (r) { return r.ok ? r.json() : []; }),
+      fetch('/api/v1/messages?limit=100').then(function (r) { return r.ok ? r.json() : []; })
+    ]).then(function (results) {
+      var rolls = results[0].reverse();
+      var msgs  = results[1].reverse();
+
+      rolls.forEach(function (r) { if (r.id > lastRollId) lastRollId = r.id; });
+      msgs.forEach(function  (m) { if (m.id > lastMsgId)  lastMsgId  = m.id; });
+
+      var combined = mergeAndSort(rolls, msgs);
+      combined.forEach(function (e) { appendFeedEntry(e); });
+      scrollFeedToBottom();
+
+      feedOffset = rolls.length;
+      startPolling();
+    }).catch(function () { startPolling(); });
+  }
+
+  window.loadOlderEntries = function () {
+    var btn = document.getElementById('load-more-btn');
+    btn.disabled = true;
+    btn.textContent = '// LOADING…';
+    fetch('/api/v1/rolls?limit=' + FEED_PAGE + '&offset=' + feedOffset)
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (rolls) {
+        if (rolls.length === 0) {
+          btn.textContent = '↑ NONE OLDER';
+          return;
+        }
+        rolls.reverse();
+        rolls.forEach(function (r) { if (r.id > lastRollId) lastRollId = r.id; });
+        prependFeedEntries(rolls);
+        feedOffset += rolls.length;
+        btn.disabled = false;
+        btn.textContent = '↑ LOAD EARLIER HISTORY';
+      })
+      .catch(function () { btn.disabled = false; btn.textContent = '↑ LOAD EARLIER HISTORY'; });
+  };
+
+  // ── POLLING ───────────────────────────────────────────────────────────────
+  function startPolling() {
+    if (pollTimer) clearInterval(pollTimer);
+    pollTimer = setInterval(poll, 3000);
+    if (saveTimer) clearInterval(saveTimer);
+    saveTimer = setInterval(saveSheet, 5000);
+  }
+
+  function poll() {
+    Promise.all([
+      fetch('/api/v1/rolls?after=' + lastRollId).then(function (r) { return r.ok ? r.json() : []; }),
+      fetch('/api/v1/messages?after=' + lastMsgId).then(function (r) { return r.ok ? r.json() : []; })
+    ]).then(function (results) {
+      var newRolls = results[0];
+      var newMsgs  = results[1];
+      newRolls.forEach(function (r) { if (r.id > lastRollId) lastRollId = r.id; });
+      newMsgs.forEach(function  (m) { if (m.id > lastMsgId)  lastMsgId  = m.id; });
+
+      var combined = mergeAndSort(newRolls, newMsgs);
+      combined.forEach(function (e) {
+        var alreadyIn = feedEntries.some(function (fe) { return fe._id === e.id && e._type === 'roll'; });
+        if (!alreadyIn) appendFeedEntry(e);
+      });
+      if (combined.length > 0 && autoScroll) scrollFeedToBottom();
+    }).catch(function () {});
+  }
+
+  // ── HELPERS ───────────────────────────────────────────────────────────────
+  function getCurrentSession() {
+    return null;
+  }
+
+  function escHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── BOOT ──────────────────────────────────────────────────────────────────
+  loadStaticData().then(function () {
+    if (hunterId) {
+      loadHunterSheet(hunterId).then(function () {
+        renderPanel();
+        initialLoad();
+      });
+    } else {
+      renderPanel();
+      initialLoad();
+    }
+  });
+
+}());
+</script>
+</body>
+</html>

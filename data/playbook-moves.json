@@ -220,7 +220,8 @@
         "source": "area_of_study",
         "name": "Kick Some Ass (Violence)",
         "roll": "+Sharp",
-        "description": "May roll +Sharp instead of +Tough for kick some ass. When making a scientific attack, either do +1 harm or take +1 forward."
+        "description": "May roll +Sharp instead of +Tough for kick some ass. When making a scientific attack, either do +1 harm or take +1 forward.",
+        "basic_move_ref": "kick-some-ass"
       }
     ],
     "alan": [],
