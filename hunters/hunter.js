@@ -464,10 +464,16 @@
       .then(function (data) {
         if (!data) return;
         var hunter = data.hunters.filter(function (h) { return h.id === hunterId; })[0];
-        if (!hunter || !hunter.luck_special) return;
-        el.innerHTML =
-          '<span class="luck-special-label">// LUCK SPECIAL</span>' +
-          '<span class="luck-special-text">' + hunter.luck_special + '</span>';
+        if (!hunter) return;
+        if (hunter.luck_special) {
+          el.innerHTML =
+            '<span class="luck-special-label">// LUCK SPECIAL</span>' +
+            '<span class="luck-special-text">' + hunter.luck_special + '</span>';
+        }
+        if (hunter.area_of_study && hunter.area_of_study.effect) {
+          var aosEl = document.getElementById('area-of-study-effect');
+          if (aosEl) aosEl.textContent = hunter.area_of_study.effect;
+        }
       })
       .catch(function () {});
   }
