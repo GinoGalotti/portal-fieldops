@@ -1,282 +1,86 @@
 {
   "version": "portal-campaign-current",
-  "source": "worldbuilding.md + player character creation",
-  "note": "Seed data for D1 hunters table. FILL_FROM_SESSION fields must be confirmed from actual character sheets before seeding the database. Confirmed fields are sourced from worldbuilding.md and session notes.",
+  "source": "Confirmed from D1 hunter_sheets (migrated from local, 2026-03-11). Dynamic state (harm, luck, xp, bonds, checks) lives in D1 — this file is the static identity layer only.",
   "hunters": [
     {
       "id": "rex",
       "name": "Rex Bangley",
       "playbook": "action-scientist",
-      "playbook_ref": "motw-playbooks.json#action-scientist",
       "accent_colour": "#f0a500",
-      "harm": 0,
-      "harm_max": 7,
-      "luck": 7,
-      "xp": 0,
-      "xp_threshold": 5,
-      "stats": {
-        "note": "FILL_FROM_SESSION \u2014 pick one of the 5 stat lines from action-scientist playbook. All have Sharp+2.",
-        "charm": "FILL_FROM_SESSION",
-        "cool": "FILL_FROM_SESSION",
-        "sharp": 2,
-        "tough": "FILL_FROM_SESSION",
-        "weird": "FILL_FROM_SESSION"
-      },
+      "stats": { "charm": -1, "cool": 0, "sharp": 2, "tough": -1, "weird": 2 },
       "area_of_study": {
         "id": "violence",
         "name": "Violence",
-        "confirmed": true,
         "effect": "May roll +Sharp instead of +Tough for kick some ass. When making a scientific attack, either do +1 harm or take +1 forward."
       },
       "weird_move": "weird-science",
-      "weird_move_confirmed": true,
-      "active_moves": [
-        {
-          "id": "weird-science",
-          "source": "alternate_weird_moves",
-          "confirmed": true,
-          "note": "Replaces Use Magic. Recommended by playbook \u2014 natural fit for Action Scientist."
-        },
-        {
-          "id": "FILL_FROM_SESSION",
-          "source": "action-scientist",
-          "confirmed": false,
-          "note": "First of two starting move picks. Options: test-hypothesis, sabotage, oblivious-to-danger, the-doors-of-perception, fieldwork."
-        },
-        {
-          "id": "FILL_FROM_SESSION",
-          "source": "action-scientist",
-          "confirmed": false,
-          "note": "Second of two starting move picks."
-        }
-      ],
-      "gear": {
-        "science_weapons": [
-          {
-            "name": "FILL_FROM_SESSION",
-            "tags": []
-          },
-          {
-            "name": "FILL_FROM_SESSION",
-            "tags": []
-          }
-        ],
-        "protective_equipment": {
-          "name": "FILL_FROM_SESSION",
-          "tags": []
-        },
-        "always_has": "Toolkits containing everything needed for science, engineering, and analysis tasks."
+      "confirmed_moves": ["move-weird-science", "move-test-hypothesis", "move-oblivious-to-danger"],
+      "confirmed_gear": {
+        "science_weapons": ["net-launcher", "force-knife"],
+        "protective_equipment": "biohazard-suit"
       },
-      "bonds": [
-        {
-          "target": "sven",
-          "description": "Half/bonus brothers \u2014 Rex confirmed Sven's death-related visions were real and brought him to PORTAL.",
-          "confirmed": true
-        },
-        {
-          "target": "FILL_FROM_SESSION",
-          "description": "FILL_FROM_SESSION",
-          "confirmed": false
-        },
-        {
-          "target": "FILL_FROM_SESSION",
-          "description": "FILL_FROM_SESSION",
-          "confirmed": false
-        }
-      ],
       "luck_special": "When you spend a point of Luck, some gadget or machine near you will soon malfunction, break down, or explode (what exactly is up to the Keeper).",
       "background": "Research leader and field operative. Area of expertise: serial killers (pre-PORTAL). Loves tinkering and gadget creation equally with field action.",
       "keeper_notes": {
         "arc_hooks": [
-          "University rival Dan Nilsson is working for MESA \u2014 Rex does not know this yet.",
-          "Rex examining a MESA Anchor Spike or Substance \u0398 sample would immediately recognise the BIM signature \u2014 direct Project Veil breadcrumb.",
-          "Area of Study: Violence means Rex can roll Sharp for kick some ass \u2014 significant in MESA confrontations."
+          "University rival Dan Nilsson is working for MESA — Rex does not know this yet.",
+          "Rex examining a MESA Anchor Spike or Substance Θ sample would immediately recognise the BIM signature — direct Project Veil breadcrumb.",
+          "Area of Study: Violence means Rex can roll Sharp for kick some ass — significant in MESA confrontations."
         ],
-        "secrets_involved": [
-          "secret-dan-nilsson-at-mesa",
-          "secret-project-veil"
-        ]
+        "secrets_involved": ["secret-dan-nilsson-at-mesa", "secret-project-veil"]
       }
     },
     {
       "id": "reed",
       "name": "Reed Atwood",
       "playbook": "sidekick",
-      "playbook_ref": "motw-playbooks.json#sidekick",
       "accent_colour": "#3ab5b0",
-      "harm": 0,
-      "harm_max": 7,
-      "luck": 7,
-      "xp": 0,
-      "xp_threshold": 5,
-      "stats": {
-        "note": "FILL_FROM_SESSION \u2014 pick one of the 5 stat lines, then add +1 to Rex's highest stat (confirm which stat is Rex's highest at table).",
-        "charm": "FILL_FROM_SESSION",
-        "cool": "FILL_FROM_SESSION",
-        "sharp": "FILL_FROM_SESSION",
-        "tough": "FILL_FROM_SESSION",
-        "weird": "FILL_FROM_SESSION",
-        "hero_stat_bonus": "+1 to Rex's highest stat \u2014 confirm after Rex's stat line is locked in"
-      },
+      "stats": { "charm": 1, "cool": 0, "sharp": 2, "tough": -1, "weird": 1 },
       "hero": "rex",
-      "hero_confirmed": true,
-      "active_moves": [
-        {
-          "id": "sidekick-theres-no-i-in-team",
-          "source": "sidekick",
-          "confirmed": true,
-          "note": "Mandatory starting move. +1 on all help out rolls, +2 if helping Rex."
-        },
-        {
-          "id": "FILL_FROM_SESSION",
-          "source": "sidekick",
-          "confirmed": false,
-          "note": "Second starting move. Options: caddy, as-you-wish, eek, bodyguard, me-too, i-can-make-you-look-good, apprentice."
-        },
-        {
-          "id": "FILL_FROM_SESSION",
-          "source": "sidekick",
-          "confirmed": false,
-          "note": "Third starting move."
-        }
-      ],
-      "gear": {
-        "hero_item": {
-          "name": "FILL_FROM_SESSION",
-          "note": "One item from Rex's gear options."
-        },
-        "sidekick_weapon": {
-          "name": "FILL_FROM_SESSION",
-          "tags": [],
-          "note": "Options: handgun, shotgun, baseball-bat, stun-gun, big-knife."
-        }
+      "confirmed_moves": ["move-theres-no-i", "move-as-you-wish", "move-bodyguard"],
+      "confirmed_gear": {
+        "sidekick_weapons": ["baseball-bat", "stun-gun"]
       },
-      "bonds": [
-        {
-          "target": "rex",
-          "description": "Hero \u2014 Reed idolises Rex and is devoted to protecting and supporting him.",
-          "confirmed": true
-        },
-        {
-          "target": "john-johnson",
-          "description": "John Johnson is Reed's aunt's husband.",
-          "confirmed": true
-        },
-        {
-          "target": "FILL_FROM_SESSION",
-          "description": "FILL_FROM_SESSION",
-          "confirmed": false
-        }
-      ],
       "luck_special": "Whenever you spend a Luck point, you'll get a chance to do something heroic.",
       "background": "Idolises Rex Bangley. Avoids being a burden; gets into trouble by not asking for help. Can be manipulated by appeals to what will make the group happy.",
       "keeper_notes": {
         "arc_hooks": [
-          "Director Leech has been contacting Reed separately \u2014 Reed may carry a private directive the team doesn't know about. Not yet surfaced in play.",
+          "Director Leech has been contacting Reed separately — Reed may carry a private directive the team doesn't know about. Not yet surfaced in play.",
           "CAMPBELL knows about the Leech-Reed contact pattern, won't lie if asked directly but won't volunteer it.",
-          "Teddy Brandt notices things \u2014 closest to knowing Reed is carrying something."
+          "Teddy Brandt notices things — closest to knowing Reed is carrying something."
         ],
-        "secrets_involved": [
-          "secret-reeds-private-directive"
-        ]
+        "secrets_involved": ["secret-reeds-private-directive"]
       }
     },
     {
       "id": "alan",
       "name": "Alan Frazier",
       "playbook": "changeling",
-      "playbook_ref": "motw-playbooks.json#changeling",
       "accent_colour": "#3ab5b0",
-      "harm": 0,
-      "harm_max": 7,
-      "luck": 7,
-      "xp": 0,
-      "xp_threshold": 5,
-      "stats": {
-        "note": "FILL_FROM_SESSION \u2014 pick one of the 5 stat lines from changeling playbook.",
-        "charm": "FILL_FROM_SESSION",
-        "cool": "FILL_FROM_SESSION",
-        "sharp": "FILL_FROM_SESSION",
-        "tough": "FILL_FROM_SESSION",
-        "weird": "FILL_FROM_SESSION"
-      },
+      "stats": { "charm": 1, "cool": 0, "sharp": -1, "tough": 1, "weird": 2 },
       "unknown_heritage": {
-        "note": "Pick 3 tags from the 10 options in the changeling playbook.",
-        "tags": [
-          "FILL_FROM_SESSION",
-          "FILL_FROM_SESSION",
-          "FILL_FROM_SESSION"
-        ]
+        "tags": ["Strange Thoughts", "Repulsion from Iron Melee Weapons", "Obsession with Animals"]
       },
-      "active_moves": [
-        {
-          "id": "changeling-glamour",
-          "source": "changeling",
-          "confirmed": true,
-          "note": "Mandatory starting move."
-        },
-        {
-          "id": "FILL_FROM_SESSION",
-          "source": "changeling",
-          "confirmed": false,
-          "note": "Second starting move. Options: inhuman-talent, they-are-my-people, force-of-nature, lockdown, faerie-gossip, renewal, strange-paths."
-        },
-        {
-          "id": "FILL_FROM_SESSION",
-          "source": "changeling",
-          "confirmed": false,
-          "note": "Third starting move."
-        }
-      ],
-      "gear": {
-        "transport": {
-          "name": "FILL_FROM_SESSION",
-          "tags": []
-        },
-        "weapon": {
-          "name": "FILL_FROM_SESSION",
-          "tags": []
-        },
-        "mementos": [
-          {
-            "name": "FILL_FROM_SESSION"
-          },
-          {
-            "name": "FILL_FROM_SESSION"
-          }
-        ]
+      "confirmed_moves": ["move-glamour", "move-inhuman-talent", "move-they-are-my-people"],
+      "confirmed_gear": {
+        "transport": "van",
+        "mementos": ["talisman", "childhood-toy"],
+        "other": ["smartphone"]
       },
-      "bonds": [
-        {
-          "target": "reed",
-          "description": "Uses Reed as his moral compass.",
-          "confirmed": true
-        },
-        {
-          "target": "FILL_FROM_SESSION",
-          "description": "FILL_FROM_SESSION",
-          "confirmed": false
-        },
-        {
-          "target": "FILL_FROM_SESSION",
-          "description": "FILL_FROM_SESSION",
-          "confirmed": false
-        }
-      ],
       "luck_special": "When you spend a point of Luck, something or someone related to your inhuman heritage or human upbringing shows up soon.",
       "background": "Swapped at birth, raised by a human family who have since died. Powers triggered by one of Rex's experiments. Has been accumulating evidence of thin-boundary locations.",
       "items_of_note": [
         {
           "name": "Diane Marsh's notebook",
           "description": "Contains a threshold sketch Alan recognises as meaningful. Acquired in Session 02.",
-          "significance": "Long thread \u2014 who mapped the thresholds first, and why can Alan read the map?"
+          "significance": "Long thread — who mapped the thresholds first, and why can Alan read the map?"
         }
       ],
       "keeper_notes": {
         "arc_hooks": [
-          "Alan reads place the way fey characters do \u2014 by resonance and layered memory.",
-          "The Cartographer case is NOT about illusion \u2014 Alan's glamour powers don't apply. His gift is his nature.",
-          "Diane Marsh's notebook contains a threshold sketch he recognises \u2014 major long-arc thread."
+          "Alan reads place the way fey characters do — by resonance and layered memory.",
+          "The Cartographer case is NOT about illusion — Alan's glamour powers don't apply. His gift is his nature.",
+          "Diane Marsh's notebook contains a threshold sketch he recognises — major long-arc thread."
         ],
         "secrets_involved": []
       }
@@ -285,140 +89,39 @@
       "id": "sven",
       "name": "Sven",
       "playbook": "monstrous",
-      "playbook_ref": "motw-playbooks.json#monstrous",
       "accent_colour": "#a78bfa",
-      "harm": 0,
-      "harm_max": 7,
-      "luck": 7,
-      "xp": 0,
-      "xp_threshold": 5,
-      "stats": {
-        "note": "FILL_FROM_SESSION \u2014 pick one of the 5 stat lines. All have Weird+3.",
-        "charm": "FILL_FROM_SESSION",
-        "cool": "FILL_FROM_SESSION",
-        "sharp": "FILL_FROM_SESSION",
-        "tough": "FILL_FROM_SESSION",
-        "weird": 3
-      },
+      "stats": { "charm": 2, "cool": 0, "sharp": -1, "tough": -1, "weird": 3 },
       "breed": "ghost",
-      "breed_confirmed": true,
-      "curse": {
-        "pick": "FILL_FROM_SESSION",
-        "campaign_suggestion": "vulnerability \u2014 rock salt",
-        "options": [
-          "feed",
-          "vulnerability",
-          "pure-drive",
-          "dark-master"
-        ]
-      },
+      "curse": "pure-drive",
+      "curse_detail": "Emotion: Greed",
       "natural_attacks": {
-        "base": {
-          "type": "magical force",
-          "tags": [
-            "hand"
-          ],
-          "confirmed": true
-        },
-        "extras": [
-          {
-            "name": "FILL_FROM_SESSION",
-            "confirmed": false,
-            "note": "One extra from the monstrous attack extras list."
-          }
-        ]
+        "base": { "type": "magical force", "tags": ["hand"] }
       },
-      "active_moves": [
-        {
-          "id": "monstrous-incorporeal",
-          "source": "monstrous",
-          "confirmed": true
-        },
-        {
-          "id": "monstrous-immortal",
-          "source": "monstrous",
-          "confirmed": true
-        }
-      ],
-      "bonds": [
-        {
-          "target": "rex",
-          "description": "Half/bonus brothers \u2014 Rex confirmed Sven's visions were real and brought him into PORTAL.",
-          "confirmed": true
-        },
-        {
-          "target": "FILL_FROM_SESSION",
-          "description": "FILL_FROM_SESSION",
-          "confirmed": false
-        }
-      ],
+      "confirmed_moves": ["move-incorporeal", "move-immortal"],
       "luck_special": "When you spend Luck, your monster side gains power; your Curse may become stronger, or another Breed disadvantage may manifest.",
-      "background": "Died on an ayahuasca trip \u2014 cause unknown. Visions from the trip turned out to be real. Motivated by finding exciting applications of monsters. Immune to the Aldermoor displacement effect (no cognitive map).",
+      "background": "Died on an ayahuasca trip — cause unknown. Visions from the trip turned out to be real. Motivated by finding exciting applications of monsters. Immune to the Aldermoor displacement effect (no cognitive map).",
       "special_properties": [
-        "Immune to Aldermoor displacement effect \u2014 has no cognitive map to consume.",
+        "Immune to Aldermoor displacement effect — has no cognitive map to consume.",
         "An entity recognised him at a boundary during Session 02.",
         "An Anchor Spike used against him deals 3-harm and forces him out of any supernatural state for the rest of the scene. The user will know what he is."
       ],
       "keeper_notes": {
         "arc_hooks": [
-          "Cause of death unknown \u2014 deliberately left open. Should connect to at least one active thread.",
-          "Natural contact vector for The Cartographer \u2014 entity recognises him as something between states.",
+          "Cause of death unknown — deliberately left open. Should connect to at least one active thread.",
+          "Natural contact vector for The Cartographer — entity recognises him as something between states.",
           "Natural resolution vector for Case E (The Understudies).",
-          "MESA has a file on Sven \u2014 Rook identified him as non-biological on first meeting."
+          "MESA has a file on Sven — Rook identified him as non-biological on first meeting."
         ],
-        "secrets_involved": [
-          "secret-svens-cause-of-death"
-        ]
+        "secrets_involved": ["secret-svens-cause-of-death"]
       }
     },
     {
       "id": "john-johnson",
       "name": "John Johnson",
       "playbook": "flake",
-      "playbook_ref": "motw-playbooks.json#flake",
       "accent_colour": "#c8ddd0",
       "role": "keeper_npc",
-      "note": "Keeper's own character \u2014 used sparingly as a plot presence, not played as a full hunter.",
-      "harm": 0,
-      "harm_max": 7,
-      "luck": 7,
-      "xp": 0,
-      "xp_threshold": 5,
-      "stats": {
-        "note": "FILL_FROM_SESSION \u2014 confirm from flake playbook. All options have Sharp+2.",
-        "charm": "FILL_FROM_SESSION",
-        "cool": "FILL_FROM_SESSION",
-        "sharp": 2,
-        "tough": "FILL_FROM_SESSION",
-        "weird": "FILL_FROM_SESSION"
-      },
-      "active_moves": [
-        {
-          "id": "FILL_FROM_SESSION",
-          "source": "flake",
-          "confirmed": false
-        },
-        {
-          "id": "FILL_FROM_SESSION",
-          "source": "flake",
-          "confirmed": false
-        },
-        {
-          "id": "FILL_FROM_SESSION",
-          "source": "flake",
-          "confirmed": false
-        }
-      ],
-      "gear": {
-        "note": "FILL_FROM_SESSION \u2014 flake gets 1 normal weapon + 2 hidden weapons."
-      },
-      "bonds": [
-        {
-          "target": "reed",
-          "description": "Reed Atwood's aunt's husband.",
-          "confirmed": true
-        }
-      ],
+      "note": "Keeper's own character — used sparingly as a plot presence, not played as a full hunter.",
       "luck_special": "When you spend Luck, pick an aspect of the current situation. The Keeper will tell you what other conspiracies that aspect connects to.",
       "background": "Believes everything is a hoax and everything is connected. Drawn to rival organisation threads, government involvement, lab ethics.",
       "keeper_notes": {
@@ -426,9 +129,7 @@
           "Most likely character to notice the MESA acronym pattern across shell company names.",
           "Arc: Deeper Conspiracy."
         ],
-        "secrets_involved": [
-          "secret-mesa-acronym-pattern"
-        ]
+        "secrets_involved": ["secret-mesa-acronym-pattern"]
       }
     }
   ]
