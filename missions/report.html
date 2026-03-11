@@ -420,6 +420,157 @@
     .meta-bar    { grid-template-columns: 1fr; }
   }
 
+  /* ─── OPERATIVE REPORTS ─── */
+  .op-reports-section {
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .op-reports-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--keeper-dim);
+  }
+  .op-reports-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--keeper);
+  }
+  .op-load-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    padding: 5px 14px;
+    border: 1px solid var(--keeper-dim);
+    background: transparent;
+    color: var(--keeper-dim);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  .op-load-btn:hover { border-color: var(--keeper); color: var(--keeper); }
+  .op-status {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    padding: 20px 0;
+    text-align: center;
+  }
+  .op-filed-count {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+  }
+  .op-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .op-card {
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--h-color, var(--border));
+    background: var(--bg2);
+    padding: 14px;
+    border-radius: 2px;
+  }
+  .op-card--empty { opacity: 0.4; }
+  .op-hunter-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--h-color, var(--text));
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .op-filed-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+    color: var(--green);
+  }
+  .op-not-filed {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+  }
+  .op-ratings {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 10px;
+    margin-bottom: 12px;
+  }
+  .op-rating-item { display: flex; align-items: center; gap: 6px; }
+  .op-rating-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    width: 56px;
+    flex-shrink: 0;
+  }
+  .op-rating-pips { display: flex; gap: 3px; }
+  .op-pip {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+  }
+  .op-pip.filled { background: var(--h-color, var(--keeper)); border-color: var(--h-color, var(--keeper)); }
+  .op-field { margin-bottom: 10px; }
+  .op-field-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    margin-bottom: 3px;
+  }
+  .op-field-value {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: var(--text);
+  }
+  .op-field-value--empty {
+    color: var(--text-dim);
+    font-style: italic;
+    font-size: 0.75rem;
+  }
+  .op-scenes {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .op-scene-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.12em;
+    color: var(--keeper-dim);
+    margin-top: 8px;
+    margin-bottom: 3px;
+  }
+  .op-scene-value {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: var(--text);
+    padding-left: 8px;
+    border-left: 2px solid var(--keeper-dim);
+  }
+  @media (max-width: 600px) {
+    .op-grid { grid-template-columns: 1fr; }
+  }
+
 </style>
 </head>
 <body>
@@ -428,6 +579,7 @@
 <header>
   <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L <span style="font-size:0.7rem;color:var(--keeper-dim);margin-left:8px;">// KEEPER</span></a>
   <nav id="keeper-nav"></nav><script src="keeper-nav.js"></script>
+  <div><span class="keeper-dot"></span><span style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--keeper-dim)">RESTRICTED ACCESS</span></div>
 </header>
 
 <section class="hero">
@@ -633,6 +785,17 @@
     <div class="db-field">
       <label>QUESTIONS FOR AI WHEN DRAFTING NEXT SESSION</label>
       <textarea id="db-ai-prompt" rows="3" placeholder="What do you want Claude to help you figure out? What's still murky?"></textarea>
+    </div>
+  </section>
+
+  <!-- OPERATIVE REPORTS -->
+  <section class="op-reports-section">
+    <div class="op-reports-head">
+      <div class="op-reports-title">// OPERATIVE REPORTS</div>
+      <button class="op-load-btn" id="btn-load-reports">↺ REFRESH</button>
+    </div>
+    <div id="op-reports-body">
+      <div class="op-status">// LOADING REPORTS…</div>
     </div>
   </section>
 
@@ -981,6 +1144,8 @@
         applyState(state);
       });
     }
+
+    loadOperativeReports(sid);
   }
 
   // ── SAVE ──────────────────────────────────────────────────────────────────
@@ -1106,6 +1271,42 @@
     lines.push('**Breadcrumbs:** ' + v(r.setup));
     lines.push('**AI prompts:** ' + v(r.aiPrompt));
 
+    // ── Player reports (if loaded) ──
+    var cachedReports = opReportsCache[sid];
+    if (cachedReports) {
+      var pweek = SESSION_TO_WEEK[sid];
+      var pRatings = ['story', 'atmosphere', 'role', 'emotion', 'overall'];
+      var pRatingNames = { story: 'Story', atmosphere: 'Atmosphere', role: 'Role', emotion: 'Emotion', overall: 'Overall' };
+      var pSceneLabels = {
+        'eszter-balint': 'Eszter & Bálint', 'portal-directive': 'The Portal Directive',
+        'your-moment': "Operative's Moment", 'cartographer': 'The Cartographer', 'aldermoor': 'Aldermoor'
+      };
+      lines.push('');
+      lines.push('---');
+      lines.push('');
+      lines.push('## Operative Field Reports (' + (pweek || '?') + ')');
+      lines.push('');
+      OP_HUNTER_LIST.forEach(function (hid) {
+        var rd = cachedReports[hid];
+        lines.push('### ' + OP_HUNTER_META[hid].name);
+        if (!rd) { lines.push('_Not filed._'); lines.push(''); return; }
+        var rParts = pRatings.map(function (rid) {
+          return pRatingNames[rid] + ': ' + ((rd.ratings && rd.ratings[rid]) ? rd.ratings[rid] + '/5' : '—');
+        });
+        lines.push('**Ratings:** ' + rParts.join(' · '));
+        lines.push('');
+        if (rd.favourite && rd.favourite.trim()) lines.push('**Favourite moment:** ' + rd.favourite.trim());
+        if (rd.different && rd.different.trim()) lines.push('**Would do differently:** ' + rd.different.trim());
+        if (rd.operative && rd.operative.trim()) lines.push("**Operative's feelings:** " + rd.operative.trim());
+        if (rd.other     && rd.other.trim())     lines.push('**Other:** ' + rd.other.trim());
+        var sceneIds = OP_WEEK_SCENES[pweek] || [];
+        var sceneLines = sceneIds.filter(function (scId) { return rd.scenes && rd.scenes[scId] && rd.scenes[scId].trim(); })
+          .map(function (scId) { return '- _' + (pSceneLabels[scId] || scId) + ':_ ' + rd.scenes[scId].trim(); });
+        if (sceneLines.length) { lines.push(''); lines.push('**Scene notes:**'); sceneLines.forEach(function (l) { lines.push(l); }); }
+        lines.push('');
+      });
+    }
+
     return lines.join('\n');
   }
 
@@ -1137,6 +1338,144 @@
     setTimeout(function () { el.classList.remove('visible'); }, 2000);
   }
 
+  // ── OPERATIVE REPORTS ────────────────────────────────────────────────────
+
+  var SESSION_TO_WEEK = { S01: 'W01', S02: 'W02' };
+
+  var OP_HUNTER_LIST = ['rex', 'reed', 'alan', 'sven', 'john'];
+
+  var OP_HUNTER_META = {
+    rex:  { name: 'Rex Bangley',  color: '#f0a500' },
+    reed: { name: 'Reed Atwood',  color: '#3ab5b0' },
+    alan: { name: 'Alan Frazier', color: '#2ec4b6' },
+    sven: { name: 'Sven',         color: '#a78bfa' },
+    john: { name: 'John Johnson', color: '#e05c5c' }
+  };
+
+  var OP_RATING_LABELS = {
+    story: 'STORY', atmosphere: 'ATMOS', role: 'ROLE',
+    emotion: 'EMOT', overall: 'OVERALL'
+  };
+
+  var OP_SCENE_LABELS = {
+    'eszter-balint':    'ESZTER & BÁLINT',
+    'portal-directive': 'THE PORTAL DIRECTIVE',
+    'your-moment':      "OPERATIVE'S MOMENT",
+    'cartographer':     'THE CARTOGRAPHER',
+    'aldermoor':        'ALDERMOOR DISTRICT'
+  };
+
+  var OP_WEEK_SCENES = {
+    W01: ['eszter-balint', 'portal-directive', 'your-moment'],
+    W02: ['cartographer', 'aldermoor', 'your-moment']
+  };
+
+  var opReportsCache = {}; // sid → { hid → data|null }
+
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function loadOperativeReports(sid) {
+    var week = SESSION_TO_WEEK[sid];
+    var body = document.getElementById('op-reports-body');
+    body.innerHTML = '<div class="op-status">// LOADING…</div>';
+
+    if (!week) {
+      body.innerHTML = '<div class="op-status">No player week mapped to this session.</div>';
+      return;
+    }
+
+    var promises = OP_HUNTER_LIST.map(function (hid) {
+      return fetch('/api/v1/player-reports/' + week + '/' + hid + '/state')
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          return { hid: hid, data: (data && Object.keys(data).length > 0) ? data : null };
+        })
+        .catch(function () { return { hid: hid, data: null }; });
+    });
+
+    Promise.all(promises).then(function (results) {
+      var byHunter = {};
+      results.forEach(function (r) { byHunter[r.hid] = r.data; });
+      opReportsCache[sid] = byHunter;
+      renderOperativeReports(byHunter, week);
+    });
+  }
+
+  function renderOperativeReports(byHunter, week) {
+    var sceneIds = OP_WEEK_SCENES[week] || [];
+    var ratings  = ['story', 'atmosphere', 'role', 'emotion', 'overall'];
+
+    var filedCount = OP_HUNTER_LIST.filter(function (h) { return byHunter[h]; }).length;
+
+    var html = '<div class="op-filed-count">' + filedCount + ' / ' + OP_HUNTER_LIST.length + ' REPORTS FILED — ' + week + '</div>';
+    html += '<div class="op-grid">';
+
+    OP_HUNTER_LIST.forEach(function (hid) {
+      var d    = byHunter[hid];
+      var meta = OP_HUNTER_META[hid];
+
+      html += '<div class="op-card' + (d ? '' : ' op-card--empty') + '" style="--h-color:' + meta.color + '">';
+      html += '<div class="op-hunter-name">' + escHtml(meta.name);
+      html += d ? '<span class="op-filed-badge">✓ FILED</span>' : '<span class="op-not-filed">NOT FILED</span>';
+      html += '</div>';
+
+      if (d) {
+        // Ratings
+        html += '<div class="op-ratings">';
+        ratings.forEach(function (rid) {
+          var val = (d.ratings && d.ratings[rid]) || 0;
+          html += '<div class="op-rating-item"><span class="op-rating-label">' + OP_RATING_LABELS[rid] + '</span><div class="op-rating-pips">';
+          for (var i = 1; i <= 5; i++) {
+            html += '<div class="op-pip' + (i <= val ? ' filled' : '') + '"></div>';
+          }
+          html += '</div></div>';
+        });
+        html += '</div>';
+
+        // Text fields
+        [
+          { key: 'favourite', label: 'FAVOURITE MOMENT' },
+          { key: 'different', label: 'WOULD DO DIFFERENTLY' },
+          { key: 'operative', label: "OPERATIVE'S FEELINGS" },
+          { key: 'other',     label: 'OTHER NOTES' }
+        ].forEach(function (f) {
+          var val = d[f.key] && d[f.key].trim();
+          html += '<div class="op-field"><div class="op-field-label">' + f.label + '</div>';
+          html += val
+            ? '<div class="op-field-value">' + escHtml(val) + '</div>'
+            : '<div class="op-field-value op-field-value--empty">—</div>';
+          html += '</div>';
+        });
+
+        // Scene notes (only those with content)
+        var hasScenes = sceneIds.some(function (scId) { return d.scenes && d.scenes[scId] && d.scenes[scId].trim(); });
+        if (hasScenes) {
+          html += '<div class="op-scenes">';
+          sceneIds.forEach(function (scId) {
+            var val = d.scenes && d.scenes[scId] && d.scenes[scId].trim();
+            if (!val) return;
+            html += '<div class="op-scene-label">' + escHtml(OP_SCENE_LABELS[scId] || scId.toUpperCase()) + '</div>';
+            html += '<div class="op-scene-value">' + escHtml(val) + '</div>';
+          });
+          html += '</div>';
+        }
+      }
+
+      html += '</div>'; // end op-card
+    });
+
+    html += '</div>'; // end op-grid
+    document.getElementById('op-reports-body').innerHTML = html;
+  }
+
+  document.getElementById('btn-load-reports').addEventListener('click', function () {
+    loadOperativeReports(currentSid);
+  });
+
   // ── BOOT ──────────────────────────────────────────────────────────────────
 
   buildTabs();
@@ -1149,6 +1488,8 @@
     applyState(state);
     if (!state.date) document.getElementById('db-date').value = new Date().toISOString().slice(0, 10);
   });
+
+  loadOperativeReports('S01');
 
 }());
 </script>
