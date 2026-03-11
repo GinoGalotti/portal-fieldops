@@ -1,0 +1,230 @@
+{
+  "version": "1.0",
+  "note": "Move definitions keyed by data-check-key. Feed view: load hunter sheet state from D1, cross-reference checked keys here to render active moves. always_active_moves lists moves derived from fixed selections (area_of_study, breed) that are always on regardless of checks.",
+  "moves": {
+
+    "move-weird-science": {
+      "hunter": "rex",
+      "name": "Weird Science",
+      "roll": "+Weird",
+      "description": "Create bespoke mystical gadgets using science. On 10+: it works. On 7–9: it works, but pick one — side effect, temperamental, or needs specific fuel. Miss: goes wrong badly."
+    },
+    "move-test-hypothesis": {
+      "hunter": "rex",
+      "name": "Test Hypothesis",
+      "roll": "+Sharp",
+      "description": "When you test a potential explanation based on gathered data. On 10+: the Keeper tells you if you're on track, missing data, or wrong — and you can trust the answer. On 7–9: honest answer, but you wasted time or destroyed evidence. Miss: the answer is unrelated to the facts."
+    },
+    "move-sabotage": {
+      "hunter": "rex",
+      "name": "Sabotage",
+      "roll": "+Sharp",
+      "description": "When you quickly break a complicated gadget. On 10+: broken — your choice if quietly or irreparably. On 7–9: broken but fixable, and you made noise. Miss: worst thing possible — usually explosions."
+    },
+    "move-oblivious-to-danger": {
+      "hunter": "rex",
+      "name": "Oblivious to Danger",
+      "roll": null,
+      "description": "You are immune to all fear-based moves and powers. You never need to act under pressure to resist fear from any source."
+    },
+    "move-doors-of-perception": {
+      "hunter": "rex",
+      "name": "The Doors of Perception",
+      "roll": "+Weird",
+      "description": "When you use psychological, pharmacological, or meditation techniques to open your mind. On 10+: pick two effects. On 7–9: pick one, but your mind is confused and foggy. Miss: lost in altered states. Effects: communicate with something normally impossible · see normally invisible things · ask one investigate-a-mystery question · +1 Cool, Sharp, or Weird for the next hour (max +3)."
+    },
+    "move-fieldwork": {
+      "hunter": "rex",
+      "name": "Fieldwork",
+      "roll": null,
+      "description": "When you put yourself in danger to test a hypothesis, get +1 forward. When you confirm the hypothesis as true or false, mark experience."
+    },
+
+    "move-glamour": {
+      "hunter": "alan",
+      "name": "Glamour",
+      "roll": null,
+      "description": "When feeling calm, you can maintain an illusion of humanity. You may drop your glamour and display your supernatural power to turn any roll into a 10+. Your unknown heritage stirs up trouble right away or soon after."
+    },
+    "move-inhuman-talent": {
+      "hunter": "alan",
+      "name": "Inhuman Talent",
+      "roll": null,
+      "description": "+1 ongoing when you use a basic Weird move that your specific powers can enhance. At the start of each session, hold 2. Spend hold for +1 forward on a move your powers can enhance."
+    },
+    "move-they-are-my-people": {
+      "hunter": "alan",
+      "name": "They Are My People",
+      "roll": null,
+      "description": "Once per session, when you protect someone, act as if you rolled a 12+. You gain +1 forward when acting under pressure to resist instincts from your unknown heritage, dark urges, or fight-or-flight situations."
+    },
+    "move-force-of-nature": {
+      "hunter": "alan",
+      "name": "Force of Nature",
+      "roll": "+Weird",
+      "description": "Supernatural attack from your heritage. On 10+: summon a 1-harm close weapon, pick two extras. On 7–9: pick one extra. Miss: power turns against you. Extras: +1 harm, hand, far, autonomous, distracting, ignore-armour, area, grab, blind, stun."
+    },
+    "move-lockdown": {
+      "hunter": "alan",
+      "name": "Lockdown",
+      "roll": "+Weird",
+      "description": "Stun people with a petrifying gaze, overwhelming illusions, or bewildering moths. On 10+: target immobilised for minutes or until something snaps them out. On 7–9: immobilised while you focus. Miss: magical backlash."
+    },
+    "move-faerie-gossip": {
+      "hunter": "alan",
+      "name": "Faerie Gossip",
+      "roll": "+Weird",
+      "description": "Communicate with local spirits and mystical creatures. When investigating a mystery by questioning them, roll +Weird instead of +Sharp and ask extra questions: Is anything affecting the supernatural environment? How long has ____ been in the area? When did ____ first arrive?"
+    },
+    "move-renewal": {
+      "hunter": "alan",
+      "name": "Renewal",
+      "roll": null,
+      "description": "When teammates and allies in your presence recover harm by any means, they recover 1 extra harm."
+    },
+    "move-strange-paths": {
+      "hunter": "alan",
+      "name": "Strange Paths",
+      "roll": "+Weird",
+      "description": "Walk or drive between worlds, though you don't know the way well. On 10+: arrive quicker than possible. On 7–9: find trouble along the way. Miss: arrive a little too late or deal with something blocking the way."
+    },
+
+    "move-theres-no-i": {
+      "hunter": "reed",
+      "name": "There's No \"I\" In \"Team\"",
+      "roll": null,
+      "description": "+1 on all help out rolls, or +2 if helping Rex Bangley (your hero)."
+    },
+    "move-caddy": {
+      "hunter": "reed",
+      "name": "Caddy",
+      "roll": null,
+      "description": "You carry all your hero's stuff. You can use anything from Rex's gear list unless he is currently holding it. If it has spares, you can use it even if he is."
+    },
+    "move-as-you-wish": {
+      "hunter": "reed",
+      "name": "As You Wish",
+      "roll": null,
+      "description": "Mark experience whenever your hero orders or requests that you do something you don't want to do, and you do it anyway."
+    },
+    "move-eek": {
+      "hunter": "reed",
+      "name": "Eek!",
+      "roll": "+Sharp",
+      "description": "When a monster appears and you find a hiding spot. On 10+: hide in the best nearby spot before the monster sees you. On 7–9: pick one — you hide okay but the monster is between you and escape; your spot will be spotted soon; you leave something important in the open. Miss: fail to hide in time."
+    },
+    "move-bodyguard": {
+      "hunter": "reed",
+      "name": "Bodyguard",
+      "roll": null,
+      "description": "If something bad is going to happen to your hero, comrades, or a bystander, and you are right there, throw yourself in harm's way. Whatever was going to happen to them happens to you instead, and you mark experience."
+    },
+    "move-me-too": {
+      "hunter": "reed",
+      "name": "Me Too!",
+      "roll": null,
+      "description": "If your hero makes a roll for a move, and you copy what they did, you may choose not to roll. Instead use your hero's die roll, adjusted with your own rating."
+    },
+    "move-i-can-make-you-look-good": {
+      "hunter": "reed",
+      "name": "I Can Make You Look Good",
+      "roll": null,
+      "description": "If helping out your hero, you may swap one or both dice with theirs, as long as you come out with the lowest total. Calculate results as if you had each rolled the dice you now hold."
+    },
+    "move-apprentice": {
+      "hunter": "reed",
+      "name": "Apprentice",
+      "roll": null,
+      "description": "Take a move that your hero (Rex) has."
+    },
+
+    "move-incorporeal": {
+      "hunter": "sven",
+      "name": "Incorporeal",
+      "roll": null,
+      "description": "You may move freely through solid objects (but not people)."
+    },
+    "move-immortal": {
+      "hunter": "sven",
+      "name": "Immortal",
+      "roll": null,
+      "description": "You do not age or sicken, and whenever you suffer harm you suffer 1-harm less."
+    },
+    "move-unnatural-appeal": {
+      "hunter": "sven",
+      "name": "Unnatural Appeal",
+      "roll": "+Weird",
+      "description": "Roll +Weird instead of +Charm when you manipulate someone."
+    },
+    "move-unholy-strength": {
+      "hunter": "sven",
+      "name": "Unholy Strength",
+      "roll": "+Weird",
+      "description": "Roll +Weird instead of +Tough when you kick some ass."
+    },
+    "move-preternatural-speed": {
+      "hunter": "sven",
+      "name": "Preternatural Speed",
+      "roll": null,
+      "description": "You go much faster than normal people. When you chase, flee, or run, take +1 ongoing."
+    },
+    "move-claws-of-the-beast": {
+      "hunter": "sven",
+      "name": "Claws of the Beast",
+      "roll": null,
+      "description": "All your natural attacks get +1 harm."
+    },
+    "move-mental-dominion": {
+      "hunter": "sven",
+      "name": "Mental Dominion",
+      "roll": "+Charm",
+      "description": "Gaze into a normal human's eyes and exert your will. On 10+: hold 3. On 7–9: hold 1. Spend hold to give orders — regular people follow without question; hunters may choose to comply and mark experience. Miss: no hold."
+    },
+    "move-unquenchable-vitality": {
+      "hunter": "sven",
+      "name": "Unquenchable Vitality",
+      "roll": "+Cool",
+      "description": "When you have taken harm, you can heal yourself. On 10+: heal 2-harm and stabilise. On 7–9: heal 1-harm and stabilise. Miss: your injuries worsen."
+    },
+    "move-dark-negotiator": {
+      "hunter": "sven",
+      "name": "Dark Negotiator",
+      "roll": null,
+      "description": "You can use the manipulate someone move on monsters as well as people, if they can reason and talk."
+    },
+    "move-flight": {
+      "hunter": "sven",
+      "name": "Flight",
+      "roll": null,
+      "description": "You can fly."
+    },
+    "move-shapeshifter": {
+      "hunter": "sven",
+      "name": "Shapeshifter",
+      "roll": null,
+      "description": "You may change your form (usually into an animal). Decide if you have one alternate form or several. You gain +1 to investigate a mystery when using an alternate form's superior senses."
+    },
+    "move-something-borrowed": {
+      "hunter": "sven",
+      "name": "Something Borrowed",
+      "roll": null,
+      "description": "Take a move from a hunter playbook that is not currently in play."
+    }
+
+  },
+
+  "always_active_moves": {
+    "rex": [
+      {
+        "id": "area-of-study-violence",
+        "source": "area_of_study",
+        "name": "Kick Some Ass (Violence)",
+        "roll": "+Sharp",
+        "description": "May roll +Sharp instead of +Tough for kick some ass. When making a scientific attack, either do +1 harm or take +1 forward."
+      }
+    ],
+    "alan": [],
+    "reed": [],
+    "sven": []
+  }
+}
