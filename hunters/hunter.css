@@ -831,6 +831,30 @@ textarea.pb-field { min-height: 72px; resize: vertical; }
 
 .check-list.hide-unchecked .check-item:not(.checked):not(.mandatory) { display: none; }
 
+/* ── LUCK SPECIAL ─────────────────────────────────────────────────────────── */
+.luck-special-block {
+  margin: 0.6rem 0 0.9rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 2px solid var(--accent-dim);
+  background: rgba(0,0,0,0.15);
+  border-radius: 0 4px 4px 0;
+}
+.luck-special-label {
+  display: block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--accent-dim);
+  margin-bottom: 0.25rem;
+}
+.luck-special-text {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+  font-style: italic;
+}
+
 /* Pick-note guidance */
 .pick-note {
   font-family: 'Share Tech Mono', monospace;

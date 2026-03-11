@@ -104,7 +104,7 @@
   // ── SHEET SERIALISE / APPLY ───────────────────────────────────────────────
 
   function serialiseSheet() {
-    var sheet = { stats: {}, harm: 0, luck: 0, xp: 0, bonds: [], notes: '', special: [], checks: {} };
+    var sheet = { stats: {}, harm: 0, luck: 0, xp: 0, bonds: [], notes: '', special: [], checks: {}, hiddenLists: [] };
 
     // Stats
     document.querySelectorAll('.stat-input[data-stat]').forEach(function (inp) {
@@ -139,6 +139,12 @@
     // Checklists (moves, gear, improvements)
     document.querySelectorAll('.check-item[data-check-key]').forEach(function (el) {
       sheet.checks[el.dataset.checkKey] = el.classList.contains('checked');
+    });
+
+    // Hidden lists (hide-unchosen toggle state)
+    sheet.hiddenLists = [];
+    document.querySelectorAll('.check-list.hide-unchecked').forEach(function (el) {
+      if (el.id) sheet.hiddenLists.push(el.id);
     });
 
     return sheet;
@@ -188,6 +194,17 @@
         if (sheet.checks[el.dataset.checkKey] !== undefined) {
           el.classList.toggle('checked', !!sheet.checks[el.dataset.checkKey]);
         }
+      });
+    }
+
+    // Restore hidden lists
+    if (sheet.hiddenLists && sheet.hiddenLists.length > 0) {
+      sheet.hiddenLists.forEach(function (id) {
+        var list = document.getElementById(id);
+        if (!list) return;
+        list.classList.add('hide-unchecked');
+        var btn = document.querySelector('.hide-toggle[onclick*="\'' + id + '\'"]');
+        if (btn) btn.textContent = '// SHOW ALL';
       });
     }
   }
@@ -438,7 +455,26 @@
   });
 
 
+  // ── LUCK SPECIAL ─────────────────────────────────────────────────────────
+  function loadLuckSpecial() {
+    var el = document.getElementById('luck-special');
+    if (!el) return;
+    fetch('/data/hunters.json')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (!data) return;
+        var hunter = data.hunters.filter(function (h) { return h.id === hunterId; })[0];
+        if (!hunter || !hunter.luck_special) return;
+        el.innerHTML =
+          '<span class="luck-special-label">// LUCK SPECIAL</span>' +
+          '<span class="luck-special-text">' + hunter.luck_special + '</span>';
+      })
+      .catch(function () {});
+  }
+
+
   // ── BOOT ─────────────────────────────────────────────────────────────────
   load();
+  loadLuckSpecial();
 
 }());

@@ -84,7 +84,7 @@
           "confirmed": false
         }
       ],
-      "luck_special": "When you spend a point of Luck, some gadget or machine near you will soon malfunction, break down, or explode.",
+      "luck_special": "When you spend a point of Luck, some gadget or machine near you will soon malfunction, break down, or explode (what exactly is up to the Keeper).",
       "background": "Research leader and field operative. Area of expertise: serial killers (pre-PORTAL). Loves tinkering and gadget creation equally with field action.",
       "keeper_notes": {
         "arc_hooks": [
@@ -263,7 +263,7 @@
           "confirmed": false
         }
       ],
-      "luck_special": "FILL_FROM_SESSION \u2014 confirm from changeling playbook luck special.",
+      "luck_special": "When you spend a point of Luck, something or someone related to your inhuman heritage or human upbringing shows up soon.",
       "background": "Swapped at birth, raised by a human family who have since died. Powers triggered by one of Rex's experiments. Has been accumulating evidence of thin-boundary locations.",
       "items_of_note": [
         {
@@ -352,7 +352,7 @@
           "confirmed": false
         }
       ],
-      "luck_special": "FILL_FROM_SESSION \u2014 confirm from monstrous playbook luck special.",
+      "luck_special": "When you spend Luck, your monster side gains power; your Curse may become stronger, or another Breed disadvantage may manifest.",
       "background": "Died on an ayahuasca trip \u2014 cause unknown. Visions from the trip turned out to be real. Motivated by finding exciting applications of monsters. Immune to the Aldermoor displacement effect (no cognitive map).",
       "special_properties": [
         "Immune to Aldermoor displacement effect \u2014 has no cognitive map to consume.",
@@ -419,6 +419,7 @@
           "confirmed": true
         }
       ],
+      "luck_special": "When you spend Luck, pick an aspect of the current situation. The Keeper will tell you what other conspiracies that aspect connects to.",
       "background": "Believes everything is a hoax and everything is connected. Drawn to rival organisation threads, government involvement, lab ethics.",
       "keeper_notes": {
         "arc_hooks": [

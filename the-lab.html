@@ -382,6 +382,12 @@ textarea.lab-field { resize: vertical; }
       s[el.dataset.lab] = el.value || el.textContent || '';
     });
 
+    // Hidden lists (hide-unchosen toggle state)
+    s.hiddenLists = [];
+    document.querySelectorAll('.check-list.hide-unchecked').forEach(function (el) {
+      if (el.id) s.hiddenLists.push(el.id);
+    });
+
     return s;
   }
 
@@ -411,6 +417,17 @@ textarea.lab-field { resize: vertical; }
 
     // Ally custom row visibility
     toggleAllyCustom();
+
+    // Restore hidden lists
+    if (s.hiddenLists && s.hiddenLists.length > 0) {
+      s.hiddenLists.forEach(function (id) {
+        var list = document.getElementById(id);
+        if (!list) return;
+        list.classList.add('hide-unchecked');
+        var btn = document.querySelector('.hide-toggle[onclick*="\'' + id + '\'"]');
+        if (btn) btn.textContent = '// SHOW ALL';
+      });
+    }
   }
 
   // ── ALLY CUSTOM ROW ──
