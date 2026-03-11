@@ -59,7 +59,8 @@ portal-fieldops/
 │   ├── motw-teambooks.json        # Research Lab team playbook (PORTAL's active team book)
 │   ├── portal-custom-moves.json   # MESA equipment moves + house rules
 │   ├── sessions.json              # Session registry — id, label, title, status (drives keeper toggle + session-state.js)
-│   ├── hunters.json               # Hunter starting states + player choices seed data
+│   ├── hunters.json               # Hunter identity layer: playbook, accent colour, lore, luck_special, area_of_study, keeper notes
+│   ├── playbook-moves.json        # Move definitions keyed by data-check-key → name, roll, description (feed layer)
 │   ├── portal-npcs.json           # Full NPC roster with player/keeper description split, session_overrides, keeper_scene_notes
 │   └── portal-entities.json       # Entity/threat database; session_overrides controls player bestiary visibility
 │
@@ -498,7 +499,26 @@ Hunter pages renamed to `hunters/[name].html` (alan, rex, reed, sven). Each has 
 - `hunterId` derived from filename: `pathname.split('/').pop().replace('-hunter-stories.html','').replace('-hunter.html','').replace('.html','')`
 - Team playbook: `GET/PUT /api/v1/team/playbook` → `team_state` table (migration 006)
 
-### Phase 2.8 — The Lab Team Playbook Page (COMPLETE)
+### Phase 2.8 — Hunter Sheet Enhancements (COMPLETE)
+
+- **Dynamic bonds:** All 4 hunter pages — replace 3 fixed bond inputs with add/remove rows (`// + ADD` / `−` button). Serialised as `sheet.bonds[]` array, rebuilt on load. Minimum 1 row enforced.
+- **Move/gear/improvement checklists:** All picks on each hunter page are now `check-item` elements with `data-check-key`. Players can tick their chosen moves, gear, improvements. Each list has a `// HIDE UNCHOSEN` toggle that collapses unchosen items; hide state is persisted in D1 sheet state as `sheet.hiddenLists[]`.
+- **Luck special:** Fetched from `data/hunters.json` at page load via `loadHunterMeta()`; injected into `#luck-special` block below the XP track. All 4 hunters now have `luck_special` populated.
+- **Area of Study effect (Rex):** `loadHunterMeta()` also injects `area_of_study.effect` into `#area-of-study-effect` below the Violence label.
+- **Reed hero item text input:** Free-text field inside the Hero's item gear check-item; saved via `pb-special-input` mechanism.
+- **`data/playbook-moves.json`:** New file — move definitions keyed by `data-check-key`. Each entry: `hunter`, `name`, `roll` (stat string or null), `description`. Plus `always_active_moves` per hunter (e.g. Rex's Violence area of study). This is the static definition layer for the feed view.
+
+**Data layer split (confirmed architecture):**
+| Layer | Where | What it holds |
+|-------|-------|---------------|
+| Static identity | `data/hunters.json` | Playbook, accent colour, lore, luck_special, area_of_study, keeper notes |
+| Move definitions | `data/playbook-moves.json` | name, roll, description per check-key — feed rendering source |
+| Dynamic choices | D1 `hunter_sheets` | Stats, harm/luck/xp, checked moves/gear/improvements, bonds text, hide state |
+| Arc story | D1 `hunter_arc_state` | Beat fills, resolution picks, open-text answers |
+
+**Feed rendering logic (planned):** load D1 sheet → check which `check-key` values are true → look up each in `playbook-moves.json` → render move cards. `always_active_moves` from the same file render unconditionally.
+
+### Phase 2.9 — The Lab Team Playbook Page (COMPLETE)
 
 `the-lab.html` at root — player-facing Research Lab team playbook page.
 - Style: **Hazardous Research** — end-of-session Q: "Did we find safe and beneficial applications for the dangerous things we learned about?"
@@ -645,11 +665,27 @@ All files in `data/` are static assets served by CF Pages. Never written to at r
 
 ### `hunters.json`
 
-**Purpose:** Seed data for D1 hunter tables. Also used as offline fallback in Phase 1.
+**Purpose:** Static identity layer for hunters. Also used as offline fallback in Phase 1.
 
-**Each hunter:** `id`, `playbook`, `accent_colour`, `stats` (confirmed or `FILL_FROM_SESSION`), `active_moves` (with `confirmed` flag), `gear`, `bonds`, `keeper_notes` (arc_hooks, secrets_involved).
+**Each hunter:** `id`, `playbook`, `accent_colour`, `luck_special` (fully populated — all 4 hunters + John Johnson), `area_of_study` (Rex: `id`, `name`, `effect`), `stats` (confirmed or `FILL_FROM_SESSION`), `active_moves` (with `confirmed` flag), `gear`, `bonds`, `keeper_notes` (arc_hooks, secrets_involved).
 
-**D1 seeding:** Map stats → `hunter_stats`; active_moves → `hunter_moves`; gear → `hunter_gear`; bonds → `hunter_bonds`. Skip `FILL_FROM_SESSION` rows.
+**Loaded at runtime by `hunter.js`:** `loadHunterMeta()` fetches this file, finds the hunter by `id === hunterId`, injects `luck_special` into `#luck-special` and (if present) `area_of_study.effect` into `#area-of-study-effect`.
+
+**D1 seeding (Phase 3):** Map stats → `hunter_stats`; active_moves → `hunter_moves`; gear → `hunter_gear`; bonds → `hunter_bonds`. Skip `FILL_FROM_SESSION` rows.
+
+---
+
+### `playbook-moves.json`
+
+**Purpose:** Move definition layer for the feed view. Maps `data-check-key` → move mechanics.
+
+**Top-level:** `version`, `note`, `moves` (flat object keyed by check-key), `always_active_moves` (per-hunter array of moves that are always on, e.g. Violence area of study for Rex).
+
+**Each move:** `hunter` (which hunter owns it), `name`, `roll` (stat string like `"+Sharp"` or `null` for passive), `description`.
+
+**Feed rendering:** Load D1 sheet state → for each `checks[key] === true`, look up `moves[key]` → render move card (name + roll badge + description). Then render `always_active_moves[hunterId]` unconditionally.
+
+**Currently covers:** All 4 hunters (Rex 6 moves, Alan 8 moves, Reed 8 moves, Sven 12 moves) + Rex's Violence always-active move. All descriptions extracted from hunter HTML pages.
 
 ---
 
@@ -681,11 +717,11 @@ All files in `data/` are static assets served by CF Pages. Never written to at r
 
 1. **Fill `FILL_FROM_SESSION` fields in `hunters.json`** — stat lines, gear picks, second/third move choices, Sven's curse. Requires actual character sheets.
 
-2. **Build the dice roller** — pure JS, reads `motw-basic-moves.json` + `motw-playbooks.json`, auto-fills stat, displays result + outcome text. Phase 1, one afternoon.
+2. **Build Phase 4 feed view** (`app/feed.html`) — load D1 sheet state + `playbook-moves.json`, render active move cards per hunter. Roll interface: click move → roll 2d6+stat → result logged to D1. No WebSockets yet — poll `/api/v1/rolls`.
 
-3. **Scaffold the Workers API** — start with `/hunters` and `/rolls`. Seed D1 from `hunters.json` and `portal-npcs.json` once Workers are up.
+3. **Scaffold the Workers API** — start with `/hunters` and `/rolls`. Seed D1 from `hunters.json` once stat lines are confirmed.
 
-4. **Build `session.html` and `command.html`** — comes after data layer is working. Command board entity panel reads from `portal-entities.json`; NPC reveal panel reads from `portal-npcs.json`.
+4. **Build `command.html`** — keeper command board. Entity panel from `portal-entities.json`; NPC reveal from `portal-npcs.json`; move reference from `playbook-moves.json`.
 
 ---
 
