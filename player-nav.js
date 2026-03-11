@@ -18,7 +18,7 @@
     { label: 'Briefing',   href: b + 'index.html#sessions' },
     { label: 'Operatives', href: b + 'index.html#operatives' },
     { label: 'Bestiary',   href: b + 'index.html#bestiary' },
-    { label: 'The Lab',    href: b + 'index.html#lab' },
+    { label: 'The Lab',    href: b + 'the-lab.html',  match: 'the-lab.html' },
     { label: 'Artefacts',  href: b + 'index.html#artefacts' },
     { label: 'Missions',   href: m + 'missions.html',  match: 'missions.html' },
     { label: 'Contacts',   href: m + 'contacts.html',  match: 'contacts.html' },

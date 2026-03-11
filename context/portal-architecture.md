@@ -102,7 +102,8 @@ portal-fieldops/
 │   └── s1-ash-veil-memo.html  # S01 redacted ash/veil lab report (static)
 ├── hunters/                   # Hunter story pages (arc choices + beats persist to D1)
 │   ├── hunter.js              # Shared script: keeper toggle, D1 save/load, all interactions
-│   └── *-hunter-stories.html  # One page per hunter — no inline scripts, just <script src="hunter.js">
+│   ├── alan.html, rex.html, reed.html, sven.html  # Hunter pages (playbook + arcs), use hunter.js
+│   └── hunter.js              # hunterId derived from filename: .replace('.html','') at end
 ├── images/                    # Active reference images
 ├── player-nav.js              # Shared player nav
 └── missions/keeper-nav.js     # Shared keeper nav
@@ -482,28 +483,28 @@ All seven static data files built from source (MOTW hardcover, Slayer's Survival
 - **Session config pattern** (used by both reports): threads, clocks, and scenes defined in a JS `SESSIONS`/`WEEKS` object at the top of the script — add new sessions by extending the config
 - **Future**: keeper review view for all player debriefs (read all rows for a given week, display aggregated ratings + notes)
 
-### Phase 2.7 — Hunter Playbook Sections + Character Data in D1 (NEXT)
+### Phase 2.7 — Hunter Playbook Sections + Character Data in D1 (COMPLETE)
 
-Each hunter page (`hunters/[name]-hunter-stories.html`) will gain a **Playbook** section above the existing arc content, showing their full character sheet. Data is entered by the player directly in the browser and persisted to D1 — this replaces the `FILL_FROM_SESSION` placeholders in `data/hunters.json`.
+Hunter pages renamed to `hunters/[name].html` (alan, rex, reed, sven). Each has a **Playbook** section above arc content, showing the full character sheet. D1-backed via `GET/PUT /api/v1/hunters/:id/sheet`.
 
 **Playbook section contains:**
-- Stats (Cool, Tough, Sharp, Charm, Weird) — editable number inputs
-- Harm track (0–7) and Luck track (0–7) — pip selectors
-- XP track — pip selector
-- Active moves list (from `data/motw-playbooks.json`) — checkboxes to mark which are taken
-- Gear list — editable text fields
-- Bonds — editable text fields
+- Stats (Charm, Cool, Sharp, Tough, Weird) — `data-stat` inputs
+- Harm/Luck (7 pips), XP (5 pips) — `data-track` pip clicks with cumulative fill
+- Hunter-specific features (Alan: 3 Unknown Heritage tag inputs; Rex: static Area of Study + Weird Move; Reed: static Hero; Sven: static Breed + editable Curse)
+- Active moves (5 text inputs), Gear (4), Bonds (3), Notes (textarea) — `data-sheet` + `data-sheet-idx`
 
 **Persistence:**
-- New API endpoint: `GET/PUT /api/v1/hunters/:id/sheet` — stores structured JSON to D1
-- Table: `hunter_sheets` (migration 004) — `hunter_id TEXT PRIMARY KEY, state TEXT, updated_at TEXT`
-- Same D1-first pattern as arc state: load on page open, explicit Save button with feedback
-- Once populated, this data feeds the Live Feed view (Phase 4) — no more static JSON
+- API: `GET/PUT /api/v1/hunters/:id/sheet` → `hunter_sheets` table (migration 005)
+- `hunterId` derived from filename: `pathname.split('/').pop().replace('-hunter-stories.html','').replace('-hunter.html','').replace('.html','')`
+- Team playbook: `GET/PUT /api/v1/team/playbook` → `team_state` table (migration 006)
 
-**Page rename consideration:**
-- Current: `[name]-hunter-stories.html` (describes arc content)
-- With playbook added, the page becomes a full character hub — may rename to `[name]-hunter.html` or keep and update nav label
-- Decision deferred to implementation session
+### Phase 2.8 — The Lab Team Playbook Page (COMPLETE)
+
+`the-lab.html` at root — player-facing Research Lab team playbook page.
+- Style: **Hazardous Research** — end-of-session Q: "Did we find safe and beneficial applications for the dangerous things we learned about?"
+- Interactive: XP track, moves checklist, assets checklist, ally/enemy fields, notes
+- D1-backed via `/api/v1/team/playbook`, localStorage key `portal_lab_playbook`
+- Linked from "The Lab" in player-nav.js and from Lab section of index.html
 
 **Data model for `hunter_sheet` state:**
 ```json

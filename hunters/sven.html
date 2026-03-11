@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>P.O.R.T.A.L — Sven · Hunter Stories</title>
+<title>P.O.R.T.A.L — Sven</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="hunter.css">
 <style>
@@ -22,11 +22,8 @@
 
 <header>
   <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</a>
-  <nav>
-    <span class="status-dot" style="background:var(--accent);box-shadow:0 0 8px var(--accent)"></span>
-    <a href="../index.html">Home</a>
-    <a href="../index.html#operatives" class="active">Operatives</a>
-  </nav>
+  <nav id="player-nav"></nav>
+  <script src="../player-nav.js"></script>
 </header>
 
 <div class="hero">
@@ -46,8 +43,106 @@
 </div>
 
 <main>
+<!-- ══ PLAYBOOK SECTION ══ -->
+<div id="playbook" class="playbook">
+  <div class="playbook-header">
+    <div class="playbook-eyebrow">// OPERATIVE PLAYBOOK</div>
+    <div class="playbook-title">The Monstrous</div>
+  </div>
+  <div class="playbook-body">
+
+    <div class="playbook-section-label">// STATS</div>
+    <div class="stats-grid">
+      <div class="stat-cell"><div class="stat-label">Charm</div><input class="stat-input" type="number" data-stat="charm" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Cool</div><input class="stat-input" type="number" data-stat="cool" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Sharp</div><input class="stat-input" type="number" data-stat="sharp" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Tough</div><input class="stat-input" type="number" data-stat="tough" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Weird</div><input class="stat-input" type="number" data-stat="weird" min="-3" max="3" placeholder="0"></div>
+    </div>
+
+    <div class="playbook-section-label">// HARM · LUCK · EXPERIENCE</div>
+    <div class="track-row">
+      <div class="track-label">Harm</div>
+      <div class="track-pips">
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+      </div>
+    </div>
+    <div class="track-row">
+      <div class="track-label">Luck</div>
+      <div class="track-pips">
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+      </div>
+    </div>
+    <div class="track-row">
+      <div class="track-label">XP</div>
+      <div class="track-pips">
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+      </div>
+    </div>
+
+    <div class="playbook-section-label">// MONSTER FEATURES</div>
+    <div class="pb-block">
+      <div class="pb-special">
+        <span class="pb-special-label">Breed</span>
+        <span class="pb-special-static">Ghost</span>
+      </div>
+      <div class="pb-special">
+        <span class="pb-special-label">Curse</span>
+        <input class="pb-special-input" type="text" data-special-idx="0" placeholder="e.g. Vulnerability, Pure Drive, Feed…">
+      </div>
+    </div>
+
+    <div class="playbook-section-label">// ACTIVE MOVES</div>
+    <div class="pb-block">
+      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="0" placeholder="Move 1…">
+      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="1" placeholder="Move 2…">
+      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="2" placeholder="Move 3…">
+      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="3" placeholder="Move 4…">
+      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="4" placeholder="Move 5…">
+    </div>
+
+    <div class="playbook-section-label">// GEAR</div>
+    <div class="pb-block">
+      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="0" placeholder="Item 1…">
+      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="1" placeholder="Item 2…">
+      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="2" placeholder="Item 3…">
+      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="3" placeholder="Item 4…">
+    </div>
+
+    <div class="playbook-section-label">// BONDS</div>
+    <div class="pb-block">
+      <input class="pb-field" type="text" data-sheet="bonds" data-sheet-idx="0" placeholder="Bond 1…">
+      <input class="pb-field" type="text" data-sheet="bonds" data-sheet-idx="1" placeholder="Bond 2…">
+      <input class="pb-field" type="text" data-sheet="bonds" data-sheet-idx="2" placeholder="Bond 3…">
+    </div>
+
+    <div class="playbook-section-label">// NOTES</div>
+    <div class="pb-block">
+      <textarea class="pb-field" data-sheet="notes" rows="4" placeholder="Session notes, backstory, reminders…"></textarea>
+    </div>
+
+  </div>
+</div>
+
 <div class="arc-nav">
-  <a href="#arc-footsteps" class="active">Arc I — In My Footsteps</a>
+  <a href="#playbook">Playbook</a>
+  <a href="#arc-footsteps">Arc I — In My Footsteps</a>
   <a href="#arc-misguided">Arc II — The Misguided Hunter</a>
   <a href="#arc-cause" class="custom">Arc III — What Killed Me ✦ PORTAL</a>
 </div>

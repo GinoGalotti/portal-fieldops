@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — The Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="player.css">
+<style>
+/* ── LAB PAGE EXTRAS ──────────────────────────────────────────────────────── */
+.lab-section { max-width: 860px; margin: 0 auto 3rem; }
+
+.lab-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+.lab-card::before {
+  content: '';
+  display: block;
+  height: 3px;
+  background: var(--green);
+}
+.lab-card-header {
+  padding: 1rem 1.5rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.lab-card-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--green-dim);
+  margin-bottom: 0.25rem;
+}
+.lab-card-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--text-bright);
+  text-transform: uppercase;
+}
+.lab-card-body { padding: 1rem 1.5rem 1.5rem; }
+.lab-section-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--green);
+  margin: 1.2rem 0 0.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--border);
+}
+.lab-section-label:first-child { margin-top: 0; }
+
+/* XP track */
+.xp-row { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+.xp-label { font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: var(--text-mid); min-width: 3rem; }
+.xp-pips { display: flex; gap: 0.35rem; }
+.xp-pip {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.xp-pip.filled-xp { background: var(--green-dim); border-color: var(--green); }
+
+/* Moves / assets checklist */
+.check-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+}
+.check-item:hover { background: var(--card-hover, rgba(255,255,255,0.03)); border-color: var(--border); }
+.check-item.checked { background: rgba(46,204,113,0.06); border-color: rgba(46,204,113,0.2); }
+.check-box {
+  flex-shrink: 0;
+  width: 14px; height: 14px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  margin-top: 2px;
+  position: relative;
+}
+.check-item.checked .check-box { border-color: var(--green); background: var(--green-dim); }
+.check-item.checked .check-box::after {
+  content: '✓';
+  position: absolute;
+  top: -2px; left: 1px;
+  font-size: 0.7rem;
+  color: var(--green);
+  font-family: 'Share Tech Mono', monospace;
+}
+.check-text { font-family: 'Barlow', sans-serif; font-size: 0.85rem; color: var(--text); line-height: 1.4; }
+.check-subtext { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.1rem; }
+
+/* Selectors */
+.lab-select {
+  background: var(--input-bg, rgba(0,0,0,0.3));
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 320px;
+}
+.lab-select:focus { outline: none; border-color: var(--green); }
+
+/* Text fields */
+.lab-field {
+  width: 100%;
+  background: var(--input-bg, rgba(0,0,0,0.3));
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.85rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.lab-field:focus { outline: none; border-color: var(--green); }
+textarea.lab-field { resize: vertical; }
+
+.lab-pair { display: flex; gap: 0.75rem; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; }
+.lab-pair-label { font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: var(--text-mid); min-width: 7rem; flex-shrink: 0; }
+
+/* Lore section */
+.lore-block { font-family: 'Barlow', sans-serif; font-size: 0.9rem; color: var(--text); line-height: 1.7; }
+.lore-block p { margin: 0 0 0.8rem; }
+.lore-block strong { color: var(--text-bright); font-weight: 600; }
+
+/* End-of-session question highlight */
+.eosq {
+  background: rgba(46,204,113,0.06);
+  border-left: 3px solid var(--green);
+  padding: 0.75rem 1rem;
+  border-radius: 0 4px 4px 0;
+  margin: 0.75rem 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--green);
+}
+.eosq-label { font-size: 0.65rem; color: var(--green-dim); margin-bottom: 0.25rem; letter-spacing: 0.1em; }
+
+/* Save button — fixed bottom-right (mirrors hunter.css pattern) */
+.page-actions { position: fixed; bottom: 24px; right: 24px; z-index: 200; display: flex; gap: 10px; }
+.action-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--green);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.action-btn:hover { background: rgba(46,204,113,0.08); border-color: var(--green); }
+.action-btn:disabled { opacity: 0.5; cursor: default; }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</a>
+  <nav id="player-nav"></nav>
+  <script src="player-nav.js"></script>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">// P.O.R.T.A.L — RESEARCH LAB · TEAM PLAYBOOK</div>
+  <h1 class="hero-title">THE <span class="accent">LAB</span></h1>
+  <p class="hero-desc">The Paranormal Operations Research &amp; Theoretical Applied Liminology laboratory. The facility has discovered things with as much potential for evil as good. Every breakthrough carries an equal and opposite risk — and the team's job is to find safe and beneficial applications before someone else finds the other kind.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">TEAM PLAYBOOK: <span>Research Lab</span></div>
+    <div class="hero-meta-item">STYLE: <span>Hazardous Research</span></div>
+    <div class="hero-meta-item">CAMPBELL: <span>Online</span></div>
+    <div class="hero-meta-item">STATUS: <span>Active · Field Operations</span></div>
+  </div>
+</div>
+
+<main>
+
+<!-- ══ SECTION 1: TEAM PLAYBOOK ══ -->
+<section class="lab-section">
+
+  <div class="lab-card">
+    <div class="lab-card-header">
+      <div class="lab-card-eyebrow">// TEAM ADVANCEMENT</div>
+      <div class="lab-card-title">Experience Track</div>
+    </div>
+    <div class="lab-card-body">
+      <div class="eosq">
+        <div class="eosq-label">// END-OF-SESSION QUESTION (HAZARDOUS RESEARCH)</div>
+        Did we find safe and beneficial applications for the dangerous things we learned about?
+      </div>
+      <div class="lab-section-label">// TEAM XP — FILL 5 TO ADVANCE</div>
+      <div class="xp-row">
+        <div class="xp-label">Team XP</div>
+        <div class="xp-pips" id="team-xp-pips">
+          <div class="xp-pip" data-xp-idx="0"></div>
+          <div class="xp-pip" data-xp-idx="1"></div>
+          <div class="xp-pip" data-xp-idx="2"></div>
+          <div class="xp-pip" data-xp-idx="3"></div>
+          <div class="xp-pip" data-xp-idx="4"></div>
+        </div>
+      </div>
+      <div class="lab-section-label">// ON ADVANCEMENT — CHOOSE ONE</div>
+      <ul class="check-list" id="adv-list">
+        <li class="check-item" data-check-key="adv-0"><span class="check-box"></span><span class="check-text">Gain a new team move.</span></li>
+        <li class="check-item" data-check-key="adv-1"><span class="check-box"></span><span class="check-text">Gain a new team ally.</span></li>
+        <li class="check-item" data-check-key="adv-2"><span class="check-box"></span><span class="check-text">Gain two new asset selections.</span></li>
+        <li class="check-item" data-check-key="adv-3"><span class="check-box"></span><span class="check-text">Make the next mystery about your team enemy — a chance to interfere in their plans.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="lab-card">
+    <div class="lab-card-header">
+      <div class="lab-card-eyebrow">// TEAM MOVES</div>
+      <div class="lab-card-title">Active Moves</div>
+    </div>
+    <div class="lab-card-body">
+      <ul class="check-list" id="moves-list">
+        <li class="check-item" data-check-key="move-scientific-method"><span class="check-box"></span><span class="check-text"><strong>Scientific Method</strong><div class="check-subtext">When the team investigates a mystery, ask one additional question: "Which of our ideas is wrong?" or "What weird energies or materials are present?"</div></span></li>
+        <li class="check-item" data-check-key="move-trial-and-error"><span class="check-box"></span><span class="check-text"><strong>Trial and Error</strong><div class="check-subtext">When a team member rolls 10+ on kick some ass or protect someone, you can ask a question from investigate a mystery in addition to the normal option.</div></span></li>
+        <li class="check-item" data-check-key="move-repurpose-old-junk"><span class="check-box"></span><span class="check-text"><strong>Repurpose Old Junk</strong><div class="check-subtext">Once per session, ignore all but one requirement for weird science or any similar move.</div></span></li>
+        <li class="check-item" data-check-key="move-pattern-recognition"><span class="check-box"></span><span class="check-text"><strong>Pattern Recognition</strong><div class="check-subtext">Once per session, after a team member successfully reads a bad situation, they may ask: "How do I ensure or prevent _______ happening?"</div></span></li>
+        <li class="check-item" data-check-key="move-button-mashing"><span class="check-box"></span><span class="check-text"><strong>Button Mashing</strong><div class="check-subtext">When presented with technology beyond your experience, work together to study it. Each team member who helps out gets +1 forward.</div></span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="lab-card">
+    <div class="lab-card-header">
+      <div class="lab-card-eyebrow">// TEAM ASSETS</div>
+      <div class="lab-card-title">Lab Resources</div>
+    </div>
+    <div class="lab-card-body">
+      <ul class="check-list" id="assets-list">
+        <li class="check-item checked" data-check-key="asset-the-lab"><span class="check-box"></span><span class="check-text"><strong>The Lab ✦ mandatory</strong><div class="check-subtext">A well-stocked and extensive laboratory complex for weird science and high-tech big magic. Space for all gear and instruments. Crash space for all-nighters.</div></span></li>
+        <li class="check-item" data-check-key="asset-sensor-array"><span class="check-box"></span><span class="check-text"><strong>Sensor Array</strong><div class="check-subtext">Instruments allowing you to keep track of weird phenomena in the area.</div></span></li>
+        <li class="check-item" data-check-key="asset-cutting-edge-analysis"><span class="check-box"></span><span class="check-text"><strong>Cutting-Edge Analysis</strong><div class="check-subtext">Access to any current device, no matter how expensive.</div></span></li>
+        <li class="check-item" data-check-key="asset-manufacturing-bays"><span class="check-box"></span><span class="check-text"><strong>Manufacturing Bays</strong><div class="check-subtext">3D printers and old-school assembly lines. Build any test device or prototype you want (no mass production).</div></span></li>
+        <li class="check-item" data-check-key="asset-medical-bay"><span class="check-box"></span><span class="check-text"><strong>Medical Bay</strong><div class="check-subtext">High-tech medical facilities equivalent to staying in a hospital.</div></span></li>
+        <li class="check-item" data-check-key="asset-vehicle-bay"><span class="check-box"></span><span class="check-text"><strong>Vehicle Bay</strong><div class="check-subtext">A small fleet of vehicles — ground and air.</div></span></li>
+        <li class="check-item" data-check-key="asset-containment"><span class="check-box"></span><span class="check-text"><strong>Containment</strong><div class="check-subtext">Facilities to keep live creatures or dangerous materials securely contained.</div></span></li>
+        <li class="check-item" data-check-key="asset-housing"><span class="check-box"></span><span class="check-text"><strong>Housing</strong><div class="check-subtext">Each team member has comfortable and secure housing — a small house or comfortable condo, loaded with tech.</div></span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="lab-card">
+    <div class="lab-card-header">
+      <div class="lab-card-eyebrow">// TEAM ROSTER</div>
+      <div class="lab-card-title">Enemy &amp; Ally</div>
+    </div>
+    <div class="lab-card-body">
+      <div class="lab-section-label">// TEAM ENEMY</div>
+      <div class="lab-pair">
+        <span class="lab-pair-label">Enemy</span>
+        <input type="text" class="lab-field" id="team-enemy" data-lab="enemy" placeholder="e.g. A shadowy corporation turning people into monsters…" style="max-width:480px">
+      </div>
+      <div class="lab-section-label">// TEAM ALLY</div>
+      <div class="lab-pair">
+        <span class="lab-pair-label">Ally</span>
+        <select class="lab-select" id="team-ally-select" data-lab="ally">
+          <option value="">— Select ally —</option>
+          <option value="kana-harlison">Kana Harlison — cat burglar, stealth specialist</option>
+          <option value="dalia-amin">Dalia Amin — community leader, local cooperation</option>
+          <option value="sergeant-qeb-gomez">Sgt Qeb Gomez — law enforcement liaison</option>
+          <option value="campbell">CAMPBELL — lab AI, virtual scenario testing</option>
+          <option value="dr-yos-sokha">Dr Yos Sokha — former colleague, cross-team research</option>
+          <option value="questerr-and-wrexy">Questerr and Wrexy — alien diplomats, advanced tech</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div class="lab-pair" id="ally-custom-row" style="display:none">
+        <span class="lab-pair-label">Custom ally</span>
+        <input type="text" class="lab-field" id="team-ally-custom" data-lab="ally_custom" placeholder="Name and description…" style="max-width:480px">
+      </div>
+      <div class="lab-section-label">// TEAM NOTES</div>
+      <textarea class="lab-field" data-lab="notes" rows="4" placeholder="Post-session notes, ongoing threads, research priorities…"></textarea>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══ SECTION 2: THE LAB ══ -->
+<section class="lab-section">
+  <div class="lab-card">
+    <div class="lab-card-header">
+      <div class="lab-card-eyebrow">// FACILITY OVERVIEW</div>
+      <div class="lab-card-title">P.O.R.T.A.L Research Division</div>
+    </div>
+    <div class="lab-card-body lore-block">
+      <p>The <strong>Paranormal Operations Research &amp; Theoretical Applied Liminology</strong> laboratory operates as the field and research arm of a classified programme with roots in Cold War fringe science. The lab exists in the gap between what institutions can officially study and what the world keeps insisting is real.</p>
+      <p>It is staffed by people who have each, in their own way, crossed a threshold they can't uncross — and found that PORTAL was already waiting on the other side.</p>
+    </div>
+  </div>
+
+  <div class="lab-card">
+    <div class="lab-card-header">
+      <div class="lab-card-eyebrow">// CAMPBELL — LAB INTELLIGENCE</div>
+      <div class="lab-card-title">AI Briefing System</div>
+    </div>
+    <div class="lab-card-body lore-block">
+      <p><strong>CAMPBELL</strong> is the lab's AI briefing and computation system. It handles background computation, threat modelling, evidence correlation, and virtual scenario testing. CAMPBELL's briefings are the primary way operatives receive mission intelligence.</p>
+      <p>CAMPBELL does not take risks. CAMPBELL does not second-guess. CAMPBELL presents what the data shows and trusts its operatives to decide what to do about it. This is by design. The people who built it had reasons for wanting a system that would not try to save them from themselves.</p>
+    </div>
+  </div>
+
+  <div class="lab-card">
+    <div class="lab-card-header">
+      <div class="lab-card-eyebrow">// PROJECT VEIL</div>
+      <div class="lab-card-title">The Classification Layer</div>
+    </div>
+    <div class="lab-card-body lore-block">
+      <p><strong>Project Veil</strong> is the programme within which PORTAL operates. Its classification level means that most of what the team investigates cannot be reported through standard channels. What happens in the field stays in the field — except what CAMPBELL records, and CAMPBELL records everything.</p>
+      <p>The official position is that Project Veil does not exist. The unofficial position, known to anyone who has been around long enough, is that it exists specifically so that certain things can happen without the official position having to change.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="page-actions">
+  <button class="action-btn" id="save-btn" onclick="saveNow(this)">// SAVE</button>
+  <button class="action-btn" onclick="resetLab()">// RESET</button>
+</div>
+
+<script>
+(function () {
+  var API  = '/api/v1/team/playbook';
+  var LKEY = 'portal_lab_playbook';
+
+  // ── SERIALISE ──
+  function serialise() {
+    var s = { xp: 0, checked: {}, enemy: '', ally: '', ally_custom: '', notes: '' };
+
+    // XP pips
+    var filled = 0;
+    document.querySelectorAll('.xp-pip').forEach(function (pip) {
+      if (pip.classList.contains('filled-xp')) filled++;
+    });
+    s.xp = filled;
+
+    // Checkboxes
+    document.querySelectorAll('.check-item[data-check-key]').forEach(function (el) {
+      s.checked[el.dataset.checkKey] = el.classList.contains('checked');
+    });
+
+    // Lab data fields
+    document.querySelectorAll('[data-lab]').forEach(function (el) {
+      s[el.dataset.lab] = el.value || el.textContent || '';
+    });
+
+    return s;
+  }
+
+  // ── APPLY ──
+  function applyState(s) {
+    if (!s || typeof s !== 'object') return;
+
+    // XP
+    var xpPips = document.querySelectorAll('.xp-pip');
+    xpPips.forEach(function (pip, i) {
+      pip.classList.toggle('filled-xp', i < (s.xp || 0));
+    });
+
+    // Checkboxes
+    if (s.checked) {
+      document.querySelectorAll('.check-item[data-check-key]').forEach(function (el) {
+        if (s.checked[el.dataset.checkKey] !== undefined) {
+          el.classList.toggle('checked', !!s.checked[el.dataset.checkKey]);
+        }
+      });
+    }
+
+    // Lab data fields
+    document.querySelectorAll('[data-lab]').forEach(function (el) {
+      if (s[el.dataset.lab] !== undefined) el.value = s[el.dataset.lab];
+    });
+
+    // Ally custom row visibility
+    toggleAllyCustom();
+  }
+
+  // ── ALLY CUSTOM ROW ──
+  function toggleAllyCustom() {
+    var sel = document.getElementById('team-ally-select');
+    var row = document.getElementById('ally-custom-row');
+    if (sel && row) row.style.display = sel.value === 'custom' ? '' : 'none';
+  }
+
+  // ── SAVE ──
+  function save() {
+    var state = serialise();
+    try { localStorage.setItem(LKEY, JSON.stringify(state)); } catch (e) {}
+    fetch(API, { method: 'PUT', body: JSON.stringify(state), headers: { 'Content-Type': 'application/json' } }).catch(function () {});
+  }
+
+  window.saveNow = function (btn) {
+    var state = serialise();
+    try { localStorage.setItem(LKEY, JSON.stringify(state)); } catch (e) {}
+    var original = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '// SAVING…';
+    fetch(API, { method: 'PUT', body: JSON.stringify(state), headers: { 'Content-Type': 'application/json' } })
+      .then(function (r) { btn.textContent = r.ok ? '// SAVED ✓' : '// ERROR'; })
+      .catch(function () { btn.textContent = '// OFFLINE'; })
+      .finally(function () {
+        btn.disabled = false;
+        setTimeout(function () { btn.textContent = original; }, 2000);
+      });
+  };
+
+  window.resetLab = function () {
+    if (!confirm('Reset all Lab playbook data?')) return;
+    document.querySelectorAll('.xp-pip').forEach(function (pip) { pip.classList.remove('filled-xp'); });
+    document.querySelectorAll('.check-item[data-check-key]').forEach(function (el) { el.classList.remove('checked'); });
+    // Re-check mandatory asset
+    var mandatory = document.querySelector('[data-check-key="asset-the-lab"]');
+    if (mandatory) mandatory.classList.add('checked');
+    document.querySelectorAll('[data-lab]').forEach(function (el) { el.value = ''; });
+    try { localStorage.removeItem(LKEY); } catch (e) {}
+    fetch(API, { method: 'PUT', body: '{}', headers: { 'Content-Type': 'application/json' } }).catch(function () {});
+  };
+
+  // ── LOAD ──
+  function load() {
+    fetch(API)
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (state) {
+        if (state && Object.keys(state).length > 0) {
+          applyState(state);
+          try { localStorage.setItem(LKEY, JSON.stringify(state)); } catch (e) {}
+        } else {
+          loadFromLocalStorage();
+        }
+      })
+      .catch(loadFromLocalStorage);
+  }
+
+  function loadFromLocalStorage() {
+    var raw; try { raw = localStorage.getItem(LKEY); } catch (e) {}
+    if (!raw) return;
+    var state; try { state = JSON.parse(raw); } catch (e) { return; }
+    applyState(state);
+  }
+
+  // ── XP PIP CLICKS ──
+  var xpPips = Array.prototype.slice.call(document.querySelectorAll('.xp-pip'));
+  xpPips.forEach(function (pip, i) {
+    pip.addEventListener('click', function () {
+      var currentFill = 0;
+      xpPips.forEach(function (p, j) { if (p.classList.contains('filled-xp')) currentFill = j + 1; });
+      var newVal = (currentFill === i + 1) ? i : i + 1;
+      xpPips.forEach(function (p, j) { p.classList.toggle('filled-xp', j < newVal); });
+      save();
+    });
+  });
+
+  // ── CHECKBOX CLICKS ──
+  document.querySelectorAll('.check-item').forEach(function (el) {
+    el.addEventListener('click', function () {
+      // Don't uncheck the mandatory asset
+      if (el.dataset.checkKey === 'asset-the-lab') return;
+      el.classList.toggle('checked');
+      save();
+    });
+  });
+
+  // ── INPUT CHANGES ──
+  document.querySelectorAll('[data-lab]').forEach(function (el) {
+    el.addEventListener('input', function () {
+      if (el.id === 'team-ally-select') toggleAllyCustom();
+      save();
+    });
+    el.addEventListener('change', function () {
+      if (el.id === 'team-ally-select') toggleAllyCustom();
+      save();
+    });
+  });
+
+  // ── BOOT ──
+  load();
+}());
+</script>
+</body>
+</html>

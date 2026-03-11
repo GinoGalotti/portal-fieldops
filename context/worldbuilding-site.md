@@ -29,10 +29,11 @@ When the Keeper asks you to build a page:
 |------|-----|----------|-------------|
 | `index.html` | `player.css` | Player | Main player landing — missions, links to case briefings |
 | `missions-index.html` | `player.css` | Player | Player-facing mission archive |
-| `rex-hunter-stories.html` | player inline | Player | Rex Bangley arcs — 3 arcs, keeper sections blurred |
-| `alan-hunter-stories.html` | player inline | Player | Alan Frazier arcs — 3 arcs, keeper sections blurred |
-| `reed-hunter-stories.html` | player inline | Player | Reed Atwood arcs — 3 arcs, keeper sections blurred |
-| `sven-hunter-stories.html` | player inline | Player | Sven arcs — 3 arcs, keeper sections blurred |
+| `hunters/rex.html` | `hunter.css` + accent | Player | Rex Bangley — playbook section + 3 arcs, keeper sections blurred |
+| `hunters/alan.html` | `hunter.css` | Player | Alan Frazier — playbook section + 3 arcs, keeper sections blurred |
+| `hunters/reed.html` | `hunter.css` + accent | Player | Reed Atwood — playbook section + 3 arcs, keeper sections blurred |
+| `hunters/sven.html` | `hunter.css` + accent | Player | Sven — playbook section + 3 arcs, keeper sections blurred |
+| `the-lab.html` | `player.css` | Player | Research Lab team playbook — XP track, moves/assets checklists, ally/enemy, D1-backed |
 | `campbell-briefings.html` | `briefing.css` | Player | CAMPBELL priority queue — week switcher, fetches fragments from `briefings/` |
 | `briefings/index.json` | — | — | Week registry: id, label, title, status, summary. Add one entry per week. |
 | `briefings/w01.html` | fragment | Player | Week 01 briefing fragment (no doctype/head/body — injected by campbell-briefings.html) |

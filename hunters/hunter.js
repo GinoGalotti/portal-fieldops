@@ -1,7 +1,6 @@
 (function () {
 
-  // ── KEEPER TOGGLE ────────────────────────────────────────────────────────
-  // Double-click / double-tap the top-right corner to reveal keeper sections.
+  // ── KEEPER TOGGLE ─────────────────────────────────────────────────────────
   var trigger = document.createElement('div');
   trigger.id = 'keeper-trigger';
   document.body.appendChild(trigger);
@@ -28,47 +27,48 @@
   });
 
 
-  // ── PERSISTENCE ──────────────────────────────────────────────────────────
-  // Key derived from filename: "alan-hunter-stories.html" → "alan"
-  var hunterId = window.location.pathname.split('/').pop().replace('-hunter-stories.html', '');
-  var STORAGE_KEY = 'portal_hunter_' + hunterId;
-  var API_BASE = '/api/v1/hunters/' + hunterId + '/arc-state';
+  // ── PERSISTENCE IDs ───────────────────────────────────────────────────────
+  // Supports old (-hunter-stories.html), intermediate (-hunter.html), and new (name.html) filenames
+  var hunterId = window.location.pathname.split('/').pop()
+    .replace('-hunter-stories.html', '')
+    .replace('-hunter.html', '')
+    .replace('.html', '');
 
-  // ── SERIALISE / DESERIALISE ───────────────────────────────────────────────
+  var STORAGE_KEY = 'portal_hunter_' + hunterId;
+  var SHEET_KEY   = 'portal_sheet_'  + hunterId;
+  var API_BASE    = '/api/v1/hunters/' + hunterId + '/arc-state';
+  var SHEET_API   = '/api/v1/hunters/' + hunterId + '/sheet';
+
+
+  // ── ARC SERIALISE / APPLY ─────────────────────────────────────────────────
 
   function serialise() {
     var state = {};
-
     document.querySelectorAll('.arc[id]').forEach(function (arc) {
       var s = { choices: {}, texts: {}, beats: 0, resolution: null };
 
-      // Which choice options are selected, keyed by "groupIndex-choiceIndex"
       arc.querySelectorAll('.choice-group').forEach(function (group, gi) {
         group.querySelectorAll('.choice-opt').forEach(function (opt, oi) {
           if (opt.classList.contains('selected')) s.choices[gi + '-' + oi] = true;
         });
       });
 
-      // Open text input values, keyed by index within the arc
       arc.querySelectorAll('.choice-open input').forEach(function (inp, i) {
         if (inp.value) s.texts[i] = inp.value;
       });
 
-      // Beat count (sequential fill, so a number is enough)
       var filled = 0;
       arc.querySelectorAll('.beat-box').forEach(function (box) {
         if (box.classList.contains('filled')) filled++;
       });
       s.beats = filled;
 
-      // Which resolution move is selected (index, or null)
       arc.querySelectorAll('.res-move').forEach(function (move, i) {
         if (move.classList.contains('selected')) s.resolution = i;
       });
 
       state[arc.id] = s;
     });
-
     return state;
   }
 
@@ -77,26 +77,22 @@
       var s = state[arc.id];
       if (!s) return;
 
-      // Restore choice selections
       arc.querySelectorAll('.choice-group').forEach(function (group, gi) {
         group.querySelectorAll('.choice-opt').forEach(function (opt, oi) {
           if (s.choices && s.choices[gi + '-' + oi]) opt.classList.add('selected');
         });
       });
 
-      // Restore text inputs
       arc.querySelectorAll('.choice-open input').forEach(function (inp, i) {
         if (s.texts && s.texts[i]) inp.value = s.texts[i];
       });
 
-      // Restore beats
       if (s.beats > 0) {
         arc.querySelectorAll('.beat-box').forEach(function (box, i) {
           if (i < s.beats) box.classList.add('filled');
         });
       }
 
-      // Restore resolution move
       if (s.resolution !== null && s.resolution !== undefined) {
         var moves = arc.querySelectorAll('.res-move');
         if (moves[s.resolution]) moves[s.resolution].classList.add('selected');
@@ -104,35 +100,138 @@
     });
   }
 
-  // ── SAVE ─────────────────────────────────────────────────────────────────
-  // Write to localStorage immediately; sync to D1 in the background.
 
-  function save() {
-    var state = serialise();
-    var json  = JSON.stringify(state);
+  // ── SHEET SERIALISE / APPLY ───────────────────────────────────────────────
 
-    // localStorage — always, works offline
-    try { localStorage.setItem(STORAGE_KEY, json); } catch (e) {}
+  function serialiseSheet() {
+    var sheet = { stats: {}, harm: 0, luck: 0, xp: 0, moves: [], gear: [], bonds: [], notes: '', special: [] };
 
-    // D1 via API — fire-and-forget, ignore errors
-    fetch(API_BASE, { method: 'PUT', body: json, headers: { 'Content-Type': 'application/json' } })
-      .catch(function () {});
+    // Stats
+    document.querySelectorAll('.stat-input[data-stat]').forEach(function (inp) {
+      sheet.stats[inp.dataset.stat] = inp.value;
+    });
+
+    // Tracks
+    ['harm', 'luck', 'xp'].forEach(function (name) {
+      var count = 0;
+      document.querySelectorAll('.track-pip[data-track="' + name + '"]').forEach(function (pip) {
+        if (pip.classList.contains('filled-' + name)) count++;
+      });
+      sheet[name] = count;
+    });
+
+    // Array fields: data-sheet + data-sheet-idx
+    document.querySelectorAll('[data-sheet]').forEach(function (el) {
+      var key = el.dataset.sheet;
+      var idx = el.dataset.sheetIdx !== undefined ? parseInt(el.dataset.sheetIdx, 10) : NaN;
+      if (!isNaN(idx)) {
+        if (!Array.isArray(sheet[key])) sheet[key] = [];
+        sheet[key][idx] = el.value;
+      } else {
+        sheet[key] = el.value;
+      }
+    });
+
+    // Hunter-specific special inputs
+    document.querySelectorAll('.pb-special-input[data-special-idx]').forEach(function (inp) {
+      sheet.special[parseInt(inp.dataset.specialIdx, 10)] = inp.value;
+    });
+
+    return sheet;
   }
 
-  // Explicit save with button feedback — called by onclick="saveNow(this)"
-  window.saveNow = function (btn) {
-    var state = serialise();
-    var json  = JSON.stringify(state);
+  function applySheet(sheet) {
+    if (!sheet || typeof sheet !== 'object') return;
 
-    try { localStorage.setItem(STORAGE_KEY, json); } catch (e) {}
+    // Stats
+    document.querySelectorAll('.stat-input[data-stat]').forEach(function (inp) {
+      if (sheet.stats && sheet.stats[inp.dataset.stat] !== undefined) {
+        inp.value = sheet.stats[inp.dataset.stat];
+      }
+    });
+
+    // Tracks
+    ['harm', 'luck', 'xp'].forEach(function (name) {
+      var count = sheet[name] || 0;
+      var pips = document.querySelectorAll('.track-pip[data-track="' + name + '"]');
+      pips.forEach(function (pip, i) {
+        pip.classList.toggle('filled-' + name, i < count);
+      });
+    });
+
+    // Array and scalar fields
+    document.querySelectorAll('[data-sheet]').forEach(function (el) {
+      var key = el.dataset.sheet;
+      var idx = el.dataset.sheetIdx !== undefined ? parseInt(el.dataset.sheetIdx, 10) : NaN;
+      if (!isNaN(idx)) {
+        if (sheet[key] && sheet[key][idx] !== undefined) el.value = sheet[key][idx];
+      } else {
+        if (sheet[key] !== undefined) el.value = sheet[key];
+      }
+    });
+
+    // Special inputs
+    document.querySelectorAll('.pb-special-input[data-special-idx]').forEach(function (inp) {
+      var idx = parseInt(inp.dataset.specialIdx, 10);
+      if (sheet.special && sheet.special[idx] !== undefined) inp.value = sheet.special[idx];
+    });
+  }
+
+
+  // ── TRACK PIP INTERACTION ─────────────────────────────────────────────────
+
+  function setTrack(name, val) {
+    document.querySelectorAll('.track-pip[data-track="' + name + '"]').forEach(function (pip, i) {
+      pip.classList.toggle('filled-' + name, i < val);
+    });
+  }
+
+  // Wire up track pip clicks — cumulative fill, click last filled to unfill
+  ['harm', 'luck', 'xp'].forEach(function (name) {
+    var pips = Array.prototype.slice.call(
+      document.querySelectorAll('.track-pip[data-track="' + name + '"]')
+    );
+    pips.forEach(function (pip, i) {
+      pip.addEventListener('click', function () {
+        var currentFill = 0;
+        pips.forEach(function (p, j) { if (p.classList.contains('filled-' + name)) currentFill = j + 1; });
+        setTrack(name, currentFill === i + 1 ? i : i + 1);
+        save();
+      });
+    });
+  });
+
+
+  // ── SAVE ──────────────────────────────────────────────────────────────────
+
+  function save() {
+    var arcState   = serialise();
+    var sheetState = serialiseSheet();
+
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arcState));   } catch (e) {}
+    try { localStorage.setItem(SHEET_KEY,   JSON.stringify(sheetState)); } catch (e) {}
+
+    fetch(API_BASE,  { method: 'PUT', body: JSON.stringify(arcState),   headers: { 'Content-Type': 'application/json' } }).catch(function () {});
+    fetch(SHEET_API, { method: 'PUT', body: JSON.stringify(sheetState), headers: { 'Content-Type': 'application/json' } }).catch(function () {});
+  }
+
+  window.saveNow = function (btn) {
+    var arcState   = serialise();
+    var sheetState = serialiseSheet();
+
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arcState));   } catch (e) {}
+    try { localStorage.setItem(SHEET_KEY,   JSON.stringify(sheetState)); } catch (e) {}
 
     var original = btn.textContent;
     btn.disabled = true;
     btn.textContent = '// SAVING…';
 
-    fetch(API_BASE, { method: 'PUT', body: json, headers: { 'Content-Type': 'application/json' } })
-      .then(function (r) {
-        btn.textContent = r.ok ? '// SAVED ✓' : '// ERROR';
+    Promise.all([
+      fetch(API_BASE,  { method: 'PUT', body: JSON.stringify(arcState),   headers: { 'Content-Type': 'application/json' } }),
+      fetch(SHEET_API, { method: 'PUT', body: JSON.stringify(sheetState), headers: { 'Content-Type': 'application/json' } })
+    ])
+      .then(function (responses) {
+        btn.textContent = responses.every(function (r) { return r.ok; }) ? '// SAVED ✓' : '// ERROR';
       })
       .catch(function () {
         btn.textContent = '// OFFLINE';
@@ -143,8 +242,8 @@
       });
   };
 
-  // ── LOAD ─────────────────────────────────────────────────────────────────
-  // Prefer D1 (shared across all users); fall back to localStorage.
+
+  // ── LOAD ──────────────────────────────────────────────────────────────────
 
   function load() {
     fetch(API_BASE)
@@ -152,31 +251,44 @@
       .then(function (state) {
         if (state && Object.keys(state).length > 0) {
           applyState(state);
-          // Keep localStorage in sync with server state
           try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
         } else {
-          loadFromLocalStorage();
+          loadArcFromLocalStorage();
         }
       })
-      .catch(function () {
-        // API unreachable (file://, offline, etc.) — use localStorage
-        loadFromLocalStorage();
-      });
+      .catch(loadArcFromLocalStorage);
+
+    fetch(SHEET_API)
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (sheet) {
+        if (sheet && Object.keys(sheet).length > 0) {
+          applySheet(sheet);
+          try { localStorage.setItem(SHEET_KEY, JSON.stringify(sheet)); } catch (e) {}
+        } else {
+          loadSheetFromLocalStorage();
+        }
+      })
+      .catch(loadSheetFromLocalStorage);
   }
 
-  function loadFromLocalStorage() {
-    var raw;
-    try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  function loadArcFromLocalStorage() {
+    var raw; try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) {}
     if (!raw) return;
-    var state;
-    try { state = JSON.parse(raw); } catch (e) { return; }
+    var state; try { state = JSON.parse(raw); } catch (e) { return; }
     applyState(state);
   }
 
+  function loadSheetFromLocalStorage() {
+    var raw; try { raw = localStorage.getItem(SHEET_KEY); } catch (e) {}
+    if (!raw) return;
+    var sheet; try { sheet = JSON.parse(raw); } catch (e) { return; }
+    applySheet(sheet);
+  }
 
-  // ── INTERACTIONS (save after every change) ───────────────────────────────
 
-  // Choice options — toggle selected, save
+  // ── INTERACTIONS ──────────────────────────────────────────────────────────
+
+  // Arc: choice options
   document.querySelectorAll('.choice-opt').forEach(function (opt) {
     opt.addEventListener('click', function () {
       this.classList.toggle('selected');
@@ -184,12 +296,12 @@
     });
   });
 
-  // Open text inputs — save on input
+  // Arc: open text inputs
   document.querySelectorAll('.choice-open input').forEach(function (inp) {
     inp.addEventListener('input', save);
   });
 
-  // Beat boxes — cumulative fill/unfill, save
+  // Arc: beat boxes (cumulative fill)
   document.querySelectorAll('.beats-track').forEach(function (track) {
     var boxes = track.querySelectorAll('.beat-box');
     boxes.forEach(function (box, i) {
@@ -204,25 +316,39 @@
     });
   });
 
-  // Resolution moves — radio-style, exposed on window for onclick attributes
+  // Arc: resolution moves
   window.toggleRes = function (el) {
-    el.parentElement.querySelectorAll('.res-move').forEach(function (m) {
-      m.classList.remove('selected');
-    });
+    el.parentElement.querySelectorAll('.res-move').forEach(function (m) { m.classList.remove('selected'); });
     el.classList.add('selected');
     save();
   };
 
-  // Reset — clears DOM, localStorage, and D1
+  // Sheet: stat inputs and all data-sheet / pb-special-input fields
+  document.querySelectorAll('.stat-input, [data-sheet], .pb-special-input').forEach(function (el) {
+    el.addEventListener('input', save);
+  });
+
+  // Reset — clears all DOM, localStorage, and both D1 tables
   window.resetAll = function () {
-    if (!confirm('Reset all choices for this hunter?')) return;
+    if (!confirm('Reset all choices and sheet data for this hunter?')) return;
+
+    // Arc DOM
     document.querySelectorAll('.choice-opt').forEach(function (o) { o.classList.remove('selected'); });
     document.querySelectorAll('.res-move').forEach(function (o) { o.classList.remove('selected'); });
     document.querySelectorAll('.beat-box').forEach(function (o) { o.classList.remove('filled'); });
     document.querySelectorAll('.choice-open input').forEach(function (i) { i.value = ''; });
+
+    // Sheet DOM
+    document.querySelectorAll('.stat-input').forEach(function (i) { i.value = ''; });
+    document.querySelectorAll('[data-sheet]').forEach(function (el) { el.value = ''; });
+    document.querySelectorAll('.pb-special-input').forEach(function (el) { el.value = ''; });
+    ['harm', 'luck', 'xp'].forEach(function (name) { setTrack(name, 0); });
+
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-    fetch(API_BASE, { method: 'PUT', body: '{}', headers: { 'Content-Type': 'application/json' } })
-      .catch(function () {});
+    try { localStorage.removeItem(SHEET_KEY);   } catch (e) {}
+
+    fetch(API_BASE,  { method: 'PUT', body: '{}', headers: { 'Content-Type': 'application/json' } }).catch(function () {});
+    fetch(SHEET_API, { method: 'PUT', body: '{}', headers: { 'Content-Type': 'application/json' } }).catch(function () {});
   };
 
   // Arc nav smooth scroll
@@ -238,7 +364,7 @@
   });
 
 
-  // ── BOOT ────────────────────────────────────────────────────────────────
+  // ── BOOT ─────────────────────────────────────────────────────────────────
   load();
 
 }());
