@@ -104,22 +104,61 @@
       </div>
     </div>
 
-    <div class="playbook-section-label">// ACTIVE MOVES</div>
-    <div class="pb-block">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="0" placeholder="Move 1…">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="1" placeholder="Move 2…">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="2" placeholder="Move 3…">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="3" placeholder="Move 4…">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="4" placeholder="Move 5…">
-    </div>
+    <div class="playbook-section-label">// PLAYBOOK MOVES <button class="hide-toggle" onclick="toggleHide(this,'reed-moves')">// HIDE UNCHOSEN</button></div>
+    <div class="pick-note">There's No "I" In "Team" is mandatory. Pick 2 more.</div>
+    <ul class="check-list" id="reed-moves">
+      <li class="check-item mandatory checked" data-check-key="move-theres-no-i">
+        <span class="check-box"></span>
+        <span><span class="check-name">There's No "I" In "Team"</span><span class="check-mandatory-tag">// MANDATORY</span>
+        <div class="check-desc">You get +1 on all help out rolls, or +2 if it's for your hero (Rex Bangley).</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-caddy">
+        <span class="check-box"></span>
+        <span><span class="check-name">Caddy</span>
+        <div class="check-desc">You carry all your hero's stuff. You can use anything from Rex's gear list, unless he is currently holding it. If it's something with spares, you can use it even if he is.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-as-you-wish">
+        <span class="check-box"></span>
+        <span><span class="check-name">As You Wish</span>
+        <div class="check-desc">Mark experience whenever your hero orders or requests that you do something you don't want to do, and you go ahead and do it anyway.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-eek">
+        <span class="check-box"></span>
+        <span><span class="check-name">Eek!</span><span class="check-roll">roll +Sharp</span>
+        <div class="check-desc">When a monster appears and you find a hiding spot. On 10+: you hide in the best nearby spot before the monster sees you. On 7–9: pick one — you hide okay but the monster is now between you and escape; your hiding spot will be spotted soon; you leave something important out in the open. Miss: you fail to hide in time.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-bodyguard">
+        <span class="check-box"></span>
+        <span><span class="check-name">Bodyguard</span>
+        <div class="check-desc">If something bad is going to happen to your hero, your comrades, or a bystander, and you are right there, you may throw yourself in harm's way. Whatever was going to happen to them happens to you instead, and you mark experience.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-me-too">
+        <span class="check-box"></span>
+        <span><span class="check-name">Me Too!</span>
+        <div class="check-desc">If your hero makes a roll for a move, and you copy what they did, you may choose not to roll. Instead, use your hero's die roll, but adjusted with your own rating.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-i-can-make-you-look-good">
+        <span class="check-box"></span>
+        <span><span class="check-name">I Can Make You Look Good</span>
+        <div class="check-desc">If you are helping out your hero, you may swap one or both your dice with theirs, as long as you come out with the lowest total. Calculate your results as if you had each rolled the dice you now have.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-apprentice">
+        <span class="check-box"></span>
+        <span><span class="check-name">Apprentice</span>
+        <div class="check-desc">Take a move that your hero (Rex) has.</div></span>
+      </li>
+    </ul>
 
-    <div class="playbook-section-label">// GEAR</div>
-    <div class="pb-block">
-      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="0" placeholder="Item 1…">
-      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="1" placeholder="Item 2…">
-      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="2" placeholder="Item 3…">
-      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="3" placeholder="Item 4…">
-    </div>
+    <div class="playbook-section-label">// GEAR &amp; EQUIPMENT <button class="hide-toggle" onclick="toggleHide(this,'reed-gear')">// HIDE UNCHOSEN</button></div>
+    <div class="pick-note">Pick 1 item from Rex's gear list · Pick 1 sidekick weapon</div>
+    <ul class="check-list" id="reed-gear">
+      <li class="check-item" data-check-key="gear-hero-item"><span class="check-box"></span><span><span class="check-name">Hero's item</span><span class="check-roll">from Rex's gear list</span><div class="check-desc">Pick one item from Rex's science weapons or protective equipment — note which one below in bonds/notes.</div></span></li>
+      <li class="check-item" data-check-key="gear-handgun"><span class="check-box"></span><span><span class="check-name">Handgun</span><span class="check-roll">sidekick weapon · 2-harm close reload loud</span></span></li>
+      <li class="check-item" data-check-key="gear-shotgun"><span class="check-box"></span><span><span class="check-name">Shotgun</span><span class="check-roll">sidekick weapon · 3-harm close messy</span></span></li>
+      <li class="check-item" data-check-key="gear-baseball-bat"><span class="check-box"></span><span><span class="check-name">Baseball bat</span><span class="check-roll">sidekick weapon · 2-harm hand</span></span></li>
+      <li class="check-item" data-check-key="gear-stun-gun"><span class="check-box"></span><span><span class="check-name">Stun gun</span><span class="check-roll">sidekick weapon · 1-harm hand stun</span></span></li>
+      <li class="check-item" data-check-key="gear-big-knife"><span class="check-box"></span><span><span class="check-name">Big knife</span><span class="check-roll">sidekick weapon · 1-harm hand</span></span></li>
+    </ul>
 
     <div class="playbook-section-label">// BONDS</div>
     <div class="pb-block">
@@ -132,6 +171,28 @@
     <div class="pb-block">
       <textarea class="pb-field" data-sheet="notes" rows="4" placeholder="Session notes, backstory, reminders…"></textarea>
     </div>
+
+    <div class="playbook-section-label">// IMPROVEMENTS <button class="hide-toggle" onclick="toggleHide(this,'reed-impr')">// HIDE UNCHOSEN</button></div>
+    <ul class="check-list" id="reed-impr">
+      <li class="check-item" data-check-key="impr-sharp-3"><span class="check-box"></span><span><span class="check-name">+1 Sharp</span><span class="check-roll">max +3</span></span></li>
+      <li class="check-item" data-check-key="impr-charm-3"><span class="check-box"></span><span><span class="check-name">+1 Charm</span><span class="check-roll">max +3</span></span></li>
+      <li class="check-item" data-check-key="impr-cool-2"><span class="check-box"></span><span><span class="check-name">+1 Cool</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-tough-2"><span class="check-box"></span><span><span class="check-name">+1 Tough</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-sidekick-move-1"><span class="check-box"></span><span><span class="check-name">Take another Sidekick move</span></span></li>
+      <li class="check-item" data-check-key="impr-sidekick-move-2"><span class="check-box"></span><span><span class="check-name">Take another Sidekick move</span></span></li>
+      <li class="check-item" data-check-key="impr-ally-sidekick"><span class="check-box"></span><span><span class="check-name">Gain an ally: another sidekick for your hero, junior to you</span></span></li>
+      <li class="check-item" data-check-key="impr-change-playbook"><span class="check-box"></span><span><span class="check-name">Change playbooks to be the same as your hero</span><div class="check-desc">Overrides the general rule that only one of each playbook may be in use.</div></span></li>
+      <li class="check-item" data-check-key="impr-other-move-1"><span class="check-box"></span><span><span class="check-name">Take a move from another playbook</span></span></li>
+      <li class="check-item" data-check-key="impr-other-move-2"><span class="check-box"></span><span><span class="check-name">Take a move from another playbook</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-any-3"><span class="check-box"></span><span><span class="check-name">+1 to any rating</span><span class="check-roll">advanced · max +3</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-new-type"><span class="check-box"></span><span><span class="check-name">Change this hunter to a new type</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-second-hunter"><span class="check-box"></span><span><span class="check-name">Create a second hunter to play as well as this one</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-basic-advanced-1"><span class="check-box"></span><span><span class="check-name">Mark two basic moves as advanced</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-basic-advanced-2"><span class="check-box"></span><span><span class="check-name">Mark another two basic moves as advanced</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-retire"><span class="check-box"></span><span><span class="check-name">Retire this hunter to safety</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-get-back-luck"><span class="check-box"></span><span><span class="check-name">Get back one used Luck point</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-new-hero"><span class="check-box"></span><span><span class="check-name">Pick a new hero</span><span class="check-roll">advanced</span><div class="check-desc">All moves that mention your hero now apply to the new hero.</div></span></li>
+    </ul>
 
   </div>
 </div>

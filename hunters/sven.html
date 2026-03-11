@@ -108,22 +108,90 @@
       </div>
     </div>
 
-    <div class="playbook-section-label">// ACTIVE MOVES</div>
-    <div class="pb-block">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="0" placeholder="Move 1…">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="1" placeholder="Move 2…">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="2" placeholder="Move 3…">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="3" placeholder="Move 4…">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="4" placeholder="Move 5…">
-    </div>
+    <div class="playbook-section-label">// PLAYBOOK MOVES <button class="hide-toggle" onclick="toggleHide(this,'sven-moves')">// HIDE UNCHOSEN</button></div>
+    <div class="pick-note">Incorporeal and Immortal are your confirmed starting moves. Pick more as you improve.</div>
+    <ul class="check-list" id="sven-moves">
+      <li class="check-item mandatory checked" data-check-key="move-incorporeal">
+        <span class="check-box"></span>
+        <span><span class="check-name">Incorporeal</span><span class="check-mandatory-tag">// STARTING</span>
+        <div class="check-desc">You may move freely through solid objects (but not people).</div></span>
+      </li>
+      <li class="check-item mandatory checked" data-check-key="move-immortal">
+        <span class="check-box"></span>
+        <span><span class="check-name">Immortal</span><span class="check-mandatory-tag">// STARTING</span>
+        <div class="check-desc">You do not age or sicken, and whenever you suffer harm you suffer 1-harm less.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-unnatural-appeal">
+        <span class="check-box"></span>
+        <span><span class="check-name">Unnatural Appeal</span>
+        <div class="check-desc">Roll +Weird instead of +Charm when you manipulate someone.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-unholy-strength">
+        <span class="check-box"></span>
+        <span><span class="check-name">Unholy Strength</span>
+        <div class="check-desc">Roll +Weird instead of +Tough when you kick some ass.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-preternatural-speed">
+        <span class="check-box"></span>
+        <span><span class="check-name">Preternatural Speed</span>
+        <div class="check-desc">You go much faster than normal people. When you chase, flee, or run, take +1 ongoing.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-claws-of-the-beast">
+        <span class="check-box"></span>
+        <span><span class="check-name">Claws of the Beast</span>
+        <div class="check-desc">All your natural attacks get +1 harm.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-mental-dominion">
+        <span class="check-box"></span>
+        <span><span class="check-name">Mental Dominion</span><span class="check-roll">roll +Charm</span>
+        <div class="check-desc">When you gaze into a normal human's eyes and exert your will. On 10+: hold 3. On 7–9: hold 1. Spend hold to give orders — regular people follow; hunters may choose to comply and mark experience. Miss: no hold.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-unquenchable-vitality">
+        <span class="check-box"></span>
+        <span><span class="check-name">Unquenchable Vitality</span><span class="check-roll">roll +Cool</span>
+        <div class="check-desc">When you have taken harm, you can heal yourself. On 10+: heal 2-harm and stabilise. On 7–9: heal 1-harm and stabilise. Miss: your injuries worsen.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-dark-negotiator">
+        <span class="check-box"></span>
+        <span><span class="check-name">Dark Negotiator</span>
+        <div class="check-desc">You can use the manipulate someone move on monsters as well as people, if they can reason and talk.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-flight">
+        <span class="check-box"></span>
+        <span><span class="check-name">Flight</span>
+        <div class="check-desc">You can fly.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-shapeshifter">
+        <span class="check-box"></span>
+        <span><span class="check-name">Shapeshifter</span>
+        <div class="check-desc">You may change your form (usually into an animal). Decide if you have one alternate form or several. You gain +1 to investigate a mystery when using an alternate form's superior senses.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-something-borrowed">
+        <span class="check-box"></span>
+        <span><span class="check-name">Something Borrowed</span>
+        <div class="check-desc">Take a move from a hunter playbook that is not currently in play.</div></span>
+      </li>
+    </ul>
 
-    <div class="playbook-section-label">// GEAR</div>
-    <div class="pb-block">
-      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="0" placeholder="Item 1…">
-      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="1" placeholder="Item 2…">
-      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="2" placeholder="Item 3…">
-      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="3" placeholder="Item 4…">
-    </div>
+    <div class="playbook-section-label">// GEAR &amp; EQUIPMENT <button class="hide-toggle" onclick="toggleHide(this,'sven-gear')">// HIDE UNCHOSEN</button></div>
+    <div class="pick-note">Optional: pick 1 handy weapon · Natural attack: pick a Base + add an Extra (or pick two Bases)</div>
+    <ul class="check-list" id="sven-gear">
+      <li class="check-item" data-check-key="gear-38-revolver"><span class="check-box"></span><span><span class="check-name">.38 revolver</span><span class="check-roll">weapon · 2-harm close reload loud</span></span></li>
+      <li class="check-item" data-check-key="gear-9mm"><span class="check-box"></span><span><span class="check-name">9mm</span><span class="check-roll">weapon · 2-harm close loud</span></span></li>
+      <li class="check-item" data-check-key="gear-magnum"><span class="check-box"></span><span><span class="check-name">Magnum</span><span class="check-roll">weapon · 3-harm close reload loud</span></span></li>
+      <li class="check-item" data-check-key="gear-shotgun"><span class="check-box"></span><span><span class="check-name">Shotgun</span><span class="check-roll">weapon · 3-harm close messy</span></span></li>
+      <li class="check-item" data-check-key="gear-big-knife"><span class="check-box"></span><span><span class="check-name">Big knife</span><span class="check-roll">weapon · 1-harm hand</span></span></li>
+      <li class="check-item" data-check-key="gear-brass-knuckles"><span class="check-box"></span><span><span class="check-name">Brass knuckles</span><span class="check-roll">weapon · 1-harm hand quiet small</span></span></li>
+      <li class="check-item" data-check-key="gear-sword"><span class="check-box"></span><span><span class="check-name">Sword</span><span class="check-roll">weapon · 2-harm hand messy</span></span></li>
+      <li class="check-item" data-check-key="gear-huge-sword"><span class="check-box"></span><span><span class="check-name">Huge sword</span><span class="check-roll">weapon · 3-harm hand heavy</span></span></li>
+      <li class="check-item" data-check-key="gear-attack-teeth"><span class="check-box"></span><span><span class="check-name">Natural attack: Teeth (base)</span><span class="check-roll">3-harm intimate</span></span></li>
+      <li class="check-item" data-check-key="gear-attack-claws"><span class="check-box"></span><span><span class="check-name">Natural attack: Claws (base)</span><span class="check-roll">2-harm hand</span></span></li>
+      <li class="check-item mandatory checked" data-check-key="gear-attack-magic-force"><span class="check-box"></span><span><span class="check-name">Natural attack: Magical force (base)</span><span class="check-mandatory-tag">// CONFIRMED</span><span class="check-roll">1-harm magical close → hand range</span></span></li>
+      <li class="check-item" data-check-key="gear-attack-life-drain"><span class="check-box"></span><span><span class="check-name">Natural attack: Life-drain (base)</span><span class="check-roll">1-harm intimate life-drain</span></span></li>
+      <li class="check-item" data-check-key="gear-extra-harm"><span class="check-box"></span><span><span class="check-name">Extra: +1 harm to a base</span><span class="check-roll">natural attack extra</span></span></li>
+      <li class="check-item" data-check-key="gear-extra-ignore-armour"><span class="check-box"></span><span><span class="check-name">Extra: Add ignore-armour to a base</span><span class="check-roll">natural attack extra</span></span></li>
+      <li class="check-item" data-check-key="gear-extra-range"><span class="check-box"></span><span><span class="check-name">Extra: Add an extra range to a base</span><span class="check-roll">natural attack extra · intimate, hand, or close</span></span></li>
+    </ul>
 
     <div class="playbook-section-label">// BONDS</div>
     <div class="pb-block">
@@ -136,6 +204,29 @@
     <div class="pb-block">
       <textarea class="pb-field" data-sheet="notes" rows="4" placeholder="Session notes, backstory, reminders…"></textarea>
     </div>
+
+    <div class="playbook-section-label">// IMPROVEMENTS <button class="hide-toggle" onclick="toggleHide(this,'sven-impr')">// HIDE UNCHOSEN</button></div>
+    <ul class="check-list" id="sven-impr">
+      <li class="check-item" data-check-key="impr-charm-2"><span class="check-box"></span><span><span class="check-name">+1 Charm</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-sharp-2"><span class="check-box"></span><span><span class="check-name">+1 Sharp</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-cool-2"><span class="check-box"></span><span><span class="check-name">+1 Cool</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-tough-2"><span class="check-box"></span><span><span class="check-name">+1 Tough</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-monstrous-move-1"><span class="check-box"></span><span><span class="check-name">Take another Monstrous move</span></span></li>
+      <li class="check-item" data-check-key="impr-monstrous-move-2"><span class="check-box"></span><span><span class="check-name">Take another Monstrous move</span></span></li>
+      <li class="check-item" data-check-key="impr-haven"><span class="check-box"></span><span><span class="check-name">Gain a haven, like the Expert has</span><div class="check-desc">With two options.</div></span></li>
+      <li class="check-item" data-check-key="impr-natural-attack"><span class="check-box"></span><span><span class="check-name">Take a natural attacks pick</span></span></li>
+      <li class="check-item" data-check-key="impr-other-move-1"><span class="check-box"></span><span><span class="check-name">Take a move from another playbook</span></span></li>
+      <li class="check-item" data-check-key="impr-other-move-2"><span class="check-box"></span><span><span class="check-name">Take a move from another playbook</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-any-3"><span class="check-box"></span><span><span class="check-name">+1 to any rating</span><span class="check-roll">advanced · max +3</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-new-type"><span class="check-box"></span><span><span class="check-name">Change this hunter to a new type</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-second-hunter"><span class="check-box"></span><span><span class="check-name">Create a second hunter to play as well as this one</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-basic-advanced-1"><span class="check-box"></span><span><span class="check-name">Mark two basic moves as advanced</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-basic-advanced-2"><span class="check-box"></span><span><span class="check-name">Mark another two basic moves as advanced</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-retire"><span class="check-box"></span><span><span class="check-name">Retire this hunter to safety</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-free-curse"><span class="check-box"></span><span><span class="check-name">Free yourself from the curse of your kind</span><span class="check-roll">advanced</span><div class="check-desc">Your curse no longer applies, but you lose 1 Weird.</div></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-turn-evil"><span class="check-box"></span><span><span class="check-name">You turn evil (again)</span><span class="check-roll">advanced</span><div class="check-desc">Retire this character — they become one of the Keeper's threats.</div></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-get-back-luck"><span class="check-box"></span><span><span class="check-name">Get back one used Luck point</span><span class="check-roll">advanced</span></span></li>
+    </ul>
 
   </div>
 </div>

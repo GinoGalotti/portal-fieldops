@@ -110,22 +110,60 @@
       </div>
     </div>
 
-    <div class="playbook-section-label">// ACTIVE MOVES</div>
-    <div class="pb-block">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="0" placeholder="Move 1…">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="1" placeholder="Move 2…">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="2" placeholder="Move 3…">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="3" placeholder="Move 4…">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="4" placeholder="Move 5…">
-    </div>
+    <div class="playbook-section-label">// PLAYBOOK MOVES <button class="hide-toggle" onclick="toggleHide(this,'rex-moves')">// HIDE UNCHOSEN</button></div>
+    <div class="pick-note">Pick 2 from 5 optional moves · Weird Science is your mandatory Weird move.</div>
+    <ul class="check-list" id="rex-moves">
+      <li class="check-item mandatory checked" data-check-key="move-weird-science">
+        <span class="check-box"></span>
+        <span><span class="check-name">Weird Science</span><span class="check-mandatory-tag">// WEIRD MOVE</span>
+        <div class="check-desc">You can create bespoke mystical gadgets using science. When you build or use a weird science gadget, roll +Weird. On 10+: it works. On 7–9: it works, but choose one — it has a side effect, it's temperamental, or it needs a specific fuel/power source. Miss: it goes wrong in a bad way.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-test-hypothesis">
+        <span class="check-box"></span>
+        <span><span class="check-name">Test Hypothesis</span><span class="check-roll">roll +Sharp</span>
+        <div class="check-desc">When you test a potential explanation based on data gathered, the Keeper will tell you if you're on the right track, missing some critical data, or on the wrong track. On 10+: you can trust that answer. On 7–9: the Keeper answers honestly, but you wasted time or the testing destroyed evidence. Miss: the Keeper's answer is unrelated to the facts.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-sabotage">
+        <span class="check-box"></span>
+        <span><span class="check-name">Sabotage</span><span class="check-roll">roll +Sharp</span>
+        <div class="check-desc">When you quickly break a complicated gadget. On 10+: it's broken — your choice if done quietly or left totally irreparable. On 7–9: it's broken, but not too hard to fix and you made a ruckus. Miss: the worst thing possible happens — usually explosions.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-oblivious-to-danger">
+        <span class="check-box"></span>
+        <span><span class="check-name">Oblivious to Danger</span>
+        <div class="check-desc">You are immune to all fear-based moves and powers. You never need to act under pressure to resist fear from any source.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-doors-of-perception">
+        <span class="check-box"></span>
+        <span><span class="check-name">The Doors of Perception</span><span class="check-roll">roll +Weird</span>
+        <div class="check-desc">When you use psychological, pharmacological, or meditation techniques to open your mind to transcendental knowledge. On 10+: pick two effects. On 7–9: pick one, but your mind and perceptions are confused and foggy. Miss: you get lost in altered states. Effects: Communicate with something you normally couldn't · See what is normally invisible (ghosts, magical effects) · Ask one investigate-a-mystery question · Clarity: +1 Cool, Sharp, or Weird for the next hour (max +3).</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-fieldwork">
+        <span class="check-box"></span>
+        <span><span class="check-name">Fieldwork</span>
+        <div class="check-desc">When you put yourself in danger to test a hypothesis, get +1 forward. When you confirm the hypothesis as true or false, mark experience.</div></span>
+      </li>
+    </ul>
 
-    <div class="playbook-section-label">// GEAR</div>
-    <div class="pb-block">
-      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="0" placeholder="Item 1…">
-      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="1" placeholder="Item 2…">
-      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="2" placeholder="Item 3…">
-      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="3" placeholder="Item 4…">
-    </div>
+    <div class="playbook-section-label">// GEAR &amp; EQUIPMENT <button class="hide-toggle" onclick="toggleHide(this,'rex-gear')">// HIDE UNCHOSEN</button></div>
+    <div class="pick-note">Pick 2 science weapons · Pick 1 protective equipment · You also have toolkits for normal science/engineering/analysis tasks.</div>
+    <ul class="check-list" id="rex-gear">
+      <li class="check-item" data-check-key="gear-lightning-gun"><span class="check-box"></span><span><span class="check-name">Lightning gun</span><span class="check-roll">science weapon · 3-harm close loud area electricity batteries</span></span></li>
+      <li class="check-item" data-check-key="gear-particle-accelerator"><span class="check-box"></span><span><span class="check-name">Portable particle accelerator</span><span class="check-roll">science weapon · 3-harm close/far messy batteries</span></span></li>
+      <li class="check-item" data-check-key="gear-laser-cannon"><span class="check-box"></span><span><span class="check-name">Laser cannon</span><span class="check-roll">science weapon · 2-harm close/far quiet batteries</span></span></li>
+      <li class="check-item" data-check-key="gear-net-launcher"><span class="check-box"></span><span><span class="check-name">Net launcher</span><span class="check-roll">science weapon · 0-harm close entangling</span></span></li>
+      <li class="check-item" data-check-key="gear-scalpel"><span class="check-box"></span><span><span class="check-name">Scalpel</span><span class="check-roll">science weapon · 1-harm intimate/hand</span></span></li>
+      <li class="check-item" data-check-key="gear-force-knife"><span class="check-box"></span><span><span class="check-name">Force knife</span><span class="check-roll">science weapon · 2-harm hand batteries</span></span></li>
+      <li class="check-item" data-check-key="gear-tranq-rifle"><span class="check-box"></span><span><span class="check-name">Tranquiliser rifle</span><span class="check-roll">science weapon · 1-harm close/far sedating</span></span></li>
+      <li class="check-item" data-check-key="gear-stun-ray"><span class="check-box"></span><span><span class="check-name">Stun-ray</span><span class="check-roll">science weapon · 0-harm close sedating</span></span></li>
+      <li class="check-item" data-check-key="gear-drone"><span class="check-box"></span><span><span class="check-name">Autonomous drone</span><span class="check-roll">science weapon · 2-harm far autonomous</span></span></li>
+      <li class="check-item" data-check-key="gear-atomic-pistol"><span class="check-box"></span><span><span class="check-name">Atomic pistol</span><span class="check-roll">science weapon · 3-harm close radiation</span></span></li>
+      <li class="check-item" data-check-key="gear-biohazard-suit"><span class="check-box"></span><span><span class="check-name">Biohazard suit</span><span class="check-roll">protective · air-supply sealed</span></span></li>
+      <li class="check-item" data-check-key="gear-lab-coat"><span class="check-box"></span><span><span class="check-name">Lab coat</span><span class="check-roll">protective · chemical-resistant</span></span></li>
+      <li class="check-item" data-check-key="gear-engineering-coveralls"><span class="check-box"></span><span><span class="check-name">Engineering coveralls</span><span class="check-roll">protective</span></span></li>
+      <li class="check-item" data-check-key="gear-space-suit"><span class="check-box"></span><span><span class="check-name">Space suit</span><span class="check-roll">protective · air-supply sealed climate-control</span></span></li>
+      <li class="check-item" data-check-key="gear-science-armour"><span class="check-box"></span><span><span class="check-name">Science armour</span><span class="check-roll">protective · 2-armour batteries heavy</span></span></li>
+    </ul>
 
     <div class="playbook-section-label">// BONDS</div>
     <div class="pb-block">
@@ -138,6 +176,29 @@
     <div class="pb-block">
       <textarea class="pb-field" data-sheet="notes" rows="4" placeholder="Session notes, backstory, reminders…"></textarea>
     </div>
+
+    <div class="playbook-section-label">// IMPROVEMENTS <button class="hide-toggle" onclick="toggleHide(this,'rex-impr')">// HIDE UNCHOSEN</button></div>
+    <ul class="check-list" id="rex-impr">
+      <li class="check-item" data-check-key="impr-sharp-3"><span class="check-box"></span><span><span class="check-name">+1 Sharp</span><span class="check-roll">max +3</span></span></li>
+      <li class="check-item" data-check-key="impr-cool-2"><span class="check-box"></span><span><span class="check-name">+1 Cool</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-weird-2"><span class="check-box"></span><span><span class="check-name">+1 Weird</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-tough-2"><span class="check-box"></span><span><span class="check-name">+1 Tough</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-as-move-1"><span class="check-box"></span><span><span class="check-name">Take another Action Scientist move</span></span></li>
+      <li class="check-item" data-check-key="impr-as-move-2"><span class="check-box"></span><span><span class="check-name">Take another Action Scientist move</span></span></li>
+      <li class="check-item" data-check-key="impr-laboratory"><span class="check-box"></span><span><span class="check-name">Get a laboratory</span><div class="check-desc">With staff, facilities, and instruments suited to your area of study.</div></span></li>
+      <li class="check-item" data-check-key="impr-ally-team"><span class="check-box"></span><span><span class="check-name">Gain an ally team of action scientists</span></span></li>
+      <li class="check-item" data-check-key="impr-other-move-1"><span class="check-box"></span><span><span class="check-name">Take a move from another playbook</span></span></li>
+      <li class="check-item" data-check-key="impr-other-move-2"><span class="check-box"></span><span><span class="check-name">Take a move from another playbook</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-cool-3"><span class="check-box"></span><span><span class="check-name">+1 Cool</span><span class="check-roll">advanced · max +3</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-any-3"><span class="check-box"></span><span><span class="check-name">+1 to any rating</span><span class="check-roll">advanced · max +3</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-new-playbook"><span class="check-box"></span><span><span class="check-name">Change this hunter to a new playbook</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-second-hunter"><span class="check-box"></span><span><span class="check-name">Create a second hunter to play in addition to this one</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-basic-advanced-1"><span class="check-box"></span><span><span class="check-name">Mark two basic moves as advanced</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-basic-advanced-2"><span class="check-box"></span><span><span class="check-name">Mark another two basic moves as advanced</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-retire"><span class="check-box"></span><span><span class="check-name">Retire this hunter to safety</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-erase-luck"><span class="check-box"></span><span><span class="check-name">Erase one used Luck mark</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-second-area"><span class="check-box"></span><span><span class="check-name">New interest: add a second area of study</span><span class="check-roll">advanced</span></span></li>
+    </ul>
 
   </div>
 </div>

@@ -101,22 +101,79 @@
       </div>
     </div>
 
-    <div class="playbook-section-label">// ACTIVE MOVES</div>
-    <div class="pb-block">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="0" placeholder="Move 1…">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="1" placeholder="Move 2…">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="2" placeholder="Move 3…">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="3" placeholder="Move 4…">
-      <input class="pb-field" type="text" data-sheet="moves" data-sheet-idx="4" placeholder="Move 5…">
-    </div>
+    <div class="playbook-section-label">// PLAYBOOK MOVES <button class="hide-toggle" onclick="toggleHide(this,'alan-moves')">// HIDE UNCHOSEN</button></div>
+    <div class="pick-note">Glamour is mandatory. Pick 2 more.</div>
+    <ul class="check-list" id="alan-moves">
+      <li class="check-item mandatory checked" data-check-key="move-glamour">
+        <span class="check-box"></span>
+        <span><span class="check-name">Glamour</span><span class="check-mandatory-tag">// MANDATORY</span>
+        <div class="check-desc">When feeling calm, you can maintain an illusion of humanity. You may drop your glamour and display your supernatural power to turn any roll into a 10. Your unknown heritage stirs up trouble right away or soon after.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-inhuman-talent">
+        <span class="check-box"></span>
+        <span><span class="check-name">Inhuman Talent</span>
+        <div class="check-desc">+1 ongoing when you use a basic Weird move that uses your specific powers (plants, ice, illusions, summer, etc.). At the start of each session, hold 2. Spend your hold for +1 forward on a move your powers can enhance.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-they-are-my-people">
+        <span class="check-box"></span>
+        <span><span class="check-name">They Are My People</span>
+        <div class="check-desc">Once per session, when you protect someone, act as if you rolled a 12. You gain +1 forward when acting under pressure to resist instincts like your unknown heritage, dark urges, and fight-or-flight situations.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-force-of-nature">
+        <span class="check-box"></span>
+        <span><span class="check-name">Force of Nature</span><span class="check-roll">roll +Weird</span>
+        <div class="check-desc">You have a supernatural attack from your heritage. On 10+: summon a 1-harm close weapon, pick two extras. On 7–9: pick one extra. Miss: the power turns against you. Extras: +1 harm, hand, far, autonomous, distracting, ignore-armour, area, grab, blind, stun.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-lockdown">
+        <span class="check-box"></span>
+        <span><span class="check-name">Lockdown</span><span class="check-roll">roll +Weird</span>
+        <div class="check-desc">You can stun people with a petrifying gaze, overwhelming illusions, or bewildering moths. On 10+: target immobilised for a few minutes or until something snaps them out. On 7–9: immobilised while you focus. Miss: magical backlash.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-faerie-gossip">
+        <span class="check-box"></span>
+        <span><span class="check-name">Faerie Gossip</span><span class="check-roll">roll +Weird</span>
+        <div class="check-desc">You can communicate with local spirits and mystical creatures. When investigating a mystery by questioning these beings, roll +Weird instead of +Sharp and ask extra questions: Is anything affecting the supernatural environment? How long has ____ been in the area? When did ____ first arrive?</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-renewal">
+        <span class="check-box"></span>
+        <span><span class="check-name">Renewal</span>
+        <div class="check-desc">When teammates and allies in your presence recover harm by any means, they recover 1 extra harm.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-strange-paths">
+        <span class="check-box"></span>
+        <span><span class="check-name">Strange Paths</span><span class="check-roll">roll +Weird</span>
+        <div class="check-desc">You can walk (or drive) between worlds, though you don't know the way well. On 10+: arrive quicker than possible. On 7–9: find trouble along the way. Miss: arrive a little too late or deal with something blocking the way.</div></span>
+      </li>
+    </ul>
 
-    <div class="playbook-section-label">// GEAR</div>
-    <div class="pb-block">
-      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="0" placeholder="Item 1…">
-      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="1" placeholder="Item 2…">
-      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="2" placeholder="Item 3…">
-      <input class="pb-field" type="text" data-sheet="gear" data-sheet-idx="3" placeholder="Item 4…">
-    </div>
+    <div class="playbook-section-label">// GEAR &amp; EQUIPMENT <button class="hide-toggle" onclick="toggleHide(this,'alan-gear')">// HIDE UNCHOSEN</button></div>
+    <div class="pick-note">Pick 1 transport · Pick 1 weapon · Pick 2 mementos</div>
+    <ul class="check-list" id="alan-gear">
+      <li class="check-item" data-check-key="gear-skateboard"><span class="check-box"></span><span><span class="check-name">Skateboard</span><span class="check-roll">transport</span></span></li>
+      <li class="check-item" data-check-key="gear-roller-skates"><span class="check-box"></span><span><span class="check-name">Roller skates</span><span class="check-roll">transport</span></span></li>
+      <li class="check-item" data-check-key="gear-bicycle"><span class="check-box"></span><span><span class="check-name">Bicycle</span><span class="check-roll">transport</span></span></li>
+      <li class="check-item" data-check-key="gear-pickup-truck"><span class="check-box"></span><span><span class="check-name">Old pickup truck</span><span class="check-roll">transport</span></span></li>
+      <li class="check-item" data-check-key="gear-motorcycle"><span class="check-box"></span><span><span class="check-name">Motorcycle</span><span class="check-roll">transport</span></span></li>
+      <li class="check-item" data-check-key="gear-van"><span class="check-box"></span><span><span class="check-name">Van</span><span class="check-roll">transport</span></span></li>
+      <li class="check-item" data-check-key="gear-decent-car"><span class="check-box"></span><span><span class="check-name">Fairly new car in decent condition</span><span class="check-roll">transport</span></span></li>
+      <li class="check-item" data-check-key="gear-classic-car"><span class="check-box"></span><span><span class="check-name">Classic car in poor condition</span><span class="check-roll">transport</span></span></li>
+      <li class="check-item" data-check-key="gear-sport-club"><span class="check-box"></span><span><span class="check-name">Sport club</span><span class="check-roll">weapon · 2-harm hand innocuous messy</span></span></li>
+      <li class="check-item" data-check-key="gear-pocket-knife"><span class="check-box"></span><span><span class="check-name">Pocket knife / multitool</span><span class="check-roll">weapon · 1-harm hand useful small</span></span></li>
+      <li class="check-item" data-check-key="gear-small-handgun"><span class="check-box"></span><span><span class="check-name">Small handgun</span><span class="check-roll">weapon · 2-harm close loud</span></span></li>
+      <li class="check-item" data-check-key="gear-hunting-rifle"><span class="check-box"></span><span><span class="check-name">Hunting rifle</span><span class="check-roll">weapon · 3-harm far loud reload</span></span></li>
+      <li class="check-item" data-check-key="gear-sledgehammer"><span class="check-box"></span><span><span class="check-name">Sledgehammer</span><span class="check-roll">weapon · 2-harm hand messy slow</span></span></li>
+      <li class="check-item" data-check-key="gear-fire-axe"><span class="check-box"></span><span><span class="check-name">Fire axe</span><span class="check-roll">weapon · 2-harm hand messy heavy</span></span></li>
+      <li class="check-item" data-check-key="gear-talisman"><span class="check-box"></span><span><span class="check-name">Talisman or artifact</span><span class="check-roll">weapon · 1-harm close magic ignore-armour</span></span></li>
+      <li class="check-item" data-check-key="gear-childhood-toy"><span class="check-box"></span><span><span class="check-name">A childhood toy</span><span class="check-roll">memento</span></span></li>
+      <li class="check-item" data-check-key="gear-laptop"><span class="check-box"></span><span><span class="check-name">A laptop</span><span class="check-roll">memento</span></span></li>
+      <li class="check-item" data-check-key="gear-knapsack"><span class="check-box"></span><span><span class="check-name">A knapsack, backpack, or purse</span><span class="check-roll">memento</span></span></li>
+      <li class="check-item" data-check-key="gear-smartphone"><span class="check-box"></span><span><span class="check-name">A smartphone, mobile game device, or music player</span><span class="check-roll">memento</span></span></li>
+      <li class="check-item" data-check-key="gear-old-photos"><span class="check-box"></span><span><span class="check-name">Old photos</span><span class="check-roll">memento</span></span></li>
+      <li class="check-item" data-check-key="gear-jewellery"><span class="check-box"></span><span><span class="check-name">Jewellery</span><span class="check-roll">memento</span></span></li>
+      <li class="check-item" data-check-key="gear-clothing"><span class="check-box"></span><span><span class="check-name">A favourite piece of clothing</span><span class="check-roll">memento</span></span></li>
+      <li class="check-item" data-check-key="gear-journal"><span class="check-box"></span><span><span class="check-name">A journal</span><span class="check-roll">memento</span></span></li>
+      <li class="check-item" data-check-key="gear-letters"><span class="check-box"></span><span><span class="check-name">Letters or emails from home</span><span class="check-roll">memento</span></span></li>
+    </ul>
 
     <div class="playbook-section-label">// BONDS</div>
     <div class="pb-block">
@@ -129,6 +186,29 @@
     <div class="pb-block">
       <textarea class="pb-field" data-sheet="notes" rows="4" placeholder="Session notes, backstory, reminders…"></textarea>
     </div>
+
+    <div class="playbook-section-label">// IMPROVEMENTS <button class="hide-toggle" onclick="toggleHide(this,'alan-impr')">// HIDE UNCHOSEN</button></div>
+    <ul class="check-list" id="alan-impr">
+      <li class="check-item" data-check-key="impr-weird-3"><span class="check-box"></span><span><span class="check-name">+1 Weird</span><span class="check-roll">max +3</span></span></li>
+      <li class="check-item" data-check-key="impr-cool-2"><span class="check-box"></span><span><span class="check-name">+1 Cool</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-sharp-2"><span class="check-box"></span><span><span class="check-name">+1 Sharp</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-charm-2"><span class="check-box"></span><span><span class="check-name">+1 Charm</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-changeling-move-1"><span class="check-box"></span><span><span class="check-name">Take another Changeling move</span></span></li>
+      <li class="check-item" data-check-key="impr-changeling-move-2"><span class="check-box"></span><span><span class="check-name">Take another Changeling move</span></span></li>
+      <li class="check-item" data-check-key="impr-ally"><span class="check-box"></span><span><span class="check-name">Gain an ally</span><div class="check-desc">Associated with either the mortal or supernatural worlds.</div></span></li>
+      <li class="check-item" data-check-key="impr-advanced-weird"><span class="check-box"></span><span><span class="check-name">Mark use magic (or alternate Weird move) as advanced</span></span></li>
+      <li class="check-item" data-check-key="impr-other-move-1"><span class="check-box"></span><span><span class="check-name">Take a move from another playbook</span></span></li>
+      <li class="check-item" data-check-key="impr-other-move-2"><span class="check-box"></span><span><span class="check-name">Take a move from another playbook</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-any-3"><span class="check-box"></span><span><span class="check-name">+1 to any rating</span><span class="check-roll">advanced · max +3</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-new-playbook"><span class="check-box"></span><span><span class="check-name">Change this hunter to a new playbook</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-second-hunter"><span class="check-box"></span><span><span class="check-name">Create a second hunter to play in addition to this one</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-basic-advanced-1"><span class="check-box"></span><span><span class="check-name">Mark two basic moves as advanced</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-basic-advanced-2"><span class="check-box"></span><span><span class="check-name">Mark another two basic moves as advanced</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-retire"><span class="check-box"></span><span><span class="check-name">Retire this hunter to safety</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-erase-luck"><span class="check-box"></span><span><span class="check-name">Erase one used Luck mark</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-heritage-tag"><span class="check-box"></span><span><span class="check-name">Remove one Unknown Heritage tag</span><span class="check-roll">advanced</span><div class="check-desc">You've integrated well enough to avoid issues.</div></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-second-area"><span class="check-box"></span><span><span class="check-name">New interest: add a second area of study</span><span class="check-roll">advanced</span></span></li>
+    </ul>
 
   </div>
 </div>

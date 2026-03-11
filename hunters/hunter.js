@@ -104,7 +104,7 @@
   // ── SHEET SERIALISE / APPLY ───────────────────────────────────────────────
 
   function serialiseSheet() {
-    var sheet = { stats: {}, harm: 0, luck: 0, xp: 0, moves: [], gear: [], bonds: [], notes: '', special: [] };
+    var sheet = { stats: {}, harm: 0, luck: 0, xp: 0, bonds: [], notes: '', special: [], checks: {} };
 
     // Stats
     document.querySelectorAll('.stat-input[data-stat]').forEach(function (inp) {
@@ -135,6 +135,11 @@
     // Hunter-specific special inputs
     document.querySelectorAll('.pb-special-input[data-special-idx]').forEach(function (inp) {
       sheet.special[parseInt(inp.dataset.specialIdx, 10)] = inp.value;
+    });
+
+    // Checklists (moves, gear, improvements)
+    document.querySelectorAll('.check-item[data-check-key]').forEach(function (el) {
+      sheet.checks[el.dataset.checkKey] = el.classList.contains('checked');
     });
 
     return sheet;
@@ -175,6 +180,15 @@
       var idx = parseInt(inp.dataset.specialIdx, 10);
       if (sheet.special && sheet.special[idx] !== undefined) inp.value = sheet.special[idx];
     });
+
+    // Checklists
+    if (sheet.checks) {
+      document.querySelectorAll('.check-item[data-check-key]:not(.mandatory)').forEach(function (el) {
+        if (sheet.checks[el.dataset.checkKey] !== undefined) {
+          el.classList.toggle('checked', !!sheet.checks[el.dataset.checkKey]);
+        }
+      });
+    }
   }
 
 
@@ -328,6 +342,21 @@
     el.addEventListener('input', save);
   });
 
+  // Checklists: move, gear, improvement items
+  document.querySelectorAll('.check-item:not(.mandatory)').forEach(function (el) {
+    el.addEventListener('click', function () {
+      el.classList.toggle('checked');
+      save();
+    });
+  });
+
+  // Hide/show toggle
+  window.toggleHide = function (btn, listId) {
+    var list = document.getElementById(listId);
+    var hidden = list.classList.toggle('hide-unchecked');
+    btn.textContent = hidden ? '// SHOW ALL' : '// HIDE UNCHOSEN';
+  };
+
   // Reset — clears all DOM, localStorage, and both D1 tables
   window.resetAll = function () {
     if (!confirm('Reset all choices and sheet data for this hunter?')) return;
@@ -337,6 +366,9 @@
     document.querySelectorAll('.res-move').forEach(function (o) { o.classList.remove('selected'); });
     document.querySelectorAll('.beat-box').forEach(function (o) { o.classList.remove('filled'); });
     document.querySelectorAll('.choice-open input').forEach(function (i) { i.value = ''; });
+
+    // Checklist items
+    document.querySelectorAll('.check-item:not(.mandatory)').forEach(function (el) { el.classList.remove('checked'); });
 
     // Sheet DOM
     document.querySelectorAll('.stat-input').forEach(function (i) { i.value = ''; });
