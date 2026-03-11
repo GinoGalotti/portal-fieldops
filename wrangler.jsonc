@@ -1,9 +1,6 @@
 {
   "name": "portal-fieldops",
   "compatibility_date": "2026-03-10",
-  "assets": {
-    "directory": "./"
-  },
   "d1_databases": [
     {
       "binding": "portal_db",
