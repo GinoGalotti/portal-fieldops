@@ -167,6 +167,23 @@ textarea.lab-field { resize: vertical; }
 }
 .action-btn:hover { background: rgba(46,204,113,0.08); border-color: var(--green); }
 .action-btn:disabled { opacity: 0.5; cursor: default; }
+
+/* Hide/show toggle */
+.hide-toggle {
+  float: right;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: var(--green-dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0.1rem 0.4rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.hide-toggle:hover { border-color: var(--green-dim); color: var(--green); }
+.check-list.hide-unchecked .check-item:not(.checked):not(.mandatory) { display: none; }
 </style>
 </head>
 <body>
@@ -228,7 +245,7 @@ textarea.lab-field { resize: vertical; }
   <div class="lab-card">
     <div class="lab-card-header">
       <div class="lab-card-eyebrow">// TEAM MOVES</div>
-      <div class="lab-card-title">Active Moves</div>
+      <div class="lab-card-title">Active Moves <button class="hide-toggle" onclick="toggleHide(this,'moves-list')">// HIDE UNCHOSEN</button></div>
     </div>
     <div class="lab-card-body">
       <ul class="check-list" id="moves-list">
@@ -244,7 +261,7 @@ textarea.lab-field { resize: vertical; }
   <div class="lab-card">
     <div class="lab-card-header">
       <div class="lab-card-eyebrow">// TEAM ASSETS</div>
-      <div class="lab-card-title">Lab Resources</div>
+      <div class="lab-card-title">Lab Resources <button class="hide-toggle" onclick="toggleHide(this,'assets-list')">// HIDE UNCHOSEN</button></div>
     </div>
     <div class="lab-card-body">
       <ul class="check-list" id="assets-list">
@@ -492,6 +509,13 @@ textarea.lab-field { resize: vertical; }
       save();
     });
   });
+
+  // ── HIDE/SHOW TOGGLE ──
+  window.toggleHide = function (btn, listId) {
+    var list = document.getElementById(listId);
+    var hidden = list.classList.toggle('hide-unchecked');
+    btn.textContent = hidden ? '// SHOW ALL' : '// HIDE UNCHOSEN';
+  };
 
   // ── BOOT ──
   load();

@@ -152,7 +152,7 @@
     <div class="playbook-section-label">// GEAR &amp; EQUIPMENT <button class="hide-toggle" onclick="toggleHide(this,'reed-gear')">// HIDE UNCHOSEN</button></div>
     <div class="pick-note">Pick 1 item from Rex's gear list · Pick 1 sidekick weapon</div>
     <ul class="check-list" id="reed-gear">
-      <li class="check-item" data-check-key="gear-hero-item"><span class="check-box"></span><span><span class="check-name">Hero's item</span><span class="check-roll">from Rex's gear list</span><div class="check-desc">Pick one item from Rex's science weapons or protective equipment — note which one below in bonds/notes.</div></span></li>
+      <li class="check-item" data-check-key="gear-hero-item"><span class="check-box"></span><span><span class="check-name">Hero's item</span><span class="check-roll">from Rex's gear list</span><div class="check-desc">Pick one item from Rex's science weapons or protective equipment.<br><label class="pb-label" style="margin-top:0.4rem;display:block">Chosen item:</label><input class="pb-field pb-special-input" type="text" data-special-idx="0" placeholder="e.g. Laser cannon, Biohazard suit…" style="margin-top:0.2rem"></div></span></li>
       <li class="check-item" data-check-key="gear-handgun"><span class="check-box"></span><span><span class="check-name">Handgun</span><span class="check-roll">sidekick weapon · 2-harm close reload loud</span></span></li>
       <li class="check-item" data-check-key="gear-shotgun"><span class="check-box"></span><span><span class="check-name">Shotgun</span><span class="check-roll">sidekick weapon · 3-harm close messy</span></span></li>
       <li class="check-item" data-check-key="gear-baseball-bat"><span class="check-box"></span><span><span class="check-name">Baseball bat</span><span class="check-roll">sidekick weapon · 2-harm hand</span></span></li>
@@ -160,11 +160,11 @@
       <li class="check-item" data-check-key="gear-big-knife"><span class="check-box"></span><span><span class="check-name">Big knife</span><span class="check-roll">sidekick weapon · 1-harm hand</span></span></li>
     </ul>
 
-    <div class="playbook-section-label">// BONDS</div>
-    <div class="pb-block">
-      <input class="pb-field" type="text" data-sheet="bonds" data-sheet-idx="0" placeholder="Bond 1…">
-      <input class="pb-field" type="text" data-sheet="bonds" data-sheet-idx="1" placeholder="Bond 2…">
-      <input class="pb-field" type="text" data-sheet="bonds" data-sheet-idx="2" placeholder="Bond 3…">
+    <div class="playbook-section-label">// BONDS <button class="hide-toggle" onclick="addBond()">// + ADD</button></div>
+    <div class="pb-block" id="bonds-container">
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 1…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 2…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 3…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
     </div>
 
     <div class="playbook-section-label">// NOTES</div>

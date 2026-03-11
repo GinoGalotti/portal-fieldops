@@ -843,3 +843,22 @@ textarea.pb-field { min-height: 72px; resize: vertical; }
 
 /* Improvement section variant */
 .check-item.impr-advanced { border-left: 2px solid var(--accent-dim); margin-top: 0.2rem; }
+
+/* ── DYNAMIC BOND ROWS ───────────────────────────────────────────────────── */
+.bond-row { display: flex; gap: 0.4rem; align-items: center; margin-bottom: 0.35rem; }
+.bond-row .pb-field { flex: 1; min-width: 0; }
+.remove-bond-btn {
+  flex-shrink: 0;
+  width: 26px; height: 26px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: color 0.15s, border-color 0.15s;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Share Tech Mono', monospace;
+}
+.remove-bond-btn:hover { color: #e74c3c; border-color: #e74c3c; }

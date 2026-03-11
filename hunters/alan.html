@@ -175,11 +175,11 @@
       <li class="check-item" data-check-key="gear-letters"><span class="check-box"></span><span><span class="check-name">Letters or emails from home</span><span class="check-roll">memento</span></span></li>
     </ul>
 
-    <div class="playbook-section-label">// BONDS</div>
-    <div class="pb-block">
-      <input class="pb-field" type="text" data-sheet="bonds" data-sheet-idx="0" placeholder="Bond 1…">
-      <input class="pb-field" type="text" data-sheet="bonds" data-sheet-idx="1" placeholder="Bond 2…">
-      <input class="pb-field" type="text" data-sheet="bonds" data-sheet-idx="2" placeholder="Bond 3…">
+    <div class="playbook-section-label">// BONDS <button class="hide-toggle" onclick="addBond()">// + ADD</button></div>
+    <div class="pb-block" id="bonds-container">
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 1…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 2…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 3…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
     </div>
 
     <div class="playbook-section-label">// NOTES</div>

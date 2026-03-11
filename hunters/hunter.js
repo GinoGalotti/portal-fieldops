@@ -120,16 +120,15 @@
       sheet[name] = count;
     });
 
-    // Array fields: data-sheet + data-sheet-idx
+    // Scalar fields (notes textarea, etc.)
     document.querySelectorAll('[data-sheet]').forEach(function (el) {
       var key = el.dataset.sheet;
-      var idx = el.dataset.sheetIdx !== undefined ? parseInt(el.dataset.sheetIdx, 10) : NaN;
-      if (!isNaN(idx)) {
-        if (!Array.isArray(sheet[key])) sheet[key] = [];
-        sheet[key][idx] = el.value;
-      } else {
-        sheet[key] = el.value;
-      }
+      sheet[key] = el.value;
+    });
+
+    // Dynamic bonds
+    document.querySelectorAll('#bonds-container .bond-input').forEach(function (inp) {
+      sheet.bonds.push(inp.value);
     });
 
     // Hunter-specific special inputs
@@ -164,16 +163,18 @@
       });
     });
 
-    // Array and scalar fields
+    // Scalar fields
     document.querySelectorAll('[data-sheet]').forEach(function (el) {
       var key = el.dataset.sheet;
-      var idx = el.dataset.sheetIdx !== undefined ? parseInt(el.dataset.sheetIdx, 10) : NaN;
-      if (!isNaN(idx)) {
-        if (sheet[key] && sheet[key][idx] !== undefined) el.value = sheet[key][idx];
-      } else {
-        if (sheet[key] !== undefined) el.value = sheet[key];
-      }
+      if (sheet[key] !== undefined) el.value = sheet[key];
     });
+
+    // Dynamic bonds — rebuild rows from saved array
+    var bc = document.getElementById('bonds-container');
+    if (bc && sheet.bonds && sheet.bonds.length > 0) {
+      bc.innerHTML = '';
+      sheet.bonds.forEach(function (val) { createBondRow(val); });
+    }
 
     // Special inputs
     document.querySelectorAll('.pb-special-input[data-special-idx]').forEach(function (inp) {
@@ -341,6 +342,47 @@
   document.querySelectorAll('.stat-input, [data-sheet], .pb-special-input').forEach(function (el) {
     el.addEventListener('input', save);
   });
+
+  // Dynamic bond rows
+  function createBondRow(val) {
+    var bc = document.getElementById('bonds-container');
+    if (!bc) return;
+    var row = document.createElement('div');
+    row.className = 'bond-row';
+    var inp = document.createElement('input');
+    inp.type = 'text';
+    inp.className = 'pb-field bond-input';
+    inp.placeholder = 'Bond…';
+    inp.value = val || '';
+    inp.addEventListener('input', save);
+    var btn = document.createElement('button');
+    btn.className = 'remove-bond-btn';
+    btn.textContent = '−';
+    btn.title = 'Remove bond';
+    btn.addEventListener('click', function () {
+      if (bc.querySelectorAll('.bond-row').length > 1) { row.remove(); save(); }
+    });
+    row.appendChild(inp);
+    row.appendChild(btn);
+    bc.appendChild(row);
+  }
+
+  window.addBond = function () { createBondRow(''); save(); };
+
+  // Wire static initial bond rows (loaded from HTML before applySheet runs)
+  (function () {
+    var bc = document.getElementById('bonds-container');
+    if (!bc) return;
+    bc.querySelectorAll('.bond-input').forEach(function (inp) {
+      inp.addEventListener('input', save);
+    });
+    bc.querySelectorAll('.remove-bond-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var row = btn.closest('.bond-row');
+        if (bc.querySelectorAll('.bond-row').length > 1) { row.remove(); save(); }
+      });
+    });
+  }());
 
   // Checklists: move, gear, improvement items
   document.querySelectorAll('.check-item:not(.mandatory)').forEach(function (el) {
