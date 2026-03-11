@@ -201,7 +201,15 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
   <p class="hero-desc">
     A private research laboratory at the edge of what science can explain. You are among the few who know what we actually do here. This archive documents what the field teams have encountered — and what they have brought back.
   </p>
-  <div class="oracle-readout">
+  <div class="oracle-readout" data-session-from="w1" data-session-until="w1">
+    <span class="o-label">// CAMPBELL — SYSTEM STATUS</span>
+    ACTIVE CASES: <span class="o-amber">1</span><br>
+    ANOMALIES FLAGGED THIS MONTH: <span class="o-green">1</span><br>
+    FIELD TEAMS DEPLOYED: <span class="o-green">1</span><br>
+    SUBSTANCES UNDER ANALYSIS: <span class="o-amber">0</span><br>
+    LAST DIRECTIVE ISSUED: <span class="o-amber">ACTIVE — KELLER UNIVERSITY</span>
+  </div>
+  <div class="oracle-readout" data-session-from="w2">
     <span class="o-label">// CAMPBELL — SYSTEM STATUS</span>
     ACTIVE CASES: <span class="o-amber">3</span><br>
     ANOMALIES FLAGGED THIS MONTH: <span class="o-green">4</span><br>
@@ -219,7 +227,24 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
   </div>
   <div class="sessions-grid">
 
-    <div class="session-card">
+    <!-- SESSION 01 — W1 (active) -->
+    <div class="session-card" data-session-from="w1" data-session-until="w1">
+      <div class="session-meta">
+        <span class="session-num">// SESSION 01</span>
+        <span class="session-status active">ACTIVE</span>
+      </div>
+      <div class="session-title">A Promise is a Promise</div>
+      <div class="session-excerpt">
+        CAMPBELL has flagged an unclassified particulate at Keller University — three incidents in four weeks, one critical. The field team is deployed. The substance does not match anything on record.
+      </div>
+      <div class="session-redacted">
+        LOCATION: Keller University &nbsp;·&nbsp;
+        ENTITY TYPE: <span class="redact">████████████████</span> &nbsp;·&nbsp;
+        DIRECTIVE STATUS: <span class="redact">██████ PENDING</span>
+      </div>
+    </div>
+    <!-- SESSION 01 — W2+ (completed) -->
+    <div class="session-card" data-session-from="w2">
       <div class="session-meta">
         <span class="session-num">// SESSION 01</span>
         <span class="session-status completed">COMPLETED</span>
@@ -235,7 +260,8 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
       </div>
     </div>
 
-    <div class="session-card">
+    <!-- SESSION 02 — W2+ (active) -->
+    <div class="session-card" data-session-from="w2">
       <div class="session-meta">
         <span class="session-num">// SESSION 02</span>
         <span class="session-status active">ACTIVE</span>
@@ -251,7 +277,8 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
       </div>
     </div>
 
-    <div class="session-card" style="opacity:0.5;">
+    <!-- SESSION 03 — W2+ placeholder -->
+    <div class="session-card" style="opacity:0.5;" data-session-from="w2">
       <div class="session-meta">
         <span class="session-num">// SESSION 03</span>
         <span class="session-status upcoming">UPCOMING</span>
@@ -321,7 +348,21 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
   </div>
   <div class="bestiary-grid">
 
-    <div class="beast-card" data-threat="THREAT LEVEL: 2">
+    <!-- ESZTER — W1 (active, pre-resolution) -->
+    <div class="beast-card" data-threat="THREAT LEVEL: ?" data-session-from="w1" data-session-until="w1">
+      <div class="beast-name">Eszter</div>
+      <div class="beast-type">// CLASS: UNCONFIRMED — INCORPOREAL</div>
+      <div class="beast-desc">
+        CAMPBELL has flagged an unclassified entity at Keller University. Linked to a physical anchor object — a small ash locket. Manifests as a young woman. Leaves grey ash residue at incident sites. Associated with harm to individuals near the anchor's keeper.
+      </div>
+      <div class="beast-classified blurred">
+        ⚠ WEAKNESSES: UNDER FIELD ASSESSMENT<br>
+        ANCHOR OBJECT: Located — recovery directive active
+      </div>
+      <div class="blur-notice">⚠ FULL PROFILE UNLOCKS POST-SESSION 01</div>
+    </div>
+    <!-- ESZTER — W2+ (resolved, fully revealed) -->
+    <div class="beast-card" data-threat="THREAT LEVEL: 2" data-session-from="w2">
       <div class="beast-name">Eszter</div>
       <div class="beast-type">// CLASS: INCORPOREAL SPIRIT — EXECUTIONER</div>
       <div class="beast-desc">
@@ -333,7 +374,8 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
       </div>
     </div>
 
-    <div class="beast-card" data-threat="THREAT LEVEL: ?">
+    <!-- CARTOGRAPHER — W2 (active, blurred) -->
+    <div class="beast-card" data-threat="THREAT LEVEL: ?" data-session-from="w2" data-session-until="w2">
       <div class="beast-name blurred">The Cartographer</div>
       <div class="beast-type blurred">// CLASS: SPATIAL ENTITY — COLLECTOR</div>
       <div class="beast-desc blurred">
@@ -344,6 +386,19 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
         EPICENTRE: UNDER INVESTIGATION — 14 Aldermoor Crescent
       </div>
       <div class="blur-notice">⚠ FULL PROFILE UNLOCKS POST-SESSION 02</div>
+    </div>
+
+    <!-- CARTOGRAPHER — W3+ (contained, fully revealed) -->
+    <div class="beast-card" data-threat="THREAT LEVEL: 3" data-session-from="w3">
+      <div class="beast-name">The Cartographer</div>
+      <div class="beast-type">// CLASS: SPATIAL ENTITY — COLLECTOR (URBAN SPRAWLER)</div>
+      <div class="beast-desc">
+        A pre-urban consciousness that predates the neighbourhood — possibly the city. Has no body. Has no malice. It holds something like memory, something like attention, something like longing. When residents truly knew their streets, it fed symbiotically on that familiarity. The construction site excavation at the Aldermoor District reservoir broke its containment and it expanded — consuming the cognitive maps of long-term residents without understanding it was taking something they could not replace. It does not initiate harm. It only wants to be known the way it once was.
+      </div>
+      <div class="beast-classified">
+        ⚠ WEAKNESS: COMMUNICATION — any genuine attempt to make contact (voluntarily releasing spatial anchor) allows Use Magic or Act Under Pressure. The entity does not resist someone who is trying to understand it.<br>
+        STATUS: Contained — boundary re-established at excavation site. Entity retracted to pre-expansion range. Residents' navigation gradually recovering. Diane Marsh: extracted. Margaret Holt: elected to remain. Entity is quiet. It knows the field team now.
+      </div>
     </div>
 
   </div>
@@ -383,7 +438,7 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
       <div class="lore-text">
         The lab's primary long-term research thread. Details are above most field team clearance levels. What is known: certain materials recovered from field operations have the potential to accelerate it significantly. The Director considers it the most important work the lab is doing.
       </div>
-      <div class="lore-classified">
+      <div class="lore-classified" data-session-from="w2">
         ⚠ UPDATE — POST SESSION 01: Trace particulate recovered from the Keller University incident is currently under analysis. Early results are of significant interest to this project. The field team is not required to be informed at this stage.
       </div>
     </div>
@@ -409,7 +464,26 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
   </div>
   <div class="artefact-list">
 
-    <div class="artefact-card">
+    <!-- ART-001 — W1 (active, pre-recovery) -->
+    <div class="artefact-card" data-session-from="w1" data-session-until="w1">
+      <div class="artefact-id">
+        ART-001<br>
+        SESSION 01<br>
+        STATUS:<br>PENDING RECOVERY
+      </div>
+      <div>
+        <div class="artefact-name">The Ash Locket</div>
+        <div class="artefact-desc">
+          CAMPBELL has flagged a physical anchor object — a small gold locket associated with the Keller University entity. Warm to the touch at all ambient temperatures. Lab directive: priority acquisition. Locket is believed to be in the possession of the entity's charge.
+        </div>
+        <div class="artefact-desc" style="margin-top:10px;font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.08em;line-height:1.9;color:var(--green-dim);">
+          // LAB DIRECTIVE — ACTIVE<br>
+          Acquire and transport intact. No field analysis until locket is secured. Handle with standard anomalous-object protocols.
+        </div>
+      </div>
+    </div>
+    <!-- ART-001 — W2+ (lab analysis ongoing) -->
+    <div class="artefact-card" data-session-from="w2">
       <div class="artefact-id">
         ART-001<br>
         SESSION 01<br>
@@ -428,7 +502,8 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
       </div>
     </div>
 
-    <div class="artefact-card">
+    <!-- ART-002 — W2 (blurred/pending) -->
+    <div class="artefact-card" data-session-from="w2" data-session-until="w2">
       <div class="artefact-id">
         ART-002<br>
         SESSION 02<br>
@@ -443,7 +518,27 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
       </div>
     </div>
 
-    <div class="artefact-card" style="opacity:0.4;">
+    <!-- ART-002 — W3+ (recovered, in lab) -->
+    <div class="artefact-card" data-session-from="w3">
+      <div class="artefact-id">
+        ART-002<br>
+        SESSION 02<br>
+        STATUS:<br>LAB POSSESSION
+      </div>
+      <div>
+        <div class="artefact-name">Diane Marsh's Field Notebook</div>
+        <div class="artefact-desc">
+          Nine days of observations recorded from inside the Aldermoor displacement zone by district nurse Diane Marsh, 58. Charted intensity cycles, navigation windows, street-by-street behaviour. Contains a hand-drawn sketch of a threshold-shaped shadow in the excavation substrate — described as "a door-shaped shadow in the rock — not a door, but the memory of one." Drawn at dawn, three days before extraction. Object of interest to multiple researchers. Significance of threshold sketch: under assessment.
+        </div>
+        <div class="artefact-desc" style="margin-top:10px;font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.08em;line-height:1.9;color:var(--green-dim);">
+          // LAB ANALYSIS — ONGOING<br>
+          Notebook constitutes the most detailed first-person account of spatial consciousness displacement recovered to date. Threshold sketch cross-referenced against known liminal boundary maps. Flagged for operative Alan Frazier's review — possible resonance with Changeling geographic sensitivity. Research continues.
+        </div>
+      </div>
+    </div>
+
+    <!-- ART-??? — W2+ placeholder -->
+    <div class="artefact-card" style="opacity:0.4;" data-session-from="w2">
       <div class="artefact-id">
         ART-???<br>
         SESSION ??<br>
@@ -506,11 +601,11 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
   <span>CAMPBELL v<span id="ver"></span> // ALL CONTENT CLASSIFIED</span>
 </footer>
 
+<script src="session-state.js"></script>
 <script>
   // Fake version number for flavour
   document.getElementById('ver').textContent =
     '2.' + Math.floor(Math.random()*9+1) + '.' + Math.floor(Math.random()*99+10);
-
 </script>
 
 </body>

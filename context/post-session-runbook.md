@@ -31,9 +31,43 @@ After each session, updates happen in two stages:
 
 ## Stage 2 — Before Next Session (Claude Code session)
 
-Hand Claude this file + `portal-architecture.md` + `worldbuilding.md` + the Keeper Field Report markdown.
+Hand Claude this file + `portal-architecture.md` + `worldbuilding-site.md` + `worldbuilding-lore.md` + the Keeper Field Report markdown.
 
 Work through the checklist below in order. Not every item applies every session — mark what's needed.
+
+---
+
+### 2.0 — Advance the Campaign Session
+
+This step updates the session-aware content system so player pages reflect the new state.
+
+**a) Update `data/sessions.json`:**
+- Mark the just-completed session `"status": "closed"`
+- Add a new entry for the incoming session (`"status": "active"`)
+
+```json
+{ "id": "w3", "label": "WEEK 03", "title": "Mission Title", "status": "active" }
+```
+
+**b) Author W-next HTML content variants in player-facing pages:**
+
+For each session that just resolved, existing player pages need a "post-resolution" variant:
+
+- **`missions/missions.html`** — add `data-session-from="wN+1"` COMPLETED card for the resolved mission; the ACTIVE card already has `data-session-until="wN"`
+- **`index.html`** — add COMPLETED variants for the session archive card, fully-revealed beast card, and any recovered artefact cards with `data-session-from="wN+1"`
+- **`missions/contacts.html`** — add `data-session-from="wN+1"` wrappers for any NPCs now visible for the first time
+
+Use the existing W1→W2 HTML variants as a template. The pattern is always: old card gets `data-session-until="wN"`, new card gets `data-session-from="wN+1"`.
+
+**c) Update NPC `session_overrides` in `data/portal-npcs.json`:**
+- For each NPC first revealed in this session, add a `"wN+1"` entry in `session_overrides` with the post-resolution `player_description`
+- Set `available_from_session` to the session when they first appear in contacts.html
+
+**d) Update entity `session_overrides` in `data/portal-entities.json`:**
+- For any resolved entity, set the `"wN+1"` override: `"blurred": false`, full player-facing description
+- Update `status` field: `"active"` → `"resolved"` / `"contained"` / `"escalated"`
+
+**e) The Keeper toggle in D1 does not need to be changed in code** — when the Keeper is ready for players to see the new session, they click the new week button in the keeper banner on any keeper page. This updates D1 and all player pages reflect it immediately.
 
 ---
 
@@ -166,16 +200,19 @@ Or ask Claude to query all reports for a week and summarise the ratings and key 
 - [ ] `reports/sN-[title].html` — player-facing post-session memo (if written)
 
 ### Files to modify (every session)
+- [ ] `data/sessions.json` — add new session entry, mark previous `"closed"` (step 2.0a)
 - [ ] `missions/briefings/index.json` — add new week entry, close previous
 - [ ] `missions/report.html` — add new session to `SESSIONS` config
 - [ ] `reports/player-report.html` — add new week to `WEEKS` config
-- [ ] `data/portal-npcs.json` — update status, keeper notes, visibility
-- [ ] `data/portal-entities.json` — update entity status
-- [ ] `context/worldbuilding.md` — update lore, NPC relationships, confirmed facts
+- [ ] `data/portal-npcs.json` — update status, `session_overrides` for newly-revealed NPCs, `keeper_scene_notes` for next mission (step 2.0c)
+- [ ] `data/portal-entities.json` — update entity status, `session_overrides` for resolved/changed entities (step 2.0d)
+- [ ] `context/worldbuilding-lore.md` — update lore, NPC relationships, confirmed facts
 - [ ] `context/post-session-runbook.md` — update this file if the workflow changes
 
 ### Files to modify (when needed)
-- [ ] `missions/contacts.html` — update visible NPCs
+- [ ] `missions/missions.html` — add W-next session-aware card variants (step 2.0b)
+- [ ] `index.html` — add W-next session-aware variants for archive, bestiary, artefacts (step 2.0b)
+- [ ] `missions/contacts.html` — add W-next contact sections for newly-visible NPCs (step 2.0b)
 - [ ] `missions/arcs.html` — arc tracker (if beats were missed or need manual correction)
 - [ ] `context/portal-architecture.md` — update if infrastructure changes
 - [ ] `workers/migrations/` — new SQL if new DB tables added

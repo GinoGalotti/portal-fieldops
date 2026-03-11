@@ -58,15 +58,18 @@ portal-fieldops/
 │   ├── motw-playbooks.json        # Active hunter playbooks (Action Scientist, Sidekick, Changeling, Monstrous, Flake)
 │   ├── motw-teambooks.json        # Research Lab team playbook (PORTAL's active team book)
 │   ├── portal-custom-moves.json   # MESA equipment moves + house rules
+│   ├── sessions.json              # Session registry — id, label, title, status (drives keeper toggle + session-state.js)
 │   ├── hunters.json               # Hunter starting states + player choices seed data
-│   ├── portal-npcs.json           # Full NPC roster with player/keeper description split
-│   └── portal-entities.json       # Entity/threat database for keeper command board
+│   ├── portal-npcs.json           # Full NPC roster with player/keeper description split, session_overrides, keeper_scene_notes
+│   └── portal-entities.json       # Entity/threat database; session_overrides controls player bestiary visibility
 │
+├── session-state.js           # Shared session resolution + DOM visibility + keeper toggle injection
 ├── functions/                 # CF Pages Functions (serverless API, auto-routed)
 │   └── api/v1/
 │       ├── hunters/[id]/arc-state.js          # GET + PUT hunter arc state → D1
 │       ├── reports/[id]/state.js              # GET + PUT keeper field report per session → D1
-│       └── player-reports/[week]/[hunter]/state.js  # GET + PUT player debrief per week+hunter → D1
+│       ├── player-reports/[week]/[hunter]/state.js  # GET + PUT player debrief per week+hunter → D1
+│       └── session/active.js                 # GET active session from D1; PUT to set (keeper toggle)
 │
 ├── workers/                   # Cloudflare Workers API (Phase 3+)
 │   ├── schema.sql             # D1 schema — already applied to remote DB
@@ -125,6 +128,17 @@ Migrations are numbered files in `workers/migrations/`. Each must be applied to 
 ```bash
 wrangler d1 execute portal-db --file=workers/migrations/001_arc_state.sql          # local
 wrangler d1 execute portal-db --file=workers/migrations/001_arc_state.sql --remote # remote
+```
+
+**Migration 004 — `active_session`** (applied ✅ local + remote)
+
+```sql
+CREATE TABLE IF NOT EXISTS active_session (
+  id         TEXT PRIMARY KEY DEFAULT 'global',
+  session_id TEXT NOT NULL DEFAULT 'w2',
+  updated_at TEXT DEFAULT (datetime('now'))
+);
+INSERT OR IGNORE INTO active_session (id, session_id) VALUES ('global', 'w2');
 ```
 
 **Migration 001 — `hunter_arc_state`** (applied ✅)
@@ -312,6 +326,8 @@ GET  /api/v1/reports/:id/state                      → keeper field report for 
 PUT  /api/v1/reports/:id/state                      → upsert keeper field report (no auth)
 GET  /api/v1/player-reports/:week/:hunter/state     → player debrief for week+hunter (no auth)
 PUT  /api/v1/player-reports/:week/:hunter/state     → upsert player debrief (no auth)
+GET  /api/v1/session/active                         → { session_id } — active session from D1 (no auth)
+PUT  /api/v1/session/active                         → { session_id } — set active session; keeper toggle only
 ```
 
 **Planned (Phase 3, Workers):**

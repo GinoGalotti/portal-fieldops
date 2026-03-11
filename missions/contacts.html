@@ -32,8 +32,8 @@
   <div class="filter-bar">
     <button class="filter-btn active" data-filter="all">// ALL</button>
     <button class="filter-btn" data-filter="portal">// PORTAL PERSONNEL</button>
-    <button class="filter-btn" data-filter="s01">// S01 — A PROMISE IS A PROMISE</button>
-    <button class="filter-btn" data-filter="s02">// S02 — SOMETHING THAT WANTS TO BE KNOWN</button>
+    <button class="filter-btn" data-filter="s01" data-session-from="w2">// S01 — A PROMISE IS A PROMISE</button>
+    <button class="filter-btn" data-filter="s02" data-session-from="w3">// S02 — SOMETHING THAT WANTS TO BE KNOWN</button>
   </div>
 
   <!-- PORTAL PERSONNEL -->
@@ -142,6 +142,7 @@
   </div>
 
   <!-- S01 CONTACTS -->
+  <div data-session-from="w2">
   <div class="section-header-sm section-gap">
     <h2>S01 — A Promise is a Promise</h2>
     <span class="section-tag">// KELLER UNIVERSITY · CASE CLOSED</span>
@@ -181,8 +182,10 @@
     </div>
 
   </div>
+  </div><!-- /data-session-from="w2" -->
 
   <!-- S02 CONTACTS -->
+  <div data-session-from="w3">
   <div class="section-header-sm section-gap">
     <h2>S02 — Something That Wants to Be Known</h2>
     <span class="section-tag">// ALDERMOOR DISTRICT · ACTIVE DEPLOYMENT</span>
@@ -256,9 +259,11 @@
     </div>
 
   </div>
+  </div><!-- /data-session-from="w3" -->
 
 </main>
 
+<script src="../session-state.js"></script>
 <script>
 document.querySelectorAll('.filter-btn').forEach(function(btn) {
   btn.addEventListener('click', function() {
