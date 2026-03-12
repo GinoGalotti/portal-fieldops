@@ -1,7 +1,2 @@
+temp-message.txt
 .env
-.claude
-__pycache__/
-.wrangler/
-node_modules/
-test-results/
-playwright-report/
