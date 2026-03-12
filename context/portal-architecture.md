@@ -98,7 +98,9 @@ portal-fieldops/
 │   │   ├── 004_active_session.sql # active_session ✅ remote + local
 │   │   ├── 005_hunter_sheets.sql  # hunter_sheets ✅ remote + local
 │   │   ├── 006_team_state.sql     # team_state ✅ remote + local
-│   │   └── 007_feed_tables.sql    # rolls + messages ✅ remote + local
+│   │   ├── 007_feed_tables.sql    # rolls + messages ✅ remote + local
+│   │   ├── 008_incident_responses.sql # incident_responses ✅ remote + local
+│   │   └── 009_incident_state.sql     # incident_state ✅ local (apply --remote when ready)
 │   └── src/                   # (Phase 3) Workers source
 │       ├── index.ts           # Main router
 │       └── routes/
@@ -549,6 +551,38 @@ Hunter pages renamed to `hunters/[name].html` (alan, rex, reed, sven). Each has 
 | Arc story | D1 `hunter_arc_state` | Beat fills, resolution picks, open-text answers |
 
 **Feed rendering logic (planned):** load D1 sheet → check which `check-key` values are true → look up each in `playbook-moves.json` → render move cards. `always_active_moves` from the same file render unconditionally.
+
+### Phase 2.10 — Incident Log: Data-Driven Refactor + D1 Save (COMPLETE)
+
+`lab-incidents.html` — between-session incident log page.
+- Fully data-driven: all content extracted to `data/incidents.json` (week-indexed)
+- **Week tabs** (W1 closed empty state, W2 active with 3 incidents + teaser) — built from JSON at runtime
+- **Incident types:** `choice` (3-button + optional custom text), `open` (freetext, multi-submit), `informational` (read-only), `teaser` (email + log excerpts, read-only)
+- **Block types rendered by JS:** `narrative`, `campbell`, `callout`, `email`, `log-excerpt`
+- **SAVE RESPONSES button** — single end-of-page button collects all `choice` answers for the active week → `PUT /api/v1/incidents/{week}/state` → locks choice buttons; also writes `localStorage('portal-incident-state-{week}')`
+- **Open incidents** (S01-I02) keep independent SUBMIT button → `POST /api/v1/incidents/{id}/responses`
+- State blob shape: `{ "S01-I01": { type, choice, custom, question_snapshot, locked, saved_at } }`
+
+**New D1 table — `incident_state`** (migration 009):
+```sql
+CREATE TABLE IF NOT EXISTS incident_state (
+  week       TEXT PRIMARY KEY,
+  state      TEXT NOT NULL DEFAULT '{}',
+  updated_at TEXT
+);
+```
+
+**New API endpoints:**
+- `GET  /api/v1/incidents/{week}/state` → returns state blob for week (or `{}`)
+- `PUT  /api/v1/incidents/{week}/state` → `INSERT OR REPLACE` with new state blob
+- `GET  /api/v1/incidents/{id}/responses` → all open responses for incident (keeper export)
+- `POST /api/v1/incidents/{id}/responses` → submit open response (existing, migration 008)
+
+**Key files:**
+- `data/incidents.json` — week-indexed incident data (all content, all block types)
+- `functions/api/v1/incidents/[id]/state.js` — GET+PUT incident state (week is `params.id`)
+- `functions/api/v1/incidents/[id]/responses.js` — GET+POST open responses (existing)
+- `workers/migrations/009_incident_state.sql` — new table (applied local; apply --remote before deploy)
 
 ### Phase 2.9 — The Lab Team Playbook Page (COMPLETE)
 

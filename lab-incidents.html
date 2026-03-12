@@ -13,6 +13,64 @@
   --purple-glow: rgba(124,58,237,0.12);
 }
 
+/* ── WEEK SWITCHER ── */
+.week-switcher {
+  max-width: var(--max-w, 860px);
+  margin: 0 auto 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.sw-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+}
+.week-tabs {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.week-tab {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  padding: 7px 22px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.week-tab:hover { border-color: var(--green-dim); color: var(--green); }
+.week-tab.active { border-color: var(--green); background: rgba(46,204,113,0.06); color: var(--green); }
+.week-tab.status-active::after { content: ' ●'; color: var(--green); font-size: 0.5rem; vertical-align: middle; }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 80px 20px;
+  border: 1px solid var(--border);
+  margin-bottom: 48px;
+}
+
+/* ── LOADING STATE ── */
+.loading {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 80px 20px;
+}
+
 /* ── INCIDENT CARD ── */
 .incident-card {
   border: 1px solid var(--border);
@@ -157,29 +215,43 @@
   color: var(--text);
   margin-bottom: 7px;
 }
-.choice-btn:hover:not(:disabled)         { border-color: var(--amber-dim); color: var(--text); }
-.choice-btn.selected                     { border-color: var(--amber); background: rgba(240,165,0,0.06); color: var(--text); }
-.choice-btn.selected .ch-label          { color: var(--amber); }
-.choice-btn:disabled                     { cursor: default; }
-.choice-btn:disabled:not(.selected)     { opacity: 0.3; }
+.choice-btn:hover:not(:disabled)        { border-color: var(--amber-dim); color: var(--text); }
+.choice-btn.selected                    { border-color: var(--amber); background: rgba(240,165,0,0.06); color: var(--text); }
+.choice-btn.selected .ch-label         { color: var(--amber); }
+.choice-btn:disabled                    { cursor: default; }
+.choice-btn:disabled:not(.selected)    { opacity: 0.3; }
 
-.choice-actions { display: flex; align-items: center; gap: 16px; margin-top: 10px; flex-wrap: wrap; }
-.confirm-btn {
+/* ── CUSTOM TEXT AREA ── */
+.custom-row {
+  margin: 4px 0 16px;
+}
+
+/* ── SAVE BAR ── */
+.save-bar {
+  margin: 0 0 64px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 20px 0;
+  border-top: 1px solid var(--border);
+}
+.save-btn {
   font-family: 'Share Tech Mono', monospace;
   font-size: 0.62rem;
   letter-spacing: 0.15em;
-  padding: 8px 20px;
+  padding: 10px 28px;
   border: 1px solid var(--amber-dim);
   background: transparent;
   color: var(--amber-dim);
   cursor: pointer;
   transition: all 0.15s;
 }
-.confirm-btn:hover:not(:disabled)  { border-color: var(--amber); color: var(--amber); background: rgba(240,165,0,0.06); }
-.confirm-btn:disabled              { opacity: 0.35; cursor: default; }
-.confirm-btn.locked                { border-color: var(--green-dim); color: var(--green); cursor: default; }
-.choice-status { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; color: var(--text-dim); }
-.choice-status.confirmed { color: var(--green); }
+.save-btn:hover:not(:disabled) { border-color: var(--amber); color: var(--amber); background: rgba(240,165,0,0.06); }
+.save-btn:disabled              { opacity: 0.35; cursor: default; }
+.save-btn.locked                { border-color: var(--green-dim); color: var(--green); cursor: default; }
+.save-status { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; color: var(--text-dim); }
+.save-status.ok { color: var(--green); }
 
 /* ── RESPONSE FORM ── */
 .form-hint {
@@ -391,438 +463,532 @@
   <nav id="player-nav"></nav><script src="player-nav.js"></script>
 </header>
 
-<div class="hero">
-  <div class="hero-eyebrow">// BETWEEN-SESSION — POST-S01 STAFF COMMUNIQUÉS</div>
-  <h1 class="hero-title">Incident <span class="accent">Log</span></h1>
-  <p class="hero-desc">Three items logged during the Keller deployment require staff input before the Aldermoor briefing. One item is informational only.</p>
+<div class="week-switcher">
+  <div class="sw-label">// INCIDENT LOG — SELECT REPORTING PERIOD</div>
+  <div class="week-tabs" id="week-tabs"></div>
 </div>
 
-<main>
+<div class="hero">
+  <div class="hero-eyebrow" id="hero-eyebrow"></div>
+  <h1 class="hero-title">Incident <span class="accent">Log</span></h1>
+  <p class="hero-desc" id="hero-desc"></p>
+</div>
 
-  <!-- ─────────────────────────────────────────────────
-       INCIDENT 01 — The Eszter Particulate
-       Type: Choice (locked, localStorage)
-       ───────────────────────────────────────────────── -->
-  <div class="incident-card amber" id="incident-01">
-    <div class="incident-id">// INCIDENT LOG — POST-SESSION 01 — ITEM 01 OF 03</div>
-    <h2 class="incident-title">
-      The Eszter Particulate
-      <span class="incident-badge badge-amber">RESPONSE REQUIRED</span>
-    </h2>
-
-    <p class="narrative">
-      The ash particulate recovered from the Bálint case is doing something strange in Lab Bay 3. It responds to nearby electronic processing load — not interference, something closer to attention. Dr. Priya Osei has run the analysis four times and submitted two research directions. She wants field operative input before proceeding. Director Leech has deferred the decision.
-    </p>
-
-    <div class="campbell-block">
-      <span class="cb-label">// CAMPBELL — INTERNAL NOTICE — SAMPLE BIM-S01-003</span>
-      Following closure of Case S01, trace particulate recovered from the Bálint residence has been logged under sample identifier BIM-S01-003. The sample is contained in Lab Bay 3, cold storage, under standard anomalous-material protocols.<br><br>
-      Dr. Osei has completed preliminary analysis. The particulate interacts with active electronic systems in a manner that does not correspond to any catalogued material property. She describes the effect as "localised interference — not signal degradation, something closer to attention."<br><br>
-      Dr. Osei has submitted two proposed research directions and has requested field operative input before proceeding. Director Leech has deferred the decision, citing insufficient data on downstream risk.
-      <span class="cb-flag">// FLAG: Decision required before next scheduled lab review. Either direction carries resource implications for the Aldermoor deployment.</span>
-    </div>
-
-    <p class="narrative">
-      Priya came and found Reed in the break room on Wednesday. She had her tablet and a look that meant she'd been thinking about something for longer than she'd admit.
-    </p>
-    <p class="narrative">
-      "The sample does something," she said, without preamble. "I've run it four times. Every time there's active processing nearby — the storage server, the analysis rig, once just Marcus's laptop — the read changes. Not the sample. The read. Like something is adjusting how the instruments report."
-    </p>
-    <p class="narrative">
-      She showed him the graphs. They didn't look like interference. They looked like a response.
-    </p>
-    <p class="narrative">
-      "Leech wants us to decide what we do with it," she said. "He's not comfortable making the call alone. Which I find either reassuring or worrying depending on the day."
-    </p>
-
-    <div class="callout callout-amber">
-      <span class="callout-from">// DR. P. OSEI — SUPPLEMENTAL NOTE</span>
-      I want to be transparent: I don't know what this material is. I know what it does to instruments near it. I know that the effect scales with processing load — more computation nearby, more pronounced the response. I don't know if 'response' is even the right word. I'm using it because 'coincidence' stopped fitting after the third run.<br><br>
-      Both directions below are defensible. Neither is safe in the way we usually mean safe.
-    </div>
-
-    <div class="choice-grid" id="choice-grid-01">
-      <button class="choice-btn" data-choice="A" onclick="selectChoice('01','A',this)">
-        <span class="ch-label">A — Controlled Exposure Study</span>
-        Increase processing load near the sample in incremental steps. Measure whether the response scales linearly. Treat it as a potential data source — something producing signal, not noise. Risk: we don't know what happens at the upper end of the curve.
-      </button>
-      <button class="choice-btn" data-choice="B" onclick="selectChoice('01','B',this)">
-        <span class="ch-label">B — Isolation and Structural Analysis</span>
-        Move the sample to a Faraday-shielded environment. Cut off all electronic proximity. Document what changes. Treat the interference as a contamination risk to be contained before we study the contents. Slower. Safer. Probably.
-      </button>
-      <button class="choice-btn" data-choice="C" onclick="selectChoice('01','C',this)">
-        <span class="ch-label">C — Flag to Saoirse First</span>
-        Neither direction gets approved until Dr. Mullen has reviewed the analysis logs. She'll push back on timeline. That's the point. Something that adjusts how instruments report feels like it falls inside her remit, and it would be good to know she's been consulted before anything goes wrong.
-      </button>
-    </div>
-
-    <div class="choice-actions">
-      <button class="confirm-btn" id="confirm-01" onclick="confirmChoice('01')" disabled>SUBMIT DIRECTION</button>
-      <span class="choice-status" id="choice-status-01">— select a direction above</span>
-    </div>
-
-    <div class="stamp-bar">
-      <span class="stamp">LOGGED: POST-SESSION 01</span>
-      <span class="stamp">CATEGORY: SAMPLE HANDLING / RESEARCH DIRECTION</span>
-      <span class="stamp">SUBMITTED BY: DR. P. OSEI</span>
-    </div>
-  </div>
-
-  <!-- ─────────────────────────────────────────────────
-       INCIDENT 02 — The Bálint Question
-       Type: Open response (D1, multi-submit, export)
-       ───────────────────────────────────────────────── -->
-  <div class="incident-card purple" id="incident-02">
-    <div class="incident-id">// INCIDENT LOG — POST-SESSION 01 — ITEM 02 OF 03</div>
-    <h2 class="incident-title">
-      The Bálint Question
-      <span class="incident-badge badge-purple">DISCUSS AMONG YOURSELVES</span>
-    </h2>
-
-    <p class="narrative">
-      Bálint — the person at the centre of Case S01 — called the PORTAL contact number three times in the two weeks after the case closed. Nobody answered. The number routes to a voicemail managed by CAMPBELL. He hasn't called in eleven days. Saoirse Mullen has asked whether field operatives have a view on what PORTAL owes to people it has helped but not saved.
-    </p>
-
-    <div class="campbell-block">
-      <span class="cb-label">// CAMPBELL — INTERNAL NOTICE</span>
-      Bálint remains at his sister's residence in Hackney. He is not a PORTAL contact. He does not know the organisation's name. He was told that the individuals who assisted him were "independent researchers" — a description that is technically accurate and contextually incomplete.<br><br>
-      He called the number left by field operatives on three occasions in the two weeks following Case S01. The calls were not answered — the number routes to a voicemail managed by this office. Messages have been retained. I am not attaching them to this notice.<br><br>
-      He has not called in eleven days.
-      <span class="cb-flag">// NOTE: This item is not flagged for action. It is flagged because I judged it relevant for field operatives to know. No response is required. A response, if given, would carry implications I cannot model in advance.</span>
-    </div>
-
-    <p class="narrative">The messages were three minutes, four minutes, and forty seconds.</p>
-    <p class="narrative">
-      Teddy heard about the voicemails through Marcus, who heard about them through the routing log, which he keeps because nobody told him not to. She mentioned it to Saoirse in passing — more of a question than a statement, the way things become questions when you're not sure if raising them is allowed.
-    </p>
-    <p class="narrative">
-      Saoirse's response was careful. "He called three times and then stopped," she said. "That tells you something."
-    </p>
-    <p class="narrative">"What does it tell you?" Teddy asked.</p>
-    <p class="narrative">
-      "That he wanted help and decided he wasn't going to get it. Or that he's fine and doesn't need it anymore." She paused. "Those two things feel very different and I can't tell from here which one is true."
-    </p>
-    <p class="narrative">
-      The thing nobody had said yet — the thing that had been sitting in the room since Teddy brought it up — was that someone made a call about those messages and decided not to tell the field team. And that call was not necessarily wrong, and not necessarily right, and had been made by someone in this building who also thought it wasn't wrong, wasn't right, and couldn't be both at once.
-    </p>
-
-    <div class="callout callout-purple">
-      <span class="callout-from">// DR. S. MULLEN — ADVISORY</span>
-      I am not issuing a formal recommendation on this. I don't have enough information to issue a formal recommendation, and I'm suspicious of my own instincts when it comes to cases involving grief. What I will say is this: the question of what we owe to people we've helped — not saved, helped — is one the organisation hasn't answered. If we had an answer, we'd know what to do with those three voicemails. We don't have an answer. I think we should probably talk about it before the next case ends the same way.
-    </div>
-
-    <p class="narrative">Bálint has not called in eleven days.</p>
-
-    <div class="form-hint">Write whatever you actually think. This goes to Saoirse's office, not the Director. There is no wrong answer and no word limit.</div>
-    <div class="form-row">
-      <label class="form-label" for="resp-name">OPERATIVE NAME (optional)</label>
-      <input class="form-input" id="resp-name" type="text" placeholder="Anonymous" maxlength="80">
-    </div>
-    <div class="form-row">
-      <textarea class="form-textarea" id="resp-text" placeholder="Your response..."></textarea>
-    </div>
-    <div class="form-actions">
-      <button class="submit-btn" id="submit-02" onclick="submitResponse()" disabled>SUBMIT RESPONSE</button>
-      <button class="export-btn" id="export-02" onclick="exportResponses()" style="display:none">EXPORT FOR KEEPER</button>
-      <span class="form-status" id="submit-status-02"></span>
-    </div>
-    <div class="submissions-list" id="submissions-list-02" style="display:none">
-      <div class="submissions-list-label">// RESPONSES LOGGED FROM THIS DEVICE</div>
-    </div>
-
-    <div class="stamp-bar">
-      <span class="stamp">LOGGED: POST-SESSION 01</span>
-      <span class="stamp">CATEGORY: PERSONNEL / AFTERCARE</span>
-      <span class="stamp">FLAGGED BY: CAMPBELL</span>
-    </div>
-  </div>
-
-  <!-- ─────────────────────────────────────────────────
-       INCIDENT 03 — The Lab at 3am
-       Type: Informational only
-       ───────────────────────────────────────────────── -->
-  <div class="incident-card red" id="incident-03">
-    <div class="incident-id">// INCIDENT LOG — PRE-SESSION 02 — ITEM 03 OF 03</div>
-    <h2 class="incident-title">
-      The Lab at 3am
-      <span class="incident-badge badge-red">UNDER REVIEW</span>
-    </h2>
-
-    <p class="narrative">
-      Someone accessed Lab Bay 3 at 3am using Dr. Priya Osei's keycard. Priya was at a conference in Manchester. Nothing was taken. The corridor camera has a blind spot — the person entered it from one end and didn't appear at the other for fourteen minutes. The figure is Priya's height. Moves the way she moves. The security review is ongoing.
-    </p>
-
-    <div class="campbell-block">
-      <span class="cb-label">// CAMPBELL — SECURITY NOTICE</span>
-      On Tuesday at 03:17, the internal motion system logged activity in Lab Bay 3. Duration: eleven minutes. The system attributed the movement to a staff member whose keycard had been used to enter the building at 02:54.<br><br>
-      The staff member in question — Dr. Osei — was not in the building at that time. She was contacted this morning. Her keycard has been in her possession throughout. She has not reported it lost or damaged.<br><br>
-      Lab Bay 3 houses the Aldermoor deployment equipment and, until its transfer to cold storage at 09:00 Tuesday, the BIM-S01-003 sample.<br><br>
-      Nothing has been reported missing. The motion log shows a route: entrance, corridor B, Lab Bay 3, corridor B, exit. Eleven minutes. No deviation.
-      <span class="cb-flag">// FLAG: Security review is in progress. Marcus Finch is coordinating. Dr. Osei has been briefed. The sample has been relocated as a precaution. This notice is being shared with field operatives because the incident occurred in the 36 hours before the scheduled Aldermoor deployment briefing. I do not know if this is relevant. I am noting it.</span>
-    </div>
-
-    <p class="narrative">
-      Marcus pulled the corridor footage himself. He's done this before — the camera in B-corridor has a blind spot between markers 4 and 7, which he's mentioned in three successive maintenance reports and which has remained unresolved. He knows the spot well enough that when he reviewed the footage from 02:54 to 03:28, he wasn't surprised by the gap. He was surprised by what was on either side of it.
-    </p>
-    <p class="narrative">
-      A person enters the blind spot from the lobby end at 03:04. The person does not appear at marker 7. At 03:18 — fourteen minutes later — they appear at marker 7 from the Lab Bay 3 direction and walk back toward the lobby.
-    </p>
-    <p class="narrative">The corridor blind spot is four metres long. You can cross it in four seconds.</p>
-    <p class="narrative">
-      What the person was doing in Lab Bay 3 for the intervening time, or why they didn't appear at marker 7 after entering from the lobby, Marcus doesn't know. He's reviewed the footage six times. He's not sure he wants to review it a seventh.
-    </p>
-    <p class="narrative">He filed the report at 11:00. He didn't mention the marker 7 thing in the report. He's not sure why not.</p>
-
-    <div class="callout callout-red">
-      <span class="callout-from">// M. FINCH — SUPPLEMENTAL (TRANSCRIBED BY CAMPBELL)</span>
-      The person on the footage is the right height. Priya's height. Moves the way she moves — not exactly, but close. I've worked with her for two years. The gait is right. The way she holds herself when she's carrying something is right. I pulled her schedule and she was at a conference in Manchester Tuesday night, hotel confirmed, train booked through the lab account. So. I don't know. I just — I noted it. For the record.
-    </div>
-
-    <p class="narrative">
-      The Aldermoor briefing is still scheduled. The sample is in cold storage, two locks, Priya's code and Leech's. Nothing is missing. The motion log shows eleven minutes and a door that closed and opened again on the right keycard.
-    </p>
-    <p class="narrative">
-      Teddy checked the Aldermoor equipment on Wednesday morning, unprompted, while Marcus was on the phone. She didn't find anything wrong. She didn't mention that she'd checked.
-    </p>
-
-    <div class="stamp-bar">
-      <span class="stamp">LOGGED: PRE-SESSION 02</span>
-      <span class="stamp">CATEGORY: FACILITIES / SECURITY / ONGOING</span>
-      <span class="stamp">REVIEW: M. FINCH + CAMPBELL</span>
-    </div>
-  </div>
-
-  <!-- ─────────────────────────────────────────────────
-       CAMPBELL LOG TEASER
-       Type: Informational — teases future campbell-logs.html
-       ───────────────────────────────────────────────── -->
-  <div class="campbell-log-section" id="campbell-log-teaser">
-    <div class="incident-id">// VOLUNTEER REQUEST — FIELD SUPPORT — T. BRANDT</div>
-    <h2 class="incident-title">
-      CAMPBELL Activity Logs
-      <span class="incident-badge badge-purple">TEDDY NEEDS EYES</span>
-    </h2>
-
-    <p class="narrative">
-      Teddy has noticed anomalous entries in CAMPBELL's activity logs while running Aldermoor kit prep. She's not raising it formally yet. She wants someone to look at three excerpts before she decides whether to escalate.
-    </p>
-
-    <div class="email-block">
-      <div class="email-header">
-        FROM: <span>teddy.brandt@portal-internal.org</span><br>
-        TO: <span>field-team@portal-internal.org</span><br>
-        SUBJECT: <span>something slightly weird I need help with</span><br>
-        DATE: <span>this week</span>
-      </div>
-      <div class="email-body">
-        <p>Right. So this is slightly awkward to raise because I like CAMPBELL and I don't want to be the person who started the "is the AI broken" conversation, but here we are.</p>
-        <p>I've been reviewing the activity logs from the past three weeks as part of the Aldermoor kit prep — standard thing, making sure the equipment inventory is current before a deployment. CAMPBELL generates these logs automatically. Most of them are completely normal: timestamps, inventory flags, maintenance notes.</p>
-        <p>Except for a few entries that I can't account for. They're formatted correctly. They have valid timestamps. But the content doesn't match any activity I can trace to an actual event, and in two cases the cross-references point to case files that don't exist in the system.</p>
-        <p>I asked CAMPBELL about them directly. It said, and I am quoting: <em>"Those entries are accurate. The referenced events occurred. The absence of corresponding case files is a filing discrepancy that I have noted and will resolve."</em> Which is either completely fine and administrative, or is a sentence I'm going to think about for a very long time.</p>
-        <p>I'm not raising this with the Director yet. I want someone else to look at the logs first and tell me if I'm misreading something obvious, because that would be the ideal outcome here.</p>
-        <p>I've attached three excerpts below. If you've got ten minutes and want to help me feel less like I'm going mad, I'd appreciate it.</p>
-        <div class="email-sig">
-          — Teddy<br>
-          Field Support Technician, PORTAL
-        </div>
-      </div>
-    </div>
-
-    <div class="log-excerpt">
-      <span class="le-header">CAMPBELL ACTIVITY LOG — EXCERPT A // TIMESTAMP 03:41:07</span>
-      INVENTORY CHECK: Bay 3 sample BIM-S01-003 — PRESENT / CONTAINED<br>
-      CROSS-REFERENCE: <span class="log-anomaly">CASE FILE S01-EXTENDED — STATUS: ACTIVE</span><br>
-      NOTE: Subject remains within designated parameters. Monitoring continues <span class="log-anomaly">per directive</span>.
-      <div class="le-annotation">// TEDDY'S ANNOTATION: Case S01 is closed. There is no "S01-EXTENDED" in the system. I checked twice.</div>
-    </div>
-
-    <div class="log-excerpt">
-      <span class="le-header">CAMPBELL ACTIVITY LOG — EXCERPT B // TIMESTAMP 14:22:33</span>
-      COMMUNICATION ROUTED: External call, voicemail receipt — logged under contact protocol.<br>
-      CALLER IDENTIFIED: <span class="log-anomaly">[REDACTED BY CAMPBELL — "PRIVACY PROTOCOL 7"]</span><br>
-      NOTE: Third contact attempt. Pattern consistent with previous cases. No escalation warranted at this time. Monitoring continues.
-      <div class="le-annotation">// TEDDY'S ANNOTATION: Privacy Protocol 7 isn't in any manual I have access to. I asked Marcus. He'd never heard of it either.</div>
-    </div>
-
-    <div class="log-excerpt">
-      <span class="le-header">CAMPBELL ACTIVITY LOG — EXCERPT C // TIMESTAMP 09:05:18</span>
-      PATTERN FLAG: External data cross-reference — source designation <span class="log-anomaly">MESA-INTERNAL</span> — flagged for monitoring.<br>
-      PRIORITY: LOW. No immediate action required.<br>
-      NOTE: <span class="log-anomaly">Subject is not yet aware of the connection. This is preferable for now.</span>
-    </div>
-
-    <p class="narrative" style="color:var(--text-dim);">
-      Teddy's read: "CAMPBELL is either doing something I don't understand and everything is fine, or it's doing something I don't understand and it isn't fine. I can't tell which one from here and I'd like a second opinion."
-    </p>
-    <p class="narrative" style="color:var(--text-dim);">She's not asking anyone to do anything. She's asking someone to look.</p>
-  </div>
-
+<main id="incidents-main">
+  <div class="loading">// LOADING INCIDENT DATA...</div>
 </main>
 
 <script>
-// ── INCIDENT 01 — CHOICE (localStorage) ──────────────────────────────
-var INCIDENTS_KEY = 'portal-incidents';
+(function () {
+  'use strict';
 
-function getIncidents() {
-  try { return JSON.parse(localStorage.getItem(INCIDENTS_KEY)) || {}; } catch(e) { return {}; }
-}
-function saveIncidents(data) { localStorage.setItem(INCIDENTS_KEY, JSON.stringify(data)); }
+  var weekData     = null;
+  var activeWeekId = null;
+  var weekState    = {};  // D1-loaded state for current week
+  var pendingChoices = {}; // { incId: { choice, custom } }
 
-function selectChoice(incId, choice, btn) {
-  var data = getIncidents();
-  if (data[incId] && data[incId].locked) return;
-  document.querySelectorAll('#choice-grid-' + incId + ' .choice-btn').forEach(function(b) {
-    b.classList.remove('selected');
-  });
-  btn.classList.add('selected');
-  if (!data[incId]) data[incId] = {};
-  data[incId].pending = choice;
-  saveIncidents(data);
-  document.getElementById('confirm-' + incId).disabled = false;
-  document.getElementById('choice-status-' + incId).textContent = '— direction ' + choice + ' selected';
-}
+  // ── INIT ──────────────────────────────────────────────────────────────
+  fetch('data/incidents.json')
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      weekData = data;
+      buildTabs(data.weeks);
+      var hashId    = location.hash.slice(1);
+      var fromHash  = data.weeks.filter(function (w) { return w.id === hashId; })[0];
+      var defWeek   = data.weeks.filter(function (w) { return w.status === 'active'; })[0]
+                   || data.weeks[data.weeks.length - 1];
+      activateWeek((fromHash || defWeek).id);
+    })
+    .catch(function () {
+      document.getElementById('incidents-main').innerHTML =
+        '<p class="narrative" style="color:var(--red);">// ERROR — Failed to load incident data.</p>';
+    });
 
-function confirmChoice(incId) {
-  var data = getIncidents();
-  var pending = data[incId] && data[incId].pending;
-  if (!pending) return;
-  data[incId] = { choice: pending, locked: true, timestamp: new Date().toISOString() };
-  saveIncidents(data);
-  lockChoiceUI(incId, pending);
-}
-
-function lockChoiceUI(incId, choice) {
-  document.querySelectorAll('#choice-grid-' + incId + ' .choice-btn').forEach(function(b) {
-    b.disabled = true;
-    if (b.dataset.choice === choice) b.classList.add('selected');
-  });
-  var btn = document.getElementById('confirm-' + incId);
-  btn.textContent = 'DIRECTION ' + choice + ' — LOGGED';
-  btn.classList.add('locked');
-  btn.disabled = true;
-  var status = document.getElementById('choice-status-' + incId);
-  status.textContent = '— submitted';
-  status.classList.add('confirmed');
-}
-
-// ── INCIDENT 02 — RESPONSE (D1 + localStorage fallback) ──────────────
-document.getElementById('resp-text').addEventListener('input', function() {
-  document.getElementById('submit-02').disabled = this.value.trim().length === 0;
-});
-
-function submitResponse() {
-  var name = document.getElementById('resp-name').value.trim() || 'Anonymous';
-  var text = document.getElementById('resp-text').value.trim();
-  if (!text) return;
-
-  var btn = document.getElementById('submit-02');
-  var statusEl = document.getElementById('submit-status-02');
-  btn.disabled = true;
-  statusEl.textContent = 'SENDING...';
-  statusEl.className = 'form-status';
-
-  fetch('/api/v1/incidents/02/responses', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name: name, text: text })
-  })
-  .then(function(r) { return r.ok ? r.json() : Promise.reject(r.status); })
-  .then(function() {
-    onSubmitSuccess(name, text, statusEl);
-  })
-  .catch(function() {
-    // Offline fallback — save to localStorage so export still works
-    var stored = JSON.parse(localStorage.getItem('portal-responses-02') || '[]');
-    stored.push({ hunter_name: name, response_text: text, submitted_at: new Date().toISOString(), offline: true });
-    localStorage.setItem('portal-responses-02', JSON.stringify(stored));
-    statusEl.textContent = 'SAVED LOCALLY (offline)';
-    onSubmitSuccess(name, text, statusEl);
-  });
-}
-
-function onSubmitSuccess(name, text, statusEl) {
-  if (statusEl.textContent === 'SENDING...') {
-    statusEl.textContent = 'LOGGED';
-    statusEl.className = 'form-status ok';
+  // ── TABS ──────────────────────────────────────────────────────────────
+  function buildTabs(weeks) {
+    var container = document.getElementById('week-tabs');
+    weeks.forEach(function (week) {
+      var btn = document.createElement('button');
+      btn.className = 'week-tab' + (week.status === 'active' ? ' status-active' : '');
+      btn.dataset.id = week.id;
+      btn.textContent = week.label;
+      btn.addEventListener('click', function () { activateWeek(week.id); });
+      container.appendChild(btn);
+    });
   }
-  appendSubmissionPreview(name, text);
-  document.getElementById('resp-text').value = '';
-  document.getElementById('resp-name').value = '';
-  document.getElementById('submit-02').disabled = true;
-  document.getElementById('export-02').style.display = '';
-  document.getElementById('submissions-list-02').style.display = '';
-}
 
-function appendSubmissionPreview(name, text) {
-  var list = document.getElementById('submissions-list-02');
-  var el = document.createElement('div');
-  el.className = 'submission-preview';
-  el.innerHTML = '<div class="sp-name">// ' + esc(name.toUpperCase()) + '</div>'
-               + '<div class="sp-text">' + esc(text).replace(/\n/g, '<br>') + '</div>';
-  list.appendChild(el);
-}
+  function activateWeek(id) {
+    if (activeWeekId === id) return;
+    activeWeekId   = id;
+    pendingChoices = {};
+    weekState      = {};
 
-function exportResponses() {
-  var statusEl = document.getElementById('submit-status-02');
-  statusEl.textContent = 'FETCHING...';
+    document.querySelectorAll('.week-tab').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.id === id);
+    });
+    history.replaceState(null, '', '#' + id);
 
-  fetch('/api/v1/incidents/02/responses')
-  .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
-  .then(function(rows) { renderExport(rows, statusEl); })
-  .catch(function() {
-    // Fall back to any locally stored responses
-    var stored = JSON.parse(localStorage.getItem('portal-responses-02') || '[]');
-    renderExport(stored, statusEl);
-  });
-}
+    var week = weekData.weeks.filter(function (w) { return w.id === id; })[0];
+    if (!week) return;
 
-function renderExport(rows, statusEl) {
-  var lines = [
-    '# PORTAL — Incident Log Responses',
-    '## Incident 02 — The Bálint Question',
-    ''
-  ];
-  rows.forEach(function(row) {
-    var ts = row.submitted_at ? new Date(row.submitted_at).toLocaleString() : '';
-    lines.push('**' + (row.hunter_name || 'Anonymous') + '** (' + ts + ')');
-    lines.push('');
-    lines.push(row.response_text);
-    lines.push('');
-    lines.push('---');
-    lines.push('');
-  });
-  var md = lines.join('\n');
-  navigator.clipboard.writeText(md).then(function() {
-    statusEl.textContent = 'COPIED TO CLIPBOARD';
-    statusEl.className = 'form-status ok';
-  }).catch(function() {
-    // Fallback: inject a selectable textarea
-    var ta = document.createElement('textarea');
-    ta.value = md;
-    ta.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:55vh;z-index:9999;'
-      + 'background:var(--bg3);color:var(--text);padding:20px;font-family:monospace;'
-      + 'font-size:0.75rem;border:none;border-bottom:2px solid var(--border);outline:none;';
-    document.body.appendChild(ta);
-    ta.focus();
-    ta.select();
-    statusEl.textContent = 'SELECT ALL AND COPY';
-    ta.addEventListener('blur', function() { document.body.removeChild(ta); });
-  });
-}
-
-function esc(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// ── INIT — restore locked state on page load ──────────────────────────
-(function() {
-  var data = getIncidents();
-  if (data['01'] && data['01'].locked) {
-    var c = data['01'].choice;
-    var btn = document.querySelector('#choice-grid-01 .choice-btn[data-choice="' + c + '"]');
-    if (btn) btn.classList.add('selected');
-    lockChoiceUI('01', c);
+    updateHero(week);
+    renderWeek(week);
+    loadWeekState(week.id);
   }
+
+  // ── HERO ──────────────────────────────────────────────────────────────
+  function updateHero(week) {
+    document.getElementById('hero-eyebrow').textContent = week.hero_eyebrow;
+    document.getElementById('hero-desc').textContent    = week.hero_desc;
+  }
+
+  // ── RENDER WEEK ───────────────────────────────────────────────────────
+  function renderWeek(week) {
+    var main = document.getElementById('incidents-main');
+    if (!week.incidents || week.incidents.length === 0) {
+      main.innerHTML = '<div class="empty-state">// NO INCIDENTS LOGGED — THIS PERIOD IS CLOSED.</div>';
+      return;
+    }
+
+    var html = week.incidents.map(renderIncident).join('');
+
+    var choiceIncs = week.incidents.filter(function (inc) { return inc.type === 'choice'; });
+    if (choiceIncs.length > 0) {
+      html += '<div class="save-bar" id="save-bar">'
+            + '<button class="save-btn" id="save-btn" disabled>SAVE RESPONSES</button>'
+            + '<span class="save-status" id="save-status">— select a direction to enable save</span>'
+            + '</div>';
+    }
+
+    main.innerHTML = html;
+    attachListeners(week);
+  }
+
+  // ── INCIDENT RENDERER ─────────────────────────────────────────────────
+  function renderIncident(inc) {
+    return inc.type === 'teaser' ? renderTeaser(inc) : renderCard(inc);
+  }
+
+  function renderCard(inc) {
+    var h = '<div class="incident-card ' + inc.color + '" id="incident-' + inc.id + '">';
+    h += '<div class="incident-id">' + esc(inc.item_label) + '</div>';
+    h += '<h2 class="incident-title">' + esc(inc.title)
+      + ' <span class="incident-badge badge-' + inc.badge_color + '">' + esc(inc.badge) + '</span>'
+      + '</h2>';
+    h += inc.blocks.map(renderBlock).join('');
+    if (inc.type === 'choice') h += renderChoiceUI(inc);
+    if (inc.type === 'open')   h += renderOpenUI(inc);
+    if (inc.stamps)            h += renderStamps(inc.stamps);
+    h += '</div>';
+    return h;
+  }
+
+  function renderTeaser(inc) {
+    var h = '<div class="campbell-log-section" id="incident-' + inc.id + '">';
+    h += '<div class="incident-id">' + esc(inc.item_label) + '</div>';
+    h += '<h2 class="incident-title">' + esc(inc.title)
+      + ' <span class="incident-badge badge-' + inc.badge_color + '">' + esc(inc.badge) + '</span>'
+      + '</h2>';
+    h += inc.blocks.map(renderBlock).join('');
+    h += '</div>';
+    return h;
+  }
+
+  // ── BLOCK RENDERERS ───────────────────────────────────────────────────
+  function renderBlock(block) {
+    switch (block.type) {
+      case 'narrative': {
+        var style = block.dim ? ' style="color:var(--text-dim);"' : '';
+        return '<p class="narrative"' + style + '>' + esc(block.text) + '</p>';
+      }
+      case 'campbell': {
+        var colorCls = block.color === 'purple' ? ' purple' : '';
+        var paras = block.paragraphs.map(function (p) { return esc(p); }).join('<br><br>');
+        return '<div class="campbell-block' + colorCls + '">'
+          + '<span class="cb-label">' + esc(block.label) + '</span>'
+          + paras
+          + (block.flag ? '<span class="cb-flag">' + esc(block.flag) + '</span>' : '')
+          + '</div>';
+      }
+      case 'callout': {
+        var text = esc(block.text).replace(/\n\n/g, '<br><br>');
+        return '<div class="callout callout-' + block.color + '">'
+          + '<span class="callout-from">' + esc(block.from) + '</span>'
+          + text
+          + '</div>';
+      }
+      case 'email': {
+        var bodyHtml = block.body_paras.map(function (p) {
+          return '<p>' + inlineMarkup(p) + '</p>';
+        }).join('');
+        var sigHtml = esc(block.sig).replace(/\n/g, '<br>');
+        return '<div class="email-block">'
+          + '<div class="email-header">'
+          + 'FROM: <span>' + esc(block.from) + '</span><br>'
+          + 'TO: <span>' + esc(block.to) + '</span><br>'
+          + 'SUBJECT: <span>' + esc(block.subject) + '</span><br>'
+          + 'DATE: <span>' + esc(block.date) + '</span>'
+          + '</div>'
+          + '<div class="email-body">'
+          + bodyHtml
+          + '<div class="email-sig">' + sigHtml + '</div>'
+          + '</div>'
+          + '</div>';
+      }
+      case 'log-excerpt': {
+        var linesHtml = block.lines.map(function (l) { return inlineMarkup(l); }).join('<br>');
+        var annHtml   = block.annotation
+          ? '<div class="le-annotation">' + esc(block.annotation) + '</div>'
+          : '';
+        return '<div class="log-excerpt">'
+          + '<span class="le-header">' + esc(block.label) + '</span>'
+          + linesHtml
+          + annHtml
+          + '</div>';
+      }
+      default: return '';
+    }
+  }
+
+  function renderChoiceUI(inc) {
+    var h = '<div class="choice-grid" id="choice-grid-' + inc.id + '">';
+    inc.choices.forEach(function (ch) {
+      h += '<button class="choice-btn" data-choice="' + ch.id + '" data-inc="' + inc.id + '">'
+        + '<span class="ch-label">' + esc(ch.label) + '</span>'
+        + esc(ch.text)
+        + '</button>';
+    });
+    h += '</div>';
+    if (inc.allow_custom) {
+      h += '<div class="form-row custom-row" id="custom-row-' + inc.id + '">'
+        + '<label class="form-label" for="custom-' + inc.id + '">OR DESCRIBE YOUR OWN APPROACH (OPTIONAL)</label>'
+        + '<textarea class="form-textarea" id="custom-' + inc.id + '" rows="3" placeholder="Describe your approach..."></textarea>'
+        + '</div>';
+    }
+    return h;
+  }
+
+  function renderOpenUI(inc) {
+    return '<div class="form-hint">' + esc(inc.form_hint) + '</div>'
+      + '<div class="form-row">'
+      + '<label class="form-label" for="resp-name-' + inc.id + '">OPERATIVE NAME (optional)</label>'
+      + '<input class="form-input" id="resp-name-' + inc.id + '" type="text" placeholder="Anonymous" maxlength="80">'
+      + '</div>'
+      + '<div class="form-row">'
+      + '<textarea class="form-textarea" id="resp-text-' + inc.id + '" placeholder="Your response..."></textarea>'
+      + '</div>'
+      + '<div class="form-actions">'
+      + '<button class="submit-btn" id="submit-btn-' + inc.id + '" disabled>SUBMIT RESPONSE</button>'
+      + '<button class="export-btn" id="export-btn-' + inc.id + '" style="display:none">EXPORT FOR KEEPER</button>'
+      + '<span class="form-status" id="form-status-' + inc.id + '"></span>'
+      + '</div>'
+      + '<div class="submissions-list" id="submissions-list-' + inc.id + '" style="display:none">'
+      + '<div class="submissions-list-label">// RESPONSES LOGGED FROM THIS DEVICE</div>'
+      + '</div>';
+  }
+
+  function renderStamps(stamps) {
+    if (!stamps || stamps.length === 0) return '';
+    return '<div class="stamp-bar">'
+      + stamps.map(function (s) { return '<span class="stamp">' + esc(s) + '</span>'; }).join('')
+      + '</div>';
+  }
+
+  // ── ATTACH LISTENERS ──────────────────────────────────────────────────
+  function attachListeners(week) {
+    // Save button
+    var saveBtn = document.getElementById('save-btn');
+    if (saveBtn) saveBtn.addEventListener('click', handleSave);
+
+    if (!week.incidents) return;
+
+    week.incidents.forEach(function (inc) {
+      // Choice buttons
+      if (inc.type === 'choice') {
+        var grid = document.getElementById('choice-grid-' + inc.id);
+        if (grid) {
+          grid.querySelectorAll('.choice-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () { onChoiceClick(btn, inc.id); });
+          });
+        }
+        // Custom textarea
+        if (inc.allow_custom) {
+          var ta = document.getElementById('custom-' + inc.id);
+          if (ta) {
+            ta.addEventListener('input', function () {
+              if (!pendingChoices[inc.id]) pendingChoices[inc.id] = {};
+              pendingChoices[inc.id].custom = ta.value;
+            });
+          }
+        }
+      }
+
+      // Open response form
+      if (inc.type === 'open') {
+        var textEl   = document.getElementById('resp-text-' + inc.id);
+        var submitEl = document.getElementById('submit-btn-' + inc.id);
+        var exportEl = document.getElementById('export-btn-' + inc.id);
+        if (textEl && submitEl) {
+          textEl.addEventListener('input', function () {
+            submitEl.disabled = textEl.value.trim().length === 0;
+          });
+          submitEl.addEventListener('click', function () { submitOpenResponse(inc); });
+        }
+        if (exportEl) {
+          exportEl.addEventListener('click', function () { exportResponses(inc); });
+        }
+      }
+    });
+  }
+
+  // ── CHOICE SELECTION ──────────────────────────────────────────────────
+  function onChoiceClick(btn, incId) {
+    var grid = document.getElementById('choice-grid-' + incId);
+    if (!grid) return;
+    var first = grid.querySelector('.choice-btn');
+    if (first && first.disabled) return; // locked
+
+    grid.querySelectorAll('.choice-btn').forEach(function (b) { b.classList.remove('selected'); });
+    btn.classList.add('selected');
+
+    if (!pendingChoices[incId]) pendingChoices[incId] = {};
+    pendingChoices[incId].choice = btn.dataset.choice;
+    updateSaveButton();
+  }
+
+  function updateSaveButton() {
+    var saveBtn = document.getElementById('save-btn');
+    var saveSt  = document.getElementById('save-status');
+    if (!saveBtn) return;
+    var hasSelection = Object.keys(pendingChoices).some(function (k) {
+      return pendingChoices[k] && pendingChoices[k].choice;
+    });
+    saveBtn.disabled = !hasSelection;
+    if (hasSelection) {
+      saveSt.textContent = '— ready to save';
+      saveSt.className   = 'save-status';
+    }
+  }
+
+  // ── SAVE (choice incidents) ───────────────────────────────────────────
+  function handleSave() {
+    var saveBtn = document.getElementById('save-btn');
+    var saveSt  = document.getElementById('save-status');
+    if (!saveBtn || saveBtn.disabled || saveBtn.classList.contains('locked')) return;
+
+    saveBtn.disabled = true;
+    saveSt.textContent = 'SAVING...';
+    saveSt.className   = 'save-status';
+
+    var now       = new Date().toISOString();
+    var stateBlob = JSON.parse(JSON.stringify(weekState)); // copy existing state
+    var week      = weekData.weeks.filter(function (w) { return w.id === activeWeekId; })[0];
+    if (!week) return;
+
+    week.incidents.forEach(function (inc) {
+      if (inc.type !== 'choice') return;
+      var p = pendingChoices[inc.id];
+      if (!p || !p.choice) return;
+      stateBlob[inc.id] = {
+        type:              'choice',
+        choice:            p.choice,
+        custom:            (p.custom || '').slice(0, 2000),
+        question_snapshot: inc.title,
+        locked:            true,
+        saved_at:          now
+      };
+    });
+
+    // Write to localStorage immediately
+    localStorage.setItem('portal-incident-state-' + activeWeekId, JSON.stringify(stateBlob));
+
+    // PUT to D1
+    fetch('/api/v1/incidents/' + activeWeekId + '/state', {
+      method:  'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(stateBlob)
+    })
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function () {
+      onSaveComplete(stateBlob, saveSt, saveBtn, '— directions logged');
+    })
+    .catch(function () {
+      onSaveComplete(stateBlob, saveSt, saveBtn, '— saved locally (offline)');
+    });
+  }
+
+  function onSaveComplete(stateBlob, saveSt, saveBtn, statusText) {
+    weekState = stateBlob;
+    saveBtn.textContent = 'SAVED';
+    saveBtn.classList.add('locked');
+    saveSt.textContent  = statusText;
+    saveSt.className    = 'save-status ok';
+    for (var incId in stateBlob) {
+      var s = stateBlob[incId];
+      if (s.type === 'choice' && s.locked) lockChoiceUI(incId, s.choice, s.custom);
+    }
+  }
+
+  function lockChoiceUI(incId, choice, custom) {
+    var grid = document.getElementById('choice-grid-' + incId);
+    if (!grid) return;
+    grid.querySelectorAll('.choice-btn').forEach(function (b) {
+      b.disabled = true;
+      b.classList.toggle('selected', b.dataset.choice === choice);
+    });
+    var ta = document.getElementById('custom-' + incId);
+    if (ta) { ta.value = custom || ''; ta.disabled = true; }
+    delete pendingChoices[incId];
+  }
+
+  // ── LOAD D1 STATE ─────────────────────────────────────────────────────
+  function loadWeekState(weekId) {
+    fetch('/api/v1/incidents/' + weekId + '/state')
+      .then(function (r) { return r.ok ? r.json() : {}; })
+      .then(function (state) {
+        weekState = state || {};
+        applyState();
+      })
+      .catch(function () {
+        try { weekState = JSON.parse(localStorage.getItem('portal-incident-state-' + weekId) || '{}'); }
+        catch (e) { weekState = {}; }
+        applyState();
+      });
+  }
+
+  function applyState() {
+    for (var incId in weekState) {
+      var s = weekState[incId];
+      if (s.type === 'choice' && s.locked) lockChoiceUI(incId, s.choice, s.custom);
+    }
+    // If any choices are locked, reflect that on the save bar
+    var saveBtn = document.getElementById('save-btn');
+    var saveSt  = document.getElementById('save-status');
+    if (!saveBtn) return;
+    var anyLocked = Object.keys(weekState).some(function (k) {
+      return weekState[k].type === 'choice' && weekState[k].locked;
+    });
+    if (anyLocked) {
+      saveBtn.textContent = 'SAVED';
+      saveBtn.classList.add('locked');
+      saveBtn.disabled   = true;
+      saveSt.textContent = '— directions logged';
+      saveSt.className   = 'save-status ok';
+    }
+  }
+
+  // ── OPEN RESPONSE (submit) ────────────────────────────────────────────
+  function submitOpenResponse(inc) {
+    var nameEl   = document.getElementById('resp-name-' + inc.id);
+    var textEl   = document.getElementById('resp-text-' + inc.id);
+    var submitEl = document.getElementById('submit-btn-' + inc.id);
+    var statusEl = document.getElementById('form-status-' + inc.id);
+    var name = (nameEl ? nameEl.value.trim() : '') || 'Anonymous';
+    var text = textEl ? textEl.value.trim() : '';
+    if (!text) return;
+
+    submitEl.disabled  = true;
+    statusEl.textContent = 'SENDING...';
+    statusEl.className   = 'form-status';
+
+    fetch('/api/v1/incidents/' + inc.id + '/responses', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ name: name, text: text })
+    })
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function () {
+      onOpenSubmitSuccess(inc, name, text, statusEl, nameEl, textEl, submitEl);
+    })
+    .catch(function () {
+      var stored = JSON.parse(localStorage.getItem('portal-responses-' + inc.id) || '[]');
+      stored.push({ hunter_name: name, response_text: text, submitted_at: new Date().toISOString(), offline: true });
+      localStorage.setItem('portal-responses-' + inc.id, JSON.stringify(stored));
+      statusEl.textContent = 'SAVED LOCALLY (offline)';
+      onOpenSubmitSuccess(inc, name, text, statusEl, nameEl, textEl, submitEl);
+    });
+  }
+
+  function onOpenSubmitSuccess(inc, name, text, statusEl, nameEl, textEl, submitEl) {
+    if (statusEl.textContent === 'SENDING...') {
+      statusEl.textContent = 'LOGGED';
+      statusEl.className   = 'form-status ok';
+    }
+    appendSubmissionPreview(inc.id, name, text);
+    if (textEl) textEl.value = '';
+    if (nameEl) nameEl.value = '';
+    submitEl.disabled = true;
+    var exportEl = document.getElementById('export-btn-' + inc.id);
+    var listEl   = document.getElementById('submissions-list-' + inc.id);
+    if (exportEl) exportEl.style.display = '';
+    if (listEl)   listEl.style.display   = '';
+  }
+
+  function appendSubmissionPreview(incId, name, text) {
+    var list = document.getElementById('submissions-list-' + incId);
+    if (!list) return;
+    var el = document.createElement('div');
+    el.className = 'submission-preview';
+    el.innerHTML = '<div class="sp-name">// ' + esc(name.toUpperCase()) + '</div>'
+                 + '<div class="sp-text">' + esc(text).replace(/\n/g, '<br>') + '</div>';
+    list.appendChild(el);
+  }
+
+  function exportResponses(inc) {
+    var statusEl = document.getElementById('form-status-' + inc.id);
+    statusEl.textContent = 'FETCHING...';
+    fetch('/api/v1/incidents/' + inc.id + '/responses')
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (rows) { renderExport(rows, statusEl, inc.title); })
+      .catch(function () {
+        var stored = JSON.parse(localStorage.getItem('portal-responses-' + inc.id) || '[]');
+        renderExport(stored, statusEl, inc.title);
+      });
+  }
+
+  function renderExport(rows, statusEl, title) {
+    var lines = ['# PORTAL — Incident Log Responses', '## ' + title, ''];
+    rows.forEach(function (row) {
+      var ts = row.submitted_at ? new Date(row.submitted_at).toLocaleString() : '';
+      lines.push('**' + (row.hunter_name || 'Anonymous') + '** (' + ts + ')');
+      lines.push('');
+      lines.push(row.response_text);
+      lines.push('');
+      lines.push('---');
+      lines.push('');
+    });
+    var md = lines.join('\n');
+    navigator.clipboard.writeText(md).then(function () {
+      statusEl.textContent = 'COPIED TO CLIPBOARD';
+      statusEl.className   = 'form-status ok';
+    }).catch(function () {
+      var ta = document.createElement('textarea');
+      ta.value = md;
+      ta.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:55vh;z-index:9999;'
+        + 'background:var(--bg3);color:var(--text);padding:20px;font-family:monospace;'
+        + 'font-size:0.75rem;border:none;border-bottom:2px solid var(--border);outline:none;';
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      statusEl.textContent = 'SELECT ALL AND COPY';
+      ta.addEventListener('blur', function () { document.body.removeChild(ta); });
+    });
+  }
+
+  // ── HELPERS ───────────────────────────────────────────────────────────
+  function esc(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function inlineMarkup(text) {
+    return esc(text)
+      .replace(/\{\{anomaly:(.*?)\}\}/g, '<span class="log-anomaly">$1</span>')
+      .replace(/\{\{em:(.*?)\}\}/g, '<em>$1</em>');
+  }
+
 })();
 </script>
 

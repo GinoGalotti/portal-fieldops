@@ -60,7 +60,7 @@ When the Keeper asks you to build a page:
 | `report.html` | `keeper.css` | Keeper | Keeper post-session field report — session tab switcher (S01/S02), outcome, hunter cards, per-session scene notes, thread tags, clock status, seeds. Saves to D1. "Copy for Claude" exports Markdown. |
 | `reports/player-report.html` | `player.css` | Player | Operative Field Report — week + hunter selector, 5 rating pips, general feedback, per-week scene questions. Unique save per week+hunter, D1-backed. Linked from player nav as "Report". |
 | `contacts.html` | `player.css` | Player | NPC Contact Directory — fetches `portal-npcs.json`, renders player-visible NPCs grouped by affiliation (PORTAL staff / field contacts / unknown). Static render, no D1 dependency. |
-| `lab-incidents.html` | `player.css` (draft inline) | Player | Between-session incident log — 3 incidents (choice mechanic, open response, information-only) + CAMPBELL log teaser. Choice persists in localStorage; open response exports to markdown for Keeper. HTML draft built in Claude.ai workflow; integration by Claude Code via `lab-incidents-brief.md`. |
+| `lab-incidents.html` | `player.css` + inline | Player | Between-session incident log. Fully data-driven from `data/incidents.json`. Week tab switcher (W1 closed/empty, W2 active). Incident types: `choice` (3-button pick + optional custom textarea), `open` (freetext multi-submit), `informational` (read-only), `teaser` (email + log excerpts). Single **SAVE RESPONSES** button collects all choice answers → `PUT /api/v1/incidents/{week}/state` → locks buttons; also writes localStorage. Open incidents keep independent SUBMIT button → `POST /api/v1/incidents/{id}/responses`. EXPORT FOR KEEPER on open incidents. |
 | `feed.html` | `player.css` + inline | Player + Keeper | Live session tool — split layout (feed left, panel right). Hunter picker; **Moves tab** (always-active + playbook + basic moves, inline modifier + ROLL, hover shows description + outcome rows + questions for Investigate/Read); **Contacts tab** (player-visible NPCs, double-click to add per-hunter private note stored in `localStorage('portal_contact_notes')` as `{hunter_id:{npc_id:text}}`); **Handouts tab** (placeholder). Bottom composer for any player to post to the feed. Roll entries show breakdown `[d1 + d2 + stat + mod = total]`, hover shows specific outcome text + question list (for Investigate a Mystery / Read a Bad Situation). 3s D1 polling, 5s auto-save for harm/luck/xp changes. Keeper mode (5× logo click) replaces player UI with 4 tabs: **OPERATIVES** (click hunter to view sheet + moves), **CONTACTS** (session filter S01/S02/ALL + NPC visibility toggles persisted to localStorage), **REFERENCES** (MoTW rules cheat sheet: outcomes, harm moves, luck, XP, end-of-session, principles, keeper moves, monster moves, phenomena moves, investigate questions, keeper page links), **THREATS** (session selector, entity stat block from `portal-entities.json`, threats/minions/bystanders + equipment from `session-data.json`). |
 
 ### Upcoming Pages (planned, not yet built)
@@ -752,5 +752,446 @@ When building new pages or Workers:
 > - **Track 1** (`session_overrides.wN+1.player_description`): post-resolution state for the contacts page — what players read between sessions after the case closes. Never mid-mission states.
 > - **Track 2** (`keeper_scene_notes`): per-scene guidance for the keeper during the session — what information to push to players at each scene via the live feed. Keyed as `"sNN-scene-slug"`.
 
+**For writing between-session incident content (new week):**
+> "Read Part 10 (Between-Session Content Formats) in `worldbuilding-site.md` for the exact JSON schema. Produce: a single `weeks[]` entry as JSON, ready to append to `data/incidents.json`. Do NOT produce HTML. Use only the documented block types and inline markup syntax. Mark the new week `"status": "active"` and note that the previous active week should be changed to `"closed"`."
+
+**For writing the CAMPBELL priority queue (new week):**
+> "Read Part 10 (Between-Session Content Formats) in `worldbuilding-site.md` for the exact fragment format and CSS class reference. Produce: (1) `missions/briefings/wNN.html` — fragment only, no `<html>/<head>/<body>` tags; (2) the updated `missions/briefings/index.json` showing the new entry added and the previous week marked `"closed"`. Write in CAMPBELL's institutional voice (see `worldbuilding-lore.md` Part 2)."
+
 **For advancing the campaign session (after a session plays):**
 > "Read `post-session-runbook.md`. Key steps: update `data/sessions.json` (mark old session `closed`, add new), author W-next HTML content variants in missions.html + index.html + contacts.html, update NPC `session_overrides` for revealed NPCs, update entity `session_overrides` for resolved entities, update D1 active session via keeper toggle."
+
+---
+
+## PART 10 — BETWEEN-SESSION CONTENT FORMATS
+
+This part is for **Claude.ai (content author)**. It defines exactly what to produce for each recurring between-session content type. Claude Code integrates the output; no translation should be needed.
+
+Two content types are authored between sessions:
+1. **Incident Log** — append a new `weeks[]` entry to `data/incidents.json`
+2. **CAMPBELL Queue** — write a new `missions/briefings/wNN.html` fragment + update `missions/briefings/index.json`
+
+---
+
+### FORMAT 1 — Incident Log (`data/incidents.json`)
+
+**What to produce:** A single JSON object — one `weeks[]` entry — ready to paste into the array. No HTML. No JavaScript. No CSS class names. All rendering is handled by `lab-incidents.html`.
+
+**Delivery format:**
+```
+Append this entry to the `weeks[]` array in `data/incidents.json`.
+Mark the previous active week as `"status": "closed"`.
+```
+
+#### Week Entry Structure
+
+```json
+{
+  "id": "W3",
+  "label": "WEEK 03",
+  "status": "active",
+  "hero_eyebrow": "// BETWEEN-SESSION — POST-S02 STAFF COMMUNIQUÉS",
+  "hero_desc": "One item logged during the Aldermoor deployment requires staff input.",
+  "incidents": [ ... ]
+}
+```
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `id` | string | `"W1"`, `"W2"`, `"W3"` — uppercase, no leading zero |
+| `label` | string | `"WEEK 01"` — displayed on tab button |
+| `status` | string | `"active"` or `"closed"` — only one week is `"active"` at a time |
+| `hero_eyebrow` | string | Monospace header line above the page title |
+| `hero_desc` | string | One or two sentences — sets up the week's content |
+| `incidents` | array | Ordered list of incident objects (empty `[]` for closed/blank weeks) |
+
+#### Incident Object — Base Fields (all types)
+
+```json
+{
+  "id": "S02-I01",
+  "type": "choice",
+  "color": "amber",
+  "title": "The Eszter Particulate",
+  "badge": "RESPONSE REQUIRED",
+  "badge_color": "amber",
+  "item_label": "// INCIDENT LOG — POST-SESSION 02 — ITEM 01 OF 02",
+  "stamps": [
+    "LOGGED: POST-SESSION 02",
+    "CATEGORY: SAMPLE HANDLING / RESEARCH DIRECTION",
+    "SUBMITTED BY: DR. P. OSEI"
+  ],
+  "blocks": [ ... ]
+}
+```
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `id` | string | Pattern: `SNN-IMM` — session + item, e.g. `S02-I01` |
+| `type` | string | `"choice"` / `"open"` / `"informational"` / `"teaser"` |
+| `color` | string | `"amber"` / `"purple"` / `"red"` — card accent stripe |
+| `title` | string | Display title (all-caps rendered by CSS) |
+| `badge` | string | Short text in badge pill |
+| `badge_color` | string | `"amber"` / `"purple"` / `"red"` |
+| `item_label` | string | Monospace ID line at top of card |
+| `stamps` | array of strings | Footer metadata pills (omit for `teaser` type) |
+| `blocks` | array | Content blocks — see Block Types below |
+
+**Type-specific additional fields:**
+
+`choice` — add after `blocks`:
+```json
+"choices": [
+  { "id": "A", "label": "A — Short Title", "text": "Longer description of this option." },
+  { "id": "B", "label": "B — Short Title", "text": "..." },
+  { "id": "C", "label": "C — Short Title", "text": "..." }
+],
+"allow_custom": true
+```
+`allow_custom: true` shows an optional freetext textarea below the choice buttons.
+
+`open` — add after `blocks`:
+```json
+"form_hint": "Write whatever you actually think. This goes to Saoirse's office, not the Director.",
+"name_optional": true
+```
+
+`informational` — no additional fields.
+
+`teaser` — omit `color`, `stamps`. Uses different card styling (purple border section). The `item_label` is a volunteer/request line rather than an incident log line.
+
+#### Block Types
+
+All blocks go inside the `"blocks"` array in order. Mix freely per incident.
+
+---
+
+**`narrative`** — body prose paragraph.
+```json
+{ "type": "narrative", "text": "Single paragraph of prose." }
+{ "type": "narrative", "text": "Dimmed paragraph — used for closing reflective text.", "dim": true }
+```
+`"dim": true` renders in a lighter colour. Optional; omit if false.
+
+---
+
+**`campbell`** — CAMPBELL terminal block. Green by default; purple for internal/anomalous notices.
+```json
+{
+  "type": "campbell",
+  "label": "// CAMPBELL — INTERNAL NOTICE — SAMPLE BIM-S01-003",
+  "paragraphs": [
+    "First paragraph of the notice.",
+    "Second paragraph. Each renders separated by a blank line."
+  ],
+  "flag": "// FLAG: Decision required before next scheduled lab review.",
+  "color": "green"
+}
+```
+| Field | Notes |
+|-------|-------|
+| `label` | Monospace header — always starts with `// CAMPBELL —` |
+| `paragraphs` | Array of strings. Each paragraph is a separate entry; they render with a blank line between. |
+| `flag` | Optional closing flag line in accent colour. Starts with `// FLAG:` or `// NOTE:`. Omit if not needed. |
+| `color` | `"green"` (default, omit if green) or `"purple"` (for anomalous/sensitive notices) |
+
+---
+
+**`callout`** — attributed aside block. Used for supplemental notes from named characters.
+```json
+{
+  "type": "callout",
+  "color": "amber",
+  "from": "// DR. P. OSEI — SUPPLEMENTAL NOTE",
+  "text": "First paragraph text.\n\nSecond paragraph. Use \\n\\n for paragraph breaks within a callout."
+}
+```
+| Field | Notes |
+|-------|-------|
+| `color` | `"amber"` / `"purple"` / `"red"` — matches the incident accent |
+| `from` | Attribution line — always `// NAME — ROLE` format |
+| `text` | Use `\n\n` (two newlines in JSON) for paragraph breaks within the callout. |
+
+---
+
+**`email`** — internal email block. Used in `teaser` type incidents.
+```json
+{
+  "type": "email",
+  "from": "teddy.brandt@portal-internal.org",
+  "to": "field-team@portal-internal.org",
+  "subject": "something slightly weird I need help with",
+  "date": "this week",
+  "body_paras": [
+    "First paragraph of email body.",
+    "Second paragraph. Use {{em:quoted text}} for italicised inline emphasis.",
+    "Third paragraph."
+  ],
+  "sig": "— Teddy\nField Support Technician, PORTAL"
+}
+```
+`\n` in `sig` becomes a line break. Each string in `body_paras` becomes a `<p>` tag.
+
+---
+
+**`log-excerpt`** — CAMPBELL activity log terminal block. Used in `teaser` type incidents.
+```json
+{
+  "type": "log-excerpt",
+  "label": "CAMPBELL ACTIVITY LOG — EXCERPT A // TIMESTAMP 03:41:07",
+  "lines": [
+    "INVENTORY CHECK: Bay 3 sample BIM-S01-003 — PRESENT / CONTAINED",
+    "CROSS-REFERENCE: {{anomaly:CASE FILE S01-EXTENDED — STATUS: ACTIVE}}",
+    "NOTE: Subject remains within designated parameters. Monitoring continues {{anomaly:per directive}}."
+  ],
+  "annotation": "// TEDDY'S ANNOTATION: Case S01 is closed. There is no \"S01-EXTENDED\" in the system."
+}
+```
+`annotation` is optional — set to `null` or omit if no annotation. Each string in `lines` renders on its own line.
+
+---
+
+#### Inline Markup (used inside specific string fields only)
+
+| Syntax | Renders as | Use in |
+|--------|-----------|--------|
+| `{{anomaly:TEXT}}` | Purple `.log-anomaly` span | `log-excerpt` lines only |
+| `{{em:TEXT}}` | Italic `<em>` span | `email` body_paras only |
+
+Do not use HTML tags directly in any field. Do not use inline markup outside the specified fields.
+
+---
+
+#### Constraints
+
+| Rule | Detail |
+|------|--------|
+| One `"active"` week | Only one week in the array has `"status": "active"`. All others are `"closed"`. |
+| Week IDs | `"W1"`, `"W2"`, `"W3"` — uppercase, no leading zero. |
+| Incident IDs | `"SNN-IMM"` pattern — e.g. `S02-I01`, `S02-I02`. Unique across the whole file. |
+| Incident order | Incidents render in array order. Put `choice` and `open` before `informational`. Put `teaser` last. |
+| No HTML | Never write HTML tags in any field. The renderer handles all markup. |
+| Empty week | An empty `"incidents": []` renders a "no incidents logged" state — correct for `"closed"` weeks. |
+
+---
+
+#### Minimal Example — One Choice Incident
+
+```json
+{
+  "id": "W3",
+  "label": "WEEK 03",
+  "status": "active",
+  "hero_eyebrow": "// BETWEEN-SESSION — POST-S02 STAFF COMMUNIQUÉS",
+  "hero_desc": "One item logged during the Aldermoor deployment requires staff input.",
+  "incidents": [
+    {
+      "id": "S02-I01",
+      "type": "choice",
+      "color": "amber",
+      "title": "The Volunteer Sample",
+      "badge": "RESPONSE REQUIRED",
+      "badge_color": "amber",
+      "item_label": "// INCIDENT LOG — POST-SESSION 02 — ITEM 01 OF 01",
+      "stamps": [
+        "LOGGED: POST-SESSION 02",
+        "CATEGORY: SAMPLE HANDLING",
+        "SUBMITTED BY: DR. P. OSEI"
+      ],
+      "blocks": [
+        {
+          "type": "narrative",
+          "text": "The tissue sample recovered from the Hargrove case is unlike anything in the catalogued set."
+        },
+        {
+          "type": "campbell",
+          "label": "// CAMPBELL — INTERNAL NOTICE — SAMPLE HRG-S02-001",
+          "paragraphs": [
+            "Sample HRG-S02-001 has been logged under standard anomalous-material protocols.",
+            "Preliminary analysis indicates Class 3 vitality displacement signature — first recorded instance in a stable, inert sample."
+          ],
+          "flag": "// FLAG: Decision required before next scheduled lab review."
+        },
+        {
+          "type": "callout",
+          "color": "amber",
+          "from": "// DR. P. OSEI — SUPPLEMENTAL NOTE",
+          "text": "I don't know what this does at scale. Neither direction is safe in the way we usually mean safe."
+        }
+      ],
+      "choices": [
+        { "id": "A", "label": "A — Controlled Study", "text": "Incremental exposure under lab conditions. Treat it as a data source." },
+        { "id": "B", "label": "B — Full Isolation",   "text": "Faraday shielding, no electronic proximity. Document the change." },
+        { "id": "C", "label": "C — Saoirse First",   "text": "No direction proceeds until Dr. Mullen has reviewed the analysis." }
+      ],
+      "allow_custom": true
+    }
+  ]
+}
+```
+
+---
+
+### FORMAT 2 — CAMPBELL Priority Queue (`missions/briefings/wNN.html`)
+
+**What to produce:**
+1. `missions/briefings/wNN.html` — HTML fragment (no `<html>`, `<head>`, or `<body>` tags)
+2. Updated `missions/briefings/index.json` — new entry appended, previous week marked `"closed"`
+
+The fragment is loaded into the page by JavaScript — it must be a standalone HTML snippet that assumes `briefing.css` is already loaded.
+
+#### `index.json` Entry
+
+```json
+{
+  "id": "w03",
+  "label": "WEEK 03",
+  "title": "Post-Operation #XXXX-X (Location Name)",
+  "status": "active",
+  "summary": "4 cases active · 1 high · 3 medium"
+}
+```
+
+| Field | Notes |
+|-------|-------|
+| `id` | Must match the filename exactly: `"w03"` → `missions/briefings/w03.html` |
+| `label` | Displayed on the tab button |
+| `title` | Tooltip text on the tab |
+| `status` | `"active"` or `"closed"`. Mark the previous week `"closed"` when adding a new entry. |
+| `summary` | Short summary for the tab tooltip |
+
+#### Fragment Structure
+
+```html
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- WEEK 03 — Post-Operation #XXXX-X (Location)                      -->
+<!-- Queue state as issued N days post-deployment.                    -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+
+<div class="page-header">
+  <div class="portal-logo">// P · O · R · T · A · L</div>
+  <h1>CAMPBELL</h1>
+  <div class="sub">PRIORITY QUEUE — PENDING FIELD ASSIGNMENT</div>
+  <div class="divider"></div>
+  <div class="note">⚠ N CASES ACTIVE — FIELD TEAM REQUIRED · [PREV-OP LOCATION] CLOSED</div>
+  <div class="timestamp">// QUEUE UPDATE ISSUED N DAYS POST-OPERATION #XXXX-X ([LOCATION])</div>
+</div>
+
+<!-- ─── CARRY-OVER (omit section if no carry-over cases) ─── -->
+<div class="carry-over">// CARRY-OVER — CASES OPEN PRIOR TO [PREV-OP] DEPLOYMENT</div>
+
+<!-- CASE A — CODENAME -->
+<div class="briefing case-a" data-case="A">
+  <div class="card-header">
+    <div>
+      <div class="report-id">// CAMPBELL — ANOMALY REPORT #XXXX-X · UPDATED</div>
+      <div class="report-title">CODENAME</div>
+      <div class="report-subtitle">LOCATION · ANOMALY TYPE · CLASSIFICATION</div>
+    </div>
+    <div class="priority-badge high">PRIORITY: HIGH ↑</div>
+  </div>
+
+  <div class="terminal">
+    <div class="t-label"><span>FIELD BRIEFING — AUTHORISED PERSONNEL ONLY</span><span class="blink"></span></div>
+
+    <div class="data-row"><span class="k">LOCATION:</span><span class="v">Address or area</span></div>
+    <div class="data-row"><span class="k">PATTERN:</span><span class="v">What CAMPBELL detected</span></div>
+    <div class="data-row"><span class="k">DATE FLAGGED:</span><span class="v">N days ago</span></div>
+
+    <hr class="t-divider">
+
+    <div class="data-row"><span class="k">MECHANISM:</span><span class="v alert">What the anomaly does</span></div>
+    <div class="data-row"><span class="k">RISK:</span><span class="v red">Who is in danger and how</span></div>
+
+    <div class="directive">
+      <span class="directive-label">// DIRECTOR'S NOTE — [INITIAL / UPDATED POST-{PREV-OP}]</span>
+      Director's instruction to the field team. Two or three sentences. Ends with the key question or priority.
+      <br><br>
+      <span class="t-dim">// Aside note — optional personal Director comment. — Director</span>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <span><span class="status-dot"></span>ACTIVE — [STATUS SUMMARY]</span>
+    <span>REPORT #XXXX-X · CAMPBELL v<span class="ver"></span></span>
+    <span>LOCATION · ANOMALY CLASS · [NEW / UPDATED]</span>
+  </div>
+</div>
+
+
+<!-- ─── NEW CASES (omit section label if no new cases) ─── -->
+<div class="new-cases-label">// NEW — CASES FLAGGED DURING [PREV-OP] DEPLOYMENT · HUMAN REVIEW PENDING</div>
+
+<!-- ... additional case cards ... -->
+
+
+<!-- CAMPBELL CLOSING NOTE (always present) -->
+<div class="campbell-note">
+  <div class="cn-header">
+    <span>// CAMPBELL — POST-[PREV-OP] PRIORITY UPDATE</span>
+    <span>N CASES ACTIVE · N HIGH · N MEDIUM</span>
+  </div>
+  <div class="cn-text">
+    OPERATION #XXXX-X ([PREV-OP]) CLOSED — ENTITY STATUS: [STATUS].<br>
+    PRIORITY QUEUE UPDATED.<br>
+    <br>
+    DURING [PREV-OP] DEPLOYMENT:<br>
+    · CASE #XXXX-X ([CODENAME]) — [what changed].<br>
+    <br>
+    [CAMPBELL pattern notes, connections, confidence levels.]
+  </div>
+  <div class="cn-sig">// END TRANSMISSION — CAMPBELL · P.O.R.T.A.L ANOMALY DETECTION SYSTEM</div>
+</div>
+```
+
+#### CSS Class Reference
+
+**Case card colours** — the `case-X` class sets the accent colour:
+
+| Class | Colour | Use for |
+|-------|--------|---------|
+| `case-a` | Amber | First case / high-priority |
+| `case-b` | Green | Second case |
+| `case-c` | Purple | Third case / CAMPBELL-anomalous |
+| `case-d` | Teal | Fourth case |
+| `case-e` | Rose | Fifth case |
+
+**Priority badge variants:**
+
+| Class | Displayed as | Use for |
+|-------|-------------|---------|
+| `priority-badge high` | PRIORITY: HIGH ↑ | Time-critical, lives at risk |
+| `priority-badge info` | PRIORITY: MEDIUM ↑ | Escalating, needs attention |
+| `priority-badge new` | PRIORITY: MEDIUM · NEW | First appearance, amber-ish |
+| `priority-badge new-b` | PRIORITY: MEDIUM · NEW | First appearance, secondary colour |
+| `priority-badge low` | PRIORITY: LOW | Monitoring only |
+
+**Data-row value modifiers** (apply to the `<span class="v">` element):
+
+| Class | Colour | Use for |
+|-------|--------|---------|
+| `.v.alert` | Amber | Warning — something has changed or escalated |
+| `.v.red` | Red | Danger — lives at risk, critical deadline |
+| `.v.dim` | Dim | Low-confidence data, CAMPBELL internal note |
+| `.v.purple` | Purple | CAMPBELL anomalous classification, unusual finding |
+| `.v.teal` | Teal | Novel classification, first recorded instance |
+| `.v.rose` | Rose | Identity / consciousness anomaly |
+| (none) | Default | Standard confirmed data |
+
+**Inline modifiers:**
+
+| Element | Use for |
+|---------|---------|
+| `<span class="t-dim">// text</span>` | Dimmed inline aside, inside a `.v` value |
+| `<span class="blink"></span>` | Blinking dot — used once in `.t-label` only |
+| `<span class="ver"></span>` | CAMPBELL version number — auto-filled by JS, always include in `.card-footer` |
+
+#### Rules
+
+- **Fragment only** — no `<html>`, `<head>`, `<body>` tags. The JS inserts this directly into the DOM.
+- **CAMPBELL voice** — see `worldbuilding-lore.md` Part 2. Formal, precise, institutional. Data-forward. Anomalous observations noted without editorial alarm.
+- **Director's notes** — distinguish "INITIAL" (new case) from "UPDATED POST-[OP]" (carry-over). Director's voice is more direct than CAMPBELL's; has a personal aside in `.t-dim` at the end.
+- **`<span class="ver"></span>` required** in every `.card-footer` — the JS fills in the CAMPBELL version number.
+- **Section dividers** — include `carry-over` div only if there are carry-over cases; include `new-cases-label` div only if there are new cases.
+- **`campbell-note` closing block** — always present, even if brief. Summarises the queue state, notes any pattern connections, ends with `// END TRANSMISSION`.
+- **No inline styles** — all styling comes from `briefing.css` and the class names above.
