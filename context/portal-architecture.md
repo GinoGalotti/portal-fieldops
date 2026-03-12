@@ -43,6 +43,19 @@ These share the same data layer. The async hub feeds the live tool. A session re
 - **vs Vercel + PlanetScale / Neon:** More moving parts, more potential costs, more configuration.
 - **vs self-hosted:** Zero ops burden.
 
+### CF Free-Tier Budget Awareness
+
+This is a personal campaign site — all CF services stay on the free tier. Design decisions should respect those limits:
+
+| Service | Free limit | Design implication |
+|---|---|---|
+| Pages Functions (Workers) | 100k requests/day | Avoid background polling from idle tabs |
+| D1 reads | 25M/day | Polling every 3s is fine during active play; pause when tab hidden |
+| D1 writes | 100k/day | POST/PUT only on user action or explicit save — never on timers alone |
+
+**Implemented mitigations:**
+- `feed.html` polls pause via `visibilitychange` (`stopPolling()` on hide, `startPolling()` on show)
+
 ---
 
 ## Repository Structure (Actual)
@@ -577,6 +590,7 @@ Split-screen session tool. Single page at `app/feed.html` (or `session.html`).
 
 **First version scope (no Durable Objects yet):**
 - No WebSockets — feed built from D1 `rolls` table, polled every 3 seconds
+- Polling pauses automatically when the tab is hidden (`visibilitychange` → `stopPolling()`), resumes on tab focus — preserves CF free-tier request budget
 - Roll flow: player clicks move → selects stat → rolls 2d6+stat locally → result shown → PUT to `/api/v1/rolls` → appears in feed for all players on next poll
 - CAMPBELL messages: Keeper types in a text field → POST to `/api/v1/messages` → appears in feed
 - Handouts: static for now (link to existing report files)
@@ -618,6 +632,85 @@ When everything works on CF, players are pointed to the new URL and GH Pages is 
 **What goes in the repo:** All HTML, CSS, JS; `data/` JSON files; Workers code; schema migrations.
 
 **What does NOT go in the repo:** CF API tokens or secrets; player session tokens; D1 data.
+
+---
+
+## Mobile Plan — feed.html (DEFERRED)
+
+*Not implementing yet — document the plan so it's ready when needed.*
+
+### Problem
+
+`feed.html` uses a fixed side-by-side layout: feed column (left) + panel column (right, 420px). On a phone this either stacks awkwardly or both columns become unusably narrow.
+
+### Audience split
+
+- **Players on mobile:** primarily need FEED + their MOVES (to roll). Contacts and Handouts are secondary.
+- **Keeper on mobile:** less likely, but may want CONTACTS or THREATS for quick lookup. Rolls are less important.
+
+### Alternative options to evaluate first
+
+**Option A — Force landscape orientation**
+Add `<meta name="screen-orientation" content="landscape">` + CSS `@media (orientation: portrait) { … }` showing a "rotate your device" nudge. Simplest possible fix — the desktop split layout works fine in landscape on most phones (≥ 667px wide). No layout changes needed. Downside: annoying if you just want to glance at the feed quickly.
+
+**Option B — Portrait stacked split (feed top, panel bottom)**
+In portrait mode, keep both columns visible but stack them vertically: feed takes ~55% height, panel takes ~45%. Panel tabs stay horizontal. Feed scroll area shrinks but remains usable. Panel becomes a compact bottom sheet. No tab switching needed — both areas visible at once, like a tall desktop. This may actually be the best UX — closest to the desktop experience without hiding anything.
+
+**Option C — bottom tab bar (≤ 768px portrait only)**
+The fuller option described below — full-width single view with tab switching. Most work, best small-screen UX.
+
+**Recommendation when tackling this:** try Option A first (10 minutes), then Option B (30 minutes). Only build Option C if both feel wrong.
+
+### Option C detail — bottom tab bar (≤ 768px)
+
+Below a breakpoint, collapse the two-column layout into a single full-width column and add a fixed bottom tab bar to switch views. No changes to desktop layout.
+
+**Two tabs for players:**
+
+```
+[ 📡 FEED ]  [ ⚡ PANEL ]
+```
+
+- **FEED** — full-width feed scroll + composer at bottom. Default view.
+- **PANEL** — full-width panel (hunter picker + existing tabs: MOVES / CONTACTS / HANDOUTS). Panel tabs stay as-is.
+
+**Keeper mode adds a label but same two tabs** — FEED and the keeper panel tabs work identically.
+
+### Implementation notes
+
+- Add `data-view="feed"` / `data-view="panel"` to the two columns.
+- A `window.switchMobileView(v)` function toggles `display: none / flex` on each column.
+- Bottom tab bar is a `<div class="mobile-tab-bar">` rendered via CSS `@media (max-width: 768px)`, `display: none` on desktop.
+- The tab bar can be appended to the feed page body — two buttons calling `switchMobileView`.
+- No structural changes to the panel internals — they just become full-width.
+- Active badge on PANEL tab button when new feed entries arrive while viewing panel (so player knows to switch back).
+
+### CSS skeleton (not yet applied)
+
+```css
+@media (max-width: 768px) {
+  .feed-layout    { flex-direction: column; }
+  .feed-col       { display: none; width: 100%; }
+  .panel-col      { display: none; width: 100%; }
+  .feed-col.active, .panel-col.active { display: flex; }
+  .mobile-tab-bar { display: flex; }
+}
+.mobile-tab-bar {
+  display: none; /* hidden on desktop */
+  position: fixed; bottom: 0; left: 0; right: 0;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  z-index: 200;
+}
+```
+
+### Composer on mobile
+
+The feed composer (text box + send button) is currently at the bottom of the feed column. On mobile, when in FEED view it sits above the tab bar. When in PANEL view it's hidden. This is acceptable — rolling from MOVES view doesn't need the composer visible.
+
+### Keeper mode on mobile
+
+Same two-tab layout. The keeper panel tabs (OPERATIVES / CONTACTS / REFERENCES / THREATS) stack horizontally — may need font-size reduction or horizontal scroll on the tab row at very small widths.
 
 ---
 
