@@ -63,7 +63,7 @@
               "type": "callout",
               "color": "amber",
               "from": "// DR. P. OSEI — SUPPLEMENTAL NOTE",
-              "text": "I want to be transparent: I don't know what this material is. I know what it does to instruments near it. I know that the effect scales with processing load — more computation nearby, more pronounced the response. I don't know if 'response' is even the right word. I'm using it because 'coincidence' stopped fitting after the third run.\n\nBoth directions below are defensible. Neither is safe in the way we usually mean safe."
+              "text": "I want to e transparent: I don't know what this material is. I know what it does to instruments near it. I know that the effect scales with processing load — more computation nearby, more pronounced the response. I don't know if 'response' is even the right word. I'm using it because 'coincidence' stopped fitting after the third run.\n\nBoth directions below are defensible. Neither is safe in the way we usually mean safe.\n\nOn the word _attention_\n\nI am aware this is not a scientific term. I used it because the alternatives were worse. _Interference_ implies the effect is incidental — a byproduct regardless of context. It isn't. The response scales with active processing load: idle machine, weak signal; heavy computation, stronger response. The material isn't simply near electronics. It is, in some measurable sense, oriented toward them. _Attention_ is the word that most accurately describes the shape of that — and I find it troubling enough that I thought it worth saying in writing."
             }
           ],
           "choices": [
@@ -101,15 +101,15 @@
           "blocks": [
             {
               "type": "narrative",
-              "text": "Bálint — the person at the centre of Case S01 — called the PORTAL contact number three times in the two weeks after the case closed. Nobody answered. The number routes to a voicemail managed by CAMPBELL. He hasn't called in eleven days. Saoirse Mullen has asked whether field operatives have a view on what PORTAL owes to people it has helped but not saved."
+              "text": "Bálint — the person at the centre of Case S01 — called the PORTAL contact number three times in the week after the case closed. Nobody answered. The number routes to a voicemail managed by CAMPBELL. He hasn't called in the last 3 days. Saoirse Mullen has asked whether field operatives have a view on what PORTAL owes to people it has helped but not saved."
             },
             {
               "type": "campbell",
               "label": "// CAMPBELL — INTERNAL NOTICE",
               "paragraphs": [
                 "Bálint remains at his sister's residence in Hackney. He is not a PORTAL contact. He does not know the organisation's name. He was told that the individuals who assisted him were \"independent researchers\" — a description that is technically accurate and contextually incomplete.",
-                "He called the number left by field operatives on three occasions in the two weeks following Case S01. The calls were not answered — the number routes to a voicemail managed by this office. Messages have been retained. I am not attaching them to this notice.",
-                "He has not called in eleven days."
+                "He called the number left by field operatives on three occasions in the week following Case S01. The calls were not answered. Messages have been retained. I am not attaching them to this notice.",
+                "He has not called in three days."
               ],
               "flag": "// NOTE: This item is not flagged for action. It is flagged because I judged it relevant for field operatives to know. No response is required. A response, if given, would carry implications I cannot model in advance."
             },
@@ -173,10 +173,10 @@
               "type": "campbell",
               "label": "// CAMPBELL — SECURITY NOTICE",
               "paragraphs": [
-                "On Tuesday at 03:17, the internal motion system logged activity in Lab Bay 3. Duration: eleven minutes. The system attributed the movement to a staff member whose keycard had been used to enter the building at 02:54.",
+                "On Tuesday at 03:17, the internal motion system logged activity in Lab Bay 2. Duration: eleven minutes. The system attributed the movement to a staff member whose keycard had been used to enter the building at 02:54.",
                 "The staff member in question — Dr. Osei — was not in the building at that time. She was contacted this morning. Her keycard has been in her possession throughout. She has not reported it lost or damaged.",
                 "Lab Bay 3 houses the Aldermoor deployment equipment and, until its transfer to cold storage at 09:00 Tuesday, the BIM-S01-003 sample.",
-                "Nothing has been reported missing. The motion log shows a route: entrance, corridor B, Lab Bay 3, corridor B, exit. Eleven minutes. No deviation."
+                "Nothing has been reported missing. The motion log shows a route: entrance, corridor B, Lab Bay 2, corridor B, exit. Eleven minutes. No deviation."
               ],
               "flag": "// FLAG: Security review is in progress. Marcus Finch is coordinating. Dr. Osei has been briefed. The sample has been relocated as a precaution. This notice is being shared with field operatives because the incident occurred in the 36 hours before the scheduled Aldermoor deployment briefing. I do not know if this is relevant. I am noting it."
             },
@@ -194,7 +194,7 @@
             },
             {
               "type": "narrative",
-              "text": "What the person was doing in Lab Bay 3 for the intervening time, or why they didn't appear at marker 7 after entering from the lobby, Marcus doesn't know. He's reviewed the footage six times. He's not sure he wants to review it a seventh."
+              "text": "What the person was doing in Lab Bay 2 for the intervening time, or why they didn't appear at marker 7 after entering from the lobby, Marcus doesn't know. He's reviewed the footage six times. He's not sure he wants to review it a seventh."
             },
             {
               "type": "narrative",
@@ -236,7 +236,7 @@
               "date": "this week",
               "body_paras": [
                 "Right. So this is slightly awkward to raise because I like CAMPBELL and I don't want to be the person who started the \"is the AI broken\" conversation, but here we are.",
-                "I've been reviewing the activity logs from the past three weeks as part of the Aldermoor kit prep — standard thing, making sure the equipment inventory is current before a deployment. CAMPBELL generates these logs automatically. Most of them are completely normal: timestamps, inventory flags, maintenance notes.",
+                "I've been reviewing the activity logs from the past week as part of the Aldermoor kit prep — standard thing, making sure the equipment inventory is current before a deployment. CAMPBELL generates these logs automatically. Most of them are completely normal: timestamps, inventory flags, maintenance notes.",
                 "Except for a few entries that I can't account for. They're formatted correctly. They have valid timestamps. But the content doesn't match any activity I can trace to an actual event, and in two cases the cross-references point to case files that don't exist in the system.",
                 "I asked CAMPBELL about them directly. It said, and I am quoting: {{em:\"Those entries are accurate. The referenced events occurred. The absence of corresponding case files is a filing discrepancy that I have noted and will resolve.\"}} Which is either completely fine and administrative, or is a sentence I'm going to think about for a very long time.",
                 "I'm not raising this with the Director yet. I want someone else to look at the logs first and tell me if I'm misreading something obvious, because that would be the ideal outcome here.",
