@@ -29,7 +29,29 @@
         "Appear without warning at a location tied to the promise",
         "Harm someone who stands between B\u00e1lint and the promise",
         "Manifest the weight of obligation on the hunters"
-      ]
+      ],
+      "bestiary": {
+        "show": true,
+        "phases": [
+          {
+            "show_from": "w1",
+            "show_until": "w1",
+            "threat": "THREAT LEVEL: ?",
+            "class": "UNCONFIRMED \u2014 INCORPOREAL",
+            "description": "CAMPBELL has flagged an unclassified entity at Keller University. Linked to a physical anchor object \u2014 a small ash locket. Manifests as a young woman. Leaves grey ash residue at incident sites. Associated with harm to individuals near the anchor's keeper.",
+            "classified": "\u26a0 WEAKNESSES: UNDER FIELD ASSESSMENT\nANCHOR OBJECT: Located \u2014 recovery directive active",
+            "classified_blurred": true,
+            "blur_notice": "\u26a0 FULL PROFILE UNLOCKS POST-SESSION 01"
+          },
+          {
+            "show_from": "w2",
+            "threat": "THREAT LEVEL: 2",
+            "class": "INCORPOREAL SPIRIT \u2014 EXECUTIONER",
+            "description": "An incorporeal entity tethered to a physical anchor object. Manifests as a young woman. Leaves a grey ash residue that cannot be removed by conventional means. Drawn to protect a specific individual. Her grief made her dangerous \u2014 but she never harmed someone who did not first harm her charge.",
+            "classified": "\u26a0 WEAKNESSES: ANCHOR OBJECT DESTRUCTION WITH PROPER FAREWELL / CHARGE SINCERELY REQUESTING CESSATION\nANCHOR OBJECT: Not recovered \u2014 entity dispersed at scene. Trace ash submitted for lab analysis."
+          }
+        ]
+      }
     },
     {
       "id": "the-cartographer",
@@ -65,7 +87,29 @@
         "The hunters help the entity be known \u2014 witnessed, named, recorded \u2014 in a way it accepts",
         "Sven as contact vector is the natural path; the entity will not harm him"
       ],
-      "alan_note": "What the Cartographer does is NOT illusion. It consumes the real cognitive map inside residents' heads. Alan's glamour powers are the wrong tool here \u2014 his gift is his nature: he reads place by resonance and layered memory. He recognises the entity rather than seeing through it."
+      "alan_note": "What the Cartographer does is NOT illusion. It consumes the real cognitive map inside residents' heads. Alan's glamour powers are the wrong tool here \u2014 his gift is his nature: he reads place by resonance and layered memory. He recognises the entity rather than seeing through it.",
+      "bestiary": {
+        "show": true,
+        "phases": [
+          {
+            "show_from": "w2",
+            "show_until": "w2",
+            "threat": "THREAT LEVEL: ?",
+            "class": "SPATIAL ENTITY \u2014 COLLECTOR",
+            "description": "An entity that rewrites felt geography \u2014 the instinctive mental map residents carry of their own neighbourhood. Does not alter physical streets. Alters the consciousness that reads them. Grows from a point of disturbance. Feeds on familiarity. Does not appear to intend harm. It wants to be known. It is mapping itself onto the neighbourhood the way the neighbourhood was once mapped onto the people who lived there.",
+            "classified": "\u26a0 WEAKNESSES: CLASSIFIED \u2014 FIELD TEAM ONLY\nEPICENTRE: UNDER INVESTIGATION \u2014 14 Aldermoor Crescent",
+            "blur_all": true,
+            "blur_notice": "\u26a0 FULL PROFILE UNLOCKS POST-SESSION 02"
+          },
+          {
+            "show_from": "w3",
+            "threat": "THREAT LEVEL: 3",
+            "class": "SPATIAL ENTITY \u2014 COLLECTOR (URBAN SPRAWLER)",
+            "description": "A pre-urban consciousness that predates the neighbourhood \u2014 possibly the city. Has no body. Has no malice. It holds something like memory, something like attention, something like longing. When residents truly knew their streets, it fed symbiotically on that familiarity. The construction site excavation at the Aldermoor District reservoir broke its containment and it expanded \u2014 consuming the cognitive maps of long-term residents without understanding it was taking something they could not replace. It does not initiate harm. It only wants to be known the way it once was.",
+            "classified": "\u26a0 WEAKNESS: COMMUNICATION \u2014 any genuine attempt to make contact (voluntarily releasing spatial anchor) allows Use Magic or Act Under Pressure. The entity does not resist someone who is trying to understand it.\nSTATUS: Contained \u2014 boundary re-established at excavation site. Entity retracted to pre-expansion range. Residents' navigation gradually recovering. Diane Marsh: extracted. Margaret Holt: elected to remain. Entity is quiet. It knows the field team now."
+          }
+        ]
+      }
     },
     {
       "id": "the-volunteer",
