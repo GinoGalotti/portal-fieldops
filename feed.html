@@ -1648,17 +1648,19 @@ header { flex-shrink: 0; position: relative; }
           '<div class="handout-label">' + escHtml(h.label || h.subject || h.id) + '</div>' +
           (isPosted ? '<div class="handout-posted-time">POSTED ' + escHtml(posted[h.id]) + '</div>' : '') +
         '</div>' +
-        '<button class="' + btnClass + '" onclick="postHandout(' + JSON.stringify(JSON.stringify(h)) + ')">' + btnLabel + '</button>' +
+        '<button class="' + btnClass + '" onclick="postHandout(\'' + escHtml(h.id) + '\')">' + btnLabel + '</button>' +
       '</div>';
     });
     html += '</div>';
     body.innerHTML = html;
   }
 
-  window.postHandout = function (hJson) {
-    var h = JSON.parse(hJson);
-    var bodyText = h.text || h.body || h.label || '';
+  window.postHandout = function (handoutId) {
     var sess = session_data ? session_data.filter(function (s) { return s.id === keeperHandoutSession; })[0] : null;
+    if (!sess) return;
+    var h = (sess.handouts || []).filter(function (x) { return x.id === handoutId; })[0];
+    if (!h) return;
+    var bodyText = h.text || h.body || h.label || '';
     fetch('/api/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
