@@ -1,6 +1,7 @@
-// GET  /api/v1/messages?after=<id>&limit=100  — feed poll
-// GET  /api/v1/messages?offset=<n>&limit=100  — pagination
-// POST /api/v1/messages                        — keeper sends a message
+// GET    /api/v1/messages?after=<id>&limit=100    — feed poll
+// GET    /api/v1/messages?offset=<n>&limit=100   — pagination
+// POST   /api/v1/messages                        — keeper sends a message
+// DELETE /api/v1/messages?session_id=<key>       — clear all non-message handouts for a session
 
 export async function onRequestGet({ request, env }) {
   const url    = new URL(request.url);
@@ -45,4 +46,19 @@ export async function onRequestPost({ request, env }) {
     .run();
 
   return Response.json({ ok: true, id: result.meta.last_row_id });
+}
+
+export async function onRequestDelete({ request, env }) {
+  const url       = new URL(request.url);
+  const sessionId = url.searchParams.get('session_id');
+  if (!sessionId) {
+    return Response.json({ error: 'session_id required' }, { status: 400 });
+  }
+
+  await env.portal_db
+    .prepare(`DELETE FROM messages WHERE session_id = ? AND type != 'message'`)
+    .bind(sessionId)
+    .run();
+
+  return Response.json({ ok: true });
 }

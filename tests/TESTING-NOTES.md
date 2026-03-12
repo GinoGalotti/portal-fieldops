@@ -15,25 +15,38 @@
 | `contacts.html` | `tests/contacts.spec.js` | 7 | ✅ |
 | All key pages | `tests/smoke.spec.js` | 5 | ✅ |
 | Nav injection | `tests/nav.spec.js` | 5 | ✅ |
+| `feed.html` | `tests/feed.spec.js` | 15 | ✅ |
 
 ## Test Backlog — Not Yet Covered
 
 Priority: **H** = high (core features, likely to break), **M** = medium, **L** = low (nice to have).
 
 ### `feed.html` — Live Session Feed [H]
+- [x] Page loads, feed-entries area and composer present
+- [x] Roll entries from API render in the feed
+- [x] Message entries from API render in the feed
+- [x] Feed entry expands on click (adds .expanded)
+- [x] Clicking expanded entry collapses it (removes .expanded)
+- [x] Two entries can be expanded simultaneously
+- [x] Keeper mode activates on 5× logo click (keeper tabs appear)
+- [x] Keeper HANDOUTS tab visible and renders handout list (S02)
+- [x] Keeper handout POST buttons default to ▶ POST (not RE-POST)
+- [x] Clear handouts immediately resets RE-POST buttons to POST (no reload)
+- [x] Clear handouts removes .feed-image entries from feed DOM
+- [x] Clear feed view removes all entries from DOM immediately
+- [x] On reload, messages before clear sentinel are discarded
+- [x] Clear sentinel received via polling wipes the visible feed
+- [x] Feed composer sends POST with correct sender and body
 - [ ] Hunter picker dropdown renders and selecting a hunter loads their data
 - [ ] Move cards render after hunter selection (at least one visible)
-- [ ] Hover on a move card shows description block
 - [ ] Roll button exists on move cards
-- [ ] Roll feed area exists and accepts new messages via composer
 - [ ] ROLL button sends a roll entry to the feed
 - [ ] Feed composer: name auto-fills from selected hunter
 - [ ] Tracks (harm/luck/xp) render as clickable pips
-- [ ] Keeper mode activates on 5× logo click (extra tabs appear)
 - [ ] Keeper mode CONTACTS tab shows NPC visibility toggles
 - [ ] Keeper mode REFERENCES tab shows MoTW cheat sheet content
 - [ ] Keeper mode THREATS tab shows entity data
-- [ ] Feed polling: new entries appear without page reload (requires controlled test data)
+- [ ] `?mouseover=true` restores CSS :hover behaviour (hover not testable in headless)
 
 ### `hunters/*.html` — Hunter Pages [H]
 - [ ] Hunter page loads and renders playbook name

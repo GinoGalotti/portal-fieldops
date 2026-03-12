@@ -80,7 +80,11 @@ header { flex-shrink: 0; position: relative; }
   position: relative;
 }
 .feed-entry:hover { background: rgba(255,255,255,0.02); }
-.feed-entry:hover .feed-outcome-detail { opacity: 1; max-height: 500px; }
+/* Default: click to expand (hover disabled via body.no-hover class added by JS) */
+.feed-entry.expanded .feed-outcome-detail { opacity: 1; max-height: 500px; }
+body.no-hover .feed-entry:hover .feed-outcome-detail { opacity: 0 !important; max-height: 0 !important; }
+/* ?mouseover=true: keep legacy hover behaviour, no .expanded class used */
+body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-height: 500px; }
 
 .feed-entry-meta {
   display: flex;
@@ -406,22 +410,74 @@ header { flex-shrink: 0; position: relative; }
 .handout-post-btn.repost:hover { background: rgba(255,255,255,0.08); }
 
 /* ── PLAYER HANDOUTS PANEL ───────────────────────────────────────────────── */
-.handout-panel-image {
+.handout-panel-tabs {
+  display: flex;
+  gap: 0.3rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+.handout-panel-tab {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 2px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  transition: all 0.15s;
+}
+.handout-panel-tab.active {
+  background: rgba(46,204,113,0.1);
+  border-color: rgba(46,204,113,0.35);
+  color: var(--green);
+}
+.handout-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+.handout-gallery-item { cursor: zoom-in; }
+.handout-gallery-item img {
   width: 100%;
   border-radius: 2px;
   border: 1px solid var(--border);
   display: block;
-  cursor: zoom-in;
-  margin-bottom: 0.35rem;
 }
-.handout-panel-section { margin-bottom: 0.75rem; }
-.handout-panel-label {
+.handout-gallery-label {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.58rem;
+  font-size: 0.52rem;
   color: var(--text-dim);
-  letter-spacing: 0.06em;
-  margin-bottom: 0.25rem;
+  letter-spacing: 0.05em;
+  margin-top: 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+/* ── KEEPER HANDOUT MAP NOTE + CLEAR BUTTON ──────────────────────────────── */
+.handout-map-note {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.52rem;
+  color: #c07aff;
+  letter-spacing: 0.06em;
+  margin-top: 0.15rem;
+}
+.handout-clear-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.55rem;
+  border-radius: 2px;
+  cursor: pointer;
+  background: rgba(231,76,60,0.06);
+  border: 1px solid rgba(231,76,60,0.2);
+  color: #e74c3c;
+  transition: background 0.15s;
+  width: 100%;
+  margin-top: 0.6rem;
+}
+.handout-clear-btn:hover { background: rgba(231,76,60,0.12); }
 
 /* ── FEED COMPOSER ───────────────────────────────────────────────────────── */
 .feed-composer {
@@ -1077,6 +1133,19 @@ header { flex-shrink: 0; position: relative; }
   var sheetDirty     = false;
   var autoScroll     = true;
 
+  // Expand-on-click mode (default). ?mouseover=true restores legacy hover behaviour.
+  var hoverMode = new URLSearchParams(location.search).get('mouseover') === 'true';
+  if (!hoverMode) document.body.classList.add('no-hover');
+
+  // Click anywhere on a feed entry (not on a button) to toggle expanded detail
+  document.getElementById('feed-entries').addEventListener('click', function (e) {
+    if (hoverMode) return;
+    if (e.target.closest('button')) return;
+    var entry = e.target.closest('.feed-entry');
+    if (!entry) return;
+    entry.classList.toggle('expanded');
+  });
+
   var HUNTER_NAMES  = { rex: 'Rex Bangley', reed: 'Reed Atwood', alan: 'Alan Frazier', sven: 'Sven', 'john-johnson': 'John Johnson' };
   var HUNTER_COLORS = { rex: '#f0a500', reed: '#3ab5b0', alan: '#3ab5b0', sven: '#a78bfa', 'john-johnson': '#c8ddd0' };
   var STAT_NAMES    = { charm: 'CHM', cool: 'COL', sharp: 'SHP', tough: 'TGH', weird: 'WRD' };
@@ -1563,41 +1632,64 @@ header { flex-shrink: 0; position: relative; }
   };
 
   // ── PLAYER HANDOUTS PANEL ─────────────────────────────────────────────────
-  // Shows all revealed image/map/readaloud/pda entries from the live feed.
-  // Players use this as a quick reference without scrolling the whole feed.
+  // Shows keeper-shared images as a gallery, filtered by session tab.
+  // Readalouds and PDAs are feed-only — not shown here.
+  // Deduplicates: same image posted twice appears once.
+  var playerHandoutSession = null;
+
+  window.switchPlayerHandoutSession = function (id) {
+    playerHandoutSession = id;
+    renderHandoutsPanel();
+  };
+
   function renderHandoutsPanel() {
     var body = document.getElementById('panel-body');
-    var revealed = feedEntries.filter(function (e) {
-      return e.type && e.type !== 'message';
+    if (!session_data) { body.innerHTML = '<div class="keeper-panel-note">// LOADING…</div>'; return; }
+
+    // Default to last session
+    if (!playerHandoutSession) playerHandoutSession = session_data[session_data.length - 1].id;
+
+    // Session tabs
+    var html = '<div class="handout-panel-tabs">';
+    session_data.forEach(function (s) {
+      var active = s.id === playerHandoutSession ? ' active' : '';
+      html += '<button class="handout-panel-tab' + active + '" onclick="switchPlayerHandoutSession(\'' + s.id + '\')">' + escHtml(s.session_key) + '</button>';
     });
-    if (revealed.length === 0) {
-      body.innerHTML = '<div class="keeper-panel-note">// NO HANDOUTS SHARED YET</div>';
+    html += '</div>';
+
+    var sess = session_data.filter(function (s) { return s.id === playerHandoutSession; })[0];
+    var sessKey = sess ? sess.session_key : null;
+
+    // Images/maps only, matching session, dedup by src
+    var seen = {};
+    var images = feedEntries.filter(function (e) {
+      if (e.type !== 'image' && e.type !== 'map') return false;
+      if (sessKey && e.session_id !== sessKey) return false;
+      var p = {};
+      try { p = typeof e.payload === 'string' ? JSON.parse(e.payload) : (e.payload || {}); } catch (x) {}
+      var src = p.src || '';
+      if (!src || seen[src]) return false;
+      seen[src] = true;
+      return true;
+    });
+
+    if (images.length === 0) {
+      body.innerHTML = html + '<div class="keeper-panel-note">// NO IMAGES SHARED YET</div>';
       return;
     }
-    var html = '';
-    revealed.forEach(function (e) {
-      var payload = {};
-      try { payload = typeof e.payload === 'string' ? JSON.parse(e.payload) : (e.payload || {}); } catch (x) {}
-      var label = payload.label || e.subject || '';
-      var t = e.type;
-      html += '<div class="handout-panel-section">';
-      if (t === 'image' || t === 'map') {
-        var src = payload.src || '';
-        html += '<div class="feed-image-type-tag">// ' + (t === 'map' ? 'MAP' : 'IMAGE') + '</div>';
-        if (src) {
-          html += '<img class="handout-panel-image" src="' + escHtml(src) + '" alt="' + escHtml(label) + '" onclick="openLightbox(\'' + escHtml(src) + '\',\'' + escHtml(label) + '\')">';
-        }
-        if (label) html += '<div class="handout-panel-label">' + escHtml(label) + '</div>';
-      } else if (t === 'readaloud') {
-        html += '<div class="feed-image-type-tag">// READALOUD</div>';
-        if (label) html += '<div class="handout-panel-label">' + escHtml(label) + '</div>';
-      } else if (t === 'pda') {
-        var from = payload.from || e.sender || '';
-        html += '<div class="feed-image-type-tag">// PDA — ' + escHtml(from) + '</div>';
-        if (label) html += '<div class="handout-panel-label">' + escHtml(label) + '</div>';
-      }
-      html += '</div>';
+
+    html += '<div class="handout-gallery">';
+    images.forEach(function (e) {
+      var p = {};
+      try { p = typeof e.payload === 'string' ? JSON.parse(e.payload) : (e.payload || {}); } catch (x) {}
+      var src   = p.src || '';
+      var label = p.label || e.subject || '';
+      html += '<div class="handout-gallery-item" onclick="openLightbox(\'' + escHtml(src) + '\',\'' + escHtml(label) + '\')">' +
+        '<img src="' + escHtml(src) + '" alt="' + escHtml(label) + '">' +
+        (label ? '<div class="handout-gallery-label">' + escHtml(label) + '</div>' : '') +
+      '</div>';
     });
+    html += '</div>';
     body.innerHTML = html;
   }
 
@@ -1636,24 +1728,63 @@ header { flex-shrink: 0; position: relative; }
     html += '<div class="handout-list">';
     sess.handouts.forEach(function (h) {
       var isPosted = !!posted[h.id];
-      var pipClass = 'pip-' + h.type;
+      var pipClass  = 'pip-' + h.type;
       var typeLabel = h.type.toUpperCase();
       var itemClass = isPosted ? 'handout-item posted' : 'handout-item';
-      var btnLabel  = isPosted ? '↺ RE-POST' : '▶ POST';
-      var btnClass  = isPosted ? 'handout-post-btn repost' : 'handout-post-btn';
-      // images can be re-posted but show a re-post style; readalouds always re-postable
-      html += '<div class="' + itemClass + '">' +
-        '<span class="handout-type-pip ' + pipClass + '">' + escHtml(typeLabel) + '</span>' +
-        '<div class="handout-meta">' +
-          '<div class="handout-label">' + escHtml(h.label || h.subject || h.id) + '</div>' +
-          (isPosted ? '<div class="handout-posted-time">POSTED ' + escHtml(posted[h.id]) + '</div>' : '') +
-        '</div>' +
-        '<button class="' + btnClass + '" onclick="postHandout(\'' + escHtml(h.id) + '\')">' + btnLabel + '</button>' +
-      '</div>';
+      if (h.type === 'map') {
+        // Maps: no POST button — interactive maps not yet implemented
+        html += '<div class="' + itemClass + '">' +
+          '<span class="handout-type-pip ' + pipClass + '">' + escHtml(typeLabel) + '</span>' +
+          '<div class="handout-meta">' +
+            '<div class="handout-label">' + escHtml(h.label || h.subject || h.id) + '</div>' +
+            '<div class="handout-map-note">// INTERACTIVE MAP — COMING SOON — see mission doc</div>' +
+          '</div>' +
+        '</div>';
+      } else {
+        var btnLabel = isPosted ? '↺ RE-POST' : '▶ POST';
+        var btnClass = isPosted ? 'handout-post-btn repost' : 'handout-post-btn';
+        html += '<div class="' + itemClass + '">' +
+          '<span class="handout-type-pip ' + pipClass + '">' + escHtml(typeLabel) + '</span>' +
+          '<div class="handout-meta">' +
+            '<div class="handout-label">' + escHtml(h.label || h.subject || h.id) + '</div>' +
+            (isPosted ? '<div class="handout-posted-time">POSTED ' + escHtml(posted[h.id]) + '</div>' : '') +
+          '</div>' +
+          '<button class="' + btnClass + '" id="hbtn-' + escHtml(h.id) + '" onclick="postHandout(\'' + escHtml(h.id) + '\')">' + btnLabel + '</button>' +
+        '</div>';
+      }
     });
     html += '</div>';
+    html += '<button class="handout-clear-btn" onclick="clearSessionHandouts()">// CLEAR HANDOUTS — ' + escHtml(sess.session_key) + '</button>';
     body.innerHTML = html;
   }
+
+  window.clearSessionHandouts = function () {
+    var sess = session_data ? session_data.filter(function (s) { return s.id === keeperHandoutSession; })[0] : null;
+    if (!sess) return;
+
+    // Clear localStorage and re-render immediately — no waiting for D1
+    var posted = {};
+    try { posted = JSON.parse(localStorage.getItem('portal_posted_handouts') || '{}'); } catch (x) {}
+    (sess.handouts || []).forEach(function (h) { delete posted[h.id]; });
+    localStorage.setItem('portal_posted_handouts', JSON.stringify(posted));
+    // Remove handout entries from local cache and DOM for this session
+    feedEntries = feedEntries.filter(function (e) {
+      return !(e.session_id === sess.session_key && e.type && e.type !== 'message');
+    });
+    var feedContainer = document.getElementById('feed-entries');
+    feedContainer.querySelectorAll('.feed-readaloud, .feed-pda, .feed-image').forEach(function (el) {
+      el.remove();
+    });
+    renderKeeperHandoutsTab();
+    // Refresh player gallery if open
+    if (activeTab === 'handouts') renderHandoutsPanel();
+
+    // Also delete from D1 in background (ensures cleared state survives reload)
+    fetch('/api/v1/messages?session_id=' + encodeURIComponent(sess.session_key), {
+      method: 'DELETE'
+    }).then(function (r) { return r.json(); })
+      .catch(function (err) { console.error('clearSessionHandouts D1 delete failed', err); });
+  };
 
   window.postHandout = function (handoutId) {
     var sess = session_data ? session_data.filter(function (s) { return s.id === keeperHandoutSession; })[0] : null;
@@ -1673,14 +1804,23 @@ header { flex-shrink: 0; position: relative; }
         payload:    h
       })
     }).then(function (r) { return r.json(); }).then(function (res) {
-      if (!res.ok) return;
+      if (!res.ok) {
+        console.error('postHandout failed', res);
+        var errBtn = document.getElementById('hbtn-' + handoutId);
+        if (errBtn) { errBtn.textContent = 'ERR'; errBtn.style.color = '#e74c3c'; }
+        return;
+      }
       var posted = {};
       try { posted = JSON.parse(localStorage.getItem('portal_posted_handouts') || '{}'); } catch (x) {}
       var now = new Date();
       posted[h.id] = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
       localStorage.setItem('portal_posted_handouts', JSON.stringify(posted));
       renderKeeperHandoutsTab();
-    }).catch(function () {});
+    }).catch(function (err) {
+      console.error('postHandout error', err);
+      var errBtn = document.getElementById('hbtn-' + handoutId);
+      if (errBtn) { errBtn.textContent = 'ERR'; errBtn.style.color = '#e74c3c'; }
+    });
   };
 
   // ── KEEPER TAB SWITCHING ─────────────────────────────────────────────────
@@ -2200,18 +2340,25 @@ header { flex-shrink: 0; position: relative; }
       }).catch(function () {});
   };
 
-  // Keeper: clear the visible feed (DOM only — D1 data is preserved, "↑ LOAD EARLIER HISTORY" still works)
+  // Keeper: clear the visible feed for all connected clients.
+  // Posts a 'clear' sentinel to D1 — all clients wipe their feed when they receive it via polling.
+  // History is preserved in D1 and still accessible via "↑ LOAD EARLIER HISTORY".
   window.keeperClearFeed = function () {
-    if (!confirm('Clear the visible feed?\n\nThis only clears what\'s shown on screen. All history is preserved in D1 and can be loaded with "↑ LOAD EARLIER HISTORY".')) return;
+    // Clear this client's view immediately
+    feedEntries = [];
     var container = document.getElementById('feed-entries');
     var loadWrap  = document.getElementById('feed-load-more-wrap');
-    // Remove all children except the load-more-wrap
     while (container.lastChild && container.lastChild !== loadWrap) {
       container.removeChild(container.lastChild);
     }
-    feedEntries = [];
-    // Advance the feedOffset so "load earlier" still works from here
-    // lastRollId / lastMsgId stay as-is so polling picks up from current point
+    // Post clear sentinel — other clients wipe on next poll; reloads start fresh
+    fetch('/api/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sender: 'KEEPER', body: '// FEED CLEARED', type: 'clear', session_id: getCurrentSession() })
+    }).then(function (r) { return r.json(); }).then(function (data) {
+      if (data.id) lastMsgId = data.id;
+    }).catch(function () {});
   };
 
   // Keeper: send as CAMPBELL / DIRECTOR / etc.
@@ -2331,6 +2478,9 @@ header { flex-shrink: 0; position: relative; }
 
   function buildFeedEntryHtml(entry) {
     var entryType = entry.type || (entry._msg || entry.sender ? 'message' : null);
+
+    // ── Clear sentinel — never rendered ────────────────────────────────────
+    if (entryType === 'clear') return '';
 
     // ── Readaloud ──────────────────────────────────────────────────────────
     if (entryType === 'readaloud') {
@@ -2474,6 +2624,18 @@ header { flex-shrink: 0; position: relative; }
       var rolls = results[0].reverse();
       var msgs  = results[1].reverse();
 
+      // Apply clear floor: if a 'clear' sentinel exists, discard everything before it
+      var lastClear = null;
+      msgs.forEach(function (m) { if (m.type === 'clear') lastClear = m; });
+      if (lastClear) {
+        var clearTime = new Date((lastClear.delivered_at || '').replace(' ', 'T')).getTime();
+        msgs  = msgs.filter(function (m) { return m.id > lastClear.id; });
+        rolls = rolls.filter(function (r) {
+          var rt = new Date((r.rolled_at || r.timestamp || '').replace(' ', 'T')).getTime();
+          return rt > clearTime;
+        });
+      }
+
       rolls.forEach(function (r) { if (r.id > lastRollId) lastRollId = r.id; });
       msgs.forEach(function  (m) { if (m.id > lastMsgId)  lastMsgId  = m.id; });
 
@@ -2482,6 +2644,7 @@ header { flex-shrink: 0; position: relative; }
       scrollFeedToBottom();
 
       feedOffset = rolls.length;
+      lastPollTime = Date.now();
       startPolling();
     }).catch(function () { startPolling(); });
   }
@@ -2508,9 +2671,13 @@ header { flex-shrink: 0; position: relative; }
   };
 
   // ── POLLING ───────────────────────────────────────────────────────────────
+  var POLL_ACTIVE  = 6000;   // interval when page is visible
+  var POLL_PASSIVE = 60000;  // interval when tab is hidden (CF free-tier budget)
+  var lastPollTime = 0;
+
   function startPolling() {
     if (pollTimer) clearInterval(pollTimer);
-    pollTimer = setInterval(poll, 3000);
+    pollTimer = setInterval(poll, POLL_ACTIVE);
     if (saveTimer) clearInterval(saveTimer);
     saveTimer = setInterval(saveSheet, 5000);
   }
@@ -2520,15 +2687,25 @@ header { flex-shrink: 0; position: relative; }
     if (saveTimer) { clearInterval(saveTimer); saveTimer = null; }
   }
 
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-      stopPolling();
+  // Switches between fast (6s) and slow (60s) polling based on visibility + OS window focus.
+  // Called by both visibilitychange and window blur/focus events.
+  function updatePollingMode() {
+    var active = !document.hidden && document.hasFocus();
+    if (pollTimer) clearInterval(pollTimer);
+    if (active) {
+      if (Date.now() - lastPollTime > POLL_ACTIVE) poll();
+      pollTimer = setInterval(poll, POLL_ACTIVE);
     } else {
-      startPolling();
+      pollTimer = setInterval(poll, POLL_PASSIVE);
     }
-  });
+  }
+
+  document.addEventListener('visibilitychange', updatePollingMode);
+  window.addEventListener('blur',  updatePollingMode);
+  window.addEventListener('focus', updatePollingMode);
 
   function poll() {
+    lastPollTime = Date.now();
     Promise.all([
       fetch('/api/v1/rolls?after=' + lastRollId).then(function (r) { return r.ok ? r.json() : []; }),
       fetch('/api/v1/messages?after=' + lastMsgId).then(function (r) { return r.ok ? r.json() : []; })
@@ -2537,6 +2714,20 @@ header { flex-shrink: 0; position: relative; }
       var newMsgs  = results[1];
       newRolls.forEach(function (r) { if (r.id > lastRollId) lastRollId = r.id; });
       newMsgs.forEach(function  (m) { if (m.id > lastMsgId)  lastMsgId  = m.id; });
+
+      // Handle feed-clear signal: if a 'clear' message arrives, wipe the feed
+      var clearMsg = newMsgs.filter(function (m) { return m.type === 'clear'; })[0];
+      if (clearMsg) {
+        feedEntries = [];
+        var container = document.getElementById('feed-entries');
+        var loadWrap  = document.getElementById('feed-load-more-wrap');
+        while (container.lastChild && container.lastChild !== loadWrap) {
+          container.removeChild(container.lastChild);
+        }
+        // Only render messages that arrived strictly after the clear sentinel
+        newMsgs  = newMsgs.filter(function (m) { return m.id > clearMsg.id; });
+        newRolls = [];
+      }
 
       var combined = mergeAndSort(newRolls, newMsgs);
       combined.forEach(function (e) {
