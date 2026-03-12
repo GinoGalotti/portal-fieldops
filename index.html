@@ -100,6 +100,7 @@ section {
 
 /* ── SESSION CARDS ── */
 .sessions-grid { display: grid; gap: 2px; }
+a.session-card { display: block; text-decoration: none; color: inherit; }
 .session-card {
   border: 1px solid var(--border);
   background: var(--bg2);
@@ -228,7 +229,7 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
   <div class="sessions-grid">
 
     <!-- SESSION 01 — W1 (active) -->
-    <div class="session-card" data-session-from="w1" data-session-until="w1">
+    <a href="missions/missions.html" class="session-card" data-session-from="w1" data-session-until="w1">
       <div class="session-meta">
         <span class="session-num">// SESSION 01</span>
         <span class="session-status active">ACTIVE</span>
@@ -242,9 +243,9 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
         ENTITY TYPE: <span class="redact">████████████████</span> &nbsp;·&nbsp;
         DIRECTIVE STATUS: <span class="redact">██████ PENDING</span>
       </div>
-    </div>
+    </a>
     <!-- SESSION 01 — W2+ (completed) -->
-    <div class="session-card" data-session-from="w2">
+    <a href="missions/missions.html#mission-01" class="session-card" data-session-from="w2">
       <div class="session-meta">
         <span class="session-num">// SESSION 01</span>
         <span class="session-status completed">COMPLETED</span>
@@ -258,24 +259,24 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
         ENTITY TYPE: Incorporeal Spirit — Executioner &nbsp;·&nbsp;
         DIRECTIVE STATUS: Partial Recovery — Ash Locket not retrieved
       </div>
-    </div>
+    </a>
 
     <!-- SESSION 02 — W2+ (active) -->
-    <div class="session-card" data-session-from="w2">
+    <a href="missions/missions.html#mission-02" class="session-card" data-session-from="w2">
       <div class="session-meta">
         <span class="session-num">// SESSION 02</span>
         <span class="session-status active">ACTIVE</span>
       </div>
       <div class="session-title">One Who Wants To Be Known</div>
       <div class="session-excerpt">
-        CAMPBELL flagged a cluster of navigation failures in a residential district — seven reports in fourteen days, one missing person, one hospitalisation. The streets haven't changed. The people who live on them no longer know where they are. The field team is en route. They have been advised not to enter the affected zone without an anchor protocol.
+        CAMPBELL flagged a cluster of navigation failures in a residential district — seven reports in fourteen days, one missing person, one hospitalisation. The streets haven't changed. The people who live on them no longer know where they are. The field team is en route.
       </div>
       <div class="session-redacted">
         LOCATION: Aldermoor District &nbsp;·&nbsp;
         ENTITY TYPE: <span class="redact">████████████████</span> &nbsp;·&nbsp;
         DIRECTIVE STATUS: <span class="redact">██████ PENDING</span>
       </div>
-    </div>
+    </a>
 
     <!-- SESSION 03 — W2+ placeholder -->
     <div class="session-card" style="opacity:0.5;" data-session-from="w2">

@@ -51,7 +51,10 @@ footer { padding: 24px; }
 .meta-tag.amber { border-color: var(--amber-dim); color: var(--amber); }
 .meta-tag.green { border-color: var(--green-dim); color: var(--green); }
 .mission-redacted { margin-top: 14px; font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.1em; padding: 8px 12px; border: 1px solid var(--border); background: var(--bg); }
-.mission-outcome { margin-top: 14px; padding: 10px 14px; background: rgba(46,204,113,0.04); border: 1px solid var(--green-dim); font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; color: var(--green-dim); letter-spacing: 0.08em; line-height: 1.8; display: none; }
+.mission-outcome { margin-top: 14px; padding: 10px 14px; background: rgba(46,204,113,0.04); border: 1px solid var(--green-dim); font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; color: var(--green-dim); letter-spacing: 0.08em; line-height: 1.8; }
+.mission-actions { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; }
+.mission-action-link { font-family: 'Share Tech Mono', monospace; font-size: 0.64rem; letter-spacing: 0.12em; color: var(--green-dim); text-decoration: none; border: 1px solid var(--border); padding: 4px 10px; transition: color 0.15s, border-color 0.15s; }
+.mission-action-link:hover { color: var(--green); border-color: var(--green-dim); }
 
 @media (max-width: 600px) {
   .mission-card { grid-template-columns: 1fr; gap: 16px; }
@@ -125,7 +128,7 @@ footer { padding: 24px; }
     </div>
 
     <!-- MISSION 01 — W2+ (completed) -->
-    <div class="mission-card" data-session-from="w2">
+    <div class="mission-card" id="mission-01" data-session-from="w2">
       <div class="mission-id-col">
         <span class="m-num">01</span>
         KELLER UNIV.<br>
@@ -149,11 +152,22 @@ footer { padding: 24px; }
           ANCHOR OBJECT: Not recovered — dispersed at scene &nbsp;·&nbsp;
           DIRECTIVE OUTCOME: Partial — trace ash recovered, locket not retrieved
         </div>
+        <div class="mission-outcome">
+          DEBRIEF FILED: POST-SESSION 01 · REPORT #0047-C CLOSED<br>
+          ENTITY OUTCOME: Dispersed at scene following farewell and release. No further manifestation detected. Anchor object not recovered — entity dissolved before acquisition could complete.<br>
+          CASUALTIES: 1 field operative — critical injury, non-fatal. Treated and cleared for duty.<br>
+          SAMPLES: Trace ash collected incidentally at scene. Submitted to lab under Project Veil analysis protocol. Preliminary findings of significant interest.<br>
+          OUTSTANDING: Bálint Varga — welfare follow-up pending. No MESA presence at Keller. Locket remains unaccounted for.
+        </div>
+        <div class="mission-actions">
+          <a href="../reports/s1-ash-veil-memo.html" class="mission-action-link">→ REDACTED LAB MEMO</a>
+          <a href="../reports/player-report.html" class="mission-action-link">→ FILE A FIELD REPORT</a>
+        </div>
       </div>
     </div>
 
     <!-- MISSION 02 — W2+ (active) -->
-    <div class="mission-card" data-session-from="w2">
+    <div class="mission-card" id="mission-02" data-session-from="w2">
       <div class="mission-id-col">
         <span class="m-num">02</span>
         ALDERMOOR<br>
@@ -176,6 +190,10 @@ footer { padding: 24px; }
           ENTITY CLASS: <span class="redact">████████████████████</span> &nbsp;·&nbsp;
           EPICENTRE: <span class="redact">███████████████████</span> &nbsp;·&nbsp;
           DIRECTIVE OUTCOME: <span class="redact">███ PENDING RESOLUTION</span>
+        </div>
+        <div class="mission-actions">
+          <a href="campbell-briefings.html" class="mission-action-link">→ CAMPBELL PRIORITY QUEUE</a>
+          <a href="../reports/player-report.html" class="mission-action-link">→ FILE A FIELD REPORT</a>
         </div>
       </div>
     </div>

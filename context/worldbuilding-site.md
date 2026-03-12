@@ -394,13 +394,26 @@ For content that changes between sessions, author **separate HTML elements** for
   <span class="mission-status active">ACTIVE</span>
   <div class="mission-title">A Promise is a Promise</div>
   ENTITY: <span class="redact">████████████</span>
+  <div class="mission-actions">
+    <a href="campbell-briefings.html" class="mission-action-link">→ CAMPBELL PRIORITY QUEUE</a>
+    <a href="../reports/player-report.html" class="mission-action-link">→ FILE A FIELD REPORT</a>
+  </div>
 </div>
 
-<!-- W2+ state: completed, details revealed -->
-<div class="mission-card" data-session-from="w2">
+<!-- W2+ state: completed, details revealed — add id for deep linking from index.html -->
+<div class="mission-card" id="mission-01" data-session-from="w2">
   <span class="mission-status completed">COMPLETED</span>
   <div class="mission-title">A Promise is a Promise</div>
   ENTITY: Incorporeal Spirit — Eszter
+  <div class="mission-outcome">
+    DEBRIEF FILED: POST-SESSION 01 · ...<br>
+    ENTITY OUTCOME: ...<br>
+    OUTSTANDING: ...
+  </div>
+  <div class="mission-actions">
+    <a href="../reports/s1-memo.html" class="mission-action-link">→ REDACTED LAB MEMO</a>
+    <a href="../reports/player-report.html" class="mission-action-link">→ FILE A FIELD REPORT</a>
+  </div>
 </div>
 ```
 
@@ -458,9 +471,11 @@ All four player-facing areas need updating for the new session:
 **`data/sessions.json`** — add the new session entry, mark previous as `"closed"`.
 
 **`missions/missions.html`** — add two card variants:
-- `data-session-from="wN" data-session-until="wN"` — ACTIVE state (redacted entity, pending directive)
-- `data-session-from="wN+1"` — COMPLETED state (revealed entity, outcome filled)
+- `data-session-from="wN" data-session-until="wN"` — ACTIVE state (redacted entity, pending directive). Include a `.mission-actions` block with `→ CAMPBELL PRIORITY QUEUE` and `→ FILE A FIELD REPORT` links.
+- `data-session-from="wN+1"` — COMPLETED state (revealed entity, outcome filled). Add `id="mission-NN"` for deep linking from index.html. Include a `.mission-outcome` block with debrief details (entity outcome, casualties, samples, outstanding items) and a `.mission-actions` block with `→ REDACTED LAB MEMO` (if a memo exists) and `→ FILE A FIELD REPORT`.
 Also: previous session's ACTIVE card gets `data-session-until="wN-1"` and a new COMPLETED card gets `data-session-from="wN"` (already done from prior sessions).
+
+**`index.html` Session Archive** — session cards are anchor tags (`<a class="session-card">`) linking to `missions/missions.html` (active) or `missions/missions.html#mission-NN` (completed, using the `id` on the completed card). Completed card: `data-session-from="wN+1"`. Upcoming placeholder: plain `<div>` with `style="opacity:0.5"`, not a link.
 
 **`index.html`** — update or add:
 - Oracle readout variants (W-current active cases count)
