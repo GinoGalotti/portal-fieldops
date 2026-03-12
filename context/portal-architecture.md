@@ -585,6 +585,34 @@ CREATE TABLE IF NOT EXISTS incident_state (
 - `functions/api/v1/incidents/[id]/responses.js` — GET+POST open responses (existing)
 - `workers/migrations/009_incident_state.sql` — new table (applied local; apply --remote before deploy)
 
+---
+
+## E2E Testing (branch: `playwright-testing`)
+
+Playwright test suite — chromium only, targets `wrangler pages dev .` on localhost:8788.
+
+**Run:**
+```bash
+git checkout playwright-testing
+npm install && npx playwright install chromium
+npm test              # headless
+npm run test:ui       # interactive
+```
+
+**Current coverage:**
+| File | Tests | Page |
+|------|-------|------|
+| `tests/smoke.spec.js` | 5 | All key pages — HTTP 200 + element |
+| `tests/nav.spec.js` | 5 | `player-nav.js` injection |
+| `tests/contacts.spec.js` | 7 | NPC card rendering |
+| `tests/incidents.spec.js` | 18 | Full incidents page (tabs, choice, open, info, teaser) |
+
+**Tests are data-driven**: `incidents.spec.js` reads `data/incidents.json` at test time — adding new weeks won't break existing tests.
+
+**Backlog of untested features:** see `tests/TESTING-NOTES.md` on the `playwright-testing` branch. Key gaps: `feed.html` (all interactive features), hunter sheet save/restore, CAMPBELL briefings tab switcher, player/keeper report pages, session-aware content visibility, D1 persistence cycle.
+
+---
+
 ### Phase 2.9 — The Lab Team Playbook Page (COMPLETE)
 
 `the-lab.html` at root — player-facing Research Lab team playbook page.
