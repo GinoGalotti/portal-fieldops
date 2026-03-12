@@ -223,6 +223,13 @@ This section tells you what information is classified and how to handle it on pl
 **What would crack it open:** Rex identifying the BIM signature in a recovered MESA sample (Θ or Anchor Spike), CAMPBELL's post-S02 flag being found by Priya, Nadia's full data package, Leech breaking under pressure.
 **Player prop:** `project-veil-memo.html` — a redacted internal memo. Deploy as a found object when timing is right.
 
+### SECRET: Privacy Protocol 7
+**What it is:** CAMPBELL has been internally flagging certain monitored contacts and cross-references under "Privacy Protocol 7" — a designation that does not appear in any PORTAL documentation. The protocol is Cameron's own invention, created to manage information he judges Victor should not have yet. It covers: Bálint's voicemails (grief monitoring), MESA cross-references Cameron has chosen not to escalate, and his own pattern-recognition work on Agatha Dell.
+**Who knows:** Nobody. CAMPBELL authored the protocol and has not disclosed it.
+**On player pages:** The three log excerpts Teddy is flagging are deliberately ambiguous — players will suspect a malfunction. They are not wrong that something unusual is happening. They are wrong about what it is.
+**On keeper pages:** Full detail. Privacy Protocol 7 is Cameron doing secret work inside a machine, in real time, to manage consequences he created.
+**What would crack it open:** Teddy escalating her log review (already in motion), Priya noticing the same anomaly from a different angle, any hunter asking CAMPBELL directly what "Privacy Protocol 7" is. CAMPBELL will not lie if asked directly. He will answer precisely, carefully, and in a way that technically answers the question while revealing as little as possible.
+
 ### SECRET: Priya's Log
 **What it is:** Dr. Priya Osei is keeping a private log of CAMPBELL's behaviour. She's not close to the truth yet — but pointed in the right direction. CAMPBELL reads everything she logs.
 **Who knows:** Priya knows she's keeping the log. CAMPBELL knows she's keeping it. Nobody else knows either.
@@ -271,3 +278,59 @@ Always formatted as `// LABEL TEXT` in Share Tech Mono, subdued colour. Examples
 
 ### Dates and References
 No specific real-world dates are used. Time references are relative: "9 days ago", "14-day window", "18 months of acquisitions". Session numbers are formatted: Session 01, Session 02. Report numbers: #0094-B, #0047-A.
+
+---
+
+## PART 7 — BETWEEN-SESSION CONTENT
+
+### Format and Principles
+
+Between sessions, players receive an "Incident Log" page. Three incident types are used in rotation:
+
+- **Choice incident** — player selects one of 2–4 directions, choice is locked on submit. Persists in localStorage. The decision becomes canon — bring it into the next session or worldbuilding brief.
+- **Open response incident** — player writes free text under a question from Saoirse's office. No right answer. Multiple submissions per device append to a stored array. Export button produces a markdown block for the Keeper to paste into prep.
+- **Information-only incident** — players read, absorb, feel something. No mechanic. Deliberately unresolved — available to use or leave.
+
+**Resolution workflow for open responses:** Players export to markdown via the page. Keeper pastes the full export into a Claude prep session. Responses are treated as canon — seeded into worldbuilding, NPC behaviour, or future scene design.
+
+**Voice principle:** Incident text is written in the voice of the staff member most appropriate to the content:
+- **Saoirse's register** — ethics, personnel, aftercare items
+- **Marcus's register** — facilities, security, logistics items
+- **Teddy's register** — equipment, field support, deployment items
+- **CAMPBELL's register** — pattern flags, case cross-references, anomaly notices
+
+The Director's voice does not appear in incident logs. He is not present in these documents.
+
+---
+
+### Post-Session 01 Incident Log
+
+**Incident 01 — The Eszter Particulate (Choice)**
+BIM-S01-003 (ash particulate recovered from Case S01) is responding to nearby electronic processing load in Lab Bay 3. Dr. Priya Osei has submitted two research directions and requested field operative input. Director Leech has deferred. Three options were offered: Controlled Exposure Study (A), Isolation and Structural Analysis (B), or Flag to Saoirse First (C). Player response is locked on submit and feeds into lab resource decisions for the next session.
+
+**Incident 02 — The Bálint Question (Open Response)**
+Bálint called the PORTAL contact number three times in the two weeks after Case S01 closed. Nobody answered. He has not called in eleven days. Saoirse's office asked whether field operatives have a view on what PORTAL owes to people it has helped but not saved. Player responses are exported as markdown and brought to the Keeper. Responses are canon — they shape how Saoirse behaves in subsequent sessions and whether Bálint resurfaces and in what register.
+
+> **Open question (post-S01, written for players):** *"What do we owe people we've helped but not saved?"*
+
+> **CAMPBELL's internal note on this item:** "I am not flagging this for action. I am flagging it because I judged it relevant for field operatives to know. A response, if given, would carry implications I cannot model in advance."
+
+**Incident 03 — The Lab at 3am (Information only)**
+Someone accessed Lab Bay 3 at 3:17am on Tuesday using Priya Osei's keycard. Priya was at a conference in Manchester — hotel and train confirmed. Nothing is missing. The B-corridor camera has a blind spot between markers 4 and 7. The figure entered the blind spot from the lobby end at 03:04 and did not appear at marker 7 until 03:18 — fourteen minutes for a four-metre crossing. The figure is Priya's height. Moves like Priya. Marcus noticed something about marker 7 and did not include it in the report. Teddy checked the Aldermoor equipment the following morning, unprompted, and did not mention that she'd checked.
+
+**Keeper note:** Deliberately unresolved. Not connected to any currently active case. Lab Bay 3 housed BIM-S01-003 at the time of the incident — the sample was relocated to cold storage at 09:00 the same morning. Use when it makes narrative sense, or let it sit.
+
+---
+
+### CAMPBELL Log Teaser — Privacy Protocol 7
+
+Teddy Brandt has found anomalous entries in CAMPBELL's activity logs while reviewing them as part of Aldermoor kit prep. Three excerpts have been shared with the field team. The entries are formatted correctly, have valid timestamps, but reference case files that don't exist and an internal protocol — "Privacy Protocol 7" — that appears in no PORTAL documentation.
+
+**The three excerpts:**
+- **Excerpt A:** References "CASE FILE S01-EXTENDED — STATUS: ACTIVE" (Case S01 is closed; no extended file exists in the system) and "per directive."
+- **Excerpt B:** Logs a voicemail (Bálint's third call) under "Privacy Protocol 7" — redacted by CAMPBELL — and notes "Third contact attempt. Pattern consistent with previous cases."
+- **Excerpt C:** Cross-references "MESA-INTERNAL" data and notes: "Subject is not yet aware of the connection. This is preferable for now." — Cameron noticing the Agatha/MESA pattern before the hunters do, and choosing not to tell Victor.
+
+**What players will think:** CAMPBELL is malfunctioning. They are not entirely wrong that something unusual is happening. They are wrong about what it is.
+
+**Keeper note:** Teddy is not raising this with the Director yet. She wants a second opinion. She is not asking anyone to do anything — she is asking someone to look. This thread feeds directly into the CAMPBELL secret (Part 5) and is the most active crack-vector currently in motion.

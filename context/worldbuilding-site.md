@@ -14,6 +14,18 @@ Hand this file when:
 
 For world lore, NPC detail, CAMPBELL voice, and secrets → use `worldbuilding-lore.md`
 
+### Workflow Split
+
+**This workflow (Claude.ai):** Lore, NPC writing, case design, CAMPBELL voice, between-session content, scene structure, keeper narrative material, HTML drafts, and markdown briefs for Claude Code. Does not need access to the live repo.
+
+**Claude Code:** CSS integration, page architecture, Workers, D1, live site deployment. Receives markdown briefs and HTML reference drafts — does not need to understand campaign lore to build correctly.
+
+**Between-session content pages** ship as two files:
+- **HTML draft** (`lab-incidents.html` pattern) — correct content and structure, close to site aesthetic, built here for preview and Keeper reference
+- **Markdown brief** (`lab-incidents-brief.md` pattern) — handed to Claude Code for integration into the live site
+
+The markdown brief always includes: which CSS file to use, which existing pages to reference for patterns, localStorage keys in use, keeper/player split, badge colours, mobile requirements, and any forward links to pages not yet built.
+
 When the Keeper asks you to build a page:
 1. Read Part 3 (Site Architecture) — where does this page fit?
 2. Read Part 4 (Design System) — which CSS file, which classes?
@@ -48,6 +60,7 @@ When the Keeper asks you to build a page:
 | `report.html` | `keeper.css` | Keeper | Keeper post-session field report — session tab switcher (S01/S02), outcome, hunter cards, per-session scene notes, thread tags, clock status, seeds. Saves to D1. "Copy for Claude" exports Markdown. |
 | `reports/player-report.html` | `player.css` | Player | Operative Field Report — week + hunter selector, 5 rating pips, general feedback, per-week scene questions. Unique save per week+hunter, D1-backed. Linked from player nav as "Report". |
 | `contacts.html` | `player.css` | Player | NPC Contact Directory — fetches `portal-npcs.json`, renders player-visible NPCs grouped by affiliation (PORTAL staff / field contacts / unknown). Static render, no D1 dependency. |
+| `lab-incidents.html` | `player.css` (draft inline) | Player | Between-session incident log — 3 incidents (choice mechanic, open response, information-only) + CAMPBELL log teaser. Choice persists in localStorage; open response exports to markdown for Keeper. HTML draft built in Claude.ai workflow; integration by Claude Code via `lab-incidents-brief.md`. |
 | `feed.html` | `player.css` + inline | Player + Keeper | Live session tool — split layout (feed left, panel right). Hunter picker; **Moves tab** (always-active + playbook + basic moves, inline modifier + ROLL, hover shows description + outcome rows + questions for Investigate/Read); **Contacts tab** (player-visible NPCs, double-click to add per-hunter private note stored in `localStorage('portal_contact_notes')` as `{hunter_id:{npc_id:text}}`); **Handouts tab** (placeholder). Bottom composer for any player to post to the feed. Roll entries show breakdown `[d1 + d2 + stat + mod = total]`, hover shows specific outcome text + question list (for Investigate a Mystery / Read a Bad Situation). 3s D1 polling, 5s auto-save for harm/luck/xp changes. Keeper mode (5× logo click) replaces player UI with 4 tabs: **OPERATIVES** (click hunter to view sheet + moves), **CONTACTS** (session filter S01/S02/ALL + NPC visibility toggles persisted to localStorage), **REFERENCES** (MoTW rules cheat sheet: outcomes, harm moves, luck, XP, end-of-session, principles, keeper moves, monster moves, phenomena moves, investigate questions, keeper page links), **THREATS** (session selector, entity stat block from `portal-entities.json`, threats/minions/bystanders + equipment from `session-data.json`). |
 
 ### Upcoming Pages (planned, not yet built)
@@ -61,6 +74,7 @@ When the Keeper asks you to build a page:
 | `hunters.html` | `player.css` | HIGH | Hunter index — all 4 hunters, one-liners, links to story pages |
 | `case-archive.html` | `player.css` | MEDIUM | Chronological closed case log — grows each session |
 | `glossary.html` | `player.css` | MEDIUM | In-universe PORTAL terminology, written in CAMPBELL's voice |
+| `campbell-logs.html` | `player.css` | MEDIUM | CAMPBELL anomaly log page — Teddy Brandt's discovery of Privacy Protocol 7 and three flagged log excerpts. Teased in `lab-incidents.html`. Do not add a link from `lab-incidents.html` until this page exists. |
 
 **Keeper-facing:**
 
@@ -221,8 +235,8 @@ Each hunter story page uses a character-specific accent in addition to the base 
 | Hunter | Accent | Hex |
 |--------|--------|-----|
 | Rex Bangley | Amber/orange | `#f0a500` / `--amber` (already in palette) |
-| Alan Frazier | Teal | `#3ab5b0` |
-| Reed Atwood | Teal | `#3ab5b0` (same as Alan) |
+| Alan Frazier | Teal | `#2ec4b6` |
+| Reed Atwood | Teal | `#3ab5b0` |
 | Sven | Violet | `#a78bfa` / dim `#4c1d95` |
 
 These are defined as `--teal`, `--teal-dim`, `--teal-glow` or `--violet`, `--violet-dim`, `--violet-glow` in each page's inline `<style>` block.

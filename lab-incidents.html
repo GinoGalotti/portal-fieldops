@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Incident Log</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="player.css">
+<style>
+:root {
+  --purple:     #7c3aed;
+  --purple-dim: #4a1d96;
+  --purple-glow: rgba(124,58,237,0.12);
+}
+
+/* ── INCIDENT CARD ── */
+.incident-card {
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  padding: 36px 40px;
+  margin-bottom: 48px;
+  position: relative;
+}
+.incident-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.incident-card.amber::before  { background: linear-gradient(90deg, var(--amber-dim), transparent); }
+.incident-card.purple::before { background: linear-gradient(90deg, var(--purple-dim), transparent); }
+.incident-card.red::before    { background: linear-gradient(90deg, #5c2020, transparent); }
+
+/* ── INCIDENT HEADER ── */
+.incident-id {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+.incident-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.incident-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  padding: 3px 9px;
+  border: 1px solid;
+}
+.badge-amber  { color: var(--amber);   border-color: var(--amber-dim);  background: rgba(240,165,0,0.06); }
+.badge-purple { color: var(--purple);  border-color: var(--purple-dim); background: var(--purple-glow); }
+.badge-red    { color: var(--red);     border-color: #5c2020;           background: rgba(224,80,80,0.06); }
+
+/* ── CAMPBELL BLOCK ── */
+.campbell-block {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  line-height: 1.95;
+  color: var(--text-dim);
+  border-left: 2px solid var(--green-dim);
+  background: rgba(46,204,113,0.03);
+  padding: 20px 24px;
+  margin: 24px 0;
+}
+.campbell-block .cb-label {
+  color: var(--green-dim);
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  display: block;
+  margin-bottom: 12px;
+}
+.campbell-block .cb-flag {
+  color: var(--green);
+  display: block;
+  margin-top: 12px;
+}
+.campbell-block.purple {
+  border-left-color: var(--purple-dim);
+  background: var(--purple-glow);
+}
+.campbell-block.purple .cb-label { color: var(--purple); }
+.campbell-block.purple .cb-flag  { color: var(--purple); }
+
+/* ── NARRATIVE TEXT ── */
+.narrative {
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  font-size: 0.95rem;
+  line-height: 1.85;
+  color: var(--text);
+  margin: 16px 0;
+}
+
+/* ── CALLOUT BLOCK ── */
+.callout {
+  padding: 16px 22px;
+  margin: 20px 0;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  font-size: 0.88rem;
+  line-height: 1.8;
+  color: var(--text-dim);
+}
+.callout-amber  { border-left: 3px solid var(--amber-dim); background: rgba(240,165,0,0.04); }
+.callout-purple { border-left: 3px solid var(--purple-dim); background: var(--purple-glow); }
+.callout-red    { border-left: 3px solid #5c2020; background: rgba(224,80,80,0.04); }
+.callout-from {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  display: block;
+  margin-bottom: 10px;
+}
+.callout-amber  .callout-from { color: var(--amber-dim); }
+.callout-purple .callout-from { color: var(--purple); }
+.callout-red    .callout-from { color: var(--red); }
+
+/* ── CHOICE BUTTONS ── */
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 24px 0 14px;
+}
+.choice-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  line-height: 1.65;
+  text-align: left;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.choice-btn .ch-label {
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 7px;
+}
+.choice-btn:hover:not(:disabled)         { border-color: var(--amber-dim); color: var(--text); }
+.choice-btn.selected                     { border-color: var(--amber); background: rgba(240,165,0,0.06); color: var(--text); }
+.choice-btn.selected .ch-label          { color: var(--amber); }
+.choice-btn:disabled                     { cursor: default; }
+.choice-btn:disabled:not(.selected)     { opacity: 0.3; }
+
+.choice-actions { display: flex; align-items: center; gap: 16px; margin-top: 10px; flex-wrap: wrap; }
+.confirm-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  padding: 8px 20px;
+  border: 1px solid var(--amber-dim);
+  background: transparent;
+  color: var(--amber-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.confirm-btn:hover:not(:disabled)  { border-color: var(--amber); color: var(--amber); background: rgba(240,165,0,0.06); }
+.confirm-btn:disabled              { opacity: 0.35; cursor: default; }
+.confirm-btn.locked                { border-color: var(--green-dim); color: var(--green); cursor: default; }
+.choice-status { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; color: var(--text-dim); }
+.choice-status.confirmed { color: var(--green); }
+
+/* ── RESPONSE FORM ── */
+.form-hint {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-bottom: 16px;
+}
+.form-label {
+  display: block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+.form-input, .form-textarea {
+  width: 100%;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  font-size: 0.9rem;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.15s;
+  resize: vertical;
+}
+.form-input  { height: 40px; resize: none; }
+.form-textarea { min-height: 120px; }
+.form-input:focus, .form-textarea:focus { border-color: var(--green-dim); }
+.form-row { margin-bottom: 12px; }
+.form-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.submit-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  padding: 8px 20px;
+  border: 1px solid var(--green-dim);
+  background: transparent;
+  color: var(--green-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.submit-btn:hover:not(:disabled) { border-color: var(--green); color: var(--green); background: rgba(46,204,113,0.06); }
+.submit-btn:disabled             { opacity: 0.35; cursor: default; }
+.export-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.export-btn:hover { border-color: var(--text-dim); color: var(--text); }
+.form-status {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+}
+.form-status.ok { color: var(--green); }
+
+/* ── SUBMISSION PREVIEWS ── */
+.submissions-list { margin-top: 20px; }
+.submissions-list-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+.submission-preview {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 14px 18px;
+  margin-bottom: 8px;
+}
+.submission-preview .sp-name {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  color: var(--green-dim);
+  margin-bottom: 6px;
+}
+.submission-preview .sp-text {
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+/* ── STAMP BAR ── */
+.stamp-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.stamp {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.54rem;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+}
+
+/* ── EMAIL BLOCK ── */
+.email-block {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  margin: 24px 0;
+}
+.email-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  line-height: 2.1;
+  color: var(--text-dim);
+}
+.email-header span { color: var(--text); }
+.email-body {
+  padding: 22px 24px;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  font-size: 0.92rem;
+  line-height: 1.85;
+  color: var(--text);
+}
+.email-body p { margin-bottom: 14px; }
+.email-body em { font-style: italic; color: var(--text-dim); }
+.email-sig {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  line-height: 2;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── LOG EXCERPTS ── */
+.log-excerpt {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--border);
+  padding: 16px 20px;
+  margin: 14px 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  line-height: 2;
+  color: var(--text-dim);
+}
+.log-excerpt .le-header {
+  color: var(--purple);
+  display: block;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  margin-bottom: 10px;
+}
+.log-anomaly { color: var(--purple); }
+.log-excerpt .le-annotation {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  color: var(--amber-dim);
+  font-style: italic;
+  font-size: 0.64rem;
+}
+
+/* ── CAMPBELL LOG SECTION ── */
+.campbell-log-section {
+  border: 1px solid var(--purple-dim);
+  background: linear-gradient(180deg, rgba(124,58,237,0.04) 0%, transparent 100%);
+  padding: 36px 40px;
+  margin-top: 64px;
+  position: relative;
+}
+.campbell-log-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--purple-dim), transparent);
+}
+
+/* ── MOBILE ── */
+@media (max-width: 700px) {
+  .incident-card        { padding: 24px 20px; }
+  .campbell-log-section { padding: 24px 20px; }
+  .choice-grid          { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</div>
+  <nav id="player-nav"></nav><script src="player-nav.js"></script>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">// BETWEEN-SESSION — POST-S01 STAFF COMMUNIQUÉS</div>
+  <h1 class="hero-title">Incident <span class="accent">Log</span></h1>
+  <p class="hero-desc">Three items logged during the Keller deployment require staff input before the Aldermoor briefing. One item is informational only.</p>
+</div>
+
+<main>
+
+  <!-- ─────────────────────────────────────────────────
+       INCIDENT 01 — The Eszter Particulate
+       Type: Choice (locked, localStorage)
+       ───────────────────────────────────────────────── -->
+  <div class="incident-card amber" id="incident-01">
+    <div class="incident-id">// INCIDENT LOG — POST-SESSION 01 — ITEM 01 OF 03</div>
+    <h2 class="incident-title">
+      The Eszter Particulate
+      <span class="incident-badge badge-amber">RESPONSE REQUIRED</span>
+    </h2>
+
+    <p class="narrative">
+      The ash particulate recovered from the Bálint case is doing something strange in Lab Bay 3. It responds to nearby electronic processing load — not interference, something closer to attention. Dr. Priya Osei has run the analysis four times and submitted two research directions. She wants field operative input before proceeding. Director Leech has deferred the decision.
+    </p>
+
+    <div class="campbell-block">
+      <span class="cb-label">// CAMPBELL — INTERNAL NOTICE — SAMPLE BIM-S01-003</span>
+      Following closure of Case S01, trace particulate recovered from the Bálint residence has been logged under sample identifier BIM-S01-003. The sample is contained in Lab Bay 3, cold storage, under standard anomalous-material protocols.<br><br>
+      Dr. Osei has completed preliminary analysis. The particulate interacts with active electronic systems in a manner that does not correspond to any catalogued material property. She describes the effect as "localised interference — not signal degradation, something closer to attention."<br><br>
+      Dr. Osei has submitted two proposed research directions and has requested field operative input before proceeding. Director Leech has deferred the decision, citing insufficient data on downstream risk.
+      <span class="cb-flag">// FLAG: Decision required before next scheduled lab review. Either direction carries resource implications for the Aldermoor deployment.</span>
+    </div>
+
+    <p class="narrative">
+      Priya came and found Reed in the break room on Wednesday. She had her tablet and a look that meant she'd been thinking about something for longer than she'd admit.
+    </p>
+    <p class="narrative">
+      "The sample does something," she said, without preamble. "I've run it four times. Every time there's active processing nearby — the storage server, the analysis rig, once just Marcus's laptop — the read changes. Not the sample. The read. Like something is adjusting how the instruments report."
+    </p>
+    <p class="narrative">
+      She showed him the graphs. They didn't look like interference. They looked like a response.
+    </p>
+    <p class="narrative">
+      "Leech wants us to decide what we do with it," she said. "He's not comfortable making the call alone. Which I find either reassuring or worrying depending on the day."
+    </p>
+
+    <div class="callout callout-amber">
+      <span class="callout-from">// DR. P. OSEI — SUPPLEMENTAL NOTE</span>
+      I want to be transparent: I don't know what this material is. I know what it does to instruments near it. I know that the effect scales with processing load — more computation nearby, more pronounced the response. I don't know if 'response' is even the right word. I'm using it because 'coincidence' stopped fitting after the third run.<br><br>
+      Both directions below are defensible. Neither is safe in the way we usually mean safe.
+    </div>
+
+    <div class="choice-grid" id="choice-grid-01">
+      <button class="choice-btn" data-choice="A" onclick="selectChoice('01','A',this)">
+        <span class="ch-label">A — Controlled Exposure Study</span>
+        Increase processing load near the sample in incremental steps. Measure whether the response scales linearly. Treat it as a potential data source — something producing signal, not noise. Risk: we don't know what happens at the upper end of the curve.
+      </button>
+      <button class="choice-btn" data-choice="B" onclick="selectChoice('01','B',this)">
+        <span class="ch-label">B — Isolation and Structural Analysis</span>
+        Move the sample to a Faraday-shielded environment. Cut off all electronic proximity. Document what changes. Treat the interference as a contamination risk to be contained before we study the contents. Slower. Safer. Probably.
+      </button>
+      <button class="choice-btn" data-choice="C" onclick="selectChoice('01','C',this)">
+        <span class="ch-label">C — Flag to Saoirse First</span>
+        Neither direction gets approved until Dr. Mullen has reviewed the analysis logs. She'll push back on timeline. That's the point. Something that adjusts how instruments report feels like it falls inside her remit, and it would be good to know she's been consulted before anything goes wrong.
+      </button>
+    </div>
+
+    <div class="choice-actions">
+      <button class="confirm-btn" id="confirm-01" onclick="confirmChoice('01')" disabled>SUBMIT DIRECTION</button>
+      <span class="choice-status" id="choice-status-01">— select a direction above</span>
+    </div>
+
+    <div class="stamp-bar">
+      <span class="stamp">LOGGED: POST-SESSION 01</span>
+      <span class="stamp">CATEGORY: SAMPLE HANDLING / RESEARCH DIRECTION</span>
+      <span class="stamp">SUBMITTED BY: DR. P. OSEI</span>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────────
+       INCIDENT 02 — The Bálint Question
+       Type: Open response (D1, multi-submit, export)
+       ───────────────────────────────────────────────── -->
+  <div class="incident-card purple" id="incident-02">
+    <div class="incident-id">// INCIDENT LOG — POST-SESSION 01 — ITEM 02 OF 03</div>
+    <h2 class="incident-title">
+      The Bálint Question
+      <span class="incident-badge badge-purple">DISCUSS AMONG YOURSELVES</span>
+    </h2>
+
+    <p class="narrative">
+      Bálint — the person at the centre of Case S01 — called the PORTAL contact number three times in the two weeks after the case closed. Nobody answered. The number routes to a voicemail managed by CAMPBELL. He hasn't called in eleven days. Saoirse Mullen has asked whether field operatives have a view on what PORTAL owes to people it has helped but not saved.
+    </p>
+
+    <div class="campbell-block">
+      <span class="cb-label">// CAMPBELL — INTERNAL NOTICE</span>
+      Bálint remains at his sister's residence in Hackney. He is not a PORTAL contact. He does not know the organisation's name. He was told that the individuals who assisted him were "independent researchers" — a description that is technically accurate and contextually incomplete.<br><br>
+      He called the number left by field operatives on three occasions in the two weeks following Case S01. The calls were not answered — the number routes to a voicemail managed by this office. Messages have been retained. I am not attaching them to this notice.<br><br>
+      He has not called in eleven days.
+      <span class="cb-flag">// NOTE: This item is not flagged for action. It is flagged because I judged it relevant for field operatives to know. No response is required. A response, if given, would carry implications I cannot model in advance.</span>
+    </div>
+
+    <p class="narrative">The messages were three minutes, four minutes, and forty seconds.</p>
+    <p class="narrative">
+      Teddy heard about the voicemails through Marcus, who heard about them through the routing log, which he keeps because nobody told him not to. She mentioned it to Saoirse in passing — more of a question than a statement, the way things become questions when you're not sure if raising them is allowed.
+    </p>
+    <p class="narrative">
+      Saoirse's response was careful. "He called three times and then stopped," she said. "That tells you something."
+    </p>
+    <p class="narrative">"What does it tell you?" Teddy asked.</p>
+    <p class="narrative">
+      "That he wanted help and decided he wasn't going to get it. Or that he's fine and doesn't need it anymore." She paused. "Those two things feel very different and I can't tell from here which one is true."
+    </p>
+    <p class="narrative">
+      The thing nobody had said yet — the thing that had been sitting in the room since Teddy brought it up — was that someone made a call about those messages and decided not to tell the field team. And that call was not necessarily wrong, and not necessarily right, and had been made by someone in this building who also thought it wasn't wrong, wasn't right, and couldn't be both at once.
+    </p>
+
+    <div class="callout callout-purple">
+      <span class="callout-from">// DR. S. MULLEN — ADVISORY</span>
+      I am not issuing a formal recommendation on this. I don't have enough information to issue a formal recommendation, and I'm suspicious of my own instincts when it comes to cases involving grief. What I will say is this: the question of what we owe to people we've helped — not saved, helped — is one the organisation hasn't answered. If we had an answer, we'd know what to do with those three voicemails. We don't have an answer. I think we should probably talk about it before the next case ends the same way.
+    </div>
+
+    <p class="narrative">Bálint has not called in eleven days.</p>
+
+    <div class="form-hint">Write whatever you actually think. This goes to Saoirse's office, not the Director. There is no wrong answer and no word limit.</div>
+    <div class="form-row">
+      <label class="form-label" for="resp-name">OPERATIVE NAME (optional)</label>
+      <input class="form-input" id="resp-name" type="text" placeholder="Anonymous" maxlength="80">
+    </div>
+    <div class="form-row">
+      <textarea class="form-textarea" id="resp-text" placeholder="Your response..."></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="submit-btn" id="submit-02" onclick="submitResponse()" disabled>SUBMIT RESPONSE</button>
+      <button class="export-btn" id="export-02" onclick="exportResponses()" style="display:none">EXPORT FOR KEEPER</button>
+      <span class="form-status" id="submit-status-02"></span>
+    </div>
+    <div class="submissions-list" id="submissions-list-02" style="display:none">
+      <div class="submissions-list-label">// RESPONSES LOGGED FROM THIS DEVICE</div>
+    </div>
+
+    <div class="stamp-bar">
+      <span class="stamp">LOGGED: POST-SESSION 01</span>
+      <span class="stamp">CATEGORY: PERSONNEL / AFTERCARE</span>
+      <span class="stamp">FLAGGED BY: CAMPBELL</span>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────────
+       INCIDENT 03 — The Lab at 3am
+       Type: Informational only
+       ───────────────────────────────────────────────── -->
+  <div class="incident-card red" id="incident-03">
+    <div class="incident-id">// INCIDENT LOG — PRE-SESSION 02 — ITEM 03 OF 03</div>
+    <h2 class="incident-title">
+      The Lab at 3am
+      <span class="incident-badge badge-red">UNDER REVIEW</span>
+    </h2>
+
+    <p class="narrative">
+      Someone accessed Lab Bay 3 at 3am using Dr. Priya Osei's keycard. Priya was at a conference in Manchester. Nothing was taken. The corridor camera has a blind spot — the person entered it from one end and didn't appear at the other for fourteen minutes. The figure is Priya's height. Moves the way she moves. The security review is ongoing.
+    </p>
+
+    <div class="campbell-block">
+      <span class="cb-label">// CAMPBELL — SECURITY NOTICE</span>
+      On Tuesday at 03:17, the internal motion system logged activity in Lab Bay 3. Duration: eleven minutes. The system attributed the movement to a staff member whose keycard had been used to enter the building at 02:54.<br><br>
+      The staff member in question — Dr. Osei — was not in the building at that time. She was contacted this morning. Her keycard has been in her possession throughout. She has not reported it lost or damaged.<br><br>
+      Lab Bay 3 houses the Aldermoor deployment equipment and, until its transfer to cold storage at 09:00 Tuesday, the BIM-S01-003 sample.<br><br>
+      Nothing has been reported missing. The motion log shows a route: entrance, corridor B, Lab Bay 3, corridor B, exit. Eleven minutes. No deviation.
+      <span class="cb-flag">// FLAG: Security review is in progress. Marcus Finch is coordinating. Dr. Osei has been briefed. The sample has been relocated as a precaution. This notice is being shared with field operatives because the incident occurred in the 36 hours before the scheduled Aldermoor deployment briefing. I do not know if this is relevant. I am noting it.</span>
+    </div>
+
+    <p class="narrative">
+      Marcus pulled the corridor footage himself. He's done this before — the camera in B-corridor has a blind spot between markers 4 and 7, which he's mentioned in three successive maintenance reports and which has remained unresolved. He knows the spot well enough that when he reviewed the footage from 02:54 to 03:28, he wasn't surprised by the gap. He was surprised by what was on either side of it.
+    </p>
+    <p class="narrative">
+      A person enters the blind spot from the lobby end at 03:04. The person does not appear at marker 7. At 03:18 — fourteen minutes later — they appear at marker 7 from the Lab Bay 3 direction and walk back toward the lobby.
+    </p>
+    <p class="narrative">The corridor blind spot is four metres long. You can cross it in four seconds.</p>
+    <p class="narrative">
+      What the person was doing in Lab Bay 3 for the intervening time, or why they didn't appear at marker 7 after entering from the lobby, Marcus doesn't know. He's reviewed the footage six times. He's not sure he wants to review it a seventh.
+    </p>
+    <p class="narrative">He filed the report at 11:00. He didn't mention the marker 7 thing in the report. He's not sure why not.</p>
+
+    <div class="callout callout-red">
+      <span class="callout-from">// M. FINCH — SUPPLEMENTAL (TRANSCRIBED BY CAMPBELL)</span>
+      The person on the footage is the right height. Priya's height. Moves the way she moves — not exactly, but close. I've worked with her for two years. The gait is right. The way she holds herself when she's carrying something is right. I pulled her schedule and she was at a conference in Manchester Tuesday night, hotel confirmed, train booked through the lab account. So. I don't know. I just — I noted it. For the record.
+    </div>
+
+    <p class="narrative">
+      The Aldermoor briefing is still scheduled. The sample is in cold storage, two locks, Priya's code and Leech's. Nothing is missing. The motion log shows eleven minutes and a door that closed and opened again on the right keycard.
+    </p>
+    <p class="narrative">
+      Teddy checked the Aldermoor equipment on Wednesday morning, unprompted, while Marcus was on the phone. She didn't find anything wrong. She didn't mention that she'd checked.
+    </p>
+
+    <div class="stamp-bar">
+      <span class="stamp">LOGGED: PRE-SESSION 02</span>
+      <span class="stamp">CATEGORY: FACILITIES / SECURITY / ONGOING</span>
+      <span class="stamp">REVIEW: M. FINCH + CAMPBELL</span>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────────
+       CAMPBELL LOG TEASER
+       Type: Informational — teases future campbell-logs.html
+       ───────────────────────────────────────────────── -->
+  <div class="campbell-log-section" id="campbell-log-teaser">
+    <div class="incident-id">// VOLUNTEER REQUEST — FIELD SUPPORT — T. BRANDT</div>
+    <h2 class="incident-title">
+      CAMPBELL Activity Logs
+      <span class="incident-badge badge-purple">TEDDY NEEDS EYES</span>
+    </h2>
+
+    <p class="narrative">
+      Teddy has noticed anomalous entries in CAMPBELL's activity logs while running Aldermoor kit prep. She's not raising it formally yet. She wants someone to look at three excerpts before she decides whether to escalate.
+    </p>
+
+    <div class="email-block">
+      <div class="email-header">
+        FROM: <span>teddy.brandt@portal-internal.org</span><br>
+        TO: <span>field-team@portal-internal.org</span><br>
+        SUBJECT: <span>something slightly weird I need help with</span><br>
+        DATE: <span>this week</span>
+      </div>
+      <div class="email-body">
+        <p>Right. So this is slightly awkward to raise because I like CAMPBELL and I don't want to be the person who started the "is the AI broken" conversation, but here we are.</p>
+        <p>I've been reviewing the activity logs from the past three weeks as part of the Aldermoor kit prep — standard thing, making sure the equipment inventory is current before a deployment. CAMPBELL generates these logs automatically. Most of them are completely normal: timestamps, inventory flags, maintenance notes.</p>
+        <p>Except for a few entries that I can't account for. They're formatted correctly. They have valid timestamps. But the content doesn't match any activity I can trace to an actual event, and in two cases the cross-references point to case files that don't exist in the system.</p>
+        <p>I asked CAMPBELL about them directly. It said, and I am quoting: <em>"Those entries are accurate. The referenced events occurred. The absence of corresponding case files is a filing discrepancy that I have noted and will resolve."</em> Which is either completely fine and administrative, or is a sentence I'm going to think about for a very long time.</p>
+        <p>I'm not raising this with the Director yet. I want someone else to look at the logs first and tell me if I'm misreading something obvious, because that would be the ideal outcome here.</p>
+        <p>I've attached three excerpts below. If you've got ten minutes and want to help me feel less like I'm going mad, I'd appreciate it.</p>
+        <div class="email-sig">
+          — Teddy<br>
+          Field Support Technician, PORTAL
+        </div>
+      </div>
+    </div>
+
+    <div class="log-excerpt">
+      <span class="le-header">CAMPBELL ACTIVITY LOG — EXCERPT A // TIMESTAMP 03:41:07</span>
+      INVENTORY CHECK: Bay 3 sample BIM-S01-003 — PRESENT / CONTAINED<br>
+      CROSS-REFERENCE: <span class="log-anomaly">CASE FILE S01-EXTENDED — STATUS: ACTIVE</span><br>
+      NOTE: Subject remains within designated parameters. Monitoring continues <span class="log-anomaly">per directive</span>.
+      <div class="le-annotation">// TEDDY'S ANNOTATION: Case S01 is closed. There is no "S01-EXTENDED" in the system. I checked twice.</div>
+    </div>
+
+    <div class="log-excerpt">
+      <span class="le-header">CAMPBELL ACTIVITY LOG — EXCERPT B // TIMESTAMP 14:22:33</span>
+      COMMUNICATION ROUTED: External call, voicemail receipt — logged under contact protocol.<br>
+      CALLER IDENTIFIED: <span class="log-anomaly">[REDACTED BY CAMPBELL — "PRIVACY PROTOCOL 7"]</span><br>
+      NOTE: Third contact attempt. Pattern consistent with previous cases. No escalation warranted at this time. Monitoring continues.
+      <div class="le-annotation">// TEDDY'S ANNOTATION: Privacy Protocol 7 isn't in any manual I have access to. I asked Marcus. He'd never heard of it either.</div>
+    </div>
+
+    <div class="log-excerpt">
+      <span class="le-header">CAMPBELL ACTIVITY LOG — EXCERPT C // TIMESTAMP 09:05:18</span>
+      PATTERN FLAG: External data cross-reference — source designation <span class="log-anomaly">MESA-INTERNAL</span> — flagged for monitoring.<br>
+      PRIORITY: LOW. No immediate action required.<br>
+      NOTE: <span class="log-anomaly">Subject is not yet aware of the connection. This is preferable for now.</span>
+    </div>
+
+    <p class="narrative" style="color:var(--text-dim);">
+      Teddy's read: "CAMPBELL is either doing something I don't understand and everything is fine, or it's doing something I don't understand and it isn't fine. I can't tell which one from here and I'd like a second opinion."
+    </p>
+    <p class="narrative" style="color:var(--text-dim);">She's not asking anyone to do anything. She's asking someone to look.</p>
+  </div>
+
+</main>
+
+<script>
+// ── INCIDENT 01 — CHOICE (localStorage) ──────────────────────────────
+var INCIDENTS_KEY = 'portal-incidents';
+
+function getIncidents() {
+  try { return JSON.parse(localStorage.getItem(INCIDENTS_KEY)) || {}; } catch(e) { return {}; }
+}
+function saveIncidents(data) { localStorage.setItem(INCIDENTS_KEY, JSON.stringify(data)); }
+
+function selectChoice(incId, choice, btn) {
+  var data = getIncidents();
+  if (data[incId] && data[incId].locked) return;
+  document.querySelectorAll('#choice-grid-' + incId + ' .choice-btn').forEach(function(b) {
+    b.classList.remove('selected');
+  });
+  btn.classList.add('selected');
+  if (!data[incId]) data[incId] = {};
+  data[incId].pending = choice;
+  saveIncidents(data);
+  document.getElementById('confirm-' + incId).disabled = false;
+  document.getElementById('choice-status-' + incId).textContent = '— direction ' + choice + ' selected';
+}
+
+function confirmChoice(incId) {
+  var data = getIncidents();
+  var pending = data[incId] && data[incId].pending;
+  if (!pending) return;
+  data[incId] = { choice: pending, locked: true, timestamp: new Date().toISOString() };
+  saveIncidents(data);
+  lockChoiceUI(incId, pending);
+}
+
+function lockChoiceUI(incId, choice) {
+  document.querySelectorAll('#choice-grid-' + incId + ' .choice-btn').forEach(function(b) {
+    b.disabled = true;
+    if (b.dataset.choice === choice) b.classList.add('selected');
+  });
+  var btn = document.getElementById('confirm-' + incId);
+  btn.textContent = 'DIRECTION ' + choice + ' — LOGGED';
+  btn.classList.add('locked');
+  btn.disabled = true;
+  var status = document.getElementById('choice-status-' + incId);
+  status.textContent = '— submitted';
+  status.classList.add('confirmed');
+}
+
+// ── INCIDENT 02 — RESPONSE (D1 + localStorage fallback) ──────────────
+document.getElementById('resp-text').addEventListener('input', function() {
+  document.getElementById('submit-02').disabled = this.value.trim().length === 0;
+});
+
+function submitResponse() {
+  var name = document.getElementById('resp-name').value.trim() || 'Anonymous';
+  var text = document.getElementById('resp-text').value.trim();
+  if (!text) return;
+
+  var btn = document.getElementById('submit-02');
+  var statusEl = document.getElementById('submit-status-02');
+  btn.disabled = true;
+  statusEl.textContent = 'SENDING...';
+  statusEl.className = 'form-status';
+
+  fetch('/api/v1/incidents/02/responses', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: name, text: text })
+  })
+  .then(function(r) { return r.ok ? r.json() : Promise.reject(r.status); })
+  .then(function() {
+    onSubmitSuccess(name, text, statusEl);
+  })
+  .catch(function() {
+    // Offline fallback — save to localStorage so export still works
+    var stored = JSON.parse(localStorage.getItem('portal-responses-02') || '[]');
+    stored.push({ hunter_name: name, response_text: text, submitted_at: new Date().toISOString(), offline: true });
+    localStorage.setItem('portal-responses-02', JSON.stringify(stored));
+    statusEl.textContent = 'SAVED LOCALLY (offline)';
+    onSubmitSuccess(name, text, statusEl);
+  });
+}
+
+function onSubmitSuccess(name, text, statusEl) {
+  if (statusEl.textContent === 'SENDING...') {
+    statusEl.textContent = 'LOGGED';
+    statusEl.className = 'form-status ok';
+  }
+  appendSubmissionPreview(name, text);
+  document.getElementById('resp-text').value = '';
+  document.getElementById('resp-name').value = '';
+  document.getElementById('submit-02').disabled = true;
+  document.getElementById('export-02').style.display = '';
+  document.getElementById('submissions-list-02').style.display = '';
+}
+
+function appendSubmissionPreview(name, text) {
+  var list = document.getElementById('submissions-list-02');
+  var el = document.createElement('div');
+  el.className = 'submission-preview';
+  el.innerHTML = '<div class="sp-name">// ' + esc(name.toUpperCase()) + '</div>'
+               + '<div class="sp-text">' + esc(text).replace(/\n/g, '<br>') + '</div>';
+  list.appendChild(el);
+}
+
+function exportResponses() {
+  var statusEl = document.getElementById('submit-status-02');
+  statusEl.textContent = 'FETCHING...';
+
+  fetch('/api/v1/incidents/02/responses')
+  .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
+  .then(function(rows) { renderExport(rows, statusEl); })
+  .catch(function() {
+    // Fall back to any locally stored responses
+    var stored = JSON.parse(localStorage.getItem('portal-responses-02') || '[]');
+    renderExport(stored, statusEl);
+  });
+}
+
+function renderExport(rows, statusEl) {
+  var lines = [
+    '# PORTAL — Incident Log Responses',
+    '## Incident 02 — The Bálint Question',
+    ''
+  ];
+  rows.forEach(function(row) {
+    var ts = row.submitted_at ? new Date(row.submitted_at).toLocaleString() : '';
+    lines.push('**' + (row.hunter_name || 'Anonymous') + '** (' + ts + ')');
+    lines.push('');
+    lines.push(row.response_text);
+    lines.push('');
+    lines.push('---');
+    lines.push('');
+  });
+  var md = lines.join('\n');
+  navigator.clipboard.writeText(md).then(function() {
+    statusEl.textContent = 'COPIED TO CLIPBOARD';
+    statusEl.className = 'form-status ok';
+  }).catch(function() {
+    // Fallback: inject a selectable textarea
+    var ta = document.createElement('textarea');
+    ta.value = md;
+    ta.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:55vh;z-index:9999;'
+      + 'background:var(--bg3);color:var(--text);padding:20px;font-family:monospace;'
+      + 'font-size:0.75rem;border:none;border-bottom:2px solid var(--border);outline:none;';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    statusEl.textContent = 'SELECT ALL AND COPY';
+    ta.addEventListener('blur', function() { document.body.removeChild(ta); });
+  });
+}
+
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── INIT — restore locked state on page load ──────────────────────────
+(function() {
+  var data = getIncidents();
+  if (data['01'] && data['01'].locked) {
+    var c = data['01'].choice;
+    var btn = document.querySelector('#choice-grid-01 .choice-btn[data-choice="' + c + '"]');
+    if (btn) btn.classList.add('selected');
+    lockChoiceUI('01', c);
+  }
+})();
+</script>
+
+</body>
+</html>

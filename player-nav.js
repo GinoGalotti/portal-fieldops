@@ -24,6 +24,7 @@
     { label: 'Contacts',   href: b + 'contacts.html',   match: 'contacts.html' },
     { label: 'Report',     href: b + 'reports/player-report.html',    match: 'player-report.html' },
     { label: 'Queue',      href: m + 'campbell-briefings.html',        match: 'campbell-briefings.html' },
+    { label: 'Incidents',  href: b + 'lab-incidents.html',             match: 'lab-incidents.html' },
     { label: 'Feed',       href: b + 'feed.html',       match: 'feed.html' },
   ];
 
@@ -78,7 +79,7 @@
 
   // Site credit footer
   var footer = document.createElement('footer');
-  footer.style.cssText = 'text-align:center;padding:1.5rem 1rem;font-size:0.7rem;color:var(--text-dim);letter-spacing:0.05em;border-top:1px solid var(--border);margin-top:2rem;';
+  footer.style.cssText = 'display:flex;justify-content:center;align-items:center;padding:1.5rem 1rem;font-size:0.7rem;color:var(--text-dim);letter-spacing:0.05em;border-top:1px solid var(--border);margin-top:2rem;';
   footer.innerHTML = 'Made by Gino with Claude &nbsp;·&nbsp; <a href="https://github.com/GinoGalotti/portal-fieldops" target="_blank" rel="noopener" style="color:var(--text-dim);text-decoration:underline;">GitHub</a>';
   document.body.appendChild(footer);
 }());
