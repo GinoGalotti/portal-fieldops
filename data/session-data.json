@@ -6,7 +6,9 @@
     "doc": "missions/01-a-promise-is-a-promise.html",
     "entity_ids": ["eszter"],
     "threats": [],
-    "readaloud": []
+    "equipment": [],
+    "readaloud": [],
+    "handouts": []
   },
   {
     "id": "w2",
@@ -41,7 +43,7 @@
         "motivation": "to follow orders and contain the situation",
         "harm_capacity": 4,
         "armour": "1 — full tactical vest, visible. Look like private security.",
-        "harm": "2-harm close (baton, restraint). 3-harm close/far (firearm — only if firearms drawn first or Rook orders).",
+        "harm": "2-harm close/far (firearm — only if firearms drawn first or Rook orders). 2-harm close (baton, restraint).",
         "moves": [
           "Overwhelm — two grunts acting together against one hunter count as 3-harm instead of 2-harm. The hunter must Act Under Pressure to avoid physical restraint rather than just harm.",
           "Substance Θ (prophylactic) — resistance to displacement effects. Side effects: peripheral visual artefacts, mild temporal dissociation, persistent sense of being watched."
@@ -70,6 +72,118 @@
         "plot_note": "If found or taken: Rex can identify what it does within a scene. The chamber already holds a measurable BIM sample from Aldermoor — matching the S01 particulate from Eszter. Two cases. Same material. MESA has been collecting it systematically for years. What the hunters do with this is a decision with consequences."
       }
     ],
-    "readaloud": []
+    "readaloud": [
+      {
+        "label": "Cold Open — Arthur gets lost",
+        "text": "Arthur Okafor has walked this route every morning for forty-one years. Left at the gate, past the postbox, right at the phone box, along the back of the park, home. He could do it in his sleep.\n\nThis morning he turns right at the phone box and finds himself standing in front of a house he doesn't recognise. He turns back. The postbox is gone. He walks for six minutes in a direction that should take him past the park, and arrives in a cul-de-sac he has never seen in four decades of living here.\n\nHis dog sits down and will not move.\n\nArthur is not frightened yet. He is seventy-two years old and he knows this street. He sits down on the kerb and waits. Someone will come. Someone always comes."
+      },
+      {
+        "label": "Arriving at the Perimeter",
+        "text": "Aldermoor looks like any other neighbourhood on a grey afternoon. Terraced houses, recycling bins out, a cat watching from a windowsill. The only signs anything is wrong are the small ones: a hand-lettered note on a front door that says DO NOT GO OUT ALONE. A ball of orange string tied to a garden gate, trailing away down the pavement and vanishing around a corner.\n\nYou can feel the boundary if you stand at it long enough. Not a wall. More like the moment before a word comes to you — that half-second of blankness where the thing you know perfectly well has temporarily left you. Except it doesn't pass."
+      },
+      {
+        "label": "Entering the Zone",
+        "text": "Inside the boundary, everything looks exactly the same. That's the problem.\n\nThe street is right. The houses are right. The corner with the post box is right — you passed it a minute ago. And yet when you look back, it isn't where it was. Not gone. Just slightly further than it should be. The distance between things is wrong in a way you can't quite measure, like looking at a room through a mirror and not immediately knowing why it's uncanny.\n\nSomewhere nearby there's a chalk arrow on the pavement, pointing firmly in one direction. Someone drew it recently. Whoever it was knew something about this street that you don't yet."
+      },
+      {
+        "label": "Climax — Feeling the Entity",
+        "text": "You can't see it. You can't hear it. But here, at the epicentre, you can feel it the way you feel a very large room before you've counted everyone in it — a quality of attention that has nothing to do with sight or sound. Something vast and very old has noticed that you're here.\n\nIt isn't hostile. That's the strangest part. Whatever it's doing to this neighbourhood, whatever it's taken from the people who couldn't leave — it has no idea. It isn't cruel. It is just enormous, and it has been alone for a very long time, and it wants to be known the way it was once known, the way a place is known by the people who've lived in it for forty years. It just doesn't understand that it can't take that. It doesn't understand it's been taking anything at all."
+      }
+    ],
+    "handouts": [
+      {
+        "id": "s02-ra-01",
+        "type": "readaloud",
+        "label": "Cold Open — Arthur Gets Lost",
+        "text": "Arthur Okafor has walked this route every morning for forty-one years. Left at the gate, past the postbox, right at the phone box, along the back of the park, home. He could do it in his sleep.\n\nThis morning he turns right at the phone box and finds himself standing in front of a house he doesn't recognise. He turns back. The postbox is gone. He walks for six minutes in a direction that should take him past the park, and arrives in a cul-de-sac he has never seen in four decades of living here.\n\nHis dog sits down and will not move.\n\nArthur is not frightened yet. He is seventy-two years old and he knows this street. He sits down on the kerb and waits. Someone will come. Someone always comes."
+      },
+      {
+        "id": "s02-ra-02",
+        "type": "readaloud",
+        "label": "Arriving at the Perimeter",
+        "text": "Aldermoor looks like any other neighbourhood on a grey afternoon. Terraced houses, recycling bins out, a cat watching from a windowsill. The only signs anything is wrong are the small ones: a hand-lettered note on a front door that says DO NOT GO OUT ALONE. A ball of orange string tied to a garden gate, trailing away down the pavement and vanishing around a corner.\n\nYou can feel the boundary if you stand at it long enough. Not a wall. More like the moment before a word comes to you — that half-second of blankness where the thing you know perfectly well has temporarily left you. Except it doesn't pass."
+      },
+      {
+        "id": "s02-ra-03",
+        "type": "readaloud",
+        "label": "Entering the Zone",
+        "text": "Inside the boundary, everything looks exactly the same. That's the problem.\n\nThe street is right. The houses are right. The corner with the post box is right — you passed it a minute ago. And yet when you look back, it isn't where it was. Not gone. Just slightly further than it should be. The distance between things is wrong in a way you can't quite measure, like looking at a room through a mirror and not immediately knowing why it's uncanny.\n\nSomewhere nearby there's a chalk arrow on the pavement, pointing firmly in one direction. Someone drew it recently. Whoever it was knew something about this street that you don't yet."
+      },
+      {
+        "id": "s02-ra-04",
+        "type": "readaloud",
+        "label": "Climax — Feeling the Entity",
+        "text": "You can't see it. You can't hear it. But here, at the epicentre, you can feel it the way you feel a very large room before you've counted everyone in it — a quality of attention that has nothing to do with sight or sound. Something vast and very old has noticed that you're here.\n\nIt isn't hostile. That's the strangest part. Whatever it's doing to this neighbourhood, whatever it's taken from the people who couldn't leave — it has no idea. It isn't cruel. It is just enormous, and it has been alone for a very long time, and it wants to be known the way it was once known, the way a place is known by the people who've lived in it for forty years. It just doesn't understand that it can't take that. It doesn't understand it's been taking anything at all."
+      },
+      {
+        "id": "s02-pda-01",
+        "type": "pda",
+        "from": "CAMPBELL",
+        "subject": "ANOMALY REPORT #0094-B — ALDERMOOR",
+        "body": "PATTERN: 7 navigation failure reports, 14-day window. Long-term residents only — new arrivals unaffected. Classification: Topographical distortion, Class 2. No biological cause.\n\nEXPANSION RATE: +0.02 miles/week. Current radius: 0.4 miles.\n\nEPICENTRE: 14 Aldermoor Crescent. Resident (Margaret Holt, 74) uncontactable for 9 days. One missing person outstanding.\n\nPROPERTY FLAG: 34% of district addresses sold in 18 months prior to first incident. Three shell companies. Beneficial owner: unresolved.\n\nDIRECTOR NOTE: Do not enter without an anchor protocol. Establish what the entity is before any containment attempt."
+      },
+      {
+        "id": "s02-pda-02",
+        "type": "pda",
+        "from": "DIRECTOR LEECH",
+        "subject": "MID-DEPLOYMENT — STATUS REQUIRED",
+        "body": "If the entity is aware, even partially — can it be reasoned with?\n\nDon't resolve this before we've had a chance to assess it properly. Document everything. We may only get one chance to study something like this."
+      },
+      {
+        "id": "s02-img-01",
+        "type": "image",
+        "label": "Aldermoor — District Exterior",
+        "src": "images/M2-aldermoor-exterior.png"
+      },
+      {
+        "id": "s02-img-02",
+        "type": "image",
+        "label": "Arthur — Lost on a Familiar Street",
+        "src": "images/M2-arthur-lost.png"
+      },
+      {
+        "id": "s02-img-03",
+        "type": "image",
+        "label": "Estate Agent Whiteboard — Acquisition Map",
+        "src": "images/M2-estate-agent-whiteboard.png"
+      },
+      {
+        "id": "s02-img-04",
+        "type": "image",
+        "label": "Chalk Arrow — Navigation Marker",
+        "src": "images/M2-chalk-arrow.png"
+      },
+      {
+        "id": "s02-img-05",
+        "type": "image",
+        "label": "String Lines — Vera's Navigation System",
+        "src": "images/M2-string-lines.png"
+      },
+      {
+        "id": "s02-img-06",
+        "type": "image",
+        "label": "Diane's Notebook — 9 Days of Observations",
+        "src": "images/M2-diane-notebook.png"
+      },
+      {
+        "id": "s02-img-07",
+        "type": "image",
+        "label": "Shredded Email — Helix Boundary Reference",
+        "src": "images/M2-shredded-email.png"
+      },
+      {
+        "id": "s02-img-08",
+        "type": "image",
+        "label": "Inside the Zone",
+        "src": "images/M2-zone-interior.png"
+      },
+      {
+        "id": "s02-map-01",
+        "type": "map",
+        "label": "Aldermoor District — Area Survey (ALD-2)",
+        "src": "images/M2-aldermoor-exterior.png",
+        "_note": "Replace src with a PNG export of the SVG map from the mission doc"
+      }
+    ]
   }
 ]

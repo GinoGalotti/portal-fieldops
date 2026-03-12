@@ -31,14 +31,16 @@ export async function onRequestPost({ request, env }) {
   }
 
   const result = await env.portal_db
-    .prepare(`INSERT INTO messages (session_id, sender, recipient, subject, body, delivered, delivered_at)
-      VALUES (?, ?, ?, ?, ?, 1, datetime('now'))`)
+    .prepare(`INSERT INTO messages (session_id, sender, recipient, subject, body, type, payload, delivered, delivered_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, 1, datetime('now'))`)
     .bind(
       body.session_id || null,
       body.sender     || 'CAMPBELL',
       body.recipient  || 'all',
       body.subject    || null,
-      body.body
+      body.body,
+      body.type       || 'message',
+      body.payload    ? JSON.stringify(body.payload) : null
     )
     .run();
 

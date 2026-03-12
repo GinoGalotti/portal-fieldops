@@ -199,6 +199,230 @@ header { flex-shrink: 0; position: relative; }
   white-space: pre-wrap;
 }
 
+/* ── READALOUD ENTRIES ───────────────────────────────────────────────────── */
+.feed-entry.feed-readaloud {
+  border-left: 2px solid var(--green);
+  padding: 0.75rem 1rem 0.75rem calc(1rem - 2px);
+  background: rgba(46,204,113,0.03);
+}
+.feed-readaloud-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.14em;
+  color: var(--green-dim);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+.feed-readaloud-text {
+  font-family: 'Barlow', sans-serif;
+  font-style: italic;
+  font-size: 0.83rem;
+  color: var(--text);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+/* ── PDA MESSAGE ENTRIES ─────────────────────────────────────────────────── */
+.feed-entry.feed-pda {
+  padding: 0;
+  background: #111108;
+  border: 1px solid #3a3a20;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.pda-chrome {
+  background: #1c1c0e;
+  padding: 0.28rem 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #3a3a20;
+}
+.pda-chrome-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.18em;
+  color: #6a6a40;
+}
+.pda-chrome-status {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  color: #4a4a30;
+  letter-spacing: 0.08em;
+}
+.pda-body { padding: 0.6rem 0.75rem 0.7rem; }
+.pda-header-row {
+  display: flex;
+  gap: 0.4rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  line-height: 1.7;
+  padding-bottom: 0.45rem;
+  margin-bottom: 0.45rem;
+  border-bottom: 1px solid #2a2a18;
+}
+.pda-field-label { color: #5a5a38; min-width: 3.5rem; }
+.feed-pda.pda-campbell .pda-field-value { color: #4aaa6a; }
+.feed-pda.pda-other    .pda-field-value { color: #b89a30; }
+.pda-message-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+.feed-pda.pda-campbell .pda-message-text { color: #78c890; }
+.feed-pda.pda-other    .pda-message-text { color: #c0a050; }
+.pda-footer {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  color: #3a3a22;
+  margin-top: 0.5rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid #2a2a18;
+  letter-spacing: 0.1em;
+}
+
+/* ── IMAGE / MAP ENTRIES ─────────────────────────────────────────────────── */
+.feed-entry.feed-image {
+  padding: 0.6rem 1rem;
+}
+.feed-image-card { position: relative; cursor: zoom-in; }
+.feed-image-card img {
+  width: 100%;
+  display: block;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+}
+.feed-image-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  color: var(--text-dim);
+  letter-spacing: 0.06em;
+  margin-top: 0.4rem;
+}
+.feed-image-type-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  opacity: 0.5;
+  margin-bottom: 0.35rem;
+}
+
+/* ── LIGHTBOX ────────────────────────────────────────────────────────────── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  cursor: zoom-out;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.lightbox.visible { opacity: 1; }
+.lightbox img {
+  max-width: 92vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 2px;
+  box-shadow: 0 0 60px rgba(0,0,0,0.8);
+}
+.lightbox-caption {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+/* ── KEEPER HANDOUT BUTTONS ──────────────────────────────────────────────── */
+.handout-list { display: flex; flex-direction: column; gap: 0.4rem; padding: 0.5rem 0; }
+.handout-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: rgba(255,255,255,0.02);
+}
+.handout-item.posted { opacity: 0.5; border-color: rgba(46,204,113,0.2); }
+.handout-type-pip {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  padding: 0.15rem 0.4rem;
+  border-radius: 2px;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  text-transform: uppercase;
+}
+.pip-readaloud { background: rgba(46,204,113,0.12); color: var(--green-dim); border: 1px solid rgba(46,204,113,0.2); }
+.pip-pda       { background: rgba(200,160,32,0.12); color: #c8a020; border: 1px solid rgba(200,160,32,0.2); }
+.pip-image     { background: rgba(100,140,255,0.1); color: #7a9bff; border: 1px solid rgba(100,140,255,0.2); }
+.pip-map       { background: rgba(180,100,255,0.1); color: #c07aff; border: 1px solid rgba(180,100,255,0.2); }
+.handout-meta  { flex: 1; min-width: 0; }
+.handout-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text);
+  margin-bottom: 0.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.handout-posted-time {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.52rem;
+  color: var(--green-dim);
+  letter-spacing: 0.06em;
+}
+.handout-post-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.55rem;
+  border-radius: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+  background: rgba(46,204,113,0.08);
+  border: 1px solid rgba(46,204,113,0.25);
+  color: var(--green);
+}
+.handout-post-btn:hover { background: rgba(46,204,113,0.16); }
+.handout-post-btn.repost {
+  background: rgba(255,255,255,0.04);
+  border-color: var(--border);
+  color: var(--text-dim);
+}
+.handout-post-btn.repost:hover { background: rgba(255,255,255,0.08); }
+
+/* ── PLAYER HANDOUTS PANEL ───────────────────────────────────────────────── */
+.handout-panel-image {
+  width: 100%;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+  display: block;
+  cursor: zoom-in;
+  margin-bottom: 0.35rem;
+}
+.handout-panel-section { margin-bottom: 0.75rem; }
+.handout-panel-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  color: var(--text-dim);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.25rem;
+}
+
 /* ── FEED COMPOSER ───────────────────────────────────────────────────────── */
 .feed-composer {
   flex-shrink: 0;
@@ -803,6 +1027,7 @@ header { flex-shrink: 0; position: relative; }
       <button class="keeper-tab" data-ktab="contacts" onclick="switchKeeperTab('contacts')">// CONTACTS</button>
       <button class="keeper-tab" data-ktab="references" onclick="switchKeeperTab('references')">// REFERENCES</button>
       <button class="keeper-tab" data-ktab="threats" onclick="switchKeeperTab('threats')">// THREATS</button>
+      <button class="keeper-tab" data-ktab="handouts" onclick="switchKeeperTab('handouts')">// HANDOUTS</button>
     </div>
 
     <div class="panel-body" id="panel-body">
@@ -812,6 +1037,12 @@ header { flex-shrink: 0; position: relative; }
     </div>
   </div>
 
+</div>
+
+<!-- Lightbox overlay — shown when any image/map handout is clicked -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-caption" id="lightbox-caption"></div>
 </div>
 
 <script>
@@ -1331,11 +1562,124 @@ header { flex-shrink: 0; position: relative; }
     renderContactsPanel();
   };
 
-  // ── HANDOUTS PANEL ────────────────────────────────────────────────────────
+  // ── PLAYER HANDOUTS PANEL ─────────────────────────────────────────────────
+  // Shows all revealed image/map/readaloud/pda entries from the live feed.
+  // Players use this as a quick reference without scrolling the whole feed.
   function renderHandoutsPanel() {
-    document.getElementById('panel-body').innerHTML =
-      '<div class="keeper-panel-note">// HANDOUTS — COMING SOON</div>';
+    var body = document.getElementById('panel-body');
+    var revealed = feedEntries.filter(function (e) {
+      return e.type && e.type !== 'message';
+    });
+    if (revealed.length === 0) {
+      body.innerHTML = '<div class="keeper-panel-note">// NO HANDOUTS SHARED YET</div>';
+      return;
+    }
+    var html = '';
+    revealed.forEach(function (e) {
+      var payload = {};
+      try { payload = typeof e.payload === 'string' ? JSON.parse(e.payload) : (e.payload || {}); } catch (x) {}
+      var label = payload.label || e.subject || '';
+      var t = e.type;
+      html += '<div class="handout-panel-section">';
+      if (t === 'image' || t === 'map') {
+        var src = payload.src || '';
+        html += '<div class="feed-image-type-tag">// ' + (t === 'map' ? 'MAP' : 'IMAGE') + '</div>';
+        if (src) {
+          html += '<img class="handout-panel-image" src="' + escHtml(src) + '" alt="' + escHtml(label) + '" onclick="openLightbox(\'' + escHtml(src) + '\',\'' + escHtml(label) + '\')">';
+        }
+        if (label) html += '<div class="handout-panel-label">' + escHtml(label) + '</div>';
+      } else if (t === 'readaloud') {
+        html += '<div class="feed-image-type-tag">// READALOUD</div>';
+        if (label) html += '<div class="handout-panel-label">' + escHtml(label) + '</div>';
+      } else if (t === 'pda') {
+        var from = payload.from || e.sender || '';
+        html += '<div class="feed-image-type-tag">// PDA — ' + escHtml(from) + '</div>';
+        if (label) html += '<div class="handout-panel-label">' + escHtml(label) + '</div>';
+      }
+      html += '</div>';
+    });
+    body.innerHTML = html;
   }
+
+  // ── KEEPER HANDOUTS TAB ───────────────────────────────────────────────────
+  // Shows all handouts defined for the selected session, with POST buttons.
+  // Posted handouts are tracked in localStorage; readalouds can be re-posted.
+  var keeperHandoutSession = null;
+
+  window.keeperSelectHandoutSession = function (id) {
+    keeperHandoutSession = id;
+    renderKeeperHandoutsTab();
+  };
+
+  function renderKeeperHandoutsTab() {
+    var body = document.getElementById('panel-body');
+    if (!session_data) { body.innerHTML = '<div class="keeper-panel-note">// LOADING…</div>'; return; }
+    if (!keeperHandoutSession) keeperHandoutSession = session_data[session_data.length - 1].id;
+
+    // Session selector
+    var html = '<div class="data-session-selector">';
+    session_data.forEach(function (s) {
+      var active = s.id === keeperHandoutSession ? ' active' : '';
+      html += '<button class="data-sess-btn' + active + '" onclick="keeperSelectHandoutSession(\'' + s.id + '\')">' + escHtml(s.session_key) + '</button>';
+    });
+    html += '</div>';
+
+    var sess = session_data.filter(function (s) { return s.id === keeperHandoutSession; })[0];
+    if (!sess || !sess.handouts || sess.handouts.length === 0) {
+      body.innerHTML = html + '<div class="keeper-panel-note">// NO HANDOUTS FOR THIS SESSION</div>';
+      return;
+    }
+
+    var posted = {};
+    try { posted = JSON.parse(localStorage.getItem('portal_posted_handouts') || '{}'); } catch (x) {}
+
+    html += '<div class="handout-list">';
+    sess.handouts.forEach(function (h) {
+      var isPosted = !!posted[h.id];
+      var pipClass = 'pip-' + h.type;
+      var typeLabel = h.type.toUpperCase();
+      var itemClass = isPosted ? 'handout-item posted' : 'handout-item';
+      var btnLabel  = isPosted ? '↺ RE-POST' : '▶ POST';
+      var btnClass  = isPosted ? 'handout-post-btn repost' : 'handout-post-btn';
+      // images can be re-posted but show a re-post style; readalouds always re-postable
+      html += '<div class="' + itemClass + '">' +
+        '<span class="handout-type-pip ' + pipClass + '">' + escHtml(typeLabel) + '</span>' +
+        '<div class="handout-meta">' +
+          '<div class="handout-label">' + escHtml(h.label || h.subject || h.id) + '</div>' +
+          (isPosted ? '<div class="handout-posted-time">POSTED ' + escHtml(posted[h.id]) + '</div>' : '') +
+        '</div>' +
+        '<button class="' + btnClass + '" onclick="postHandout(' + JSON.stringify(JSON.stringify(h)) + ')">' + btnLabel + '</button>' +
+      '</div>';
+    });
+    html += '</div>';
+    body.innerHTML = html;
+  }
+
+  window.postHandout = function (hJson) {
+    var h = JSON.parse(hJson);
+    var bodyText = h.text || h.body || h.label || '';
+    var sess = session_data ? session_data.filter(function (s) { return s.id === keeperHandoutSession; })[0] : null;
+    fetch('/api/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        session_id: sess ? sess.session_key : null,
+        sender:     h.from || 'KEEPER',
+        subject:    h.label || h.subject || null,
+        body:       bodyText,
+        type:       h.type,
+        payload:    h
+      })
+    }).then(function (r) { return r.json(); }).then(function (res) {
+      if (!res.ok) return;
+      var posted = {};
+      try { posted = JSON.parse(localStorage.getItem('portal_posted_handouts') || '{}'); } catch (x) {}
+      var now = new Date();
+      posted[h.id] = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+      localStorage.setItem('portal_posted_handouts', JSON.stringify(posted));
+      renderKeeperHandoutsTab();
+    }).catch(function () {});
+  };
 
   // ── KEEPER TAB SWITCHING ─────────────────────────────────────────────────
   window.switchKeeperTab = function (tab) {
@@ -1352,6 +1696,7 @@ header { flex-shrink: 0; position: relative; }
     if (keeperTab === 'contacts')   renderKeeperContactsTab();
     if (keeperTab === 'references') renderKeeperReferencesTab();
     if (keeperTab === 'threats')    renderKeeperDataTab();
+    if (keeperTab === 'handouts')   renderKeeperHandoutsTab();
   }
 
   // ── KEEPER: OPERATIVES TAB ────────────────────────────────────────────────
@@ -1983,7 +2328,63 @@ header { flex-shrink: 0; position: relative; }
   }
 
   function buildFeedEntryHtml(entry) {
-    if (entry._msg || entry.sender) {
+    var entryType = entry.type || (entry._msg || entry.sender ? 'message' : null);
+
+    // ── Readaloud ──────────────────────────────────────────────────────────
+    if (entryType === 'readaloud') {
+      var payload = {};
+      try { payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      var label = payload.label || entry.subject || '';
+      var text  = payload.text  || entry.body    || '';
+      return '<div class="feed-entry feed-readaloud">' +
+        '<div class="feed-readaloud-eyebrow">// KEEPER READALOUD' + (label ? ' — ' + escHtml(label).toUpperCase() : '') + '</div>' +
+        '<div class="feed-readaloud-text">' + escHtml(text) + '</div>' +
+        '<div class="feed-time" style="margin-top:0.4rem">' + fmtTime(entry.delivered_at || entry.created_at) + '</div>' +
+      '</div>';
+    }
+
+    // ── PDA message ────────────────────────────────────────────────────────
+    if (entryType === 'pda') {
+      var payload = {};
+      try { payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      var from    = payload.from    || entry.sender  || 'UNKNOWN';
+      var subject = payload.subject || entry.subject || '';
+      var body    = payload.body    || entry.body    || '';
+      var isCamp  = from.toUpperCase().indexOf('CAMPBELL') !== -1;
+      var pdaClass = isCamp ? 'pda-campbell' : 'pda-other';
+      var valClass = 'pda-field-value';
+      return '<div class="feed-entry feed-pda ' + pdaClass + '">' +
+        '<div class="pda-chrome">' +
+          '<span class="pda-chrome-label">P.O.R.T.A.L FIELD COMMS · SECURE</span>' +
+          '<span class="pda-chrome-status">' + fmtTime(entry.delivered_at || entry.created_at) + '</span>' +
+        '</div>' +
+        '<div class="pda-body">' +
+          '<div class="pda-header-row"><span class="pda-field-label">FROM:</span><span class="' + valClass + '">' + escHtml(from) + '</span></div>' +
+          (subject ? '<div class="pda-header-row"><span class="pda-field-label">SUBJ:</span><span class="' + valClass + '">' + escHtml(subject) + '</span></div>' : '') +
+          '<div class="pda-message-text">' + escHtml(body) + '</div>' +
+          '<div class="pda-footer">// MSG DELIVERED · ENCRYPT 128 · P.O.R.T.A.L CAMPBELL RELAY</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    // ── Image / Map ────────────────────────────────────────────────────────
+    if (entryType === 'image' || entryType === 'map') {
+      var payload = {};
+      try { payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      var src   = payload.src   || '';
+      var label = payload.label || entry.subject || '';
+      var isMap = entryType === 'map';
+      return '<div class="feed-entry feed-image">' +
+        '<div class="feed-image-type-tag">// ' + (isMap ? 'MAP' : 'IMAGE') + ' SHARED BY KEEPER</div>' +
+        (src ? '<div class="feed-image-card" onclick="openLightbox(\'' + escHtml(src) + '\',\'' + escHtml(label) + '\')">' +
+          '<img src="' + escHtml(src) + '" alt="' + escHtml(label) + '" loading="lazy">' +
+        '</div>' : '') +
+        (label ? '<div class="feed-image-label">' + escHtml(label) + '</div>' : '') +
+      '</div>';
+    }
+
+    // ── Standard chat / CAMPBELL message ──────────────────────────────────
+    if (entryType === 'message' || entry._msg || entry.sender) {
       return '<div class="feed-entry msg-entry">' +
         '<div class="feed-msg-sender">// ' + escHtml(entry.sender || 'SYSTEM') + '</div>' +
         '<div class="feed-msg-body">' + escHtml(entry.body || '') + '</div>' +
@@ -2021,6 +2422,10 @@ header { flex-shrink: 0; position: relative; }
     div.innerHTML = buildFeedEntryHtml(entry);
     container.appendChild(div.firstElementChild);
     feedEntries.push(entry);
+    // If the player has the HANDOUTS tab open, refresh it so new reveals appear immediately
+    if (activeTab === 'handouts' && entry.type && entry.type !== 'message') {
+      renderHandoutsPanel();
+    }
   }
 
   function prependFeedEntries(entries) {
@@ -2149,6 +2554,25 @@ header { flex-shrink: 0; position: relative; }
     if (!str) return '';
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
+
+  // ── LIGHTBOX ───────────────────────────────────────────────────────────────
+  window.openLightbox = function (src, caption) {
+    var lb  = document.getElementById('lightbox');
+    var img = document.getElementById('lightbox-img');
+    var cap = document.getElementById('lightbox-caption');
+    img.src     = src;
+    cap.textContent = caption || '';
+    lb.style.display = 'flex';
+    requestAnimationFrame(function () { lb.classList.add('visible'); });
+  };
+  window.closeLightbox = function () {
+    var lb = document.getElementById('lightbox');
+    lb.classList.remove('visible');
+    setTimeout(function () { lb.style.display = 'none'; }, 150);
+  };
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeLightbox();
+  });
 
   // ── BOOT ──────────────────────────────────────────────────────────────────
   loadStaticData().then(function () {
