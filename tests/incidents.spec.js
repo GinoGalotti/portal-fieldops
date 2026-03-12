@@ -46,21 +46,20 @@ test.describe('Lab Incidents page', () => {
     // activateWeek() is called with the first week whose status === 'active'.
     // The active tab gets the CSS class "active" via classList.toggle('active', ...).
     // We derive the expected label from incidents.json — no hardcoded week label.
-    const activeTab = page.locator('.week-tab').filter({ hasText: activeWeek.label });
-    // Use string form of toHaveClass — checks for 'active' as an exact CSS token.
-    // Regex /active/ would also match 'status-active' (the permanent status marker).
-    await expect(activeTab).toHaveClass('active');
+    // Use CSS selector .week-tab.active to check the active token is present without
+    // matching 'status-active'. Playwright string toHaveClass matches the full class
+    // attribute in v1.49+, so we rely on the selector instead.
+    await expect(page.locator('.week-tab.active').filter({ hasText: activeWeek.label })).toBeVisible();
   });
 
   test('active week tab is no longer active after clicking W1', async ({ page }) => {
     // Clicking W1 should remove the 'active' class from the current active week.
     // Note: 'status-active' stays on W2 permanently (it marks the JSON status field).
-    // We check for the 'active' token specifically, not a regex that would match 'status-active'.
     const w1Tab = page.locator('.week-tab').filter({ hasText: w1Week.label });
     await w1Tab.click();
-    const activeTab = page.locator('.week-tab').filter({ hasText: activeWeek.label });
-    await expect(activeTab).not.toHaveClass('active');
-    await expect(w1Tab).toHaveClass('active');
+    // W2 loses 'active' (but retains 'status-active') — verified by CSS selector absence.
+    await expect(page.locator('.week-tab.active').filter({ hasText: activeWeek.label })).not.toBeVisible();
+    await expect(page.locator('.week-tab.active').filter({ hasText: w1Week.label })).toBeVisible();
   });
 
   // ── ACTIVE WEEK CONTENT ─────────────────────────────────────────────────

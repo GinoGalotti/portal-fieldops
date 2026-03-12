@@ -141,7 +141,8 @@ test.describe('feed.html — expand/collapse on click', () => {
     const entry = page.locator('.feed-entry').first();
     await entry.click();
     // .expanded class is toggled by the event-delegated click handler on #feed-entries.
-    await expect(entry).toHaveClass('expanded');
+    // Use regex — toHaveClass(string) in Playwright 1.49+ matches the full class attribute.
+    await expect(entry).toHaveClass(/\bexpanded\b/);
     // The detail block is hidden via CSS (opacity:0, max-height:0) until .expanded.
     await expect(entry.locator('.feed-outcome-detail')).toBeVisible();
     await expect(entry.locator('.feed-outcome-detail')).toContainText('cost');
@@ -153,7 +154,7 @@ test.describe('feed.html — expand/collapse on click', () => {
     await page.waitForSelector('.feed-entry');
     const entry = page.locator('.feed-entry').first();
     await entry.click(); // expand
-    await expect(entry).toHaveClass('expanded');
+    await expect(entry).toHaveClass(/\bexpanded\b/);
     await entry.click(); // collapse
     await expect(entry).not.toHaveClass(/expanded/);
   });
@@ -166,8 +167,8 @@ test.describe('feed.html — expand/collapse on click', () => {
     const entries = page.locator('.feed-entry');
     await entries.nth(0).click();
     await entries.nth(1).click();
-    await expect(entries.nth(0)).toHaveClass('expanded');
-    await expect(entries.nth(1)).toHaveClass('expanded');
+    await expect(entries.nth(0)).toHaveClass(/\bexpanded\b/);
+    await expect(entries.nth(1)).toHaveClass(/\bexpanded\b/);
   });
 
 });
@@ -381,7 +382,7 @@ test.describe('feed.html — clear feed', () => {
     await expect(page.locator('.msg-entry')).toBeVisible();
 
     // Advance clock past the 6-second poll interval.
-    await page.clock.tick(7000);
+    await page.clock.runFor(7000);
 
     // Feed should be empty after the clear sentinel is processed.
     await expect(page.locator('.feed-entry')).toHaveCount(0);
