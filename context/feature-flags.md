@@ -26,6 +26,37 @@ CSS selector `body.no-hover .feed-entry:hover .feed-outcome-detail` suppresses h
 
 ---
 
+---
+
+## `?session=wN` — Session Override (all session-aware pages)
+
+**Scope:** any page that includes `session-state.js` — `index.html`, hunter pages, mission pages, `lab-incidents.html`, etc.
+
+**Default:** off — active session determined by D1 API (`/api/v1/session/active`), falling back to localStorage cache.
+
+**When on:** forces the active session to `wN` (e.g. `w1`, `w2`, `w3`) for that page load only. Does not write to localStorage or D1 — the override is URL-only and temporary.
+
+**What changes:**
+- All `data-session-from` / `data-session-until` elements are shown/hidden as if the campaign is at week `wN`
+- Bestiary on `index.html`: use `?session=w1` to see Eszter pre-reveal only; `?session=w2` to see both entities with blurred Cartographer; `?session=w3` for both fully revealed
+- Session indicator in the keeper banner (if on a keeper page) does not update — the override is silent on player pages
+
+**Implementation:** `session-state.js`, highest-priority branch:
+```js
+var params = new URLSearchParams(window.location.search);
+if (params.get('session')) return Promise.resolve(params.get('session'));
+```
+URL param is checked before localStorage and D1. Value is validated against `data/sessions.json`; unknown values fall back to default resolution.
+
+**Known valid values:** `w1`, `w2` (add to `data/sessions.json` as sessions are added).
+
+**Use cases:**
+- Testing session-gated content without changing the live session in D1
+- Reviewing what players see at a specific campaign point
+- Sharing a URL with a specific session state for screenshots or review
+
+---
+
 ## Adding New Feature Flags
 
 When you add a URL-parameter flag to any page:

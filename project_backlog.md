@@ -103,13 +103,51 @@ Section III render: iterate `portal-db-custom.json` (custom class) + pull from `
 
 ---
 
-## BACKLOG
+## NEXT SESSION — Playwright Tests
 
-### Testing
+Write tests for everything changed/fixed this session + known gaps. Run suite, fix failures, iterate.
+
+### New tests to write
+
+**Bestiary (index.html)**
+- `bestiary.spec.js` — new file
+  - `#bestiary-grid` exists and is non-empty after load
+  - At session w1: Eszter card visible, Cartographer hidden; blur-notice present on Eszter classified block
+  - At session w2: both Eszter phases — only w2+ visible; Cartographer w2 card visible and all blurred
+  - At session w3: Cartographer w3 card visible, no blur
+  - Adding a new entity to `portal-entities.json` with `bestiary.show:true` → appears without HTML change (data integrity test)
+
+**Hunter Arcs (missions/arcs.html)**
+- `arcs.spec.js` — new file
+  - All 4 hunter sections render with correct hunter names
+  - All 12 arc cards present (4 × 3)
+  - All 6 intersection rows present
+  - Beat box click → fills box, persists in localStorage
+  - Status badge click → cycles DORMANT → ACTIVE → RESOLVED → DORMANT
+  - Resolution textarea input → persists in localStorage
+  - Stats counters update on interaction
+  - Sven arc II has custom res label "// RESOLUTION NOTE / TARGET"
+  - Sven arc III has custom res label "// CAUSE OF DEATH + RESOLUTION NOTE"
+  - Portal-type arc cards have `.portal` CSS class (rex-3, reed-3, alan-3, sven-3)
+
+**Hunter pages — nav hamburger fix**
+- Add to existing nav spec or hunter page smoke tests:
+  - At desktop viewport (1280px): `.nav-toggle` has `display:none`
+  - At mobile viewport (375px): `.nav-toggle` is visible; clicking it shows nav links
+
+**Render-before-interact race condition (regression guard)**
+- arcs.html: confirm beat/status/notes are interactive immediately — no timing window where clicks do nothing
+- index.html bestiary: confirm cards have correct `data-session-from` attrs after load
+
+### Existing gaps (from tests/TESTING-NOTES.md)
 - Hunter sheet save/restore cycle (D1 persistence)
 - CAMPBELL briefings tab switching
 - Player + keeper report pages
-- entities.html (no tests exist — add after data-driven conversion)
+- entities.html (add after data-driven conversion)
+
+---
+
+## BACKLOG
 
 ### Minor / polish
 - `missions/entities.html` stat pills (Confirmed/Resolved/Active/Theoretical counts) — currently hardcoded; update when Section I becomes data-driven
