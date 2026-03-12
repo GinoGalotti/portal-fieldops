@@ -63,7 +63,8 @@ This is a personal campaign site — all CF services stay on the free tier. Desi
 ```
 portal-fieldops/
 ├── context/                   # Claude reference docs — hand these at session start
-│   ├── worldbuilding.md       # World, voice, design system (for new pages)
+│   ├── worldbuilding-lore.md  # World, NPCs, MESA, CAMPBELL voice (for content sessions)
+│   ├── worldbuilding-site.md  # Site architecture, CSS, data formats, authoring schemas
 │   └── portal-architecture.md # This file — technical stack, schema, build phases
 │
 ├── data/                      # Static game data (not in DB) — see "Static Data Files" section
@@ -462,7 +463,7 @@ Currently: static HTML files, one per session.
 ## Build Phases
 
 ### Phase 0 — Data Foundation ✅ COMPLETE
-All seven static data files built from source (MOTW hardcover, Slayer's Survival Kit, worldbuilding.md). Live in `data/`, ready to serve. No backend required to use them.
+All seven static data files built from source (MOTW hardcover, Slayer's Survival Kit, worldbuilding-lore.md). Live in `data/`, ready to serve. No backend required to use them.
 
 **Files delivered:**
 - `data/motw-basic-moves.json` — all basic moves + alternate/new Weird moves
@@ -876,13 +877,13 @@ All files in `data/` are static assets served by CF Pages. Never written to at r
 When picking this up:
 - Check `wrangler.jsonc` at repo root — has D1 binding name (`portal_db`) and database ID
 - Workers use TypeScript; client-side JS in `app/` pages is vanilla JS (no framework)
-- The existing design system (four CSS files, `--mp-*` variables, keeper/player split, terminal aesthetic) applies to all new pages — read `context/worldbuilding.md` Part 4
+- The existing design system (four CSS files, `--mp-*` variables, keeper/player split, terminal aesthetic) applies to all new pages — read `context/worldbuilding-site.md`
 - Roll log is append-only: INSERT only, never UPDATE or DELETE
 - Player pages use D1-first persistence: on load fetch from API, fall back to localStorage if offline; on save write localStorage immediately then PUT to API in background
 - Hunter arc state pattern is the reference implementation — see `hunters/hunter.js` and `functions/api/v1/hunters/[id]/arc-state.js`
 - New migrations go in `workers/migrations/` as `NNN_description.sql`; apply to both local and remote D1 (see migration command above)
 - Keeper pages write directly to D1; player pages write their own data only
-- CAMPBELL's voice rules are in `context/worldbuilding.md` Part 2 — any generated message must sound like CAMPBELL
+- CAMPBELL's voice rules are in `context/worldbuilding-lore.md` — any generated message must sound like CAMPBELL
 - Never add passwords or a signup flow — keeper uses CF Access (Google), players use URL tokens
 - All seven `data/` JSON files are built and ready — read the "Static Data Files Reference" section above before writing any code that touches moves, hunters, NPCs, or entities. Do not reconstruct data that already exists in those files.
 - `keeper_description` and `keeper_notes` fields must never appear in player-facing API responses or page renders

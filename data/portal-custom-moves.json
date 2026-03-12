@@ -1,6 +1,6 @@
 {
   "version": "portal-campaign-current",
-  "source": "worldbuilding.md \u2014 campaign-specific rules and MESA field equipment mechanics",
+  "source": "worldbuilding-lore.md \u2014 campaign-specific rules and MESA field equipment mechanics",
   "note": "Custom and house-rule moves for the PORTAL campaign. Stored separately from motw-basic-moves.json and motw-playbooks.json. The roll interface should merge these with the standard move lists at runtime.",
   "custom_moves": [
     {

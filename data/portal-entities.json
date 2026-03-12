@@ -1,6 +1,6 @@
 {
   "version": "portal-campaign-current",
-  "source": "worldbuilding.md",
+  "source": "worldbuilding-lore.md",
   "note": "Entity and threat database for the keeper command board. Each entry has a player_description (safe for player-facing contacts) and full keeper detail. The 'status' field reflects current campaign state. Use 'classification' for MOTW monster type and 'designation' for PORTAL's internal case identifier.",
   "entities": [
     {

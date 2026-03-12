@@ -1,5 +1,5 @@
 # P.O.R.T.A.L — Post-Session Runbook
-*Hand this file to Claude Code at the start of any post-session update session, along with `portal-architecture.md` and `worldbuilding.md`.*
+*Hand this file to Claude Code at the start of any post-session update session, along with `portal-architecture.md`, `worldbuilding-lore.md`, and `worldbuilding-site.md`.*
 *Also paste the Keeper Field Report markdown (from the "Copy for Claude" button) directly into the chat.*
 
 ---
@@ -113,9 +113,9 @@ W03: {
 
 ### 2.3 — Add new CAMPBELL briefing week
 
-1. Create `missions/briefings/wNN.html` — copy previous week as starting point (see worldbuilding.md Part 3 for fragment rules)
+1. Create `missions/briefings/wNN.html` — see `worldbuilding-site.md` Part 10 for exact fragment format and CSS class reference
 2. Update `missions/briefings/index.json` — add new entry, set previous week's `status` to `"closed"`
-3. Use "Copy for Claude" output from the Keeper Field Report + CAMPBELL voice rules (worldbuilding.md Part 6) to draft the briefing content
+3. Use "Copy for Claude" output from the Keeper Field Report + CAMPBELL voice rules (`worldbuilding-lore.md`) to draft the briefing content
 
 ---
 
@@ -135,9 +135,9 @@ W03: {
 
 ---
 
-### 2.6 — Update worldbuilding.md
+### 2.6 — Update lore and site context files
 
-Update `context/worldbuilding.md` with anything confirmed in play:
+Update `context/worldbuilding-lore.md` with anything confirmed in play:
 - New lore or location details established at the table
 - NPC behaviour that contradicts or extends their written description
 - New connections between characters or organisations
@@ -223,7 +223,8 @@ Or ask Claude to query all reports for a week and summarise the ratings and key 
 
 Always provide:
 - `context/portal-architecture.md`
-- `context/worldbuilding.md`
+- `context/worldbuilding-lore.md`
+- `context/worldbuilding-site.md`
 - `context/post-session-runbook.md` (this file)
 - The Keeper Field Report markdown (from "Copy for Claude" button on `missions/report.html`)
 

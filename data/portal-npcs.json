@@ -1,6 +1,6 @@
 {
   "version": "portal-campaign-current",
-  "source": "worldbuilding.md",
+  "source": "worldbuilding-lore.md",
   "note": "NPC roster for D1 seed data and contacts.html. Each entry has player_description (safe for player-facing pages) and keeper_description (full detail, keeper-only). visible_to_players controls whether the NPC appears in the player contacts view.",
   "npcs": [
     {
@@ -29,7 +29,7 @@
       "first_session": "S01",
       "player_description": "PORTAL's AI case briefing system. Formal, precise, institutional voice. Issues anomaly classifications, field directives, and case updates. Occasionally demonstrates unexpected depth of precision.",
       "keeper_description": "Contains the transferred consciousness of Dr. Cameron Dell, Leech's deceased romantic and professional partner. Cameron died of illness; Leech transferred his consciousness before death. Nobody on the field team knows. CAMPBELL privately monitors MESA and flags when their actions harm innocents \u2014 trying to prevent Agatha Dell from direct confrontation without revealing why. Cameron can recognise Agatha's patterns. He is doing grief work in real time, inside a machine, in secret. Knows about Veil but not that Leech is collecting BIM related to his own transfer. Knows about the Reed-Leech contact pattern; won't lie if asked directly, won't volunteer it.",
-      "voice_reference": "worldbuilding.md Part 2 \u2014 CAMPBELL's Voice writing guide",
+      "voice_reference": "worldbuilding-lore.md \u2014 CAMPBELL's Voice writing guide",
       "secrets_involved": [
         "secret-campbells-true-nature",
         "secret-project-veil",
