@@ -54,7 +54,7 @@ When the Keeper asks you to build a page:
 | `02-portal-keeper-cases.html` | keeper inline | Keeper | All 4 active cases, keeper detail |
 | `01-a-promise-is-a-promise.html` | `mission-prep.css` | Keeper | Session 01 full prep (amber/brown palette) |
 | `02-something-that-wants-to-be-known.html` | `mission-prep.css` | Keeper | Session 02 full prep (green/forest palette) — includes inline SVG district map, read-aloud blurbs (.read-aloud class), MESA confrontation appendix with Rook stat block |
-| `arcs.html` | `keeper.css` | Keeper | Arc tracker — all 12 hunter arcs, beat tracking, session stamping, intersection map, localStorage + JSON export/import |
+| `arcs.html` | `keeper.css` | Keeper | Arc tracker — renders entirely from `data/hunter-arcs.json`. All 12 hunter arcs (4 hunters × 3 arcs) + 6 cross-hunter intersections. Beat progress, status (DORMANT/ACTIVE/RESOLVED), and resolution notes saved to localStorage (`portal-arcs-v1`). |
 | `report.html` | `keeper.css` | Keeper | Keeper post-session field report — session tab switcher (S01/S02), outcome, hunter cards, per-session scene notes, thread tags, clock status, seeds. Saves to D1. "Copy for Claude" exports Markdown. |
 | `reports/player-report.html` | `player.css` | Player | Operative Field Report — week + hunter selector, 5 rating pips, general feedback, per-week scene questions. Unique save per week+hunter, D1-backed. Linked from player nav as "Report". |
 | `contacts.html` | `player.css` | Player | NPC Contact Directory — fetches `portal-npcs.json`, renders player-visible NPCs grouped by affiliation (PORTAL staff / field contacts / unknown). Static render, no D1 dependency. |
@@ -636,6 +636,47 @@ Entities in `data/portal-entities.json` use an extended schema identical in phil
 
 The `blurred` field in `session_overrides` controls whether the beast card renders with the `.blur-notice` treatment on the player-facing bestiary (index.html). If `blurred: true`, the description is shown dimmed with a keeper-access notice. If `false`, the full description renders clearly.
 
+#### Entity `bestiary{}` object — player-facing bestiary on `index.html`
+
+The player bestiary on `index.html` is **fully data-driven** — no HTML edits needed to add or update beast cards. It fetches `portal-entities.json` and renders entities with `bestiary.show === true`.
+
+Each phase is session-gated with `show_from` / `show_until` (same pattern as `data-session-from/until` on HTML elements). Add a new session-phase by appending to `phases[]` with the correct `show_from`.
+
+```json
+"bestiary": {
+  "show": true,
+  "phases": [
+    {
+      "show_from": "w1",
+      "show_until": "w1",
+      "threat": "?",
+      "class": "UNCONFIRMED — INCORPOREAL",
+      "description": "Player-facing mystery text (HTML allowed)",
+      "classified": "⚠ WEAKNESSES: UNDER FIELD ASSESSMENT\nANCHOR OBJECT: Located — recovery directive active",
+      "classified_blurred": true,
+      "blur_notice": "⚠ FULL PROFILE UNLOCKS POST-SESSION 01"
+    },
+    {
+      "show_from": "w2",
+      "threat": "2",
+      "class": "INCORPOREAL SPIRIT — EXECUTIONER",
+      "description": "Player-facing revealed description (HTML allowed)",
+      "classified": "⚠ WEAKNESSES: presence of ash from the promise site\nSTATUS: RESOLVED — PEACEFUL DISPERSAL",
+      "classified_blurred": false
+    }
+  ]
+}
+```
+
+**Fields:**
+- `show`: `true` → entity appears in bestiary; `false` / omitted → skipped (e.g. keeper-only entities)
+- `show_from` / `show_until`: session week strings (`"w1"`, `"w2"` etc.) — same logic as HTML `data-session-from/until`. Omit `show_until` for the final phase (visible from that week onward).
+- `classified_blurred`: `true` → classified block is blurred with `blur_notice` overlay
+- `blur_all`: `true` → entire card is blurred (name, class, description, classified) — use for entities not yet partially revealed
+- `blur_notice`: string shown in the blur overlay when `classified_blurred` or `blur_all` is true
+
+**How to add a new entity to the bestiary:** Add a `bestiary{}` object to its entry in `portal-entities.json`. The player bestiary re-renders on next load — no HTML change needed.
+
 ---
 
 ## PART 7 — CSS CLASSES NOT YET IN SHARED STYLESHEETS
@@ -664,7 +705,7 @@ The following classes were defined inline on specific pages and have not been pr
 
 ## PART 8 — DATA FILES DIRECTORY
 
-Seven static JSON files live in `data/` and cover all game rules, campaign characters, NPCs, and entities. **Read this section before building any page or Worker that touches game data.** Full technical documentation for each file — field schemas, consumption patterns, D1 seeding notes — is in `portal-architecture.md` under "Static Data Files Reference".
+Nine static JSON files live in `data/` and cover all game rules, campaign characters, NPCs, entities, and hunter arcs. **Read this section before building any page or Worker that touches game data.** Full technical documentation for each file — field schemas, consumption patterns, D1 seeding notes — is in `portal-architecture.md` under "Static Data Files Reference".
 
 ### What lives in the data files (not in D1)
 
@@ -679,7 +720,9 @@ These files are static assets served by Cloudflare Pages. They are read-only at 
 | `portal-custom-moves.json` | Substance Θ (roll+Weird), Anchor Spike (situational, no roll), BIM Collection Array recovery (no roll). Plus an empty `house_rules` array. | Roll interface (merged with standard moves), keeper command board |
 | `hunters.json` | All 5 hunters — harm, luck, XP, stats, active moves, gear, bonds, background, keeper arc hooks. Confirmed fields locked; unrecorded picks marked `FILL_FROM_SESSION`. | D1 seed, character sheet pages, offline fallback |
 | `portal-npcs.json` | NPCs — PORTAL inner circle, MESA operatives, case bystanders. Each has `player_description` / `keeper_description` split, `available_from_session` (replaces old `visible_to_players` flag), `session_overrides` per session, and `keeper_scene_notes` per scene. See Part 6 for full schema. | `contacts.html`, keeper NPC panel |
-| `portal-entities.json` | Entities. Status, stat blocks, powers, weaknesses, keeper moves, BIM connection. Each has `available_from_session`, `session_overrides` (including `blurred` flag for player bestiary), and `keeper_scene_notes`. See Part 6 for full schema. | Keeper entity panel, player bestiary |
+| `portal-entities.json` | Entities. Status, stat blocks, powers, weaknesses, keeper moves, BIM connection. Each has `available_from_session`, `session_overrides`, and `keeper_scene_notes`. Also drives the **player-facing bestiary** on `index.html` via the `bestiary{}` object (see Part 6). See Part 6 for full schema. | Keeper entity panel, player bestiary (`index.html`) |
+| `portal-entity-types.json` | Classification archetypes — 8 theoretical type cards (T-001 → T-008) for `missions/entities.html` Section II. Each has `class_badge`, `tags[]`, `active_case` FK to portal-entities.json, and `sections[]` (HTML content, optional `blurred`/`blur_notice`). Add a new theoretical type by appending to `types[]` — no HTML edit needed. | `missions/entities.html` Section II (planned data-driven render) |
+| `hunter-arcs.json` | All 4 hunters × 3 arcs + 6 cross-hunter intersections. Drives `missions/arcs.html` entirely — the page has no hardcoded arc content. Add a new arc by appending to the hunter's `arcs[]` — no HTML edit needed. Beat/status/notes state still lives in localStorage (`portal-arcs-v1`). | `missions/arcs.html` |
 
 ### Cross-file relationships
 
@@ -699,6 +742,15 @@ portal-npcs.json
 portal-entities.json
   └── entity.case              → references session/case IDs ('S01', 'case-a', etc.)
   └── entity.secrets_involved[]→ references secret IDs from worldbuilding-lore.md Part 5
+  └── entity.bestiary.phases[] → drives player-facing bestiary cards on index.html (show_from/show_until gated)
+
+portal-entity-types.json
+  └── type.active_case         → references portal-entities.json entity id (or null if theoretical)
+  └── type.portal_entities_ref → secondary FK for entities with no active case but a stat block entry
+
+hunter-arcs.json
+  └── arc.type ('portal'|'adapted') → CSS class logic in arcs.html renderer
+  └── intersection.from_hunter → references hunter id (rex/reed/alan/sven) for colour lookup
 ```
 
 ### The keeper/player split in data files

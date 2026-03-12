@@ -149,6 +149,23 @@ Write tests for everything changed/fixed this session + known gaps. Run suite, f
 
 ## BACKLOG
 
+### Data-driven migrations (upcoming)
+
+**`data/portal-missions.json`** — HIGH PRIORITY
+- Both `index.html` (hub mission cards) and `missions/missions.html` (rich archive) hardcode the same mission data twice. One JSON eliminates the duplication.
+- Schema: `{ missions: [ { id, status, title, location, entity_id, directive, phases: [ { show_from, show_until, content, outcome } ] } ] }`
+- Same session-gated phase pattern as the bestiary.
+
+**`data/portal-artefacts.json`** — MEDIUM PRIORITY
+- Artefacts section in `index.html` (~90 lines hardcoded, 4 items with session-gated pre/post-reveal phases).
+- Same pattern as bestiary — straightforward conversion.
+- Schema: `{ artefacts: [ { id, name, phases: [ { show_from, show_until, status, description, lab_note, classified_blurred } ] } ] }`
+
+**`the-lab.html` — reads moves/assets from `motw-teambooks.json`** — BUG / MEDIUM
+- Team moves and assets are hardcoded in `the-lab.html` but `data/motw-teambooks.json` already has the Research Lab entry with 7 moves and 2 assets.
+- Fix: render move/asset definitions from `motw-teambooks.json` at load time.
+- Player choices (which moves are checked, ally, enemy) stay in D1 as they already are — no change to persistence.
+
 ### Minor / polish
 - `missions/entities.html` stat pills (Confirmed/Resolved/Active/Theoretical counts) — currently hardcoded; update when Section I becomes data-driven
 - Map handout type in feed.html — currently shows "COMING SOON" instead of POST button (one-line fix: remove map special-case in `renderKeeperHandoutsTab`)

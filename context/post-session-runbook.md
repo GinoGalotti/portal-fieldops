@@ -49,15 +49,20 @@ This step updates the session-aware content system so player pages reflect the n
 { "id": "w3", "label": "WEEK 03", "title": "Mission Title", "status": "active" }
 ```
 
-**b) Author W-next HTML content variants in player-facing pages:**
+**b) Author W-next content variants in player-facing pages:**
 
-For each session that just resolved, existing player pages need a "post-resolution" variant:
+For each session that just resolved, player pages need post-resolution variants. Most are now data-driven — **no HTML edits needed for bestiary or arcs**.
 
+**HTML edits still required:**
 - **`missions/missions.html`** — add `data-session-from="wN+1"` COMPLETED card for the resolved mission; the ACTIVE card already has `data-session-until="wN"`
-- **`index.html`** — add COMPLETED variants for the session archive card, fully-revealed beast card, and any recovered artefact cards with `data-session-from="wN+1"`
+- **`index.html`** — add COMPLETED variants for the session archive card and any recovered artefact cards with `data-session-from="wN+1"`. **Bestiary cards are now data-driven — do NOT add HTML beast cards here.**
 - **`missions/contacts.html`** — add `data-session-from="wN+1"` wrappers for any NPCs now visible for the first time
 
 Use the existing W1→W2 HTML variants as a template. The pattern is always: old card gets `data-session-until="wN"`, new card gets `data-session-from="wN+1"`.
+
+**Data-file updates (instead of HTML):**
+- **Bestiary** (`index.html`): append a new phase to `portal-entities.json` → `entity.bestiary.phases[]` with `show_from: "wN+1"`. Set the previous phase `show_until: "wN"` if it should hide after resolution. The bestiary re-renders from data on page load — no HTML change needed.
+- **Hunter arcs** (`missions/arcs.html`): edit `data/hunter-arcs.json` to update arc content. The page renders entirely from that file.
 
 **c) Add new session entry to `data/session-data.json`:**
 - Add a new object for the incoming session with: `id`, `session_key`, `label`, `doc`, `entity_ids`, `threats`, `equipment`, `readaloud`, `handouts`
@@ -71,9 +76,10 @@ Use the existing W1→W2 HTML variants as a template. The pattern is always: old
 - Add new NPCs who appear for the first time as full entries
 - Note: `portal-npcs.json` is the *persistent* NPC record (player descriptions, relationships, keeper arc notes across all sessions). `session-data.json threats[]` is the *tactical* reference for running them at the table. Recurring NPCs like Rook live in both — npcs.json for the campaign, session-data.json for their stat block each time they appear.
 
-**e) Update entity `session_overrides` in `data/portal-entities.json`:**
-- For any resolved entity, set the `"wN+1"` override: `"blurred": false`, full player-facing description
-- Update `status` field: `"active"` → `"resolved"` / `"contained"` / `"escalated"`
+**e) Update entity data in `data/portal-entities.json`:**
+- For any resolved entity, update `status` field: `"active"` → `"resolved"` / `"contained"` / `"escalated"`
+- Update `session_overrides` if the keeper/player description changes post-resolution
+- **Bestiary phases**: for entities on the player bestiary (`bestiary.show: true`), append a new fully-revealed phase with `show_from: "wN+1"` and set the previous phase's `show_until: "wN"`. Set `classified_blurred: false` on the new phase. The bestiary on `index.html` will pick up the change automatically — no HTML edits needed.
 
 **f) The Keeper toggle in D1 does not need to be changed in code** — when the Keeper is ready for players to see the new session, they click the new week button in the keeper banner on any keeper page. This updates D1 and all player pages reflect it immediately.
 
@@ -214,15 +220,16 @@ Or ask Claude to query all reports for a week and summarise the ratings and key 
 - [ ] `reports/player-report.html` — add new week to `WEEKS` config
 - [ ] `data/session-data.json` — add new session entry with threats, equipment, handouts, readaloud (step 2.0c)
 - [ ] `data/portal-npcs.json` — update status, `session_overrides` for newly-revealed NPCs, `keeper_scene_notes` for next mission (step 2.0d)
-- [ ] `data/portal-entities.json` — update entity status, `session_overrides` for resolved/changed entities (step 2.0d)
+- [ ] `data/portal-entities.json` — update entity status, `session_overrides`, and `bestiary.phases[]` for resolved/changed entities (step 2.0e)
 - [ ] `context/worldbuilding-lore.md` — update lore, NPC relationships, confirmed facts
 - [ ] `context/post-session-runbook.md` — update this file if the workflow changes
 
 ### Files to modify (when needed)
 - [ ] `missions/missions.html` — add W-next session-aware card variants (step 2.0b)
-- [ ] `index.html` — add W-next session-aware variants for archive, bestiary, artefacts (step 2.0b)
+- [ ] `index.html` — add W-next session-aware variants for archive and artefacts only — **not bestiary** (step 2.0b)
 - [ ] `missions/contacts.html` — add W-next contact sections for newly-visible NPCs (step 2.0b)
-- [ ] `missions/arcs.html` — arc tracker (if beats were missed or need manual correction)
+- [ ] `data/hunter-arcs.json` — if arc content changes (new arc added, description updated, status changed)
+- [ ] `missions/arcs.html` — **only** if beat state needs manual correction via browser (beat/status saved in localStorage)
 - [ ] `context/portal-architecture.md` — update if infrastructure changes
 - [ ] `workers/migrations/` — new SQL if new DB tables added
 
