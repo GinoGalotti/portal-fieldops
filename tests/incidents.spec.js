@@ -47,16 +47,20 @@ test.describe('Lab Incidents page', () => {
     // The active tab gets the CSS class "active" via classList.toggle('active', ...).
     // We derive the expected label from incidents.json — no hardcoded week label.
     const activeTab = page.locator('.week-tab').filter({ hasText: activeWeek.label });
-    await expect(activeTab).toHaveClass(/active/);
+    // Use string form of toHaveClass — checks for 'active' as an exact CSS token.
+    // Regex /active/ would also match 'status-active' (the permanent status marker).
+    await expect(activeTab).toHaveClass('active');
   });
 
   test('active week tab is no longer active after clicking W1', async ({ page }) => {
-    // Clicking W1 should remove the active class from the current active week.
+    // Clicking W1 should remove the 'active' class from the current active week.
+    // Note: 'status-active' stays on W2 permanently (it marks the JSON status field).
+    // We check for the 'active' token specifically, not a regex that would match 'status-active'.
     const w1Tab = page.locator('.week-tab').filter({ hasText: w1Week.label });
     await w1Tab.click();
     const activeTab = page.locator('.week-tab').filter({ hasText: activeWeek.label });
-    await expect(activeTab).not.toHaveClass(/\bactive\b/);
-    await expect(w1Tab).toHaveClass(/active/);
+    await expect(activeTab).not.toHaveClass('active');
+    await expect(w1Tab).toHaveClass('active');
   });
 
   // ── ACTIVE WEEK CONTENT ─────────────────────────────────────────────────
