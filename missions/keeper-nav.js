@@ -42,4 +42,10 @@
       toggle.textContent = '≡';
     }
   });
+
+  // Site credit footer
+  var footer = document.createElement('footer');
+  footer.style.cssText = 'text-align:center;padding:1.5rem 1rem;font-size:0.7rem;color:var(--text-dim);letter-spacing:0.05em;border-top:1px solid var(--border);margin-top:2rem;';
+  footer.innerHTML = 'Made by Gino with Claude &nbsp;·&nbsp; <a href="https://github.com/GinoGalotti/portal-fieldops" target="_blank" rel="noopener" style="color:var(--text-dim);text-decoration:underline;">GitHub</a>';
+  document.body.appendChild(footer);
 }());
