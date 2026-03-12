@@ -388,6 +388,53 @@ test.describe('feed.html — clear feed', () => {
     await expect(page.locator('.feed-entry')).toHaveCount(0);
   });
 
+  test('old rolls do not reappear on subsequent polls after a cleared feed', async ({ page }) => {
+    // Regression test for: lastRollId staying 0 when all rolls predate the clear sentinel,
+    // causing the next poll (after=0) to trigger the "initial load" branch in the API
+    // and return all historical rolls — bypassing the clear.
+    //
+    // Fix: initialLoad() must advance lastRollId from the UNFILTERED roll list so the
+    // poll cursor is never 0 after a clear, even when no rolls survive the clear filter.
+    const oldTimestamp  = '2025-01-01T10:00:00.000Z';
+    const clearTimestamp = '2025-01-01T12:00:00.000Z';
+
+    const oldRolls = [
+      { id: 1, hunter_id: 'reed', move_name: 'Act Under Pressure', roll_1: 3, roll_2: 4, modifier: 1, total: 8, outcome: 'partial', rolled_at: oldTimestamp },
+      { id: 2, hunter_id: 'reed', move_name: 'Kick Some Ass',      roll_1: 5, roll_2: 6, modifier: 2, total: 13, outcome: 'advanced', rolled_at: oldTimestamp },
+    ];
+    const clearSentinel = { id: 10, sender: 'KEEPER', body: '// FEED CLEARED', type: 'clear', session_id: 'S01', delivered_at: clearTimestamp };
+
+    await page.route('**/api/v1/rolls**', route => {
+      const url   = new URL(route.request().url());
+      const after = parseInt(url.searchParams.get('after') || '0', 10);
+      // after=0 → "initial load" branch in rolls.js — returns ALL historical rolls.
+      // The bug: if lastRollId stays 0 after a clear, every poll triggers this branch.
+      // The fix: lastRollId is advanced past pre-clear rolls so polls use after=2, not after=0.
+      route.fulfill({ json: after > 0 ? [] : oldRolls });
+    });
+    await page.route('**/api/v1/messages**', route => {
+      const url   = new URL(route.request().url());
+      const after = parseInt(url.searchParams.get('after') || '0', 10);
+      // Return the clear sentinel only once (before lastMsgId advances past it).
+      route.fulfill({ json: after >= 10 ? [] : [clearSentinel] });
+    });
+    await page.route('**/api/v1/hunters/**', route => route.fulfill({ json: null }));
+
+    await page.clock.install();
+    await page.goto('/feed.html');
+    await page.waitForLoadState('networkidle');
+
+    // Initial load applied the clear filter: no entries visible (all rolls predate clear).
+    await expect(page.locator('.feed-entry')).toHaveCount(0);
+
+    // Advance past the poll interval — triggers a new poll.
+    // Without the fix: poll uses after=0 → API returns old rolls → they render.
+    // With the fix:    poll uses after=2 → API returns []    → feed stays empty.
+    await page.clock.runFor(7000);
+
+    await expect(page.locator('.feed-entry')).toHaveCount(0);
+  });
+
 });
 
 // ── FEED COMPOSER ─────────────────────────────────────────────────────────────

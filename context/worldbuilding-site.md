@@ -46,10 +46,8 @@ When the Keeper asks you to build a page:
 | `hunters/reed.html` | `hunter.css` + accent | Player | Reed Atwood — playbook section + 3 arcs, keeper sections blurred |
 | `hunters/sven.html` | `hunter.css` + accent | Player | Sven — playbook section + 3 arcs, keeper sections blurred |
 | `the-lab.html` | `player.css` | Player | Research Lab team playbook — XP track, moves/assets checklists, ally/enemy, D1-backed |
-| `campbell-briefings.html` | `briefing.css` | Player | CAMPBELL priority queue — week switcher, fetches fragments from `briefings/` |
-| `briefings/index.json` | — | — | Week registry: id, label, title, status, summary. Add one entry per week. |
-| `briefings/w01.html` | fragment | Player | Week 01 briefing fragment (no doctype/head/body — injected by campbell-briefings.html) |
-| `briefings/w02.html` | fragment | Player | Week 02 briefing fragment |
+| `campbell-briefings.html` | `briefing.css` | Player | CAMPBELL priority queue — week switcher, renders from `data/briefings.json` |
+| `data/briefings.json` | — | — | All queue weeks: week metadata + `items[]` (cases + section labels). Add one `weeks[]` entry per week. |
 | `keeper.html` | `keeper.css` | Keeper | Keeper mission index |
 | `references.html` | keeper inline | Keeper | Keeper dossiers — hunters, PORTAL, MESA, NPCs |
 | `entities.html` | keeper inline | Keeper | Entity bestiary — confirmed + theoretical + database |
@@ -124,25 +122,13 @@ All handouts live in `data/session-data.json` under `handouts[]` per session ent
 
 ### Adding a New CAMPBELL Queue Week
 
-The queue page (`missions/campbell-briefings.html`) fetches HTML fragments from `missions/briefings/`. To add Week 03 after a session:
+The queue page (`missions/campbell-briefings.html`) renders entirely from `data/briefings.json`. To add Week 03 after a session:
 
-1. Create `missions/briefings/w03.html` — copy `w02.html` as a starting point
-2. Add one entry to `missions/briefings/index.json`:
-   ```json
-   { "id": "w03", "label": "WEEK 03", "title": "Post-Operation #XXXX (Location)", "status": "active", "summary": "N cases active · N high · N medium" }
-   ```
-3. Set the previous week's `"status"` to `"closed"` in `index.json`
-4. That's it — the new tab appears automatically
+1. Append a new entry to the `"weeks"` array in `data/briefings.json`
+2. Set the previous week's `"status"` to `"closed"` in the same file
+3. That's it — the new tab appears automatically, the renderer handles all HTML
 
-**Fragment file rules:**
-- No `<!DOCTYPE>`, `<html>`, `<head>`, or `<body>` — just the content divs
-- Must start with a `<!-- WEEK XX -->` comment block (see w01.html for template)
-- Always include a `.page-header` div at the top with the week's specific note and optional `.timestamp`
-- Use `.carry-over` label before cases that were open in the prior week
-- Use `.new-cases-label` before cases first introduced this week
-- Use `.ver` spans inside `.card-footer` for the CAMPBELL version number (filled automatically)
-- End with a `.campbell-note` closing block
-- Do **not** include a `<script>` tag — version filling is handled by the main page
+**No HTML files to create.** See FORMAT 2 in Part 10 for the exact JSON schema.
 
 **Case colour assignments (briefing.css):**
 - Case A → amber (`case-a`)
@@ -461,9 +447,9 @@ Claude should produce all of the following in one session, in this order:
 - Sections: Overview, CAMPBELL Report, Scene Breakdown (with `.read-aloud` blocks), NPCs, Entity Stat Block, Keeper Moves, Project Veil thread if applicable
 - Keeper-only: never linked from player nav
 
-#### 2. CAMPBELL Briefing Fragment — `missions/briefings/wNN.html`
-- Fragment only (no `<html>`/`<head>`/`<body>`)
-- Update `missions/briefings/index.json` — add entry, mark previous week `"closed"`
+#### 2. CAMPBELL Queue Week — `data/briefings.json`
+- Append a new `weeks[]` entry (JSON only — no HTML files)
+- Mark previous week `"status": "closed"` in the same file
 - CAMPBELL voice (see `worldbuilding-lore.md` Part 2)
 
 #### 3. Session-Aware HTML Updates
@@ -792,7 +778,7 @@ When building new pages or Workers:
 > "Read Part 10 (Between-Session Content Formats) in `worldbuilding-site.md` for the exact JSON schema. Produce: a single `weeks[]` entry as JSON, ready to append to `data/incidents.json`. Do NOT produce HTML. Use only the documented block types and inline markup syntax. Mark the new week `"status": "active"` and note that the previous active week should be changed to `"closed"`."
 
 **For writing the CAMPBELL priority queue (new week):**
-> "Read Part 10 (Between-Session Content Formats) in `worldbuilding-site.md` for the exact fragment format and CSS class reference. Produce: (1) `missions/briefings/wNN.html` — fragment only, no `<html>/<head>/<body>` tags; (2) the updated `missions/briefings/index.json` showing the new entry added and the previous week marked `"closed"`. Write in CAMPBELL's institutional voice (see `worldbuilding-lore.md` Part 2)."
+> "Read Part 10 (Between-Session Content Formats) in `worldbuilding-site.md` for the exact JSON schema. Produce: a single `weeks[]` entry as JSON, ready to append to `data/briefings.json`. Do NOT produce HTML. Use only the documented item types, row fields, and inline markup syntax (`{{color:text}}`). Mark the new week `"status": "active"` and note that the previous active week should be changed to `"closed"`. Write case content in CAMPBELL's institutional voice (see `worldbuilding-lore.md` Part 2)."
 
 **For advancing the campaign session (after a session plays):**
 > "Read `post-session-runbook.md`. Key steps: update `data/sessions.json` (mark old session `closed`, add new), author W-next HTML content variants in missions.html + index.html + contacts.html, update NPC `session_overrides` for revealed NPCs, update entity `session_overrides` for resolved entities, update D1 active session via keeper toggle."
@@ -805,7 +791,7 @@ This part is for **Claude.ai (content author)**. It defines exactly what to prod
 
 Two content types are authored between sessions:
 1. **Incident Log** — append a new `weeks[]` entry to `data/incidents.json`
-2. **CAMPBELL Queue** — write a new `missions/briefings/wNN.html` fragment + update `missions/briefings/index.json`
+2. **CAMPBELL Queue** — append a new `weeks[]` entry to `data/briefings.json` (mark the previous week `"closed"`)
 
 ---
 
@@ -1068,166 +1054,161 @@ Do not use HTML tags directly in any field. Do not use inline markup outside the
 
 ---
 
-### FORMAT 2 — CAMPBELL Priority Queue (`missions/briefings/wNN.html`)
+### FORMAT 2 — CAMPBELL Priority Queue (`data/briefings.json`)
 
-**What to produce:**
-1. `missions/briefings/wNN.html` — HTML fragment (no `<html>`, `<head>`, or `<body>` tags)
-2. Updated `missions/briefings/index.json` — new entry appended, previous week marked `"closed"`
+**What to produce:** a single `weeks[]` entry as JSON, ready to append to `data/briefings.json`. No HTML files. The renderer in `campbell-briefings.html` handles all layout.
 
-The fragment is loaded into the page by JavaScript — it must be a standalone HTML snippet that assumes `briefing.css` is already loaded.
-
-#### `index.json` Entry
+#### Week Entry Schema
 
 ```json
 {
   "id": "w03",
   "label": "WEEK 03",
-  "title": "Post-Operation #XXXX-X (Location Name)",
   "status": "active",
-  "summary": "4 cases active · 1 high · 3 medium"
+  "title": "Post-Operation #XXXX-X (Location Name)",
+  "summary": "4 cases active · 1 high · 3 medium",
+  "header_note": "⚠ N CASES ACTIVE — FIELD TEAM REQUIRED · [PREV-OP] CLOSED",
+  "header_timestamp": "// QUEUE UPDATE ISSUED N DAYS POST-OPERATION #XXXX-X ([LOCATION])",
+  "items": [ ... ],
+  "closing_note": { ... }
 }
 ```
 
 | Field | Notes |
 |-------|-------|
-| `id` | Must match the filename exactly: `"w03"` → `missions/briefings/w03.html` |
-| `label` | Displayed on the tab button |
-| `title` | Tooltip text on the tab |
-| `status` | `"active"` or `"closed"`. Mark the previous week `"closed"` when adding a new entry. |
-| `summary` | Short summary for the tab tooltip |
+| `id` | Week identifier: `"w03"`, `"w04"`, etc. |
+| `label` | Tab button text: `"WEEK 03"` |
+| `status` | `"active"` or `"closed"`. Mark the previous week `"closed"` when adding. |
+| `title` | Tab tooltip: `"Post-Operation #XXXX-X (Location)"` |
+| `summary` | Tab tooltip suffix: `"N cases active · N high · N medium"` |
+| `header_note` | Banner line below the divider — `⚠ …` format |
+| `header_timestamp` | Optional second line — `// QUEUE UPDATE ISSUED …` format. Omit if not needed. |
 
-#### Fragment Structure
+#### `items[]` — Cases and Section Labels
 
-```html
-<!-- ═══════════════════════════════════════════════════════════════════ -->
-<!-- WEEK 03 — Post-Operation #XXXX-X (Location)                      -->
-<!-- Queue state as issued N days post-deployment.                    -->
-<!-- ═══════════════════════════════════════════════════════════════════ -->
+Items are rendered in order. Mix `"type": "section-label"` entries between cases to create grouping headers.
 
-<div class="page-header">
-  <div class="portal-logo">// P · O · R · T · A · L</div>
-  <h1>CAMPBELL</h1>
-  <div class="sub">PRIORITY QUEUE — PENDING FIELD ASSIGNMENT</div>
-  <div class="divider"></div>
-  <div class="note">⚠ N CASES ACTIVE — FIELD TEAM REQUIRED · [PREV-OP LOCATION] CLOSED</div>
-  <div class="timestamp">// QUEUE UPDATE ISSUED N DAYS POST-OPERATION #XXXX-X ([LOCATION])</div>
-</div>
-
-<!-- ─── CARRY-OVER (omit section if no carry-over cases) ─── -->
-<div class="carry-over">// CARRY-OVER — CASES OPEN PRIOR TO [PREV-OP] DEPLOYMENT</div>
-
-<!-- CASE A — CODENAME -->
-<div class="briefing case-a" data-case="A">
-  <div class="card-header">
-    <div>
-      <div class="report-id">// CAMPBELL — ANOMALY REPORT #XXXX-X · UPDATED</div>
-      <div class="report-title">CODENAME</div>
-      <div class="report-subtitle">LOCATION · ANOMALY TYPE · CLASSIFICATION</div>
-    </div>
-    <div class="priority-badge high">PRIORITY: HIGH ↑</div>
-  </div>
-
-  <div class="terminal">
-    <div class="t-label"><span>FIELD BRIEFING — AUTHORISED PERSONNEL ONLY</span><span class="blink"></span></div>
-
-    <div class="data-row"><span class="k">LOCATION:</span><span class="v">Address or area</span></div>
-    <div class="data-row"><span class="k">PATTERN:</span><span class="v">What CAMPBELL detected</span></div>
-    <div class="data-row"><span class="k">DATE FLAGGED:</span><span class="v">N days ago</span></div>
-
-    <hr class="t-divider">
-
-    <div class="data-row"><span class="k">MECHANISM:</span><span class="v alert">What the anomaly does</span></div>
-    <div class="data-row"><span class="k">RISK:</span><span class="v red">Who is in danger and how</span></div>
-
-    <div class="directive">
-      <span class="directive-label">// DIRECTOR'S NOTE — [INITIAL / UPDATED POST-{PREV-OP}]</span>
-      Director's instruction to the field team. Two or three sentences. Ends with the key question or priority.
-      <br><br>
-      <span class="t-dim">// Aside note — optional personal Director comment. — Director</span>
-    </div>
-  </div>
-
-  <div class="card-footer">
-    <span><span class="status-dot"></span>ACTIVE — [STATUS SUMMARY]</span>
-    <span>REPORT #XXXX-X · CAMPBELL v<span class="ver"></span></span>
-    <span>LOCATION · ANOMALY CLASS · [NEW / UPDATED]</span>
-  </div>
-</div>
-
-
-<!-- ─── NEW CASES (omit section label if no new cases) ─── -->
-<div class="new-cases-label">// NEW — CASES FLAGGED DURING [PREV-OP] DEPLOYMENT · HUMAN REVIEW PENDING</div>
-
-<!-- ... additional case cards ... -->
-
-
-<!-- CAMPBELL CLOSING NOTE (always present) -->
-<div class="campbell-note">
-  <div class="cn-header">
-    <span>// CAMPBELL — POST-[PREV-OP] PRIORITY UPDATE</span>
-    <span>N CASES ACTIVE · N HIGH · N MEDIUM</span>
-  </div>
-  <div class="cn-text">
-    OPERATION #XXXX-X ([PREV-OP]) CLOSED — ENTITY STATUS: [STATUS].<br>
-    PRIORITY QUEUE UPDATED.<br>
-    <br>
-    DURING [PREV-OP] DEPLOYMENT:<br>
-    · CASE #XXXX-X ([CODENAME]) — [what changed].<br>
-    <br>
-    [CAMPBELL pattern notes, connections, confidence levels.]
-  </div>
-  <div class="cn-sig">// END TRANSMISSION — CAMPBELL · P.O.R.T.A.L ANOMALY DETECTION SYSTEM</div>
-</div>
+**Section label:**
+```json
+{ "type": "section-label", "css_class": "carry-over", "text": "// CARRY-OVER — CASES OPEN PRIOR TO [PREV-OP] DEPLOYMENT" }
+{ "type": "section-label", "css_class": "new-cases-label", "text": "// NEW — CASES FLAGGED DURING [PREV-OP] DEPLOYMENT · HUMAN REVIEW PENDING" }
 ```
 
-#### CSS Class Reference
+**Case card:**
+```json
+{
+  "type": "case",
+  "id": "case-a",
+  "report_id": "// CAMPBELL — ANOMALY REPORT #XXXX-X · UPDATED",
+  "title": "CODENAME",
+  "subtitle": "LOCATION · ANOMALY TYPE · CLASSIFICATION",
+  "priority": "high",
+  "priority_label": "PRIORITY: HIGH ↑",
+  "rows": [ ... ],
+  "directive": { ... },
+  "footer_status": "ACTIVE — [STATUS SUMMARY]",
+  "footer_ref": "REPORT #XXXX-X",
+  "footer_class": "LOCATION · ANOMALY CLASS · NEW"
+}
+```
 
-**Case card colours** — the `case-X` class sets the accent colour:
-
-| Class | Colour | Use for |
-|-------|--------|---------|
-| `case-a` | Amber | First case / high-priority |
+| `id` | CSS class | Accent colour |
+|------|-----------|---------------|
+| `case-a` | Amber | First/highest-priority case |
 | `case-b` | Green | Second case |
 | `case-c` | Purple | Third case / CAMPBELL-anomalous |
 | `case-d` | Teal | Fourth case |
 | `case-e` | Rose | Fifth case |
 
-**Priority badge variants:**
+#### `rows[]` — Data Rows
 
-| Class | Displayed as | Use for |
-|-------|-------------|---------|
-| `priority-badge high` | PRIORITY: HIGH ↑ | Time-critical, lives at risk |
-| `priority-badge info` | PRIORITY: MEDIUM ↑ | Escalating, needs attention |
-| `priority-badge new` | PRIORITY: MEDIUM · NEW | First appearance, amber-ish |
-| `priority-badge new-b` | PRIORITY: MEDIUM · NEW | First appearance, secondary colour |
-| `priority-badge low` | PRIORITY: LOW | Monitoring only |
+```json
+{ "k": "LOCATION", "v": "Address or area" }
+{ "k": "CROSS-REF", "v": "Something alarming", "color": "alert" }
+{ "k": "DATE FLAGGED", "v": "41 days ago", "note": "// review queue: low priority" }
+{ "k": "CROSS-REF", "v": "Critical info", "color": "red", "note": "// dim suffix" }
+{ "k": "POST 1", "v": "Predicted fire · {{alert:Verified accurate}}" }
+{ "divider": true }
+```
 
-**Data-row value modifiers** (apply to the `<span class="v">` element):
+| Field | Notes |
+|-------|-------|
+| `k` | Key label (rendered without colon — renderer adds it) |
+| `v` | Value text. Supports `{{color:text}}` inline markup for partial coloring. |
+| `color` | Optional color for the whole value: `alert` · `red` · `dim` · `purple` · `teal` · `rose` |
+| `note` | Optional dim suffix appended after the value (renders as `<span class="dim">`) |
+| `divider` | `true` → renders `<hr class="t-divider">`. No other fields needed. |
 
-| Class | Colour | Use for |
+**Value color meanings:**
+
+| Value | Colour | Use for |
 |-------|--------|---------|
-| `.v.alert` | Amber | Warning — something has changed or escalated |
-| `.v.red` | Red | Danger — lives at risk, critical deadline |
-| `.v.dim` | Dim | Low-confidence data, CAMPBELL internal note |
-| `.v.purple` | Purple | CAMPBELL anomalous classification, unusual finding |
-| `.v.teal` | Teal | Novel classification, first recorded instance |
-| `.v.rose` | Rose | Identity / consciousness anomaly |
-| (none) | Default | Standard confirmed data |
+| `alert` | Amber | Warning — something changed or escalated |
+| `red` | Red | Danger — lives at risk, critical deadline |
+| `dim` | Dim | Low-confidence, CAMPBELL internal note, starts with `//` |
+| `purple` | Purple | CAMPBELL anomalous classification, unusual mechanism |
+| `teal` | Teal | Novel classification, first recorded instance |
+| `rose` | Rose | Identity / consciousness anomaly |
+| (none) | Default white | Standard confirmed data |
 
-**Inline modifiers:**
+**Inline markup** — for coloring part of a value (not the whole span):
+`"v": "Predicted fire · {{alert:Verified accurate}}"` → renders the `Verified accurate` portion in amber.
 
-| Element | Use for |
-|---------|---------|
-| `<span class="t-dim">// text</span>` | Dimmed inline aside, inside a `.v` value |
-| `<span class="blink"></span>` | Blinking dot — used once in `.t-label` only |
-| `<span class="ver"></span>` | CAMPBELL version number — auto-filled by JS, always include in `.card-footer` |
+#### `directive` — Director's Note
+
+```json
+{
+  "label": "// DIRECTOR'S NOTE — [INITIAL / UPDATED POST-{PREV-OP}]",
+  "paragraphs": [
+    "First paragraph. Director's instruction to the field team.",
+    "Second paragraph. Ends with the key question or priority."
+  ],
+  "dim_note": "// Optional personal aside. — Director"
+}
+```
+
+- `paragraphs` renders with `<br><br>` between entries
+- `dim_note` is optional; renders after the last paragraph, dimmed
+- Distinguish `"INITIAL"` (new case) from `"UPDATED POST-[OP]"` (carry-over)
+
+#### `priority_label` and `priority` values
+
+| `priority` | `priority_label` | Use for |
+|-----------|-----------------|---------|
+| `high` | `PRIORITY: HIGH` or `PRIORITY: HIGH ↑` | Time-critical, lives at risk |
+| `medium` | `PRIORITY: MEDIUM` | Standard active case |
+| `info` | `PRIORITY: MEDIUM ↑` | Escalating, needs attention |
+| `new` | `PRIORITY: MEDIUM · NEW` | First appearance, primary colour |
+| `new-b` | `PRIORITY: MEDIUM · NEW` | First appearance, secondary colour |
+| `low` | `PRIORITY: LOW` | Monitoring only |
+
+#### `closing_note`
+
+```json
+{
+  "header": "// CAMPBELL — POST-[PREV-OP] PRIORITY UPDATE",
+  "count": "N CASES ACTIVE · N HIGH · N MEDIUM",
+  "lines": [
+    "OPERATION #XXXX-X ([PREV-OP]) CLOSED — ENTITY STATUS: [STATUS].",
+    "PRIORITY QUEUE UPDATED.",
+    "",
+    "DURING [PREV-OP] DEPLOYMENT:",
+    "· CASE #XXXX-X ([CODENAME]) — [what changed].",
+    "",
+    "[CAMPBELL pattern notes, connections, confidence levels.]"
+  ],
+  "sig": "// END TRANSMISSION — CAMPBELL · P.O.R.T.A.L ANOMALY DETECTION SYSTEM"
+}
+```
+
+Empty strings in `lines` render as blank lines. Use `·` (middle dot) for bulleted items.
 
 #### Rules
 
-- **Fragment only** — no `<html>`, `<head>`, `<body>` tags. The JS inserts this directly into the DOM.
+- **JSON only** — no HTML. The renderer in `campbell-briefings.html` handles all layout.
 - **CAMPBELL voice** — see `worldbuilding-lore.md` Part 2. Formal, precise, institutional. Data-forward. Anomalous observations noted without editorial alarm.
-- **Director's notes** — distinguish "INITIAL" (new case) from "UPDATED POST-[OP]" (carry-over). Director's voice is more direct than CAMPBELL's; has a personal aside in `.t-dim` at the end.
-- **`<span class="ver"></span>` required** in every `.card-footer` — the JS fills in the CAMPBELL version number.
-- **Section dividers** — include `carry-over` div only if there are carry-over cases; include `new-cases-label` div only if there are new cases.
-- **`campbell-note` closing block** — always present, even if brief. Summarises the queue state, notes any pattern connections, ends with `// END TRANSMISSION`.
-- **No inline styles** — all styling comes from `briefing.css` and the class names above.
+- **General writing voice** — see `worldbuilding-lore.md` Part 4 (Writing Voice — General Principles). Default register: lead with the finding, one observation per sentence, no restatement. Fuller register only for first appearances or emotional centrepieces.
+- **Director's notes** — distinguish "INITIAL" (new case) from "UPDATED POST-[OP]" (carry-over). Director's voice is more direct than CAMPBELL's; `dim_note` holds the personal aside.
+- **Section labels** — include `carry-over` item only if there are carry-over cases; include `new-cases-label` item only if there are new cases. Both are optional.
+- **`closing_note`** — always present, even if brief. Summarises queue state, notes pattern connections, ends with `// END TRANSMISSION`.
+- **`footer_ref`** — report number only: `"REPORT #0091-F"`. The renderer appends ` · CAMPBELL v{ver}` automatically.

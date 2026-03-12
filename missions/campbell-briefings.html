@@ -140,75 +140,154 @@
 
 <script>
 (function () {
-  var cache = {};
+  var cache    = {};   // rendered HTML strings keyed by week id
   var activeId = null;
-  var weeks = [];
+  var allWeeks = [];
 
-  // Generate a consistent fake CAMPBELL version per page load
+  // Consistent fake CAMPBELL version for the session
   var ver = '2.' + (Math.floor(Math.random() * 9) + 1) + '.' + (Math.floor(Math.random() * 89) + 10);
 
-  function fillVer(container) {
-    container.querySelectorAll('.ver').forEach(function (el) {
-      el.textContent = ver;
+  // ── UTILITIES ──────────────────────────────────────────────────────────────
+
+  function esc(s) {
+    if (s == null) return '';
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // Replace {{color:text}} tokens with inline colored spans (same pattern as incidents.json)
+  function inline(s) {
+    return esc(s).replace(/\{\{(\w[\w-]*):([^}]+)\}\}/g, function (_, cls, txt) {
+      return '<span class="v ' + cls + '">' + txt + '</span>';
     });
   }
 
+  // ── RENDERERS ──────────────────────────────────────────────────────────────
+
+  function renderRow(row) {
+    if (row.divider) return '<hr class="t-divider">';
+    var cls  = row.color ? ' ' + row.color : '';
+    var note = row.note  ? ' <span class="dim">' + esc(row.note) + '</span>' : '';
+    return '<div class="data-row">' +
+      '<span class="k">' + esc(row.k) + ':</span>' +
+      '<span class="v' + cls + '">' + inline(row.v) + note + '</span>' +
+      '</div>';
+  }
+
+  function renderDirective(d) {
+    if (!d) return '';
+    var html = '<div class="directive">';
+    html += '<span class="directive-label">' + esc(d.label) + '</span>';
+    html += (d.paragraphs || []).map(esc).join('<br><br>');
+    if (d.dim_note) html += '<br><br><span class="t-dim">' + esc(d.dim_note) + '</span>';
+    html += '</div>';
+    return html;
+  }
+
+  function renderCase(c) {
+    var letter = c.id.replace('case-', '').toUpperCase();
+    var html = '<div class="briefing ' + c.id + '" data-case="' + letter + '">';
+
+    // Card header
+    html += '<div class="card-header"><div>';
+    html += '<div class="report-id">'    + esc(c.report_id) + '</div>';
+    html += '<div class="report-title">' + esc(c.title)     + '</div>';
+    html += '<div class="report-subtitle">' + esc(c.subtitle) + '</div>';
+    html += '</div>';
+    html += '<div class="priority-badge ' + c.priority + '">' + esc(c.priority_label) + '</div>';
+    html += '</div>';
+
+    // Terminal block
+    html += '<div class="terminal">';
+    html += '<div class="t-label"><span>FIELD BRIEFING — AUTHORISED PERSONNEL ONLY</span><span class="blink"></span></div>';
+    (c.rows || []).forEach(function (row) { html += renderRow(row); });
+    html += renderDirective(c.directive);
+    html += '</div>';
+
+    // Card footer
+    html += '<div class="card-footer">';
+    html += '<span><span class="status-dot"></span>' + esc(c.footer_status) + '</span>';
+    html += '<span>' + esc(c.footer_ref) + ' · CAMPBELL v<span class="ver"></span></span>';
+    html += '<span>' + esc(c.footer_class) + '</span>';
+    html += '</div>';
+
+    html += '</div>';
+    return html;
+  }
+
+  function renderWeek(week) {
+    var html = '';
+
+    // Page header
+    html += '<div class="page-header">';
+    html += '<div class="portal-logo">// P · O · R · T · A · L</div>';
+    html += '<h1>CAMPBELL</h1>';
+    html += '<div class="sub">PRIORITY QUEUE — PENDING FIELD ASSIGNMENT</div>';
+    html += '<div class="divider"></div>';
+    if (week.header_note)      html += '<div class="note">'      + esc(week.header_note)      + '</div>';
+    if (week.header_timestamp) html += '<div class="timestamp">' + esc(week.header_timestamp) + '</div>';
+    html += '</div>';
+
+    // Items: section labels + cases (interleaved in order)
+    (week.items || []).forEach(function (item) {
+      if (item.type === 'section-label') {
+        html += '<div class="' + item.css_class + '">' + esc(item.text) + '</div>';
+      } else if (item.type === 'case') {
+        html += renderCase(item);
+      }
+    });
+
+    // Closing CAMPBELL note
+    var n = week.closing_note;
+    html += '<div class="campbell-note">';
+    html += '<div class="cn-header"><span>' + esc(n.header) + '</span><span>' + esc(n.count) + '</span></div>';
+    html += '<div class="cn-text">' + (n.lines || []).map(esc).join('<br>') + '</div>';
+    html += '<div class="cn-sig">' + esc(n.sig) + '</div>';
+    html += '</div>';
+
+    return html;
+  }
+
+  // ── DISPLAY HELPERS ────────────────────────────────────────────────────────
+
+  function fillVer(container) {
+    container.querySelectorAll('.ver').forEach(function (el) { el.textContent = ver; });
+  }
+
   function showContent(html) {
-    var content = document.getElementById('briefing-content');
-    content.innerHTML = html;
-    fillVer(content);
+    var el = document.getElementById('briefing-content');
+    el.innerHTML = html;
+    fillVer(el);
   }
 
-  function showLoading() {
-    document.getElementById('briefing-content').innerHTML =
-      '<div class="loading">// FETCHING TRANSMISSION...</div>';
-  }
-
-  function showError(id) {
-    document.getElementById('briefing-content').innerHTML =
-      '<div class="load-error">// TRANSMISSION ERROR — FILE NOT FOUND: briefings/' + id + '.html</div>';
-  }
+  // ── TAB + ACTIVATION ───────────────────────────────────────────────────────
 
   function activateWeek(id) {
     if (activeId === id) return;
     activeId = id;
 
-    // Update tab states
     document.querySelectorAll('.week-tab').forEach(function (btn) {
       btn.classList.toggle('active', btn.dataset.id === id);
     });
-
-    // Update URL hash without scrolling
     history.replaceState(null, '', '#' + id);
 
-    // Serve from cache if available
-    if (cache[id]) {
-      showContent(cache[id]);
+    if (cache[id]) { showContent(cache[id]); return; }
+
+    var week = allWeeks.find(function (w) { return w.id === id; });
+    if (!week) {
+      document.getElementById('briefing-content').innerHTML =
+        '<div class="load-error">// TRANSMISSION ERROR — WEEK NOT FOUND: ' + id + '</div>';
       return;
     }
 
-    showLoading();
-
-    fetch('briefings/' + id + '.html')
-      .then(function (r) {
-        if (!r.ok) throw new Error('not found');
-        return r.text();
-      })
-      .then(function (html) {
-        cache[id] = html;
-        showContent(html);
-      })
-      .catch(function () {
-        showError(id);
-      });
+    var html = renderWeek(week);
+    cache[id] = html;
+    showContent(html);
   }
 
-  function buildTabs(data) {
-    weeks = data;
+  function buildTabs(weeks) {
     var container = document.getElementById('week-tabs');
     container.innerHTML = '';
-
-    data.forEach(function (week) {
+    weeks.forEach(function (week) {
       var btn = document.createElement('button');
       btn.className = 'week-tab';
       if (week.status === 'active') btn.classList.add('status-active');
@@ -220,15 +299,15 @@
     });
   }
 
-  // Boot: load index, build tabs, activate default week
-  fetch('briefings/index.json')
+  // ── BOOT ───────────────────────────────────────────────────────────────────
+
+  fetch('../data/briefings.json')
     .then(function (r) { return r.json(); })
     .then(function (data) {
-      buildTabs(data);
-
-      // Honour URL hash if valid, otherwise default to first week
-      var hash = location.hash.slice(1);
-      var target = data.find(function (w) { return w.id === hash; }) || data[0];
+      allWeeks = data.weeks;
+      buildTabs(allWeeks);
+      var hash   = location.hash.slice(1);
+      var target = allWeeks.find(function (w) { return w.id === hash; }) || allWeeks[0];
       activateWeek(target.id);
     })
     .catch(function () {

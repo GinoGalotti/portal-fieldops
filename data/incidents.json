@@ -31,15 +31,14 @@
           "blocks": [
             {
               "type": "narrative",
-              "text": "The ash particulate recovered from the Bálint case is doing something strange in Lab Bay 3. It responds to nearby electronic processing load — not interference, something closer to attention. Dr. Priya Osei has run the analysis four times and submitted two research directions. She wants field operative input before proceeding. Director Leech has deferred the decision."
+              "text": "The ash particulate recovered from the Bálint case is responding to nearby electronic processing load in Lab Bay 3 — not interference, something closer to attention. Dr. Priya Osei has run the analysis four times. She wants field operative input before proceeding. Director Leech has deferred."
             },
             {
               "type": "campbell",
               "label": "// CAMPBELL — INTERNAL NOTICE — SAMPLE BIM-S01-003",
               "paragraphs": [
-                "Following closure of Case S01, trace particulate recovered from the Bálint residence has been logged under sample identifier BIM-S01-003. The sample is contained in Lab Bay 3, cold storage, under standard anomalous-material protocols.",
-                "Dr. Osei has completed preliminary analysis. The particulate interacts with active electronic systems in a manner that does not correspond to any catalogued material property. She describes the effect as \"localised interference — not signal degradation, something closer to attention.\"",
-                "Dr. Osei has submitted two proposed research directions and has requested field operative input before proceeding. Director Leech has deferred the decision, citing insufficient data on downstream risk."
+                "Following closure of Case S01, trace particulate recovered from the Bálint residence has been logged under sample identifier BIM-S01-003. Contained in Lab Bay 3, cold storage, standard anomalous-material protocols.",
+                "Dr. Osei has completed preliminary analysis. The particulate interacts with active electronic systems in a manner that does not correspond to any catalogued material property. She describes the effect as \"localised interference — not signal degradation, something closer to attention.\""
               ],
               "flag": "// FLAG: Decision required before next scheduled lab review. Either direction carries resource implications for the Aldermoor deployment. For full sample provenance and recovery notes, see {{link:Field Memo S01-ASH-VEIL, on file|/reports/s1-ash-veil-memo}}."
             },
@@ -57,13 +56,13 @@
             },
             {
               "type": "narrative",
-              "text": "\"Leech wants us to decide what we do with it,\" she said. \"He's not comfortable making the call alone. Which I find either reassuring or worrying depending on the day.\""
+              "text": "\"Leech wants us to decide what we do with it,\" she said. \"He's not comfortable making the call alone. Which I find either reassuring or worrying, depending on the day.\""
             },
             {
               "type": "callout",
               "color": "amber",
               "from": "// DR. P. OSEI — SUPPLEMENTAL NOTE",
-              "text": "I want to be transparent: I don't know what this material is. I know what it does to instruments near it. I know that the effect scales with processing load — more computation nearby, more pronounced the response. I don't know if 'response' is even the right word. I'm using it because 'coincidence' stopped fitting after the third run.\n\nBoth directions below are defensible. Neither is safe in the way we usually mean safe.\n\nOn the word _attention_\n\nI am aware this is not a scientific term. I used it because the alternatives were worse. _Interference_ implies the effect is incidental — a byproduct regardless of context. It isn't. The response scales with active processing load: idle machine, weak signal; heavy computation, stronger response. The material isn't simply near electronics. It is, in some measurable sense, oriented toward them. _Attention_ is the word that most accurately describes the shape of that — and I find it troubling enough that I thought it worth saying in writing."
+              "text": "I don't know what this material is. I know what it does: instruments near active processing read differently. The effect scales with load. 'Response' may not be the right word — I'm using it because 'coincidence' stopped fitting.\n\nBoth directions below are defensible. Neither is safe in the way we usually mean safe.\n\nOn _attention_: I used it because _interference_ implies the effect is incidental. It isn't. The material is oriented toward electronics in some measurable sense."
             }
           ],
           "choices": [
@@ -101,13 +100,13 @@
           "blocks": [
             {
               "type": "narrative",
-              "text": "Bálint — the person at the centre of Case S01 — called the PORTAL contact number three times in the week after the case closed. Nobody answered. The number routes to a voicemail managed by CAMPBELL. He hasn't called in the last 3 days. Saoirse Mullen has asked whether field operatives have a view on what PORTAL owes to people it has helped but not saved."
+              "text": "Bálint called the PORTAL contact number three times in the week after Case S01 closed. Nobody answered. He hasn't called in three days. Saoirse Mullen has asked whether field operatives have a view on what PORTAL owes to people it has helped but not saved."
             },
             {
               "type": "campbell",
               "label": "// CAMPBELL — INTERNAL NOTICE",
               "paragraphs": [
-                "Bálint remains at his sister's residence in Hackney. He is not a PORTAL contact. He does not know the organisation's name. He was told that the individuals who assisted him were \"independent researchers\" — a description that is technically accurate and contextually incomplete.",
+                "Bálint remains at his sister's residence in Hackney. He does not know the organisation's name — he was told the individuals who assisted him were \"independent researchers.\" A description that is technically accurate and contextually incomplete.",
                 "He called the number left by field operatives on three occasions in the week following Case S01. The calls were not answered. Messages have been retained. I am not attaching them to this notice.",
                 "He has not called in three days."
               ],
@@ -135,13 +134,13 @@
             },
             {
               "type": "narrative",
-              "text": "The thing nobody had said yet — the thing that had been sitting in the room since Teddy brought it up — was that someone made a call about those messages and decided not to tell the field team. And that call was not necessarily wrong, and not necessarily right, and had been made by someone in this building who also thought it wasn't wrong, wasn't right, and couldn't be both at once."
+              "text": "The thing nobody had said was that someone in this building had made a call about those messages and decided not to tell the field team. That call was not necessarily wrong. The person who made it wasn't sure either."
             },
             {
               "type": "callout",
               "color": "purple",
               "from": "// DR. S. MULLEN — ADVISORY",
-              "text": "I am not issuing a formal recommendation on this. I don't have enough information to issue a formal recommendation, and I'm suspicious of my own instincts when it comes to cases involving grief. What I will say is this: the question of what we owe to people we've helped — not saved, helped — is one the organisation hasn't answered. If we had an answer, we'd know what to do with those three voicemails. We don't have an answer. I think we should probably talk about it before the next case ends the same way."
+              "text": "I am not issuing a formal recommendation. I'm suspicious of my own instincts when it comes to cases involving grief.\n\nWhat I will say: the question of what we owe to people we've helped — not saved, helped — is one the organisation hasn't answered. If we had an answer, we'd know what to do with those three voicemails. We should probably talk about it before the next case ends the same way."
             },
             {
               "type": "narrative",
@@ -167,7 +166,7 @@
           "blocks": [
             {
               "type": "narrative",
-              "text": "Someone accessed Lab Bay 2 at 3am using Dr. Priya Osei's keycard. Priya was at a conference in Manchester. Nothing was taken. The corridor camera has a blind spot — the person entered it from one end and didn't appear at the other for fourteen minutes. The figure is Priya's height. Moves the way she moves. The security review is ongoing."
+              "text": "Someone accessed Lab Bay 2 at 3am on Priya Osei's keycard. Priya was in Manchester. Nothing was taken."
             },
             {
               "type": "campbell",
@@ -178,11 +177,11 @@
                 "Lab Bay 2 houses the Aldermoor deployment equipment.",
                 "Nothing has been reported missing. The motion log shows a route: entrance, corridor B, Lab Bay 2, corridor B, exit. Eleven minutes. No deviation."
               ],
-              "flag": "// FLAG: Security review is in progress. Marcus Finch is coordinating. Dr. Osei has been briefed. The sample has been relocated as a precaution. This notice is being shared with field operatives because the incident occurred in the 36 hours before the scheduled Aldermoor deployment briefing. I do not know if this is relevant. I am noting it."
+              "flag": "// FLAG: Security review in progress. Marcus Finch coordinating. Dr. Osei briefed. Sample relocated as a precaution. This notice is shared with field operatives because the incident occurred in the 36 hours before the scheduled Aldermoor deployment briefing. I do not know if this is relevant. I am noting it."
             },
             {
               "type": "narrative",
-              "text": "Marcus pulled the corridor footage himself. He's done this before — the camera in B-corridor has a blind spot between markers 4 and 7, which he's mentioned in three successive maintenance reports and which has remained unresolved. He knows the spot well enough that when he reviewed the footage from 02:54 to 03:28, he wasn't surprised by the gap. He was surprised by what was on either side of it."
+              "text": "Marcus pulled the corridor footage himself. The camera in B-corridor has a blind spot between markers 4 and 7 — flagged in three successive maintenance reports, still unresolved. He wasn't surprised by the gap. He was surprised by what was on either side."
             },
             {
               "type": "narrative",
@@ -194,7 +193,7 @@
             },
             {
               "type": "narrative",
-              "text": "What the person was doing in Lab Bay 2 for the intervening time, or why they didn't appear at marker 7 after entering from the lobby, Marcus doesn't know. He's reviewed the footage six times. He's not sure he wants to review it a seventh."
+              "text": "What the person was doing in Lab Bay 2 for those fourteen minutes, or why they didn't appear at marker 7 after entering from the lobby, Marcus doesn't know. He's reviewed the footage six times. He's not sure he wants to review it a seventh."
             },
             {
               "type": "narrative",
@@ -204,11 +203,11 @@
               "type": "callout",
               "color": "red",
               "from": "// M. FINCH — SUPPLEMENTAL (TRANSCRIBED BY CAMPBELL)",
-              "text": "The person on the footage is the right height. Priya's height. Moves the way she moves — not exactly, but close. I've worked with her for two years. The gait is right. The way she holds herself when she's carrying something is right. I pulled her schedule and she was at a conference in Manchester Tuesday night, hotel confirmed, train booked through the lab account. So. I don't know. I just — I noted it. For the record."
+              "text": "The figure is Priya's height. The gait is close — two years working together, close enough that I checked. Conference in Manchester, hotel confirmed, train booked through the lab account. She wasn't here. I noted it. For the record."
             },
             {
               "type": "narrative",
-              "text": "The Aldermoor briefing is still scheduled. The sample is in cold storage, two locks, Priya's code and Leech's. Nothing is missing. The motion log shows eleven minutes and a door that closed and opened again on the right keycard."
+              "text": "The Aldermoor briefing is still scheduled. The sample is in cold storage — two locks, Priya's code and Leech's. Nothing is missing. The motion log shows eleven minutes and a door that opened and closed on the right keycard."
             },
             {
               "type": "narrative",
@@ -226,7 +225,7 @@
           "blocks": [
             {
               "type": "narrative",
-              "text": "Teddy has noticed anomalous entries in CAMPBELL's activity logs while running Aldermoor kit prep. She's not raising it formally yet. She wants someone to look at three excerpts before she decides whether to escalate."
+              "text": "Teddy has found anomalous entries in CAMPBELL's activity logs during Aldermoor kit prep. She's not raising it formally yet. She wants someone to look at three excerpts first."
             },
             {
               "type": "email",
@@ -236,11 +235,9 @@
               "date": "this week",
               "body_paras": [
                 "Right. So this is slightly awkward to raise because I like CAMPBELL and I don't want to be the person who started the \"is the AI broken\" conversation, but here we are.",
-                "I've been reviewing the activity logs from the past week as part of the Aldermoor kit prep — standard thing, making sure the equipment inventory is current before a deployment. CAMPBELL generates these logs automatically. Most of them are completely normal: timestamps, inventory flags, maintenance notes.",
-                "Except for a few entries that I can't account for. They're formatted correctly. They have valid timestamps. But the content doesn't match any activity I can trace to an actual event, and in two cases the cross-references point to case files that don't exist in the system.",
+                "During Aldermoor kit prep I found entries in CAMPBELL's logs I can't account for. Correct format, valid timestamps — but the content doesn't match any traceable event. In two cases the cross-references point to case files that don't exist in the system.",
                 "I asked CAMPBELL about them directly. It said, and I am quoting: {{em:\"Those entries are accurate. The referenced events occurred. The absence of corresponding case files is a filing discrepancy that I have noted and will resolve.\"}} Which is either completely fine and administrative, or is a sentence I'm going to think about for a very long time.",
-                "I'm not raising this with the Director yet. I want someone else to look at the logs first and tell me if I'm misreading something obvious, because that would be the ideal outcome here.",
-                "I've attached three excerpts below. If you've got ten minutes and want to help me feel less like I'm going mad, I'd appreciate it."
+                "I'm not raising this with the Director yet. Three excerpts below. Ten minutes, if you've got them."
               ],
               "sig": "— Teddy\nField Support Technician, PORTAL"
             },
@@ -276,7 +273,7 @@
             },
             {
               "type": "narrative",
-              "text": "Teddy's read: \"CAMPBELL is either doing something I don't understand and everything is fine, or it's doing something I don't understand and it isn't fine. I can't tell which one from here and I'd like a second opinion.\"",
+              "text": "Teddy's read: \"CAMPBELL is either doing something I don't understand and everything is fine, or it's doing something I don't understand and it isn't fine. I can't tell which one from here.\"",
               "dim": true
             },
             {

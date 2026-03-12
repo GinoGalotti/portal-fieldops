@@ -2666,8 +2666,10 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
     div.innerHTML = buildFeedEntryHtml(entry);
     container.appendChild(div.firstElementChild);
     feedEntries.push(entry);
-    // If the player has the HANDOUTS tab open, refresh it so new reveals appear immediately
-    if (activeTab === 'handouts' && entry.type && entry.type !== 'message') {
+    // If the player has the HANDOUTS tab open, refresh it so new reveals appear immediately.
+    // Guard keeperMode — in keeper mode the panel body belongs to renderKeeperPanel(),
+    // and calling renderHandoutsPanel() here would wipe the keeper's handout list.
+    if (!keeperMode && activeTab === 'handouts' && entry.type && entry.type !== 'message') {
       renderHandoutsPanel();
     }
   }
@@ -2722,6 +2724,11 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
       if (lastClear) {
         var clearTime = new Date((lastClear.delivered_at || '').replace(' ', 'T')).getTime();
         msgs  = msgs.filter(function (m) { return m.id > lastClear.id; });
+        // Advance lastRollId past ALL fetched rolls before filtering — critical to prevent
+        // the poll cursor resetting to 0 when no rolls survive the clear filter.
+        // Without this, the next poll uses after=0, which the API treats as "initial load"
+        // and returns all historical rolls, bypassing the clear.
+        rolls.forEach(function (r) { if (r.id > lastRollId) lastRollId = r.id; });
         rolls = rolls.filter(function (r) {
           var rt = new Date((r.rolled_at || r.timestamp || '').replace(' ', 'T')).getTime();
           return rt > clearTime;

@@ -169,6 +169,43 @@ Example CAMPBELL private note (keeper-facing):
 
 ---
 
+### Writing Voice — General Principles
+
+These principles apply to all in-world text: incident logs, callouts, NPC writing, player-facing documents, and keeper narrative. They exist because the PORTAL staff are smart scientists and professionals — they write like it.
+
+**Default register (most content):**
+- Lead with the finding, not the path to the finding
+- One observation per sentence
+- No restating what the previous sentence already showed
+- Emotional texture comes through word choice, not extra sentences
+- Trust the reader to feel the weight — don't signpost it
+
+**Fuller register (use sparingly):**
+- First time a character speaks in writing in the campaign
+- The incident is the emotional centrepiece of the week
+- The character's voice is doing narrative work beyond the information
+
+**When to use which:**
+
+| Content type | Register |
+|---|---|
+| CAMPBELL flags and log entries | Default — lean toward clinical |
+| Lab staff callouts (Priya, Marcus, Teddy) | Default — scientists writing to colleagues |
+| Saoirse advisory notes | Default, with one moment of genuine uncertainty allowed |
+| Narrative interstitials (keeper-written scene context) | Fuller register if it's the only one in the incident |
+| Player-facing documents (briefings, memos, found text) | Default — players are reading under time pressure |
+| Keeper-only content | Default — keeper is scanning, not reading |
+
+**Practical tests before finalising any block:**
+- Could the first sentence be cut without losing information? If yes, cut it.
+- Does any sentence restate what the one before it already said? If yes, cut it.
+- Does the emotional weight land without being named? If not, find the word that carries it — don't add a sentence explaining it.
+
+**What this is not:**
+This is not a rule against character voice or flavour. Teddy's email opener ("I don't want to be the person who started the 'is the AI broken' conversation") stays — it's doing character work, not information work. The rule is against sentences that exist only to cushion findings that don't need cushioning.
+
+---
+
 ## PART 5 — SECRETS MAP
 
 This section tells you what information is classified and how to handle it on player-facing vs keeper-facing pages.
