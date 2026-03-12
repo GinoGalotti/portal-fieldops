@@ -61,7 +61,43 @@ When the Keeper asks you to build a page:
 | `reports/player-report.html` | `player.css` | Player | Operative Field Report — week + hunter selector, 5 rating pips, general feedback, per-week scene questions. Unique save per week+hunter, D1-backed. Linked from player nav as "Report". |
 | `contacts.html` | `player.css` | Player | NPC Contact Directory — fetches `portal-npcs.json`, renders player-visible NPCs grouped by affiliation (PORTAL staff / field contacts / unknown). Static render, no D1 dependency. |
 | `lab-incidents.html` | `player.css` + inline | Player | Between-session incident log. Fully data-driven from `data/incidents.json`. Week tab switcher (W1 closed/empty, W2 active). Incident types: `choice` (3-button pick + optional custom textarea), `open` (freetext multi-submit), `informational` (read-only), `teaser` (email + log excerpts). Single **SAVE RESPONSES** button collects all choice answers → `PUT /api/v1/incidents/{week}/state` → locks buttons; also writes localStorage. Open incidents keep independent SUBMIT button → `POST /api/v1/incidents/{id}/responses`. EXPORT FOR KEEPER on open incidents. |
-| `feed.html` | `player.css` + inline | Player + Keeper | Live session tool — split layout (feed left, panel right). Hunter picker; **Moves tab** (always-active + playbook + basic moves, inline modifier + ROLL, hover shows description + outcome rows + questions for Investigate/Read); **Contacts tab** (player-visible NPCs, double-click to add per-hunter private note stored in `localStorage('portal_contact_notes')` as `{hunter_id:{npc_id:text}}`); **Handouts tab** (images/maps posted by keeper, session tabs S01/S02, deduplicated 2-column gallery, click to open lightbox). Bottom composer for any player to post to the feed. Feed entries **expand on click** (toggle `.expanded` class); click again to collapse; multiple can be open simultaneously. Roll entries show breakdown `[d1 + d2 + stat + mod = total]`, click shows specific outcome text + question list (for Investigate a Mystery / Read a Bad Situation). **Smart polling**: 6s when tab has focus, 60s when tab hidden or window blurred (immediately re-polls on regain focus). 5s auto-save for harm/luck/xp changes. `?mouseover=true` URL flag restores legacy CSS `:hover` expand behaviour (for A/B testing). Keeper mode (5× logo click) replaces player UI with 5 tabs: **OPERATIVES** (click hunter to view sheet + moves), **CONTACTS** (session filter S01/S02/ALL + NPC visibility toggles persisted to localStorage), **REFERENCES** (MoTW rules cheat sheet: outcomes, harm moves, luck, XP, end-of-session, principles, keeper moves, monster moves, phenomena moves, investigate questions, keeper page links), **THREATS** (session selector, entity stat block from `portal-entities.json`, threats/minions/bystanders + equipment from `session-data.json`), **HANDOUTS** (session selector; per-session list of readaloud/PDA/image items; POST / RE-POST buttons persisted to `localStorage('portal_posted_handouts')`; map items show note instead of POST; **CLEAR HANDOUTS** button removes posted handout entries from feed DOM immediately + wipes localStorage + fires background DELETE to D1). **CLEAR FEED** (keeper button): posts a `type:'clear'` sentinel to D1; keeper's feed clears immediately; polling clients clear on receipt; `initialLoad()` discards all entries before the sentinel (history still accessible via "↑ LOAD EARLIER HISTORY"). |
+| `feed.html` | `player.css` + inline | Player + Keeper | Live session tool — split layout (feed left, panel right). Hunter picker; **Moves tab** (always-active + playbook + basic moves, inline modifier + ROLL, hover shows description + outcome rows + questions for Investigate/Read); **Contacts tab** (player-visible NPCs, double-click to add per-hunter private note stored in `localStorage('portal_contact_notes')` as `{hunter_id:{npc_id:text}}`); **Handouts tab** (images/maps posted by keeper, session tabs S01/S02, deduplicated 2-column gallery, click to open lightbox — documents/classified/readaloud/PDA entries are feed-only, not shown in gallery). Bottom composer for any player to post to the feed. Feed entries **expand on click** (toggle `.expanded` class); click again to collapse; multiple can be open simultaneously. Roll entries show breakdown `[d1 + d2 + stat + mod = total]`, click shows specific outcome text + question list (for Investigate a Mystery / Read a Bad Situation). **Smart polling**: 6s when tab has focus, 60s when tab hidden or window blurred (immediately re-polls on regain focus). 5s auto-save for harm/luck/xp changes. `?mouseover=true` URL flag restores legacy CSS `:hover` expand behaviour (for A/B testing). Keeper mode (5× logo click) replaces player UI with 5 tabs: **OPERATIVES** (click hunter to view sheet + moves), **CONTACTS** (session filter S01/S02/ALL + NPC visibility toggles persisted to localStorage), **REFERENCES** (MoTW rules cheat sheet: outcomes, harm moves, luck, XP, end-of-session, principles, keeper moves, monster moves, phenomena moves, investigate questions, keeper page links), **THREATS** (session selector, entity stat block from `portal-entities.json`, threats/minions/bystanders + equipment from `session-data.json`), **HANDOUTS** (session selector; per-session list of all handout items with POST / RE-POST buttons persisted to `localStorage('portal_posted_handouts')`; map items show note instead of POST; classified items show purple pip; **CLEAR HANDOUTS** button removes all non-message entries from feed DOM + localStorage + D1). **CLEAR FEED** (keeper button): posts a `type:'clear'` sentinel to D1; keeper's feed clears immediately; polling clients clear on receipt; `initialLoad()` discards all entries before the sentinel (history still accessible via "↑ LOAD EARLIER HISTORY"). |
+
+---
+
+### Feed Handout Types — Reference for New Session Data
+
+All handouts live in `data/session-data.json` under `handouts[]` per session entry. The keeper posts them from the HANDOUTS tab during play. Each type renders differently in the player feed. Claude should use these creatively when authoring session data.
+
+| type | Player sees | Keeper POST button | Player gallery? | Best used for |
+|------|-------------|-------------------|-----------------|---------------|
+| `readaloud` | Green bordered block with `// KEEPER READALOUD` eyebrow + prose text | ▶ POST | No | Scene-setting narration, cold opens, atmosphere — read aloud at the table |
+| `pda` | Amber PDA terminal card with FROM/SUBJ header, body text, PORTAL FIELD COMMS chrome | ▶ POST | No | In-universe messages from CAMPBELL, Director Leech, or other senders — delivered mid-scene |
+| `document` | Amber monospace card with classification stamp (e.g. FIELD EVIDENCE — S02), title, preformatted body | ▶ POST | No | Physical documents the hunters find — whiteboards, partial emails, notebooks, reports |
+| `image` | Captioned photo in 2-column gallery + feed thumbnail | ▶ POST | Yes (2-col) | Scene images, locations, character portraits, artefacts |
+| `map` | Note in keeper panel ("INTERACTIVE MAP — see mission doc") — not postable yet | Note only | Yes (2-col) | District/location maps (post as image when ready) |
+| `classified` | Black redacted block with 3 censorship bars + `[ CLASSIFIED — KEEPER ACCESS ONLY ]` | ▶ POST | No | Keeper-only reminders, NPC private notes, plot flags — players know *something* arrived but can't read it |
+
+**JSON shape for each type:**
+```json
+{ "id": "s02-ra-01",  "type": "readaloud",  "label": "Scene Title",     "text": "Prose..." }
+{ "id": "s02-pda-01", "type": "pda",        "from": "CAMPBELL",         "subject": "SUBJ LINE", "body": "Body..." }
+{ "id": "s02-doc-01", "type": "document",   "label": "Doc Title",       "classification": "FIELD EVIDENCE — S02", "body": "Preformatted text..." }
+{ "id": "s02-img-01", "type": "image",      "label": "Caption",         "src": "images/filename.png" }
+{ "id": "s02-map-01", "type": "map",        "label": "Map Title",       "src": "images/map.png", "_note": "keeper note" }
+{ "id": "s02-cl-01",  "type": "classified", "label": "Keeper Note — X", "body": "Private text..." }
+```
+
+**Naming convention:** `s{session_num}-{type_abbrev}-{nn}` e.g. `s02-ra-01`, `s02-pda-03`, `s02-doc-02`, `s02-classified-01`.
+
+**Creative notes for future sessions:**
+- `pda` from unexpected senders (MESA, a bystander with the portal number, an unknown domain) creates intrigue
+- `document` works well for anything physical: business cards, receipts, torn pages, transcripts, lab reports
+- `classified` is great for keeper-only scene reminders that appear as incoming transmissions — players feel the information asymmetry
+- `readaloud` + matching `image` posted together creates strong visual narrative moments
+- Ordering in `handouts[]` sets the keeper panel display order — arrange narratively, not by type
+
+---
 
 ### Upcoming Pages (planned, not yet built)
 

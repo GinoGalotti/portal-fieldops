@@ -286,6 +286,45 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
   letter-spacing: 0.1em;
 }
 
+/* ── DOCUMENT ENTRIES ───────────────────────────────────────────────────── */
+.feed-entry.feed-document { border-left: 2px solid rgba(180,140,80,0.5); background: rgba(15,12,8,0.95); }
+.document-chrome {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.3rem 0.75rem;
+  background: rgba(100,70,20,0.3);
+  border-bottom: 1px solid rgba(180,140,80,0.2);
+}
+.document-classification { font-size: 0.65rem; font-family: 'Share Tech Mono', monospace; color: #c8a020; letter-spacing: 0.08em; }
+.document-title { padding: 0.5rem 0.75rem 0.2rem; font-size: 0.8rem; font-weight: 700; color: #d4b060; letter-spacing: 0.04em; text-transform: uppercase; }
+.document-body { padding: 0.3rem 0.75rem 0.7rem; font-size: 0.75rem; line-height: 1.6; color: #c0a050; white-space: pre-wrap; font-family: 'Share Tech Mono', monospace; }
+
+/* ── CLASSIFIED ENTRIES (keeper view / player redacted) ─────────────────── */
+.feed-entry.feed-classified { border-left: 2px solid rgba(160,100,200,0.6); background: rgba(20,10,30,0.95); }
+.classified-chrome {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.3rem 0.75rem;
+  background: rgba(80,40,120,0.3);
+  border-bottom: 1px solid rgba(160,100,200,0.2);
+}
+.classified-eyebrow { font-size: 0.65rem; font-family: 'Share Tech Mono', monospace; color: #a060d0; letter-spacing: 0.08em; }
+.classified-time { font-size: 0.65rem; font-family: 'Share Tech Mono', monospace; color: #5a3a7a; }
+.classified-title { padding: 0.5rem 0.75rem 0.2rem; font-size: 0.8rem; font-weight: 700; color: #c080e0; letter-spacing: 0.04em; text-transform: uppercase; }
+.classified-body { padding: 0.3rem 0.75rem 0.7rem; font-size: 0.75rem; line-height: 1.6; color: #b090d0; white-space: pre-wrap; font-family: 'Share Tech Mono', monospace; }
+.feed-entry.feed-redacted { border-left: 2px solid rgba(60,60,60,0.5); background: rgba(10,10,10,0.95); }
+.redacted-chrome {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.3rem 0.75rem;
+  background: rgba(25,25,25,0.8);
+  border-bottom: 1px solid rgba(60,60,60,0.3);
+}
+.redacted-label { font-size: 0.65rem; font-family: 'Share Tech Mono', monospace; color: #383838; letter-spacing: 0.08em; }
+.redacted-body { padding: 0.6rem 0.75rem 0.7rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.redacted-bar { height: 0.65rem; background: #1e1e1e; border-radius: 2px; }
+.redacted-bar:nth-child(1) { width: 82%; }
+.redacted-bar:nth-child(2) { width: 64%; }
+.redacted-bar:nth-child(3) { width: 74%; }
+.redacted-footer { font-size: 0.6rem; color: #2a2a2a; letter-spacing: 0.12em; text-align: center; padding-top: 0.3rem; font-family: 'Share Tech Mono', monospace; }
+
 /* ── IMAGE / MAP ENTRIES ─────────────────────────────────────────────────── */
 .feed-entry.feed-image {
   padding: 0.6rem 1rem;
@@ -369,9 +408,11 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
   text-transform: uppercase;
 }
 .pip-readaloud { background: rgba(46,204,113,0.12); color: var(--green-dim); border: 1px solid rgba(46,204,113,0.2); }
-.pip-pda       { background: rgba(200,160,32,0.12); color: #c8a020; border: 1px solid rgba(200,160,32,0.2); }
-.pip-image     { background: rgba(100,140,255,0.1); color: #7a9bff; border: 1px solid rgba(100,140,255,0.2); }
-.pip-map       { background: rgba(180,100,255,0.1); color: #c07aff; border: 1px solid rgba(180,100,255,0.2); }
+.pip-pda        { background: rgba(200,160,32,0.12); color: #c8a020; border: 1px solid rgba(200,160,32,0.2); }
+.pip-image      { background: rgba(100,140,255,0.1); color: #7a9bff; border: 1px solid rgba(100,140,255,0.2); }
+.pip-map        { background: rgba(180,100,255,0.1); color: #c07aff; border: 1px solid rgba(180,100,255,0.2); }
+.pip-document   { background: rgba(180,140,32,0.12); color: #c8a020; border: 1px solid rgba(180,140,32,0.2); }
+.pip-classified { background: rgba(160,100,200,0.12); color: #a060d0; border: 1px solid rgba(160,100,200,0.2); }
 .handout-meta  { flex: 1; min-width: 0; }
 .handout-label {
   font-family: 'Share Tech Mono', monospace;
@@ -1772,7 +1813,7 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
       return !(e.session_id === sess.session_key && e.type && e.type !== 'message');
     });
     var feedContainer = document.getElementById('feed-entries');
-    feedContainer.querySelectorAll('.feed-readaloud, .feed-pda, .feed-image').forEach(function (el) {
+    feedContainer.querySelectorAll('.feed-readaloud, .feed-pda, .feed-image, .feed-document, .feed-classified, .feed-redacted').forEach(function (el) {
       el.remove();
     });
     renderKeeperHandoutsTab();
@@ -2519,6 +2560,54 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
       '</div>';
     }
 
+    // ── Document ───────────────────────────────────────────────────────────
+    if (entryType === 'document') {
+      var payload = {};
+      try { payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      var label          = payload.label          || entry.subject || '';
+      var classification = payload.classification || 'FIELD EVIDENCE';
+      var body           = payload.body           || entry.body    || '';
+      return '<div class="feed-entry feed-document">' +
+        '<div class="document-chrome">' +
+          '<span class="document-classification">// ' + escHtml(classification) + '</span>' +
+          '<span class="document-classification">' + fmtTime(entry.delivered_at || entry.created_at) + '</span>' +
+        '</div>' +
+        (label ? '<div class="document-title">' + escHtml(label) + '</div>' : '') +
+        '<div class="document-body">' + escHtml(body) + '</div>' +
+      '</div>';
+    }
+
+    // ── Classified (keeper-only) ────────────────────────────────────────────
+    if (entryType === 'classified') {
+      var payload = {};
+      try { payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      var label = payload.label || entry.subject || '';
+      var body  = payload.body  || entry.body    || '';
+      if (keeperMode) {
+        return '<div class="feed-entry feed-classified">' +
+          '<div class="classified-chrome">' +
+            '<span class="classified-eyebrow">// KEEPER CLASSIFIED — RESTRICTED ACCESS</span>' +
+            '<span class="classified-time">' + fmtTime(entry.delivered_at || entry.created_at) + '</span>' +
+          '</div>' +
+          (label ? '<div class="classified-title">' + escHtml(label) + '</div>' : '') +
+          '<div class="classified-body">' + escHtml(body) + '</div>' +
+        '</div>';
+      } else {
+        return '<div class="feed-entry feed-redacted">' +
+          '<div class="redacted-chrome">' +
+            '<span class="redacted-label">// INCOMING TRANSMISSION — CLASSIFICATION: RESTRICTED</span>' +
+            '<span class="redacted-label">' + fmtTime(entry.delivered_at || entry.created_at) + '</span>' +
+          '</div>' +
+          '<div class="redacted-body">' +
+            '<div class="redacted-bar"></div>' +
+            '<div class="redacted-bar"></div>' +
+            '<div class="redacted-bar"></div>' +
+            '<div class="redacted-footer">[ CLASSIFIED — KEEPER ACCESS ONLY ]</div>' +
+          '</div>' +
+        '</div>';
+      }
+    }
+
     // ── Image / Map ────────────────────────────────────────────────────────
     if (entryType === 'image' || entryType === 'map') {
       var payload = {};
@@ -2674,6 +2763,7 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
   var POLL_ACTIVE  = 6000;   // interval when page is visible
   var POLL_PASSIVE = 60000;  // interval when tab is hidden (CF free-tier budget)
   var lastPollTime = 0;
+  var pollInFlight = false;  // guard against concurrent polls (visibilitychange + focus fire together)
 
   function startPolling() {
     if (pollTimer) clearInterval(pollTimer);
@@ -2705,11 +2795,14 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
   window.addEventListener('focus', updatePollingMode);
 
   function poll() {
+    if (pollInFlight) return;
+    pollInFlight = true;
     lastPollTime = Date.now();
     Promise.all([
       fetch('/api/v1/rolls?after=' + lastRollId).then(function (r) { return r.ok ? r.json() : []; }),
       fetch('/api/v1/messages?after=' + lastMsgId).then(function (r) { return r.ok ? r.json() : []; })
     ]).then(function (results) {
+      pollInFlight = false;
       var newRolls = results[0];
       var newMsgs  = results[1];
       newRolls.forEach(function (r) { if (r.id > lastRollId) lastRollId = r.id; });
@@ -2735,7 +2828,7 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
         if (!alreadyIn) appendFeedEntry(e);
       });
       if (combined.length > 0 && autoScroll) scrollFeedToBottom();
-    }).catch(function () {});
+    }).catch(function () { pollInFlight = false; });
   }
 
   // ── HELPERS ───────────────────────────────────────────────────────────────

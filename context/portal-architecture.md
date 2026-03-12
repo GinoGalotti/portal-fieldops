@@ -77,7 +77,7 @@ portal-fieldops/
 │   ├── playbook-moves.json        # Move definitions keyed by data-check-key → name, roll, description (feed layer)
 │   ├── portal-npcs.json           # Full NPC roster with player/keeper description split, session_overrides, keeper_scene_notes
 │   ├── portal-entities.json       # Entity/threat database; session_overrides controls player bestiary visibility
-│   └── session-data.json          # Per-session data for feed.html THREATS tab: doc path, entity_ids, threats[], equipment[], readaloud[]
+│   └── session-data.json          # Per-session data for feed.html: doc path, entity_ids, threats[], equipment[], readaloud[], handouts[]
 │
 ├── session-state.js           # Shared session resolution + DOM visibility + keeper toggle injection
 ├── functions/                 # CF Pages Functions (serverless API, auto-routed)
@@ -271,13 +271,14 @@ CREATE TABLE IF NOT EXISTS messages (
   recipient    TEXT DEFAULT 'all',
   subject      TEXT,
   body         TEXT NOT NULL,
-  type         TEXT DEFAULT 'message',   -- 'message' | 'readaloud' | 'pda' | 'image' | 'map' | 'clear'
-  payload      TEXT,                     -- JSON blob (handout metadata: src, label, from, etc.)
+  type         TEXT DEFAULT 'message',   -- 'message' | 'readaloud' | 'pda' | 'document' | 'image' | 'map' | 'classified' | 'clear'
+  payload      TEXT,                     -- JSON blob (handout metadata: src, label, from, classification, body, etc.)
   delivered    INTEGER DEFAULT 1,
   delivered_at TEXT DEFAULT (datetime('now'))
 );
 -- type:'clear' is a sentinel: clients discard all messages/rolls with earlier timestamps on receipt.
--- DELETE /api/v1/messages?session_id=S02 removes all non-'message' rows for a session (clears handouts).
+-- type:'classified' entries render as REDACTED to players; keeper sees full content.
+-- DELETE /api/v1/messages?session_id=S02 removes all non-'message' rows for a session (clears handouts + classified).
 
 -- ─── SESSION STATE ──────────────────────────────────────────────────────────
 CREATE TABLE sessions (
