@@ -423,6 +423,8 @@
   margin-bottom: 10px;
 }
 .log-anomaly { color: var(--purple); }
+.incident-ref-link { color: var(--green-dim); text-decoration: underline; text-underline-offset: 2px; }
+.incident-ref-link:hover { color: var(--green); }
 .log-excerpt .le-annotation {
   margin-top: 12px;
   padding-top: 10px;
@@ -603,11 +605,11 @@
       }
       case 'campbell': {
         var colorCls = block.color === 'purple' ? ' purple' : '';
-        var paras = block.paragraphs.map(function (p) { return esc(p); }).join('<br><br>');
+        var paras = block.paragraphs.map(function (p) { return inlineMarkup(p); }).join('<br><br>');
         return '<div class="campbell-block' + colorCls + '">'
           + '<span class="cb-label">' + esc(block.label) + '</span>'
           + paras
-          + (block.flag ? '<span class="cb-flag">' + esc(block.flag) + '</span>' : '')
+          + (block.flag ? '<span class="cb-flag">' + inlineMarkup(block.flag) + '</span>' : '')
           + '</div>';
       }
       case 'callout': {
@@ -986,7 +988,8 @@
   function inlineMarkup(text) {
     return esc(text)
       .replace(/\{\{anomaly:(.*?)\}\}/g, '<span class="log-anomaly">$1</span>')
-      .replace(/\{\{em:(.*?)\}\}/g, '<em>$1</em>');
+      .replace(/\{\{em:(.*?)\}\}/g, '<em>$1</em>')
+      .replace(/\{\{link:(.*?)\|(.*?)\}\}/g, '<a href="$2" class="incident-ref-link">$1</a>');
   }
 
 })();

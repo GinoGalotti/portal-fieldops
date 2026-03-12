@@ -41,7 +41,7 @@
                 "Dr. Osei has completed preliminary analysis. The particulate interacts with active electronic systems in a manner that does not correspond to any catalogued material property. She describes the effect as \"localised interference — not signal degradation, something closer to attention.\"",
                 "Dr. Osei has submitted two proposed research directions and has requested field operative input before proceeding. Director Leech has deferred the decision, citing insufficient data on downstream risk."
               ],
-              "flag": "// FLAG: Decision required before next scheduled lab review. Either direction carries resource implications for the Aldermoor deployment."
+              "flag": "// FLAG: Decision required before next scheduled lab review. Either direction carries resource implications for the Aldermoor deployment. For full sample provenance and recovery notes, see {{link:Field Memo S01-ASH-VEIL, on file|/reports/s1-ash-veil-memo}}."
             },
             {
               "type": "narrative",
