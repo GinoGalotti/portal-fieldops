@@ -228,15 +228,29 @@ Or ask Claude to query all reports for a week and summarise the ratings and key 
 
 ---
 
-## Context to Hand Claude at Session Start
+## Context to Hand Claude — By Task Type
 
-Always provide:
+### Post-session site update (most common)
+- `context/post-session-runbook.md` (this file)
 - `context/portal-architecture.md`
 - `context/worldbuilding-lore.md`
 - `context/worldbuilding-site.md`
-- `context/post-session-runbook.md` (this file)
 - The Keeper Field Report markdown (from "Copy for Claude" button on `missions/report.html`)
+- Optionally: player report data (paste D1 query output, or ask Claude to query and summarise)
 
-Optionally:
-- Player report data (paste D1 query output, or ask Claude to query and summarise)
-- Any new mission prep notes or between-session lore additions
+### New session data authoring (before next session)
+Hand Claude these files so it knows the existing state before adding to it:
+- `context/post-session-runbook.md` (this file — step 2.0 explains what to produce)
+- `context/worldbuilding-lore.md` (NPCs, world, CAMPBELL voice)
+- `data/session-data.json` (so Claude adds the new entry in the right format)
+- `data/portal-npcs.json` (so Claude knows which NPCs already exist before adding new ones)
+- The mission prep HTML doc if written (e.g. `missions/03-title.html`)
+
+Claude should produce: new entry in `session-data.json` (threats, equipment, handouts, readaloud) + updates to `portal-npcs.json` (new NPCs, session_overrides for any that change).
+
+### Lore / NPC / worldbuilding only
+- `context/worldbuilding-lore.md`
+
+### Coding / feature work
+- `context/portal-architecture.md`
+- `context/worldbuilding-site.md`
