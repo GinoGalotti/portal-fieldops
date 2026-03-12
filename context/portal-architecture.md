@@ -50,11 +50,11 @@ This is a personal campaign site — all CF services stay on the free tier. Desi
 | Service | Free limit | Design implication |
 |---|---|---|
 | Pages Functions (Workers) | 100k requests/day | Avoid background polling from idle tabs |
-| D1 reads | 25M/day | Polling every 3s is fine during active play; pause when tab hidden |
+| D1 reads | 25M/day | Polling 6s active / 60s hidden; immediate poll on focus regain |
 | D1 writes | 100k/day | POST/PUT only on user action or explicit save — never on timers alone |
 
 **Implemented mitigations:**
-- `feed.html` polls pause via `visibilitychange` (`stopPolling()` on hide, `startPolling()` on show)
+- `feed.html` uses smart polling: 6s when the page is active, 60s when the tab is hidden OR the browser window loses OS focus. Uses `visibilitychange` + `window.blur/focus` + `document.hasFocus()`. Triggers an immediate poll when focus is regained (if >6s since last poll).
 
 ---
 
@@ -88,7 +88,7 @@ portal-fieldops/
 │       ├── player-reports/[week]/[hunter]/state.js  # GET + PUT player debrief per week+hunter → D1
 │       ├── session/active.js                 # GET active session from D1; PUT to set (keeper toggle)
 │       ├── rolls.js                           # GET (after= polling / offset= pagination) + POST → D1 rolls table
-│       └── messages.js                        # GET (after= polling / offset= pagination) + POST → D1 messages table
+│       └── messages.js                        # GET (after= / offset=) + POST + DELETE(?session_id=) → D1 messages table
 │
 ├── workers/                   # Cloudflare Workers API (Phase 3+)
 │   ├── schema.sql             # D1 schema — already applied to remote DB
@@ -101,7 +101,8 @@ portal-fieldops/
 │   │   ├── 006_team_state.sql     # team_state ✅ remote + local
 │   │   ├── 007_feed_tables.sql    # rolls + messages ✅ remote + local
 │   │   ├── 008_incident_responses.sql # incident_responses ✅ remote + local
-│   │   └── 009_incident_state.sql     # incident_state ✅ local (apply --remote when ready)
+│   │   ├── 009_incident_state.sql     # incident_state ✅ remote + local
+│   │   └── 010_messages_type.sql      # messages.type + messages.payload ✅ remote + local
 │   └── src/                   # (Phase 3) Workers source
 │       ├── index.ts           # Main router
 │       └── routes/
@@ -270,9 +271,13 @@ CREATE TABLE IF NOT EXISTS messages (
   recipient    TEXT DEFAULT 'all',
   subject      TEXT,
   body         TEXT NOT NULL,
+  type         TEXT DEFAULT 'message',   -- 'message' | 'readaloud' | 'pda' | 'image' | 'map' | 'clear'
+  payload      TEXT,                     -- JSON blob (handout metadata: src, label, from, etc.)
   delivered    INTEGER DEFAULT 1,
   delivered_at TEXT DEFAULT (datetime('now'))
 );
+-- type:'clear' is a sentinel: clients discard all messages/rolls with earlier timestamps on receipt.
+-- DELETE /api/v1/messages?session_id=S02 removes all non-'message' rows for a session (clears handouts).
 
 -- ─── SESSION STATE ──────────────────────────────────────────────────────────
 CREATE TABLE sessions (
