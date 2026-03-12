@@ -59,15 +59,23 @@ For each session that just resolved, existing player pages need a "post-resoluti
 
 Use the existing W1→W2 HTML variants as a template. The pattern is always: old card gets `data-session-until="wN"`, new card gets `data-session-from="wN+1"`.
 
-**c) Update NPC `session_overrides` in `data/portal-npcs.json`:**
+**c) Add new session entry to `data/session-data.json`:**
+- Add a new object for the incoming session with: `id`, `session_key`, `label`, `doc`, `entity_ids`, `threats`, `equipment`, `readaloud`, `handouts`
+- `threats[]` = keeper combat reference (stat blocks, moves, harm capacity) for NPCs appearing this session — this is the THREATS tab cheat sheet in feed.html
+- `handouts[]` = all pushable content for the session (readalouds, PDA messages, images, maps) — this is the keeper HANDOUTS tab in feed.html
+- Use the existing W2 entry as a template. See `context/worldbuilding-site.md` Part 10 for the handout format.
+
+**d) Update NPC `session_overrides` in `data/portal-npcs.json`:**
 - For each NPC first revealed in this session, add a `"wN+1"` entry in `session_overrides` with the post-resolution `player_description`
 - Set `available_from_session` to the session when they first appear in contacts.html
+- Add new NPCs who appear for the first time as full entries
+- Note: `portal-npcs.json` is the *persistent* NPC record (player descriptions, relationships, keeper arc notes across all sessions). `session-data.json threats[]` is the *tactical* reference for running them at the table. Recurring NPCs like Rook live in both — npcs.json for the campaign, session-data.json for their stat block each time they appear.
 
-**d) Update entity `session_overrides` in `data/portal-entities.json`:**
+**e) Update entity `session_overrides` in `data/portal-entities.json`:**
 - For any resolved entity, set the `"wN+1"` override: `"blurred": false`, full player-facing description
 - Update `status` field: `"active"` → `"resolved"` / `"contained"` / `"escalated"`
 
-**e) The Keeper toggle in D1 does not need to be changed in code** — when the Keeper is ready for players to see the new session, they click the new week button in the keeper banner on any keeper page. This updates D1 and all player pages reflect it immediately.
+**f) The Keeper toggle in D1 does not need to be changed in code** — when the Keeper is ready for players to see the new session, they click the new week button in the keeper banner on any keeper page. This updates D1 and all player pages reflect it immediately.
 
 ---
 
@@ -204,7 +212,8 @@ Or ask Claude to query all reports for a week and summarise the ratings and key 
 - [ ] `missions/briefings/index.json` — add new week entry, close previous
 - [ ] `missions/report.html` — add new session to `SESSIONS` config
 - [ ] `reports/player-report.html` — add new week to `WEEKS` config
-- [ ] `data/portal-npcs.json` — update status, `session_overrides` for newly-revealed NPCs, `keeper_scene_notes` for next mission (step 2.0c)
+- [ ] `data/session-data.json` — add new session entry with threats, equipment, handouts, readaloud (step 2.0c)
+- [ ] `data/portal-npcs.json` — update status, `session_overrides` for newly-revealed NPCs, `keeper_scene_notes` for next mission (step 2.0d)
 - [ ] `data/portal-entities.json` — update entity status, `session_overrides` for resolved/changed entities (step 2.0d)
 - [ ] `context/worldbuilding-lore.md` — update lore, NPC relationships, confirmed facts
 - [ ] `context/post-session-runbook.md` — update this file if the workflow changes
