@@ -109,3 +109,24 @@ npx playwright test   # in another
 ```
 
 The `playwright.config.js` has `reuseExistingServer: true` — if `wrangler pages dev .` is already running, Playwright will use it. Otherwise it starts it automatically.
+
+---
+
+## Feature Backlog — Pending Implementation
+
+Things not yet built, noted here so they don't get lost.
+
+### `feed.html` — Move card / feed entry expand behaviour [UX]
+
+**Current:** move cards in the MOVES panel and roll entries in the feed expand (show description/outcome detail) on hover (`CSS :hover` with `opacity` + `max-height` transition).
+
+**Desired default:** expand on **click** instead — feels more intentional during play, less noisy.
+
+**Feature flag:** `?mouseover=true` in the URL restores hover behaviour for A/B testing with players.
+
+**Implementation notes:**
+- Read `new URLSearchParams(location.search).get('mouseover')` on boot; store as a boolean `hoverMode`
+- If `hoverMode` is false (default): add a click listener to each `.feed-entry` / move card that toggles an `.expanded` class; CSS `:hover` rule replaced by `.expanded` rule
+- If `hoverMode` is true: keep current CSS hover behaviour as-is
+- Both modes should work for: move cards in MOVES panel, roll entries in feed, outcome detail blocks
+- Tests to add once implemented: click to expand, click again to collapse, `?mouseover=true` restores hover, two entries don't both stay open (or do — decide UX first)
