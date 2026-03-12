@@ -129,4 +129,5 @@ Things not yet built, noted here so they don't get lost.
 - If `hoverMode` is false (default): add a click listener to each `.feed-entry` / move card that toggles an `.expanded` class; CSS `:hover` rule replaced by `.expanded` rule
 - If `hoverMode` is true: keep current CSS hover behaviour as-is
 - Both modes should work for: move cards in MOVES panel, roll entries in feed, outcome detail blocks
-- Tests to add once implemented: click to expand, click again to collapse, `?mouseover=true` restores hover, two entries don't both stay open (or do — decide UX first)
+- **Decided UX:** click toggles expand/collapse; multiple entries can be open simultaneously; clicking the ROLL button on a move card does NOT collapse it
+- Tests to add once implemented: click to expand, click again to collapse, two entries can both be open, ROLL button click doesn't collapse card, `?mouseover=true` restores hover behaviour
