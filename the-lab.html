@@ -248,13 +248,7 @@ textarea.lab-field { resize: vertical; }
       <div class="lab-card-title">Active Moves <button class="hide-toggle" onclick="toggleHide(this,'moves-list')">// HIDE UNCHOSEN</button></div>
     </div>
     <div class="lab-card-body">
-      <ul class="check-list" id="moves-list">
-        <li class="check-item" data-check-key="move-scientific-method"><span class="check-box"></span><span class="check-text"><strong>Scientific Method</strong><div class="check-subtext">When the team investigates a mystery, ask one additional question: "Which of our ideas is wrong?" or "What weird energies or materials are present?"</div></span></li>
-        <li class="check-item" data-check-key="move-trial-and-error"><span class="check-box"></span><span class="check-text"><strong>Trial and Error</strong><div class="check-subtext">When a team member rolls 10+ on kick some ass or protect someone, you can ask a question from investigate a mystery in addition to the normal option.</div></span></li>
-        <li class="check-item" data-check-key="move-repurpose-old-junk"><span class="check-box"></span><span class="check-text"><strong>Repurpose Old Junk</strong><div class="check-subtext">Once per session, ignore all but one requirement for weird science or any similar move.</div></span></li>
-        <li class="check-item" data-check-key="move-pattern-recognition"><span class="check-box"></span><span class="check-text"><strong>Pattern Recognition</strong><div class="check-subtext">Once per session, after a team member successfully reads a bad situation, they may ask: "How do I ensure or prevent _______ happening?"</div></span></li>
-        <li class="check-item" data-check-key="move-button-mashing"><span class="check-box"></span><span class="check-text"><strong>Button Mashing</strong><div class="check-subtext">When presented with technology beyond your experience, work together to study it. Each team member who helps out gets +1 forward.</div></span></li>
-      </ul>
+      <ul class="check-list" id="moves-list"></ul>
     </div>
   </div>
 
@@ -264,16 +258,7 @@ textarea.lab-field { resize: vertical; }
       <div class="lab-card-title">Lab Resources <button class="hide-toggle" onclick="toggleHide(this,'assets-list')">// HIDE UNCHOSEN</button></div>
     </div>
     <div class="lab-card-body">
-      <ul class="check-list" id="assets-list">
-        <li class="check-item checked" data-check-key="asset-the-lab"><span class="check-box"></span><span class="check-text"><strong>The Lab ✦ mandatory</strong><div class="check-subtext">A well-stocked and extensive laboratory complex for weird science and high-tech big magic. Space for all gear and instruments. Crash space for all-nighters.</div></span></li>
-        <li class="check-item" data-check-key="asset-sensor-array"><span class="check-box"></span><span class="check-text"><strong>Sensor Array</strong><div class="check-subtext">Instruments allowing you to keep track of weird phenomena in the area.</div></span></li>
-        <li class="check-item" data-check-key="asset-cutting-edge-analysis"><span class="check-box"></span><span class="check-text"><strong>Cutting-Edge Analysis</strong><div class="check-subtext">Access to any current device, no matter how expensive.</div></span></li>
-        <li class="check-item" data-check-key="asset-manufacturing-bays"><span class="check-box"></span><span class="check-text"><strong>Manufacturing Bays</strong><div class="check-subtext">3D printers and old-school assembly lines. Build any test device or prototype you want (no mass production).</div></span></li>
-        <li class="check-item" data-check-key="asset-medical-bay"><span class="check-box"></span><span class="check-text"><strong>Medical Bay</strong><div class="check-subtext">High-tech medical facilities equivalent to staying in a hospital.</div></span></li>
-        <li class="check-item" data-check-key="asset-vehicle-bay"><span class="check-box"></span><span class="check-text"><strong>Vehicle Bay</strong><div class="check-subtext">A small fleet of vehicles — ground and air.</div></span></li>
-        <li class="check-item" data-check-key="asset-containment"><span class="check-box"></span><span class="check-text"><strong>Containment</strong><div class="check-subtext">Facilities to keep live creatures or dangerous materials securely contained.</div></span></li>
-        <li class="check-item" data-check-key="asset-housing"><span class="check-box"></span><span class="check-text"><strong>Housing</strong><div class="check-subtext">Each team member has comfortable and secure housing — a small house or comfortable condo, loaded with tech.</div></span></li>
-      </ul>
+      <ul class="check-list" id="assets-list"></ul>
     </div>
   </div>
 
@@ -505,16 +490,6 @@ textarea.lab-field { resize: vertical; }
     });
   });
 
-  // ── CHECKBOX CLICKS ──
-  document.querySelectorAll('.check-item').forEach(function (el) {
-    el.addEventListener('click', function () {
-      // Don't uncheck the mandatory asset
-      if (el.dataset.checkKey === 'asset-the-lab') return;
-      el.classList.toggle('checked');
-      save();
-    });
-  });
-
   // ── INPUT CHANGES ──
   document.querySelectorAll('[data-lab]').forEach(function (el) {
     el.addEventListener('input', function () {
@@ -534,8 +509,81 @@ textarea.lab-field { resize: vertical; }
     btn.textContent = hidden ? '// SHOW ALL' : '// HIDE UNCHOSEN';
   };
 
-  // ── BOOT ──
-  load();
+  // ── RENDER MOVES FROM JSON ──
+  function renderMoves(lab) {
+    var ul = document.getElementById('moves-list');
+    if (!ul) return;
+    var html = '';
+    lab.moves.forEach(function (move) {
+      var key = 'move-' + move.id.replace('rl-', '');
+      var subtext = move.description;
+      if (move.choices && move.choices.length) {
+        subtext += ' ' + move.choices.map(function (c) { return '"' + c + '"'; }).join(' or ');
+      } else if (move.choices_note) {
+        subtext += ' ' + move.choices_note;
+      }
+      html += '<li class="check-item" data-check-key="' + key + '">';
+      html += '<span class="check-box"></span>';
+      html += '<span class="check-text"><strong>' + move.name + '</strong>';
+      html += '<div class="check-subtext">' + subtext + '</div></span>';
+      html += '</li>';
+    });
+    ul.innerHTML = html;
+  }
+
+  // ── RENDER ASSETS FROM JSON ──
+  function renderAssets(lab) {
+    var ul = document.getElementById('assets-list');
+    if (!ul) return;
+    var html = '';
+
+    var m = lab.assets.mandatory;
+    var mandatoryKey = 'asset-' + m.id.replace('rl-asset-', '');
+    html += '<li class="check-item checked" data-check-key="' + mandatoryKey + '">';
+    html += '<span class="check-box"></span>';
+    html += '<span class="check-text"><strong>' + m.name + ' ✦ mandatory</strong>';
+    html += '<div class="check-subtext">' + m.description + '</div></span>';
+    html += '</li>';
+
+    lab.assets.pick_one.forEach(function (asset) {
+      var key = 'asset-' + asset.id.replace('rl-asset-', '');
+      html += '<li class="check-item" data-check-key="' + key + '">';
+      html += '<span class="check-box"></span>';
+      html += '<span class="check-text"><strong>' + asset.name + '</strong>';
+      html += '<div class="check-subtext">' + asset.description + '</div></span>';
+      html += '</li>';
+    });
+    ul.innerHTML = html;
+  }
+
+  // ── CHECKBOX CLICKS (attached after render) ──
+  function initCheckHandlers() {
+    document.querySelectorAll('.check-item').forEach(function (el) {
+      el.addEventListener('click', function () {
+        if (el.dataset.checkKey === 'asset-the-lab') return;
+        el.classList.toggle('checked');
+        save();
+      });
+    });
+  }
+
+  // ── BOOT: fetch teambooks → render → attach handlers → load state ──
+  fetch('data/motw-teambooks.json')
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      var lab = data.team_playbooks.find(function (p) { return p.id === 'research-lab'; });
+      if (lab) {
+        renderMoves(lab);
+        renderAssets(lab);
+      }
+      initCheckHandlers();
+      load();
+    })
+    .catch(function (err) {
+      console.error('[PORTAL] teambooks load error:', err);
+      initCheckHandlers();
+      load();
+    });
 }());
 </script>
 </body>

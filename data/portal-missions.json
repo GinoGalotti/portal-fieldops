@@ -1,0 +1,113 @@
+{
+  "missions": [
+    {
+      "id": "mission-01",
+      "num": "01",
+      "location_short": "KELLER UNIV.\nSTATUS:",
+      "phases": [
+        {
+          "show_from": "w1",
+          "show_until": "w1",
+          "anchor": null,
+          "placeholder": false,
+          "status": "active",
+          "title": "A Promise is a Promise",
+          "subtitle": "// CAMPBELL ANOMALY REPORT #0047-C — CLASS 2 ECTOPLASMIC RESIDUE",
+          "excerpt": "CAMPBELL has flagged an unclassified particulate at Keller University — three incidents in four weeks, one critical. The field team is deployed. The substance does not match anything on record.",
+          "summary": "Three incidents at Keller University in four weeks. One critical. CAMPBELL flagged an unclassified particulate at all three scenes — a substance it had never encountered before, rated 99th percentile rarity. The field team is deployed. The substance does not match anything on record.",
+          "index_redacted": "LOCATION: Keller University · ENTITY TYPE: [REDACT] · DIRECTIVE STATUS: [REDACT] PENDING",
+          "meta_tags": [
+            { "label": "LOCATION: KELLER UNIVERSITY", "class": "" },
+            { "label": "ENTITY: [REDACT]", "class": "red" },
+            { "label": "DIRECTIVE: ACTIVE", "class": "amber" },
+            { "label": "CASUALTIES: UNDER ASSESSMENT", "class": "" }
+          ],
+          "archive_redacted": "ENTITY CLASS: [REDACT] · ANCHOR OBJECT: [REDACT] · DIRECTIVE OUTCOME: [REDACT] PENDING RESOLUTION",
+          "outcome": null,
+          "actions": []
+        },
+        {
+          "show_from": "w2",
+          "show_until": null,
+          "anchor": "mission-01",
+          "placeholder": false,
+          "status": "completed",
+          "title": "A Promise is a Promise",
+          "subtitle": "// CAMPBELL ANOMALY REPORT #0047-C — CLASS 2 ECTOPLASMIC RESIDUE",
+          "excerpt": "CAMPBELL flagged an unclassified particulate at Keller University — three incidents, one critical. The field team deployed. The substance was not what the briefing suggested. The source was not what the victims deserved.",
+          "summary": "Three incidents at Keller University in four weeks. One critical. CAMPBELL flagged an unclassified particulate at all three scenes — a substance it had never encountered before, rated 99th percentile rarity. The field team deployed. What they found was not what the briefing suggested. The source was not what the victims deserved.",
+          "index_redacted": "LOCATION: Keller University · ENTITY TYPE: Incorporeal Spirit — Executioner · DIRECTIVE STATUS: Partial Recovery — Ash Locket not retrieved",
+          "meta_tags": [
+            { "label": "LOCATION: KELLER UNIVERSITY", "class": "" },
+            { "label": "ENTITY: INCORPOREAL SPIRIT — EXECUTIONER", "class": "red" },
+            { "label": "RESOLVED", "class": "green" },
+            { "label": "CASUALTIES: 1 CRITICAL (NON-FATAL)", "class": "" }
+          ],
+          "archive_redacted": "ENTITY IDENTITY: Eszter · ANCHOR OBJECT: Not recovered — dispersed at scene · DIRECTIVE OUTCOME: Partial — trace ash recovered, locket not retrieved",
+          "outcome": "DEBRIEF FILED: POST-SESSION 01 · REPORT #0047-C CLOSED\nENTITY OUTCOME: Dispersed at scene following farewell and release. No further manifestation detected. Anchor object not recovered — entity dissolved before acquisition could complete.\nCASUALTIES: 1 field operative — critical injury, non-fatal. Treated and cleared for duty.\nSAMPLES: Trace ash collected incidentally at scene. Submitted to lab under Project Veil analysis protocol. Preliminary findings of significant interest.\nOUTSTANDING: Bálint Varga — welfare follow-up pending. No MESA presence at Keller. Locket remains unaccounted for.",
+          "actions": [
+            { "label": "→ REDACTED LAB MEMO", "href": "../reports/s1-ash-veil-memo.html" },
+            { "label": "→ FILE A FIELD REPORT", "href": "../reports/player-report.html" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mission-02",
+      "num": "02",
+      "location_short": "ALDERMOOR\nDISTRICT",
+      "phases": [
+        {
+          "show_from": "w2",
+          "show_until": null,
+          "anchor": "mission-02",
+          "placeholder": false,
+          "status": "active",
+          "title": "One That Wants To Be Known",
+          "subtitle": "// CAMPBELL ANOMALY REPORT #0094-B — TOPOGRAPHICAL DISTORTION, CLASS 2",
+          "excerpt": "CAMPBELL flagged a cluster of navigation failures in a residential district — seven reports in fourteen days, one missing person, one hospitalisation. The streets haven't changed. The people who live on them no longer know where they are. The field team is en route.",
+          "summary": "Seven residents of the same neighbourhood reported getting lost — on streets they have lived on for decades. One of them never came home. The streets haven't changed. Something else has. The field team is en route.",
+          "index_redacted": "LOCATION: Aldermoor District · ENTITY TYPE: [REDACT] · DIRECTIVE STATUS: [REDACT] PENDING",
+          "meta_tags": [
+            { "label": "LOCATION: ALDERMOOR DISTRICT", "class": "" },
+            { "label": "ENTITY: [REDACT]", "class": "red" },
+            { "label": "DIRECTIVE: ACTIVE", "class": "amber" },
+            { "label": "MISSING PERSONS: 1", "class": "" }
+          ],
+          "archive_redacted": "ENTITY CLASS: [REDACT] · EPICENTRE: [REDACT] · DIRECTIVE OUTCOME: [REDACT] PENDING RESOLUTION",
+          "outcome": null,
+          "actions": [
+            { "label": "→ CAMPBELL PRIORITY QUEUE", "href": "campbell-briefings.html" },
+            { "label": "→ FILE A FIELD REPORT", "href": "../reports/player-report.html" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mission-03",
+      "num": "03",
+      "location_short": "LOCATION:\nUNKNOWN",
+      "phases": [
+        {
+          "show_from": "w2",
+          "show_until": null,
+          "anchor": null,
+          "placeholder": true,
+          "status": "upcoming",
+          "title": "— Classification Pending —",
+          "subtitle": "// CAMPBELL HAS FLAGGED A NEW ANOMALY",
+          "excerpt": "CAMPBELL HAS FLAGGED A NEW ANOMALY.\nDETAILS AVAILABLE POST-DEPLOYMENT.",
+          "summary": "Details available post-deployment. CAMPBELL continues monitoring.",
+          "index_redacted": null,
+          "meta_tags": [
+            { "label": "ENTITY: UNCLASSIFIED", "class": "" },
+            { "label": "DIRECTIVE: AWAITING BRIEFING", "class": "" }
+          ],
+          "archive_redacted": null,
+          "outcome": null,
+          "actions": []
+        }
+      ]
+    }
+  ]
+}
