@@ -92,10 +92,29 @@
     ],
     "handouts": [
       {
+        "id": "s02-pda-01",
+        "type": "pda",
+        "from": "CAMPBELL",
+        "subject": "ANOMALY REPORT #0094-B — ALDERMOOR",
+        "body": "PATTERN: 7 navigation failure reports, 14-day window. Long-term residents only — new arrivals unaffected. Classification: Topographical distortion, Class 2. No biological cause.\n\nEXPANSION RATE: +0.02 miles/week. Current radius: 0.4 miles.\n\nEPICENTRE: 14 Aldermoor Crescent. Resident (Margaret Holt, 74) uncontactable for 9 days. One missing person outstanding.\n\nPROPERTY FLAG: 34% of district addresses sold in 18 months prior to first incident. Three shell companies. Beneficial owner: unresolved.\n\nDIRECTOR NOTE: Do not enter without an anchor protocol. Establish what the entity is before any containment attempt."
+      },
+      {
+        "id": "s02-img-01",
+        "type": "image",
+        "label": "Aldermoor — District Exterior",
+        "src": "images/M2-aldermoor-exterior.png"
+      },
+      {
         "id": "s02-ra-01",
         "type": "readaloud",
         "label": "Cold Open — Arthur Gets Lost",
         "text": "Arthur Okafor has walked this route every morning for forty-one years. Left at the gate, past the postbox, right at the phone box, along the back of the park, home. He could do it in his sleep.\n\nThis morning he turns right at the phone box and finds himself standing in front of a house he doesn't recognise. He turns back. The postbox is gone. He walks for six minutes in a direction that should take him past the park, and arrives in a cul-de-sac he has never seen in four decades of living here.\n\nHis dog sits down and will not move.\n\nArthur is not frightened yet. He is seventy-two years old and he knows this street. He sits down on the kerb and waits. Someone will come. Someone always comes."
+      },
+      {
+        "id": "s02-img-02",
+        "type": "image",
+        "label": "Arthur — Lost on a Familiar Street",
+        "src": "images/M2-arthur-lost.png"
       },
       {
         "id": "s02-ra-02",
@@ -104,30 +123,17 @@
         "text": "Aldermoor looks like any other neighbourhood on a grey afternoon. Terraced houses, recycling bins out, a cat watching from a windowsill. The only signs anything is wrong are the small ones: a hand-lettered note on a front door that says DO NOT GO OUT ALONE. A ball of orange string tied to a garden gate, trailing away down the pavement and vanishing around a corner.\n\nYou can feel the boundary if you stand at it long enough. Not a wall. More like the moment before a word comes to you — that half-second of blankness where the thing you know perfectly well has temporarily left you. Except it doesn't pass."
       },
       {
-        "id": "s02-ra-03",
-        "type": "readaloud",
-        "label": "Entering the Zone",
-        "text": "Inside the boundary, everything looks exactly the same. That's the problem.\n\nThe street is right. The houses are right. The corner with the post box is right — you passed it a minute ago. And yet when you look back, it isn't where it was. Not gone. Just slightly further than it should be. The distance between things is wrong in a way you can't quite measure, like looking at a room through a mirror and not immediately knowing why it's uncanny.\n\nSomewhere nearby there's a chalk arrow on the pavement, pointing firmly in one direction. Someone drew it recently. Whoever it was knew something about this street that you don't yet."
+        "id": "s02-map-01",
+        "type": "map",
+        "label": "Aldermoor District — Area Survey (ALD-2)",
+        "src": "images/M2-aldermoor-exterior.png",
+        "_note": "Replace src with a PNG export of the SVG map from the mission doc"
       },
       {
-        "id": "s02-ra-04",
-        "type": "readaloud",
-        "label": "Climax — Feeling the Entity",
-        "text": "You can't see it. You can't hear it. But here, at the epicentre, you can feel it the way you feel a very large room before you've counted everyone in it — a quality of attention that has nothing to do with sight or sound. Something vast and very old has noticed that you're here.\n\nIt isn't hostile. That's the strangest part. Whatever it's doing to this neighbourhood, whatever it's taken from the people who couldn't leave — it has no idea. It isn't cruel. It is just enormous, and it has been alone for a very long time, and it wants to be known the way it was once known, the way a place is known by the people who've lived in it for forty years. It just doesn't understand that it can't take that. It doesn't understand it's been taking anything at all."
-      },
-      {
-        "id": "s02-pda-01",
-        "type": "pda",
-        "from": "CAMPBELL",
-        "subject": "ANOMALY REPORT #0094-B — ALDERMOOR",
-        "body": "PATTERN: 7 navigation failure reports, 14-day window. Long-term residents only — new arrivals unaffected. Classification: Topographical distortion, Class 2. No biological cause.\n\nEXPANSION RATE: +0.02 miles/week. Current radius: 0.4 miles.\n\nEPICENTRE: 14 Aldermoor Crescent. Resident (Margaret Holt, 74) uncontactable for 9 days. One missing person outstanding.\n\nPROPERTY FLAG: 34% of district addresses sold in 18 months prior to first incident. Three shell companies. Beneficial owner: unresolved.\n\nDIRECTOR NOTE: Do not enter without an anchor protocol. Establish what the entity is before any containment attempt."
-      },
-      {
-        "id": "s02-pda-03",
-        "type": "pda",
-        "from": "DIRECTOR LEECH",
-        "subject": "ESTATE AGENT PREMISES — REPORT REQUIRED",
-        "body": "CAMPBELL has flagged your entry into the Aldermoor Property Services office. I need a full account of what you found there — acquisition records, company names, anything on the whiteboard.\n\nDon't send it through CAMPBELL. Call me directly.\n\nAnd don't touch anything you haven't photographed first."
+        "id": "s02-img-03",
+        "type": "image",
+        "label": "Estate Agent Whiteboard — Acquisition Map",
+        "src": "images/M2-estate-agent-whiteboard.png"
       },
       {
         "id": "s02-doc-01",
@@ -137,6 +143,12 @@
         "body": "ACQUISITIONS LOG — ALDERMOOR DISTRICT\nCompiled: Aldermoor Property Services, 22 Aldermoor High Street\n\nPROPERTIES ACQUIRED: 47\nPERIOD: 18 months\nBUYING ENTITIES:\n  — Greyfield Assets Ltd\n  — Veritas Realty Holdings\n  — Solstice Property Group\nREGISTERED ADDRESS (all three): JERSEY\n\nDates written at each street address. Earliest entry: 3 weeks before first public navigation report. Most recent entry: 2 weeks ago — after office officially closed.\n\nSomeone still had a key."
       },
       {
+        "id": "s02-img-07",
+        "type": "image",
+        "label": "Shredded Email — Helix Boundary Reference",
+        "src": "images/M2-shredded-email.png"
+      },
+      {
         "id": "s02-doc-02",
         "type": "document",
         "label": "Partial Email — Recovered from Jammed Shredder",
@@ -144,34 +156,11 @@
         "body": "[ UPPER PORTION — RECONSTRUCTED FROM FRAGMENTS ]\n\nFROM: [ILLEGIBLE]@helixboundary.com\nTO: [ILLEGIBLE]\nSUBJECT: ALD-1 // PHASE 2 ANCHOR REVIEW\n\n...boundary expansion has exceeded the Phase 1 model by approximately 0.06 miles. Recommend...\n\n...Specimen ALD-1 is responding to the excavation breach as anticipated. Spatial anchoring protocol to be reviewed before...\n\n...do not approach the epicentre without prophylactic pre-treatment. The cognitive map disruption at ground zero is now...\n\n[ LOWER PORTION — UNRECOVERABLE ]\n\n---\n// NOTE: @helixboundary.com has no public registration. CAMPBELL cannot resolve the domain. — CAMPBELL"
       },
       {
-        "id": "s02-img-01",
-        "type": "image",
-        "label": "Aldermoor — District Exterior",
-        "src": "images/M2-aldermoor-exterior.png"
-      },
-      {
-        "id": "s02-img-02",
-        "type": "image",
-        "label": "Arthur — Lost on a Familiar Street",
-        "src": "images/M2-arthur-lost.png"
-      },
-      {
-        "id": "s02-img-03",
-        "type": "image",
-        "label": "Estate Agent Whiteboard — Acquisition Map",
-        "src": "images/M2-estate-agent-whiteboard.png"
-      },
-      {
-        "id": "s02-img-04",
-        "type": "image",
-        "label": "Chalk Arrow — Navigation Marker",
-        "src": "images/M2-chalk-arrow.png"
-      },
-      {
-        "id": "s02-img-07",
-        "type": "image",
-        "label": "Shredded Email — Helix Boundary Reference",
-        "src": "images/M2-shredded-email.png"
+        "id": "s02-pda-03",
+        "type": "pda",
+        "from": "DIRECTOR LEECH",
+        "subject": "ESTATE AGENT PREMISES — REPORT REQUIRED",
+        "body": "CAMPBELL has flagged your entry into the Aldermoor Property Services office. I need a full account of what you found there — acquisition records, company names, anything on the whiteboard.\n\nDon't send it through CAMPBELL. Call me directly.\n\nAnd don't touch anything you haven't photographed first."
       },
       {
         "id": "s02-ra-03",
@@ -180,17 +169,29 @@
         "text": "Inside the boundary, everything looks exactly the same. That's the problem.\n\nThe street is right. The houses are right. The corner with the post box is right — you passed it a minute ago. And yet when you look back, it isn't where it was. Not gone. Just slightly further than it should be. The distance between things is wrong in a way you can't quite measure, like looking at a room through a mirror and not immediately knowing why it's uncanny.\n\nSomewhere nearby there's a chalk arrow on the pavement, pointing firmly in one direction. Someone drew it recently. Whoever it was knew something about this street that you don't yet."
       },
       {
-        "id": "s02-pda-02",
-        "type": "pda",
-        "from": "DIRECTOR LEECH",
-        "subject": "MID-DEPLOYMENT — STATUS REQUIRED",
-        "body": "If the entity is aware, even partially — can it be reasoned with?\n\nDon't resolve this before we've had a chance to assess it properly. Document everything. We may only get one chance to study something like this."
+        "id": "s02-img-04",
+        "type": "image",
+        "label": "Chalk Arrow — Navigation Marker",
+        "src": "images/M2-chalk-arrow.png"
       },
       {
         "id": "s02-img-05",
         "type": "image",
         "label": "String Lines — Vera's Navigation System",
         "src": "images/M2-string-lines.png"
+      },
+      {
+        "id": "s02-img-08",
+        "type": "image",
+        "label": "Inside the Zone",
+        "src": "images/M2-zone-interior.png"
+      },
+      {
+        "id": "s02-pda-02",
+        "type": "pda",
+        "from": "DIRECTOR LEECH",
+        "subject": "MID-DEPLOYMENT — STATUS REQUIRED",
+        "body": "If the entity is aware, even partially — can it be reasoned with?\n\nDon't resolve this before we've had a chance to assess it properly. Document everything. We may only get one chance to study something like this."
       },
       {
         "id": "s02-img-06",
@@ -206,18 +207,6 @@
         "body": "DAY 1\nGot disoriented on Aldermoor Gardens — same street I've done three times a week for twenty years. Walked it twice and ended up back at the same corner. Not lost. The street is wrong, not me. Found the construction site office unlocked. Decided to stay put and observe. Rule one: don't make it worse.\n\nDAY 2\nThe effect intensifies at dusk and again just before dawn. Clearest window is mid-morning, roughly 10am to noon. I've been timing it.\n\nDAY 4\nAnimals are fine. I watched three cats cross the Gardens without hesitation. They know exactly where they're going. Whatever is disrupting the cognitive map, it doesn't work on them. Important.\n\nDAY 6\nSomeone is leaving food parcels at the fence each night. I haven't seen who. I'm grateful.\n\nDAY 7 — NOTE\nSomething in the excavation substrate. Dawn. Low light. There's a shape in the rock — not carved, not structural. The impression of a threshold. Like a doorway that was never built but is remembered anyway. I drew it. I don't know what it is. It isn't architectural.\n\n[ SKETCH — one page — threshold shape, reservoir substrate ]\n\nDAY 9\nSomeone will come. The effect has structure. It can be understood. I've been mapping the intensity cycles — I think the clearest approach is from the north, mid-morning. Whoever finds this: the string-line method works."
       },
       {
-        "id": "s02-img-08",
-        "type": "image",
-        "label": "Inside the Zone",
-        "src": "images/M2-zone-interior.png"
-      },
-      {
-        "id": "s02-ra-04",
-        "type": "readaloud",
-        "label": "Climax — Feeling the Entity",
-        "text": "You can't see it. You can't hear it. But here, at the epicentre, you can feel it the way you feel a very large room before you've counted everyone in it — a quality of attention that has nothing to do with sight or sound. Something vast and very old has noticed that you're here.\n\nIt isn't hostile. That's the strangest part. Whatever it's doing to this neighbourhood, whatever it's taken from the people who couldn't leave — it has no idea. It isn't cruel. It is just enormous, and it has been alone for a very long time, and it wants to be known the way it was once known, the way a place is known by the people who've lived in it for forty years. It just doesn't understand that it can't take that. It doesn't understand it's been taking anything at all."
-      },
-      {
         "id": "s02-pda-04",
         "type": "pda",
         "from": "DIRECTOR LEECH",
@@ -225,11 +214,10 @@
         "body": "Whatever you find at 14 Aldermoor Crescent — document it. All of it.\n\nDon't destroy anything you can't replace. Don't attempt resolution before I've had a chance to assess what we're dealing with. We may only get one chance to study something like this.\n\nI understand there are residents inside. I am not asking you to leave them there. I am asking you not to close a door we haven't finished looking through.\n\nThose are not the same instruction. I trust you to know the difference.\n\n— Leech"
       },
       {
-        "id": "s02-map-01",
-        "type": "map",
-        "label": "Aldermoor District — Area Survey (ALD-2)",
-        "src": "images/M2-aldermoor-exterior.png",
-        "_note": "Replace src with a PNG export of the SVG map from the mission doc"
+        "id": "s02-ra-04",
+        "type": "readaloud",
+        "label": "Climax — Feeling the Entity",
+        "text": "You can't see it. You can't hear it. But here, at the epicentre, you can feel it the way you feel a very large room before you've counted everyone in it — a quality of attention that has nothing to do with sight or sound. Something vast and very old has noticed that you're here.\n\nIt isn't hostile. That's the strangest part. Whatever it's doing to this neighbourhood, whatever it's taken from the people who couldn't leave — it has no idea. It isn't cruel. It is just enormous, and it has been alone for a very long time, and it wants to be known the way it was once known, the way a place is known by the people who've lived in it for forty years. It just doesn't understand that it can't take that. It doesn't understand it's been taking anything at all."
       },
       {
         "id": "s02-classified-01",

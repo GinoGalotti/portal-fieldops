@@ -52,6 +52,8 @@ Priority: **H** = high (core features, likely to break), **M** = medium, **L** =
 - [x] On reload, messages before clear sentinel are discarded
 - [x] Clear sentinel received via polling wipes the visible feed
 - [x] Feed composer sends POST with correct sender and body
+- [x] Posting image after PDA does not remove PDA from feed DOM (regression — image covers PDA visually if too tall; fixed with max-height: 560px on .feed-image-card img)
+- [ ] **Known issue (not tested):** posting multiple handouts in rapid succession (faster than the 6s poll interval) may cause ordering issues — repost or clear to recover
 - [ ] Hunter picker dropdown renders and selecting a hunter loads their data
 - [ ] Move cards render after hunter selection (at least one visible)
 - [ ] Roll button exists on move cards

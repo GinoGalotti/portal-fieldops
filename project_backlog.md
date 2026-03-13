@@ -175,15 +175,39 @@ Four related features that close gaps in the current session-summary → next-se
 
 **Why this matters beyond John Johnson:** Makes the site genuinely reusable for any MoTW group. The reference layer is the book data; the campaign layer is your group's choices. Clean separation.
 
-**Incoming data — needs cleaning before ingestion:**
-User has Claude-generated JSON files covering full playbook and move data from the reference books. Before any refactor work, paste the raw JSON and identify which files they came from. Expect:
-- Deduplication between new files and existing `motw-playbooks.json` / `playbook-moves.json`
-- Hunter-specific fields (`"hunter": "rex"`) bleeding into reference-layer data — strip to campaign layer
-- Schema drift between files (field names, nesting) if generated across multiple sessions
-- Missing or inconsistent `data-check-key` mappings that tie into hunter page HTML — must stay consistent or be updated in sync
-**Action:** audit new JSON against existing files, agree on clean merged schema, then implement.
+**Reference data is now available** (2026-03-13 migration complete):
+- `motw-playbooks.json` — 24 playbooks (4 PORTAL + 20 generic, including Flake)
+- `playbook-moves.json` — 177 moves across all playbooks; `always_active_moves` preserved
+- `motw-playbook-arcs.json` — 33 playbooks × 2 arcs including Flake arcs
+- `motw-teambooks.json` — all 9 team playbooks
+
+The refactor above is now unblocked. All reference data exists; it's just a matter of connecting the layers.
+
+---
+
+### Adding John Johnson (Flake) — new hunter onboarding exercise — MEDIUM
+
+**Goal:** Add John Johnson as a fully playable hunter. Use this as a worked end-to-end exercise documenting *exactly* what it takes to add a new hunter to the site — useful reference for any future new players.
+
+**What we now have for Flake:**
+- `motw-playbooks.json` — Flake playbook entry (`hunter: null`, generic)
+- `playbook-moves.json` — Flake moves included in the 177-move set
+- `motw-playbook-arcs.json` — Flake arcs I ("Deeper Conspiracy") and II ("The Benign Conspiracy")
+- `data/hunters.json` — John Johnson entry exists (john-johnson), in feed dropdown already
+
+**What needs doing:**
+
+1. **`data/hunters.json`** — confirm John's entry is complete (playbook, accent colour, luck_special, area_of_study, lore, keeper notes)
+2. **`data/playbook-moves.json`** — Flake moves are in the file but keyed to playbook, not `"hunter": "john-johnson"`. Update the `hunter` field on Flake moves (or defer to the playbook architecture refactor above — these two tasks are linked)
+3. **`hunters/john.html`** — create hunter page following `hunters/reed.html` as template; link `hunter.js` + `hunter.css`
+4. **`data/hunter-arcs.json`** — add John's selected arc(s) (pick from `motw-playbook-arcs.json` Flake entries, adapt to campaign context)
+5. **D1** — no migration needed; `hunter_sheets` table accepts any hunter_id. John's sheet starts empty (no D1 record until first save).
+6. **`player-nav.js`** — confirm John appears in Operatives nav (driven by `hunters.json`, check auto-detection)
+7. **Tests** — add john.html to `tests/hunters.spec.js` (structure, stat pips, arcs, save)
+
+**Why do this now:** Flake reference data just landed. John is already in the feed dropdown. This exercise will surface any gaps in the "add a hunter" path and produce a reusable checklist for future new players.
 
 ---
 
 ### Minor / polish
-- John Johnson hunter page — no page, no D1 stats, no Flake moves in `playbook-moves.json` yet (blocked on playbook architecture refactor above)
+- John Johnson hunter page — blocked on playbook architecture refactor OR can be done manually as the exercise above (hunter field on Flake moves, explicit john entry)

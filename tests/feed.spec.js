@@ -594,3 +594,82 @@ test.describe('feed.html — hunter panel', () => {
   });
 
 });
+
+// ── HANDOUT COEXISTENCE ───────────────────────────────────────────────────────
+//
+// Regression: posting an image handout must not remove a previously-posted PDA
+// from the feed. Both entries must be visible after both are posted in sequence.
+//
+// The stateful route mock tracks messages added via POST and filters GET responses
+// by the `after` param, mirroring the real messages API behaviour.
+
+test.describe('feed.html — handout coexistence', () => {
+
+  test('posting an image after a PDA does not remove the PDA from the feed', async ({ page }) => {
+    const postedMessages = [];
+    let nextId = 50;
+
+    await page.route('**/api/v1/rolls**', route => route.fulfill({ json: [] }));
+    await page.route('**/api/v1/messages**', async route => {
+      const method = route.request().method();
+      if (method === 'POST') {
+        const body = route.request().postDataJSON() || {};
+        nextId++;
+        postedMessages.push({
+          id: nextId,
+          type: body.type || 'message',
+          sender: body.sender || 'KEEPER',
+          subject: body.subject || null,
+          body: body.body || '',
+          payload: body.payload ? JSON.stringify(body.payload) : null,
+          delivered: 1,
+          delivered_at: `2025-01-01 12:${String(nextId).padStart(2, '0')}:00`,
+          session_id: body.session_id || null,
+        });
+        return route.fulfill({ json: { ok: true, id: nextId } });
+      }
+      if (method === 'DELETE') return route.fulfill({ json: { ok: true } });
+      // GET: mirror the real API — after=0 → DESC order; after=N → ASC, id > N only
+      const url = new URL(route.request().url());
+      const after = parseInt(url.searchParams.get('after') || '0', 10);
+      if (after > 0) {
+        return route.fulfill({ json: postedMessages.filter(m => m.id > after) });
+      }
+      return route.fulfill({ json: [...postedMessages].reverse() });
+    });
+    await page.route('**/api/v1/hunters/**', route => route.fulfill({ json: null }));
+
+    await page.clock.install();
+    await page.goto('/feed.html');
+
+    // Enter keeper mode (5× logo click)
+    const logo = page.locator('.logo');
+    for (let i = 0; i < 5; i++) await logo.click();
+
+    // Open keeper HANDOUTS tab and wait for the handout list
+    await page.locator('[data-ktab="handouts"]').click();
+    await page.waitForSelector('.handout-list');
+
+    // Post the PDA handout (s02-pda-01 — CAMPBELL Anomaly Report)
+    await page.locator('#hbtn-s02-pda-01').click();
+
+    // Advance clock past the 6s poll interval so the PDA arrives via polling
+    await page.clock.runFor(7000);
+    await expect(page.locator('.feed-pda')).toBeVisible();
+    // Exactly 1 feed entry (the PDA) — no extras
+    await expect(page.locator('.feed-entry')).toHaveCount(1);
+
+    // Post the image handout (s02-img-01 — Aldermoor exterior)
+    await page.locator('#hbtn-s02-img-01').click();
+
+    // Advance clock again so the image arrives via the next poll
+    await page.clock.runFor(7000);
+    await expect(page.locator('.feed-image')).toBeVisible();
+
+    // Feed must now have exactly 2 entries — PDA was not removed when image arrived
+    await expect(page.locator('.feed-entry')).toHaveCount(2);
+    await expect(page.locator('.feed-pda')).toHaveCount(1);
+    await expect(page.locator('.feed-image')).toHaveCount(1);
+  });
+
+});
