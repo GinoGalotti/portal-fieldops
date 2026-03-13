@@ -51,6 +51,39 @@
             "classified": "\u26a0 WEAKNESSES: ANCHOR OBJECT DESTRUCTION WITH PROPER FAREWELL / CHARGE SINCERELY REQUESTING CESSATION\nANCHOR OBJECT: Not recovered \u2014 entity dispersed at scene. Trace ash submitted for lab analysis."
           }
         ]
+      },
+      "display": {
+        "id": "e001",
+        "num": "001",
+        "eyebrow": "// CONFIRMED · RESOLVED · SESSION 01",
+        "name": "Eszter",
+        "sub": "KELLER UNIVERSITY · CAMPBELL REPORT #0047-C · EXECUTIONER",
+        "card_class": "resolved",
+        "tags": [
+          { "label": "RESOLVED — PEACEFUL DISPERSAL", "color": "green" },
+          { "label": "EXECUTIONER", "color": "grey" },
+          { "label": "ASH ORIGIN — HUNGARIAN", "color": "grey" },
+          { "label": "PROJECT VEIL FLAG", "color": "purple" }
+        ],
+        "stat_block": [
+          { "label": "// TYPE", "value": "<strong>Executioner</strong> — spirit anchored to a promise made at the moment of death. Not malicious. Protecting someone she loved.", "full": false },
+          { "label": "// HARM CAPACITY", "harm_num": "10", "harm_sub": "// WILL NOT KILL BY CHOICE<br>CHOSE TO LEAVE MARCUS ALIVE", "harm_color": "red" },
+          { "label": "// ARMOUR", "value": "<strong>2-armour (incorporeal)</strong> — mundane weapons pass through her entirely. Physical harm is essentially impossible unless she is partially manifest.", "full": false },
+          { "label": "// ORIGIN", "value": "Died in a road accident. Ash locket — her remains, held by Bálint Kovács. The locket was her anchor to the physical world.", "full": false },
+          { "label": "// ATTACK — SPECTRAL EMBRACE", "value": "<strong>2-harm close cold intimate</strong> — wraps around a target like a freezing wind. Leaves frost on skin and bruising in the shape of handprints. Targets individuals who have harmed Bálint.", "full": true },
+          { "label": "// ATTACK — HAUNTING SURGE", "value": "<strong>3-harm far ignore-armour magic</strong> — screams through electronics. Phones explode with static, screens crack, lights shatter. Target feels her grief as a physical blow. Gains <em>area</em> tag if she witnesses someone physically attack Bálint.", "full": true },
+          { "label": "// WEAKNESS", "value": "The locket, destroyed or its ash scattered with a proper farewell. Destruction without consent disperses her violently — not restfully. <strong>Correct resolution:</strong> Bálint says goodbye of his own will. Cannot harm anyone who has never hurt Bálint unless directly attacked first.", "full": true },
+          { "label": "// MINIONS — STUDENT ROBOTS (4)", "value": "<strong>5 harm each · 1-armour · </strong>Chassis Slam: 2-harm close forceful. Drill Attachment: 3-harm intimate (restrained only). <strong>Weakness:</strong> shared wireless signal with Eszter — cut power or destroy the screen and they go offline immediately.", "full": true }
+        ],
+        "named_moves": [
+          { "name": "A Promise is a Promise", "text": "Whenever Bálint is hurt, humiliated, or in genuine danger, Eszter immediately knows — regardless of distance. She will come. The Keeper may trigger her arrival at any dramatically appropriate moment after Bálint suffers harm or a serious social wound." },
+          { "name": "She Remembers Their Faces", "text": "Once Eszter has witnessed someone harm Bálint, she marks them. Marked individuals begin experiencing her grief second-hand: cold drafts, the smell of ash, waking dreams of the crash. They take <strong>–1 ongoing</strong> on all rolls while alone. Cannot be removed until Eszter is put to rest." },
+          { "name": "Let Me Go, Bálint", "text": "If Bálint sincerely asks Eszter to stop and says goodbye, she pauses. All hunters gain <strong>+1 forward</strong> on any move to put her to rest before she can resume. Window lasts one scene only." }
+        ],
+        "notes": [
+          { "label": "// RESOLUTION — SESSION 01", "text": "<strong>Outcome: Humane — peaceful dispersal.</strong> Bálint said goodbye of his own will. Eszter departed restfully. The locket opened; the ash dispersed in the shape of a figure. Temperature normalised. Robots inert.<br><br>Lab directive: <strong>partial.</strong> Locket not recovered. Trace particulate collected incidentally from the scene. No conscious tissue sample obtained." },
+          { "label": "// PROJECT VEIL FLAG", "text": "Ash analysis reveals anomalous interaction with electronic systems — consistent with Haunting Surge mechanism. CAMPBELL's private note to Dr. Leech: <em>\"The ash is not inert. It retains a signal interaction property even post-dispersal. If a sample of this purity could be stabilised, the implications for Project Veil are significant.\"</em><br><br><strong>Field team does not know this.</strong>" }
+        ]
       }
     },
     {
@@ -108,6 +141,39 @@
             "description": "A pre-urban consciousness that predates the neighbourhood \u2014 possibly the city. Has no body. Has no malice. It holds something like memory, something like attention, something like longing. When residents truly knew their streets, it fed symbiotically on that familiarity. The construction site excavation at the Aldermoor District reservoir broke its containment and it expanded \u2014 consuming the cognitive maps of long-term residents without understanding it was taking something they could not replace. It does not initiate harm. It only wants to be known the way it once was.",
             "classified": "\u26a0 WEAKNESS: COMMUNICATION \u2014 any genuine attempt to make contact (voluntarily releasing spatial anchor) allows Use Magic or Act Under Pressure. The entity does not resist someone who is trying to understand it.\nSTATUS: Contained \u2014 boundary re-established at excavation site. Entity retracted to pre-expansion range. Residents' navigation gradually recovering. Diane Marsh: extracted. Margaret Holt: elected to remain. Entity is quiet. It knows the field team now."
           }
+        ]
+      },
+      "display": {
+        "id": "e002",
+        "num": "002",
+        "eyebrow": "// CONFIRMED · ACTIVE — SESSION 02 PENDING",
+        "name": "The Cartographer",
+        "sub": "ALDERMOOR DISTRICT · CAMPBELL REPORT #0094-B · COLLECTOR (URBAN SPRAWLER RESKIN)",
+        "card_class": "active",
+        "tags": [
+          { "label": "ACTIVE — SESSION 02 UNRESOLVED", "color": "amber" },
+          { "label": "COLLECTOR · SPATIAL", "color": "grey" },
+          { "label": "PRE-HUMAN CONSCIOUSNESS", "color": "teal" },
+          { "label": "PROJECT VEIL — LEECH FLAGGED", "color": "purple" },
+          { "label": "MESA OBSERVED — BUYING LAND", "color": "red" }
+        ],
+        "stat_block": [
+          { "label": "// TYPE", "value": "<strong>Collector</strong> (Urban Sprawler reskin, Deck of Monsters #49) — pre-human consciousness that predates the neighbourhood. Feeds on cognitive familiarity. Not malicious. Lonely.", "full": false },
+          { "label": "// HARM CAPACITY", "harm_num": "10", "harm_sub": "// WILL NOT INITIATE HARM<br>DOES NOT UNDERSTAND WHAT IT COSTS", "harm_color": "amber" },
+          { "label": "// ARMOUR", "value": "<strong>None — but physically invulnerable.</strong> Cannot be harmed by physical means. Immune to conventional weapons entirely. Harm must be done through communication or severing its anchor.", "full": false },
+          { "label": "// MOTIVATION", "value": "To be known as completely as it once was. It was symbiotic for decades — the neighbourhood knowing itself fed the entity. The excavation broke its containment and it expanded back without understanding what changed.", "full": false },
+          { "label": "// ATTACK — DISPLACEMENT", "value": "<strong>2-harm (disorientation)</strong> — targets the hunter's sense of place, not their body. On 10+: hunter temporarily lost within the zone. On 7–9: hunter loses their anchor for one scene. On a miss: permanent mild disorientation (–1 on navigation-based moves for remainder of session).", "full": true },
+          { "label": "// WEAKNESS — COMMUNICATION", "value": "Any hunter who makes genuine contact — by <strong>voluntarily removing their anchor</strong> — can affect the entity with a Use Magic or Act Under Pressure roll. It does not fight someone genuinely trying to understand it. Contact is an act of vulnerability, not combat. Recovery is not guaranteed if the anchor is lost.", "full": true },
+          { "label": "// SPECIALS", "value": "<strong>Animals immune</strong> — navigate by scent, not cognitive map. Unaffected. · <strong>Sven</strong> immune to displacement (no cognitive map to disrupt), not to contact — entity will attempt to communicate if he remains still. · <strong>Alan</strong> may receive fragmentary impressions without initiating contact. · The entity is <em>everywhere in the zone at once</em> — cannot be found in a single location.", "full": true }
+        ],
+        "named_moves": [
+          { "name": "The Palimpsest", "text": "Near the epicentre, the entity's memory of the street is faintly visible overlaid on the physical one: earlier versions of the neighbourhood — a terrace where a garden used to be, a corner where a phone box stood decades ago. Not dangerous on its own. Profoundly disorienting if a hunter's anchor slips at the same moment." },
+          { "name": "The Longer You've Lived Here", "text": "The effect scales with familiarity. New arrivals (moved in within 18 months) feel nothing unusual. A resident of 6 years disorients within 2 hours. Arthur Okafor — 41 years on Fenwick Road — disorients within minutes. When the Keeper needs to calibrate a resident's vulnerability, use depth of familiarity, not time inside the zone." },
+          { "name": "It Knows the Hunters Now", "text": "After genuine contact is made — especially if Sven shares what it's like to exist without a body — the entity will recognise the hunters in future encounters. It will not harm them. It may, in a future session, attempt to communicate from a distance: a felt wrongness that isn't disorientation, more like a nudge." }
+        ],
+        "notes": [
+          { "label": "// RESOLUTION PATHS — SESSION 02", "text": "<strong>Best:</strong> Contact made, entity understands what it's doing. Retracts. Residents' familiarity returns gradually. Diane escapes. Margaret stays — wants to. Entity quieter but present.<br><br><strong>Partial:</strong> Entity contained but not understood. Familiarity loss permanent for some long-term residents. Diane rescued. CAMPBELL can study it.<br><br><strong>Bad:</strong> Violent attempt to destroy entity. It contracts rapidly — familiarity pulled back at once. Diane cannot be extracted. Margaret's sense of place collapses. Neighbourhood uninhabitable." },
+          { "label": "// PROJECT VEIL FLAG &amp; MESA THREAD", "text": "CAMPBELL private note to Dr. Leech: <em>\"Topographical anchoring. If controllable, this is a delivery mechanism.\"</em> Leech has not shared this with the field team.<br><br>MESA had 34% of district addresses purchased via shell companies <strong>before the first incident was reported.</strong> They knew this was coming. They were waiting for the district to empty. Reference: Greyfield Assets, Veritas Realty, Solstice Property Group — all Jersey-registered, same beneficial owner chain." }
         ]
       }
     },

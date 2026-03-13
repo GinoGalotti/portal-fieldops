@@ -14,8 +14,20 @@
 | `lab-incidents.html` | `tests/incidents.spec.js` | 18 | ✅ |
 | `contacts.html` | `tests/contacts.spec.js` | 7 | ✅ |
 | All key pages | `tests/smoke.spec.js` | 5 | ✅ |
-| Nav injection | `tests/nav.spec.js` | 5 | ✅ |
+| Nav injection + hamburger | `tests/nav.spec.js` | 10 | ✅ |
 | `feed.html` | `tests/feed.spec.js` | 15 | ✅ |
+| `index.html` bestiary | `tests/bestiary.spec.js` | 15 | ✅ |
+| `missions/arcs.html` | `tests/arcs.spec.js` | 24 | ✅ |
+| `missions/entities.html` | `tests/entities.spec.js` | 36 | ✅ |
+
+## ⬆ Next Up (recommended order)
+
+1. **`tests/hunters.spec.js`** [H] — Hunter pages have zero coverage and are used every session. Test on `reed.html` + `rex.html` (share `hunter.js`): stat pips render, harm/luck/xp tracks clickable, save→reload→restore D1 round-trip, arc beats visible.
+2. **Feed hunter panel** [H] — Add to `feed.spec.js`: hunter picker loads sheet, move cards render, tracks render as pips, ROLL button posts to feed, composer name auto-fills.
+3. **`tests/briefings.spec.js`** [M] — CAMPBELL briefings tab switcher; same data-driven pattern as `incidents.spec.js` (read `briefings.json`).
+4. **`tests/player-report.spec.js`** [M] — Week + hunter selectors, rating pips, SAVE button, D1 round-trip.
+
+---
 
 ## Test Backlog — Not Yet Covered
 
@@ -80,9 +92,9 @@ Priority: **H** = high (core features, likely to break), **M** = medium, **L** =
 - [ ] State persists and restores
 
 ### `index.html` — Home Page [M]
-- [ ] Session-aware cards: cards with `data-session-from` are hidden/shown based on active session
+- [x] Bestiary cards render (data-driven from portal-entities.json, session-gated) → `bestiary.spec.js`
+- [ ] Session-aware cards: archive/artefact cards with `data-session-from` are hidden/shown
 - [ ] Archive cards render
-- [ ] Bestiary cards render
 - [ ] Artefact cards render
 
 ### `the-lab.html` — Research Lab Playbook [L]
@@ -96,6 +108,8 @@ Priority: **H** = high (core features, likely to break), **M** = medium, **L** =
 - **Note**: these tests require either a real local D1 instance (wrangler provides one at `.wrangler/state/`) or test fixtures. The save/restore cycle tests are the most valuable and the hardest to write without flakiness.
 
 ### Nav injection correctness [M]
+- [x] Mobile hamburger toggle: visible at ≤640px, click opens/closes nav → `nav.spec.js`
+- [x] Desktop: `.nav-toggle` hidden → `nav.spec.js`
 - [ ] All player-facing pages inject nav with the same set of links
 - [ ] Subdirectory pages (`hunters/`, `missions/`, `reports/`) get correct relative paths in nav links
 - [ ] Nav links resolve to valid pages (no 404s on click)
