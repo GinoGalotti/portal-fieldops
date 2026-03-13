@@ -175,6 +175,14 @@ Four related features that close gaps in the current session-summary → next-se
 
 **Why this matters beyond John Johnson:** Makes the site genuinely reusable for any MoTW group. The reference layer is the book data; the campaign layer is your group's choices. Clean separation.
 
+**Incoming data — needs cleaning before ingestion:**
+User has Claude-generated JSON files covering full playbook and move data from the reference books. Before any refactor work, paste the raw JSON and identify which files they came from. Expect:
+- Deduplication between new files and existing `motw-playbooks.json` / `playbook-moves.json`
+- Hunter-specific fields (`"hunter": "rex"`) bleeding into reference-layer data — strip to campaign layer
+- Schema drift between files (field names, nesting) if generated across multiple sessions
+- Missing or inconsistent `data-check-key` mappings that tie into hunter page HTML — must stay consistent or be updated in sync
+**Action:** audit new JSON against existing files, agree on clean merged schema, then implement.
+
 ---
 
 ### Minor / polish
