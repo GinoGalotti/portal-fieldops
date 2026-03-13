@@ -1,0 +1,108 @@
+{
+  "maps": [
+    {
+      "id": "aldermoor",
+      "session_id": "w2",
+      "title": "ALDERMOOR DISTRICT",
+      "subtitle": "// CAMPBELL TOPOGRAPHIC OVERLAY — ALD-2 — RESTRICTED",
+      "grid": [
+        [
+          {
+            "type": "loc",
+            "id": "arthur-house",
+            "order": 2,
+            "label": "37 OKAFOR WALK",
+            "sublabel": "ARTHUR'S ROUTE",
+            "npcs": ["Arthur Okafor"],
+            "player_desc": "Arthur Okafor, 72, has walked this route every morning for forty-one years. He got lost here. His dog sat down and would not move. First data point CAMPBELL flagged.",
+            "keeper_note": "Arthur's starting point. The distortion hits here first each morning. His dog is fine — animals are immune to the effect. Arthur will help if found."
+          },
+          { "type": "street-v" },
+          { "type": "empty" },
+          { "type": "street-v" },
+          {
+            "type": "loc",
+            "id": "holt-crescent",
+            "order": 7,
+            "label": "14 ALDERMOOR CRESCENT",
+            "sublabel": "// EPICENTRE — CLASS RED",
+            "npcs": ["Margaret Holt", "The Cartographer"],
+            "player_desc": "Residence of Margaret Holt, 74. CAMPBELL flagged this address as the topographic distortion epicentre. Uncontactable for 9 days at time of briefing.",
+            "keeper_note": "The Cartographer is centred here. The excavation breach is directly below the garden. Within 20 feet the cognitive map fails completely. Margaret is inside — disoriented but alive."
+          },
+          { "type": "street-v" },
+          {
+            "type": "loc",
+            "id": "site-office",
+            "order": 6,
+            "label": "SITE OFFICE",
+            "sublabel": "CONSTRUCTION PERIMETER",
+            "npcs": ["Diane Marsh"],
+            "player_desc": "A temporary structure at the edge of the sealed excavation site. String lines extend from it in four directions. Someone has been using it as a base.",
+            "keeper_note": "Diane Marsh's shelter. She's been here 9 days — systematic, calm, and she has a notebook. She knows the entity isn't hostile. She will help if approached correctly."
+          }
+        ],
+        [
+          { "type": "street-h", "label": "ALDERMOOR CRESCENT" }
+        ],
+        [
+          {
+            "type": "loc",
+            "id": "aldermoor-park",
+            "order": 1,
+            "label": "ALDERMOOR PARK",
+            "sublabel": "NAVIGATION REFERENCE",
+            "npcs": [],
+            "player_desc": "A small park on the west edge of the district. Arthur's morning route passes along its back fence. Animals move through it without hesitation. The distortion feels weakest here.",
+            "keeper_note": "Clearest area in the district mid-morning. Cognitive map stays intact here. Useful staging point — the effect weakens between 10am and noon."
+          },
+          { "type": "street-v" },
+          { "type": "empty" },
+          { "type": "street-v" },
+          {
+            "type": "loc",
+            "id": "reservoir-site",
+            "order": 5,
+            "label": "FORMER RESERVOIR",
+            "sublabel": "EXCAVATION — SEALED",
+            "npcs": ["The Cartographer"],
+            "player_desc": "A former water reservoir, partially excavated and then abruptly sealed. Orange fencing. Construction equipment abandoned mid-work. Something about the ground here feels wrong.",
+            "keeper_note": "The entity is distributed through the substrate here. The excavation breach is what woke it. Diane's threshold sketch is visible at the base of the dig. This is where contact is possible."
+          },
+          { "type": "street-v" },
+          { "type": "empty" }
+        ],
+        [
+          { "type": "street-h", "label": "ALDERMOOR GARDENS" }
+        ],
+        [
+          { "type": "empty" },
+          { "type": "street-v" },
+          {
+            "type": "loc",
+            "id": "postbox-corner",
+            "order": 3,
+            "label": "THE POSTBOX CORNER",
+            "sublabel": "NAVIGATION LANDMARK",
+            "npcs": [],
+            "player_desc": "The corner where Arthur's morning route turns right. The postbox was gone — then back. Chalk arrows left by residents point in multiple contradictory directions.",
+            "keeper_note": "Distortion peaks here. Cognitive map snaps when you try to hold the junction in mind. At least two residents tried to mark safe routes. The arrows don't agree."
+          },
+          { "type": "street-v" },
+          {
+            "type": "loc",
+            "id": "estate-agent",
+            "order": 4,
+            "label": "ALDERMOOR PROPERTY SERVICES",
+            "sublabel": "22 ALDERMOOR HIGH ST",
+            "npcs": ["Rook"],
+            "player_desc": "Closed and locked. CAMPBELL has flagged 47 property acquisitions across the district in 18 months — three shell companies, all registered in Jersey. Someone still has a key.",
+            "keeper_note": "Whiteboard inside has the acquisition log. Front door locked. Side window: faulty latch. Recent muddy boot print — Rook has been here. Helix Boundary Ltd connection."
+          },
+          { "type": "street-v" },
+          { "type": "empty" }
+        ]
+      ]
+    }
+  ]
+}

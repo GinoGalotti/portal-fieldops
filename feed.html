@@ -11,11 +11,9 @@
 body { overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
 header { flex-shrink: 0; position: relative; }
 .feed-layout {
-  display: grid;
-  grid-template-columns: 1fr 420px;
+  display: flex;
   flex: 1;
   min-height: 0;
-  gap: 0;
 }
 
 /* ── FEED (LEFT) ─────────────────────────────────────────────────────────── */
@@ -23,7 +21,8 @@ header { flex-shrink: 0; position: relative; }
   display: flex;
   flex-direction: column;
   min-height: 0;
-  border-right: 1px solid var(--border);
+  flex: 1;
+  min-width: 0;
 }
 .feed-header {
   flex-shrink: 0;
@@ -568,11 +567,26 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
 }
 .composer-send:hover { background: rgba(46,204,113,0.15); }
 
+/* ── PANEL RESIZE HANDLE ─────────────────────────────────────────────────── */
+.panel-resize-handle {
+  width: 5px;
+  flex-shrink: 0;
+  cursor: col-resize;
+  background: var(--border);
+  transition: background 0.15s;
+  position: relative;
+  z-index: 10;
+}
+.panel-resize-handle:hover,
+.panel-resize-handle.dragging { background: rgba(167,139,250,0.45); }
+
 /* ── RIGHT PANEL ─────────────────────────────────────────────────────────── */
 .panel-col {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  width: 420px;
+  flex-shrink: 0;
   background: var(--card-bg);
 }
 .panel-header {
@@ -621,7 +635,16 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
   flex: 1;
   overflow-y: auto;
   padding: 0.75rem 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(46,204,113,0.25) transparent;
 }
+.panel-body::-webkit-scrollbar { width: 3px; }
+.panel-body::-webkit-scrollbar-track { background: transparent; }
+.panel-body::-webkit-scrollbar-thumb { background: rgba(46,204,113,0.25); border-radius: 2px; }
+.panel-body::-webkit-scrollbar-thumb:hover { background: rgba(46,204,113,0.5); }
+.keeper-active .panel-body { scrollbar-color: rgba(167,139,250,0.25) transparent; }
+.keeper-active .panel-body::-webkit-scrollbar-thumb { background: rgba(167,139,250,0.25); }
+.keeper-active .panel-body::-webkit-scrollbar-thumb:hover { background: rgba(167,139,250,0.5); }
 
 /* ── MOVE CARDS ──────────────────────────────────────────────────────────── */
 .move-section-label {
@@ -891,7 +914,7 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
 .keeper-mode-header { display: none; flex-shrink: 0; padding: 0.55rem 1rem; border-bottom: 1px solid var(--border); background: rgba(167,139,250,0.04); align-items: center; gap: 0.5rem; }
 .keeper-active .keeper-mode-header { display: flex; }
 .keeper-mode-label { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; color: #a78bfa; flex: 1; }
-.keeper-mode-tabs { display: none; flex-shrink: 0; border-bottom: 1px solid var(--border); }
+.keeper-mode-tabs { display: none; flex-shrink: 0; border-bottom: 1px solid var(--border); overflow-x: auto; flex-wrap: nowrap; }
 .keeper-active .keeper-mode-tabs { display: flex; }
 .keeper-tab {
   font-family: 'Share Tech Mono', monospace;
@@ -907,6 +930,11 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
 }
 .keeper-tab:hover { color: var(--text); }
 .keeper-tab.active { color: #a78bfa; border-bottom-color: #a78bfa; }
+.keeper-mode-tabs::-webkit-scrollbar { height: 3px; }
+.keeper-mode-tabs::-webkit-scrollbar-track { background: transparent; }
+.keeper-mode-tabs::-webkit-scrollbar-thumb { background: rgba(167,139,250,0.25); border-radius: 2px; }
+.keeper-mode-tabs::-webkit-scrollbar-thumb:hover { background: rgba(167,139,250,0.5); }
+.keeper-mode-tabs { scrollbar-width: thin; scrollbar-color: rgba(167,139,250,0.25) transparent; }
 
 /* Keeper operative pills */
 .keeper-ops-row { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-bottom: 0.85rem; }
@@ -982,14 +1010,14 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
 
 /* Keeper references */
 .ref-section { margin-bottom: 1.1rem; }
-.ref-label { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; color: #a78bfa; margin-bottom: 0.4rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--border); }
-.ref-row { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--text-dim); line-height: 1.7; }
+.ref-label { font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em; color: #a78bfa; margin-bottom: 0.4rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--border); }
+.ref-row { font-family: 'Share Tech Mono', monospace; font-size: 0.73rem; color: var(--text-dim); line-height: 1.7; }
 .ref-row strong { color: var(--text); }
 .ref-list { margin: 0; padding: 0; list-style: none; }
-.ref-list li { font-family: 'Share Tech Mono', monospace; font-size: 0.63rem; color: var(--text-dim); line-height: 1.65; padding-left: 0.9rem; position: relative; }
+.ref-list li { font-family: 'Share Tech Mono', monospace; font-size: 0.71rem; color: var(--text-dim); line-height: 1.65; padding-left: 0.9rem; position: relative; }
 .ref-list li::before { content: '·'; position: absolute; left: 0.1rem; color: #a78bfa; }
 .ref-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; }
-.ref-note { font-family: 'Barlow', sans-serif; font-size: 0.72rem; color: var(--text-dim); font-style: italic; margin-top: 0.3rem; line-height: 1.45; }
+.ref-note { font-family: 'Barlow', sans-serif; font-size: 0.8rem; color: var(--text-dim); font-style: italic; margin-top: 0.3rem; line-height: 1.45; }
 
 /* Data tab */
 .data-session-selector { display: flex; gap: 0.4rem; margin-bottom: 1rem; flex-wrap: wrap; }
@@ -1036,6 +1064,73 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
   padding: 1rem 0;
   text-align: center;
 }
+
+/* ── MAP GRID ── */
+.map-wrap { padding: 0.75rem 0 0; }
+.map-header { margin-bottom: 0.75rem; }
+.map-title { font-family: 'Share Tech Mono', monospace; font-size: 0.73rem; letter-spacing: 0.18em; color: var(--green-dim); margin-bottom: 2px; }
+.map-subtitle { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: var(--text-dim); }
+.map-grid { display: grid; grid-template-columns: 1fr 12px 1fr 12px 1fr 12px 1fr; }
+.map-cell-loc {
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  padding: 7px 8px;
+  min-height: 72px;
+  font-family: 'Share Tech Mono', monospace;
+  cursor: default;
+  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+}
+.map-loc-order {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  color: var(--text-dim);
+  opacity: 0.55;
+  line-height: 1;
+}
+.map-cell-loc.unlocked .map-loc-order { color: var(--green-dim); opacity: 0.8; }
+.map-cell-loc.unlocked { border-color: var(--green-dim); cursor: pointer; }
+.map-cell-loc.unlocked:hover { border-color: var(--green); background: var(--bg3); }
+.map-cell-loc.selected { border-color: var(--green); background: rgba(46,204,113,0.06); }
+.map-loc-label { font-size: 0.65rem; letter-spacing: 0.08em; color: var(--green); line-height: 1.35; }
+.map-cell-loc.locked .map-loc-label { color: var(--border); }
+.map-loc-sublabel { font-size: 0.57rem; letter-spacing: 0.06em; color: var(--text-dim); margin-top: 2px; line-height: 1.3; }
+.map-loc-redacted { font-size: 0.72rem; color: var(--border); line-height: 1.15; margin-top: 4px; opacity: 0.55; }
+.map-loc-classified { font-size: 0.49rem; color: var(--border); letter-spacing: 0.1em; margin-top: 3px; }
+.map-loc-toggle { font-size: 0.6rem; letter-spacing: 0.06em; margin-top: 6px; }
+.map-cell-loc.unlocked .map-loc-toggle { color: var(--green-dim); }
+.map-cell-loc.locked .map-loc-toggle { color: var(--text-dim); }
+.map-loc-keepernote { font-size: 0.58rem; color: var(--amber-dim); letter-spacing: 0.03em; margin-top: 4px; line-height: 1.4; }
+.map-loc-npc-row { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 5px; }
+.map-loc-npc { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; letter-spacing: 0.05em; color: var(--amber); border: 1px solid var(--amber-dim); padding: 1px 5px; border-radius: 2px; }
+.map-loc-visited-btn { display: block; width: 100%; margin-top: 5px; padding: 2px 4px; background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; letter-spacing: 0.08em; cursor: pointer; text-align: left; }
+.map-loc-visited-btn:hover { border-color: var(--green-dim); color: var(--green-dim); }
+.map-cell-loc.visited .map-loc-visited-btn { border-color: rgba(46,204,113,0.35); color: var(--green-dim); }
+.map-bulk-btns { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.75rem; padding-top: 0.6rem; border-top: 1px solid var(--border); }
+.map-bulk-btn { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; padding: 3px 8px; background: transparent; border: 1px solid var(--border); color: var(--text-dim); cursor: pointer; border-radius: 2px; }
+.map-bulk-btn:hover { border-color: rgba(167,139,250,0.45); color: #a78bfa; }
+.map-cell-street-h {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  gap: 6px;
+}
+.map-cell-street-h::before, .map-cell-street-h::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.map-street-label { font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; letter-spacing: 0.14em; color: var(--text-dim); white-space: nowrap; flex-shrink: 0; }
+.map-cell-street-v { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+.map-cell-empty { min-height: 72px; background: var(--bg); border: 1px solid transparent; }
+.map-detail-card { margin-top: 0.6rem; border: 1px solid var(--green-dim); background: rgba(46,204,113,0.03); padding: 10px 12px; font-family: 'Share Tech Mono', monospace; }
+.map-detail-label { font-size: 0.62rem; letter-spacing: 0.1em; color: var(--green); margin-bottom: 2px; }
+.map-detail-sublabel { font-size: 0.54rem; letter-spacing: 0.07em; color: var(--green-dim); margin-bottom: 7px; }
+.map-detail-desc { font-family: 'Barlow', sans-serif; font-size: 0.82rem; color: var(--text-dim); line-height: 1.65; }
+.map-sync-btn { display: block; width: 100%; margin-top: 0.6rem; padding: 5px; background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; cursor: pointer; }
+.map-sync-btn:hover { border-color: var(--green-dim); color: var(--green-dim); }
 
 /* Keeper message composer */
 .msg-composer { margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.75rem; }
@@ -1099,8 +1194,11 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
     </div>
   </div>
 
+  <!-- ── RESIZE HANDLE ── -->
+  <div class="panel-resize-handle" id="panel-resize-handle"></div>
+
   <!-- ── RIGHT: PANEL ── -->
-  <div class="panel-col">
+  <div class="panel-col" id="panel-col">
     <!-- Player controls (hidden in keeper mode) -->
     <div class="panel-header">
       <select class="hunter-select" id="hunter-select" onchange="onHunterChange(this.value)">
@@ -1116,6 +1214,7 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
       <button class="panel-tab active" data-tab="moves" onclick="switchTab('moves')">// MOVES</button>
       <button class="panel-tab" data-tab="contacts" onclick="switchTab('contacts')">// CONTACTS</button>
       <button class="panel-tab" data-tab="handouts" onclick="switchTab('handouts')">// HANDOUTS</button>
+      <button class="panel-tab" data-tab="map" onclick="switchTab('map')">// MAP</button>
     </div>
 
     <!-- Keeper controls (hidden unless keeper-active) -->
@@ -1128,6 +1227,7 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
       <button class="keeper-tab" data-ktab="references" onclick="switchKeeperTab('references')">// REFERENCES</button>
       <button class="keeper-tab" data-ktab="threats" onclick="switchKeeperTab('threats')">// THREATS</button>
       <button class="keeper-tab" data-ktab="handouts" onclick="switchKeeperTab('handouts')">// HANDOUTS</button>
+      <button class="keeper-tab" data-ktab="map" onclick="switchKeeperTab('map')">// MAP</button>
     </div>
 
     <div class="panel-body" id="panel-body">
@@ -1166,6 +1266,11 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
   var keeperSessionFilter = 'S02';         // 'S01' | 'S02' | 'ALL'
   var npcVisibilityOverrides = {};         // { npc_id: bool } — loaded from localStorage
   var contactNotes = {};                   // { npc_id: string } — loaded from localStorage
+  var maps_data        = null;               // loaded from portal-maps.json
+  var mapState         = { u: {}, v: {} };   // u = unlocked (player-visible), v = visited (keeper-only)
+  var selectedMapLoc   = null;               // currently expanded location in player MAP tab
+  var playerMapSession = null;               // session id selected in player MAP tab
+  var keeperMapSession = null;               // session id selected in keeper MAP tab
 
   var feedEntries    = [];   // combined rolls + messages, sorted by timestamp
   var lastRollId     = 0;
@@ -1255,13 +1360,15 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
       fetch('/data/motw-basic-moves.json').then(function (r) { return r.ok ? r.json() : null; }),
       fetch('/data/portal-npcs.json').then(function (r) { return r.ok ? r.json() : null; }),
       fetch('/data/portal-entities.json').then(function (r) { return r.ok ? r.json() : null; }),
-      fetch('/data/session-data.json').then(function (r) { return r.ok ? r.json() : null; })
+      fetch('/data/session-data.json').then(function (r) { return r.ok ? r.json() : null; }),
+      fetch('/data/portal-maps.json').then(function (r) { return r.ok ? r.json() : null; })
     ]).then(function (results) {
       playbook_moves = results[0];
       basic_moves    = results[1];
       npcs_data      = results[2];
       entities_data  = results[3];
       session_data   = results[4];
+      maps_data      = results[5];
     });
   }
 
@@ -1280,6 +1387,7 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
     if (activeTab === 'moves')    renderMovesPanel();
     if (activeTab === 'contacts') renderContactsPanel();
     if (activeTab === 'handouts') renderHandoutsPanel();
+    if (activeTab === 'map')      renderMapPanel();
   }
 
   // ── MOVES PANEL ───────────────────────────────────────────────────────────
@@ -1775,27 +1883,16 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
       var pipClass  = 'pip-' + h.type;
       var typeLabel = h.type.toUpperCase();
       var itemClass = isPosted ? 'handout-item posted' : 'handout-item';
-      if (h.type === 'map') {
-        // Maps: no POST button — interactive maps not yet implemented
-        html += '<div class="' + itemClass + '">' +
-          '<span class="handout-type-pip ' + pipClass + '">' + escHtml(typeLabel) + '</span>' +
-          '<div class="handout-meta">' +
-            '<div class="handout-label">' + escHtml(h.label || h.subject || h.id) + '</div>' +
-            '<div class="handout-map-note">// INTERACTIVE MAP — COMING SOON — see mission doc</div>' +
-          '</div>' +
-        '</div>';
-      } else {
-        var btnLabel = isPosted ? '↺ RE-POST' : '▶ POST';
-        var btnClass = isPosted ? 'handout-post-btn repost' : 'handout-post-btn';
-        html += '<div class="' + itemClass + '">' +
-          '<span class="handout-type-pip ' + pipClass + '">' + escHtml(typeLabel) + '</span>' +
-          '<div class="handout-meta">' +
-            '<div class="handout-label">' + escHtml(h.label || h.subject || h.id) + '</div>' +
-            (isPosted ? '<div class="handout-posted-time">POSTED ' + escHtml(posted[h.id]) + '</div>' : '') +
-          '</div>' +
-          '<button class="' + btnClass + '" id="hbtn-' + escHtml(h.id) + '" onclick="postHandout(\'' + escHtml(h.id) + '\')">' + btnLabel + '</button>' +
-        '</div>';
-      }
+      var btnLabel = isPosted ? '↺ RE-POST' : '▶ POST';
+      var btnClass = isPosted ? 'handout-post-btn repost' : 'handout-post-btn';
+      html += '<div class="' + itemClass + '">' +
+        '<span class="handout-type-pip ' + pipClass + '">' + escHtml(typeLabel) + '</span>' +
+        '<div class="handout-meta">' +
+          '<div class="handout-label">' + escHtml(h.label || h.subject || h.id) + '</div>' +
+          (isPosted ? '<div class="handout-posted-time">POSTED ' + escHtml(posted[h.id]) + '</div>' : '') +
+        '</div>' +
+        '<button class="' + btnClass + '" id="hbtn-' + escHtml(h.id) + '" onclick="postHandout(\'' + escHtml(h.id) + '\')">' + btnLabel + '</button>' +
+      '</div>';
     });
     html += '</div>';
     html += '<button class="handout-clear-btn" onclick="clearSessionHandouts()">// CLEAR HANDOUTS — ' + escHtml(sess.session_key) + '</button>';
@@ -1883,6 +1980,7 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
     if (keeperTab === 'references') renderKeeperReferencesTab();
     if (keeperTab === 'threats')    renderKeeperDataTab();
     if (keeperTab === 'handouts')   renderKeeperHandoutsTab();
+    if (keeperTab === 'map')        renderKeeperMapTab();
   }
 
   // ── KEEPER: OPERATIVES TAB ────────────────────────────────────────────────
@@ -2882,6 +2980,306 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
       initialLoad();
     }
   });
+
+  // ── MAP STATE HELPERS ────────────────────────────────────────────────────────
+  function _normaliseMapState(raw) {
+    if (!raw) return { u: {}, v: {} };
+    if (raw.u !== undefined || raw.v !== undefined) return { u: raw.u || {}, v: raw.v || {} };
+    return { u: raw, v: {} }; // legacy flat format — treat as unlocked
+  }
+
+  function _saveMapState(mapId) {
+    fetch('/api/v1/maps/' + mapId + '/state', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(mapState)
+    });
+  }
+
+  function _findAllLocs(map) {
+    var locs = [];
+    map.grid.forEach(function (row) {
+      row.forEach(function (cell) { if (cell && cell.type === 'loc') locs.push(cell); });
+    });
+    return locs;
+  }
+
+  // ── MAP SESSION SELECTOR HELPERS ────────────────────────────────────────────
+  function _buildPlayerMapSelHtml() {
+    if (!session_data || !session_data.length) return '';
+    var html = '<div class="handout-panel-tabs">';
+    session_data.forEach(function (s) {
+      var active = playerMapSession === s.id ? ' active' : '';
+      html += '<button class="handout-panel-tab' + active + '" onclick="switchPlayerMapSession(\'' + s.id + '\')">' + escHtml(s.session_key) + '</button>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  function _buildKeeperMapSelHtml() {
+    if (!session_data || !session_data.length) return '';
+    var html = '<div class="data-session-selector">';
+    session_data.forEach(function (s) {
+      var active = keeperMapSession === s.id ? ' active' : '';
+      html += '<button class="data-sess-btn' + active + '" onclick="keeperSelectMapSession(\'' + s.id + '\')">' + escHtml(s.session_key) + '</button>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  // ── MAP PANEL (player) ──────────────────────────────────────────────────────
+  function renderMapPanel() {
+    var body = document.getElementById('panel-body');
+    if (!session_data || !session_data.length) {
+      body.innerHTML = '<div class="keeper-panel-note">// NO MAP DATA</div>';
+      return;
+    }
+    if (!playerMapSession) playerMapSession = session_data[session_data.length - 1].id;
+    var selHtml = _buildPlayerMapSelHtml();
+    var map = maps_data && maps_data.maps ? maps_data.maps.find(function (m) { return m.session_id === playerMapSession; }) : null;
+    if (!map) {
+      body.innerHTML = selHtml + '<div class="keeper-panel-note">// NO MAP FOR THIS MISSION</div>';
+      return;
+    }
+    body.innerHTML = selHtml + '<div class="keeper-panel-note">// SYNCING MAP STATE…</div>';
+    fetch('/api/v1/maps/' + map.id + '/state')
+      .then(function (r) { return r.ok ? r.json() : {}; })
+      .then(function (state) {
+        mapState = _normaliseMapState(state);
+        _renderMapGrid(body, map, false, selHtml);
+      })
+      .catch(function () {
+        mapState = { u: {}, v: {} };
+        _renderMapGrid(body, map, false, selHtml);
+      });
+  }
+
+  window.switchPlayerMapSession = function (sessId) {
+    playerMapSession = sessId;
+    selectedMapLoc = null;
+    renderMapPanel();
+  };
+
+  // ── MAP TAB (keeper) ────────────────────────────────────────────────────────
+  function renderKeeperMapTab() {
+    var body = document.getElementById('panel-body');
+    if (!session_data || !session_data.length) {
+      body.innerHTML = '<div class="keeper-panel-note">// NO MAP DATA</div>';
+      return;
+    }
+    if (!keeperMapSession) keeperMapSession = session_data[session_data.length - 1].id;
+    var selHtml = _buildKeeperMapSelHtml();
+    var map = maps_data && maps_data.maps ? maps_data.maps.find(function (m) { return m.session_id === keeperMapSession; }) : null;
+    if (!map) {
+      body.innerHTML = selHtml + '<div class="keeper-panel-note">// NO MAP FOR THIS MISSION</div>';
+      return;
+    }
+    body.innerHTML = selHtml + '<div class="keeper-panel-note">// LOADING MAP STATE…</div>';
+    fetch('/api/v1/maps/' + map.id + '/state')
+      .then(function (r) { return r.ok ? r.json() : {}; })
+      .then(function (state) {
+        mapState = _normaliseMapState(state);
+        _renderMapGrid(body, map, true, selHtml);
+      })
+      .catch(function () {
+        mapState = { u: {}, v: {} };
+        _renderMapGrid(body, map, true, selHtml);
+      });
+  }
+
+  window.keeperSelectMapSession = function (sessId) {
+    keeperMapSession = sessId;
+    renderKeeperMapTab();
+  };
+
+  // ── SHARED MAP GRID RENDERER ────────────────────────────────────────────────
+  function _renderMapGrid(body, map, keeperView, prefixHtml) {
+    var html = (prefixHtml || '') + '<div class="map-wrap">';
+    html += '<div class="map-header">';
+    html += '<div class="map-title">// ' + escHtml(map.title) + '</div>';
+    html += '<div class="map-subtitle">' + escHtml(map.subtitle) + '</div>';
+    html += '</div>';
+
+    html += '<div class="map-grid">';
+    map.grid.forEach(function (row) {
+      row.forEach(function (cell) {
+        if (!cell) return;
+        if (cell.type === 'street-h') {
+          html += '<div class="map-cell-street-h">' +
+            '<span class="map-street-label">' + escHtml(cell.label) + '</span>' +
+            '</div>';
+        } else if (cell.type === 'street-v') {
+          html += '<div class="map-cell-street-v"></div>';
+        } else if (cell.type === 'loc') {
+          var unlocked = !!(mapState.u && mapState.u[cell.id]);
+          var visited  = !!(mapState.v && mapState.v[cell.id]);
+          var isSelected = !keeperView && selectedMapLoc === cell.id;
+          var cls = 'map-cell-loc' +
+            (unlocked ? ' unlocked' : ' locked') +
+            (visited  ? ' visited'  : '') +
+            (isSelected ? ' selected' : '');
+          var orderBadge = (keeperView && cell.order) ? '<div class="map-loc-order">' + cell.order + '</div>' : '';
+          if (keeperView) {
+            html += '<div class="' + cls + '" onclick="toggleMapLocation(\'' +
+              escHtml(map.id) + '\',\'' + escHtml(cell.id) + '\')">';
+            html += orderBadge;
+            html += '<div class="map-loc-label">' + escHtml(cell.label) + '</div>';
+            html += '<div class="map-loc-sublabel">' + escHtml(cell.sublabel) + '</div>';
+            if (cell.npcs && cell.npcs.length) {
+              html += '<div class="map-loc-npc-row">';
+              cell.npcs.forEach(function (n) { html += '<span class="map-loc-npc">' + escHtml(n) + '</span>'; });
+              html += '</div>';
+            }
+            if (cell.keeper_note) {
+              html += '<div class="map-loc-keepernote">↳ ' + escHtml(cell.keeper_note) + '</div>';
+            }
+            html += '<div class="map-loc-toggle">' + (unlocked ? '● VISIBLE' : '○ LOCKED') + '</div>';
+            html += '<button class="map-loc-visited-btn" onclick="toggleMapVisited(\'' +
+              escHtml(map.id) + '\',\'' + escHtml(cell.id) + '\');event.stopPropagation()">' +
+              (visited ? '✓ VISITED' : '○ NOT VISITED') + '</button>';
+            html += '</div>';
+          } else if (unlocked) {
+            html += '<div class="' + cls + '" onclick="showMapDetail(\'' + escHtml(cell.id) + '\')">';
+            html += '<div class="map-loc-label">' + escHtml(cell.label) + '</div>';
+            html += '<div class="map-loc-sublabel">' + escHtml(cell.sublabel) + '</div>';
+            html += '</div>';
+          } else {
+            html += '<div class="' + cls + '">';
+            html += '<div class="map-loc-redacted">░░░░░░<br>░░░░░░<br>░░░░░░</div>';
+            html += '<div class="map-loc-classified">// CLASSIFIED</div>';
+            html += '</div>';
+          }
+        } else {
+          html += '<div class="map-cell-empty"></div>';
+        }
+      });
+    });
+    html += '</div>'; // .map-grid
+
+    if (keeperView) {
+      html += '<div class="map-bulk-btns">' +
+        '<button class="map-bulk-btn" onclick="toggleAllMap(\'' + escHtml(map.id) + '\',true)">// REVEAL ALL</button>' +
+        '<button class="map-bulk-btn" onclick="toggleAllMap(\'' + escHtml(map.id) + '\',false)">// RESET MAP</button>' +
+        '<button class="map-bulk-btn" onclick="toggleAllVisited(\'' + escHtml(map.id) + '\',true)">// ALL VISITED</button>' +
+        '<button class="map-bulk-btn" onclick="toggleAllVisited(\'' + escHtml(map.id) + '\',false)">// CLEAR VISITED</button>' +
+        '</div>';
+    } else {
+      html += '<div id="map-detail">';
+      if (selectedMapLoc) {
+        var locData = _findMapLoc(map, selectedMapLoc);
+        if (locData && mapState.u && mapState.u[locData.id]) {
+          html += _buildMapDetail(locData);
+        }
+      }
+      html += '</div>';
+      html += '<button class="map-sync-btn" onclick="renderMapPanel()">// SYNC MAP</button>';
+    }
+
+    html += '</div>'; // .map-wrap
+    body.innerHTML = html;
+  }
+
+  window.showMapDetail = function (locId) {
+    selectedMapLoc = (selectedMapLoc === locId) ? null : locId;
+    if (!maps_data || !maps_data.maps) return;
+    var map = maps_data.maps.find(function (m) { return m.session_id === playerMapSession; });
+    if (!map) return;
+    _renderMapGrid(document.getElementById('panel-body'), map, false, _buildPlayerMapSelHtml());
+  };
+
+  window.toggleMapLocation = function (mapId, locId) {
+    mapState.u = mapState.u || {};
+    mapState.u[locId] = !mapState.u[locId];
+    _saveMapState(mapId);
+    if (!maps_data || !maps_data.maps) return;
+    var map = maps_data.maps.find(function (m) { return m.id === mapId; });
+    if (map) _renderMapGrid(document.getElementById('panel-body'), map, true, _buildKeeperMapSelHtml());
+  };
+
+  window.toggleMapVisited = function (mapId, locId) {
+    mapState.v = mapState.v || {};
+    mapState.v[locId] = !mapState.v[locId];
+    _saveMapState(mapId);
+    if (!maps_data || !maps_data.maps) return;
+    var map = maps_data.maps.find(function (m) { return m.id === mapId; });
+    if (map) _renderMapGrid(document.getElementById('panel-body'), map, true, _buildKeeperMapSelHtml());
+  };
+
+  window.toggleAllMap = function (mapId, unlock) {
+    if (!maps_data || !maps_data.maps) return;
+    var map = maps_data.maps.find(function (m) { return m.id === mapId; });
+    if (!map) return;
+    mapState.u = mapState.u || {};
+    _findAllLocs(map).forEach(function (cell) { mapState.u[cell.id] = unlock || undefined; });
+    if (!unlock) mapState.u = {};
+    _saveMapState(mapId);
+    _renderMapGrid(document.getElementById('panel-body'), map, true, _buildKeeperMapSelHtml());
+  };
+
+  window.toggleAllVisited = function (mapId, mark) {
+    if (!maps_data || !maps_data.maps) return;
+    var map = maps_data.maps.find(function (m) { return m.id === mapId; });
+    if (!map) return;
+    mapState.v = mapState.v || {};
+    _findAllLocs(map).forEach(function (cell) { mapState.v[cell.id] = mark || undefined; });
+    if (!mark) mapState.v = {};
+    _saveMapState(mapId);
+    _renderMapGrid(document.getElementById('panel-body'), map, true, _buildKeeperMapSelHtml());
+  };
+
+  function _findMapLoc(map, locId) {
+    for (var r = 0; r < map.grid.length; r++) {
+      for (var c = 0; c < map.grid[r].length; c++) {
+        var cell = map.grid[r][c];
+        if (cell && cell.type === 'loc' && cell.id === locId) return cell;
+      }
+    }
+    return null;
+  }
+
+  function _buildMapDetail(loc) {
+    return '<div class="map-detail-card">' +
+      '<div class="map-detail-label">' + escHtml(loc.label) + '</div>' +
+      '<div class="map-detail-sublabel">' + escHtml(loc.sublabel) + '</div>' +
+      '<div class="map-detail-desc">' + escHtml(loc.player_desc) + '</div>' +
+      '</div>';
+  }
+
+  // ── PANEL RESIZE ─────────────────────────────────────────────────────────────
+  (function () {
+    var handle   = document.getElementById('panel-resize-handle');
+    var panelCol = document.getElementById('panel-col');
+    var MIN_W = 280, MAX_W = 760;
+    var dragging = false, startX, startW;
+
+    var saved = parseInt(localStorage.getItem('portal_panel_width'), 10);
+    if (saved && saved >= MIN_W && saved <= MAX_W) panelCol.style.width = saved + 'px';
+
+    handle.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      dragging = true;
+      startX = e.clientX;
+      startW = panelCol.offsetWidth;
+      handle.classList.add('dragging');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', function (e) {
+      if (!dragging) return;
+      var newW = Math.min(MAX_W, Math.max(MIN_W, startW - (e.clientX - startX)));
+      panelCol.style.width = newW + 'px';
+    });
+
+    document.addEventListener('mouseup', function () {
+      if (!dragging) return;
+      dragging = false;
+      handle.classList.remove('dragging');
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      localStorage.setItem('portal_panel_width', panelCol.offsetWidth);
+    });
+  }());
 
 }());
 </script>

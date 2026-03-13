@@ -22,12 +22,13 @@
 | `hunters/*.html` | `tests/hunters.spec.js` | ~18 | ✅ |
 | `missions/campbell-briefings.html` | `tests/briefings.spec.js` | ~12 | ✅ |
 | `reports/player-report.html` | `tests/player-report.spec.js` | ~15 | ✅ |
+| D1 round-trip (hunter sheet, arc, incident, player report, map) | `tests/d1-round-trip.spec.js` | 7 | ✅ |
+| `feed.html` MAP tab (player + keeper) | `tests/map.spec.js` | 24 | ✅ |
 
 ## ⬆ Next Up (recommended order)
 
-1. **`tests/missions/report.spec.js`** [M] — Keeper field report: session selector, save, COPY FOR CLAUDE button.
-2. **Full D1 round-trip** [H] — Save→reload→restore cycle: hunter sheets, incident state. Requires live local wrangler.
-3. **Nav subdirectory paths** [M] — All player-facing pages inject nav with same links; links resolve correctly from `hunters/`, `missions/`, `reports/` subdirs.
+1. **`tests/report.spec.js`** [M] — Keeper field report: session selector, save, COPY FOR CLAUDE button.
+2. **Nav subdirectory paths** [M] — All player-facing pages inject nav with same links; links resolve correctly from `hunters/`, `missions/`, `reports/` subdirs.
 
 ---
 
@@ -104,10 +105,10 @@ Priority: **H** = high (core features, likely to break), **M** = medium, **L** =
 - [ ] D1-backed state saves and restores
 
 ### D1 Persistence (cross-page) [H, but hard]
-- [ ] Full save→reload→restore cycle for hunter sheets
-- [ ] Full save→reload→restore cycle for incident choice state
+- [x] Full save→reload→restore cycle for hunter sheets → `d1-round-trip.spec.js`
+- [x] Full save→reload→restore cycle for incident choice state → `d1-round-trip.spec.js`
+- [x] Full save→reload→restore cycle for player report (rating pip + textarea) → `d1-round-trip.spec.js`
 - [ ] Offline fallback: when D1 is unreachable, localStorage state is used
-- **Note**: these tests require either a real local D1 instance (wrangler provides one at `.wrangler/state/`) or test fixtures. The save/restore cycle tests are the most valuable and the hardest to write without flakiness.
 
 ### Nav injection correctness [M]
 - [x] Mobile hamburger toggle: visible at ≤640px, click opens/closes nav → `nav.spec.js`

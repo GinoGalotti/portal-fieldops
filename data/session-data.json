@@ -1,7 +1,7 @@
 [
   {
     "id": "w1",
-    "session_key": "S01",
+    "session_key": "M01",
     "label": "WEEK 01 — A Promise is a Promise",
     "doc": "missions/01-a-promise-is-a-promise.html",
     "entity_ids": ["eszter"],
@@ -12,7 +12,7 @@
   },
   {
     "id": "w2",
-    "session_key": "S02",
+    "session_key": "M02",
     "label": "WEEK 02 — Something That Wants to Be Known",
     "doc": "missions/02-something-that-wants-to-be-known.html",
     "entity_ids": ["the-cartographer"],
