@@ -16,6 +16,11 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 - `tests/d1-round-trip.spec.js` — +2 tests: map unlock round-trip, map visited round-trip (7 total)
 - Total: **276 tests across 16 files**
 
+### Playwright test suite expansion — nav + keeper report (2026-03-13)
+- `tests/nav.spec.js` — +12 subdirectory path tests: all 11 nav labels present on hunters/reed.html, missions/missions.html, reports/player-report.html; subdir pages use `../` prefix; root pages don't
+- `tests/report.spec.js` — 15 tests: session tabs (S01/S02, default active, title update), save buttons (top + bottom), COPY FOR CLAUDE, PUT to D1 + flash feedback, outcome buttons, scene textareas, thread tags
+- Total: **303 tests across 17 files**
+
 ### Map handout fix (2026-03-13)
 - Removed `map` special-case from `renderKeeperHandoutsTab` in `feed.html` — maps now get standard ▶ POST / ↺ RE-POST button like all other handout types
 
@@ -51,11 +56,7 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 ## NEXT UP — Playwright Tests
 
-288 tests passing across 16 files. Suite: `smoke` (5) · `nav` (22) · `contacts` (7) · `incidents` (18) · `feed` (~25) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (15) · `d1-round-trip` (7) · `map` (24).
-
-**1. Keeper field report (`missions/report.html`) — MEDIUM**
-- New file: `tests/report.spec.js`
-- Session selector renders; save button; "COPY FOR CLAUDE" button exists
+303 tests passing across 17 files. Suite: `smoke` (5) · `nav` (22) · `contacts` (7) · `incidents` (18) · `feed` (~25) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (15) · `d1-round-trip` (7) · `map` (24) · `report` (15).
 
 ---
 

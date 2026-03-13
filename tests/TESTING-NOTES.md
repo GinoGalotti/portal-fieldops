@@ -24,11 +24,11 @@
 | `reports/player-report.html` | `tests/player-report.spec.js` | ~15 | ✅ |
 | D1 round-trip (hunter sheet, arc, incident, player report, map) | `tests/d1-round-trip.spec.js` | 7 | ✅ |
 | `feed.html` MAP tab (player + keeper) | `tests/map.spec.js` | 24 | ✅ |
+| `missions/report.html` | `tests/report.spec.js` | 15 | ✅ |
 
 ## ⬆ Next Up (recommended order)
 
-1. **`tests/report.spec.js`** [M] — Keeper field report: session selector, save, COPY FOR CLAUDE button.
-~~2. **Nav subdirectory paths** [M] — All player-facing pages inject nav with same links; links resolve correctly from `hunters/`, `missions/`, `reports/` subdirs.~~ ✅ done (`nav.spec.js`)
+1. **`index.html` session-aware cards** [M] — archive/artefact cards with `data-session-from` hidden/shown correctly.
 
 ---
 
@@ -87,12 +87,15 @@ Priority: **H** = high (core features, likely to break), **M** = medium, **L** =
 - [ ] SAVE REPORT button exists
 - [ ] State persists to D1 and restores on reload
 
-### `missions/report.html` — Keeper Field Report [M]
-- [ ] Session selector renders
-- [ ] Scene sections and rating sliders render
-- [ ] SAVE REPORT button exists
-- [ ] COPY FOR CLAUDE button exists
-- [ ] State persists and restores
+### `missions/report.html` — Keeper Field Report [M] ✅ covered in `report.spec.js`
+- [x] Session selector renders (S01, S02 tabs)
+- [x] S01 active by default; switching tab updates title
+- [x] SAVE REPORT button exists (top + bottom)
+- [x] COPY FOR CLAUDE button exists
+- [x] Save triggers PUT to D1 and shows feedback
+- [x] Outcome buttons render and toggle correctly
+- [x] Scene textareas render per session
+- [x] Thread tags render and toggle
 
 ### `index.html` — Home Page [M]
 - [x] Bestiary cards render (data-driven from portal-entities.json, session-gated) → `bestiary.spec.js`

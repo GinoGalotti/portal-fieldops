@@ -637,17 +637,30 @@ npm test              # headless
 npm run test:ui       # interactive
 ```
 
-**Current coverage:**
+**Current coverage — 303 tests across 17 files:**
 | File | Tests | Page |
 |------|-------|------|
 | `tests/smoke.spec.js` | 5 | All key pages — HTTP 200 + element |
-| `tests/nav.spec.js` | 5 | `player-nav.js` injection |
+| `tests/nav.spec.js` | 22 | `player-nav.js` injection + subdirectory path correctness |
 | `tests/contacts.spec.js` | 7 | NPC card rendering |
 | `tests/incidents.spec.js` | 18 | Full incidents page (tabs, choice, open, info, teaser) |
+| `tests/feed.spec.js` | ~25 | Live feed (mocked D1) + hunter panel |
+| `tests/bestiary.spec.js` | 15 | Player bestiary session gating |
+| `tests/arcs.spec.js` | 24 | Hunter arcs reference |
+| `tests/artefacts.spec.js` | 15 | Artefacts section |
+| `tests/missions.spec.js` | 23 | Mission archive |
+| `tests/lab.spec.js` | 20 | Research Lab playbook |
+| `tests/entities.spec.js` | 36 | Entity registry (3 sections) |
+| `tests/hunters.spec.js` | 19 | Hunter pages (reed + rex) |
+| `tests/briefings.spec.js` | 12 | CAMPBELL briefings tab switcher |
+| `tests/player-report.spec.js` | 15 | Player operative field report |
+| `tests/d1-round-trip.spec.js` | 7 | Full save→reload→restore cycle (real D1) |
+| `tests/map.spec.js` | 24 | Interactive district map (player + keeper) |
+| `tests/report.spec.js` | 15 | Keeper field report (session tabs, save, copy) |
 
-**Tests are data-driven**: `incidents.spec.js` reads `data/incidents.json` at test time — adding new weeks won't break existing tests.
+**Tests are data-driven**: spec files read source JSON at module level — adding new content won't break existing tests.
 
-**Backlog of untested features:** see `tests/TESTING-NOTES.md` on the `playwright-testing` branch. Key gaps: `feed.html` (all interactive features), hunter sheet save/restore, CAMPBELL briefings tab switcher, player/keeper report pages, session-aware content visibility, D1 persistence cycle.
+**Backlog:** see `tests/TESTING-NOTES.md`. Key remaining gaps: `index.html` session-aware cards, offline D1 fallback, nav 404 checks.
 
 ---
 
