@@ -126,6 +126,9 @@
     });
   }
 
+  // Expose apply function for pages that render dynamic content after session resolves
+  window.PORTAL_APPLY_SESSION = applySession;
+
   /** Inject the session toggle widget into .keeper-banner */
   function injectKeeperToggle(sessions, activeSession) {
     var banner = document.querySelector('.keeper-banner');

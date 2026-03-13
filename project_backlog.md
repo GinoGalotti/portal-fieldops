@@ -16,6 +16,20 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 - `tests/d1-round-trip.spec.js` — +2 tests: map unlock round-trip, map visited round-trip (7 total)
 - Total: **276 tests across 16 files**
 
+### Player report keeper debrief recap (2026-03-13)
+- `reports/player-report.html` — `// KEEPER DEBRIEF` section at bottom; fetches keeper field report for each week; outcome badge + directive + summary; pending placeholder
+- `tests/player-report.spec.js` — +10 recap tests (29 total)
+- Total: **329 tests across 18 files**
+
+### index.html session gating refactor + tests (2026-03-13)
+- `session-state.js` — exposed `window.PORTAL_APPLY_SESSION`; removed 3 duplicate inline apply functions from `index.html`
+- `tests/index-session.spec.js` — 16 tests: missions grid gating (w1/w2), oracle-readout, lore-classified, card counts
+- Total: **319 tests across 18 files**
+
+### Keeper review page + COPY FOR CLAUDE fix (2026-03-13)
+- `reports/keeper-review.html` — new keeper page, W01/W02 tabs, 5-col responsive card grid, fetches all hunter reports in `Promise.all`, filed/not-filed badge, rating pips, text fields, scene notes
+- `missions/report.html` — `loadOperativeReports()` returns its Promise; `ensureOperativeReports(sid)` helper; COPY FOR CLAUDE awaits reports before copying (fixes race condition on fast click)
+
 ### Playwright test suite expansion — nav + keeper report (2026-03-13)
 - `tests/nav.spec.js` — +12 subdirectory path tests: all 11 nav labels present on hunters/reed.html, missions/missions.html, reports/player-report.html; subdir pages use `../` prefix; root pages don't
 - `tests/report.spec.js` — 15 tests: session tabs (S01/S02, default active, title update), save buttons (top + bottom), COPY FOR CLAUDE, PUT to D1 + flash feedback, outcome buttons, scene textareas, thread tags
@@ -58,7 +72,7 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 303 tests passing across 17 files. Suite: `smoke` (5) · `nav` (22) · `contacts` (7) · `incidents` (18) · `feed` (~25) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (15) · `d1-round-trip` (7) · `map` (24) · `report` (15).
 
-**1. `index.html` session-aware cards** [M] — archive/artefact cards with `data-session-from` are hidden/shown correctly at current session; tests for `session-state.js` gating logic.
+**1. Campaign thread + clock tracker — `missions/threads.html`** [MEDIUM] — see Post-Session Workflow section below.
 
 ---
 
@@ -96,27 +110,7 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 Four related features that close gaps in the current session-summary → next-session-prep pipeline.
 
-#### 1. Keeper review of player reports — `reports/keeper-review.html` [HIGH]
-**Problem:** The runbook currently says "run a wrangler D1 query to read player reports" — that's the weakest link in the whole post-session workflow.
-**Goal:** A keeper-facing page that shows all player operative reports for a selected week, side by side. Aggregated ratings (story/atmosphere/role/emotion/overall as stars), favourite moment, "what I'd do differently", and scene notes per hunter — all readable without touching the terminal.
-**Implementation:**
-- Keeper selects week (W01, W02…) from a tab/selector
-- Page calls `GET /api/v1/player-reports/{week}/{hunter}/state` for each hunter in parallel
-- Renders a 2×2 (or scrollable) grid of hunter report cards
-- Shows which hunters have filed vs not yet filed
-- Page lives at `reports/keeper-review.html`, uses `keeper.css`
-**Why now:** Closes the most obvious gap in the existing workflow. Data is already in D1 — just needs a reader.
-
-#### 2. Combined COPY FOR CLAUDE — enhanced export on `missions/report.html` [HIGH]
-**Problem:** The current COPY FOR CLAUDE button exports only the keeper's perspective. Player ratings, favourite moments, and feedback are in D1 but not included.
-**Goal:** When the keeper clicks COPY FOR CLAUDE, the export pulls player report data from D1 for the active session's week and appends a "OPERATIVE REPORTS" section to the markdown — aggregated ratings, standout moments, and any cross-player themes — before copying to clipboard.
-**Implementation:**
-- On COPY FOR CLAUDE click, fetch all player reports for the week mapped to this session
-- Append a structured `## OPERATIVE REPORTS` section to the existing markdown
-- Fall back gracefully if no player reports filed yet (show which hunters haven't filed)
-**Why now:** Direct improvement to the AI-prep pipeline. Makes the claude.ai session richer with one click.
-
-#### 3. Campaign thread + clock tracker — `missions/threads.html` [MEDIUM]
+#### 1. Campaign thread + clock tracker — `missions/threads.html` [MEDIUM]
 **Problem:** Threads and clocks are tracked per session in the field report, but there's no continuous view across sessions. The arc tracker (`missions/arcs.html`) does this beautifully for hunter arcs — nothing equivalent exists for campaign-level threads.
 **Goal:** A keeper-facing page showing all named threads (PROJECT VEIL, MESA, CAMPBELL, etc.) and all countdown clocks with their current status, last-updated session, and any notes — the campaign's shape at a glance.
 **Implementation:**
@@ -125,16 +119,6 @@ Four related features that close gaps in the current session-summary → next-se
 - Both rendered as a keeper dashboard — threads grouped by category, clocks as visual pip tracks
 - State saved to D1 (new migration) or to these JSON files directly (simpler if clocks don't change mid-session)
 **Why now:** Makes campaign structure visible. Directly feeds into next-session prep and the COPY FOR CLAUDE export.
-
-#### 4. Session recap page — player-facing [MEDIUM]
-**Problem:** Players have no "previously on P.O.R.T.A.L" reference between sessions. The keeper's summary is in D1 but invisible to players.
-**Goal:** A player-facing page (`reports/recap.html` or similar) showing post-session summaries for closed sessions — keeper's plain-language summary, outcome, and key thread updates — made visible to players once the keeper advances the session.
-**Implementation:**
-- Reads from the field reports D1 table (`GET /api/v1/reports/:sid/state`) for all closed sessions
-- Renders keeper's `db-summary`, outcome, and optional `db-spine` (next-session setup) per session tab
-- Session-gated: only sessions up to the current active session are visible
-- Read-only, player.css, linked from player nav
-**Why now:** Closes the memory gap between sessions. Uses data already being collected.
 
 ---
 

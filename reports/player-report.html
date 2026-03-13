@@ -266,6 +266,86 @@
     .sel-btn { padding: 5px 10px; font-size: 0.63rem; }
   }
 
+  /* ─── KEEPER DEBRIEF RECAP ─── */
+  .recap-section {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+  .recap-section-head {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.25em;
+    color: var(--green-dim);
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .recap-loading {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    padding: 20px 0;
+    text-align: center;
+  }
+  .recap-card {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--r-color, var(--border));
+    background: var(--bg2);
+    padding: 16px 18px;
+    border-radius: 2px;
+    margin-bottom: 12px;
+  }
+  .recap-header {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    margin-bottom: 12px;
+  }
+  .recap-week {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+  }
+  .recap-mission {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    flex: 1;
+  }
+  .recap-outcome {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
+  }
+  .recap-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.18em;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+    margin-top: 12px;
+  }
+  .recap-text {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .recap-pending {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    padding: 4px 0;
+  }
+
 </style>
 </head>
 <body>
@@ -341,6 +421,12 @@
     </section>
 
   </div><!-- /form-body -->
+
+  <!-- KEEPER DEBRIEF -->
+  <section class="recap-section">
+    <div class="recap-section-head">// KEEPER DEBRIEF</div>
+    <div id="recap-body"><div class="recap-loading">// LOADING…</div></div>
+  </section>
 
 </div>
 </main>
@@ -657,10 +743,71 @@
     saveReport(this);
   });
 
+  // ── KEEPER DEBRIEF RECAP ──────────────────────────────────────────────────
+
+  var WEEK_TO_SESSION = { W01: 'S01', W02: 'S02' };
+
+  var OUTCOME_META = {
+    humane:  { label: 'HUMANE ENDING',      color: 'var(--green)' },
+    partial: { label: 'PARTIAL RESOLUTION', color: 'var(--amber)' },
+    bad:     { label: 'BAD ENDING',         color: 'var(--red)'   }
+  };
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function loadRecap() {
+    var weekKeys = Object.keys(WEEKS);
+    var promises = weekKeys.map(function (wk) {
+      var sid = WEEK_TO_SESSION[wk];
+      if (!sid) return Promise.resolve({ wk: wk, data: null });
+      return fetch('/api/v1/reports/' + sid + '/state')
+        .then(function (r) { return r.ok ? r.json() : {}; })
+        .then(function (d) { return { wk: wk, data: (d && d.summary) ? d : null }; })
+        .catch(function () { return { wk: wk, data: null }; });
+    });
+
+    Promise.all(promises).then(function (results) {
+      var html = '';
+      results.forEach(function (r) {
+        var wk  = r.wk;
+        var d   = r.data;
+        var cfg = WEEKS[wk];
+        var om  = d && d.outcome ? OUTCOME_META[d.outcome] : null;
+        var borderColor = om ? om.color : 'var(--border)';
+
+        html += '<div class="recap-card" style="--r-color:' + borderColor + '">';
+        html += '<div class="recap-header">';
+        html += '<div class="recap-week">' + escHtml(cfg.label) + '</div>';
+        html += '<div class="recap-mission">' + escHtml((d && d.mission) || cfg.subtitle) + '</div>';
+        if (om) {
+          html += '<div class="recap-outcome" style="color:' + om.color + '">' + om.label + '</div>';
+        }
+        html += '</div>';
+
+        if (d) {
+          if (d.directive && d.directive.trim()) {
+            html += '<div class="recap-label">DIRECTIVE</div>';
+            html += '<div class="recap-text">' + escHtml(d.directive.trim()) + '</div>';
+          }
+          html += '<div class="recap-label">SUMMARY</div>';
+          html += '<div class="recap-text">' + escHtml(d.summary.trim()) + '</div>';
+        } else {
+          html += '<div class="recap-pending">// DEBRIEF PENDING</div>';
+        }
+
+        html += '</div>';
+      });
+      document.getElementById('recap-body').innerHTML = html;
+    });
+  }
+
   // ── BOOT ─────────────────────────────────────────────────────────────────
   buildSelectors();
   buildRatings();
   updateSummary();
+  loadRecap();
 
 }());
 </script>

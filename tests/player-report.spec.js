@@ -11,10 +11,13 @@
 //   then #bottom-flash shows "✓ FILED" (or "⚠ ERROR" on failure).
 // - API: GET/PUT /api/v1/player-reports/{week}/{hunter}/state — mocked here
 //   to return {} (empty state) so the form starts blank.
+// - Keeper debrief recap: always-visible section at bottom, fetches
+//   GET /api/v1/reports/{S01|S02}/state for each week. Shows summary +
+//   directive + outcome badge if filed; "// DEBRIEF PENDING" if not.
 
 import { test, expect } from '@playwright/test';
 
-// ── MOCK HELPER ───────────────────────────────────────────────────────────────
+// ── MOCK HELPERS ──────────────────────────────────────────────────────────────
 
 // Intercepts all player-report D1 calls. GET returns {}, PUT returns 200.
 async function mockPlayerReportApi(page) {
@@ -23,6 +26,17 @@ async function mockPlayerReportApi(page) {
       return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
     }
     return route.fulfill({ contentType: 'application/json', body: '{}' });
+  });
+}
+
+// Intercepts keeper field report calls. Returns empty by default.
+async function mockKeeperReportApi(page, responses) {
+  // responses: { S01: stateObj|null, S02: stateObj|null }
+  await page.route('**/api/v1/reports/**', async route => {
+    const url = route.request().url();
+    const sid = url.includes('/S01/') ? 'S01' : url.includes('/S02/') ? 'S02' : null;
+    const data = sid && responses[sid] ? responses[sid] : {};
+    return route.fulfill({ contentType: 'application/json', body: JSON.stringify(data) });
   });
 }
 
@@ -245,6 +259,91 @@ test.describe('Player report — save button', () => {
 
     // Rex's form should start blank (separate memCache key)
     await expect(page.locator('#f-favourite')).toHaveValue('');
+  });
+
+});
+
+// ── KEEPER DEBRIEF RECAP ──────────────────────────────────────────────────────
+
+test.describe('Player report — keeper debrief recap (no reports filed)', () => {
+
+  test.beforeEach(async ({ page }) => {
+    clearPlayerReportStorage(page);
+    await mockPlayerReportApi(page);
+    await mockKeeperReportApi(page, { S01: null, S02: null });
+    await page.goto('/reports/player-report.html');
+    await page.waitForLoadState('networkidle');
+  });
+
+  test('recap section is visible regardless of week/hunter selection', async ({ page }) => {
+    await expect(page.locator('.recap-section')).toBeVisible();
+  });
+
+  test('shows // DEBRIEF PENDING for W01 when no report filed', async ({ page }) => {
+    const cards = page.locator('.recap-card');
+    await expect(cards.first()).toContainText('DEBRIEF PENDING');
+  });
+
+  test('renders one recap card per week', async ({ page }) => {
+    await expect(page.locator('.recap-card')).toHaveCount(2);
+  });
+
+  test('recap section still visible when no week/hunter selected (form locked)', async ({ page }) => {
+    // form-body has no .unlocked class — but recap section should still show
+    await expect(page.locator('#form-body')).not.toHaveClass(/unlocked/);
+    await expect(page.locator('.recap-section')).toBeVisible();
+  });
+
+});
+
+test.describe('Player report — keeper debrief recap (S01 filed)', () => {
+
+  const s01Report = {
+    summary:   'The team deployed to Keller University and encountered the ghost of Eszter. They resolved her haunting through a farewell ritual. The ash locket was not recovered.',
+    directive: 'Partial — the entity was dispersed but the anchor object was not retrieved.',
+    outcome:   'partial',
+    mission:   'A Promise is a Promise'
+  };
+
+  test.beforeEach(async ({ page }) => {
+    clearPlayerReportStorage(page);
+    await mockPlayerReportApi(page);
+    await mockKeeperReportApi(page, { S01: s01Report, S02: null });
+    await page.goto('/reports/player-report.html');
+    await page.waitForLoadState('networkidle');
+  });
+
+  test('W01 card shows the keeper summary text', async ({ page }) => {
+    const card = page.locator('.recap-card').first();
+    await expect(card).toContainText('Keller University');
+  });
+
+  test('W01 card shows the directive text', async ({ page }) => {
+    const card = page.locator('.recap-card').first();
+    await expect(card).toContainText('anchor object was not retrieved');
+  });
+
+  test('W01 card shows PARTIAL RESOLUTION outcome badge', async ({ page }) => {
+    const card = page.locator('.recap-card').first();
+    await expect(card).toContainText('PARTIAL RESOLUTION');
+  });
+
+  test('W01 card shows mission title from report data', async ({ page }) => {
+    const card = page.locator('.recap-card').first();
+    await expect(card).toContainText('A Promise is a Promise');
+  });
+
+  test('W02 card still shows // DEBRIEF PENDING', async ({ page }) => {
+    const card = page.locator('.recap-card').nth(1);
+    await expect(card).toContainText('DEBRIEF PENDING');
+  });
+
+  test('W01 card left border color reflects outcome (not default --border)', async ({ page }) => {
+    const card = page.locator('.recap-card').first();
+    const style = await card.getAttribute('style');
+    // Should have --r-color set to amber (partial) not default border
+    expect(style).toContain('--r-color');
+    expect(style).not.toContain('var(--border)');
   });
 
 });

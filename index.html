@@ -448,26 +448,6 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
     grid.innerHTML = html;
   }
 
-  function applyMissionsSession() {
-    var sessions = window.PORTAL_SESSIONS;
-    var sessionId = window.PORTAL_SESSION;
-    if (!sessions || !sessionId) return;
-    var ids = sessions.map(function (s) { return s.id; });
-    var idx = ids.indexOf(sessionId);
-    document.querySelectorAll('.sessions-grid [data-session-from],[data-session-until]').forEach(function (el) {
-      var visible = true;
-      if (el.hasAttribute('data-session-from')) {
-        var fromIdx = ids.indexOf(el.dataset.sessionFrom);
-        if (fromIdx === -1 || fromIdx > idx) visible = false;
-      }
-      if (el.hasAttribute('data-session-until')) {
-        var untilIdx = ids.indexOf(el.dataset.sessionUntil);
-        if (untilIdx !== -1 && untilIdx < idx) visible = false;
-      }
-      el.style.display = visible ? '' : 'none';
-    });
-  }
-
   function restoreHash() {
     if (!window.location.hash) return;
     var el = document.getElementById(window.location.hash.slice(1));
@@ -478,10 +458,12 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
     .then(function (r) { return r.json(); })
     .then(function (data) {
       renderIndexMissions(data.missions);
-      if (window.PORTAL_SESSION) {
-        applyMissionsSession();
+      if (window.PORTAL_SESSIONS && window.PORTAL_SESSION) {
+        window.PORTAL_APPLY_SESSION(window.PORTAL_SESSIONS, window.PORTAL_SESSION);
       } else {
-        document.addEventListener('portalSessionReady', applyMissionsSession, { once: true });
+        document.addEventListener('portalSessionReady', function (e) {
+          window.PORTAL_APPLY_SESSION(e.detail.sessions, e.detail.session);
+        }, { once: true });
       }
       restoreHash();
     })
@@ -553,26 +535,6 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
     list.innerHTML = html;
   }
 
-  function applyArtefactsSession() {
-    var sessions = window.PORTAL_SESSIONS;
-    var sessionId = window.PORTAL_SESSION;
-    if (!sessions || !sessionId) return;
-    var ids = sessions.map(function (s) { return s.id; });
-    var idx = ids.indexOf(sessionId);
-    document.querySelectorAll('.artefact-list [data-session-from],[data-session-until]').forEach(function (el) {
-      var visible = true;
-      if (el.hasAttribute('data-session-from')) {
-        var fromIdx = ids.indexOf(el.dataset.sessionFrom);
-        if (fromIdx === -1 || fromIdx > idx) visible = false;
-      }
-      if (el.hasAttribute('data-session-until')) {
-        var untilIdx = ids.indexOf(el.dataset.sessionUntil);
-        if (untilIdx !== -1 && untilIdx < idx) visible = false;
-      }
-      el.style.display = visible ? '' : 'none';
-    });
-  }
-
   function restoreHash() {
     if (!window.location.hash) return;
     var el = document.getElementById(window.location.hash.slice(1));
@@ -583,10 +545,12 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
     .then(function (r) { return r.json(); })
     .then(function (data) {
       renderArtefacts(data.artefacts);
-      if (window.PORTAL_SESSION) {
-        applyArtefactsSession();
+      if (window.PORTAL_SESSIONS && window.PORTAL_SESSION) {
+        window.PORTAL_APPLY_SESSION(window.PORTAL_SESSIONS, window.PORTAL_SESSION);
       } else {
-        document.addEventListener('portalSessionReady', applyArtefactsSession, { once: true });
+        document.addEventListener('portalSessionReady', function (e) {
+          window.PORTAL_APPLY_SESSION(e.detail.sessions, e.detail.session);
+        }, { once: true });
       }
       restoreHash();
     })
@@ -628,34 +592,16 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
     grid.innerHTML = html;
   }
 
-  function applyBestiarySession() {
-    var sessions = window.PORTAL_SESSIONS;
-    var sessionId = window.PORTAL_SESSION;
-    if (!sessions || !sessionId) return;
-    var ids = sessions.map(function (s) { return s.id; });
-    var idx = ids.indexOf(sessionId);
-    document.querySelectorAll('#bestiary-grid [data-session-from],[data-session-until]').forEach(function (el) {
-      var visible = true;
-      if (el.hasAttribute('data-session-from')) {
-        var fromIdx = ids.indexOf(el.dataset.sessionFrom);
-        if (fromIdx === -1 || fromIdx > idx) visible = false;
-      }
-      if (el.hasAttribute('data-session-until')) {
-        var untilIdx = ids.indexOf(el.dataset.sessionUntil);
-        if (untilIdx !== -1 && untilIdx < idx) visible = false;
-      }
-      el.style.display = visible ? '' : 'none';
-    });
-  }
-
   fetch('data/portal-entities.json')
     .then(function (r) { return r.json(); })
     .then(function (data) {
       renderBestiary(data.entities);
-      if (window.PORTAL_SESSION) {
-        applyBestiarySession();
+      if (window.PORTAL_SESSIONS && window.PORTAL_SESSION) {
+        window.PORTAL_APPLY_SESSION(window.PORTAL_SESSIONS, window.PORTAL_SESSION);
       } else {
-        document.addEventListener('portalSessionReady', applyBestiarySession, { once: true });
+        document.addEventListener('portalSessionReady', function (e) {
+          window.PORTAL_APPLY_SESSION(e.detail.sessions, e.detail.session);
+        }, { once: true });
       }
       if (window.location.hash) {
         var el = document.getElementById(window.location.hash.slice(1));

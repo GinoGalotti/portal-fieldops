@@ -1311,13 +1311,21 @@
   }
 
   document.getElementById('btn-copy-claude').addEventListener('click', function () {
-    var state = serialise();
-    var md = toMarkdown(state, currentSid);
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(md).then(function () { flash('✓ COPIED'); }, function () { fallbackCopy(md); });
-    } else {
-      fallbackCopy(md);
-    }
+    var btn = this;
+    var original = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '// LOADING…';
+    ensureOperativeReports(currentSid).then(function () {
+      btn.disabled = false;
+      btn.textContent = original;
+      var state = serialise();
+      var md = toMarkdown(state, currentSid);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(md).then(function () { flash('✓ COPIED'); }, function () { fallbackCopy(md); });
+      } else {
+        fallbackCopy(md);
+      }
+    });
   });
 
   function fallbackCopy(text) {
@@ -1385,7 +1393,7 @@
 
     if (!week) {
       body.innerHTML = '<div class="op-status">No player week mapped to this session.</div>';
-      return;
+      return Promise.resolve({});
     }
 
     var promises = OP_HUNTER_LIST.map(function (hid) {
@@ -1397,12 +1405,18 @@
         .catch(function () { return { hid: hid, data: null }; });
     });
 
-    Promise.all(promises).then(function (results) {
+    return Promise.all(promises).then(function (results) {
       var byHunter = {};
       results.forEach(function (r) { byHunter[r.hid] = r.data; });
       opReportsCache[sid] = byHunter;
       renderOperativeReports(byHunter, week);
+      return byHunter;
     });
+  }
+
+  function ensureOperativeReports(sid) {
+    if (opReportsCache[sid] !== undefined) return Promise.resolve(opReportsCache[sid]);
+    return loadOperativeReports(sid);
   }
 
   function renderOperativeReports(byHunter, week) {
