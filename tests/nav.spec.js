@@ -2,6 +2,9 @@
 // The nav is entirely dynamically created — there are no hardcoded <a> tags in
 // the HTML source. These tests confirm that the injection script runs successfully
 // and produces the expected links on multiple pages.
+//
+// Also tests the mobile hamburger toggle injected by player-nav.js:
+// .nav-toggle appears at ≤640px (CSS media query), clicking it opens the nav.
 
 import { test, expect } from '@playwright/test';
 
@@ -48,6 +51,51 @@ test.describe('Player nav injection', () => {
     // to the right side of the header on every player page.
     await expect(page.locator('#campbell-status')).toBeVisible();
     await expect(page.locator('#campbell-status')).toHaveText('CAMPBELL ONLINE');
+  });
+
+});
+
+test.describe('Mobile hamburger toggle', () => {
+
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  test('.nav-toggle is visible at 375px viewport', async ({ page }) => {
+    // player-nav.js injects a .nav-toggle button. CSS shows it only at ≤640px.
+    await page.goto('/index.html');
+    await expect(page.locator('.nav-toggle')).toBeVisible();
+  });
+
+  test('nav links are not visible before toggle click at 375px', async ({ page }) => {
+    // At mobile width, nav has display:none unless .open class is present.
+    await page.goto('/index.html');
+    await expect(page.locator('#player-nav')).toBeHidden();
+  });
+
+  test('clicking .nav-toggle makes nav links visible', async ({ page }) => {
+    await page.goto('/index.html');
+    await page.locator('.nav-toggle').click();
+    // .open class added to #player-nav → CSS sets display:flex
+    await expect(page.locator('#player-nav')).toBeVisible();
+    await expect(page.locator('#player-nav a').first()).toBeVisible();
+  });
+
+  test('clicking .nav-toggle again closes the nav', async ({ page }) => {
+    await page.goto('/index.html');
+    const toggle = page.locator('.nav-toggle');
+    await toggle.click(); // open
+    await toggle.click(); // close
+    await expect(page.locator('#player-nav')).toBeHidden();
+  });
+
+});
+
+test.describe('Nav toggle hidden at desktop', () => {
+
+  test('.nav-toggle is not visible at 1280px viewport', async ({ page }) => {
+    // At desktop width (>640px), CSS sets .nav-toggle { display: none }.
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/index.html');
+    await expect(page.locator('.nav-toggle')).toBeHidden();
   });
 
 });

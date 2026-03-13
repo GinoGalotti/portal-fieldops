@@ -884,13 +884,51 @@ All files in `data/` are static assets served by CF Pages. Never written to at r
 
 ### `portal-entities.json`
 
-**Purpose:** Entity/threat database for keeper command board.
+**Purpose:** Entity/threat database for keeper command board and `missions/entities.html` Section I.
 
-**Each entity:** `id`, `designation` (E-001 etc.), `classification`, `case`, `status`, `player_description`, `keeper_description`, `powers`, `harm`, `harm_capacity`, `armour`, `weakness`, `bim_connection`, `bim_note` (highlight in command board — Project Veil thread), `keeper_moves`, optional `keeper_only`.
+**Each entity (base fields):** `id`, `designation` (E-001 etc.), `classification`, `case`, `status`, `player_description`, `keeper_description`, `powers`, `harm`, `harm_capacity`, `armour`, `weakness`, `bim_connection`, `bim_note` (highlight in command board — Project Veil thread), `keeper_moves`, optional `keeper_only`.
+
+**`display{}` block (optional — adds entity to Section I of entities.html):** Add to an entity to make it appear in the "Confirmed Entities" keeper registry. Fields:
+- `id` — DOM id for the card (e.g. `"e001"`)
+- `num` — zero-padded display number (e.g. `"001"`)
+- `eyebrow` — status line (e.g. `"// CONFIRMED · RESOLVED · SESSION 01"`)
+- `name` — display name
+- `sub` — subtitle / classification line
+- `card_class` — CSS class: `"resolved"` or `"active"`
+- `tags[]` — `{ label, color }` badge chips
+- `stat_block[]` — stat rows; each is either `{ label, value, full? }` or `{ label, harm_num, harm_sub, harm_color, full? }` (harm_num variant renders the `.harm-row` layout)
+- `named_moves[]` — `{ name, text }` — entity moves rendered in expanded body
+- `notes[]` — `{ label, text }` — keeper resolution / context notes
+
+**Adding a new confirmed entity to entities.html:** Add `display{}` to the entity's entry in this file. No HTML edits needed — `entities.html` renders Section I dynamically from all entries that have a `display` key.
 
 **Command board:** Load entity by case ID when session is active. Highlight `bim_note` — keeper's reminder of which Project Veil breadcrumbs are live in this scene.
 
-**Current state:** E-001 (Eszter) resolved. E-002 (Cartographer) active — Session 02. E-003–E-006 active. T-006 (The Hollow) theoretical/keeper-only.
+**Current state:** E-001 (Eszter) resolved + display block. E-002 (Cartographer) active + display block — Session 02. E-003–E-006 active. T-006 (The Hollow) theoretical/keeper-only.
+
+---
+
+### `portal-db-custom.json`
+
+**Purpose:** PORTAL-original entities for the Gathered Database (Section III of `entities.html`). Entities observed/documented by PORTAL that aren't in the standard Deck of Monsters.
+
+**Each entry:** `id`, `display_name` (may contain inline HTML/styling), `tags[]` (`{ label, color }`), `stat_block[]` (same harm_num variant schema as `portal-entities.json display{}`), `custom_moves[]` (`{ name, text }`), `notes[]` (`{ label, text }`).
+
+**⚠ Schema normalisation pending** (backlog): the `stat_block[]` column/value pattern is layout-coupled rather than semantic. See backlog item "Entity JSON schema normalisation".
+
+**Adding a new custom entity:** Append to `entries[]`. Rendered by `buildCustomDBCard()` in `entities.html` — no HTML edits needed.
+
+---
+
+### `portal-db-deck.json`
+
+**Purpose:** All 53 Deck of Monsters entries for the Gathered Database (Section III of `entities.html`). Source data extracted from original hardcoded HTML.
+
+**Each entry:** `id`, `name`, `tags[]` (`{ label, color }`), `columns[]` where each column has `label`, `value`, optional `full: true` (full-width layout), `flavour: true` (italic description style).
+
+**⚠ Schema normalisation pending** (backlog): the generic `columns[]` pattern mirrors HTML layout rather than data semantics. See backlog item "Entity JSON schema normalisation". Proposed fix: semantic field keys (`harm`, `armour`, `motivation`, `powers`, `attacks[]`, `weakness`, `custom_moves[]`, `description`).
+
+**Adding new Deck of Monsters entries:** Append to `entries[]`. Rendered by `buildDeckDBCard()` in `entities.html` — no HTML edits needed.
 
 ---
 
@@ -919,5 +957,5 @@ When picking this up:
 - Keeper pages write directly to D1; player pages write their own data only
 - CAMPBELL's voice rules are in `context/worldbuilding-lore.md` — any generated message must sound like CAMPBELL
 - Never add passwords or a signup flow — keeper uses CF Access (Google), players use URL tokens
-- All seven `data/` JSON files are built and ready — read the "Static Data Files Reference" section above before writing any code that touches moves, hunters, NPCs, or entities. Do not reconstruct data that already exists in those files.
+- All nine `data/` JSON files are built and ready — read the "Static Data Files Reference" section above before writing any code that touches moves, hunters, NPCs, or entities. Do not reconstruct data that already exists in those files.
 - `keeper_description` and `keeper_notes` fields must never appear in player-facing API responses or page renders
