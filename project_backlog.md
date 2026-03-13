@@ -54,9 +54,11 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 ---
 
-## NEXT UP — Playwright Tests
+## NEXT UP
 
 303 tests passing across 17 files. Suite: `smoke` (5) · `nav` (22) · `contacts` (7) · `incidents` (18) · `feed` (~25) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (15) · `d1-round-trip` (7) · `map` (24) · `report` (15).
+
+**1. `index.html` session-aware cards** [M] — archive/artefact cards with `data-session-from` are hidden/shown correctly at current session; tests for `session-state.js` gating logic.
 
 ---
 
@@ -88,5 +90,92 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 **`the-lab.html`** — MEDIUM / BUG
 - Team moves + assets are hardcoded but `data/motw-teambooks.json` already has the Research Lab entry. Fix: render from JSON at load time. Player choices (D1) unaffected.
 
+---
+
+### Post-Session Workflow Improvements — HIGH
+
+Four related features that close gaps in the current session-summary → next-session-prep pipeline.
+
+#### 1. Keeper review of player reports — `reports/keeper-review.html` [HIGH]
+**Problem:** The runbook currently says "run a wrangler D1 query to read player reports" — that's the weakest link in the whole post-session workflow.
+**Goal:** A keeper-facing page that shows all player operative reports for a selected week, side by side. Aggregated ratings (story/atmosphere/role/emotion/overall as stars), favourite moment, "what I'd do differently", and scene notes per hunter — all readable without touching the terminal.
+**Implementation:**
+- Keeper selects week (W01, W02…) from a tab/selector
+- Page calls `GET /api/v1/player-reports/{week}/{hunter}/state` for each hunter in parallel
+- Renders a 2×2 (or scrollable) grid of hunter report cards
+- Shows which hunters have filed vs not yet filed
+- Page lives at `reports/keeper-review.html`, uses `keeper.css`
+**Why now:** Closes the most obvious gap in the existing workflow. Data is already in D1 — just needs a reader.
+
+#### 2. Combined COPY FOR CLAUDE — enhanced export on `missions/report.html` [HIGH]
+**Problem:** The current COPY FOR CLAUDE button exports only the keeper's perspective. Player ratings, favourite moments, and feedback are in D1 but not included.
+**Goal:** When the keeper clicks COPY FOR CLAUDE, the export pulls player report data from D1 for the active session's week and appends a "OPERATIVE REPORTS" section to the markdown — aggregated ratings, standout moments, and any cross-player themes — before copying to clipboard.
+**Implementation:**
+- On COPY FOR CLAUDE click, fetch all player reports for the week mapped to this session
+- Append a structured `## OPERATIVE REPORTS` section to the existing markdown
+- Fall back gracefully if no player reports filed yet (show which hunters haven't filed)
+**Why now:** Direct improvement to the AI-prep pipeline. Makes the claude.ai session richer with one click.
+
+#### 3. Campaign thread + clock tracker — `missions/threads.html` [MEDIUM]
+**Problem:** Threads and clocks are tracked per session in the field report, but there's no continuous view across sessions. The arc tracker (`missions/arcs.html`) does this beautifully for hunter arcs — nothing equivalent exists for campaign-level threads.
+**Goal:** A keeper-facing page showing all named threads (PROJECT VEIL, MESA, CAMPBELL, etc.) and all countdown clocks with their current status, last-updated session, and any notes — the campaign's shape at a glance.
+**Implementation:**
+- New `data/portal-threads.json` — thread registry: `id`, `name`, `category` (faction/personal/mystery), `status` (active/resolved/dormant), `sessions[]` (per-session notes/state)
+- New `data/portal-clocks.json` — clock registry: `id`, `label`, `max_ticks`, `ticks`, `status`, `notes`
+- Both rendered as a keeper dashboard — threads grouped by category, clocks as visual pip tracks
+- State saved to D1 (new migration) or to these JSON files directly (simpler if clocks don't change mid-session)
+**Why now:** Makes campaign structure visible. Directly feeds into next-session prep and the COPY FOR CLAUDE export.
+
+#### 4. Session recap page — player-facing [MEDIUM]
+**Problem:** Players have no "previously on P.O.R.T.A.L" reference between sessions. The keeper's summary is in D1 but invisible to players.
+**Goal:** A player-facing page (`reports/recap.html` or similar) showing post-session summaries for closed sessions — keeper's plain-language summary, outcome, and key thread updates — made visible to players once the keeper advances the session.
+**Implementation:**
+- Reads from the field reports D1 table (`GET /api/v1/reports/:sid/state`) for all closed sessions
+- Renders keeper's `db-summary`, outcome, and optional `db-spine` (next-session setup) per session tab
+- Session-gated: only sessions up to the current active session are visible
+- Read-only, player.css, linked from player nav
+**Why now:** Closes the memory gap between sessions. Uses data already being collected.
+
+---
+
+### Playbook data architecture refactor — MEDIUM
+
+**Problem:** `playbook-moves.json` has moves keyed to specific hunters (rex, alan, reed, sven) rather than to playbooks (Action Scientist, Sidekick, etc.). Meanwhile `motw-playbooks.json` has 5 playbooks (action-scientist, sidekick, changeling, monstrous, flake) with full reference data. These two layers don't connect cleanly.
+
+**Current state:**
+- `motw-playbooks.json` — 5 playbooks from the book: full stat options, moves list, gear, improvements, `"hunter": "rex"` field tying it to a specific campaign hunter
+- `playbook-moves.json` — 34 moves keyed by `data-check-key`, each with `"hunter": "rex"` etc. — hunter-specific, not playbook-generic
+- `hunters.json` — 5 hunters with identity data, each references a playbook implicitly
+
+**The problem in practice:** When John Johnson (Flake playbook) needs a hunter page, his moves aren't in `playbook-moves.json`. You'd have to add them manually. If another group wanted to use the site, every hunter would need manual move entries.
+
+**Proposed two-layer architecture:**
+
+*Layer 1 — Reference (playbook-generic):*
+- `motw-playbooks.json` — already exists, keep as canonical playbook definitions. Remove `"hunter"` field (it's campaign-specific, not book data). Each playbook has `id`, `name`, `moves[]` with full text.
+- `playbook-moves.json` — refactor to be playbook-keyed, not hunter-keyed. Each move entry: `playbook_id`, `move_id`, `name`, `roll`, `description`. The `data-check-key` becomes `{playbook_id}-{move_id}`.
+
+*Layer 2 — Campaign (hunter-specific):*
+- `hunters.json` — add `playbook_id` field linking each hunter to their playbook. Already has `"hunter": "rex"` → `"playbook_id": "action-scientist"`.
+- D1 `hunter_sheets` — unchanged. Stores which move keys are checked (`checks{}`), plus stats/harm/luck/xp.
+
+*How hunter pages work after refactor:*
+1. Load hunter identity from `hunters.json` → get `playbook_id`
+2. Load playbook definition from `motw-playbooks.json` by `playbook_id` → get move list
+3. Load sheet state from D1 → get which moves are checked
+4. Render only checked moves as active cards in the panel (same as now, different data path)
+
+**Adding John Johnson (Flake):**
+- Flake playbook already exists in `motw-playbooks.json`
+- Add John to `hunters.json` with `"playbook_id": "flake"`
+- Create `hunters/john.html` pointing to `hunters/hunter.js`
+- Flake moves render automatically — no manual move entries needed
+
+**Scope:** `data/hunters.json`, `data/playbook-moves.json`, `data/motw-playbooks.json`, `hunters/hunter.js` (move lookup path), `feed.html` (move card render), tests.
+
+**Why this matters beyond John Johnson:** Makes the site genuinely reusable for any MoTW group. The reference layer is the book data; the campaign layer is your group's choices. Clean separation.
+
+---
+
 ### Minor / polish
-- John Johnson hunter page — no page, no D1 stats, no Flake moves in `playbook-moves.json` yet
+- John Johnson hunter page — no page, no D1 stats, no Flake moves in `playbook-moves.json` yet (blocked on playbook architecture refactor above)
