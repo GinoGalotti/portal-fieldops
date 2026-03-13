@@ -15,17 +15,19 @@
 | `contacts.html` | `tests/contacts.spec.js` | 7 | ✅ |
 | All key pages | `tests/smoke.spec.js` | 5 | ✅ |
 | Nav injection + hamburger | `tests/nav.spec.js` | 10 | ✅ |
-| `feed.html` | `tests/feed.spec.js` | 15 | ✅ |
+| `feed.html` | `tests/feed.spec.js` | ~25 | ✅ |
 | `index.html` bestiary | `tests/bestiary.spec.js` | 15 | ✅ |
 | `missions/arcs.html` | `tests/arcs.spec.js` | 24 | ✅ |
 | `missions/entities.html` | `tests/entities.spec.js` | 36 | ✅ |
+| `hunters/*.html` | `tests/hunters.spec.js` | ~18 | ✅ |
+| `missions/campbell-briefings.html` | `tests/briefings.spec.js` | ~12 | ✅ |
+| `reports/player-report.html` | `tests/player-report.spec.js` | ~15 | ✅ |
 
 ## ⬆ Next Up (recommended order)
 
-1. **`tests/hunters.spec.js`** [H] — Hunter pages have zero coverage and are used every session. Test on `reed.html` + `rex.html` (share `hunter.js`): stat pips render, harm/luck/xp tracks clickable, save→reload→restore D1 round-trip, arc beats visible.
-2. **Feed hunter panel** [H] — Add to `feed.spec.js`: hunter picker loads sheet, move cards render, tracks render as pips, ROLL button posts to feed, composer name auto-fills.
-3. **`tests/briefings.spec.js`** [M] — CAMPBELL briefings tab switcher; same data-driven pattern as `incidents.spec.js` (read `briefings.json`).
-4. **`tests/player-report.spec.js`** [M] — Week + hunter selectors, rating pips, SAVE button, D1 round-trip.
+1. **`tests/missions/report.spec.js`** [M] — Keeper field report: session selector, save, COPY FOR CLAUDE button.
+2. **Full D1 round-trip** [H] — Save→reload→restore cycle: hunter sheets, incident state. Requires live local wrangler.
+3. **Nav subdirectory paths** [M] — All player-facing pages inject nav with same links; links resolve correctly from `hunters/`, `missions/`, `reports/` subdirs.
 
 ---
 

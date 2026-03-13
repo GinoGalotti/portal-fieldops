@@ -464,3 +464,133 @@ test.describe('feed.html — composer', () => {
   });
 
 });
+
+// ── HUNTER PANEL ──────────────────────────────────────────────────────────────
+//
+// The panel's MOVES tab renders after selecting a hunter from #hunter-select.
+// onHunterChange(id) fetches the hunter sheet from /api/v1/hunters/{id}/sheet,
+// then calls renderMovesPanel() which:
+//  - Shows stat chips and clickable tracks (.track-mini-pip) if sheet.stats exists
+//  - Shows playbook move cards (.move-card) for checked moves in sheet.checks
+//  - Always shows basic move cards (.move-card) from /data/motw-basic-moves.json
+//  - Sets #composer-name to HUNTER_NAMES[id]
+// doRoll() runs after a 350ms animation, then POSTs to /api/v1/rolls.
+
+const MOCK_SHEET = {
+  stats: { charm: 1, cool: 0, sharp: 2, tough: -1, weird: 0 },
+  harm: 0, luck: 3, xp: 1,
+  checks: {},
+  bonds: [], notes: '', special: [], hiddenLists: [],
+};
+
+// Sets up fresh routes for the hunter panel tests (overrides mockFeedApis).
+async function setupFeedWithHunter(page) {
+  await page.route('**/api/v1/rolls**', async route => {
+    if (route.request().method() === 'POST') return route.fulfill({ json: { ok: true, id: 99 } });
+    return route.fulfill({ json: [] });
+  });
+  await page.route('**/api/v1/messages**', async route => {
+    const method = route.request().method();
+    if (method === 'POST' || method === 'DELETE') return route.fulfill({ json: { ok: true, id: 99 } });
+    return route.fulfill({ json: [] });
+  });
+  // Return MOCK_SHEET for any hunter GET; swallow PUTs.
+  await page.route('**/api/v1/hunters/**', async route => {
+    if (route.request().method() === 'PUT') return route.fulfill({ status: 200, body: '{}' });
+    return route.fulfill({ json: MOCK_SHEET });
+  });
+  await page.goto('/feed.html');
+  await page.waitForLoadState('networkidle');
+}
+
+test.describe('feed.html — hunter panel', () => {
+
+  test('hunter picker dropdown (#hunter-select) renders in panel header', async ({ page }) => {
+    await setupFeedWithHunter(page);
+    await expect(page.locator('#hunter-select')).toBeVisible();
+  });
+
+  test('selecting a hunter auto-fills composer name from HUNTER_NAMES', async ({ page }) => {
+    await setupFeedWithHunter(page);
+    await page.selectOption('#hunter-select', 'reed');
+    // onHunterChange sets #composer-name to HUNTER_NAMES['reed'] = 'Reed Atwood'
+    await expect(page.locator('#composer-name')).toHaveValue('Reed Atwood');
+  });
+
+  test('move cards render after hunter selection', async ({ page }) => {
+    await setupFeedWithHunter(page);
+    await page.selectOption('#hunter-select', 'reed');
+    // renderMovesPanel() always renders basic moves from motw-basic-moves.json
+    await page.waitForSelector('.move-card');
+    await expect(page.locator('.move-card').first()).toBeVisible();
+  });
+
+  test('each move card has a // ROLL button', async ({ page }) => {
+    await setupFeedWithHunter(page);
+    await page.selectOption('#hunter-select', 'reed');
+    await page.waitForSelector('.roll-btn');
+    await expect(page.locator('.roll-btn').first()).toBeVisible();
+    await expect(page.locator('.roll-btn').first()).toContainText('ROLL');
+  });
+
+  test('track pips (.track-mini-pip) render when sheet has stats', async ({ page }) => {
+    await setupFeedWithHunter(page);
+    await page.selectOption('#hunter-select', 'reed');
+    // renderTrack() outputs .track-mini-pip elements only when hunterSheet.stats exists
+    await page.waitForSelector('.track-mini-pip');
+    await expect(page.locator('.track-mini-pip').first()).toBeVisible();
+  });
+
+  test('clicking ROLL appends a new feed entry to the feed column', async ({ page }) => {
+    await setupFeedWithHunter(page);
+    await page.selectOption('#hunter-select', 'reed');
+    await page.waitForSelector('.roll-btn');
+
+    const initialCount = await page.locator('.feed-entry').count();
+
+    // Click the first ROLL button
+    await page.locator('.roll-btn').first().click();
+
+    // doRoll() appends a local entry after a 350ms setTimeout
+    await page.waitForFunction(
+      count => document.querySelectorAll('.feed-entry').length > count,
+      initialCount,
+      { timeout: 2000 }
+    );
+
+    const newCount = await page.locator('.feed-entry').count();
+    expect(newCount).toBeGreaterThan(initialCount);
+  });
+
+  test('clicking ROLL sends POST to /api/v1/rolls with correct hunter_id', async ({ page }) => {
+    const posts = [];
+
+    await page.route('**/api/v1/rolls**', async route => {
+      if (route.request().method() === 'POST') {
+        posts.push(await route.request().postDataJSON());
+        return route.fulfill({ json: { ok: true, id: 50 } });
+      }
+      return route.fulfill({ json: [] });
+    });
+    await page.route('**/api/v1/messages**', route => route.fulfill({ json: [] }));
+    await page.route('**/api/v1/hunters/**', async route => {
+      if (route.request().method() === 'PUT') return route.fulfill({ status: 200, body: '{}' });
+      return route.fulfill({ json: MOCK_SHEET });
+    });
+
+    await page.goto('/feed.html');
+    await page.waitForLoadState('networkidle');
+    await page.selectOption('#hunter-select', 'reed');
+    await page.waitForSelector('.roll-btn');
+    await page.locator('.roll-btn').first().click();
+
+    // Wait for the 350ms animation + fetch to fire
+    await page.waitForFunction(() => window._rollPosted, undefined, { timeout: 2000 }).catch(() => {});
+    // Fallback: small wait to allow the setTimeout(fn, 350) to execute
+    await page.waitForTimeout(600);
+
+    expect(posts.length).toBeGreaterThan(0);
+    expect(posts[0].hunter_id).toBe('reed');
+  });
+
+});
