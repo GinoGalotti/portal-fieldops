@@ -14,7 +14,7 @@
 | `lab-incidents.html` | `tests/incidents.spec.js` | 18 | ✅ |
 | `contacts.html` | `tests/contacts.spec.js` | 7 | ✅ |
 | All key pages | `tests/smoke.spec.js` | 5 | ✅ |
-| Nav injection + hamburger | `tests/nav.spec.js` | 10 | ✅ |
+| Nav injection + hamburger | `tests/nav.spec.js` | 22 | ✅ |
 | `feed.html` | `tests/feed.spec.js` | ~25 | ✅ |
 | `index.html` bestiary | `tests/bestiary.spec.js` | 15 | ✅ |
 | `missions/arcs.html` | `tests/arcs.spec.js` | 24 | ✅ |
@@ -28,7 +28,7 @@
 ## ⬆ Next Up (recommended order)
 
 1. **`tests/report.spec.js`** [M] — Keeper field report: session selector, save, COPY FOR CLAUDE button.
-2. **Nav subdirectory paths** [M] — All player-facing pages inject nav with same links; links resolve correctly from `hunters/`, `missions/`, `reports/` subdirs.
+~~2. **Nav subdirectory paths** [M] — All player-facing pages inject nav with same links; links resolve correctly from `hunters/`, `missions/`, `reports/` subdirs.~~ ✅ done (`nav.spec.js`)
 
 ---
 
@@ -113,8 +113,8 @@ Priority: **H** = high (core features, likely to break), **M** = medium, **L** =
 ### Nav injection correctness [M]
 - [x] Mobile hamburger toggle: visible at ≤640px, click opens/closes nav → `nav.spec.js`
 - [x] Desktop: `.nav-toggle` hidden → `nav.spec.js`
-- [ ] All player-facing pages inject nav with the same set of links
-- [ ] Subdirectory pages (`hunters/`, `missions/`, `reports/`) get correct relative paths in nav links
+- [x] All player-facing pages inject nav with the same set of links → `nav.spec.js`
+- [x] Subdirectory pages (`hunters/`, `missions/`, `reports/`) get correct relative paths in nav links → `nav.spec.js`
 - [ ] Nav links resolve to valid pages (no 404s on click)
 
 ## Running the Tests

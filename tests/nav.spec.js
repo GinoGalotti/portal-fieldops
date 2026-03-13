@@ -5,6 +5,15 @@
 //
 // Also tests the mobile hamburger toggle injected by player-nav.js:
 // .nav-toggle appears at ≤640px (CSS media query), clicking it opens the nav.
+//
+// Subdirectory path tests verify that player-nav.js adjusts hrefs correctly for
+// pages in hunters/, missions/, and reports/ (b = '../') vs root pages (b = '').
+
+// All 11 nav item labels defined in player-nav.js, in order.
+const NAV_LABELS = [
+  'Briefing', 'Operatives', 'Bestiary', 'The Lab', 'Artefacts',
+  'Missions', 'Contacts', 'Report', 'Queue', 'Incidents', 'Feed',
+];
 
 import { test, expect } from '@playwright/test';
 
@@ -96,6 +105,129 @@ test.describe('Nav toggle hidden at desktop', () => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto('/index.html');
     await expect(page.locator('.nav-toggle')).toBeHidden();
+  });
+
+});
+
+// ── SUBDIRECTORY PATH TESTS ───────────────────────────────────────────────────
+//
+// player-nav.js detects the current directory and sets:
+//   b = '../'  for pages in hunters/, missions/, reports/
+//   b = ''     for root-level pages
+//
+// Root-targeted links (Feed, Contacts, The Lab, etc.) must include '../' from
+// subdirectory pages so they don't produce 404s. Links that already have a
+// subdir prefix (Missions → missions/missions.html) must also resolve correctly.
+
+test.describe('Nav subdirectory paths — hunters/', () => {
+
+  test('all nav labels present on hunters/reed.html', async ({ page }) => {
+    // Silence D1 API calls so test focuses on nav, not hunter data
+    await page.route('**/api/v1/**', r => r.fulfill({ json: null }));
+    await page.goto('/hunters/reed.html');
+    const nav = page.locator('#player-nav');
+    await expect(nav).toBeVisible();
+    for (const label of NAV_LABELS) {
+      await expect(nav.getByText(label, { exact: true })).toBeVisible();
+    }
+  });
+
+  test('Feed link on hunters/reed.html uses ../ prefix', async ({ page }) => {
+    await page.route('**/api/v1/**', r => r.fulfill({ json: null }));
+    await page.goto('/hunters/reed.html');
+    const feedLink = page.locator('#player-nav a').filter({ hasText: 'Feed' });
+    await expect(feedLink).toHaveAttribute('href', '../feed.html');
+  });
+
+  test('Contacts link on hunters/reed.html uses ../ prefix', async ({ page }) => {
+    await page.route('**/api/v1/**', r => r.fulfill({ json: null }));
+    await page.goto('/hunters/reed.html');
+    const link = page.locator('#player-nav a').filter({ hasText: 'Contacts' });
+    await expect(link).toHaveAttribute('href', '../contacts.html');
+  });
+
+  test('Missions link on hunters/reed.html resolves to ../missions/missions.html', async ({ page }) => {
+    await page.route('**/api/v1/**', r => r.fulfill({ json: null }));
+    await page.goto('/hunters/reed.html');
+    const link = page.locator('#player-nav a').filter({ hasText: 'Missions' });
+    await expect(link).toHaveAttribute('href', '../missions/missions.html');
+  });
+
+});
+
+test.describe('Nav subdirectory paths — missions/', () => {
+
+  test('all nav labels present on missions/missions.html', async ({ page }) => {
+    await page.route('**/api/v1/**', r => r.fulfill({ json: [] }));
+    await page.goto('/missions/missions.html');
+    await page.waitForLoadState('networkidle');
+    const nav = page.locator('#player-nav');
+    await expect(nav).toBeVisible();
+    for (const label of NAV_LABELS) {
+      await expect(nav.getByText(label, { exact: true })).toBeVisible();
+    }
+  });
+
+  test('Feed link on missions/missions.html uses ../ prefix', async ({ page }) => {
+    await page.route('**/api/v1/**', r => r.fulfill({ json: [] }));
+    await page.goto('/missions/missions.html');
+    await page.waitForLoadState('networkidle');
+    const link = page.locator('#player-nav a').filter({ hasText: 'Feed' });
+    await expect(link).toHaveAttribute('href', '../feed.html');
+  });
+
+  test('Report link on missions/missions.html resolves to ../reports/player-report.html', async ({ page }) => {
+    await page.route('**/api/v1/**', r => r.fulfill({ json: [] }));
+    await page.goto('/missions/missions.html');
+    await page.waitForLoadState('networkidle');
+    const link = page.locator('#player-nav a').filter({ hasText: 'Report' });
+    await expect(link).toHaveAttribute('href', '../reports/player-report.html');
+  });
+
+});
+
+test.describe('Nav subdirectory paths — reports/', () => {
+
+  test('all nav labels present on reports/player-report.html', async ({ page }) => {
+    await page.route('**/api/v1/**', r => r.fulfill({ json: null }));
+    await page.goto('/reports/player-report.html');
+    const nav = page.locator('#player-nav');
+    await expect(nav).toBeVisible();
+    for (const label of NAV_LABELS) {
+      await expect(nav.getByText(label, { exact: true })).toBeVisible();
+    }
+  });
+
+  test('Feed link on reports/player-report.html uses ../ prefix', async ({ page }) => {
+    await page.route('**/api/v1/**', r => r.fulfill({ json: null }));
+    await page.goto('/reports/player-report.html');
+    const link = page.locator('#player-nav a').filter({ hasText: 'Feed' });
+    await expect(link).toHaveAttribute('href', '../feed.html');
+  });
+
+  test('Incidents link on reports/player-report.html uses ../ prefix', async ({ page }) => {
+    await page.route('**/api/v1/**', r => r.fulfill({ json: null }));
+    await page.goto('/reports/player-report.html');
+    const link = page.locator('#player-nav a').filter({ hasText: 'Incidents' });
+    await expect(link).toHaveAttribute('href', '../lab-incidents.html');
+  });
+
+});
+
+test.describe('Nav root paths — no ../ prefix', () => {
+
+  test('Feed link on index.html does NOT use ../ prefix', async ({ page }) => {
+    await page.goto('/index.html');
+    await page.waitForLoadState('networkidle');
+    const link = page.locator('#player-nav a').filter({ hasText: 'Feed' });
+    await expect(link).toHaveAttribute('href', 'feed.html');
+  });
+
+  test('Contacts link on index.html does NOT use ../ prefix', async ({ page }) => {
+    await page.goto('/index.html');
+    await page.waitForLoadState('networkidle');
+    const link = page.locator('#player-nav a').filter({ hasText: 'Contacts' });
+    await expect(link).toHaveAttribute('href', 'contacts.html');
   });
 
 });

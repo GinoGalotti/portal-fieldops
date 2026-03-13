@@ -51,14 +51,11 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 ## NEXT UP — Playwright Tests
 
-276 tests passing across 16 files. Suite: `smoke` (5) · `nav` (10) · `contacts` (7) · `incidents` (18) · `feed` (~25) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (15) · `d1-round-trip` (7) · `map` (24).
+288 tests passing across 16 files. Suite: `smoke` (5) · `nav` (22) · `contacts` (7) · `incidents` (18) · `feed` (~25) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (15) · `d1-round-trip` (7) · `map` (24).
 
 **1. Keeper field report (`missions/report.html`) — MEDIUM**
 - New file: `tests/report.spec.js`
 - Session selector renders; save button; "COPY FOR CLAUDE" button exists
-
-**2. Nav subdirectory paths — MEDIUM**
-- All player-facing pages inject nav with same links; links resolve correctly from `hunters/`, `missions/`, `reports/` subdirs
 
 ---
 
