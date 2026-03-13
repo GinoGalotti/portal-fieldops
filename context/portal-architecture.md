@@ -102,7 +102,8 @@ portal-fieldops/
 │   │   ├── 007_feed_tables.sql    # rolls + messages ✅ remote + local
 │   │   ├── 008_incident_responses.sql # incident_responses ✅ remote + local
 │   │   ├── 009_incident_state.sql     # incident_state ✅ remote + local
-│   │   └── 010_messages_type.sql      # messages.type + messages.payload ✅ remote + local
+│   │   ├── 010_messages_type.sql      # messages.type + messages.payload ✅ remote + local
+│   │   └── 011_map_state.sql          # map_state ✅ local (apply --remote before deploy)
 │   └── src/                   # (Phase 3) Workers source
 │       ├── index.ts           # Main router
 │       └── routes/
@@ -173,7 +174,7 @@ INSERT OR IGNORE INTO active_session (id, session_id) VALUES ('global', 'w2');
 ```sql
 -- ─── FIELD REPORTS (migration 002) ────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS field_reports (
-  session_id TEXT PRIMARY KEY,   -- 'S01' | 'S02' etc (keeper report, one per session)
+  session_id TEXT PRIMARY KEY,   -- 'M01' | 'M02' etc (keeper report, one per session)
   state      TEXT NOT NULL,      -- JSON blob: { session, mission, date, outcome, directive, summary,
                                  --   energy, intensity, best, surprise, flat,
                                  --   hunters: { rex/reed/alan/sven: { action, arc, note } },
@@ -593,6 +594,37 @@ CREATE TABLE IF NOT EXISTS incident_state (
 
 ---
 
+### Phase 2.11 — Interactive District Map (COMPLETE)
+
+**`data/portal-maps.json`** — explicit grid matrix for Aldermoor (M02). Each map: `id`, `session_id`, grid (5-row × 7-col; cells: `loc`, `street-h`, `street-v`, `empty`). Each `loc` cell: `id`, `order` (1-7 narrative progression), `label`, `sublabel`, `player_desc`, `keeper_note`, `npcs[]`.
+
+**Map state schema:** `{ u: { loc_id: true }, v: { loc_id: true } }` — `u` = player-unlocked, `v` = keeper-visited. Legacy flat format `{ loc_id: true }` is auto-migrated by `_normaliseMapState()` in `feed.html`.
+
+**New D1 table — `map_state`** (migration 011):
+```sql
+CREATE TABLE IF NOT EXISTS map_state (
+  map_id     TEXT PRIMARY KEY,
+  state      TEXT NOT NULL DEFAULT '{}',
+  updated_at TEXT NOT NULL
+);
+```
+⚠ Applied local only — run `wrangler d1 execute portal-db --remote --file=workers/migrations/011_map_state.sql` before deploying.
+
+**New API endpoint:**
+- `GET  /api/v1/maps/:id/state` → returns parsed state or `{}`
+- `PUT  /api/v1/maps/:id/state` → `INSERT OR REPLACE` with new state blob
+
+**Key files:**
+- `data/portal-maps.json` — map grid data (static asset)
+- `functions/api/v1/maps/[id]/state.js` — GET+PUT map state
+- `workers/migrations/011_map_state.sql` — new table
+
+**Player MAP tab**: mission session selector → grid of `loc`/street cells; locked cells show redacted blocks; unlocked cells show label + sublabel + detail card on click; SYNC MAP button.
+
+**Keeper MAP tab**: same grid with order badges (keeper-only, hidden from players), NPC pills per cell, unlock toggle per cell, visited button (○/✓), bulk actions (REVEAL ALL / RESET MAP / ALL VISITED / CLEAR VISITED).
+
+---
+
 ## E2E Testing (branch: `playwright-testing`)
 
 Playwright test suite — chromium only, targets `wrangler pages dev .` on localhost:8788.
@@ -779,7 +811,7 @@ The feed composer (text box + send button) is currently at the bottom of the fee
 
 ### Keeper mode on mobile
 
-Same two-tab layout. The keeper panel tabs (OPERATIVES / CONTACTS / REFERENCES / THREATS) stack horizontally — may need font-size reduction or horizontal scroll on the tab row at very small widths.
+Same two-tab layout. The keeper panel tabs (OPERATIVES / CONTACTS / REFERENCES / THREATS / HANDOUTS / MAP) stack horizontally — the tab row uses `overflow-x: auto; flex-wrap: nowrap` with a styled thin scrollbar so all 6 tabs remain accessible.
 
 ---
 
