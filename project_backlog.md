@@ -6,6 +6,15 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 ## RECENTLY DONE ✅
 
+### Lab hardcoded bug fix + entity JSON schema normalisation (2026-03-13)
+- `data/motw-teambooks.json` — `tagline` added to all 7 Research Lab allies; `campbell-team-ally` id → `campbell`
+- `the-lab.html` — `renderAdvancements(lab)` + `renderAlly(lab)` data-driven from JSON; advancement items → counter UI (`−/count/+`); ally dropdown background fixed to solid `--bg2`; counters serialised as numeric values in `s.checked['adv-N']`
+- `data/portal-db-deck.json` — 53 entries normalised from `tags[]`/`columns[]` → semantic keys: `type`, `harm`, `armour`, `motivation`, `powers`, `attacks[]`, `weakness`, `custom_moves[]`, `description`
+- `data/portal-db-custom.json` — Shōjō normalised from `stat_block[]` → semantic fields + `extra_tags[]`, `type_detail`, `harm_color`, `harm_note`, `armour_detail`, `origin`, `notes[]`
+- `missions/entities.html` — removed `buildStatItem()` helper; replaced both DB renderers with semantic-field functions; `DECK_TYPE_COLORS` lookup table
+- `tests/lab.spec.js` — +7 tests: advancement counter DOM, +/−/floor behaviour, ally select count + values
+- Total: **329 tests across 18 files**
+
 ### Interactive district map + map tests (2026-03-13)
 - `data/portal-maps.json` — explicit grid map for Aldermoor (M02); `"order"` (1-7 narrative progression), `"npcs"` arrays per location
 - `workers/migrations/011_map_state.sql` — `map_state` table; applied local + remote
@@ -70,41 +79,13 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 ## NEXT UP
 
-303 tests passing across 17 files. Suite: `smoke` (5) · `nav` (22) · `contacts` (7) · `incidents` (18) · `feed` (~25) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (15) · `d1-round-trip` (7) · `map` (24) · `report` (15).
+329 tests passing across 18 files. Suite: `smoke` (5) · `nav` (22) · `contacts` (7) · `incidents` (18) · `feed` (~25) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (27) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (29) · `d1-round-trip` (7) · `map` (24) · `report` (15) · `index-session` (16).
 
 **1. Campaign thread + clock tracker — `missions/threads.html`** [MEDIUM] — see Post-Session Workflow section below.
 
 ---
 
 ## BACKLOG
-
-### Entity JSON schema normalisation — MEDIUM
-**Problem:** `portal-db-custom.json` and `portal-db-deck.json` use a generic `{ "label": "...", "value": "..." }` column pattern that mirrors HTML layout rather than data semantics. This is inconsistent with the clean field-keyed style of `portal-entities.json` (which uses `name`, `harm`, `powers[]`, `keeper_moves[]` etc.).
-
-**Goal:** Normalise to semantic keys so the JSON describes *what* the data is, not *how* it's displayed. The renderer maps fields to layout — the JSON stays layout-agnostic.
-
-**Proposed deck entry schema:**
-```json
-{
-  "id": "db001", "name": "Arbiter Spirit",
-  "type": "executioner", "harm": "15 harm", "armour": "Spectral mail: 1-armour.",
-  "motivation": "to bring justice at the request of its summoner",
-  "powers": "Incorporeal. Phases through walls...",
-  "attacks": [ { "name": "Spectral Blade", "value": "2-harm balanced close holy." } ],
-  "weakness": "Can only be summoned to kill the guilty...",
-  "custom_moves": [ { "name": "Soul Judgement", "text": "..." } ],
-  "description": "A spirit of justice and revenge..."
-}
-```
-
-**Scope:** Update `portal-db-deck.json` (53 entries), `portal-db-custom.json` (Shōjō), `renderDeckDB()` + `buildCustomDBCard()` in `entities.html`, and `entities.spec.js` assertions. No visual change.
-
-### Data-driven migrations (upcoming)
-
-**`the-lab.html`** — MEDIUM / BUG
-- Team moves + assets are hardcoded but `data/motw-teambooks.json` already has the Research Lab entry. Fix: render from JSON at load time. Player choices (D1) unaffected.
-
----
 
 ### Post-Session Workflow Improvements — HIGH
 

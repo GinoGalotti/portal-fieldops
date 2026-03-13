@@ -82,32 +82,38 @@
         {
           "id": "kana-harlison",
           "name": "Kana Harlison",
+          "tagline": "cat burglar, stealth specialist",
           "description": "A cat burglar with a taste for helping out in a crisis. Stealth is their deal, but they can't resist stealing things if they get a chance."
         },
         {
           "id": "dalia-amin",
           "name": "Dalia Amin",
+          "tagline": "community leader, local cooperation",
           "description": "A local community leader. They'll get cooperation from locals, whether it's taking cover or getting some manual labour done. They want you to look after the community, too."
         },
         {
           "id": "sergeant-qeb-gomez",
           "name": "Sergeant Qeb Gomez",
+          "tagline": "law enforcement liaison",
           "description": "Local law enforcement. He can keep the team aware of what the cops plan to do, and act as your liaison."
         },
         {
-          "id": "campbell-team-ally",
+          "id": "campbell",
           "name": "CAMBELL (sic), the lab AI",
+          "tagline": "lab AI, virtual scenario testing",
           "description": "Handles most background computation and maintenance tasks. Exceptionally good at creating virtual scenarios to test theories.",
           "portal_note": "Intentional single-L spelling in source. In the PORTAL campaign this maps directly to CAMPBELL — the team's lab AI briefing system."
         },
         {
           "id": "dr-yos-sokha",
           "name": "Dr Yos Sokha",
+          "tagline": "former colleague, cross-team research",
           "description": "A former colleague. Can provide research and data from different teams and different viewpoints."
         },
         {
           "id": "questerr-and-wrexy",
           "name": "Questerr and Wrexy",
+          "tagline": "alien diplomats, advanced tech",
           "description": "Diplomats from a friendly alien civilisation. They're also concerned about your ongoing troubles, and sometimes provide you with rare resources or advanced technology."
         },
         {

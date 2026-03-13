@@ -90,6 +90,72 @@ test.describe('the-lab.html — assets render', () => {
 
 });
 
+// ── Advancements and ally render ──────────────────────────────────────────────
+
+test.describe('the-lab.html — advancements and ally render', () => {
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/the-lab.html');
+    await page.waitForLoadState('networkidle');
+  });
+
+  test('#adv-list is non-empty after networkidle', async ({ page }) => {
+    await expect(page.locator('#adv-list')).not.toBeEmpty();
+  });
+
+  test('correct advancement item count from JSON', async ({ page }) => {
+    const expected = lab.improvement_track.on_fill.length;
+    await expect(page.locator('#adv-list .adv-item')).toHaveCount(expected);
+  });
+
+  test('each advancement item has correct data-adv-key', async ({ page }) => {
+    for (let i = 0; i < lab.improvement_track.on_fill.length; i++) {
+      await expect(page.locator('#adv-list [data-adv-key="adv-' + i + '"]')).toBeAttached();
+    }
+  });
+
+  test('each advancement item has + and − buttons and a count display', async ({ page }) => {
+    const items = page.locator('#adv-list .adv-item');
+    const count = await items.count();
+    for (let i = 0; i < count; i++) {
+      await expect(items.nth(i).locator('.adv-btn')).toHaveCount(2);
+      await expect(items.nth(i).locator('.adv-count')).toBeAttached();
+    }
+  });
+
+  test('advancement counter increments and decrements', async ({ page }) => {
+    await page.route('**/api/v1/team/playbook', route => route.fulfill({ json: {} }));
+    await page.addInitScript(() => { localStorage.removeItem('portal_lab_playbook'); });
+    await page.goto('/the-lab.html');
+    await page.waitForLoadState('networkidle');
+    const item = page.locator('#adv-list .adv-item').first();
+    const countEl = item.locator('.adv-count');
+    await expect(countEl).toHaveText('0');
+    await item.locator('.adv-btn').last().click();  // +
+    await expect(countEl).toHaveText('1');
+    await item.locator('.adv-btn').last().click();  // +
+    await expect(countEl).toHaveText('2');
+    await item.locator('.adv-btn').first().click(); // −
+    await expect(countEl).toHaveText('1');
+    await item.locator('.adv-btn').first().click(); // −
+    await expect(countEl).toHaveText('0');
+    await item.locator('.adv-btn').first().click(); // − (can't go below 0)
+    await expect(countEl).toHaveText('0');
+  });
+
+  test('ally select has correct option count (allies + 1 placeholder)', async ({ page }) => {
+    const expected = lab.allies.length + 1;
+    await expect(page.locator('#team-ally-select option')).toHaveCount(expected);
+  });
+
+  test('ally select option values match JSON ids', async ({ page }) => {
+    for (const ally of lab.allies) {
+      await expect(page.locator('#team-ally-select option[value="' + ally.id + '"]')).toBeAttached();
+    }
+  });
+
+});
+
 // ── Interactivity ─────────────────────────────────────────────────────────────
 
 test.describe('the-lab.html — check-item interactivity', () => {

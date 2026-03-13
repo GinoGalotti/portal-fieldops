@@ -103,7 +103,7 @@
 
 /* Selectors */
 .lab-select {
-  background: var(--input-bg, rgba(0,0,0,0.3));
+  background: var(--bg2);
   border: 1px solid var(--border);
   color: var(--text);
   font-family: 'Share Tech Mono', monospace;
@@ -114,6 +114,21 @@
   max-width: 320px;
 }
 .lab-select:focus { outline: none; border-color: var(--green); }
+.lab-select option { background: var(--bg2); color: var(--text); }
+
+/* Advancement counter */
+.adv-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.35rem 0.6rem; }
+.adv-counter { display: flex; align-items: center; gap: 0.3rem; flex-shrink: 0; }
+.adv-btn {
+  font-family: 'Share Tech Mono', monospace; font-size: 0.8rem;
+  width: 20px; height: 20px; border: 1px solid var(--border);
+  background: transparent; color: var(--green-dim);
+  cursor: pointer; border-radius: 2px; padding: 0; line-height: 1;
+  transition: border-color 0.15s, color 0.15s;
+}
+.adv-btn:hover { border-color: var(--green); color: var(--green); }
+.adv-count { font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; color: var(--green); min-width: 1.2rem; text-align: center; }
+.adv-text { font-family: 'Barlow', sans-serif; font-size: 0.85rem; color: var(--text); line-height: 1.4; }
 
 /* Text fields */
 .lab-field {
@@ -233,12 +248,7 @@ textarea.lab-field { resize: vertical; }
         </div>
       </div>
       <div class="lab-section-label">// ON ADVANCEMENT — CHOOSE ONE</div>
-      <ul class="check-list" id="adv-list">
-        <li class="check-item" data-check-key="adv-0"><span class="check-box"></span><span class="check-text">Gain a new team move.</span></li>
-        <li class="check-item" data-check-key="adv-1"><span class="check-box"></span><span class="check-text">Gain a new team ally.</span></li>
-        <li class="check-item" data-check-key="adv-2"><span class="check-box"></span><span class="check-text">Gain two new asset selections.</span></li>
-        <li class="check-item" data-check-key="adv-3"><span class="check-box"></span><span class="check-text">Make the next mystery about your team enemy — a chance to interfere in their plans.</span></li>
-      </ul>
+      <ul class="check-list" id="adv-list"></ul>
     </div>
   </div>
 
@@ -278,13 +288,6 @@ textarea.lab-field { resize: vertical; }
         <span class="lab-pair-label">Ally</span>
         <select class="lab-select" id="team-ally-select" data-lab="ally">
           <option value="">— Select ally —</option>
-          <option value="kana-harlison">Kana Harlison — cat burglar, stealth specialist</option>
-          <option value="dalia-amin">Dalia Amin — community leader, local cooperation</option>
-          <option value="sergeant-qeb-gomez">Sgt Qeb Gomez — law enforcement liaison</option>
-          <option value="campbell">CAMPBELL — lab AI, virtual scenario testing</option>
-          <option value="dr-yos-sokha">Dr Yos Sokha — former colleague, cross-team research</option>
-          <option value="questerr-and-wrexy">Questerr and Wrexy — alien diplomats, advanced tech</option>
-          <option value="custom">Custom</option>
         </select>
       </div>
       <div class="lab-pair" id="ally-custom-row" style="display:none">
@@ -362,6 +365,13 @@ textarea.lab-field { resize: vertical; }
       s.checked[el.dataset.checkKey] = el.classList.contains('checked');
     });
 
+    // Advancement counters
+    document.querySelectorAll('[data-adv-key]').forEach(function (el) {
+      var idx = el.dataset.advKey.replace('adv-', '');
+      var span = document.getElementById('adv-count-' + idx);
+      s.checked[el.dataset.advKey] = span ? (parseInt(span.textContent) || 0) : 0;
+    });
+
     // Lab data fields
     document.querySelectorAll('[data-lab]').forEach(function (el) {
       s[el.dataset.lab] = el.value || el.textContent || '';
@@ -392,6 +402,13 @@ textarea.lab-field { resize: vertical; }
         if (s.checked[el.dataset.checkKey] !== undefined) {
           el.classList.toggle('checked', !!s.checked[el.dataset.checkKey]);
         }
+      });
+      // Advancement counters
+      document.querySelectorAll('[data-adv-key]').forEach(function (el) {
+        var key = el.dataset.advKey;
+        var idx = key.replace('adv-', '');
+        var span = document.getElementById('adv-count-' + idx);
+        if (span && s.checked[key] !== undefined) span.textContent = s.checked[key] || 0;
       });
     }
 
@@ -448,6 +465,10 @@ textarea.lab-field { resize: vertical; }
     if (!confirm('Reset all Lab playbook data?')) return;
     document.querySelectorAll('.xp-pip').forEach(function (pip) { pip.classList.remove('filled-xp'); });
     document.querySelectorAll('.check-item[data-check-key]').forEach(function (el) { el.classList.remove('checked'); });
+    document.querySelectorAll('[data-adv-key]').forEach(function (el) {
+      var span = document.getElementById('adv-count-' + el.dataset.advKey.replace('adv-', ''));
+      if (span) span.textContent = '0';
+    });
     // Re-check mandatory asset
     var mandatory = document.querySelector('[data-check-key="asset-the-lab"]');
     if (mandatory) mandatory.classList.add('checked');
@@ -508,6 +529,41 @@ textarea.lab-field { resize: vertical; }
     var hidden = list.classList.toggle('hide-unchecked');
     btn.textContent = hidden ? '// SHOW ALL' : '// HIDE UNCHOSEN';
   };
+
+  // ── RENDER ADVANCEMENTS FROM JSON ──
+  function renderAdvancements(lab) {
+    var ul = document.getElementById('adv-list');
+    if (!ul || !lab.improvement_track) return;
+    ul.innerHTML = (lab.improvement_track.on_fill || []).map(function (text, i) {
+      return '<li class="adv-item" data-adv-key="adv-' + i + '">'
+        + '<div class="adv-counter">'
+        + '<button class="adv-btn" onclick="changeAdv(\'adv-' + i + '\',-1)">−</button>'
+        + '<span class="adv-count" id="adv-count-' + i + '">0</span>'
+        + '<button class="adv-btn" onclick="changeAdv(\'adv-' + i + '\',1)">+</button>'
+        + '</div>'
+        + '<span class="adv-text">' + text + '</span>'
+        + '</li>';
+    }).join('');
+  }
+
+  window.changeAdv = function (key, delta) {
+    var idx = key.replace('adv-', '');
+    var span = document.getElementById('adv-count-' + idx);
+    if (!span) return;
+    span.textContent = Math.max(0, (parseInt(span.textContent) || 0) + delta);
+    save();
+  };
+
+  // ── RENDER ALLY SELECT FROM JSON ──
+  function renderAlly(lab) {
+    var sel = document.getElementById('team-ally-select');
+    if (!sel || !lab.allies) return;
+    sel.innerHTML = '<option value="">— Select ally —</option>'
+      + lab.allies.map(function (a) {
+          var label = a.tagline ? (a.name + ' — ' + a.tagline) : a.name;
+          return '<option value="' + a.id + '">' + label + '</option>';
+        }).join('');
+  }
 
   // ── RENDER MOVES FROM JSON ──
   function renderMoves(lab) {
@@ -573,6 +629,8 @@ textarea.lab-field { resize: vertical; }
     .then(function (data) {
       var lab = data.team_playbooks.find(function (p) { return p.id === 'research-lab'; });
       if (lab) {
+        renderAdvancements(lab);
+        renderAlly(lab);
         renderMoves(lab);
         renderAssets(lab);
       }

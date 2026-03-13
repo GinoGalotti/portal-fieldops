@@ -811,23 +811,21 @@
   }
 
   // ── Section I: Confirmed Entities ────────────────────────────
-  function buildStatItem(item) {
-    if ('harm_num' in item) {
-      return `<div class="sb-item${item.full ? ' full' : ''}">
-        <span class="sb-label">${item.label}</span>
-        <div class="sb-value"><div class="harm-row"><span class="harm-num ${item.harm_color}">${item.harm_num}</span><span class="harm-sub">${item.harm_sub}</span></div></div>
-      </div>`;
-    }
-    return `<div class="sb-item${item.full ? ' full' : ''}">
-      <span class="sb-label">${item.label}</span>
-      <div class="sb-value">${item.value}</div>
-    </div>`;
-  }
-
   function buildEntityCard(d) {
     const id = d.id;
     const tags = d.tags.map(t => `<span class="etag ${t.color}">${t.label}</span>`).join('');
-    const statBlock = d.stat_block.map(buildStatItem).join('');
+    const statBlock = d.stat_block.map(item => {
+      if ('harm_num' in item) {
+        return `<div class="sb-item${item.full ? ' full' : ''}">
+          <span class="sb-label">${item.label}</span>
+          <div class="sb-value"><div class="harm-row"><span class="harm-num ${item.harm_color}">${item.harm_num}</span><span class="harm-sub">${item.harm_sub}</span></div></div>
+        </div>`;
+      }
+      return `<div class="sb-item${item.full ? ' full' : ''}">
+        <span class="sb-label">${item.label}</span>
+        <div class="sb-value">${item.value}</div>
+      </div>`;
+    }).join('');
     const moves = d.named_moves.map(m => `<div class="move-item">
         <div class="move-name">${m.name}</div>
         <div class="move-text">${m.text}</div>
@@ -902,13 +900,32 @@
   // ── Section III: Custom DB entries ───────────────────────────
   function buildCustomDBCard(entry) {
     const id = entry.id;
-    const tags = entry.tags.map(t => `<span class="etag ${t.color}">${t.label}</span>`).join('');
-    const statBlock = entry.stat_block.map(buildStatItem).join('');
-    const moves = entry.custom_moves.map(m => `<div class="move-item">
+    // Build tags from semantic fields
+    const typeColor = entry.custom ? 'purple' : 'grey';
+    let tagsHtml = `<span class="etag ${typeColor}">${entry.type.toUpperCase()}</span>`;
+    if (entry.harm) tagsHtml += `<span class="etag grey">HARM: ${entry.harm}</span>`;
+    if (entry.armour) tagsHtml += `<span class="etag grey">ARMOUR: ${entry.armour}</span>`;
+    if (entry.extra_tags) tagsHtml += entry.extra_tags.map(t => `<span class="etag ${t.color}">${t.label}</span>`).join('');
+    // Build stat block
+    const typeName = entry.type.charAt(0).toUpperCase() + entry.type.slice(1);
+    let typeMotVal = `<strong>${typeName}</strong> (motivation: ${entry.motivation})`;
+    if (entry.type_detail) typeMotVal += '. ' + entry.type_detail;
+    let statHtml = `<div class="sb-item"><span class="sb-label">// TYPE &amp; MOTIVATION</span><div class="sb-value">${typeMotVal}</div></div>`;
+    if (entry.harm_color) {
+      const harmNum = entry.harm.split(' ')[0];
+      statHtml += `<div class="sb-item"><span class="sb-label">// HARM CAPACITY</span><div class="sb-value"><div class="harm-row"><span class="harm-num ${entry.harm_color}">${harmNum}</span><span class="harm-sub">${entry.harm_note}</span></div></div></div>`;
+    }
+    if (entry.armour_detail) statHtml += `<div class="sb-item"><span class="sb-label">// ARMOUR</span><div class="sb-value">${entry.armour_detail}</div></div>`;
+    if (entry.origin) statHtml += `<div class="sb-item"><span class="sb-label">// ORIGIN &amp; APPEARANCE</span><div class="sb-value">${entry.origin}</div></div>`;
+    (entry.attacks || []).forEach(a => {
+      statHtml += `<div class="sb-item${a.full ? ' full' : ''}"><span class="sb-label">${a.name}</span><div class="sb-value">${a.value}</div></div>`;
+    });
+    if (entry.weakness) statHtml += `<div class="sb-item full"><span class="sb-label">// WEAKNESS</span><div class="sb-value">${entry.weakness}</div></div>`;
+    const moves = (entry.custom_moves || []).map(m => `<div class="move-item">
         <div class="move-name">${m.name}</div>
         <div class="move-text">${m.text}</div>
       </div>`).join('');
-    const noteCols = entry.notes.map(n => `<div class="notes-col">
+    const noteCols = (entry.notes || []).map(n => `<div class="notes-col">
         <span class="notes-label">${n.label}</span>
         <div class="notes-text">${n.text}</div>
       </div>`).join('');
@@ -916,12 +933,12 @@
       <div class="dbcard-header" onclick="toggleDB('${id}')">
         <div class="dbcard-left">
           <div class="dbcard-name">${entry.display_name}</div>
-          <div class="dbcard-meta">${tags}</div>
+          <div class="dbcard-meta">${tagsHtml}</div>
         </div>
         <div class="dbcard-toggle">[ EXPAND ▾ ]</div>
       </div>
       <div class="dbcard-body" id="${id}-body">
-        <div class="stat-block">${statBlock}</div>
+        <div class="stat-block">${statHtml}</div>
         <div class="moves-block"><span class="moves-label">// CUSTOM MOVES</span>${moves}</div>
         <div class="notes-block">${noteCols}</div>
       </div>
@@ -934,14 +951,35 @@
   }
 
   // ── Section III: Deck DB entries ─────────────────────────────
+  const DECK_TYPE_COLORS = {
+    executioner: 'red', devourer: 'red', beast: 'grey', trickster: 'green',
+    queen: 'purple', sorcerer: 'purple', breeder: 'amber', parasite: 'amber',
+    tempter: 'amber', torturer: 'amber', collector: 'amber'
+  };
   function buildDeckDBCard(entry) {
     const id = entry.id;
-    const tags = entry.tags.map(t => `<span class="etag ${t.color}">${t.label}</span>`).join('');
-    const cols = entry.columns.map(col => {
-      const cls = 'db-col' + (col.full ? ' db-full' : '');
-      const textCls = 'db-text' + (col.flavour ? ' db-flavour' : '');
-      return `<div class="${cls}"><span class="db-label">${col.label}</span><div class="${textCls}">${col.value}</div></div>`;
-    }).join('');
+    const typeColor = DECK_TYPE_COLORS[entry.type] || 'grey';
+    const tags = `<span class="etag ${typeColor}">${entry.type.toUpperCase()}</span>`
+      + (entry.harm ? `<span class="etag grey">HARM: ${entry.harm}</span>` : '')
+      + (entry.armour ? `<span class="etag grey">ARMOUR: ${entry.armour}</span>` : '');
+    const typeName = entry.type.charAt(0).toUpperCase() + entry.type.slice(1);
+    const attacksVal = entry.attacks.length
+      ? entry.attacks.map(a => `${a.name}: ${a.value}.`).join(' ')
+      : 'None.';
+    const movesVal = entry.custom_moves.length
+      ? entry.custom_moves.map(m => `${m.name}: ${m.text}`).join(' ')
+      : 'None.';
+    const col = (lbl, val) => `<div class="db-col"><span class="db-label">${lbl}</span><div class="db-text">${val}</div></div>`;
+    const colFull = (lbl, val) => `<div class="db-col db-full"><span class="db-label">${lbl}</span><div class="db-text">${val}</div></div>`;
+    const colFlavour = (lbl, val) => `<div class="db-col db-full"><span class="db-label">${lbl}</span><div class="db-text db-flavour">${val}</div></div>`;
+    const cols = [
+      col('// TYPE &amp; MOTIVATION', `${typeName} (motivation: ${entry.motivation})`),
+      col('// POWERS', entry.powers),
+      col('// ATTACKS', attacksVal),
+      col('// WEAKNESS', entry.weakness),
+      colFull('// CUSTOM MOVES', movesVal),
+      colFlavour('// DESCRIPTION', entry.description),
+    ].join('');
     return `<div class="dbcard" data-type="deck" id="${id}">
       <div class="dbcard-header" onclick="toggleDB('${id}')">
         <div class="dbcard-left">
