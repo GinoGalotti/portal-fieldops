@@ -6,6 +6,13 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 ## RECENTLY DONE ✅
 
+### Playwright test suite expansion (2026-03-13)
+- `tests/hunters.spec.js` — 19 tests: reed.html + rex.html structure, stat pips, track interaction, arc beats, save/restore
+- `tests/briefings.spec.js` — 12 tests: tab switching, active week, case card count, priority badges
+- `tests/player-report.spec.js` — 15 tests: selectors, form unlock, textareas, save states, flash messages
+- `tests/feed.spec.js` — +10 hunter panel tests: picker, move cards, track pips, ROLL button, POST assertion
+- Total: 245 tests across 14 files
+
 ### entities.html — full data-driven conversion
 - `missions/entities.html` reduced from 2827 → ~982 lines
 - Section I: `display{}` blocks added to `portal-entities.json` for Eszter + Cartographer; stat pills update dynamically
@@ -23,25 +30,18 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 ## NEXT UP — Playwright Tests
 
-188 tests passing. Suite: `smoke` (5) · `nav` (10) · `contacts` (7) · `incidents` (18) · `feed` (15) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36).
+245 tests passing across 14 files. Suite: `smoke` (5) · `nav` (10) · `contacts` (7) · `incidents` (18) · `feed` (~25) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (15).
 
-**1. Hunter pages (`hunters/*.html`) — HIGH, zero coverage**
-- New file: `tests/hunters.spec.js`
-- Sheet stat pips render (Cool/Tough/Sharp/Charm/Weird)
-- Harm/luck/xp tracks render and pip click updates state
-- Save button writes to D1; sheet restores on reload (D1 round-trip)
-- Arc beats/status visible per hunter
-- Test on reed.html + rex.html (share `hunter.js`)
+**1. Keeper field report (`missions/report.html`) — MEDIUM**
+- New file: `tests/report.spec.js`
+- Session selector renders; save button; "COPY FOR CLAUDE" button exists
 
-**2. Feed hunter panel — HIGH, partial gap**
-- Hunter picker dropdown renders; selecting a hunter loads sheet + move cards
-- Tracks render as clickable pips; ROLL button posts to feed; composer name auto-fills
+**2. Full D1 round-trip — HIGH**
+- Save→reload→restore cycle for hunter sheets and incident state
+- Requires live local wrangler (no mocking)
 
-**3. CAMPBELL briefings (`missions/campbell-briefings.html`) — MEDIUM**
-- Tab switcher renders; active week selected by default; closed weeks distinct
-
-**4. Player field report (`reports/player-report.html`) — MEDIUM**
-- Week + hunter selectors; rating pips clickable; SAVE button; D1 round-trip
+**3. Nav subdirectory paths — MEDIUM**
+- All player-facing pages inject nav with same links; links resolve correctly from `hunters/`, `missions/`, `reports/` subdirs
 
 ---
 
