@@ -180,17 +180,24 @@ test.describe('Hunter pages — save button', () => {
 
   test('clicking save shows "// SAVING…" then "// SAVED ✓" on success', async ({ page }) => {
     clearHunterStorage(page);
-    await mockHunterApis(page); // PUT returns 200 {}
+    // Slow PUT so the SAVING… state is observable before SAVED ✓ renders.
+    await page.route('**/api/v1/hunters/**', async route => {
+      if (route.request().method() === 'PUT') {
+        await new Promise(r => setTimeout(r, 150));
+        return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+      }
+      return route.fulfill({ contentType: 'application/json', body: '{}' });
+    });
     await page.goto('/hunters/reed.html');
     await page.waitForLoadState('networkidle');
 
     const saveBtn = page.locator('#save-btn');
     await saveBtn.click();
 
-    // Should immediately flip to SAVING…
+    // Should flip to SAVING… immediately; mock delay keeps it there long enough to assert.
     await expect(saveBtn).toHaveText('// SAVING…');
 
-    // After both fetches resolve OK → SAVED ✓
+    // After both PUTs resolve OK → SAVED ✓
     await expect(saveBtn).toHaveText('// SAVED ✓', { timeout: 4000 });
   });
 
@@ -278,6 +285,14 @@ test.describe('Hunter pages — john.html smoke', () => {
   });
 
   test('save button shows SAVING then SAVED on success', async ({ page }) => {
+    // Override the route set in beforeEach to add a delay so SAVING… is observable.
+    await page.route('**/api/v1/hunters/**', async route => {
+      if (route.request().method() === 'PUT') {
+        await new Promise(r => setTimeout(r, 150));
+        return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+      }
+      return route.fulfill({ contentType: 'application/json', body: '{}' });
+    });
     const saveBtn = page.locator('#save-btn');
     await saveBtn.click();
     await expect(saveBtn).toHaveText('// SAVING…');

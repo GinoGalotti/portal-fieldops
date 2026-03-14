@@ -635,6 +635,52 @@ test.describe('feed.html — hunter panel', () => {
 
 });
 
+// ── PLAYBOOK FILTER ───────────────────────────────────────────────────────────
+//
+// renderMovesPanel() filters playbook moves by matching playbook-moves.json's
+// `playbook` field against the selected hunter's `playbook` from hunters.json
+// (loaded into hunters_meta on boot). The `hunter` field is the fallback.
+//
+// This test verifies the primary path: select Reed (sidekick), sheet has both a
+// sidekick move (move-theres-no-i) and a monstrous move (move-incorporeal) checked.
+// Only the sidekick move should appear in the moves panel; the monstrous move must not.
+
+test.describe('feed.html — playbook move filter', () => {
+
+  test('only moves matching hunter playbook appear (sidekick vs monstrous)', async ({ page }) => {
+    const sheetWithBothChecked = {
+      stats: { charm: 1, cool: 0, sharp: 2, tough: -1, weird: 0 },
+      harm: 0, luck: 0, xp: 0,
+      checks: {
+        'move-theres-no-i': true,   // sidekick — should appear for Reed
+        'move-incorporeal': true,   // monstrous — should NOT appear for Reed
+      },
+      bonds: [], notes: '', special: [], hiddenLists: [],
+    };
+
+    await page.route('**/api/v1/rolls**', route => route.fulfill({ json: [] }));
+    await page.route('**/api/v1/messages**', route => route.fulfill({ json: [] }));
+    await page.route('**/api/v1/hunters/**', async route => {
+      if (route.request().method() === 'PUT') return route.fulfill({ status: 200, body: '{}' });
+      return route.fulfill({ json: sheetWithBothChecked });
+    });
+
+    await page.goto('/feed.html');
+    await page.waitForLoadState('networkidle');
+    await page.selectOption('#hunter-select', 'reed');
+    await page.waitForSelector('.move-card');
+
+    // Sidekick move must appear in the panel
+    const sidekickCard = page.locator('.move-card', { hasText: 'There\'s No "I" In "Team"' });
+    await expect(sidekickCard).toBeVisible();
+
+    // Monstrous move must NOT appear (wrong playbook for Reed)
+    const monstrousCard = page.locator('.move-card', { hasText: 'Incorporeal' });
+    await expect(monstrousCard).not.toBeAttached();
+  });
+
+});
+
 // ── HANDOUT COEXISTENCE ───────────────────────────────────────────────────────
 //
 // Regression: posting an image handout must not remove a previously-posted PDA

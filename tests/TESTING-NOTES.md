@@ -28,7 +28,7 @@
 
 ## ⬆ Next Up (recommended order)
 
-1. **`index.html` session-aware cards** [M] — archive/artefact cards with `data-session-from` hidden/shown correctly.
+1. **Hunter page D1 round-trip for John** [L] — add john to `d1-round-trip.spec.js` once John's sheet is confirmed stable.
 
 ---
 
@@ -62,7 +62,7 @@ Priority: **H** = high (core features, likely to break), **M** = medium, **L** =
 - [x] Track pips (.track-mini-pip) render when sheet has stats
 - [x] Move card expands on click (no-hover mode — adds .expanded)
 - [x] Clicking a second move card collapses the first (exclusive)
-- [ ] Playbook moves filter by `playbook` field (via `hunters.json` lookup) — not just `hunter` field — so future hunters without hardcoded `hunter` tags still work
+- [x] Playbook moves filter by `playbook` field (via `hunters.json` lookup) — not just `hunter` field — so future hunters without hardcoded `hunter` tags still work
 - [ ] Tracks (harm/luck/xp) render as clickable pips in feed panel
 - [ ] Keeper mode CONTACTS tab shows NPC visibility toggles
 - [ ] Keeper mode REFERENCES tab shows MoTW cheat sheet content
@@ -105,9 +105,8 @@ Priority: **H** = high (core features, likely to break), **M** = medium, **L** =
 
 ### `index.html` — Home Page [M]
 - [x] Bestiary cards render (data-driven from portal-entities.json, session-gated) → `bestiary.spec.js`
-- [ ] Session-aware cards: archive/artefact cards with `data-session-from` are hidden/shown
-- [ ] Archive cards render
-- [ ] Artefact cards render
+- [x] Session-aware artefact cards hidden/shown by session → `artefacts.spec.js` (15 tests: w1/w2/w3 gating, blur, status text)
+- [x] Artefact cards render (total phase count, id + name elements) → `artefacts.spec.js`
 
 ### `the-lab.html` — Research Lab Playbook [L]
 - [ ] Page loads and renders team playbook content

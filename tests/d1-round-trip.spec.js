@@ -27,6 +27,10 @@ import { test, expect } from '@playwright/test';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
+// All tests in this file hit the real local D1. Force serial execution so
+// parallel test files don't race on shared D1 state between our reset and verify.
+test.describe.configure({ mode: 'serial' });
+
 const BASE = 'http://localhost:8788';
 
 // Load incidents data at module level to derive activeWeek.id dynamically
