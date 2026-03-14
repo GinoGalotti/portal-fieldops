@@ -42,7 +42,7 @@ Priority: **H** = high (core features, likely to break), **M** = medium, **L** =
 - [x] Message entries from API render in the feed
 - [x] Feed entry expands on click (adds .expanded)
 - [x] Clicking expanded entry collapses it (removes .expanded)
-- [x] Two entries can be expanded simultaneously
+- [x] Clicking a second entry collapses the first (exclusive expansion)
 - [x] Keeper mode activates on 5× logo click (keeper tabs appear)
 - [x] Keeper HANDOUTS tab visible and renders handout list (S02)
 - [x] Keeper handout POST buttons default to ▶ POST (not RE-POST)
@@ -54,12 +54,16 @@ Priority: **H** = high (core features, likely to break), **M** = medium, **L** =
 - [x] Feed composer sends POST with correct sender and body
 - [x] Posting image after PDA does not remove PDA from feed DOM (regression — image covers PDA visually if too tall; fixed with max-height: 560px on .feed-image-card img)
 - [ ] **Known issue (not tested):** posting multiple handouts in rapid succession (faster than the 6s poll interval) may cause ordering issues — repost or clear to recover
-- [ ] Hunter picker dropdown renders and selecting a hunter loads their data
-- [ ] Move cards render after hunter selection (at least one visible)
-- [ ] Roll button exists on move cards
-- [ ] ROLL button sends a roll entry to the feed
-- [ ] Feed composer: name auto-fills from selected hunter
-- [ ] Tracks (harm/luck/xp) render as clickable pips
+- [x] Hunter picker dropdown renders and selecting a hunter loads their data
+- [x] Move cards render after hunter selection (at least one visible)
+- [x] Roll button exists on move cards
+- [x] ROLL button sends a roll entry to the feed
+- [x] Feed composer: name auto-fills from selected hunter
+- [x] Track pips (.track-mini-pip) render when sheet has stats
+- [x] Move card expands on click (no-hover mode — adds .expanded)
+- [x] Clicking a second move card collapses the first (exclusive)
+- [ ] Playbook moves filter by `playbook` field (via `hunters.json` lookup) — not just `hunter` field — so future hunters without hardcoded `hunter` tags still work
+- [ ] Tracks (harm/luck/xp) render as clickable pips in feed panel
 - [ ] Keeper mode CONTACTS tab shows NPC visibility toggles
 - [ ] Keeper mode REFERENCES tab shows MoTW cheat sheet content
 - [ ] Keeper mode THREATS tab shows entity data

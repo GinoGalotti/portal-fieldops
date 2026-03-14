@@ -81,7 +81,6 @@ header { flex-shrink: 0; position: relative; }
 .feed-entry:hover { background: rgba(255,255,255,0.02); }
 /* Default: click to expand (hover disabled via body.no-hover class added by JS) */
 .feed-entry.expanded .feed-outcome-detail { opacity: 1; max-height: 500px; }
-body.no-hover .feed-entry:hover .feed-outcome-detail { opacity: 0 !important; max-height: 0 !important; }
 /* ?mouseover=true: keep legacy hover behaviour, no .expanded class used */
 body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-height: 500px; }
 
@@ -709,6 +708,8 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
   background: rgba(0,0,0,0.12);
 }
 .move-card:hover .move-desc { display: block; }
+body.no-hover .move-card:hover .move-desc { display: none; }
+body.no-hover .move-card.expanded .move-desc { display: block; }
 .move-desc-trigger {
   font-family: 'Barlow', sans-serif;
   font-size: 0.75rem;
@@ -1284,6 +1285,7 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
   var npcVisibilityOverrides = {};         // { npc_id: bool } — loaded from localStorage
   var contactNotes = {};                   // { npc_id: string } — loaded from localStorage
   var maps_data        = null;               // loaded from portal-maps.json
+  var hunters_meta     = null;               // loaded from hunters.json
   var mapState         = { u: {}, v: {} };   // u = unlocked (player-visible), v = visited (keeper-only)
   var selectedMapLoc   = null;               // currently expanded location in player MAP tab
   var playerMapSession = null;               // session id selected in player MAP tab
@@ -1303,13 +1305,17 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
   var hoverMode = new URLSearchParams(location.search).get('mouseover') === 'true';
   if (!hoverMode) document.body.classList.add('no-hover');
 
-  // Click anywhere on a feed entry (not on a button) to toggle expanded detail
+  // Click anywhere on a feed entry (not on a button) to expand it; collapses any other open entry.
   document.getElementById('feed-entries').addEventListener('click', function (e) {
     if (hoverMode) return;
     if (e.target.closest('button')) return;
     var entry = e.target.closest('.feed-entry');
     if (!entry) return;
-    entry.classList.toggle('expanded');
+    var wasExpanded = entry.classList.contains('expanded');
+    document.querySelectorAll('#feed-entries .feed-entry.expanded').forEach(function (el) {
+      el.classList.remove('expanded');
+    });
+    if (!wasExpanded) entry.classList.add('expanded');
   });
 
   var HUNTER_NAMES  = { rex: 'Rex Bangley', reed: 'Reed Atwood', alan: 'Alan Frazier', sven: 'Sven', john: 'John Johnson' };
@@ -1378,7 +1384,8 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
       fetch('/data/portal-npcs.json').then(function (r) { return r.ok ? r.json() : null; }),
       fetch('/data/portal-entities.json').then(function (r) { return r.ok ? r.json() : null; }),
       fetch('/data/session-data.json').then(function (r) { return r.ok ? r.json() : null; }),
-      fetch('/data/portal-maps.json').then(function (r) { return r.ok ? r.json() : null; })
+      fetch('/data/portal-maps.json').then(function (r) { return r.ok ? r.json() : null; }),
+      fetch('/data/hunters.json').then(function (r) { return r.ok ? r.json() : null; })
     ]).then(function (results) {
       playbook_moves = results[0];
       basic_moves    = results[1];
@@ -1386,6 +1393,7 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
       entities_data  = results[3];
       session_data   = results[4];
       maps_data      = results[5];
+      hunters_meta   = results[6];
     });
   }
 
@@ -1450,8 +1458,14 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
     // Playbook moves (checked in D1)
     if (playbook_moves && hunterSheet && hunterSheet.checks) {
       var checks = hunterSheet.checks;
+      var _hMeta = hunters_meta && hunters_meta.hunters &&
+        hunters_meta.hunters.filter(function (h) { return h.id === hunterId; })[0];
+      var _hPlaybook = _hMeta ? _hMeta.playbook : null;
       var active = Object.keys(checks).filter(function (k) {
-        return checks[k] === true && playbook_moves.moves[k] && playbook_moves.moves[k].hunter === hunterId;
+        return checks[k] === true && playbook_moves.moves[k] && (
+          (_hPlaybook && playbook_moves.moves[k].playbook === _hPlaybook) ||
+          playbook_moves.moves[k].hunter === hunterId  // fallback
+        );
       });
       if (active.length > 0) {
         html += '<div class="move-section-label">// PLAYBOOK MOVES</div>';
@@ -1595,6 +1609,16 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
       var inp = card.querySelector('.mod-input');
       if (inp) inp.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') card.querySelector('.roll-btn').click();
+      });
+      // Click card header area (not buttons/inputs) to expand description exclusively
+      card.querySelector('.move-card-top').addEventListener('click', function (e) {
+        if (!document.body.classList.contains('no-hover')) return; // hover mode handles it
+        if (e.target.closest('button') || e.target.closest('input')) return;
+        var wasExpanded = card.classList.contains('expanded');
+        container.querySelectorAll('.move-card.expanded').forEach(function (el) {
+          el.classList.remove('expanded');
+        });
+        if (!wasExpanded) card.classList.add('expanded');
       });
     });
   }

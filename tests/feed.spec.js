@@ -7,8 +7,9 @@
 // - Initial load: GET rolls?limit=200 + GET messages?limit=100, merged by timestamp.
 //   Tests pass pre-sorted DESC arrays (newest first) — initialLoad() reverses them.
 // - Keeper mode: click the logo 5 times. Keeper tabs replace player tabs.
-// - Expand/collapse: clicking a .feed-entry toggles .expanded; CSS shows/hides
-//   .feed-outcome-detail. Only roll entries have this detail block.
+// - Expand/collapse: clicking a .feed-entry expands it exclusively (collapses
+//   any other open entry). Click again to collapse. Only roll entries have a
+//   .feed-outcome-detail block. Move cards in the panel work the same way.
 // - Clear feed: posts type:'clear' sentinel, all clients wipe on receipt/reload.
 // - Clear handouts: clears localStorage immediately, re-renders keeper panel.
 //
@@ -119,8 +120,8 @@ test.describe('feed.html — structural', () => {
 
 // ── EXPAND / COLLAPSE ────────────────────────────────────────────────────────
 //
-// Default mode: click a .feed-entry to add .expanded class (shows detail).
-// Click again to remove it (collapses). Multiple entries can be open at once.
+// Default mode: click a .feed-entry to expand it exclusively (collapses any
+// other open entry). Click the same entry again to collapse it.
 // ?mouseover=true restores legacy CSS :hover behaviour — not tested here (hover
 // state is not reliably triggerable in Playwright headless mode).
 
@@ -159,16 +160,55 @@ test.describe('feed.html — expand/collapse on click', () => {
     await expect(entry).not.toHaveClass(/expanded/);
   });
 
-  test('two different entries can be expanded simultaneously', async ({ page }) => {
-    // Expanding entry B does NOT collapse entry A — each toggle is independent.
+  test('clicking a second entry collapses the first (exclusive expansion)', async ({ page }) => {
+    // Expanding entry B must collapse entry A — only one open at a time.
     await mockFeedApis(page, { rolls: [MOCK_ROLL_2, MOCK_ROLL] }); // DESC order
     await page.goto('/feed.html');
     await page.waitForSelector('.feed-entry');
     const entries = page.locator('.feed-entry');
-    await entries.nth(0).click();
-    await entries.nth(1).click();
+    await entries.nth(0).click(); // open first
     await expect(entries.nth(0)).toHaveClass(/\bexpanded\b/);
+    await entries.nth(1).click(); // open second → first collapses
     await expect(entries.nth(1)).toHaveClass(/\bexpanded\b/);
+    await expect(entries.nth(0)).not.toHaveClass(/expanded/);
+  });
+
+  test('move cards expand on click in default (no-hover) mode', async ({ page }) => {
+    // wireMoveCards() attaches a click handler to .move-card-top that toggles
+    // .expanded exclusively. CSS body.no-hover suppresses the :hover rule.
+    await mockFeedApis(page, { rolls: [], messages: [] });
+    await page.goto('/feed.html');
+    await page.waitForLoadState('networkidle');
+    // Select a hunter so move cards render
+    await page.route('**/api/v1/hunters/reed/sheet', route =>
+      route.fulfill({ json: { stats: { charm: 1, cool: 0, sharp: 2, tough: -1, weird: 0 }, harm: 0, luck: 3, xp: 0, checks: {}, bonds: [] } })
+    );
+    await page.selectOption('#hunter-select', 'reed');
+    await page.waitForSelector('.move-card');
+
+    const card = page.locator('.move-card').first();
+    await expect(card).not.toHaveClass(/expanded/);
+    // Click the header area (.move-card-top)
+    await card.locator('.move-card-top').click();
+    await expect(card).toHaveClass(/\bexpanded\b/);
+  });
+
+  test('clicking a second move card collapses the first', async ({ page }) => {
+    await mockFeedApis(page, { rolls: [], messages: [] });
+    await page.goto('/feed.html');
+    await page.waitForLoadState('networkidle');
+    await page.route('**/api/v1/hunters/reed/sheet', route =>
+      route.fulfill({ json: { stats: { charm: 1, cool: 0, sharp: 2, tough: -1, weird: 0 }, harm: 0, luck: 3, xp: 0, checks: {}, bonds: [] } })
+    );
+    await page.selectOption('#hunter-select', 'reed');
+    await page.waitForSelector('.move-card');
+
+    const cards = page.locator('.move-card');
+    await cards.nth(0).locator('.move-card-top').click();
+    await expect(cards.nth(0)).toHaveClass(/\bexpanded\b/);
+    await cards.nth(1).locator('.move-card-top').click();
+    await expect(cards.nth(1)).toHaveClass(/\bexpanded\b/);
+    await expect(cards.nth(0)).not.toHaveClass(/expanded/);
   });
 
 });
