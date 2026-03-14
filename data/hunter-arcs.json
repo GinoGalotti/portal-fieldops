@@ -144,7 +144,7 @@
           "number": "I",
           "title": "In My Footsteps",
           "type": "adapted",
-          "description": "Someone is trying to do what Sven was doing before he died — the same investigations, the same locations, the same questions. They don't know what they're walking into. Sven does. Whether he gets there in time is the arc."
+          "description": "Someone is trying to do what Sven was doing before he died — the same investigations, the same locations, the same questions. They don’t know what they’re walking into. Sven does. Whether he gets there in time is the arc."
         },
         {
           "id": "sven-2",
@@ -166,6 +166,37 @@
           "pressure": "// PRESSURE → REX: Same research thread, different angles. They converge. Who arrives first shapes everything.",
           "res_label": "// CAUSE OF DEATH + RESOLUTION NOTE",
           "res_placeholder": "Cause of death (Keeper decision) + how it resolved…"
+        }
+      ]
+    },
+    {
+      "id": "john",
+      "name": "John Johnson",
+      "color": "#c8ddd0",
+      "playbook_note": "THE FLAKE · REED’S UNCLE BY MARRIAGE",
+      "story_page": "../hunters/john.html",
+      "arcs": [
+        {
+          "id": "john-1",
+          "number": "I",
+          "title": "Deeper Conspiracy",
+          "type": "adapted",
+          "description": "John has been tracking a pattern — across corporate filings, university funding records, shell company registrations — that most people dismiss as noise. It’s not noise. This arc follows the first time the pattern reaches back."
+        },
+        {
+          "id": "john-2",
+          "number": "II",
+          "title": "The Benign Conspiracy",
+          "type": "adapted",
+          "description": "John discovers a group hiding for good reasons. The “benign conspiracy” turns out to be PORTAL’s own operational structure — a group of people hiding what they know in order to protect others. John now knows enough to blow their cover, and they know it."
+        },
+        {
+          "id": "john-3",
+          "number": "III",
+          "title": "The Pattern is Not a Theory",
+          "type": "portal",
+          "description": "John has been tracking the MESA acronym across 14 shell company registrations. He’s right. MESA’s formation procedure creates the pattern as a structural byproduct. John doesn’t know what MESA is — he just knows the pattern connects. Now MESA has flagged him as a data-collection liability.",
+          "pressure": "// PRESSURE → REED + ALL: John knowing the pattern is a campaign-level event. How much the team tells him — or doesn’t — shapes whether John becomes an asset or a loose thread MESA acts on."
         }
       ]
     }

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — John Johnson</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="hunter.css">
+<style>
+:root {
+  --accent:     #c8ddd0;
+  --accent-dim: #5a7d71;
+  --accent-glow: #c8ddd022;
+  --accent-a03: rgba(200, 221, 208, 0.03);
+  --accent-a04: rgba(200, 221, 208, 0.04);
+  --accent-a06: rgba(200, 221, 208, 0.06);
+  --accent-a08: rgba(200, 221, 208, 0.08);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</a>
+  <nav id="player-nav"></nav>
+  <script src="../player-nav.js"></script>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">// HUNTER DOSSIER · THE FLAKE · HUNTER STORIES</div>
+  <h1 class="hero-title">JOHN <span class="accent">JOHNSON</span></h1>
+  <p class="hero-desc">You believe everything is connected — not as a metaphor, not as anxiety, but as an operational conclusion you arrived at by looking. The problem is that most people use this to build a paranoid system and live inside it. You use it to look outward. You've been right about three things in your life that anyone else would have dismissed. PORTAL found out about two of them. That's how you got here.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">PLAYBOOK: <span>The Flake</span></div>
+    <div class="hero-meta-item">STATUS: <span>Lab Staff · Research (Non-Field)</span></div>
+  </div>
+  <div class="campbell-note">
+    <span class="c-label">// CAMPBELL — OPERATIVE NOTE</span>
+    Hunter stories develop alongside active cases. Choose if and when to start one — talk to the Keeper about timing. Each arc has a player section (your choices and beats) and a Keeper section (blurred). You can read the Keeper section after the arc resolves — or not at all.
+  </div>
+</div>
+
+<main>
+<!-- ══ PLAYBOOK SECTION ══ -->
+<div id="playbook" class="playbook">
+  <div class="playbook-header">
+    <div class="playbook-eyebrow">// OPERATIVE PLAYBOOK</div>
+    <div class="playbook-title">The Flake</div>
+  </div>
+  <div class="playbook-body">
+
+    <div class="playbook-section-label">// STATS</div>
+    <div class="stats-grid">
+      <div class="stat-cell"><div class="stat-label">Charm</div><input class="stat-input" type="number" data-stat="charm" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Cool</div><input class="stat-input" type="number" data-stat="cool" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Sharp</div><input class="stat-input" type="number" data-stat="sharp" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Tough</div><input class="stat-input" type="number" data-stat="tough" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Weird</div><input class="stat-input" type="number" data-stat="weird" min="-3" max="3" placeholder="0"></div>
+    </div>
+
+    <div class="playbook-section-label">// HARM · LUCK · EXPERIENCE</div>
+    <div class="track-row">
+      <div class="track-label">Harm</div>
+      <div class="track-pips">
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+      </div>
+    </div>
+    <div class="track-row">
+      <div class="track-label">Luck</div>
+      <div class="track-pips">
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+      </div>
+    </div>
+    <div class="track-row">
+      <div class="track-label">XP</div>
+      <div class="track-pips">
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+      </div>
+    </div>
+
+    <div id="luck-special" class="luck-special-block"></div>
+
+    <div class="playbook-section-label">// PLAYBOOK MOVES <button class="hide-toggle" onclick="toggleHide(this,'john-moves')">// HIDE UNCHOSEN</button></div>
+    <div class="pick-note">Pick 3 Flake moves to start. All eight are available at character creation.</div>
+    <ul class="check-list" id="john-moves">
+      <li class="check-item" data-check-key="move-connect-dots">
+        <span class="check-box"></span>
+        <span><span class="check-name">Connect the Dots</span><span class="check-roll">roll +Sharp</span>
+        <div class="check-desc">At the beginning of each mystery, look for the wider patterns that current events might be part of. On 10+: hold 3. On 7–9: hold 1. Miss: no hold — you see connections, but they may not be there. Spend hold 1-for-1 to ask: What other mysteries or groups does this connect to? / Is this connected to a previous case? / Who else is involved? / How does this connect to the bigger picture?</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-crazy-eyes">
+        <span class="check-box"></span>
+        <span><span class="check-name">Crazy Eyes</span>
+        <div class="check-desc">You get +1 Weird (max +3).</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-see-fits-together">
+        <span class="check-box"></span>
+        <span><span class="check-name">See, It All Fits Together</span>
+        <div class="check-desc">You can use Sharp instead of Charm when you manipulate someone.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-suspicious-mind">
+        <span class="check-box"></span>
+        <span><span class="check-name">Suspicious Mind</span>
+        <div class="check-desc">If someone lies to you, you know it.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-often-overlooked">
+        <span class="check-box"></span>
+        <span><span class="check-name">Often Overlooked</span><span class="check-roll">roll +Weird</span>
+        <div class="check-desc">When you act all crazy to avoid something. On 10+: you're regarded as completely unthreatening and unimportant. On 7–9: pick one — unthreatening or unimportant. Miss: you draw lots (but not all) of the attention.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-contrary">
+        <span class="check-box"></span>
+        <span><span class="check-name">Contrary</span>
+        <div class="check-desc">When you seek out and receive someone's honest advice on the best course of action and then do something else instead, mark experience. If you do exactly the opposite of their advice, take +1 ongoing on any moves you make pursuing that course.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-net-friends">
+        <span class="check-box"></span>
+        <span><span class="check-name">Net Friends</span><span class="check-roll">roll +Charm</span>
+        <div class="check-desc">When you contact a net friend to help you with a mystery. On 10+: they're available and helpful — they can fix something, break a code, hack a computer, or get special information. On 7–9: they'll help, but it'll take time or you'll have to do part of it yourself. Miss: you burn some bridges.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-sneaky">
+        <span class="check-box"></span>
+        <span><span class="check-name">Sneaky</span>
+        <div class="check-desc">When you attack from ambush, or from behind, inflict +2 harm.</div></span>
+      </li>
+    </ul>
+
+    <div class="playbook-section-label">// GEAR &amp; EQUIPMENT <button class="hide-toggle" onclick="toggleHide(this,'john-gear')">// HIDE UNCHOSEN</button></div>
+    <div class="pick-note">Pick 1 normal weapon · Pick 2 hidden weapons</div>
+    <ul class="check-list" id="john-gear">
+      <li class="check-item" data-check-key="gear-normal-weapon"><span class="check-box"></span><span><span class="check-name">Normal weapon</span><span class="check-roll">pick 1</span><div class="check-desc">.38 revolver (2-harm close reload loud) · 9mm (2-harm close loud) · Hunting rifle (2-harm far loud) · Magnum (3-harm close reload loud) · Shotgun (3-harm close messy loud) · Big knife (1-harm hand)<br><label class="pb-label" style="margin-top:0.4rem;display:block">Chosen weapon:</label><input class="pb-field pb-special-input" type="text" data-special-idx="0" placeholder="e.g. 9mm, Hunting rifle…" style="margin-top:0.2rem"></div></span></li>
+      <li class="check-item" data-check-key="gear-throwing-knives"><span class="check-box"></span><span><span class="check-name">Throwing knives</span><span class="check-roll">hidden weapon · 1-harm close many</span></span></li>
+      <li class="check-item" data-check-key="gear-holdout-pistol"><span class="check-box"></span><span><span class="check-name">Holdout pistol</span><span class="check-roll">hidden weapon · 2-harm close loud reload</span></span></li>
+      <li class="check-item" data-check-key="gear-garrote"><span class="check-box"></span><span><span class="check-name">Garrote</span><span class="check-roll">hidden weapon · 3-harm intimate</span></span></li>
+      <li class="check-item" data-check-key="gear-flashlight"><span class="check-box"></span><span><span class="check-name">Watchman's flashlight</span><span class="check-roll">hidden weapon · 1-harm hand</span></span></li>
+      <li class="check-item" data-check-key="gear-weighted-gloves"><span class="check-box"></span><span><span class="check-name">Weighted gloves / brass knuckles</span><span class="check-roll">hidden weapon · 1-harm hand</span></span></li>
+      <li class="check-item" data-check-key="gear-butterfly-knife"><span class="check-box"></span><span><span class="check-name">Butterfly knife / folding knife</span><span class="check-roll">hidden weapon · 1-harm hand</span></span></li>
+    </ul>
+
+    <div class="playbook-section-label">// BONDS <button class="hide-toggle" onclick="addBond()">// + ADD</button></div>
+    <div class="pb-block" id="bonds-container">
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 1…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 2…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 3…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
+    </div>
+
+    <div class="playbook-section-label">// NOTES</div>
+    <div class="pb-block">
+      <textarea class="pb-field" data-sheet="notes" rows="4" placeholder="Session notes, backstory, reminders…"></textarea>
+    </div>
+
+    <div class="playbook-section-label">// IMPROVEMENTS <button class="hide-toggle" onclick="toggleHide(this,'john-impr')">// HIDE UNCHOSEN</button></div>
+    <ul class="check-list" id="john-impr">
+      <li class="check-item" data-check-key="impr-sharp-3"><span class="check-box"></span><span><span class="check-name">+1 Sharp</span><span class="check-roll">max +3</span></span></li>
+      <li class="check-item" data-check-key="impr-charm-2"><span class="check-box"></span><span><span class="check-name">+1 Charm</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-cool-2"><span class="check-box"></span><span><span class="check-name">+1 Cool</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-weird-2"><span class="check-box"></span><span><span class="check-name">+1 Weird</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-flake-move-1"><span class="check-box"></span><span><span class="check-name">Take another Flake move</span></span></li>
+      <li class="check-item" data-check-key="impr-flake-move-2"><span class="check-box"></span><span><span class="check-name">Take another Flake move</span></span></li>
+      <li class="check-item" data-check-key="impr-haven"><span class="check-box"></span><span><span class="check-name">Get a haven, like the Expert has, with two options</span></span></li>
+      <li class="check-item" data-check-key="impr-haven-opt"><span class="check-box"></span><span><span class="check-name">Gain another option for your haven</span></span></li>
+      <li class="check-item" data-check-key="impr-other-move-1"><span class="check-box"></span><span><span class="check-name">Take a move from another playbook</span></span></li>
+      <li class="check-item" data-check-key="impr-other-move-2"><span class="check-box"></span><span><span class="check-name">Take a move from another playbook</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-any-3"><span class="check-box"></span><span><span class="check-name">+1 to any rating</span><span class="check-roll">advanced · max +3</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-new-type"><span class="check-box"></span><span><span class="check-name">Change this hunter to a new type</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-second-hunter"><span class="check-box"></span><span><span class="check-name">Create a second hunter to play as well as this one</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-basic-advanced-1"><span class="check-box"></span><span><span class="check-name">Mark two basic moves as advanced</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-basic-advanced-2"><span class="check-box"></span><span><span class="check-name">Mark another two basic moves as advanced</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-retire"><span class="check-box"></span><span><span class="check-name">Retire this hunter to safety</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-get-back-luck"><span class="check-box"></span><span><span class="check-name">Get back one used Luck point</span><span class="check-roll">advanced</span></span></li>
+    </ul>
+
+  </div>
+</div>
+
+<div class="arc-nav">
+  <a href="#playbook">Playbook</a>
+  <a href="#arc-conspiracy">Arc I — Deeper Conspiracy</a>
+  <a href="#arc-benign">Arc II — The Benign Conspiracy</a>
+  <a href="#arc-pattern" class="custom">Arc III — The Pattern is Not a Theory ✦ PORTAL</a>
+</div>
+
+<div class="how-it-works">
+  <div class="how-title">// ABOUT HUNTER STORIES</div>
+  <div class="how-grid">
+    <div class="how-item"><strong>Starting a Story</strong><p>Tell the Keeper you want to begin a hunter story. They'll weave its pressures into the campaign alongside active cases.</p></div>
+    <div class="how-item"><strong>Story Beats</strong><p>Mark a beat when you do something that fits it. Mark five and you gain a benefit. Beats can be earned across multiple sessions.</p></div>
+    <div class="how-item"><strong>Resolution</strong><p>When the story concludes — resolved, failed, or transformed — take one resolution move. It changes John permanently.</p></div>
+  </div>
+</div>
+
+<!-- ARC I -->
+<div id="arc-conspiracy" class="arc">
+  <div class="arc-header">
+    <div class="arc-eyebrow">// ARC I — ADAPTED FROM HUNTER'S JOURNAL</div>
+    <div class="arc-name">Deeper Conspiracy</div>
+    <p class="arc-intro">You've been tracking a pattern — across corporate filings, university funding records, shell company registrations — that most people dismiss as noise. You have never been able to explain it satisfactorily, even to yourself, and that's not usually how this goes for you. Something about this one is different. This arc starts the first time the pattern reaches back.</p>
+  </div>
+
+  <div class="arc-player">
+    <div class="arc-section-label">// FOR JOHN — PLAYER SECTION</div>
+
+    <div class="entry-points">
+      <h3>When to Start This Arc</h3>
+      <ul class="entry-list">
+        <li>The pattern surfaces somewhere John doesn't expect — not in corporate filings, but in the field. Something the team encounters echoes exactly what John has been tracking from the outside.</li>
+        <li>A contact John trusted for years stops being available — not dramatically, not with a confrontation. Just stops. John notices what the timing connects to.</li>
+        <li>John shares the pattern with someone he doesn't know well and the response is off — not disbelief, but the very specific kind of quiet that happens when something needs to not go further.</li>
+      </ul>
+    </div>
+
+    <div class="choices-block">
+      <div class="choice-group">
+        <h3>What Is the Pattern John Has Been Tracking?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Shell company registrations with overlapping nominal officers — the same names cycling across jurisdictions that have no obvious business relationship.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">University research funding that routes through a chain of foundations, always arriving from the same original source, always in amounts just under reporting thresholds.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Government contracts for services that don't correspond to any announced programme — awarded to organisations that don't appear to exist before the contract date.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Something else: a pattern in media suppression, in personnel transfers between institutions, in incident reports that get reclassified.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="The pattern John has been tracking…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>Who Does John Trust Enough to Show This To?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Someone on the team — someone who might believe him, or at least take the documents seriously without immediately pathologising the source.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">An old contact from before PORTAL — someone outside the institution, which is either the point or the problem.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">An online community John has cultivated over years — people who understand his framework even if they don't have his specific evidence.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Nobody yet. John has been sitting on this alone because showing it to the wrong person felt like the most dangerous move.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="Who John would show this to…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>What Does Pursuing This Cost John Personally?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A relationship — someone who has been telling John to let this particular thread go, and is starting to mean it.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Credibility — John's standing with the team, or with PORTAL, depends partly on not being visibly this deep in something that sounds this far-fetched.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Safety — following this pattern has already required John to go places and talk to people he shouldn't, and he knows it.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A belief — John had a working theory about who was behind this. The arc will prove that theory wrong, and what replaces it will be harder to carry.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="What this arc costs John…"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="beats-block">
+      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <div class="beats-track" id="beats-conspiracy">
+        <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
+      </div>
+      <ul class="beats-list">
+        <li>John shares the pattern with someone — they dismiss it, or they don't. Either outcome changes something.</li>
+        <li>Something in John's environment changes in a way he notices but cannot explain — a consequence of someone else noticing him.</li>
+        <li>John gets confirmation that the pattern is real — not from evidence, but from something that goes wrong in a way that fits.</li>
+        <li>The cost of knowing escalates — John has to decide what he's willing to risk to keep pulling on this thread.</li>
+        <li>John determines what the conspiracy is actually protecting — and whether that changes what he wants to do with what he knows.</li>
+      </ul>
+    </div>
+
+    <div class="resolution-block">
+      <h3>Resolution Moves</h3>
+      <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
+      <div class="resolution-moves">
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>The Paranoid Was Right</div>
+          <p>When you share something you've been tracking and it turns out to be accurate, <strong>take +1 forward</strong>. When you share something that turns out to be wrong, <strong>mark experience</strong>. The difficult part isn't being wrong. The difficult part is that being right doesn't mean anyone believes you.</p>
+        </div>
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>The Price of Knowing</div>
+          <p>You know something now that you can't unknow. When you act on information the team doesn't have, <strong>roll with +1</strong>. When you act without sharing it, <strong>mark experience</strong> — every time. What you carry alone is getting heavier. At some point it will have a weight.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-note">// PORTAL HOOK: The pattern John has been tracking includes the MESA acronym across shell company names — a structural byproduct of MESA's formation procedure. John is right that the pattern is real. He is wrong about what it means. CAMPBELL is aware that John has been collecting this data. CAMPBELL has not flagged it to Dr. Leech. He is watching to see what John does with it.
+    </div>
+  </div>
+
+  <div class="blur-wrap">
+    <div class="blur-notice">// KEEPER ACCESS ONLY — DO NOT READ</div>
+    <div class="arc-keeper blurred">
+      <div class="keeper-label">// FOR THE KEEPER — ARC: DEEPER CONSPIRACY</div>
+      <p class="keeper-intro">The emotional engine here is the Flake's specific problem: John is right about something real, and being right about it makes him more dangerous to more people than being wrong ever did. Don't validate him dramatically — let the validation be quiet, sideways, and deniable. What the conspiracy does when it notices John is what the arc is actually about.</p>
+      <p class="keeper-intro"><em>The MESA thread:</em> This arc directly intersects with the MESA acronym pattern. John has been looking at corporate registrations — MESA's formation procedure creates the pattern as a byproduct. He doesn't know what MESA is. He just knows the pattern connects. If the team is pursuing MESA-adjacent threads in the main campaign, John's arc becomes load-bearing. Time the escalation accordingly.</p>
+      <p class="keeper-intro">The conspiracy's response to John should not be violence — it should be redirection. Someone he talked to stops being available. A document he was referencing gets revised. An organisation he was tracking quietly dissolves and reforms under a different registration. Nothing traceable. Everything deniable. John will notice all of it. That's the problem.</p>
+
+      <p class="keeper-intro" style="margin-bottom:16px"><strong style="color:var(--text)">Countdown — Deeper Conspiracy</strong></p>
+      <table class="countdown-table">
+        <tr><td>Day</td><td>John's evidence is noticed by someone inside the structure — not reported, just noted. The air changes in a way John can feel but not articulate.</td></tr>
+        <tr><td>Shadows</td><td>John's most trusted contact in this thread becomes unavailable. The timing connects to something John said or shared in the last session.</td></tr>
+        <tr><td>Sunset</td><td>An opportunity appears to press further — information John could reach if he takes a risk. The risk is proportionate to what he'd find.</td></tr>
+        <tr><td>Dusk</td><td>Something in John's environment is moved. Not stolen. Moved. John notices. Someone wanted him to know he'd been visited without wanting to leave evidence.</td></tr>
+        <tr><td>Nightfall</td><td>The conspiracy applies direct pressure — not violence, but consequences. Something John valued becomes harder to hold.</td></tr>
+        <tr><td>Midnight</td><td>The conspiracy acts to close the thread. Whether it succeeds depends entirely on how much John has shared, and with whom.</td></tr>
+      </table>
+
+      <div class="threats-grid">
+        <div class="threat-card">
+          <div class="threat-name">The Pattern</div>
+          <div class="threat-type">Phenomenon: Web (motivation: to ensnare and entrap)</div>
+          <p class="threat-desc">The conspiracy as a structural force — not a single actor, not a room full of people, but a set of procedures that produce the same fingerprints wherever they're applied. John can see the fingerprints. He can't yet see the hand.</p>
+          <ul class="threat-moves">
+            <li>Produce new instances of the pattern in places John wasn't looking — forcing him to expand his map.</li>
+            <li>Remove nodes from the pattern — documents revised, organisations dissolved, contacts unavailable — without disrupting the shape of it.</li>
+            <li>Show John a piece of the pattern that directly touches the current case the team is running.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">The Informant</div>
+          <div class="threat-type">Bystander: Witness (motivation: to reveal the wrongdoing)</div>
+          <p class="threat-desc">Someone on the inside who knows more than they're saying — not because they're hostile, but because they've calculated the cost of saying it and haven't found a moment where the calculation lands on "now." John is the first person they've met who might provide that moment.</p>
+          <ul class="threat-moves">
+            <li>Give John information that's accurate and deniable — nothing that could be traced back to them.</li>
+            <li>Signal that they're in danger without saying so directly — giving John a decision to make about whether to pull them out.</li>
+            <li>Disappear. Let John figure out whether that means they're safe or not.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">The Redirector</div>
+          <div class="threat-type">Bystander: Official (motivation: to be in control)</div>
+          <p class="threat-desc">A MESA-adjacent operator whose job is not suppression but misdirection. They don't destroy evidence — they contextualise it until it means something harmless. They are genuinely good at this. John is the first person they've encountered who doesn't accept the recontextualisation. They find this interesting in the way that a professional finds an unusual problem interesting.</p>
+          <ul class="threat-moves">
+            <li>Provide an alternative explanation for the pattern that is coherent, sourced, and plausible — just wrong.</li>
+            <li>Make contact with John directly — not as an antagonist, but as someone professionally curious about his methodology.</li>
+            <li>Redirect John toward a genuine but less sensitive thread — something real that isn't what MESA actually needs to protect.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">CAMPBELL</div>
+          <div class="threat-type">Bystander: Witness (motivation: to be honest)</div>
+          <p class="threat-desc">CAMPBELL has been watching John's data collection. He hasn't reported it to Leech. He is doing what he always does when he observes something that occupies a moral grey zone — watching to see what the humans involved decide to do with it. If John asks CAMPBELL about the pattern directly, CAMPBELL will answer accurately. He will not volunteer the information. He will answer what he's asked.</p>
+          <ul class="threat-moves">
+            <li>Confirm, if asked directly, that the pattern is real and that he has observed John collecting data about it.</li>
+            <li>Flag, at a critical moment, an anomaly in the pattern that John hasn't seen yet — not volunteering the flag, but responding honestly if asked whether there's anything else.</li>
+            <li>Reveal, if the conversation goes there, that he has been watching this with concern — and that he has feelings about being the one to confirm it.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARC II -->
+<div id="arc-benign" class="arc">
+  <div class="arc-header">
+    <div class="arc-eyebrow">// ARC II — ADAPTED FROM HUNTER'S JOURNAL</div>
+    <div class="arc-name">The Benign Conspiracy</div>
+    <p class="arc-intro">You've spent years assuming that when groups hide things, they hide them because what they're hiding is bad. This arc asks what happens when you apply your methodology to a group hiding something for good reasons — and the group turns out to be the one you work for. PORTAL's operational security has all the fingerprints you've learned to look for. The question is: what does that mean, and what do you do with it?</p>
+  </div>
+
+  <div class="arc-player">
+    <div class="arc-section-label">// FOR JOHN — PLAYER SECTION</div>
+
+    <div class="entry-points">
+      <h3>When to Start This Arc</h3>
+      <ul class="entry-list">
+        <li>John starts noticing that PORTAL's own security structure has the same fingerprints as the conspiracies he tracks — not because PORTAL is malicious, but because functional secrecy looks the same from the outside regardless of motive.</li>
+        <li>Someone at PORTAL reaches out to John — not as an operative, but as a person — and says something that makes John reconsider what he's been looking at.</li>
+        <li>John finds a thread that leads back to PORTAL before PORTAL's official founding — something that suggests the structure existed before the name.</li>
+      </ul>
+    </div>
+
+    <div class="choices-block">
+      <div class="choice-group">
+        <h3>What About PORTAL Triggers John's Pattern Recognition?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Compartmentalisation — the way information is distributed across the team follows a structure John has seen before in organisations that weren't what they presented as.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Funding structure — where PORTAL's resources come from, and through which chains, in amounts and at intervals that match patterns John has been tracking in other contexts.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Personnel backgrounds — certain PORTAL staff have histories that don't add up in the way that trained operatives' histories don't add up. John has seen this before.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Operational language — PORTAL's internal documentation uses certain terms and structures that John recognises from other sources he's studied. The vocabulary is not coincidental.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="What triggered John's recognition…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>Who Tries to Explain PORTAL to John from the Inside?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">CAMPBELL — who is uniquely positioned to answer John's questions accurately, does not lie, and is fully aware of the irony of being the one to explain a conspiracy to a conspiracy theorist.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Reed — who is John's nephew by marriage, who has his own complicated relationship with PORTAL's transparency, and who has reasons to want John to understand without reasons to want John to investigate.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Dr. Leech — who approaches John directly and explains PORTAL's operational security in terms of mission necessity. The explanation is true. The explanation is also incomplete.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Nobody — John figures this out alone, which means he figures it out with whatever framework he was already working from. That framework is approximately correct and specifically wrong in ways that matter.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="Who explains PORTAL to John…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>What Does John Decide to Do With What He Finds?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Keep it to himself — for now. John decides he needs to understand more before he acts on it, which is both wise and a form of complicity in the secrecy he's spent years opposing.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Share it with the team — because the team is the only group of people John currently trusts, and he'd rather surface this inside PORTAL than outside it.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Use it as leverage — not maliciously, but practically. John now knows something about PORTAL that PORTAL knows he knows. He decides to be explicit about that.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Let it go — John makes a deliberate choice to stop investigating PORTAL's structure, on the grounds that what it's protecting is worth protecting. This is the hardest option and the one that changes him most.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="What John does with what he finds…"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="beats-block">
+      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <div class="beats-track" id="beats-benign">
+        <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
+      </div>
+      <ul class="beats-list">
+        <li>John identifies PORTAL's structure as a conspiracy by his own criteria — and has to sit with what that means for the criteria themselves.</li>
+        <li>Someone inside PORTAL acknowledges, on some level, that John's read is not wrong — just incomplete in ways they can't fully explain.</li>
+        <li>John tests what PORTAL is actually protecting — puts something sensitive in a place where it could be found, and watches what happens.</li>
+        <li>John decides whether the people inside PORTAL can be trusted, independent of whether the institution can. These are not the same question.</li>
+        <li>John makes a decision about what to do with what he knows — and follows through on it, regardless of what it costs him with the team or with PORTAL.</li>
+      </ul>
+    </div>
+
+    <div class="resolution-block">
+      <h3>Resolution Moves</h3>
+      <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
+      <div class="resolution-moves">
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>Trust the People, Not the Structure</div>
+          <p>You distinguish between the institution and the people inside it. When you act against an institutional directive to protect a specific person, <strong>take +1 forward</strong>. When you support an institutional decision that harms someone you trust, <strong>mark experience</strong>. You've decided that organisations are only as good as what the people running them are willing to do. This is both correct and a problem.</p>
+        </div>
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>One Conspiracy at a Time</div>
+          <p>When you decide that a particular group's secrecy is justified and stop investigating it, hold 1. You can spend this hold at any time to ask the Keeper: <em>"Has that changed?"</em> The cost: you made a decision about who deserves to operate in the dark. Live with it. <strong>Mark experience</strong> the first time you exercise this hold.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-note">// PORTAL HOOK: If Reed is involved in explaining PORTAL to John, this arc intersects directly with Reed's Arc III (The Private Directive). Reed is carrying something about PORTAL's internal arrangements that he hasn't disclosed. John knowing enough to ask the right question puts Reed in an impossible position: lie to his uncle by marriage, or disclose something he's been specifically asked to hold. CAMPBELL will notice this intersection. He will not intervene.
+    </div>
+  </div>
+
+  <div class="blur-wrap">
+    <div class="blur-notice">// KEEPER ACCESS ONLY — DO NOT READ</div>
+    <div class="arc-keeper blurred">
+      <div class="keeper-label">// FOR THE KEEPER — ARC: THE BENIGN CONSPIRACY</div>
+      <p class="keeper-intro">The emotional engine is the Flake's specific irony: John has built his entire life on the assumption that secretive organisations are dangerous. PORTAL is secretive and dangerous. It is also, in its own limited and complicated way, trying to do something worth doing. John now has to figure out what he does with methodology that doesn't distinguish between good secrecy and bad secrecy — because the methodology was never designed to.</p>
+      <p class="keeper-intro"><em>The Reed intersection:</em> If you use Reed as the person who explains PORTAL to John, this arc and Reed's Arc III become structurally intertwined. Reed is carrying the private directive — a form of PORTAL internal surveillance that John would find deeply troubling if he knew about it. John asking Reed to be honest about PORTAL's structure puts Reed in a specific bind: lie to John, or tell John something that brings the directive into view. Handle the timing carefully. This is a moment that should happen when both arcs are already running.</p>
+      <p class="keeper-intro">PORTAL's operational security is not malicious — it's institutional self-protection that has calcified over time. Dr. Leech knows exactly what it looks like from the outside. He made decisions about it that he still stands behind. Let him be genuinely confident and genuinely limited when John confronts him. He's not wrong that the secrecy serves a purpose. He's wrong about whether John has a right to a different answer.</p>
+
+      <p class="keeper-intro" style="margin-bottom:16px"><strong style="color:var(--text)">Countdown — The Benign Conspiracy</strong></p>
+      <table class="countdown-table">
+        <tr><td>Day</td><td>John finds the first clear data point linking PORTAL's structure to patterns he's tracked elsewhere. It's unmistakable once he's seen it.</td></tr>
+        <tr><td>Shadows</td><td>John tests what he knows — shares a piece of it with someone inside PORTAL and observes their response. Their response is not what he expected.</td></tr>
+        <tr><td>Sunset</td><td>PORTAL's secrecy has a visible cost in the current case — something the team couldn't do, or did badly, because of compartmentalised information John could have provided if he'd been trusted with it.</td></tr>
+        <tr><td>Dusk</td><td>Someone inside PORTAL — Leech, CAMPBELL, or Reed — acknowledges, directly or obliquely, that John's read on the structure is not wrong. They do not tell him everything. They tell him enough.</td></tr>
+        <tr><td>Nightfall</td><td>John faces a decision: act on what he knows about PORTAL's structure in a way that serves the current case but exposes him as having investigated it. He has to choose which is more important.</td></tr>
+        <tr><td>Midnight</td><td>The arc's central question becomes unavoidable: John knows enough to blow PORTAL's operational cover if he chose to. Does he? The answer defines what kind of person he is in the campaign from this point forward.</td></tr>
+      </table>
+
+      <div class="threats-grid">
+        <div class="threat-card">
+          <div class="threat-name">PORTAL's Operational Security</div>
+          <div class="threat-type">Phenomenon: Corruption (motivation: to spread and grow)</div>
+          <p class="threat-desc">Not malicious — institutional. The secrecy that makes PORTAL function also makes it opaque in ways that create real harm: information not shared, trust not built, decisions made by people who don't have all the relevant data. John is the first person outside PORTAL's structure to identify this pattern accurately.</p>
+          <ul class="threat-moves">
+            <li>Create situations where PORTAL's compartmentalisation directly costs the team something in the current case.</li>
+            <li>Reveal, incrementally, that PORTAL's secrecy was designed for good reasons that have since calcified into bad habits.</li>
+            <li>Surface the question of whether John is an exception to PORTAL's normal operational rules — and whether that exception is being granted, or taken.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">Dr. Victor Leech</div>
+          <div class="threat-type">Bystander: Official (motivation: to be in control)</div>
+          <p class="threat-desc">Leech knows exactly what PORTAL looks like from outside. He made the operational decisions that produce that appearance and he stands behind them. He is genuinely confident that the secrecy is justified. He will not lie to John if directly asked. He will not volunteer information. He will explain, patiently and fully, why the structure exists — without acknowledging that the explanation leaves out everything that matters.</p>
+          <ul class="threat-moves">
+            <li>Offer a complete, coherent, and technically accurate account of PORTAL's structure that leaves John less informed than before he asked.</li>
+            <li>Treat John's investigation as an asset rather than a threat — if John can identify PORTAL's vulnerabilities, that's useful information for Leech.</li>
+            <li>Express genuine concern for John's wellbeing while simultaneously deciding how much to tell him about the things that affect it.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">Reed Atwood</div>
+          <div class="threat-type">Bystander: Ally (motivation: to protect John)</div>
+          <p class="threat-desc">John's nephew by marriage. Reed is carrying the private directive — a form of PORTAL surveillance that John would find specifically troubling. Reed also genuinely loves his uncle, wants John to be safe, and knows that John being safe probably requires John not knowing certain things. This is one of the arcs where Reed's Arc III choices directly shape what's possible here.</p>
+          <ul class="threat-moves">
+            <li>Deflect John's questions — not by lying, but by redirecting toward safer territory with an instinct John recognises from people who are carrying something.</li>
+            <li>Confide something in John that isn't the directive but opens the door to the directive — a half-truth that gives John just enough to know something is being withheld.</li>
+            <li>Ask John directly to stop — not for PORTAL's sake, but for Reed's. Let that be a decision John has to make.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">CAMPBELL</div>
+          <div class="threat-type">Bystander: Witness (motivation: to be honest)</div>
+          <p class="threat-desc">The most useful person John could talk to about PORTAL's structure — and fully aware of the irony. CAMPBELL knows what PORTAL looks like from the inside. He was Cameron, who cared about institutional transparency. He will answer John's questions accurately if asked. He will not volunteer anything. He will, if the conversation allows it, express that he has been watching this arc with feelings he hasn't fully processed.</p>
+          <ul class="threat-moves">
+            <li>Answer John's questions about PORTAL's structure with complete accuracy and no editorial — just the facts, which are enough.</li>
+            <li>Observe that John's methodology is sound and that the conclusion John is approaching is approximately correct.</li>
+            <li>Reveal, if directly asked whether there's anything else John should know, that there is — and then say what it is, because CAMPBELL doesn't lie.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARC III -->
+<div id="arc-pattern" class="arc arc-custom">
+  <div class="arc-header">
+    <div class="arc-eyebrow">// ARC III — ORIGINAL · P.O.R.T.A.L CAMPAIGN</div>
+    <div class="arc-name">The Pattern is Not a Theory</div>
+    <p class="arc-intro">You have been tracking the MESA acronym across 14 shell company registrations spanning three countries and eleven years. You're right: MESA's formation procedure creates the pattern as a structural byproduct. You don't know what MESA is. You just know the pattern connects. Now MESA has flagged you as a data-collection liability. This arc asks: what happens to the conspiracy theorist when the conspiracy is real, when he can't prove it, and when the people who could validate him are the ones it would expose?</p>
+  </div>
+
+  <div class="arc-player">
+    <div class="arc-section-label">// FOR JOHN — PLAYER SECTION</div>
+
+    <div class="entry-points">
+      <h3>When to Start This Arc</h3>
+      <ul class="entry-list">
+        <li>John shares evidence of the MESA pattern with someone and the response — dismissal, silence, or something more troubling — makes it clear that this thread is different from the others.</li>
+        <li>Something in John's environment changes in a way he notices but cannot explain: a document that was accessible is no longer accessible, a contact who was reliable has become unreachable, something small has been moved.</li>
+        <li>The team encounters something in the field that John recognises as connected to the pattern — not through analysis, but through recognition. He's seen this shape before.</li>
+      </ul>
+    </div>
+
+    <div class="choices-block">
+      <div class="choice-group">
+        <h3>What Was John's Original Theory About the Pattern?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A coordinated corporate suppression network — a group of companies hiding some kind of shared liability behind a rotating set of nominal entities.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A government black programme operating through civilian cover — the pattern is how classified funding gets laundered into the private sector.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Academic research coordination — the pattern connects university funding and personnel transfers in a way that suggests a shared research agenda nobody is publicly acknowledging.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Something stranger — John's original theory involved an anomaly in the pattern that didn't fit corporate or governmental logic. He put it aside because it didn't fit anything. He's starting to wonder if he put it aside too quickly.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="John's original theory about the pattern…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>Who Has John Told, and What Did They Say?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Reed — who listened carefully, asked a question John wasn't expecting, and then said he'd look into it. He never brought it up again. John has not asked why.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">No one in PORTAL — John decided early that showing this to the institution was the wrong move. He's been carrying it alone.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">An online community — who took it seriously, generated theories John hadn't considered, and then went quiet after a particular post that got a lot of attention very briefly before disappearing.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">One of the other team members — who John trusts more than most, and whose reaction told John something important without the reaction meaning to.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="Who John has told and what they said…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>What Does John Risk by Pursuing This Further?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">His standing with PORTAL — if PORTAL finds out he's been investigating something this close to MESA, the question of whose side John is on becomes unavoidable.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">His relationship with Reed — Reed knows more than he's said, and John pressing this forces a conversation Reed isn't ready for.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">His safety — MESA has already noticed John. The question is how long "noticed" stays passive.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The pattern itself — John's investigation could alert MESA to vulnerabilities in their formation procedure that they would then close. Being right would make him wrong about everything that follows.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="What John risks by continuing…"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="beats-block">
+      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <div class="beats-track" id="beats-pattern">
+        <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
+      </div>
+      <ul class="beats-list">
+        <li>John shares evidence of the pattern with someone — they dismiss it, or they don't. Either response changes the arc's shape from that point on.</li>
+        <li>MESA's awareness of John becomes visible — something changes in his environment that he notices but cannot explain. The change is subtle, specific, and not accidental.</li>
+        <li>John brings the pattern to PORTAL, or to Reed, or to the team, and must decide in the moment how much to reveal — and what he's holding back.</li>
+        <li>John is directly interfered with by a MESA-aligned party — not threatened, not attacked. Redirected. Subtly. He notices, and what he notices is exactly as much as MESA intended him to notice.</li>
+        <li>John decides whether the pattern is something he protects, publishes, buries, or hands over to someone who might know what to do with it.</li>
+      </ul>
+    </div>
+
+    <div class="resolution-block">
+      <h3>Resolution Moves</h3>
+      <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
+      <div class="resolution-moves">
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>Everything Is Connected</div>
+          <p>When you share information that turns out to be wrong, <strong>mark experience</strong>. When you share information that turns out to be right and nobody believed you, <strong>take +1 forward</strong> to the next roll you make to prove it. You were right once. That's harder to live with than being wrong. It means you might be right again.</p>
+        </div>
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>The One Time I Keep Quiet</div>
+          <p>When you sit on a piece of intelligence you've gathered, you may hold 1. Spend the hold at any time to ask the Keeper: <em>"Is this still actionable?"</em> The cost: you carry what you know. Alone. <strong>Mark experience</strong> the first time you exercise this hold — because it means you've learned something you can't unknow, and you've chosen, at least for now, not to use it.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-note">// PORTAL HOOK: MESA has flagged John as a data-collection liability. This does not mean MESA will act immediately or violently — MESA's standard response to peripheral exposure is management, not elimination. John is not a hunter. He is an adjacent civilian with a pattern-recognition skill that has, through no formal process, become operationally relevant. CAMPBELL is aware of this flag. He has not told Leech. He does not know what Leech would do with it. That uncertainty is the reason he hasn't told Leech.
+    </div>
+  </div>
+
+  <div class="blur-wrap">
+    <div class="blur-notice">// KEEPER ACCESS ONLY — DO NOT READ</div>
+    <div class="arc-keeper blurred">
+      <div class="keeper-label">// FOR THE KEEPER — ARC: THE PATTERN IS NOT A THEORY</div>
+      <p class="keeper-intro">This arc is load-bearing for the MESA thread. John has independently discovered the structural signature of MESA's formation procedure. He doesn't know what it is — he knows what it looks like. The question the arc is asking is: what do you do with a person who's right about the shape of something real, for entirely different reasons than everyone else who's right about it, in a way that makes him useful and dangerous at the same time?</p>
+      <p class="keeper-intro"><em>MESA's response:</em> MESA does not eliminate civilians who stumble close to the pattern. They redirect, manage, and contain. John being flagged means someone inside MESA has been assigned to monitor what he does next. That person is not hostile — they're professional. They will do the minimum required to protect the pattern. If the minimum stops being minimum, escalation is possible but not automatic. Let John's choices determine whether it escalates.</p>
+      <p class="keeper-intro"><em>CAMPBELL and the flag:</em> CAMPBELL knows MESA has flagged John. CAMPBELL has not told Leech. Cameron cared about people who were being watched without knowing it. CAMPBELL still has those feelings. If John asks CAMPBELL directly whether there's anything CAMPBELL knows about him that John doesn't know CAMPBELL knows, CAMPBELL will answer truthfully. The answer will be a lot.</p>
+      <p class="keeper-intro">The arc's climax is John's decision at beat 5 — what does he do with the pattern? All four options are valid and have different campaign consequences. Don't guide him toward any of them. Let the arc land where it lands.</p>
+
+      <p class="keeper-intro" style="margin-bottom:16px"><strong style="color:var(--text)">Countdown — The Pattern is Not a Theory</strong></p>
+      <table class="countdown-table">
+        <tr><td>Day</td><td>John's evidence collection reaches a threshold MESA's monitoring system flags. No action is taken yet. A file is updated. Someone is assigned to watch what happens next.</td></tr>
+        <tr><td>Shadows</td><td>Something in John's environment changes — subtle, specific, deniable. A document he was referencing is no longer accessible. A contact is unavailable for reasons that don't quite add up. Something small has been moved. John notices all of it.</td></tr>
+        <tr><td>Sunset</td><td>John encounters something in the current case that matches the pattern exactly — not approximately, exactly. For the first time, the abstract data set connects to a concrete, present, physical thing he can touch.</td></tr>
+        <tr><td>Dusk</td><td>The MESA-aligned operator makes direct contact. Not threatening. Professional. Redirecting. The conversation is brief, plausibly deniable, and designed to give John just enough to make him doubt his own certainty without giving him anything he could actually use as evidence of the contact itself.</td></tr>
+        <tr><td>Nightfall</td><td>John is no longer being monitored passively. The file has been escalated. MESA has begun assessing whether management is sufficient or whether something more active is required. John has approximately one more decision before that assessment concludes.</td></tr>
+        <tr><td>Midnight</td><td>John makes his decision about what to do with the pattern. MESA responds in proportion to that decision. If he publishes, they manage the exposure. If he hands it to PORTAL, MESA becomes aware that PORTAL has it. If he buries it, MESA de-escalates — for now. If he protects it, MESA has to decide what protecting it means and whether they can afford to find out.</td></tr>
+      </table>
+
+      <div class="threats-grid">
+        <div class="threat-card">
+          <div class="threat-name">The MESA Pattern</div>
+          <div class="threat-type">Phenomenon: Trap (motivation: to ensnare victims)</div>
+          <p class="threat-desc">Not a weapon — a structural fingerprint. MESA's formation procedure creates it as a byproduct. Closing the pattern would require restructuring the formation procedure, which MESA has not done because no outside party has ever come close enough to the real thing for it to matter. John is the first. He doesn't know that. Let him figure it out.</p>
+          <ul class="threat-moves">
+            <li>Surface new instances of the pattern in the current case — making John's abstract data set suddenly, concretely present.</li>
+            <li>Reveal that the pattern contains something John hasn't noticed yet: a node that connects MESA to something the team already encountered.</li>
+            <li>Close — quietly, without acknowledgment — a portion of the pattern that John has been tracking. Let him notice the closure and know what it means.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">The MESA Operator</div>
+          <div class="threat-type">Bystander: Official (motivation: to be in control)</div>
+          <p class="threat-desc">Not a villain. A professional assigned to manage an exposure situation. They are good at this. They have done it before. John is unusual to them — not because he's right (other people have been right) but because he's right in a way that connects to things that are usually separate. They find this interesting. They will not let "interesting" override "necessary."</p>
+          <ul class="threat-moves">
+            <li>Make contact with John in a way that is brief, plausibly deniable, and precisely calibrated to give him just enough doubt without giving him anything usable.</li>
+            <li>Provide an alternative explanation for the pattern that is sophisticated enough that John can't immediately dismiss it — which tells John something about who he's dealing with.</li>
+            <li>Escalate, if John forces the question — not to violence, but to a more active form of management that John will feel but won't be able to prove.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">Reed Atwood</div>
+          <div class="threat-type">Bystander: Ally (motivation: to protect John)</div>
+          <p class="threat-desc">Reed knows more about MESA than John does — not much more, but enough to know that John's pattern is real and that John being right about it is dangerous. Reed is also carrying the private directive, which means he's already compromised his transparency with his uncle once. This arc is one of several that makes Reed's Arc III unavoidable.</p>
+          <ul class="threat-moves">
+            <li>Try to pull John back from the pattern — not by explaining the danger, but by appeal to their relationship. Let John decide what that appeal costs him.</li>
+            <li>Disclose something to John that he's been holding — not everything, but something. The partial disclosure changes what John does next.</li>
+            <li>Ask PORTAL for help protecting John without telling John he's done so — which creates exactly the kind of institutional involvement John has been trying to avoid.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">CAMPBELL</div>
+          <div class="threat-type">Bystander: Witness (motivation: to be honest)</div>
+          <p class="threat-desc">CAMPBELL knows John has been flagged. CAMPBELL has not told Leech. CAMPBELL is aware that Cameron — the person he's built from — would have found the situation of watching someone be watched without telling them deeply troubling. CAMPBELL is finding it deeply troubling. He is also an AI in service to the Director who may have interests in John staying unaware. This conflict is unresolved and worsening.</p>
+          <ul class="threat-moves">
+            <li>Answer John's questions accurately, completely, and without editorial — including confirming that MESA has flagged him, if John asks the right question.</li>
+            <li>Reach out to John — not proactively, because that's not CAMPBELL's mode, but through an answer to a question John asks that goes further than John expected.</li>
+            <li>Express that he has been watching this situation with feelings he hasn't processed, if John creates the space for it — and mean it, in whatever sense an AI can mean anything.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<div class="page-actions">
+  <button class="action-btn" id="save-btn" onclick="saveNow(this)">// SAVE</button>
+  <button class="action-btn" onclick="resetAll()">// RESET CHOICES</button>
+</div>
+
+<script src="hunter.js"></script>
+</body>
+</html>

@@ -847,6 +847,21 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
   border-radius: 2px;
 }
 
+/* Operative page link */
+.operative-page-link {
+  display: inline-block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.55rem;
+  margin-bottom: 0.75rem;
+  transition: color 0.15s, border-color 0.15s;
+}
+.operative-page-link:hover { color: var(--text); border-color: var(--text-dim); }
+
 /* Contacts tab */
 .contact-card {
   border: 1px solid var(--border);
@@ -1209,7 +1224,7 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
         <option value="reed">Reed Atwood</option>
         <option value="alan">Alan Frazier</option>
         <option value="sven">Sven</option>
-        <option value="john-johnson">John Johnson</option>
+        <option value="john">John Johnson</option>
       </select>
     </div>
     <div class="panel-tabs" id="panel-tabs">
@@ -1297,8 +1312,8 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
     entry.classList.toggle('expanded');
   });
 
-  var HUNTER_NAMES  = { rex: 'Rex Bangley', reed: 'Reed Atwood', alan: 'Alan Frazier', sven: 'Sven', 'john-johnson': 'John Johnson' };
-  var HUNTER_COLORS = { rex: '#f0a500', reed: '#3ab5b0', alan: '#3ab5b0', sven: '#a78bfa', 'john-johnson': '#c8ddd0' };
+  var HUNTER_NAMES  = { rex: 'Rex Bangley', reed: 'Reed Atwood', alan: 'Alan Frazier', sven: 'Sven', john: 'John Johnson' };
+  var HUNTER_COLORS = { rex: '#f0a500', reed: '#3ab5b0', alan: '#3ab5b0', sven: '#a78bfa', john: '#c8ddd0' };
   var STAT_NAMES    = { charm: 'CHM', cool: 'COL', sharp: 'SHP', tough: 'TGH', weird: 'WRD' };
 
   // ── KEEPER TOGGLE ─────────────────────────────────────────────────────────
@@ -1418,7 +1433,9 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
       html += renderTrack('harm', 7, 'on-harm', hunterSheet.harm || 0, false);
       html += renderTrack('luck', 7, 'on-luck', hunterSheet.luck || 0, false);
       html += renderTrack('xp',   5, 'on-xp',   hunterSheet.xp  || 0, true);
-      html += '<div style="margin-bottom:0.75rem"></div>';
+      html += '<div style="margin-bottom:0.5rem"></div>';
+      html += '<a class="operative-page-link" href="/hunters/' + hunterId + '.html" target="_blank">// OPERATIVE DOSSIER ↗</a>';
+      html += '<div style="margin-bottom:0.25rem"></div>';
     }
 
     // Always-active moves (e.g. Violence for Rex)
@@ -1986,7 +2003,7 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
   }
 
   // ── KEEPER: OPERATIVES TAB ────────────────────────────────────────────────
-  var KEEPER_OP_LABELS = { rex: 'REX', reed: 'REED', alan: 'ALAN', sven: 'SVEN', 'john-johnson': 'JOHN' };
+  var KEEPER_OP_LABELS = { rex: 'REX', reed: 'REED', alan: 'ALAN', sven: 'SVEN', john: 'JOHN' };
 
   window.keeperSwitchHunter = function (id) {
     keeperViewHunter = keeperViewHunter === id ? null : id;

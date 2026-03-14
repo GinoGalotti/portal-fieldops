@@ -196,6 +196,96 @@ test.describe('Hunter pages — save button', () => {
 
 });
 
+// ── JOHN JOHNSON SMOKE TEST ───────────────────────────────────────────────────
+
+test.describe('Hunter pages — john.html smoke', () => {
+
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      ['portal_hunter_john', 'portal_sheet_john'].forEach(function (k) {
+        try { localStorage.removeItem(k); } catch (e) {}
+      });
+    });
+    await page.route('**/api/v1/hunters/**', async route => {
+      if (route.request().method() === 'PUT') {
+        return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+      }
+      return route.fulfill({ contentType: 'application/json', body: '{}' });
+    });
+    await page.goto('/hunters/john.html');
+    await page.waitForLoadState('networkidle');
+  });
+
+  test('page title contains "John Johnson"', async ({ page }) => {
+    await expect(page).toHaveTitle(/John Johnson/i);
+  });
+
+  test('player-nav is injected with links', async ({ page }) => {
+    const nav = page.locator('#player-nav');
+    await expect(nav).toBeVisible();
+    await expect(nav.locator('a').first()).toBeVisible();
+  });
+
+  test('.hero-title contains "JOHN" and "JOHNSON"', async ({ page }) => {
+    const title = page.locator('.hero-title');
+    await expect(title).toContainText('JOHN');
+    await expect(title).toContainText('JOHNSON');
+  });
+
+  test('stat inputs render for all five stats', async ({ page }) => {
+    const statInputs = page.locator('.stat-input[data-stat]');
+    await expect(statInputs).toHaveCount(5);
+  });
+
+  test('7 harm pips render', async ({ page }) => {
+    const pips = page.locator('.track-pip[data-track="harm"]');
+    await expect(pips).toHaveCount(7);
+  });
+
+  test('7 luck pips render', async ({ page }) => {
+    const pips = page.locator('.track-pip[data-track="luck"]');
+    await expect(pips).toHaveCount(7);
+  });
+
+  test('5 xp pips render', async ({ page }) => {
+    const pips = page.locator('.track-pip[data-track="xp"]');
+    await expect(pips).toHaveCount(5);
+  });
+
+  test('#luck-special element exists', async ({ page }) => {
+    await expect(page.locator('#luck-special')).toBeAttached();
+  });
+
+  test('3 arc containers render', async ({ page }) => {
+    const arcs = page.locator('.arc[id]');
+    await expect(arcs).toHaveCount(3);
+  });
+
+  test('15 beat boxes render (5 per arc)', async ({ page }) => {
+    const beatBoxes = page.locator('.arc .beat-box');
+    await expect(beatBoxes).toHaveCount(15);
+  });
+
+  test('.choice-opt elements are present and clickable', async ({ page }) => {
+    const opts = page.locator('.choice-opt');
+    await expect(opts.first()).toBeVisible();
+  });
+
+  test('clicking a .choice-opt adds .selected class', async ({ page }) => {
+    const opt = page.locator('.choice-opt').first();
+    await opt.click();
+    await expect(opt).toHaveClass(/selected/);
+  });
+
+  test('save button shows SAVING then SAVED on success', async ({ page }) => {
+    const saveBtn = page.locator('#save-btn');
+    await saveBtn.click();
+    await expect(saveBtn).toHaveText('// SAVING…');
+    await expect(saveBtn).toHaveText('// SAVED ✓', { timeout: 4000 });
+  });
+
+});
+
 // ── REX SMOKE TEST ────────────────────────────────────────────────────────────
 
 test.describe('Hunter pages — rex.html smoke', () => {
