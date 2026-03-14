@@ -197,7 +197,7 @@ After each session, ask these questions and edit the JSON files accordingly.
 - A thread moved in this session → update `last_moved` to the new session id
 - A dormant thread activated → change `status` from `"dormant"` to `"active"`
 - A thread resolved → change `status` to `"resolved"`
-- A new thread opened (new hook, new NPC relationship, new discovery) → add a new entry
+- A new thread opened (new hook, new NPC relationship, new discovery) → add a new entry. **ID rule:** case-category threads must use `case-{letter}-{slug}` (e.g. `case-a-volunteer`) — the session prep export uses this to auto-highlight the selected case thread.
 - Summary or notes are now inaccurate → update the text
 
 **`data/portal-clocks.json` — ask after every session:**

@@ -430,6 +430,8 @@ Find "case-a-volunteer" and update `summary`: "[new summary after S03 events]".
 }
 ```
 
+**ID naming rule:** if `category` is `"case"`, the id **must** start with `case-{letter}-` (e.g. `case-a-volunteer`, `case-e-understudies`). The session prep export on `missions/threads.html` uses `id.startsWith('case-x-')` to auto-highlight the thread matching the selected case. Wrong id format = no ★ marker.
+
 ### Clock advances
 
 <!-- For each clock that should tick this session: -->
