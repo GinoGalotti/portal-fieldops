@@ -84,16 +84,12 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 ## NEXT UP
 
-329 tests passing across 18 files. Suite: `smoke` (5) · `nav` (22) · `contacts` (7) · `incidents` (18) · `feed` (~25) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (27) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (29) · `d1-round-trip` (7) · `map` (24) · `report` (15) · `index-session` (16).
+353 tests passing across 18 files. Suite: `smoke` (5) · `nav` (22) · `contacts` (7) · `incidents` (18) · `feed` (29) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (29) · `d1-round-trip` (7) · `map` (24) · `report` (15) · `index-session` (16).
 
-**1. John Johnson hunter page — `hunters/john.html`** [MEDIUM]
-Playbook arch refactor done. John is in the feed dropdown; Flake moves connected via `playbook` field. Remaining work:
-- Create `hunters/john.html` (use `hunters/reed.html` as template; same `hunter.js` + `hunter.css`)
-- Verify `data/hunters.json` John entry complete (accent colour, luck_special, area_of_study, lore, keeper notes)
-- Add John's arcs to `data/hunter-arcs.json` (from Flake entries in `motw-playbook-arcs.json`, campaign-adapted)
-- Add john.html coverage to `tests/hunters.spec.js`
-
-**2. Campaign thread + clock tracker — `missions/threads.html`** [MEDIUM] — see Post-Session Workflow section below.
+**1. John Johnson — complete arc data**
+`hunters/john.html` exists and tests pass. Still needed:
+- Add John's 3 arcs to `data/hunter-arcs.json` (arc IDs: `arc-deeper`, `arc-benign`, `arc-pattern`; source in `motw-playbook-arcs.json` Flake entries, campaign-adapted)
+- Without this, `missions/arcs.html` doesn't show John's arcs
 
 ---
 

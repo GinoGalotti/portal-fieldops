@@ -166,16 +166,16 @@
           "blocks": [
             {
               "type": "narrative",
-              "text": "Someone accessed Lab Bay 2 at 3am on Priya Osei's keycard. Priya was in Manchester. Nothing was taken."
+              "text": "Someone accessed Lab Bay 3 at 3am on Priya Osei's keycard. Priya was in Manchester. Nothing was taken."
             },
             {
               "type": "campbell",
               "label": "// CAMPBELL — SECURITY NOTICE",
               "paragraphs": [
-                "On Tuesday at 03:17, the internal motion system logged activity in Lab Bay 2. Duration: eleven minutes. The system attributed the movement to a staff member whose keycard had been used to enter the building at 02:54.",
+                "On Tuesday at 03:17, the internal motion system logged activity in Lab Bay 3. Duration: eleven minutes. The system attributed the movement to a staff member whose keycard had been used to enter the building at 02:54.",
                 "The staff member in question — Dr. Osei — was not in the building at that time. She was contacted this morning. Her keycard has been in her possession throughout. She has not reported it lost or damaged.",
-                "Lab Bay 2 houses the Aldermoor deployment equipment.",
-                "Nothing has been reported missing. The motion log shows a route: entrance, corridor B, Lab Bay 2, corridor B, exit. Eleven minutes. No deviation."
+                "Lab Bay 3 houses the ash particulate sample from Case S01 — identifier BIM-S01-003.",
+                "Nothing has been reported missing. The motion log shows a route: entrance, corridor B, Lab Bay 3, corridor B, exit. Eleven minutes. No deviation."
               ],
               "flag": "// FLAG: Security review in progress. Marcus Finch coordinating. Dr. Osei briefed. Sample relocated as a precaution. This notice is shared with field operatives because the incident occurred in the 36 hours before the scheduled Aldermoor deployment briefing. I do not know if this is relevant. I am noting it."
             },
@@ -185,7 +185,7 @@
             },
             {
               "type": "narrative",
-              "text": "A person enters the blind spot from the lobby end at 03:04. The person does not appear at marker 7. At 03:18 — fourteen minutes later — they appear at marker 7 from the Lab Bay 2 direction and walk back toward the lobby."
+              "text": "A person enters the blind spot from the lobby end at 03:04. The person does not appear at marker 7. At 03:18 — fourteen minutes later — they appear at marker 7 from the Lab Bay 3 direction and walk back toward the lobby."
             },
             {
               "type": "narrative",
@@ -193,7 +193,7 @@
             },
             {
               "type": "narrative",
-              "text": "What the person was doing in Lab Bay 2 for those fourteen minutes, or why they didn't appear at marker 7 after entering from the lobby, Marcus doesn't know. He's reviewed the footage six times. He's not sure he wants to review it a seventh."
+              "text": "What the person was doing in Lab Bay 3 for those fourteen minutes, or why they didn't appear at marker 7 after entering from the lobby, Marcus doesn't know. He's reviewed the footage six times. He's not sure he wants to review it a seventh."
             },
             {
               "type": "narrative",
