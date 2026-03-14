@@ -19,7 +19,8 @@
 | `index.html` bestiary | `tests/bestiary.spec.js` | 15 | ✅ |
 | `missions/arcs.html` | `tests/arcs.spec.js` | 24 | ✅ |
 | `missions/entities.html` | `tests/entities.spec.js` | 36 | ✅ |
-| `hunters/*.html` | `tests/hunters.spec.js` | ~18 | ✅ |
+| `hunters/*.html` | `tests/hunters.spec.js` | 29 | ✅ |
+| `missions/threads.html` | `tests/threads.spec.js` | 22 | ✅ |
 | `missions/campbell-briefings.html` | `tests/briefings.spec.js` | ~12 | ✅ |
 | `reports/player-report.html` | `tests/player-report.spec.js` | ~15 | ✅ |
 | D1 round-trip (hunter sheet, arc, incident, player report, map) | `tests/d1-round-trip.spec.js` | 7 | ✅ |
@@ -28,7 +29,7 @@
 
 ## ⬆ Next Up (recommended order)
 
-1. **Hunter page D1 round-trip for John** [L] — add john to `d1-round-trip.spec.js` once John's sheet is confirmed stable.
+1. **Hunter page D1 round-trip for John** [L] — add john to `d1-round-trip.spec.js` once John's sheet is confirmed stable in play.
 
 ---
 
