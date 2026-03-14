@@ -20,7 +20,7 @@
 | `missions/arcs.html` | `tests/arcs.spec.js` | 24 | ✅ |
 | `missions/entities.html` | `tests/entities.spec.js` | 36 | ✅ |
 | `hunters/*.html` | `tests/hunters.spec.js` | 29 | ✅ |
-| `missions/threads.html` | `tests/threads.spec.js` | 22 | ✅ |
+| `missions/threads.html` (threads, clocks, prep export) | `tests/threads.spec.js` | 30 | ✅ |
 | `missions/campbell-briefings.html` | `tests/briefings.spec.js` | ~12 | ✅ |
 | `reports/player-report.html` | `tests/player-report.spec.js` | ~15 | ✅ |
 | D1 round-trip (hunter sheet, arc, incident, player report, map) | `tests/d1-round-trip.spec.js` | 7 | ✅ |

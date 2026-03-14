@@ -214,6 +214,75 @@
   .threads-grid, .clocks-grid { grid-template-columns: 1fr; }
 }
 
+/* ── SESSION PREP EXPORT ──────────────────────────────────────────────────── */
+
+.prep-section {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 24px;
+  margin-bottom: 48px;
+}
+
+.prep-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--keeper-dim);
+  margin-bottom: 14px;
+}
+
+.case-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.case-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.case-btn:hover { border-color: var(--amber); color: var(--amber); }
+.case-btn.selected {
+  border-color: var(--amber);
+  color: var(--amber);
+  background: rgba(240,165,0,0.08);
+}
+
+.prep-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.prep-copy-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  padding: 8px 20px;
+  border: 1px solid var(--keeper-dim);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.prep-copy-btn:hover { border-color: var(--text); }
+.prep-copy-btn:disabled { opacity: 0.5; cursor: default; }
+
+.prep-feedback {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--green);
+  letter-spacing: 0.08em;
+}
+
 </style>
 </head>
 <body>
@@ -253,6 +322,24 @@
 
 <main>
 
+  <!-- ── SESSION PREP EXPORT ──────────────────────────────────────────────── -->
+
+  <div class="section-header">
+    <h2>Session Prep Export</h2>
+    <span class="section-tag">// SELECT NEXT CASE · COPY CONTEXT FOR CLAUDE</span>
+  </div>
+
+  <div class="prep-section">
+    <div class="prep-label">// NEXT CASE —</div>
+    <div class="case-picker" id="case-picker">
+      <span style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--keeper-dim)">// LOADING CASES…</span>
+    </div>
+    <div class="prep-actions">
+      <button class="prep-copy-btn" id="prep-copy-btn">⬡ COPY SESSION CONTEXT FOR CLAUDE</button>
+      <span class="prep-feedback" id="prep-feedback"></span>
+    </div>
+  </div>
+
   <!-- ── COUNTDOWN CLOCKS ──────────────────────────────────────────────────── -->
 
   <div class="section-header">
@@ -282,6 +369,232 @@
 </footer>
 
 <script>
+
+// ── PREP STATE ─────────────────────────────────────────────────────────────
+
+var selectedCaseId  = null;
+var allThreads      = [];
+var allClocks       = [];
+var sessionsData    = null;
+var briefingsData   = null;
+
+// ── CASE PICKER ─────────────────────────────────────────────────────────────
+
+function extractActiveCases(briefings) {
+  if (!briefings || !briefings.weeks) return [];
+  // Find the latest non-closed week, or the last week if all closed
+  var latest = null;
+  for (var i = briefings.weeks.length - 1; i >= 0; i--) {
+    latest = briefings.weeks[i];
+    if (briefings.weeks[i].status !== 'closed') break;
+  }
+  if (!latest) return [];
+  return (latest.items || []).filter(function (it) { return it.type === 'case'; });
+}
+
+function renderCasePicker(briefings) {
+  var picker = document.getElementById('case-picker');
+  var cases = extractActiveCases(briefings);
+  if (!cases.length) {
+    picker.innerHTML = '<span style="font-family:\'Share Tech Mono\',monospace;font-size:0.7rem;color:var(--keeper-dim)">// NO ACTIVE CASES FOUND</span>';
+    return;
+  }
+  picker.innerHTML = '';
+  cases.forEach(function (c) {
+    var letter = c.id.replace('case-', '').toUpperCase();
+    var btn = document.createElement('button');
+    btn.className = 'case-btn';
+    btn.dataset.caseId = c.id;
+    btn.textContent = 'CASE ' + letter + ' — ' + c.title;
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.case-btn').forEach(function (b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      selectedCaseId = c.id;
+      document.getElementById('prep-feedback').textContent = '';
+    });
+    picker.appendChild(btn);
+  });
+}
+
+// ── EXPORT BUILDER ──────────────────────────────────────────────────────────
+
+var OUTCOME_LABEL = { humane: 'HUMANE ENDING', partial: 'PARTIAL RESOLUTION', bad: 'BAD ENDING' };
+
+async function buildExportMarkdown() {
+  var lines = [];
+  var today = new Date().toISOString().slice(0, 10);
+
+  // ── Find selected case briefing ──────────────────────────────────────────
+  var cases = extractActiveCases(briefingsData);
+  var selCase = selectedCaseId ? cases.filter(function (c) { return c.id === selectedCaseId; })[0] : null;
+
+  // ── Fetch last session field report ─────────────────────────────────────
+  var lastReport = null;
+  var lastSession = null;
+  if (sessionsData) {
+    var closed = sessionsData.filter(function (s) { return s.status === 'closed'; });
+    if (closed.length) {
+      lastSession = closed[closed.length - 1];
+      var idx = sessionsData.indexOf(lastSession) + 1;
+      var reportId = 'S' + String(idx).padStart(2, '0');
+      try {
+        var r = await fetch('/api/v1/reports/' + reportId + '/state');
+        if (r.ok) {
+          var raw = await r.json();
+          lastReport = raw && raw.state ? (typeof raw.state === 'string' ? JSON.parse(raw.state) : raw.state) : null;
+        }
+      } catch (e) {}
+    }
+  }
+
+  // ── Header ───────────────────────────────────────────────────────────────
+  lines.push('# P.O.R.T.A.L — SESSION PREP CONTEXT');
+  lines.push('Generated: ' + today + (selCase ? ' · Next case: CASE ' + selectedCaseId.replace('case-','').toUpperCase() + ' — ' + selCase.title : ''));
+  lines.push('');
+  lines.push('---');
+  lines.push('');
+
+  // ── Selected case ────────────────────────────────────────────────────────
+  if (selCase) {
+    var cLetter = selectedCaseId.replace('case-', '').toUpperCase();
+    lines.push('## CASE ' + cLetter + ' — ' + selCase.title);
+    lines.push('*' + (selCase.subtitle || '') + '*');
+    lines.push('');
+    if (selCase.footer_status) lines.push('**Status:** ' + selCase.footer_status);
+    lines.push('');
+    (selCase.rows || []).forEach(function (row) {
+      if (row.divider) { lines.push(''); return; }
+      lines.push('**' + row.k + ':** ' + row.v + (row.note ? ' ' + row.note : ''));
+    });
+    lines.push('');
+    if (selCase.directive) {
+      lines.push('*' + selCase.directive.label + '*');
+      lines.push('');
+      (selCase.directive.paragraphs || []).forEach(function (p) { lines.push(p); lines.push(''); });
+      if (selCase.directive.dim_note) { lines.push(selCase.directive.dim_note); lines.push(''); }
+    }
+  } else {
+    lines.push('## NO CASE SELECTED');
+    lines.push('');
+    lines.push('Select a case before copying to include briefing content in the export.');
+    lines.push('');
+  }
+
+  lines.push('---');
+  lines.push('');
+
+  // ── Clocks ───────────────────────────────────────────────────────────────
+  lines.push('## COUNTDOWN CLOCKS');
+  lines.push('');
+  (allClocks || []).forEach(function (clock) {
+    var bar = '';
+    for (var i = 0; i < clock.segments; i++) bar += i < clock.filled ? '▓' : '░';
+    var fired = clock.filled >= clock.segments;
+    lines.push('### ' + clock.label + '  [' + bar + ']  ' + clock.filled + '/' + clock.segments);
+    if (fired) {
+      lines.push('⚠ CLOCK FIRED — ' + clock.segment_labels[clock.segments - 1]);
+    } else {
+      lines.push('Current state: ' + clock.segment_labels[clock.filled]);
+    }
+    lines.push('Advance when: ' + clock.advancement_note);
+    if (clock.notes) lines.push('Note: ' + clock.notes);
+    lines.push('');
+  });
+
+  lines.push('---');
+  lines.push('');
+
+  // ── Threads ──────────────────────────────────────────────────────────────
+  lines.push('## CAMPAIGN THREADS');
+  lines.push('');
+
+  var active   = (allThreads || []).filter(function (t) { return t.status === 'active'; });
+  var dormant  = (allThreads || []).filter(function (t) { return t.status === 'dormant'; });
+  var resolved = (allThreads || []).filter(function (t) { return t.status === 'resolved'; });
+
+  function threadFocus(t) {
+    // Highlight the thread that belongs to the selected case
+    return selectedCaseId && t.id.startsWith(selectedCaseId + '-') ? '  ★ SELECTED CASE' : '';
+  }
+
+  if (active.length) {
+    lines.push('### ACTIVE — ' + active.length + ' in motion');
+    lines.push('');
+    active.forEach(function (t) {
+      lines.push('**[' + t.category.toUpperCase() + '] ' + t.name + '**' + threadFocus(t));
+      lines.push('Last moved: ' + (t.last_moved ? t.last_moved.toUpperCase() : '—'));
+      lines.push(t.summary);
+      if (t.notes) lines.push(t.notes);
+      lines.push('');
+    });
+  }
+
+  if (dormant.length) {
+    lines.push('### DORMANT — ' + dormant.length + ' background hooks');
+    lines.push('');
+    dormant.forEach(function (t) {
+      lines.push('**[' + t.category.toUpperCase() + '] ' + t.name + '**  [dormant · ' + (t.last_moved ? t.last_moved.toUpperCase() : '—') + ']');
+      lines.push(t.summary);
+      if (t.notes) lines.push(t.notes);
+      lines.push('');
+    });
+  }
+
+  if (resolved.length) {
+    lines.push('### RESOLVED — for reference');
+    resolved.forEach(function (t) { lines.push('- ' + t.name); });
+    lines.push('');
+  }
+
+  lines.push('---');
+  lines.push('');
+
+  // ── Last session summary ─────────────────────────────────────────────────
+  lines.push('## LAST SESSION SUMMARY');
+  lines.push('');
+  if (lastSession && lastReport) {
+    lines.push('Session: ' + lastSession.label + ' — ' + lastSession.title);
+    if (lastReport.outcome) lines.push('Outcome: ' + (OUTCOME_LABEL[lastReport.outcome] || lastReport.outcome));
+    if (lastReport.directive) { lines.push(''); lines.push('**Directive:** ' + lastReport.directive); }
+    if (lastReport.summary) { lines.push(''); lines.push(lastReport.summary); }
+    lines.push('');
+  } else if (lastSession) {
+    lines.push('Session: ' + lastSession.label + ' — ' + lastSession.title);
+    lines.push('// Field report not found in D1. Use ⬡ COPY FOR CLAUDE on the Field Report page and paste it here.');
+    lines.push('');
+  } else {
+    lines.push('// No completed sessions yet.');
+    lines.push('');
+  }
+
+  return lines.join('\n');
+}
+
+// ── COPY BUTTON ─────────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', function () {
+  var btn = document.getElementById('prep-copy-btn');
+  var fb  = document.getElementById('prep-feedback');
+  btn.addEventListener('click', async function () {
+    btn.disabled = true;
+    btn.textContent = '// BUILDING…';
+    fb.textContent = '';
+    try {
+      var md = await buildExportMarkdown();
+      await navigator.clipboard.writeText(md);
+      fb.textContent = '// COPIED ✓';
+      btn.textContent = '⬡ COPY SESSION CONTEXT FOR CLAUDE';
+      setTimeout(function () { fb.textContent = ''; }, 4000);
+    } catch (e) {
+      fb.style.color = 'var(--red, #e05c5c)';
+      fb.textContent = '// CLIPBOARD ERROR — check console';
+      btn.textContent = '⬡ COPY SESSION CONTEXT FOR CLAUDE';
+    }
+    btn.disabled = false;
+  });
+});
+
+// ── EXISTING RENDER HELPERS ─────────────────────────────────────────────────
 
 var CATEGORY_LABELS = {
   faction:  '// FACTION THREADS',
@@ -414,14 +727,21 @@ function updateStats(threads, clocks) {
 Promise.all([
   fetch('/data/portal-threads.json').then(function (r) { return r.ok ? r.json() : null; }),
   fetch('/data/portal-clocks.json').then(function (r) { return r.ok ? r.json() : null; }),
+  fetch('/data/sessions.json').then(function (r) { return r.ok ? r.json() : null; }),
+  fetch('/data/briefings.json').then(function (r) { return r.ok ? r.json() : null; }),
 ]).then(function (results) {
   var threadsData = results[0];
   var clocksData  = results[1];
-  var threads = threadsData  ? threadsData.threads  : [];
-  var clocks  = clocksData   ? clocksData.clocks    : [];
-  renderClocks(clocks);
-  renderThreads(threads);
-  updateStats(threads, clocks);
+  sessionsData    = results[2];
+  briefingsData   = results[3];
+
+  allThreads = threadsData ? threadsData.threads : [];
+  allClocks  = clocksData  ? clocksData.clocks   : [];
+
+  renderClocks(allClocks);
+  renderThreads(allThreads);
+  updateStats(allThreads, allClocks);
+  renderCasePicker(briefingsData);
 }).catch(function (err) {
   console.error('[PORTAL] threads/clocks load error:', err);
   document.getElementById('threads-container').innerHTML = '<div class="empty-state">// LOAD ERROR — CHECK CONSOLE</div>';

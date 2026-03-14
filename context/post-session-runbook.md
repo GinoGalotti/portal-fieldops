@@ -29,6 +29,25 @@ After each session, updates happen in two stages:
 
 ---
 
+## Stage 1.5 — Session Prep Export (Before Next Session, no Claude needed)
+
+Before authoring a new session or prepping with Claude, generate the session context export from the keeper site:
+
+1. Open `missions/threads.html` (Campaign Threads & Clocks page)
+2. Under **Session Prep Export**, click the case the players chose to tackle next
+3. Click **⬡ COPY SESSION CONTEXT FOR CLAUDE** — copies a markdown block to clipboard
+4. Paste into claude.ai at the start of the session-prep conversation
+
+The export includes:
+- Full case briefing (rows + director's note) for the selected case
+- All countdown clocks with current state and advancement guidance
+- All threads grouped by status: active (full detail) → dormant (full detail) → resolved (names only)
+- Last session field report summary (outcome + directive + summary) fetched from D1
+
+Use this as the primary context handoff to claude.ai for new mission prep, NPC authoring, or CAMPBELL briefing drafting. Combine with `worldbuilding-lore.md` and the relevant context files per the "Context to Hand Claude" guide at the bottom of this document.
+
+---
+
 ## Stage 2 — Before Next Session (Claude Code session)
 
 Hand Claude this file + `portal-architecture.md` + `worldbuilding-site.md` + `worldbuilding-lore.md` + the Keeper Field Report markdown.

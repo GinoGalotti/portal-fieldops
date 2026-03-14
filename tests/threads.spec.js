@@ -84,6 +84,35 @@ const MOCK_CLOCKS = {
   ],
 };
 
+const MOCK_SESSIONS = [
+  { id: 'w1', label: 'WEEK 01', title: 'A Promise is a Promise', status: 'closed' },
+  { id: 'w2', label: 'WEEK 02', title: 'Something That Wants to Be Known', status: 'active' },
+];
+
+const MOCK_BRIEFINGS = {
+  weeks: [
+    {
+      id: 'w01', label: 'WEEK 01', status: 'closed', title: 'Test week 1',
+      items: [
+        {
+          type: 'case', id: 'case-a', title: 'THE VOLUNTEER',
+          subtitle: 'Medical · Vitality Displacement',
+          priority: 'high', footer_status: 'ACTIVE — TIME CRITICAL',
+          rows: [{ k: 'LOCATION', v: 'Hargrove Medical Centre' }],
+          directive: { label: '// DIRECTOR NOTE', paragraphs: ['Establish contact.'], dim_note: '// Find who shut down Meridian.' },
+        },
+        {
+          type: 'case', id: 'case-c', title: 'THE RECORDER',
+          subtitle: 'Informational · Precognitive',
+          priority: 'info', footer_status: 'ACTIVE — CONTACT URGENT',
+          rows: [{ k: 'SOURCE', v: 'Nadia Osei blog' }],
+          directive: { label: '// DIRECTOR NOTE', paragraphs: ['Make contact.'] },
+        },
+      ],
+    },
+  ],
+};
+
 // ── SETUP ─────────────────────────────────────────────────────────────────────
 
 test.describe('Threads page', () => {
@@ -94,6 +123,12 @@ test.describe('Threads page', () => {
     );
     await page.route('**/portal-clocks.json', route =>
       route.fulfill({ contentType: 'application/json', body: JSON.stringify(MOCK_CLOCKS) })
+    );
+    await page.route('**/sessions.json', route =>
+      route.fulfill({ contentType: 'application/json', body: JSON.stringify(MOCK_SESSIONS) })
+    );
+    await page.route('**/briefings.json', route =>
+      route.fulfill({ contentType: 'application/json', body: JSON.stringify(MOCK_BRIEFINGS) })
     );
     await page.goto('/missions/threads.html');
     await page.waitForLoadState('networkidle');
@@ -209,6 +244,81 @@ test.describe('Threads page', () => {
 
   test('thread notes render when present', async ({ page }) => {
     await expect(page.locator('.thread-notes').first()).toContainText('Faction keeper notes.');
+  });
+
+  // ── SESSION PREP EXPORT ──────────────────────────────────────────────────
+
+  test('session prep section is visible', async ({ page }) => {
+    await expect(page.locator('.prep-section')).toBeVisible();
+  });
+
+  test('case picker renders a button for each case in the latest briefing week', async ({ page }) => {
+    // MOCK_BRIEFINGS has 2 cases: case-a, case-c
+    await expect(page.locator('.case-btn')).toHaveCount(2);
+  });
+
+  test('case buttons show case letter and title', async ({ page }) => {
+    await expect(page.locator('.case-btn').first()).toContainText('CASE A');
+    await expect(page.locator('.case-btn').first()).toContainText('THE VOLUNTEER');
+  });
+
+  test('clicking a case button selects it (.selected class)', async ({ page }) => {
+    const btn = page.locator('.case-btn').first();
+    await btn.click();
+    await expect(btn).toHaveClass(/selected/);
+  });
+
+  test('clicking a different case button deselects the first', async ({ page }) => {
+    const first = page.locator('.case-btn').first();
+    const second = page.locator('.case-btn').nth(1);
+    await first.click();
+    await second.click();
+    await expect(first).not.toHaveClass(/selected/);
+    await expect(second).toHaveClass(/selected/);
+  });
+
+  test('COPY SESSION CONTEXT button is visible', async ({ page }) => {
+    await expect(page.locator('#prep-copy-btn')).toBeVisible();
+  });
+
+  test('copy button writes case + threads + clocks to clipboard', async ({ page, context }) => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await page.route('**/api/v1/reports/**', route =>
+      route.fulfill({ status: 404, body: 'not found' })
+    );
+
+    await page.locator('.case-btn').first().click();
+    await page.locator('#prep-copy-btn').click();
+
+    await expect(page.locator('#prep-feedback')).toContainText('COPIED', { timeout: 5000 });
+
+    const copied = await page.evaluate(() => navigator.clipboard.readText());
+    expect(copied).toContain('SESSION PREP CONTEXT');
+    expect(copied).toContain('CASE A');
+    expect(copied).toContain('THE VOLUNTEER');
+    expect(copied).toContain('COUNTDOWN CLOCKS');
+    expect(copied).toContain('CAMPAIGN THREADS');
+  });
+
+  test('copy output groups threads by status', async ({ page, context }) => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await page.route('**/api/v1/reports/**', route =>
+      route.fulfill({ status: 404, body: 'not found' })
+    );
+
+    await page.locator('.case-btn').first().click();
+    await page.locator('#prep-copy-btn').click();
+    await expect(page.locator('#prep-feedback')).toContainText('COPIED', { timeout: 5000 });
+
+    const copied = await page.evaluate(() => navigator.clipboard.readText());
+    // Active, dormant, resolved sections all present
+    expect(copied).toContain('ACTIVE');
+    expect(copied).toContain('DORMANT');
+    expect(copied).toContain('RESOLVED');
+    // Thread names present
+    expect(copied).toContain('Faction Thread');
+    expect(copied).toContain('Mystery Thread');
+    expect(copied).toContain('Personal Thread');
   });
 
 });
