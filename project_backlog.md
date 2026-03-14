@@ -6,6 +6,11 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 ## RECENTLY DONE ✅
 
+### Playbook data architecture refactor — feed move filtering (2026-03-14)
+- `data/playbook-moves.json` — 42 moves updated: `"playbook": null` → correct playbook id (action-scientist / changeling / sidekick / monstrous / flake). `"hunter"` field kept as fallback.
+- `feed.html` — `hunters_meta` loaded from `hunters.json`; move filter now matches by `playbook` field (via `hunters_meta` lookup) with `hunter === hunterId` fallback. 3 edits: state var, Promise.all fetch + assignment, filter predicate.
+- `tests/TESTING-NOTES.md` — added backlog item for move-panel playbook-filter test coverage.
+
 ### Lab hardcoded bug fix + entity JSON schema normalisation (2026-03-13)
 - `data/motw-teambooks.json` — `tagline` added to all 7 Research Lab allies; `campbell-team-ally` id → `campbell`
 - `the-lab.html` — `renderAdvancements(lab)` + `renderAlly(lab)` data-driven from JSON; advancement items → counter UI (`−/count/+`); ally dropdown background fixed to solid `--bg2`; counters serialised as numeric values in `s.checked['adv-N']`
@@ -81,7 +86,14 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 329 tests passing across 18 files. Suite: `smoke` (5) · `nav` (22) · `contacts` (7) · `incidents` (18) · `feed` (~25) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (27) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (29) · `d1-round-trip` (7) · `map` (24) · `report` (15) · `index-session` (16).
 
-**1. Campaign thread + clock tracker — `missions/threads.html`** [MEDIUM] — see Post-Session Workflow section below.
+**1. John Johnson hunter page — `hunters/john.html`** [MEDIUM]
+Playbook arch refactor done. John is in the feed dropdown; Flake moves connected via `playbook` field. Remaining work:
+- Create `hunters/john.html` (use `hunters/reed.html` as template; same `hunter.js` + `hunter.css`)
+- Verify `data/hunters.json` John entry complete (accent colour, luck_special, area_of_study, lore, keeper notes)
+- Add John's arcs to `data/hunter-arcs.json` (from Flake entries in `motw-playbook-arcs.json`, campaign-adapted)
+- Add john.html coverage to `tests/hunters.spec.js`
+
+**2. Campaign thread + clock tracker — `missions/threads.html`** [MEDIUM] — see Post-Session Workflow section below.
 
 ---
 
@@ -103,9 +115,11 @@ Four related features that close gaps in the current session-summary → next-se
 
 ---
 
-### Playbook data architecture refactor — MEDIUM
+### ~~Playbook data architecture refactor~~ — ✅ DONE (2026-03-14)
 
-**Problem:** `playbook-moves.json` has moves keyed to specific hunters (rex, alan, reed, sven) rather than to playbooks (Action Scientist, Sidekick, etc.). Meanwhile `motw-playbooks.json` has 5 playbooks (action-scientist, sidekick, changeling, monstrous, flake) with full reference data. These two layers don't connect cleanly.
+**Completed:** `playbook-moves.json` 42 campaign-hunter moves now have `playbook` populated; `feed.html` filters by `playbook` via `hunters.json` lookup with `hunter` fallback. See RECENTLY DONE above.
+
+~~**Problem:** `playbook-moves.json` has moves keyed to specific hunters (rex, alan, reed, sven) rather than to playbooks (Action Scientist, Sidekick, etc.). Meanwhile `motw-playbooks.json` has 5 playbooks (action-scientist, sidekick, changeling, monstrous, flake) with full reference data. These two layers don't connect cleanly.~~
 
 **Current state:**
 - `motw-playbooks.json` — 5 playbooks from the book: full stat options, moves list, gear, improvements, `"hunter": "rex"` field tying it to a specific campaign hunter
@@ -175,4 +189,4 @@ The refactor above is now unblocked. All reference data exists; it's just a matt
 ---
 
 ### Minor / polish
-- John Johnson hunter page — blocked on playbook architecture refactor OR can be done manually as the exercise above (hunter field on Flake moves, explicit john entry)
+- John Johnson hunter page — playbook architecture refactor complete; now unblocked. See NEXT UP #1 for remaining steps.

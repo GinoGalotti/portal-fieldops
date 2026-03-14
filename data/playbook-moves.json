@@ -7,7 +7,7 @@
       "roll": "+Weird",
       "description": "Create bespoke mystical gadgets using science. On 10+: it works. On 7–9: it works, but pick one — side effect, temperamental, or needs specific fuel. Miss: goes wrong badly.",
       "hunter": "rex",
-      "playbook": null,
+      "playbook": "action-scientist",
       "source": "full-book"
     },
     "move-test-hypothesis": {
@@ -15,7 +15,7 @@
       "roll": "+Sharp",
       "description": "When you test a potential explanation based on gathered data. On 10+: the Keeper tells you if you're on track, missing data, or wrong — and you can trust the answer. On 7–9: honest answer, but you wasted time or destroyed evidence. Miss: the answer is unrelated to the facts.",
       "hunter": "rex",
-      "playbook": null,
+      "playbook": "action-scientist",
       "source": "full-book"
     },
     "move-sabotage": {
@@ -23,7 +23,7 @@
       "roll": "+Sharp",
       "description": "When you quickly break a complicated gadget. On 10+: broken — your choice if quietly or irreparably. On 7–9: broken but fixable, and you made noise. Miss: worst thing possible — usually explosions.",
       "hunter": "rex",
-      "playbook": null,
+      "playbook": "action-scientist",
       "source": "full-book"
     },
     "move-oblivious-to-danger": {
@@ -31,7 +31,7 @@
       "roll": null,
       "description": "You are immune to all fear-based moves and powers. You never need to act under pressure to resist fear from any source.",
       "hunter": "rex",
-      "playbook": null,
+      "playbook": "action-scientist",
       "source": "full-book"
     },
     "move-doors-of-perception": {
@@ -39,7 +39,7 @@
       "roll": "+Weird",
       "description": "When you use psychological, pharmacological, or meditation techniques to open your mind. On 10+: pick two effects. On 7–9: pick one, but your mind is confused and foggy. Miss: lost in altered states. Effects: communicate with something normally impossible · see normally invisible things · ask one investigate-a-mystery question · +1 Cool, Sharp, or Weird for the next hour (max +3).",
       "hunter": "rex",
-      "playbook": null,
+      "playbook": "action-scientist",
       "source": "full-book"
     },
     "move-fieldwork": {
@@ -47,7 +47,7 @@
       "roll": null,
       "description": "When you put yourself in danger to test a hypothesis, get +1 forward. When you confirm the hypothesis as true or false, mark experience.",
       "hunter": "rex",
-      "playbook": null,
+      "playbook": "action-scientist",
       "source": "full-book"
     },
     "move-glamour": {
@@ -55,7 +55,7 @@
       "roll": null,
       "description": "When feeling calm, you can maintain an illusion of humanity. You may drop your glamour and display your supernatural power to turn any roll into a 10+. Your unknown heritage stirs up trouble right away or soon after.",
       "hunter": "alan",
-      "playbook": null,
+      "playbook": "changeling",
       "source": "full-book"
     },
     "move-inhuman-talent": {
@@ -63,7 +63,7 @@
       "roll": null,
       "description": "+1 ongoing when you use a basic Weird move that your specific powers can enhance. At the start of each session, hold 2. Spend hold for +1 forward on a move your powers can enhance.",
       "hunter": "alan",
-      "playbook": null,
+      "playbook": "changeling",
       "source": "full-book"
     },
     "move-they-are-my-people": {
@@ -71,7 +71,7 @@
       "roll": null,
       "description": "Once per session, when you protect someone, act as if you rolled a 12+. You gain +1 forward when acting under pressure to resist instincts from your unknown heritage, dark urges, or fight-or-flight situations.",
       "hunter": "alan",
-      "playbook": null,
+      "playbook": "changeling",
       "source": "full-book"
     },
     "move-force-of-nature": {
@@ -79,7 +79,7 @@
       "roll": "+Weird",
       "description": "Supernatural attack from your heritage. On 10+: summon a 1-harm close weapon, pick two extras. On 7–9: pick one extra. Miss: power turns against you. Extras: +1 harm, hand, far, autonomous, distracting, ignore-armour, area, grab, blind, stun.",
       "hunter": "alan",
-      "playbook": null,
+      "playbook": "changeling",
       "source": "full-book"
     },
     "move-lockdown": {
@@ -87,7 +87,7 @@
       "roll": "+Weird",
       "description": "Stun people with a petrifying gaze, overwhelming illusions, or bewildering moths. On 10+: target immobilised for minutes or until something snaps them out. On 7–9: immobilised while you focus. Miss: magical backlash.",
       "hunter": "alan",
-      "playbook": null,
+      "playbook": "changeling",
       "source": "full-book"
     },
     "move-faerie-gossip": {
@@ -95,7 +95,7 @@
       "roll": "+Weird",
       "description": "Communicate with local spirits and mystical creatures. When investigating a mystery by questioning them, roll +Weird instead of +Sharp and ask extra questions: Is anything affecting the supernatural environment? How long has ____ been in the area? When did ____ first arrive?",
       "hunter": "alan",
-      "playbook": null,
+      "playbook": "changeling",
       "source": "full-book"
     },
     "move-renewal": {
@@ -103,7 +103,7 @@
       "roll": null,
       "description": "When teammates and allies in your presence recover harm by any means, they recover 1 extra harm.",
       "hunter": "alan",
-      "playbook": null,
+      "playbook": "changeling",
       "source": "full-book"
     },
     "move-strange-paths": {
@@ -111,7 +111,7 @@
       "roll": "+Weird",
       "description": "Walk or drive between worlds, though you don't know the way well. On 10+: arrive quicker than possible. On 7–9: find trouble along the way. Miss: arrive a little too late or deal with something blocking the way.",
       "hunter": "alan",
-      "playbook": null,
+      "playbook": "changeling",
       "source": "full-book"
     },
     "move-theres-no-i": {
@@ -119,7 +119,7 @@
       "roll": null,
       "description": "+1 on all help out rolls, or +2 if helping Rex Bangley (your hero).",
       "hunter": "reed",
-      "playbook": null,
+      "playbook": "sidekick",
       "source": "full-book"
     },
     "move-caddy": {
@@ -127,7 +127,7 @@
       "roll": null,
       "description": "You carry all your hero's stuff. You can use anything from Rex's gear list unless he is currently holding it. If it has spares, you can use it even if he is.",
       "hunter": "reed",
-      "playbook": null,
+      "playbook": "sidekick",
       "source": "full-book"
     },
     "move-as-you-wish": {
@@ -135,7 +135,7 @@
       "roll": null,
       "description": "Mark experience whenever your hero orders or requests that you do something you don't want to do, and you do it anyway.",
       "hunter": "reed",
-      "playbook": null,
+      "playbook": "sidekick",
       "source": "full-book"
     },
     "move-eek": {
@@ -143,7 +143,7 @@
       "roll": "+Sharp",
       "description": "When a monster appears and you find a hiding spot. On 10+: hide in the best nearby spot before the monster sees you. On 7–9: pick one — you hide okay but the monster is between you and escape; your spot will be spotted soon; you leave something important in the open. Miss: fail to hide in time.",
       "hunter": "reed",
-      "playbook": null,
+      "playbook": "sidekick",
       "source": "full-book"
     },
     "move-bodyguard": {
@@ -151,7 +151,7 @@
       "roll": null,
       "description": "If something bad is going to happen to your hero, comrades, or a bystander, and you are right there, throw yourself in harm's way. Whatever was going to happen to them happens to you instead, and you mark experience.",
       "hunter": "reed",
-      "playbook": null,
+      "playbook": "sidekick",
       "source": "full-book"
     },
     "move-me-too": {
@@ -159,7 +159,7 @@
       "roll": null,
       "description": "If your hero makes a roll for a move, and you copy what they did, you may choose not to roll. Instead use your hero's die roll, adjusted with your own rating.",
       "hunter": "reed",
-      "playbook": null,
+      "playbook": "sidekick",
       "source": "full-book"
     },
     "move-i-can-make-you-look-good": {
@@ -167,7 +167,7 @@
       "roll": null,
       "description": "If helping out your hero, you may swap one or both dice with theirs, as long as you come out with the lowest total. Calculate results as if you had each rolled the dice you now hold.",
       "hunter": "reed",
-      "playbook": null,
+      "playbook": "sidekick",
       "source": "full-book"
     },
     "move-apprentice": {
@@ -175,7 +175,7 @@
       "roll": null,
       "description": "Take a move that your hero (Rex) has.",
       "hunter": "reed",
-      "playbook": null,
+      "playbook": "sidekick",
       "source": "full-book"
     },
     "move-incorporeal": {
@@ -183,7 +183,7 @@
       "roll": null,
       "description": "You may move freely through solid objects (but not people).",
       "hunter": "sven",
-      "playbook": null,
+      "playbook": "monstrous",
       "source": "full-book"
     },
     "move-immortal": {
@@ -191,7 +191,7 @@
       "roll": null,
       "description": "You do not age or sicken, and whenever you suffer harm you suffer 1-harm less.",
       "hunter": "sven",
-      "playbook": null,
+      "playbook": "monstrous",
       "source": "full-book"
     },
     "move-unnatural-appeal": {
@@ -199,7 +199,7 @@
       "roll": "+Weird",
       "description": "Roll +Weird instead of +Charm when you manipulate someone.",
       "hunter": "sven",
-      "playbook": null,
+      "playbook": "monstrous",
       "source": "full-book"
     },
     "move-unholy-strength": {
@@ -207,7 +207,7 @@
       "roll": "+Weird",
       "description": "Roll +Weird instead of +Tough when you kick some ass.",
       "hunter": "sven",
-      "playbook": null,
+      "playbook": "monstrous",
       "source": "full-book"
     },
     "move-preternatural-speed": {
@@ -215,7 +215,7 @@
       "roll": null,
       "description": "You go much faster than normal people. When you chase, flee, or run, take +1 ongoing.",
       "hunter": "sven",
-      "playbook": null,
+      "playbook": "monstrous",
       "source": "full-book"
     },
     "move-claws-of-the-beast": {
@@ -223,7 +223,7 @@
       "roll": null,
       "description": "All your natural attacks get +1 harm.",
       "hunter": "sven",
-      "playbook": null,
+      "playbook": "monstrous",
       "source": "full-book"
     },
     "move-mental-dominion": {
@@ -231,7 +231,7 @@
       "roll": "+Charm",
       "description": "Gaze into a normal human's eyes and exert your will. On 10+: hold 3. On 7–9: hold 1. Spend hold to give orders — regular people follow without question; hunters may choose to comply and mark experience. Miss: no hold.",
       "hunter": "sven",
-      "playbook": null,
+      "playbook": "monstrous",
       "source": "full-book"
     },
     "move-unquenchable-vitality": {
@@ -239,7 +239,7 @@
       "roll": "+Cool",
       "description": "When you have taken harm, you can heal yourself. On 10+: heal 2-harm and stabilise. On 7–9: heal 1-harm and stabilise. Miss: your injuries worsen.",
       "hunter": "sven",
-      "playbook": null,
+      "playbook": "monstrous",
       "source": "full-book"
     },
     "move-dark-negotiator": {
@@ -247,7 +247,7 @@
       "roll": null,
       "description": "You can use the manipulate someone move on monsters as well as people, if they can reason and talk.",
       "hunter": "sven",
-      "playbook": null,
+      "playbook": "monstrous",
       "source": "full-book"
     },
     "move-flight": {
@@ -255,7 +255,7 @@
       "roll": null,
       "description": "You can fly.",
       "hunter": "sven",
-      "playbook": null,
+      "playbook": "monstrous",
       "source": "full-book"
     },
     "move-shapeshifter": {
@@ -263,7 +263,7 @@
       "roll": null,
       "description": "You may change your form (usually into an animal). Decide if you have one alternate form or several. You gain +1 to investigate a mystery when using an alternate form's superior senses.",
       "hunter": "sven",
-      "playbook": null,
+      "playbook": "monstrous",
       "source": "full-book"
     },
     "move-something-borrowed": {
@@ -271,7 +271,7 @@
       "roll": null,
       "description": "Take a move from a hunter playbook that is not currently in play.",
       "hunter": "sven",
-      "playbook": null,
+      "playbook": "monstrous",
       "source": "full-book"
     },
     "move-chosen-destinys-plaything": {
@@ -1423,7 +1423,7 @@
       "roll": "+Sharp",
       "description": "At the beginning of each mystery, if you look for the wider patterns that current events might be part of, roll +Sharp. On 10+: hold 3. On 7–9: hold 1. Miss: no hold — you see connections, but they may not be there. Spend hold 1-for-1 to ask: What other mysteries or groups does this connect to? / Is this connected to a previous case? / Who else is involved — other hunters, other factions? / How does this connect to the bigger picture?",
       "hunter": "john",
-      "playbook": null,
+      "playbook": "flake",
       "source": "full-book"
     },
     "move-crazy-eyes": {
@@ -1431,7 +1431,7 @@
       "roll": null,
       "description": "You get +1 Weird (max +3).",
       "hunter": "john",
-      "playbook": null,
+      "playbook": "flake",
       "source": "full-book"
     },
     "move-see-fits-together": {
@@ -1439,7 +1439,7 @@
       "roll": null,
       "description": "You can use Sharp instead of Charm when you manipulate someone.",
       "hunter": "john",
-      "playbook": null,
+      "playbook": "flake",
       "source": "full-book"
     },
     "move-suspicious-mind": {
@@ -1447,7 +1447,7 @@
       "roll": null,
       "description": "If someone lies to you, you know it.",
       "hunter": "john",
-      "playbook": null,
+      "playbook": "flake",
       "source": "full-book"
     },
     "move-often-overlooked": {
@@ -1455,7 +1455,7 @@
       "roll": "+Weird",
       "description": "When you act all crazy to avoid something, roll +Weird. On 10+: you’re regarded as completely unthreatening and unimportant. On 7–9: pick one — unthreatening or unimportant. Miss: you draw lots (but not all) of the attention.",
       "hunter": "john",
-      "playbook": null,
+      "playbook": "flake",
       "source": "full-book"
     },
     "move-contrary": {
@@ -1463,7 +1463,7 @@
       "roll": null,
       "description": "When you seek out and receive someone’s honest advice on the best course of action and then do something else instead, mark experience. If you do exactly the opposite of their advice, take +1 ongoing on any moves you make pursuing that course.",
       "hunter": "john",
-      "playbook": null,
+      "playbook": "flake",
       "source": "full-book"
     },
     "move-net-friends": {
@@ -1471,7 +1471,7 @@
       "roll": "+Charm",
       "description": "You know a lot of people on the Internet. When you contact a net friend to help you with a mystery, roll +Charm. On 10+: they’re available and helpful — they can fix something, break a code, hack a computer, or get you special information. On 7–9: they’ll help, but it’ll take time or you’ll have to do part of it yourself. Miss: you burn some bridges.",
       "hunter": "john",
-      "playbook": null,
+      "playbook": "flake",
       "source": "full-book"
     },
     "move-sneaky": {
@@ -1479,7 +1479,7 @@
       "roll": null,
       "description": "When you attack from ambush, or from behind, inflict +2 harm.",
       "hunter": "john",
-      "playbook": null,
+      "playbook": "flake",
       "source": "full-book"
     }
   },
