@@ -13,6 +13,7 @@
     { label: 'References',      href: 'references.html', match: 'references.html' },
     { label: 'Entities',        href: 'entities.html',   match: 'entities.html' },
     { label: 'Arcs',            href: 'arcs.html',       match: 'arcs.html' },
+    { label: 'Threads',         href: 'threads.html',    match: 'threads.html' },
     { label: 'Gallery',         href: 'gallery.html',    match: 'gallery.html' },
   ];
 

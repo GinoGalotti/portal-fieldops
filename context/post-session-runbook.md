@@ -170,6 +170,35 @@ If arc beats were triggered during the session:
 
 ---
 
+### 2.10 — Update campaign threads and clocks
+
+After each session, ask these questions and edit the JSON files accordingly.
+
+**`data/portal-threads.json` — update if:**
+- A thread moved in this session → update `last_moved` to the new session id
+- A dormant thread activated → change `status` from `"dormant"` to `"active"`
+- A thread resolved → change `status` to `"resolved"`
+- A new thread opened (new hook, new NPC relationship, new discovery) → add a new entry
+- Summary or notes are now inaccurate → update the text
+
+**`data/portal-clocks.json` — ask after every session:**
+1. **Should any existing clock advance?** (Did hunters ignore a case? Did MESA gain information? Did time pass in the fiction?)
+   - Increment `filled` by the agreed number of ticks
+   - Advance note in `advancement_note` explains when to tick each clock
+2. **Did any clock fire?** (filled == segments)
+   - Update `status` to `"resolved"` and note the outcome in the `notes` field
+3. **Is there a new time-sensitive threat that needs a clock?**
+   - Add a new entry: `id`, `label`, `description`, `segments` (4 for most, 6 for longer timelines), `filled: 0`, `status: "active"`, `segment_labels[]` (one label per segment), `advancement_note`, `notes`
+
+**Guidance for clock design:**
+- 4 segments = short window (1-4 sessions before it fires)
+- 6 segments = medium window (3-6 sessions)
+- Label segments as escalating states, not dates — keeps them flexible
+- The last segment label describes what happens when the clock fires
+- `advancement_note` should be specific: "Advance 1 tick if hunters make no contact with X this session"
+
+---
+
 ### 2.8 — Apply any new D1 migrations
 
 If new DB tables were added since last deploy:
@@ -214,6 +243,8 @@ Or ask Claude to query all reports for a week and summarise the ratings and key 
 - [ ] `reports/sN-[title].html` — player-facing post-session memo (if written)
 
 ### Files to modify (every session)
+- [ ] `data/portal-threads.json` — update `last_moved`, `status`, summaries; add new threads (step 2.10)
+- [ ] `data/portal-clocks.json` — advance `filled` on any ticking clocks; add new clocks (step 2.10)
 - [ ] `data/sessions.json` — add new session entry, mark previous `"closed"` (step 2.0a)
 - [ ] `missions/briefings/index.json` — add new week entry, close previous
 - [ ] `missions/report.html` — add new session to `SESSIONS` config
