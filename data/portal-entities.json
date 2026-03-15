@@ -93,9 +93,9 @@
       "classification": "Collector (Urban Sprawler reskin)",
       "case": "S02",
       "case_name": "Something That Wants To Be Known",
-      "status": "active",
+      "status": "contained",
       "location": "Aldermoor District",
-      "player_description": "Case S02 entity. Active. Classification: Collector. Responsible for anomalous topographical distortion across the Aldermoor district.",
+      "player_description": "Case S02 entity. Contained — boundary re-established at excavation site. Entity retracted to pre-expansion range. Residents' navigation gradually recovering. Entity is quiet. It knows the field team now.",
       "keeper_description": "Pre-human consciousness. Was known once \u2014 mapped, named, remembered. Feeds on familiarity: consumes the cognitive maps of long-term residents. Does not intend harm. Wants to be known the way it once was. Resolution requires genuine communication via a hunter voluntarily removing their cognitive anchor. Sven is the natural contact vector \u2014 no cognitive map to lose, and the entity recognises him as something that exists between states.",
       "powers": [
         "Cognitive map consumption \u2014 long-term residents lose spatial familiarity with their own streets",
@@ -139,19 +139,19 @@
             "threat": "THREAT LEVEL: 3",
             "class": "SPATIAL ENTITY \u2014 COLLECTOR (URBAN SPRAWLER)",
             "description": "A pre-urban consciousness that predates the neighbourhood \u2014 possibly the city. Has no body. Has no malice. It holds something like memory, something like attention, something like longing. When residents truly knew their streets, it fed symbiotically on that familiarity. The construction site excavation at the Aldermoor District reservoir broke its containment and it expanded \u2014 consuming the cognitive maps of long-term residents without understanding it was taking something they could not replace. It does not initiate harm. It only wants to be known the way it once was.",
-            "classified": "\u26a0 WEAKNESS: COMMUNICATION \u2014 any genuine attempt to make contact (voluntarily releasing spatial anchor) allows Use Magic or Act Under Pressure. The entity does not resist someone who is trying to understand it.\nSTATUS: Contained \u2014 boundary re-established at excavation site. Entity retracted to pre-expansion range. Residents' navigation gradually recovering. Diane Marsh: extracted. Margaret Holt: elected to remain. Entity is quiet. It knows the field team now."
+            "classified": "\u26a0 WEAKNESS: COMMUNICATION \u2014 any genuine attempt to make contact (voluntarily releasing spatial anchor) permits that communication to start. The entity does not resist someone who is trying to understand it.\nSTATUS: Contained \u2014 boundary re-established at excavation site. Entity retracted to pre-expansion range. Residents' navigation gradually recovering. Diane Marsh: extracted. Margaret Holt: elected to remain. Entity is quiet. It knows the field team now."
           }
         ]
       },
       "display": {
         "id": "e002",
         "num": "002",
-        "eyebrow": "// CONFIRMED · ACTIVE — SESSION 02 PENDING",
+        "eyebrow": "// CONTAINED · ALDERMOOR — SESSION 02 RESOLVED",
         "name": "The Cartographer",
         "sub": "ALDERMOOR DISTRICT · CAMPBELL REPORT #0094-B · COLLECTOR (URBAN SPRAWLER RESKIN)",
-        "card_class": "active",
+        "card_class": "contained",
         "tags": [
-          { "label": "ACTIVE — SESSION 02 UNRESOLVED", "color": "amber" },
+          { "label": "CONTAINED — SESSION 02 RESOLVED", "color": "green" },
           { "label": "COLLECTOR · SPATIAL", "color": "grey" },
           { "label": "PRE-HUMAN CONSCIOUSNESS", "color": "teal" },
           { "label": "PROJECT VEIL — LEECH FLAGGED", "color": "purple" },

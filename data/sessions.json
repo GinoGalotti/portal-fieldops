@@ -9,12 +9,12 @@
     "id": "w2",
     "label": "WEEK 02",
     "title": "Something That Wants to Be Known",
-    "status": "active"
+    "status": "closed"
   },
   {
     "id": "w3",
     "label": "WEEK 03",
-    "title": "— Pending —",
-    "status": "upcoming"
+    "title": "The Understudies",
+    "status": "active"
   }
 ]

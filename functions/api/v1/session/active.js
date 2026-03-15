@@ -3,7 +3,7 @@ export async function onRequestGet({ env }) {
     'SELECT session_id FROM active_session WHERE id = ?'
   ).bind('global').first();
 
-  return new Response(JSON.stringify({ session_id: result ? result.session_id : 'w2' }), {
+  return new Response(JSON.stringify({ session_id: result ? result.session_id : 'w3' }), {
     headers: { 'Content-Type': 'application/json' }
   });
 }

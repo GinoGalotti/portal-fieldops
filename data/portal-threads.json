@@ -8,8 +8,8 @@
       "name": "M.E.S.A. Investigation",
       "category": "faction",
       "status": "active",
-      "last_moved": "w2",
-      "summary": "Rival paranormal research organisation operating through shell companies. Field presence confirmed in Aldermoor — 34% of district addresses sold via three shells in 18 months. PORTAL's presence in the Aldermoor estate office triggered a motion sensor. MESA knows we were there.",
+      "last_moved": "w3",
+      "summary": "Rival paranormal research organisation operating through shell companies. Field presence confirmed in Aldermoor post-resolution — sending operatives with BIM Collection Arrays while PORTAL interns are on site. PORTAL's presence in the Aldermoor estate office triggered a motion sensor. MESA knows we were there. Same shell company structure (Solstice Property Group) now confirmed funding Meridian Theatre Company — Case E.",
       "notes": "Shell companies: Meridian BioSciences · Greyfield Assets Ltd · Veritas Realty Holdings · Solstice Property Group · Helix Boundary (@helixboundary.com). All Jersey registered. Partially shredded @helixboundary.com email found referencing 'Specimen ALD-1'. The MESA acronym pattern echoes subtly in subsidiary names — Agatha's signature."
     },
 
@@ -88,7 +88,7 @@
       "name": "Sven's Cause of Death",
       "category": "personal",
       "status": "active",
-      "last_moved": "w2",
+      "last_moved": "w3",
       "summary": "Sven died on an ayahuasca trip — cause unknown. Visions from the trip turned out to be real. An entity recognised him at the Aldermoor boundary during S02 as something that exists between states.",
       "notes": "// KEEPER: Cause deliberately left open — should connect to at least one active campaign thread when defined. MESA has a file on Sven. Rook identified him as non-biological on first meeting and filed an internal threat reclassification."
     },
@@ -98,7 +98,7 @@
       "name": "Alan's Threshold Maps",
       "category": "personal",
       "status": "active",
-      "last_moved": "w2",
+      "last_moved": "w3",
       "summary": "Alan holds Diane Marsh's notebook, which contains a threshold sketch he recognises as meaningful. He has been accumulating evidence of thin-boundary locations. Long thread: who mapped the thresholds first, and why can Alan read the map?",
       "notes": "Alan reads place the way fey characters do — by resonance and layered memory. His powers don't apply to the Cartographer's mechanism; his gift in that scene was his nature. Someone knows where boundaries are weak — and someone mapped them before Alan did."
     },
@@ -134,12 +134,22 @@
     },
 
     {
+      "id": "cartographer-aldermoor",
+      "name": "The Cartographer — Aldermoor Aftermath",
+      "category": "mystery",
+      "status": "active",
+      "last_moved": "w3",
+      "summary": "Entity contained but not resolved. Boundary re-established at excavation site. Residents' navigation slowly recovering. Alan's art installation resonated — entity is quieter. MESA is now actively collecting BIM from the zone. PORTAL interns on site. The entity knows the field team.",
+      "notes": "// KEEPER: Not a pressing threat. Monitor as background. The entity may attempt future contact — a felt wrongness, not disorientation — particularly toward Sven or Rex (who made direct anchorless contact). If the excavation site is disturbed again, the boundary fails immediately. MESA's collection activity is the more immediate concern."
+    },
+
+    {
       "id": "case-e-understudies",
       "name": "Case E — The Understudies (Meridian Theatre)",
       "category": "case",
       "status": "active",
-      "last_moved": "w2",
-      "summary": "Meridian Theatre Company. Lead actors Clara Voss and Edmund Farrow died 6 months apart. Three understudies now hospitalised with complete identity loss. Remaining four understudies at risk — Saturday performance imminent. Grant source: Solstice Property Group (MESA shell).",
+      "last_moved": "w3",
+      "summary": "Meridian Theatre Company. Lead actors Clara Voss and Edmund Farrow died 6 months apart. Three understudies hospitalised with complete identity loss. Remaining four understudies at risk — Saturday performance is tomorrow. Grant source: Solstice Property Group — same shell company chain as Aldermoor. Field team assigned.",
       "notes": "PRIORITY: MEDIUM. Performance clock active — see COUNTDOWN CLOCKS. Resolution requires a theatrical farewell within the logic of performance. Sven is the natural resolution vector — this is his type of problem. The mechanism is related to thin-boundary performance spaces."
     }
 

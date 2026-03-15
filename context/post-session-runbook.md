@@ -43,6 +43,10 @@ The export includes:
 - All countdown clocks with current state and advancement guidance
 - All threads grouped by status: active (full detail) → dormant (full detail) → resolved (names only)
 - Last session field report summary (outcome + directive + summary) fetched from D1
+- Between-session incidents for the active week — incident titles, narratives, choice options, and saved selections (locked choices + operative notes) fetched from D1
+- Existing data reference: `sessions.json` (full), last `session-data.json` entry (format template), NPC ID roster, entity ID roster
+
+This gives claude.ai everything it needs to produce all ingestion package sections without requiring separate data files.
 
 Use this as the primary context handoff to claude.ai for new mission prep, NPC authoring, or CAMPBELL briefing drafting. Combine with `worldbuilding-lore.md` and the relevant context files per the "Context to Hand Claude" guide at the bottom of this document.
 
@@ -72,12 +76,14 @@ This step updates the session-aware content system so player pages reflect the n
 
 For each session that just resolved, player pages need post-resolution variants. Most are now data-driven — **no HTML edits needed for bestiary or arcs**.
 
+**Data-file edits (mission archive):**
+- **`data/portal-missions.json`** — for the resolved mission, cap the active phase with `"show_until": "wN"` and append a new completed phase with `"show_from": "wN+1"`, `"status": "completed"`, revealed `index_redacted` text (no `[REDACT]`), proper `meta_tags` (green CONTAINED/RESOLVED tag), and a filled `outcome` string. For the upcoming mission, cap the upcoming phase with `"show_until": "wN"` and append a new active phase with `"show_from": "wN+1"`, `"status": "active"`, and the confirmed title, subtitle, excerpt, and meta_tags.
+
 **HTML edits still required:**
-- **`missions/missions.html`** — add `data-session-from="wN+1"` COMPLETED card for the resolved mission; the ACTIVE card already has `data-session-until="wN"`
-- **`index.html`** — add COMPLETED variants for the session archive card and any recovered artefact cards with `data-session-from="wN+1"`. **Bestiary cards are now data-driven — do NOT add HTML beast cards here.**
+- **`index.html`** — add COMPLETED variants for any recovered artefact cards with `data-session-from="wN+1"`. **Mission archive and bestiary are now data-driven — do NOT add HTML cards for these.**
 - **`missions/contacts.html`** — add `data-session-from="wN+1"` wrappers for any NPCs now visible for the first time
 
-Use the existing W1→W2 HTML variants as a template. The pattern is always: old card gets `data-session-until="wN"`, new card gets `data-session-from="wN+1"`.
+The pattern is always: old card/phase gets `show_until: "wN"`, new card/phase gets `show_from: "wN+1"`.
 
 **Data-file updates (instead of HTML):**
 - **Bestiary** (`index.html`): append a new phase to `portal-entities.json` → `entity.bestiary.phases[]` with `show_from: "wN+1"`. Set the previous phase `show_until: "wN"` if it should hide after resolution. The bestiary re-renders from data on page load — no HTML change needed.
@@ -262,6 +268,7 @@ Or ask Claude to query all reports for a week and summarise the ratings and key 
 - [ ] `reports/sN-[title].html` — player-facing post-session memo (if written)
 
 ### Files to modify (every session)
+- [ ] `data/portal-missions.json` — cap resolved mission phase with `show_until`; add completed + next active phases (step 2.0b)
 - [ ] `data/portal-threads.json` — update `last_moved`, `status`, summaries; add new threads (step 2.10)
 - [ ] `data/portal-clocks.json` — advance `filled` on any ticking clocks; add new clocks (step 2.10)
 - [ ] `data/sessions.json` — add new session entry, mark previous `"closed"` (step 2.0a)

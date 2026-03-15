@@ -190,7 +190,7 @@
       "status": "alive",
       "visible_to_players": true,
       "first_session": "S01",
-      "player_description": "Encountered during Case S01. Alive and grieving. Contact status unresolved.",
+      "player_description": "PORTAL made contact during Case S01. Alive and grieving. Has called the PORTAL contact number three times since the case closed — nobody answered. Saoirse Mullen has raised the question of what PORTAL owes to people it has helped but not saved. Status: unresolved.",
       "keeper_description": "Eszter's person. Resolution of S01 prioritised his wellbeing. Currently alive and grieving. Contact status unresolved \u2014 available as a returning thread.",
       "secrets_involved": []
     },
@@ -262,7 +262,7 @@
       "status": "alive",
       "visible_to_players": true,
       "first_session": "S02",
-      "player_description": "58-year-old district nurse. Missing for 9 days. Located in the construction site office at the Aldermoor zone.",
+      "player_description": "District nurse. Was trapped in the Aldermoor displacement zone for nine days. Extracted by the field team. Her notebook — nine days of observations including a threshold sketch — is in PORTAL's possession. She is recovering.",
       "keeper_description": "In the construction site office. Has a notebook containing a threshold sketch that Alan will recognise as meaningful. Long-arc thread: who mapped the thresholds first, and why can Alan read the map?",
       "items_of_note": [
         {
@@ -281,7 +281,7 @@
       "visible_to_players": false,
       "first_session": null,
       "player_description": "Not yet introduced to players.",
-      "keeper_description": "58, retired schoolteacher. Lung cancer \u2014 Meridian trial survivor with complete remission. Unknowingly draining life from proximity contacts. Fourth death occurred during the Aldermoor deployment. Now living with his daughter's family, including two children. MESA is watching him. Does not know what he is doing.",
+      "keeper_description": "58, retired schoolteacher. Lung cancer \u2014 Meridian trial survivor with complete remission. Unknowingly draining life from proximity contacts. Fourth death occurred during the Aldermoor deployment. Now living with his daughter's family, including two children. MESA is watching him. Does not know what he is doing. Fourth proximity death occurred during S02 deployment. Leech is dispatching a separate PORTAL team \u2014 field team will receive an incident update between sessions. Two grandchildren in regular contact \u2014 currently highest-risk individuals.",
       "case": "case-a",
       "secrets_involved": []
     },

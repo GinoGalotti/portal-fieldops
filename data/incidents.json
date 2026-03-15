@@ -11,7 +11,7 @@
     {
       "id": "W2",
       "label": "WEEK 02",
-      "status": "active",
+      "status": "closed",
       "hero_eyebrow": "// BETWEEN-SESSION — POST-S01 STAFF COMMUNIQUÉS",
       "hero_desc": "Three items logged during the Keller deployment require staff input before the Aldermoor briefing. One item is informational only.",
       "incidents": [
@@ -280,6 +280,113 @@
               "type": "narrative",
               "text": "She's not asking anyone to do anything. She's asking someone to look.",
               "dim": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "W3",
+      "label": "WEEK 03",
+      "status": "active",
+      "hero_eyebrow": "// BETWEEN-SESSION — POST-S02 STAFF COMMUNIQUÉS",
+      "hero_desc": "Four informational updates following Operation #0094-B (Aldermoor). No operative input required.",
+      "incidents": [
+        {
+          "id": "S02-I01",
+          "type": "informational",
+          "title": "The Eszter Particulate — Direction Logged",
+          "blocks": [
+            {
+              "type": "narrative",
+              "text": "The field team filed their direction on BIM-S01-003. Sven's recommendation — controlled exposure, incremental load increase — was adopted. Priya has begun the study."
+            },
+            {
+              "type": "campbell",
+              "paragraphs": [
+                "Field operative input on BIM-S01-003 logged. Direction: Controlled Exposure Study (Option A). Operative note on record: surveillance technology application under consideration.",
+                "Priya Osei has begun incrementally increasing processing load near the sample in Lab Bay 3. Initial observations are being recorded. No anomalous escalation detected in the first 48 hours."
+              ],
+              "flag": "// FLAG: Study is underway. CAMPBELL is logging all readings. Results will be shared with the field team as they accumulate."
+            },
+            {
+              "type": "callout",
+              "color": "amber",
+              "from": "// DR. P. OSEI — LAB NOTE",
+              "text": "Direction logged. Starting incremental load increase from baseline tomorrow — storage server proximity first, then the analysis rig. I'll publish readings weekly.\n\nIf the response scales linearly, we'll know within a fortnight. If it doesn't, we'll know something more interesting."
+            }
+          ]
+        },
+        {
+          "id": "S02-I02",
+          "type": "informational",
+          "title": "Bálint — Welfare Contact",
+          "blocks": [
+            {
+              "type": "narrative",
+              "text": "Alan filed a position on the Bálint question: PORTAL has a responsibility to people affected by its cases. Saoirse agreed. She reached out."
+            },
+            {
+              "type": "campbell",
+              "paragraphs": [
+                "Following field operative input, Dr. Saoirse Mullen made direct contact with Bálint at his sister's residence in Hackney.",
+                "Bálint accepted contact. He had questions. Saoirse answered what she could. He has been given a direct line — not the voicemail."
+              ],
+              "flag": "// NOTE: Bálint is not a PORTAL asset. He is a person PORTAL helped. The distinction is intentional."
+            },
+            {
+              "type": "callout",
+              "color": "purple",
+              "from": "// DR. S. MULLEN — ADVISORY",
+              "text": "He asked if we knew what she wanted. I said yes. He asked if she got it. I said I thought so.\n\nHe said that was enough. I'm not sure it is. But it was enough for now."
+            }
+          ]
+        },
+        {
+          "id": "S02-I03",
+          "type": "informational",
+          "title": "Case A — Secondary Team Dispatched",
+          "blocks": [
+            {
+              "type": "narrative",
+              "text": "Gordon Avery has moved in with family. A fourth person died in proximity during the Aldermoor deployment. Director Leech has dispatched a second PORTAL team."
+            },
+            {
+              "type": "campbell",
+              "paragraphs": [
+                "Case A proximity event confirmed during Operation #0094-B. Subject relocated to family residence — 3 adults, 2 children. Effect intensifies with duration of contact.",
+                "Secondary team deployed under Director's directive. Field team not involved in this action."
+              ],
+              "flag": "// FLAG: Secondary team is observation and containment only. No field operative contact with subject until assessment is complete."
+            },
+            {
+              "type": "narrative",
+              "text": "The Director's note was brief. The fourth death happened while you were in Aldermoor. He's handling it. He hasn't said what that means."
+            }
+          ]
+        },
+        {
+          "id": "S02-I04",
+          "type": "informational",
+          "title": "Aldermoor — MESA Arrives",
+          "blocks": [
+            {
+              "type": "narrative",
+              "text": "PORTAL sent interns and lab researchers to Aldermoor to help residents navigate the aftermath. They were not alone for long."
+            },
+            {
+              "type": "campbell",
+              "paragraphs": [
+                "PORTAL support personnel arrived in Aldermoor District on Wednesday. By Thursday, two individuals — not affiliated with PORTAL — were observed in the district conducting what appeared to be environmental sampling.",
+                "Preliminary identification: MESA field operatives. Carrying BIM Collection Arrays — passive accumulator devices, similar to those found in the Aldermoor estate office."
+              ],
+              "flag": "// FLAG: MESA is collecting BIM particulate from the Aldermoor zone. The PORTAL interns were not approached. MESA has not made contact. CAMPBELL is monitoring."
+            },
+            {
+              "type": "callout",
+              "color": "red",
+              "from": "// CAMPBELL — PATTERN NOTE",
+              "text": "MESA was buying properties in this district before the first incident was reported. They were here for the BIM, not the entity.\n\nThey are still here. They brought different equipment this time."
             }
           ]
         }
