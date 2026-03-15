@@ -5,7 +5,7 @@
 // a page reload. Run with the wrangler server already running, or let Playwright
 // start it via webServer config (playwright.config.js).
 //
-// Seven scenarios:
+// Nine scenarios:
 //   1. Hunter sheet — harm track value persists across reload
 //   2. Hunter arc state — choice-opt selection persists across reload
 //   3. Incident state — choice button selection persists across reload
@@ -13,6 +13,8 @@
 //   5. Player report — textarea text persists across reload
 //   6. Map state — unlock state persists across page reload
 //   7. Map state — visited state persists across page reload
+//   8. Feed messages — POST insert + GET retrieval (guards against FK constraint regressions)
+//   9. Feed rolls    — POST insert + GET retrieval (guards against FK constraint regressions)
 //
 // ARCHITECTURE:
 // - beforeEach: PUT '{}' to each D1 endpoint to reset state from prior runs.
@@ -97,6 +99,8 @@ test.beforeEach(async ({ request }) => {
     request.put(`${BASE}/api/v1/maps/aldermoor/state`, {
       data: { u: {}, v: {} },
     }),
+    // Clean up any leftover messages from prior round-trip test runs.
+    request.delete(`${BASE}/api/v1/messages?session_id=rt-test`),
   ]);
 });
 
@@ -334,4 +338,70 @@ test('map state — visited mark persists across reload', async ({ page }) => {
 
   // Visited mark must still be there (restored from D1).
   await expect(page.locator('.map-loc-visited-btn').first()).toContainText('✓ VISITED');
+});
+
+// ── TEST 8: Feed messages — POST + GET round-trip ─────────────────────────────
+//
+// Guards against FK constraint regressions (the legacy messages table had
+// session_id → sessions(id) which blocked every INSERT with a free-text key).
+// Uses the `request` fixture directly — no browser navigation needed.
+
+test('feed messages — POST insert succeeds and GET returns the row', async ({ request }) => {
+  // POST a message using a realistic session_id ('M02') and hunter-style sender.
+  const postRes = await request.post(`${BASE}/api/v1/messages`, {
+    data: {
+      session_id: 'rt-test',
+      sender: 'REED',
+      body: 'Round-trip test message',
+      type: 'message',
+    },
+  });
+  expect(postRes.ok()).toBeTruthy();
+  const postBody = await postRes.json();
+  expect(postBody.ok).toBe(true);
+  expect(typeof postBody.id).toBe('number');
+
+  // GET and verify the message appears in the feed.
+  const getRes = await request.get(`${BASE}/api/v1/messages?after=0`);
+  expect(getRes.ok()).toBeTruthy();
+  const messages = await getRes.json();
+  const found = messages.find(m => m.id === postBody.id);
+  expect(found).toBeTruthy();
+  expect(found.sender).toBe('REED');
+  expect(found.body).toBe('Round-trip test message');
+});
+
+// ── TEST 9: Feed rolls — POST + GET round-trip ────────────────────────────────
+//
+// Guards against FK constraint regressions (the legacy rolls table had
+// hunter_id → hunters(id) which blocked every INSERT with a string like 'reed').
+
+test('feed rolls — POST insert succeeds and GET returns the row', async ({ request }) => {
+  // POST a roll using a realistic hunter_id and session key.
+  const postRes = await request.post(`${BASE}/api/v1/rolls`, {
+    data: {
+      hunter_id: 'reed',
+      session: 'rt-test',
+      move_name: 'Act Under Pressure',
+      stat_used: 'cool',
+      roll_1: 4,
+      roll_2: 5,
+      modifier: 1,
+      total: 10,
+    },
+  });
+  expect(postRes.ok()).toBeTruthy();
+  const postBody = await postRes.json();
+  expect(postBody.ok).toBe(true);
+  expect(typeof postBody.id).toBe('number');
+  expect(postBody.outcome).toBe('partial'); // 10 → 7-10 partial
+
+  // GET and verify the roll appears in the feed.
+  const getRes = await request.get(`${BASE}/api/v1/rolls?after=0`);
+  expect(getRes.ok()).toBeTruthy();
+  const rolls = await getRes.json();
+  const found = rolls.find(r => r.id === postBody.id);
+  expect(found).toBeTruthy();
+  expect(found.hunter_id).toBe('reed');
+  expect(found.move_name).toBe('Act Under Pressure');
 });

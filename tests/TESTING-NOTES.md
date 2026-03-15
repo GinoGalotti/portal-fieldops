@@ -23,7 +23,7 @@
 | `missions/threads.html` (threads, clocks, prep export) | `tests/threads.spec.js` | 30 | ✅ |
 | `missions/campbell-briefings.html` | `tests/briefings.spec.js` | ~12 | ✅ |
 | `reports/player-report.html` | `tests/player-report.spec.js` | ~15 | ✅ |
-| D1 round-trip (hunter sheet, arc, incident, player report, map) | `tests/d1-round-trip.spec.js` | 7 | ✅ |
+| D1 round-trip (hunter sheet, arc, incident, player report, map, messages, rolls) | `tests/d1-round-trip.spec.js` | 9 | ✅ |
 | `feed.html` MAP tab (player + keeper) | `tests/map.spec.js` | 24 | ✅ |
 | `missions/report.html` | `tests/report.spec.js` | 15 | ✅ |
 

@@ -377,6 +377,9 @@ var allThreads      = [];
 var allClocks       = [];
 var sessionsData    = null;
 var briefingsData   = null;
+var npcsData        = null;
+var entitiesData    = null;
+var sessionDataFile = null;
 
 // ── CASE PICKER ─────────────────────────────────────────────────────────────
 
@@ -567,6 +570,48 @@ async function buildExportMarkdown() {
     lines.push('');
   }
 
+  lines.push('---');
+  lines.push('');
+  lines.push('## EXISTING DATA — IDs AND FORMAT REFERENCE');
+  lines.push('*Use these only to write correct IDs and avoid collisions. Do not repeat them in your output.*');
+  lines.push('');
+
+  // sessions.json — full (small file, gives last session ID + format)
+  if (sessionsData) {
+    lines.push('### sessions.json (current)');
+    lines.push('```json');
+    lines.push(JSON.stringify(sessionsData, null, 2));
+    lines.push('```');
+    lines.push('');
+  }
+
+  // session-data.json — last entry only as format template
+  if (sessionDataFile && sessionDataFile.length) {
+    lines.push('### session-data.json — last entry (format template for new entry)');
+    lines.push('```json');
+    lines.push(JSON.stringify(sessionDataFile[sessionDataFile.length - 1], null, 2));
+    lines.push('```');
+    lines.push('');
+  }
+
+  // portal-npcs.json — compact roster: id | name | affiliation | status
+  if (npcsData && npcsData.npcs) {
+    lines.push('### portal-npcs.json — existing NPC IDs');
+    npcsData.npcs.forEach(function (npc) {
+      lines.push('- `' + npc.id + '` | ' + npc.name + ' | ' + (npc.affiliation || '—') + ' | ' + (npc.status || 'alive'));
+    });
+    lines.push('');
+  }
+
+  // portal-entities.json — compact roster: id | designation | name | status
+  if (entitiesData && entitiesData.entities) {
+    lines.push('### portal-entities.json — existing entity IDs');
+    entitiesData.entities.forEach(function (e) {
+      lines.push('- `' + e.id + '` | ' + (e.designation || '—') + ' | ' + e.name + ' | ' + (e.status || 'active'));
+    });
+    lines.push('');
+  }
+
   return lines.join('\n');
 }
 
@@ -729,11 +774,17 @@ Promise.all([
   fetch('/data/portal-clocks.json').then(function (r) { return r.ok ? r.json() : null; }),
   fetch('/data/sessions.json').then(function (r) { return r.ok ? r.json() : null; }),
   fetch('/data/briefings.json').then(function (r) { return r.ok ? r.json() : null; }),
+  fetch('/data/portal-npcs.json').then(function (r) { return r.ok ? r.json() : null; }),
+  fetch('/data/portal-entities.json').then(function (r) { return r.ok ? r.json() : null; }),
+  fetch('/data/session-data.json').then(function (r) { return r.ok ? r.json() : null; }),
 ]).then(function (results) {
   var threadsData = results[0];
   var clocksData  = results[1];
   sessionsData    = results[2];
   briefingsData   = results[3];
+  npcsData        = results[4];
+  entitiesData    = results[5];
+  sessionDataFile = results[6];
 
   allThreads = threadsData ? threadsData.threads : [];
   allClocks  = clocksData  ? clocksData.clocks   : [];
