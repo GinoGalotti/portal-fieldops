@@ -380,6 +380,7 @@ var briefingsData   = null;
 var npcsData        = null;
 var entitiesData    = null;
 var sessionDataFile = null;
+var incidentsData   = null;
 
 // ── CASE PICKER ─────────────────────────────────────────────────────────────
 
@@ -568,6 +569,59 @@ async function buildExportMarkdown() {
   } else {
     lines.push('// No completed sessions yet.');
     lines.push('');
+  }
+
+  // ── Between-session incidents (active week) ──────────────────────────────
+  var activeIncidentWeek = incidentsData
+    ? (incidentsData.weeks || []).filter(function (w) { return w.status === 'active'; })[0]
+    : null;
+
+  if (activeIncidentWeek && activeIncidentWeek.incidents && activeIncidentWeek.incidents.length) {
+    lines.push('---');
+    lines.push('');
+    lines.push('## BETWEEN-SESSION INCIDENTS — ' + activeIncidentWeek.id + ' (' + activeIncidentWeek.label + ')');
+    lines.push('');
+    lines.push(activeIncidentWeek.hero_desc || '');
+    lines.push('');
+
+    // Fetch saved state for this week from D1
+    var incidentState = {};
+    try {
+      var ir = await fetch('/api/v1/incidents/' + activeIncidentWeek.id + '/state');
+      if (ir.ok) incidentState = await ir.json();
+    } catch (e) {}
+
+    activeIncidentWeek.incidents.forEach(function (inc) {
+      var saved = incidentState[inc.id] || null;
+      var statusTag = saved && saved.locked ? ' ✓ LOCKED' : (saved ? ' (draft)' : ' (not filed)');
+      lines.push('### ' + inc.id + ' — ' + inc.title + ' [' + inc.type.toUpperCase() + statusTag + ']');
+      lines.push('');
+
+      // First narrative block as context summary
+      var firstNarrative = (inc.blocks || []).filter(function (b) { return b.type === 'narrative'; })[0];
+      if (firstNarrative) { lines.push(firstNarrative.text); lines.push(''); }
+
+      // Choices (for choice type)
+      if (inc.type === 'choice' && inc.choices) {
+        lines.push('**Options:**');
+        inc.choices.forEach(function (ch) { lines.push('- ' + ch.label + ': ' + ch.text); });
+        lines.push('');
+      }
+
+      // Saved state
+      if (saved) {
+        if (saved.type === 'choice') {
+          lines.push('**Choice filed:** ' + (saved.choice || '—'));
+          if (saved.custom) lines.push('**Operative note:** ' + saved.custom);
+        } else if (saved.type === 'open') {
+          if (saved.response) lines.push('**Response filed:** ' + saved.response);
+        }
+        lines.push('');
+      } else {
+        lines.push('*Not yet filed.*');
+        lines.push('');
+      }
+    });
   }
 
   lines.push('---');
@@ -777,6 +831,7 @@ Promise.all([
   fetch('/data/portal-npcs.json').then(function (r) { return r.ok ? r.json() : null; }),
   fetch('/data/portal-entities.json').then(function (r) { return r.ok ? r.json() : null; }),
   fetch('/data/session-data.json').then(function (r) { return r.ok ? r.json() : null; }),
+  fetch('/data/incidents.json').then(function (r) { return r.ok ? r.json() : null; }),
 ]).then(function (results) {
   var threadsData = results[0];
   var clocksData  = results[1];
@@ -785,6 +840,7 @@ Promise.all([
   npcsData        = results[4];
   entitiesData    = results[5];
   sessionDataFile = results[6];
+  incidentsData   = results[7];
 
   allThreads = threadsData ? threadsData.threads : [];
   allClocks  = clocksData  ? clocksData.clocks   : [];
