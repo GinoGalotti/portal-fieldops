@@ -26,6 +26,7 @@
 | D1 round-trip (hunter sheet, arc, incident, player report, map, messages, rolls) | `tests/d1-round-trip.spec.js` | 9 | ✅ |
 | `feed.html` MAP tab (player + keeper) | `tests/map.spec.js` | 24 | ✅ |
 | `missions/report.html` | `tests/report.spec.js` | 15 | ✅ |
+| Campaign data integrity (no browser) | `tests/post-session-integrity.spec.js` | 23 | ✅ |
 
 ## ⬆ Next Up (recommended order)
 
