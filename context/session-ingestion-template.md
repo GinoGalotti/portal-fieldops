@@ -318,7 +318,9 @@ Append:
 <!-- Target: data/incidents.json -->
 <!-- Action: mark previous week "closed", append new weeks[] entry -->
 <!-- Block types: narrative / campbell / callout / email / log-excerpt -->
-<!-- Incident types: choice / open / informational / teaser -->
+<!-- Incident types: choice / open / informational / teaser / updates -->
+<!-- Order: choice + open first → updates digest (informational callbacks) → teaser last -->
+<!-- Use "updates" type (items[] array) when multiple informational callbacks to prior cases exist — one digest card, not N separate informational cards -->
 
 Mark w2 as closed.
 Append:

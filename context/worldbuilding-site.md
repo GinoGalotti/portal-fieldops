@@ -60,7 +60,7 @@ When the Keeper asks you to build a page:
 | `reports/player-report.html` | `player.css` | Player | Operative Field Report — week + hunter selector, 5 rating pips, general feedback, per-week scene questions. Unique save per week+hunter, D1-backed. Always-visible `// KEEPER DEBRIEF` section at bottom fetches keeper field report for each week (`GET /api/v1/reports/{S01\|S02}/state`) and shows outcome badge + directive + summary (pending placeholder if not yet filed). Linked from player nav as "Report". |
 | `reports/keeper-review.html` | `keeper.css` | Keeper | All-reports review — W01/W02 tabs, auto-loads on click, fetches all 5 hunter reports via `Promise.all`, renders 5-col responsive card grid. Filed/not-filed badge, rating pips, text fields, scene notes per hunter. No new API needed — reads existing `player-reports` endpoints. |
 | `contacts.html` | `player.css` | Player | NPC Contact Directory — fetches `portal-npcs.json`, renders player-visible NPCs grouped by affiliation (PORTAL staff / field contacts / unknown). Static render, no D1 dependency. |
-| `lab-incidents.html` | `player.css` + inline | Player | Between-session incident log. Fully data-driven from `data/incidents.json`. Week tab switcher (W1 closed/empty, W2 active). Incident types: `choice` (3-button pick + optional custom textarea), `open` (freetext multi-submit), `informational` (read-only), `teaser` (email + log excerpts). Single **SAVE RESPONSES** button collects all choice answers → `PUT /api/v1/incidents/{week}/state` → locks buttons; also writes localStorage. Open incidents keep independent SUBMIT button → `POST /api/v1/incidents/{id}/responses`. EXPORT FOR KEEPER on open incidents. |
+| `lab-incidents.html` | `player.css` + inline | Player | Between-session incident log. Fully data-driven from `data/incidents.json`. Week tab switcher (W1 closed/empty, W2 active). Incident types: `choice` (3-button pick + optional custom textarea), `open` (freetext multi-submit), `informational` (read-only), `teaser` (email + log excerpts), `updates` (multi-item status digest — green top stripe, no player input required). Single **SAVE RESPONSES** button collects all choice answers → `PUT /api/v1/incidents/{week}/state` → locks buttons; also writes localStorage. Open incidents keep independent SUBMIT button → `POST /api/v1/incidents/{id}/responses`. EXPORT FOR KEEPER on open incidents. |
 | `feed.html` | `player.css` + inline | Player + Keeper | Live session tool — split layout (feed left, resizable panel right; drag handle saves width to `localStorage('portal_panel_width')`). Hunter picker; **Moves tab** (always-active + playbook + basic moves, inline modifier + ROLL, hover shows description + outcome rows + questions for Investigate/Read); **Contacts tab** (player-visible NPCs, double-click to add per-hunter private note stored in `localStorage('portal_contact_notes')` as `{hunter_id:{npc_id:text}}`); **Handouts tab** (images/maps posted by keeper, session tabs M01/M02, deduplicated 2-column gallery, click to open lightbox — documents/classified/readaloud/PDA entries are feed-only, not shown in gallery); **MAP tab** (player district map — mission session selector, locked/unlocked grid cells, detail card on click, SYNC MAP button). Bottom composer for any player to post to the feed. Feed entries **expand on click** (toggle `.expanded` class); click again to collapse; multiple can be open simultaneously. Roll entries show breakdown `[d1 + d2 + stat + mod = total]`, click shows specific outcome text + question list (for Investigate a Mystery / Read a Bad Situation). **Smart polling**: 6s when tab has focus, 60s when tab hidden or window blurred (immediately re-polls on regain focus). 5s auto-save for harm/luck/xp changes. `?mouseover=true` URL flag restores legacy CSS `:hover` expand behaviour (for A/B testing). Keeper mode (5× logo click) replaces player UI with 6 tabs: **OPERATIVES** (click hunter to view sheet + moves), **CONTACTS** (session filter M01/M02/ALL + NPC visibility toggles persisted to localStorage), **REFERENCES** (MoTW rules cheat sheet: outcomes, harm moves, luck, XP, end-of-session, principles, keeper moves, monster moves, phenomena moves, investigate questions, keeper page links), **THREATS** (session selector, entity stat block from `portal-entities.json`, threats/minions/bystanders + equipment from `session-data.json`), **HANDOUTS** (session selector; per-session list of all handout items with POST / RE-POST buttons persisted to `localStorage('portal_posted_handouts')`; classified items show purple pip; **CLEAR HANDOUTS** button removes all non-message entries from feed DOM + localStorage + D1), **MAP** (keeper district map — mission selector, grid with order badges [keeper-only, hidden from players], NPC pills per cell, unlock toggle, visited button ○/✓, bulk actions: REVEAL ALL / RESET MAP / ALL VISITED / CLEAR VISITED; state schema `{ u: {loc_id: true}, v: {loc_id: true} }` saved to D1 `map_state` table). **CLEAR FEED** (keeper button): posts a `type:'clear'` sentinel to D1; keeper's feed clears immediately; polling clients clear on receipt; `initialLoad()` discards all entries before the sentinel (history still accessible via "↑ LOAD EARLIER HISTORY"). Keeper tab row uses `overflow-x: auto` with styled thin scrollbar for narrow viewports. |
 
 ---
@@ -850,7 +850,7 @@ When building new pages or Workers:
 > - **Track 2** (`keeper_scene_notes`): per-scene guidance for the keeper during the session — what information to push to players at each scene via the live feed. Keyed as `"sNN-scene-slug"`.
 
 **For writing between-session incident content (new week):**
-> "Read Part 8 (Between-Session Content Formats) in `worldbuilding-site.md` for the exact JSON schema. Produce: a single `weeks[]` entry as JSON, ready to append to `data/incidents.json`. Do NOT produce HTML. Use only the documented block types and inline markup syntax. Mark the new week `"status": "active"` and note that the previous active week should be changed to `"closed"`."
+> "Read Part 8 (Between-Session Content Formats) in `worldbuilding-site.md` for the exact JSON schema. Produce: a single `weeks[]` entry as JSON, ready to append to `data/incidents.json`. Do NOT produce HTML. Use only the documented block types and inline markup syntax. Mark the new week `"status": "active"` and note that the previous active week should be changed to `"closed"`. Pattern: interactive incidents (`choice`/`open`) first; if there are multiple informational callbacks to prior cases, consolidate them into one `updates` digest entry (see the `updates` type in Part 8 FORMAT 1); `teaser` last."
 
 **For writing the CAMPBELL priority queue (new week):**
 > "Read Part 8 (Between-Session Content Formats) in `worldbuilding-site.md` for the exact JSON schema. Produce: a single `weeks[]` entry as JSON, ready to append to `data/briefings.json`. Do NOT produce HTML. Use only the documented item types, row fields, and inline markup syntax (`{{color:text}}`). Mark the new week `"status": "active"` and note that the previous active week should be changed to `"closed"`. Write case content in CAMPBELL's institutional voice (see `worldbuilding-lore.md` Part 1)."
@@ -924,9 +924,9 @@ Mark the previous active week as `"status": "closed"`.
 
 | Field | Type | Notes |
 |-------|------|-------|
-| `id` | string | Pattern: `SNN-IMM` — session + item, e.g. `S02-I01` |
-| `type` | string | `"choice"` / `"open"` / `"informational"` / `"teaser"` |
-| `color` | string | `"amber"` / `"purple"` / `"red"` — card accent stripe |
+| `id` | string | Pattern: `SNN-IMM` — session + item, e.g. `S02-I01`. For `updates` blobs use `SNN-UPDATES`. |
+| `type` | string | `"choice"` / `"open"` / `"informational"` / `"teaser"` / `"updates"` |
+| `color` | string | `"amber"` / `"purple"` / `"red"` — card accent stripe. **Omit for `updates` and `teaser` types.** |
 | `title` | string | Display title (all-caps rendered by CSS) |
 | `badge` | string | Short text in badge pill |
 | `badge_color` | string | `"amber"` / `"purple"` / `"red"` |
@@ -956,6 +956,29 @@ Mark the previous active week as `"status": "closed"`.
 `informational` — no additional fields.
 
 `teaser` — omit `color`, `stamps`. Uses different card styling (purple border section). The `item_label` is a volunteer/request line rather than an incident log line.
+
+`updates` — **Case status digest.** Used when a week has multiple informational callbacks to previous cases that don't require player input. Renders as a single green-accented card with each update as a titled sub-section separated by dividers. Schema:
+```json
+{
+  "id": "S02-UPDATES",
+  "type": "updates",
+  "title": "Post-Aldermoor Case Updates",
+  "badge": "INFORMATIONAL",
+  "badge_color": "green",
+  "item_label": "// CAMPBELL — CASE STATUS DIGEST — POST-SESSION 02",
+  "items": [
+    {
+      "title": "THE ESZTER PARTICULATE — DIRECTION LOGGED",
+      "blocks": [ ... ]
+    },
+    {
+      "title": "BÁLINT — WELFARE CONTACT",
+      "blocks": [ ... ]
+    }
+  ]
+}
+```
+Each item has a `title` (rendered in green monospace) and `blocks[]` (same block types as other incidents, but `campbell` blocks may omit `label` since the digest header provides context). No `color`, `stamps`, `choices`, or `form_hint`. `badge_color` should be `"green"`. One `updates` entry per week is the pattern — don't split into multiple `updates` blocks.
 
 #### Block Types
 
@@ -1066,7 +1089,7 @@ Do not use HTML tags directly in any field. Do not use inline markup outside the
 | One `"active"` week | Only one week in the array has `"status": "active"`. All others are `"closed"`. |
 | Week IDs | `"W1"`, `"W2"`, `"W3"` — uppercase, no leading zero. |
 | Incident IDs | `"SNN-IMM"` pattern — e.g. `S02-I01`, `S02-I02`. Unique across the whole file. |
-| Incident order | Incidents render in array order. Put `choice` and `open` before `informational`. Put `teaser` last. |
+| Incident order | Incidents render in array order. Put `choice` and `open` first. Put `updates` (status digest) after interactive incidents. Put `teaser` last. |
 | No HTML | Never write HTML tags in any field. The renderer handles all markup. |
 | Empty week | An empty `"incidents": []` renders a "no incidents logged" state — correct for `"closed"` weeks. |
 
