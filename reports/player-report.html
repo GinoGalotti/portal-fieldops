@@ -442,50 +442,8 @@
 
   // ── CONFIG ────────────────────────────────────────────────────────────────
 
-  var WEEKS = {
-    W01: {
-      label: 'Week 01',
-      subtitle: 'A Promise is a Promise',
-      scenes: [
-        {
-          id: 'eszter-balint',
-          label: 'ESZTER & BÁLINT',
-          prompt: "The ghost of Eszter protecting Bálint was the emotional heart of this week. How did that story land for you? Did the resolution feel right — and how did you feel about what Bálint asked of the team?"
-        },
-        {
-          id: 'portal-directive',
-          label: 'THE PORTAL DIRECTIVE',
-          prompt: "The lab wanted the ash sample — the locket. There was a tension between the mission objective and doing right by Bálint. How did your operative feel about that pull? What did the team decide, and did it sit right with you?"
-        },
-        {
-          id: 'your-moment',
-          label: 'YOUR OPERATIVE\'S MOMENT',
-          prompt: "Was there a specific moment — a choice, a line, a beat — where your operative really felt like themselves? What was it?"
-        }
-      ]
-    },
-    W02: {
-      label: 'Week 02',
-      subtitle: 'Something That Wants to Be Known',
-      scenes: [
-        {
-          id: 'cartographer',
-          label: 'THE CARTOGRAPHER',
-          prompt: "The Cartographer was the central entity this week. How did it land for you — frightening, fascinating, confusing, all of the above? What did you make of it?"
-        },
-        {
-          id: 'aldermoor',
-          label: 'ALDERMOOR DISTRICT',
-          prompt: "The investigation took you through Aldermoor. Did the location feel alive? What detail or moment from the district stuck with you?"
-        },
-        {
-          id: 'your-moment',
-          label: 'YOUR OPERATIVE\'S MOMENT',
-          prompt: "A moment this week where your operative surprised you, struggled with something, or changed. What was it?"
-        }
-      ]
-    }
-  };
+  // ── WEEK CONFIG — loaded from /data/report-schema.json ────────────────────
+  var WEEKS = {};
 
   var HUNTERS = [
     { id: 'alan', label: 'Alan Frazier' },
@@ -745,7 +703,7 @@
 
   // ── KEEPER DEBRIEF RECAP ──────────────────────────────────────────────────
 
-  var WEEK_TO_SESSION = { W01: 'S01', W02: 'S02' };
+  var WEEK_TO_SESSION = {};
 
   var OUTCOME_META = {
     humane:  { label: 'HUMANE ENDING',      color: 'var(--green)' },
@@ -804,10 +762,29 @@
   }
 
   // ── BOOT ─────────────────────────────────────────────────────────────────
-  buildSelectors();
-  buildRatings();
-  updateSummary();
-  loadRecap();
+
+  fetch('/data/report-schema.json')
+    .then(function (r) { return r.json(); })
+    .then(function (schema) {
+      schema.forEach(function (entry) {
+        var wk = entry.week_id;
+        WEEKS[wk] = {
+          label:    entry.week_label,
+          subtitle: entry.week_subtitle,
+          scenes:   entry.player_scenes
+        };
+        WEEK_TO_SESSION[wk] = entry.session_id;
+      });
+
+      buildSelectors();
+      buildRatings();
+      updateSummary();
+      loadRecap();
+    })
+    .catch(function () {
+      document.getElementById('week-selector').innerHTML =
+        '<div style="color:var(--red);padding:1rem">// ERROR: could not load report schema</div>';
+    });
 
 }());
 </script>

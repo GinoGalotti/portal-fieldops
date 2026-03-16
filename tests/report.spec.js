@@ -1,7 +1,7 @@
 // report.spec.js — Tests for missions/report.html (Keeper Field Report).
 //
 // Coverage:
-//   - Session tabs render (one per SESSIONS key: S01, S02)
+//   - Session tabs render (S01, S02, S03 — driven by /data/report-schema.json)
 //   - First tab is active by default
 //   - Switching tabs changes active tab and updates session title
 //   - SAVE REPORT buttons (top + bottom) are present
@@ -10,9 +10,11 @@
 //   - Scene textareas render for the active session
 //   - Thread tags render for the active session
 //   - SAVE triggers PUT to D1 and shows save feedback
+//   - Canon slots render for S03 with correct category badges
+//   - Sessions with no canon_slots show the empty placeholder message
 //
-// All D1 calls are mocked — the page's SESSIONS config is the source of truth,
-// not an external JSON file, so tests derive expected values directly from the DOM.
+// D1 calls are mocked. /data/report-schema.json is served by wrangler pages dev
+// (static file — no mock needed).
 
 import { test, expect } from '@playwright/test';
 
@@ -38,10 +40,11 @@ async function gotoReport(page) {
 
 test.describe('missions/report.html — session tabs', () => {
 
-  test('session tabs render for S01 and S02', async ({ page }) => {
+  test('session tabs render for S01, S02, and S03', async ({ page }) => {
     await gotoReport(page);
     await expect(page.locator('.stab[data-sid="S01"]')).toBeVisible();
     await expect(page.locator('.stab[data-sid="S02"]')).toBeVisible();
+    await expect(page.locator('.stab[data-sid="S03"]')).toBeVisible();
   });
 
   test('S01 tab is active by default', async ({ page }) => {
@@ -171,6 +174,125 @@ test.describe('missions/report.html — thread tags', () => {
     await expect(tag).toHaveClass(/active/);
     await tag.click();
     await expect(tag).not.toHaveClass(/active/);
+  });
+
+});
+
+// ── S03 TAB ────────────────────────────────────────────────────────────────────
+
+test.describe('missions/report.html — S03 tab', () => {
+
+  async function gotoS03(page) {
+    await mockReportApis(page);
+    await page.goto('/missions/report.html');
+    await page.waitForLoadState('networkidle');
+    await page.locator('.stab[data-sid="S03"]').click();
+    await page.waitForLoadState('networkidle');
+  }
+
+  test('S03 tab is active after clicking it', async ({ page }) => {
+    await gotoS03(page);
+    await expect(page.locator('.stab[data-sid="S03"]')).toHaveClass(/active/);
+  });
+
+  test('session title updates to S03 subtitle', async ({ page }) => {
+    await gotoS03(page);
+    await expect(page.locator('#session-title')).toContainText('The Understudies');
+  });
+
+  test('S03 scene textareas render (investigation, mesa-confrontation, climax-resolution)', async ({ page }) => {
+    await gotoS03(page);
+    await expect(page.locator('[data-scene="investigation"]')).toBeVisible();
+    await expect(page.locator('[data-scene="mesa-confrontation"]')).toBeVisible();
+    await expect(page.locator('[data-scene="climax-resolution"]')).toBeVisible();
+  });
+
+  test('S03 thread tags include MESA and THE UNDERSTUDIES entries', async ({ page }) => {
+    await gotoS03(page);
+    // Thread tags are rendered from keeper_threads — spot-check two S03-specific ones
+    const tags = page.locator('.thread-tag');
+    const count = await tags.count();
+    expect(count).toBeGreaterThan(0);
+    // Check that the container includes S03-specific thread text
+    const threadContainer = page.locator('#threads-container');
+    await expect(threadContainer).toContainText('M.E.S.A. INVESTIGATION');
+    await expect(threadContainer).toContainText('THE UNDERSTUDIES — MERIDIAN THEATRE');
+  });
+
+});
+
+// ── CANON SLOTS ────────────────────────────────────────────────────────────────
+
+test.describe('missions/report.html — canon slots', () => {
+
+  test('S01 shows the empty canon placeholder (no slots defined)', async ({ page }) => {
+    await gotoReport(page);
+    await expect(page.locator('#canon-container .canon-empty')).toBeVisible();
+    await expect(page.locator('#canon-container .canon-empty')).toContainText('No open canon slots');
+  });
+
+  test('S03 renders 6 canon slot textareas', async ({ page }) => {
+    await mockReportApis(page);
+    await page.goto('/missions/report.html');
+    await page.waitForLoadState('networkidle');
+    await page.locator('.stab[data-sid="S03"]').click();
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('#canon-container [data-canon]')).toHaveCount(6);
+  });
+
+  test('S03 canon slots include GADGET, TEXTURE, and THEORY category badges', async ({ page }) => {
+    await mockReportApis(page);
+    await page.goto('/missions/report.html');
+    await page.waitForLoadState('networkidle');
+    await page.locator('.stab[data-sid="S03"]').click();
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('.canon-tag--gadget').first()).toBeVisible();
+    await expect(page.locator('.canon-tag--texture').first()).toBeVisible();
+    await expect(page.locator('.canon-tag--theory').first()).toBeVisible();
+  });
+
+  test('S03 canon slot for bim-scanner-design is present', async ({ page }) => {
+    await mockReportApis(page);
+    await page.goto('/missions/report.html');
+    await page.waitForLoadState('networkidle');
+    await page.locator('.stab[data-sid="S03"]').click();
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('[data-canon="bim-scanner-design"]')).toBeVisible();
+  });
+
+  test('typing into a canon slot textarea is possible', async ({ page }) => {
+    await mockReportApis(page);
+    await page.goto('/missions/report.html');
+    await page.waitForLoadState('networkidle');
+    await page.locator('.stab[data-sid="S03"]').click();
+    await page.waitForLoadState('networkidle');
+    const ta = page.locator('[data-canon="bim-scanner-design"]');
+    await ta.fill('Rex called it the Harmonic Resonance Detector — a modified geiger counter with a custom frequency dial.');
+    await expect(ta).toHaveValue('Rex called it the Harmonic Resonance Detector — a modified geiger counter with a custom frequency dial.');
+  });
+
+  test('canon slot hint text is visible', async ({ page }) => {
+    await mockReportApis(page);
+    await page.goto('/missions/report.html');
+    await page.waitForLoadState('networkidle');
+    await page.locator('.stab[data-sid="S03"]').click();
+    await page.waitForLoadState('networkidle');
+    // Each slot renders a .canon-hint with the prompt text
+    const hints = page.locator('.canon-hint');
+    await expect(hints.first()).toBeVisible();
+    const count = await hints.count();
+    expect(count).toBe(6);
+  });
+
+  test('switching from S03 back to S01 restores empty canon placeholder', async ({ page }) => {
+    await mockReportApis(page);
+    await page.goto('/missions/report.html');
+    await page.waitForLoadState('networkidle');
+    await page.locator('.stab[data-sid="S03"]').click();
+    await page.waitForLoadState('networkidle');
+    await page.locator('.stab[data-sid="S01"]').click();
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('#canon-container .canon-empty')).toBeVisible();
   });
 
 });

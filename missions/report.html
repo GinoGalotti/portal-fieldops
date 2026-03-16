@@ -301,6 +301,59 @@
   }
   .scene-note textarea:focus { border-color: var(--keeper); border-left-color: var(--keeper); }
 
+  /* ─── CANON SLOTS ─── */
+  .canon-slot { margin-bottom: 18px; }
+  .canon-slot-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .canon-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .canon-tag--gadget  { background: rgba(0,240,180,0.1);  color: var(--keeper);  border: 1px solid rgba(0,240,180,0.25); }
+  .canon-tag--texture { background: rgba(167,139,250,0.1); color: #a78bfa;        border: 1px solid rgba(167,139,250,0.25); }
+  .canon-tag--theory  { background: rgba(240,165,0,0.1);   color: var(--amber);   border: 1px solid rgba(240,165,0,0.25); }
+  .canon-slot-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: var(--text);
+    text-transform: uppercase;
+  }
+  .canon-hint {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.75rem;
+    font-style: italic;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+  .canon-slot textarea {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left: 3px solid rgba(240,165,0,0.5);
+    border-radius: 2px;
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    padding: 10px 12px;
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+  }
+  .canon-slot textarea:focus { border-color: var(--amber); border-left-color: var(--amber); }
+  .canon-empty { color: var(--text-dim); font-size: 0.78rem; font-style: italic; padding: 8px 0; }
+
   /* ─── THREADS ─── */
   .thread-grid {
     display: flex;
@@ -788,7 +841,7 @@
     </div>
     <div class="db-field">
       <label>PLAYER-DEFINED CANON</label>
-      <textarea id="db-canon" rows="4" placeholder="[GADGET] Rex named the device — described it as Y&#10;[TEXTURE] The theatre smelled like Z — adopted as canon&#10;[THEORY] Alan's theory about the mechanism — keeper adopted"></textarea>
+      <div id="canon-container"></div>
     </div>
   </section>
 
@@ -818,75 +871,8 @@
 <script>
 (function () {
 
-  // ── SESSION CONFIG ────────────────────────────────────────────────────────
-  var SESSIONS = {
-    S01: {
-      title: 'A Promise is a Promise',
-      threads: [
-        'PROJECT VEIL', 'MESA', 'CAMPBELL', "SVEN'S DEATH",
-        "ALAN'S ORIGIN", "REED'S DIRECTIVE", 'DR. LEECH',
-        'BIM / ASH', 'ESZTER', 'BÁLINT', 'KELLER UNIVERSITY', 'GORDON AVERY'
-      ],
-      clocks: [
-        { id: 'gordon-avery',     label: 'Gordon Avery clock' },
-        { id: 'nadia',            label: 'Nadia — 9-day window' },
-        { id: 'martin-mira',      label: 'Martin / Mira — 14-day window' },
-        { id: 'meridian-theatre', label: 'Meridian Theatre (Saturday)' },
-        { id: 'mesa-presence',    label: 'MESA presence at Keller' },
-        { id: 'campbell-flag',    label: 'CAMPBELL internal flag' }
-      ],
-      scenes: [
-        {
-          id: 'eszter-resolution',
-          label: 'ESZTER RESOLUTION',
-          prompt: "How did the team resolve Eszter's haunting? What did they promise Bálint? What remains unfinished or ambiguous?"
-        },
-        {
-          id: 'mesa-keller',
-          label: 'MESA AT KELLER',
-          prompt: "What did MESA want at Keller University? Did they interfere directly? What did the team learn, gain, or lose in that encounter?"
-        },
-        {
-          id: 'bim-usage',
-          label: 'BIM COLLECTION ARRAY',
-          prompt: "Was the BIM used? What was collected? Any unexpected readings, effects, or side-consequences?"
-        }
-      ]
-    },
-    S02: {
-      title: 'Something That Wants to Be Known',
-      threads: [
-        'PROJECT VEIL', 'MESA', 'ROOK', 'DAN NILSSON',
-        'CAMPBELL', "SVEN'S DEATH", "ALAN'S ORIGIN", "REED'S DIRECTIVE",
-        'DR. LEECH', 'BIM / ASH', 'THE CARTOGRAPHER', 'MESA SAMPLES'
-      ],
-      clocks: [
-        { id: 'gordon-avery',     label: 'Gordon Avery clock' },
-        { id: 'nadia',            label: 'Nadia — 9-day window' },
-        { id: 'martin-mira',      label: 'Martin / Mira — 14-day window' },
-        { id: 'meridian-theatre', label: 'Meridian Theatre (Saturday)' },
-        { id: 'mesa-presence',    label: 'MESA presence in Aldermoor' },
-        { id: 'campbell-flag',    label: 'CAMPBELL internal flag' }
-      ],
-      scenes: [
-        {
-          id: 'cartographer',
-          label: 'THE CARTOGRAPHER',
-          prompt: "How did the team encounter the Cartographer? What did it reveal, take, or change? Who did it affect most, and how?"
-        },
-        {
-          id: 'aldermoor',
-          label: 'ALDERMOOR DISTRICT',
-          prompt: "Key events in Aldermoor. What changed about the location itself? What did the team leave behind — physically or otherwise?"
-        },
-        {
-          id: 'veil-thread',
-          label: 'PROJECT VEIL THREAD',
-          prompt: "Any new Project Veil breadcrumbs discovered? What do the hunters now suspect, fear, or know that they didn't before?"
-        }
-      ]
-    }
-  };
+  // ── SESSION CONFIG — loaded from /data/report-schema.json ─────────────────
+  var SESSIONS = {};
 
   // ── STATE ─────────────────────────────────────────────────────────────────
   var currentSid = 'S01';
@@ -915,7 +901,8 @@
       clocks: [], clockNotes: '',
       scenes: {},
       spine: '', stars: '', wishes: '',
-      campbell: '', setup: '', aiPrompt: ''
+      campbell: '', setup: '', aiPrompt: '',
+      canon: {}
     };
   }
 
@@ -992,10 +979,33 @@
     });
   }
 
+  function buildCanonSlots(sid) {
+    var container = document.getElementById('canon-container');
+    container.innerHTML = '';
+    var slots = SESSIONS[sid].canon_slots || [];
+    if (slots.length === 0) {
+      container.innerHTML = '<div class="canon-empty">// No open canon slots defined for this session.</div>';
+      return;
+    }
+    slots.forEach(function (slot) {
+      var div = document.createElement('div');
+      div.className = 'canon-slot';
+      div.innerHTML =
+        '<div class="canon-slot-header">' +
+          '<span class="canon-tag canon-tag--' + slot.category.toLowerCase() + '">' + slot.category + '</span>' +
+          '<span class="canon-slot-label">' + slot.label + '</span>' +
+        '</div>' +
+        '<div class="canon-hint">' + slot.prompt + '</div>' +
+        '<textarea data-canon="' + slot.id + '" rows="2" placeholder="What the player defined — note it here…"></textarea>';
+      container.appendChild(div);
+    });
+  }
+
   function buildDynamic(sid) {
     buildThreads(sid);
     buildClocks(sid);
     buildScenes(sid);
+    buildCanonSlots(sid);
   }
 
   // ── SERIALISE / APPLY ─────────────────────────────────────────────────────
@@ -1027,7 +1037,13 @@
       campbell:  document.getElementById('db-campbell').value,
       setup:     document.getElementById('db-setup').value,
       aiPrompt:  document.getElementById('db-ai-prompt').value,
-      canon:     document.getElementById('db-canon').value
+      canon:     (function () {
+        var obj = {};
+        document.querySelectorAll('#canon-container [data-canon]').forEach(function (ta) {
+          obj[ta.dataset.canon] = ta.value;
+        });
+        return obj;
+      }())
     };
 
     document.querySelectorAll('.outcome-btn').forEach(function (btn) {
@@ -1070,7 +1086,11 @@
     document.getElementById('db-campbell').value  = r.campbell || '';
     document.getElementById('db-setup').value     = r.setup    || '';
     document.getElementById('db-ai-prompt').value = r.aiPrompt || '';
-    document.getElementById('db-canon').value     = r.canon    || '';
+    if (r.canon && typeof r.canon === 'object') {
+      document.querySelectorAll('#canon-container [data-canon]').forEach(function (ta) {
+        ta.value = r.canon[ta.dataset.canon] || '';
+      });
+    }
 
     document.querySelectorAll('.outcome-btn').forEach(function (btn) {
       btn.classList.toggle('active', btn.dataset.outcome === r.outcome);
@@ -1277,10 +1297,18 @@
     lines.push('**Breadcrumbs:** ' + v(r.setup));
     lines.push('**AI prompts:** ' + v(r.aiPrompt));
 
-    if (r.canon && r.canon.trim()) {
+    var canonSlots = cfg.canon_slots || [];
+    var filledSlots = canonSlots.filter(function (s) {
+      return r.canon && typeof r.canon === 'object' && r.canon[s.id] && r.canon[s.id].trim();
+    });
+    if (filledSlots.length > 0) {
       lines.push('');
       lines.push('## Player-Defined Canon');
-      lines.push(r.canon.trim());
+      filledSlots.forEach(function (s) {
+        lines.push('### [' + s.category + '] ' + s.label);
+        lines.push(r.canon[s.id].trim());
+        lines.push('');
+      });
     }
 
     // ── Player reports (if loaded) ──
@@ -1289,10 +1317,7 @@
       var pweek = SESSION_TO_WEEK[sid];
       var pRatings = ['story', 'atmosphere', 'role', 'emotion', 'overall'];
       var pRatingNames = { story: 'Story', atmosphere: 'Atmosphere', role: 'Role', emotion: 'Emotion', overall: 'Overall' };
-      var pSceneLabels = {
-        'eszter-balint': 'Eszter & Bálint', 'portal-directive': 'The Portal Directive',
-        'your-moment': "Operative's Moment", 'cartographer': 'The Cartographer', 'aldermoor': 'Aldermoor'
-      };
+      var pSceneLabels = OP_SCENE_LABELS;
       lines.push('');
       lines.push('---');
       lines.push('');
@@ -1360,7 +1385,7 @@
 
   // ── OPERATIVE REPORTS ────────────────────────────────────────────────────
 
-  var SESSION_TO_WEEK = { S01: 'W01', S02: 'W02' };
+  var SESSION_TO_WEEK = {};
 
   var OP_HUNTER_LIST = ['rex', 'reed', 'alan', 'sven', 'john'];
 
@@ -1377,18 +1402,9 @@
     emotion: 'EMOT', overall: 'OVERALL'
   };
 
-  var OP_SCENE_LABELS = {
-    'eszter-balint':    'ESZTER & BÁLINT',
-    'portal-directive': 'THE PORTAL DIRECTIVE',
-    'your-moment':      "OPERATIVE'S MOMENT",
-    'cartographer':     'THE CARTOGRAPHER',
-    'aldermoor':        'ALDERMOOR DISTRICT'
-  };
+  var OP_SCENE_LABELS = {};
 
-  var OP_WEEK_SCENES = {
-    W01: ['eszter-balint', 'portal-directive', 'your-moment'],
-    W02: ['cartographer', 'aldermoor', 'your-moment']
-  };
+  var OP_WEEK_SCENES = {};
 
   var opReportsCache = {}; // sid → { hid → data|null }
 
@@ -1504,18 +1520,44 @@
 
   // ── BOOT ──────────────────────────────────────────────────────────────────
 
-  buildTabs();
-  buildDynamic('S01');
-  document.getElementById('session-title').textContent = SESSIONS['S01'].title;
-  document.querySelector('.stab').classList.add('active');
+  fetch('/data/report-schema.json')
+    .then(function (r) { return r.json(); })
+    .then(function (schema) {
+      schema.forEach(function (entry) {
+        var sid = entry.session_id;
+        SESSIONS[sid] = {
+          title:       entry.week_subtitle,
+          threads:     entry.keeper_threads,
+          clocks:      entry.keeper_clocks,
+          scenes:      entry.keeper_scenes,
+          canon_slots: entry.canon_slots || []
+        };
+        SESSION_TO_WEEK[sid] = entry.week_id;
+        entry.player_scenes.forEach(function (s) {
+          OP_SCENE_LABELS[s.id] = s.label;
+        });
+        OP_WEEK_SCENES[entry.week_id] = entry.player_scenes.map(function (s) { return s.id; });
+      });
 
-  fetchState('S01', function (state) {
-    memCache['S01'] = state;
-    applyState(state);
-    if (!state.date) document.getElementById('db-date').value = new Date().toISOString().slice(0, 10);
-  });
+      var firstSid = Object.keys(SESSIONS)[0] || 'S01';
+      currentSid = firstSid;
+      buildTabs();
+      buildDynamic(firstSid);
+      document.getElementById('session-title').textContent = SESSIONS[firstSid].title;
+      document.querySelector('.stab').classList.add('active');
 
-  loadOperativeReports('S01');
+      fetchState(firstSid, function (state) {
+        memCache[firstSid] = state;
+        applyState(state);
+        if (!state.date) document.getElementById('db-date').value = new Date().toISOString().slice(0, 10);
+      });
+
+      loadOperativeReports(firstSid);
+    })
+    .catch(function () {
+      document.getElementById('session-tabs').innerHTML =
+        '<div style="color:var(--red);padding:1rem">// ERROR: could not load report schema</div>';
+    });
 
 }());
 </script>

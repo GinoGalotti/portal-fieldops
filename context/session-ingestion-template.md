@@ -26,6 +26,7 @@ When claude.ai generates a **new mission prep document** (`missions/NN-title.htm
 - **Section D:** any new entities introduced in the mission (with initial bestiary phase, `classified_blurred: true` until resolved)
 - **Section F (partial):** CAMPBELL briefing items if pre-prepped alongside the mission
 - **Section J:** image prompts (`SNN-prompts.py`) — one entry per `"type": "image"` handout in Section B; filenames must match `src` values exactly
+- **Section K:** `report-schema.json` entry — always required in pre-session packages so report forms render correctly for the new session
 
 **What to omit from pre-session packages:**
 - Section A (sessions.json advance) — not needed until after the previous session closes
@@ -464,6 +465,62 @@ Find "clock-mesa-response" and increment `filled` by 1 (now 3/4).
 
 ---
 
+## SECTION K — report-schema.json
+<!-- Target: data/report-schema.json -->
+<!-- Action: append new entry to the array (or fill the placeholder entry if it exists) -->
+<!-- Required: YES for pre-session packages — needed before session so report forms work -->
+
+This section provides the session-specific configuration for the Keeper Field Report and Operative Field Report forms. Both pages fetch this file on load — a missing or empty entry means the S0N tab won't render.
+
+### Fields:
+- `keeper_threads[]` — string list of campaign threads active/relevant this session (pulled from portal-threads.json active entries + any new ones introduced this mission)
+- `keeper_clocks[]` — `[{id, label}]` — clocks visible in the keeper report (use IDs from portal-clocks.json; label is display text)
+- `keeper_scenes[]` — 3 × `{id, label, prompt}` — keeper-perspective scene questions. Prompts should be analytical ("what did X reveal, change, or cost?")
+- `player_scenes[]` — 3 × `{id, label, prompt}` — player-perspective scene questions. Prompts should be emotional/experiential ("how did X land for you?"). Always end with a "YOUR OPERATIVE'S MOMENT" entry.
+- `canon_slots[]` — `[{id, category, label, prompt, status}]` — open-canon capture fields shown in the keeper report. Each slot renders with its prompt as a reminder and a textarea the keeper fills in during/after the session. Confirmed values appear in the ⬡ COPY FOR CLAUDE output.
+  - `category`: one of `GADGET`, `TEXTURE`, `THEORY` (controls colour badge)
+  - `label`: short display name in ALL CAPS
+  - `prompt`: one or two sentences — what's undefined, what to watch for, what locks it in
+  - `status`: `"open"` (optional — ignored by the renderer, useful for Claude AI tracking)
+- `week_label` — "Week NN" (matches sessions.json label)
+- `week_subtitle` — session title (matches sessions.json title)
+
+### S03 example:
+```json
+{
+  "session_id": "S03",
+  "week_id": "W03",
+  "week_label": "Week 03",
+  "week_subtitle": "The Understudies",
+  "keeper_threads": ["PROJECT VEIL", "MESA", "MERIDIAN THEATRE", "THE UNDERSTUDIES", "CAMPBELL", "GORDON AVERY", "DR. LEECH", "BIM / ASH", "SVEN'S DEATH", "ALAN'S ORIGIN", "REED'S DIRECTIVE"],
+  "keeper_clocks": [
+    { "id": "meridian-theatre", "label": "Meridian Theatre (Saturday)" },
+    { "id": "gordon-avery", "label": "Gordon Avery clock" },
+    { "id": "nadia", "label": "Nadia — 9-day window" },
+    { "id": "campbell-flag", "label": "CAMPBELL internal flag" }
+  ],
+  "keeper_scenes": [
+    { "id": "understudies", "label": "THE UNDERSTUDIES", "prompt": "How did the team engage with the affected understudies? Which characters/spirits were encountered, and what was resolved vs left open?" },
+    { "id": "meridian-theatre", "label": "MERIDIAN THEATRE", "prompt": "What did the investigation reveal about the theatre itself — its history, the BIM readings, the spirit mechanism? What changed or was left behind?" },
+    { "id": "bim-development", "label": "BIM MEASUREMENT THREAD", "prompt": "Did BIM readings factor into the session? Any developments toward a measurement device? What does the team now know or suspect about BIM and theatrical/emotional resonance?" }
+  ],
+  "player_scenes": [
+    { "id": "understudies", "label": "THE UNDERSTUDIES", "prompt": "The possessed understudies were the emotional centre of this week. How did that land for you — uncanny, sad, frightening? What did your operative make of people losing themselves to a role?" },
+    { "id": "meridian-theatre", "label": "THE MERIDIAN THEATRE", "prompt": "The theatre itself was almost a character. Did the location feel alive? Was there a moment — a detail, a line, a room — that stuck with you?" },
+    { "id": "your-moment", "label": "YOUR OPERATIVE'S MOMENT", "prompt": "A moment this week where your operative surprised you, struggled with something, or changed. What was it?" }
+  ],
+  "canon_slots": [
+    { "id": "slot-id", "category": "GADGET", "label": "SLOT LABEL IN CAPS", "prompt": "What's undefined and what to watch for — one or two sentences. What locks this in?", "status": "open" },
+    { "id": "slot-id-2", "category": "TEXTURE", "label": "ANOTHER SLOT", "prompt": "…", "status": "open" },
+    { "id": "slot-id-3", "category": "THEORY", "label": "OPEN THEORY", "prompt": "…", "status": "open" }
+  ]
+}
+```
+
+**Category colour guide:** `GADGET` = teal/keeper green · `TEXTURE` = purple · `THEORY` = amber. Use the category that best fits the slot type; all three are available in any session.
+
+---
+
 ## SECTION J — Image Prompts (`SNN-prompts.py`)
 <!-- Target: SNN-prompts.py at repo root (e.g. S3-prompts.py) -->
 <!-- Action: produce a Python prompts file for generate_images.py -->
@@ -499,7 +556,7 @@ Already-generated images are skipped automatically.
 ### When generating a new mission (pre-session)
 - Output **two things** in the same response: (1) the mission HTML, (2) a partial ingestion package
 - Use the `MISSION PREP INGESTION PACKAGE` header (see "Pre-Session / Mission Prep" section above)
-- Include Sections B, C, D, J, and optionally F — omit A, G, H, I
+- Include Sections B, C, D, J, K, and optionally F — omit A, G, H, I
 - Mark the `session_key` in Section B as `"wN"` with a note to confirm before ingesting if the week isn't locked
 - New entities in Section D should have `classified_blurred: true` in their initial bestiary phase
 

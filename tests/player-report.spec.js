@@ -3,7 +3,8 @@
 // ARCHITECTURE NOTES (read before editing):
 // - The page has two selector rows: week (#week-selector) and hunter
 //   (#hunter-selector). Both must be selected to unlock #form-body.
-// - Weeks (WEEKS) and hunters (HUNTERS) are hardcoded in the page JS.
+// - Weeks (WEEKS) are fetched from /data/report-schema.json on init.
+//   HUNTERS are hardcoded in the page JS.
 // - Rating pips: .rating-pip[data-rating][data-val]. 5 pips per category
 //   × 5 categories = 25 total. Clicking a pip selects it (.selected) and
 //   deselects any other pip in the same category.
@@ -31,10 +32,12 @@ async function mockPlayerReportApi(page) {
 
 // Intercepts keeper field report calls. Returns empty by default.
 async function mockKeeperReportApi(page, responses) {
-  // responses: { S01: stateObj|null, S02: stateObj|null }
+  // responses: { S01: stateObj|null, S02: stateObj|null, S03: stateObj|null }
   await page.route('**/api/v1/reports/**', async route => {
     const url = route.request().url();
-    const sid = url.includes('/S01/') ? 'S01' : url.includes('/S02/') ? 'S02' : null;
+    const sid = url.includes('/S01/') ? 'S01'
+              : url.includes('/S02/') ? 'S02'
+              : url.includes('/S03/') ? 'S03' : null;
     const data = sid && responses[sid] ? responses[sid] : {};
     return route.fulfill({ contentType: 'application/json', body: JSON.stringify(data) });
   });
@@ -61,11 +64,12 @@ test.describe('Player report — selectors', () => {
     await page.waitForLoadState('networkidle');
   });
 
-  test('week selector buttons render (at least W01)', async ({ page }) => {
+  test('week selector buttons render (W01, W02, W03)', async ({ page }) => {
     const weekBtns = page.locator('#week-selector .sel-btn');
     await expect(weekBtns.first()).toBeVisible();
-    // W01 must be present
     await expect(page.locator('[data-week="W01"]')).toBeVisible();
+    await expect(page.locator('[data-week="W02"]')).toBeVisible();
+    await expect(page.locator('[data-week="W03"]')).toBeVisible();
   });
 
   test('hunter selector buttons render (Reed, Rex, Alan, Sven, John)', async ({ page }) => {
@@ -104,6 +108,42 @@ test.describe('Player report — selectors', () => {
   test('selecting only a hunter does not unlock the form', async ({ page }) => {
     await page.locator('[data-hunter="reed"]').click();
     await expect(page.locator('#form-body')).not.toHaveClass(/unlocked/);
+  });
+
+});
+
+// ── W03 SELECTION ─────────────────────────────────────────────────────────────
+
+test.describe('Player report — W03 week selection', () => {
+
+  test.beforeEach(async ({ page }) => {
+    clearPlayerReportStorage(page);
+    await mockPlayerReportApi(page);
+    await page.goto('/reports/player-report.html');
+    await page.waitForLoadState('networkidle');
+  });
+
+  test('clicking W03 then Reed unlocks the form', async ({ page }) => {
+    await page.locator('[data-week="W03"]').click();
+    await page.locator('[data-hunter="reed"]').click();
+    await expect(page.locator('#form-body')).toHaveClass(/unlocked/);
+  });
+
+  test('#selection-summary shows Week 03 and The Understudies after W03+hunter', async ({ page }) => {
+    await page.locator('[data-week="W03"]').click();
+    await page.locator('[data-hunter="reed"]').click();
+    const summary = page.locator('#selection-summary');
+    await expect(summary).toContainText('Week 03');
+    await expect(summary).toContainText('The Understudies');
+  });
+
+  test('W03 scene textareas render (the-understudies, the-performance, your-moment)', async ({ page }) => {
+    await page.locator('[data-week="W03"]').click();
+    await page.locator('[data-hunter="reed"]').click();
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('[data-scene="the-understudies"]')).toBeVisible();
+    await expect(page.locator('[data-scene="the-performance"]')).toBeVisible();
+    await expect(page.locator('[data-scene="your-moment"]')).toBeVisible();
   });
 
 });
@@ -270,7 +310,7 @@ test.describe('Player report — keeper debrief recap (no reports filed)', () =>
   test.beforeEach(async ({ page }) => {
     clearPlayerReportStorage(page);
     await mockPlayerReportApi(page);
-    await mockKeeperReportApi(page, { S01: null, S02: null });
+    await mockKeeperReportApi(page, { S01: null, S02: null, S03: null });
     await page.goto('/reports/player-report.html');
     await page.waitForLoadState('networkidle');
   });
@@ -284,8 +324,8 @@ test.describe('Player report — keeper debrief recap (no reports filed)', () =>
     await expect(cards.first()).toContainText('DEBRIEF PENDING');
   });
 
-  test('renders one recap card per week', async ({ page }) => {
-    await expect(page.locator('.recap-card')).toHaveCount(2);
+  test('renders one recap card per week (W01, W02, W03)', async ({ page }) => {
+    await expect(page.locator('.recap-card')).toHaveCount(3);
   });
 
   test('recap section still visible when no week/hunter selected (form locked)', async ({ page }) => {
@@ -308,7 +348,7 @@ test.describe('Player report — keeper debrief recap (S01 filed)', () => {
   test.beforeEach(async ({ page }) => {
     clearPlayerReportStorage(page);
     await mockPlayerReportApi(page);
-    await mockKeeperReportApi(page, { S01: s01Report, S02: null });
+    await mockKeeperReportApi(page, { S01: s01Report, S02: null, S03: null });
     await page.goto('/reports/player-report.html');
     await page.waitForLoadState('networkidle');
   });
