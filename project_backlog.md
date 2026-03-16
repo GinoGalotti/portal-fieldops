@@ -184,5 +184,22 @@ The refactor above is now unblocked. All reference data exists; it's just a matt
 
 ---
 
+### Connection map rendering — feed.html — HIGH (S03 prerequisite)
+
+S03 uses a connection map (investigation board) instead of the Aldermoor spatial grid. Data is in `portal-maps.json` as a `connection_maps[]` entry with `type: "connection"`.
+
+**What needs building:**
+- `feed.html` player MAP tab: detect `type: "connection"` vs `"grid"` from the loaded map data, render nodes-and-edges layout (SVG or CSS flexbox) instead of the grid matrix
+- Player view: nodes showing `label`, `sublabel`, `player_desc`; connection threads between them; unlocked/locked state per node
+- Keeper view: same + `keeper_note` per node, route badges (A/B/C), NPC pills, visited state, bulk actions
+- State schema for connection maps: probably same `{ u: { node_id: true }, v: { node_id: true } }` as grid maps — D1 `map_state` table already supports any map id
+- Mission selector in MAP tab should offer both grid and connection maps (M02 = grid, M03 = connection)
+
+**Data:** `data/portal-maps.json` `connection_maps[]` — 7 nodes + 11 edges for M03 theatre investigation
+
+**Design reference:** `s03-map-description.md` (deleted after integration; content in portal-maps.json nodes/edges)
+
+---
+
 ### Minor / polish
 - John Johnson hunter page — playbook architecture refactor complete; now unblocked. See NEXT UP #1 for remaining steps.

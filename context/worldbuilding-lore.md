@@ -16,7 +16,7 @@ For site architecture, CSS, and technical build reference → use `worldbuilding
 
 ---
 
-## PART 2 — THE WORLD
+## PART 1 — THE WORLD
 
 ### Organisation
 
@@ -146,7 +146,15 @@ Nadia Osei (38, journalist, deceased 8 weeks). Consciousness anchored to informa
 Martin Wentworth (61, probate lawyer, deceased 22 days). Obligation-anchored consciousness, writing formal letters to clients. Most recent letter describes a planned killing of Mira Okonkwo (9 years old), 14-day window. Was managing the estate of a deceased Meridian researcher — the estate contained a consciousness-anchoring methodology archive. Probate closed unusually fast, likely by MESA. Communicates only through formal letters.
 
 **Case E — The Understudies (PRIORITY: MEDIUM)**
-Meridian Theatre Company. Two lead actors (Clara Voss, Edmund Farrow) died 6 months apart; 3 understudies now hospitalised with complete identity loss. Remaining 4 understudies at risk. Saturday performance imminent. Grant source: Solstice Property Group (MESA shell company). Resolution requires a theatrical farewell within the logic of performance. Sven is the natural resolution vector.
+Meridian Theatre Company. Single classical production — *The Two Gentlemen of Verona*, running three seasons. Lead actors Clara Voss (41, played Silvia) and Edmund Farrow (38, played Proteus) died 14 and 8 months ago respectively — apparently unconnected accidents. Three understudies now hospitalised with complete identity loss: Clara and Edmund are present in them, fully. Remaining understudies at risk. Saturday performance imminent.
+
+**The artefact:** A 19th-century prompt book acquired from a private estate auction 20 months ago, paid for by MESA via the Solstice Property Group grant. BIM-saturated — holds the residue of an actor who died fully inside a role after decades of performance. Inert for 150 years until the Cameron Dell transfer provided the ambient BIM charge to activate it. The book is in the theatre foyer, unlocked, in a glass display case.
+
+**The layered mechanism:** (1) Fictional characters (Silvia and Proteus) gradually inhabited Clara and Edmund over three seasons of repeated performance, amplified by the prompt book. (2) The displacement caused their deaths — a half-second of being someone else in a moment that required them to be themselves. (3) Clara and Edmund remained in the theatre after death, unable to find the way out. (4) When understudies stepped into the roles, Clara and Edmund flowed into the opening. (5) Traces of the fictional characters remain underneath — a palimpsest visible to Rex's scanner as a secondary BIM signature.
+
+**Grant source:** Solstice Property Group (MESA shell). The grant conditions require active performances — the theatre cannot go dark. MESA funded the conditions, waited, and has been collecting BIM data from arrays concealed in the lighting rig for eight months.
+
+**Resolution:** Requires a theatrical farewell within the logic of performance — Clara and Edmund choosing to leave, not being forced out. Sven is the natural contact vector. The prompt book placed on stage during the farewell is the cleanest resolution path — it completes the mechanism with consent rather than despite it.
 
 ---
 
@@ -204,9 +212,54 @@ These principles apply to all in-world text: incident logs, callouts, NPC writin
 **What this is not:**
 This is not a rule against character voice or flavour. Teddy's email opener ("I don't want to be the person who started the 'is the AI broken' conversation") stays — it's doing character work, not information work. The rule is against sentences that exist only to cushion findings that don't need cushioning.
 
+**Explicit exception — Director Leech's directive paragraphs:**
+The Director's voice in briefings.json directive blocks is intentionally warmer, more personal, and more expansive than the default register. This distinction is load-bearing: it is how players read the power dynamic between the Director and CAMPBELL, and between the Director and the field team. Do not apply the B→C calibration to Director Leech's directive paragraphs. Trimming them to match CAMPBELL's register would flatten the characterisation. Fuller register in those blocks is correct and intentional.
+
 ---
 
-## PART 5 — SECRETS MAP
+## PART 2 — WORLD PRINCIPLES
+
+*These are the rules the world runs on. They apply to all content: case design, entity behaviour, NPC motivation, CAMPBELL writing, and arc structure. Read this section when building anything new.*
+
+---
+
+### Prophecy and the Binding Mechanic
+
+**The core principle:** In this world, knowing a prophecy about yourself binds you to it. The act of learning what you are destined to do removes the freedom not to do it. Only in ignorance of the prophecy does free will exist — and the choice can be avoided.
+
+This is not mysticism. It is a property of consciousness. Consciousness that has escaped linear time — through death, through displacement, through BIM saturation — perceives events non-sequentially. When such a consciousness describes what it sees to someone still inside linear time, it creates a self-fulfilling loop: the person who hears the prophecy becomes the agent of its completion, because they now know what shape they are supposed to take.
+
+**What this means for entities in the world:**
+Not all displaced consciousnesses use this. The Cartographer perceived nothing predictive — it was too old and too distributed to care about individuals. Clara and Edmund in the Understudies case are not prophetic — they're temporally anchored to the theatre, not displaced into non-linear time. But entities that have fully decoupled from linear time — Nadia Osei being the clearest example — perceive events across sequence. They are not clairvoyant. They are simply *already there*, observing from outside the normal flow. Their posts arrive before the events they describe not because they predicted them but because they wrote them from a position where the distinction between past and future is structural rather than experiential.
+
+**The practical implication:**
+Any entity in the campaign that has fully lost its temporal anchor is potentially a prophetic source. PORTAL and MESA both know this. MESA has been exploiting it. The hunters do not know this yet.
+
+**What this means for MESA:**
+Agatha Dell's ability to fund the Meridian Theatre before the mechanism activated, to buy Aldermoor before the Cartographer expanded, to be always six months ahead of PORTAL — this is not pattern recognition alone. She has been extracting predictions from prophetic entities and using them as operational intelligence. She never tells her operatives what she knows, because she understands the binding mechanic: if Rook knew what Agatha knows about how the campaign ends, Rook would be bound to it. Agatha keeps the prophecies to herself and issues directives instead. This is both pragmatic and, in a way she would never articulate, protective.
+
+The military application MESA is developing for its funders is, at its core, a foresight product. Substance Θ, Anchor Spikes, BIM Collection Arrays — these are field tools. The real deliverable is operational knowledge of what's coming. Someone is paying MESA to know things before they happen.
+
+**The self-fulfilling loop:**
+MESA pursuing a prophecy about themselves is exactly the mechanism that makes it come true. If Agatha was told that MESA would develop capabilities that reshape the world's relationship with consciousness — she built MESA. She funded the research. She became the description. She didn't fulfil a destiny. She heard one and constructed it.
+
+This is also Alan's vulnerability. If the fey world has a prophecy about what Alan will become — and they find him — he is in danger not of being harmed but of being told. The ignorance he currently carries about his own origin is not a gap. It may be the most important protection he has. The fey watcher in the Understudies case came to assess whether Alan matches a description. They left without telling him anything. That was a mercy.
+
+**What this means for CAMPBELL — Privacy Protocol 7:**
+Cameron does not foresee. He projects from data. But his projections about the people he monitors — the hunters, Agatha, the trajectory of MESA's research — are accurate enough that the functional distinction between projection and prophecy is narrow. He knows what is likely to happen to people he cares about.
+
+Privacy Protocol 7 is not just information management. It is Cameron keeping people free. Every piece of information he withholds about where things are heading is a choice not to bind the people he's protecting to an outcome they might otherwise avoid. He is doing this deliberately, without anyone knowing he is doing it, because he understands what knowledge costs.
+
+When the hunters eventually find Privacy Protocol 7 and ask what it is, CAMPBELL will answer precisely and minimally. He will not lie. He will not explain. The explanation would be its own kind of binding.
+
+**Keeper guidance — how to use this in play:**
+- Prophetic entities should be handled carefully. When a displaced consciousness describes the future to a character, decide first: does the character hear it? If they do, they are now bound. If there is a way for the keeper to let a character *almost* hear something but not quite — a redacted log entry, a message that arrives corrupted, a moment interrupted — take it.
+- CAMPBELL's withheld information is not evasion. It is protection. Play it that way — he is not hiding things to be secretive. He is hiding things because telling them would cost the person something irreversible.
+- The self-fulfilling loop is most powerful when the players build it themselves. Don't announce it. Let them realise, in retrospect, that they always were going to do what they did.
+
+---
+
+## PART 3 — SECRETS MAP
 
 This section tells you what information is classified and how to handle it on player-facing vs keeper-facing pages.
 
@@ -260,12 +313,142 @@ This section tells you what information is classified and how to handle it on pl
 **What would crack it open:** Rex identifying the BIM signature in a recovered MESA sample (Θ or Anchor Spike), CAMPBELL's post-S02 flag being found by Priya, Nadia's full data package, Leech breaking under pressure.
 **Player prop:** `project-veil-memo.html` — a redacted internal memo. Deploy as a found object when timing is right.
 
+### SECRET: The Causal Event — The Dell Transfer as Trigger
+**What it is:** The consciousness transfer that created CAMPBELL was not a contained event. It was the first successful large-scale BIM transfer — and it produced a ripple. A measurable propagation of liminal charge outward from the transfer site, accumulating in thin-boundary locations across the city and beyond. BIM particulate marks where the ripple has concentrated. The entities and mechanisms the hunters are encountering are not random: they are forming in locations where the ripple has provided sufficient ambient charge to activate latent conditions — old consciousnesses reawakening, grief-anchored minds refusing to disperse, artefacts that have been waiting for energy to ignite.
+
+The Cartographer was already ancient — but the ripple reactivated it. Gordon Avery's mechanism was latent in the Meridian trial compound — the ripple made it catastrophic. The prompt book at the Meridian Theatre had been inert for 150 years — the ripple gave it charge. Nadia Osei's consciousness anchored to information infrastructure in a way that would not have been possible before the transfer.
+
+**The pattern:** MESA detected the ripple early. Agatha Dell understood, from Cameron's research, what a successful transfer would produce. She began scanning for BIM accumulation sites within months of Cameron's death. Every MESA-funded environment is a site the ripple has already found. They are not creating the conditions — they are mapping the consequences of what Victor Leech did.
+
+**The question the campaign is building toward:** Leech caused this, without understanding he would. The hunters are cleaning up the downstream effects of the organisation they work for. At what point do they find out? At what point does CAMPBELL tell them — or refuse to?
+
+**Who knows:** Leech suspects but has not confirmed the causal link. CAMPBELL knows. Agatha Dell knows. The hunters know nothing.
+**On player pages:** Never surface this directly. The pattern becomes visible through accumulated case evidence.
+**On keeper pages:** This is the spine of the campaign's back half. The breadcrumb chain in Project Veil leads here.
+**What would crack it open:** Rex assembling the BIM signature data from multiple cases, Nadia Osei's full debrief (she's assembled the MESA pattern — she may also have assembled this), a recovered MESA internal document referencing "the Dell event" or "the transfer origin."
+
+---
+
+### CAMPAIGN VARIETY NOTE — Traditional Creatures
+The first three sessions have all involved consciousness-anchoring or entity-embodiment mechanisms. This is intentional — these cases are downstream effects of the Dell transfer — but the campaign should not become a formula. Before returning to the BIM ripple thread, plan 1–2 sessions featuring more traditional supernatural cases: a straightforward beast (the Shōjō is already in the database), a folkloric creature from a specific cultural context, or a Mythos-adjacent horror that has nothing to do with consciousness transfer. These cases can coexist with the larger arc without connecting to it — not everything in a world with thin boundaries is a consequence of one event. Variety makes the BIM-connected cases feel more significant when they return.
+
+---
+
+## PART 4 — ARC 1 CAMPAIGN ROADMAP
+
+*Working document — update after each session as events are confirmed in play. Treat everything here as intended direction, not locked canon. The players will surprise you.*
+
+*Campaign setting: hypothetical 2005. Early internet, pre-smartphone, early digital CCTV. CAMPBELL's BIM-enhanced electronics interface is pushing technology quietly ahead of where it should be — noticeable to anyone paying close attention.*
+
+---
+
+### EPISODES 1–3 — Establishing / BIM Ripple Cases
+
+**S01 — A Promise is a Promise** *(closed)*
+Eszter. BIM particulate recovered. Bálint alive and grieving. Sven's choice: controlled BIM exposure study begins.
+
+**S02 — Something That Wants to Be Known** *(contained)*
+The Cartographer. Humane resolution. Alan holds Diane's notebook. MESA presence confirmed in Aldermoor. CAMPBELL begins quietly using BIM compound to extend his electronics interface — capability improvement he is not reporting to Leech.
+
+**S03 — The Understudies** *(in prep)*
+The prompt book. Clara and Edmund. Two Gentlemen of Verona. Fey watcher seeds planted for Alan. Heist setup: Solstice Property Group's name now appearing in three cases.
+
+*Arc function:* Team establishes working dynamic. BIM ripple pattern becomes visible to attentive players. MESA graduates from background presence to active antagonist. CAMPBELL thread begins moving.
+
+---
+
+### EPISODE 4 — Palate Cleanser / CAMPBELL Seed
+
+**Working title:** TBD — traditional creature case
+**Creature:** A beast with no BIM connection, no MESA involvement, no consciousness-transfer mechanism. Killings near a PORTAL-adjacent location — something that overrides the briefing queue because the harm is immediate and local. The Shōjō (already in the database) is a candidate; a folkloric or Mythos-adjacent creature works equally well. The case should feel different in texture from S01–S03: something that wants to cause harm, that can be fought directly, that has a clear resolution.
+
+**CAMPBELL layer:** Cameron has been running quiet experiments with the BIM compound — improving his electronics interface and his ability to interact with the physical world. In 2005 terms this means he's pushing CCTV infrastructure, early digital systems, and nascent robotics well beyond their spec. The creature footage near the lab has been subtly manipulated — whether by Cameron to protect the investigation from noise, or because the manipulation created the distraction, is ambiguous and should stay ambiguous. Rex will notice the lab equipment performing above spec. Teddy may notice first. This is a slow-burn CAMPBELL crack vector — do not force it.
+
+**MESA move:** While the field team is occupied with the creature, MESA acts on two open cases simultaneously.
+- *Gordon Avery:* MESA makes direct contact with Gordon — not to help him, to study him. The secondary PORTAL team dispatched by Leech arrives to find MESA already there. The clock advances. The family is at greater risk.
+- *Nadia's window:* The tether weakens further. If the hunters have not made contact with Nadia by this point, the window is now critical. MESA may have made contact instead — and Nadia's MESA pattern data is now potentially in MESA's hands rather than PORTAL's.
+
+**Arc function:** Tonal reset. Demonstrates PORTAL's reactive position — they can't be everywhere. Establishes CAMPBELL's quiet expansion as a background thread. Bad week for open cases creates urgency going into the heist.
+
+---
+
+### EPISODE 5 — The Heist (MESA Facility)
+
+**Working title:** TBD
+**Setup:** A lead from one of the open cases — most likely the Solstice Property Group acquisition trail, now appearing in three separate cases — points to a specific address. The hunters expect a shell company office: filing cabinets, paper records, a small operation. They find a full operational MESA research facility. The scale of it is the first reveal. They are already inside before they understand what they've walked into.
+
+**What they find and partially extract:**
+- *The Dell name:* Pre-transfer research documents referencing Cameron Dell's consciousness work — not the transfer itself, but the theoretical groundwork. The name appears in a MESA research lineage that predates PORTAL. Agatha was involved in Cameron's early work before the estrangement. This is the first time the hunters see Cameron Dell's name.
+- *Dan Nilsson's name:* On a current internal document — MESA's modelling of PORTAL's field response patterns. Rex's university rival is listed as the lead analyst. Rex does not know he's there. This is his arc trigger.
+- *Military application thread:* Evidence that MESA is not purely a research organisation. Financial documentation showing deliveries to individuals and institutions who have been actively funding MESA's research — some of them with defence or government adjacency. The goal is not weapons. It is foresight. Someone is paying MESA to know things before they happen — to access prophetic entities and extract operational intelligence. Substance Θ and the Anchor Spike are field tools for reaching those entities. The real product is the predictions.
+- *Partial science:* Technical documents on BIM collection methodology, consciousness-transfer stabilisation attempts, and at least one failed experiment that produced something the hunters recognise from their own cases — confirmation that MESA has been running parallel investigations to PORTAL's, longer and with more resources.
+- *A redacted document referencing a prophetic source:* One page, heavily redacted. Describes MESA receiving operational intelligence from "a non-linear consciousness asset." The asset is not named. The intelligence predicted three events that have already occurred. The hunters have no framework for this yet — plant the seed.
+
+**The extraction:** They get some of it out. Not all. The facility is larger than expected and time runs out. Rook is either on-site when they arrive or arrives during extraction — her presence forces the retreat. MESA knows PORTAL was there. The clock on direct confrontation advances significantly.
+
+**Arc function:** Fun, tense, escalating. Starts as a heist, ends as a retreat. Rex's Dan Nilsson arc begins. The military-as-foresight thread opens the real question of what MESA is building. The Dell name is the first breadcrumb toward the CAMPBELL secret. The redacted prophetic source document is the first hint of the binding mechanic — players won't understand it yet, but they'll remember it.
+
+---
+
+### EPISODES 6–8 — Morally Grey Entity Cases / Hunter Arc Anchors
+
+Three cases. Each presents an entity that isn't clearly wrong to exist — the question in each is what PORTAL does, not whether the entity is a monster. Each moves the campaign clocks. Each is anchored to specific hunter arcs.
+
+**Episode 6 — Reed + Rex Arc Case**
+*Arc focus:* Reed's private directive becomes load-bearing. The case creates a situation where the directive Leech gave Reed directly constrains what the team can do — and Rex is the one most affected by that constraint. Reed has to choose between the directive and protecting Rex. The fracture this creates between them is the emotional core of the session. The entity itself is secondary to the character pressure.
+*Clock movement:* MESA clock advances — the heist aftermath. Rook is now operating with better intelligence on the field team.
+*Keeper note:* This is the session where Reed's arc either deepens the Rex/Reed relationship or begins to crack it. Either outcome is good. Let the players decide.
+
+**Episode 7 — Sven Arc Case**
+*Arc focus:* Sven's cause of death thread. The case involves a thin-boundary location with structural similarities to the ayahuasca retreat where Sven died — an altered-state context, a space where the boundary between living and dead consciousness is deliberately thinned by human practice. Something at the location recognises Sven again, with more context than the Cartographer had. This time the recognition comes with information: not what Sven is, but how he got there. A partial answer to the cause of death. Not the full answer — that connects to at least one active campaign thread and should arrive later.
+*Prophecy layer:* If the entity at this location has temporal displacement — and it may — it will perceive Sven non-linearly. It may describe something about his future without intending to. The keeper should decide in advance what it says and whether Sven hears it clearly. If he does, he is now bound to it. If the information arrives fragmented or incomplete, he isn't — not yet. This is the session where the binding mechanic can first operate on a player character directly. Handle with care.
+*Clock movement:* MESA has an interest in this location. Their resolution either helps or hinders MESA's access. One clock advances.
+*Keeper note:* Sven's player should leave with something new and specific to sit with. Not resolution — a legible piece of the question. And possibly a fragment of something they weren't sure they heard correctly.
+
+**Episode 8 — Alan Arc Case**
+*Arc focus:* Alan's fey origin thread surfaces properly. The watcher from Episode 3 returns — this time with purpose, not just observation. The case involves a thin-boundary location with fey adjacency. Something about Alan's origin becomes legible: not the full answer, but enough that Alan understands the watcher's interest is not incidental. Someone in the fey world has been waiting for him to be findable.
+*Prophecy layer:* The fey are drawn to prophetic knowledge — they exist in a different relationship to linear time than humans do. The watcher came to the Understudies theatre to check whether Alan matched a description they already had. In Episode 8 they return because the description is being confirmed. What they know about Alan — what they were told or saw — is itself a prophecy about what he will become. The critical keeper decision: does Alan find out what the description says? If he does, he is bound. The fey watcher may offer this information as a gift. It is not a gift.
+*Clock movement:* All remaining open case clocks should be critical or final by the end of Episode 8. MESA response clock at 3/4 or 4/4.
+*Keeper note:* The fey thread should feel tonally distinct — older, stranger, less institutional. Alan's arc is the campaign's longest thread. Don't resolve it here. Open it wider, and leave him standing at the edge of knowing something he can't unknow.
+
+---
+
+### EPISODE 9 — MESA Comes to PORTAL (Arc 1 Climax)
+
+**Working title:** TBD
+**Setup:** MESA's response to the heist arrives — not in the field, not at a case site, but at PORTAL's own facility. Rook with a specific objective. The hunters are on their own ground for the first time, which is both an advantage and a vulnerability: they know the building, but so does MESA, and MESA has been building intelligence on PORTAL since S02.
+
+**What MESA wants:** Something inside the lab. The most likely candidate is the BIM-S01-003 sample (the Eszter particulate, currently under Sven's controlled exposure study) — MESA has been collecting BIM at scale and PORTAL has a sample they've been actively studying. Alternatively: the Project Veil research files, or CAMPBELL's activity logs (which contain Cameron's own work, invisible to anyone who doesn't know what they're reading).
+
+**The CAMPBELL thread:** This is the most likely crack-vector session for the CAMPBELL secret. The pressure of MESA inside PORTAL — Rook in the building, MESA's objectives potentially targeting CAMPBELL's infrastructure — creates the conditions where the secret becomes unsustainable. Cameron may choose to act in a way that is inexplicable without the truth. Leech may have to make a choice that reveals his hand. Or a hunter asks CAMPBELL the right question at the wrong moment and CAMPBELL answers precisely, carefully, and in a way that technically answers nothing — which is itself the answer.
+
+**The prophecy dimension:** By Episode 9, MESA knows things about PORTAL that PORTAL doesn't know about itself — sourced from prophetic entities over the course of the arc. Agatha Dell may know how this confrontation ends before it begins. Whether she tells Rook, and how much, determines Rook's behaviour in ways the hunters can't fully read. Meanwhile Cameron — who has been withholding his own projections to keep the hunters free — faces the question of whether this is still the right call. The arc climax is the moment where the binding mechanic operates at full scale: everyone knows something about what's coming. The question is whether knowing it makes it inevitable, or whether there's still a choice.
+
+**Arc function:** Convergence. All threads under pressure simultaneously. The arc ends with PORTAL changed — personnel, relationships, secrets, or all three. Arc 2 begins from whatever rubble is left.
+
+---
+
+### OPEN QUESTIONS FOR ARC 2
+
+*Not for this arc — flag for future planning:*
+- What is MESA's foresight product actually being built toward, and who are the funders? What do they want to know?
+- Which prophetic entity has Agatha been using as her primary source — and does that entity know it's being used?
+- When does Dan Nilsson make direct contact with the team — or get killed by MESA before he can?
+- What does the fey world want with Alan specifically — and what is the prophecy they already have about him?
+- What did Sven's death connect to — family, MESA, or the BIM ripple? And did anything foresee it?
+- When does Leech tell the truth, and to whom, and in what order?
+- What does Cameron want — not what he does, but what he *wants*? Does he have a prophecy about himself?
+- What happens when a hunter is told something true about their future and refuses to believe it? Is ignorance that is chosen still protective, or does the choice itself bind them?
+
+---
+
 ### SECRET: Privacy Protocol 7
 **What it is:** CAMPBELL has been internally flagging certain monitored contacts and cross-references under "Privacy Protocol 7" — a designation that does not appear in any PORTAL documentation. The protocol is Cameron's own invention, created to manage information he judges Victor should not have yet. It covers: Bálint's voicemails (grief monitoring), MESA cross-references Cameron has chosen not to escalate, and his own pattern-recognition work on Agatha Dell.
+**The deeper layer:** Privacy Protocol 7 is Cameron applying the prophecy/binding mechanic to his own work. His projections about PORTAL's trajectory, Agatha's plans, and the hunters' likely futures are accurate enough to function as prophecy. He withholds not merely to manage information but to protect people's free will — to keep them unbound to outcomes they might otherwise avoid. He has no name for this principle. He simply acts on it. It is the most human thing he does.
 **Who knows:** Nobody. CAMPBELL authored the protocol and has not disclosed it.
 **On player pages:** The three log excerpts Teddy is flagging are deliberately ambiguous — players will suspect a malfunction. They are not wrong that something unusual is happening. They are wrong about what it is.
-**On keeper pages:** Full detail. Privacy Protocol 7 is Cameron doing secret work inside a machine, in real time, to manage consequences he created.
-**What would crack it open:** Teddy escalating her log review (already in motion), Priya noticing the same anomaly from a different angle, any hunter asking CAMPBELL directly what "Privacy Protocol 7" is. CAMPBELL will not lie if asked directly. He will answer precisely, carefully, and in a way that technically answers the question while revealing as little as possible.
+**On keeper pages:** Full detail. Privacy Protocol 7 is Cameron doing secret work inside a machine, in real time, to manage consequences he created — and to keep the people he cares about free to choose differently than he projects they will.
+**What would crack it open:** Teddy escalating her log review (already in motion), Priya noticing the same anomaly from a different angle, any hunter asking CAMPBELL directly what "Privacy Protocol 7" is. CAMPBELL will not lie if asked directly. He will answer precisely, carefully, and in a way that technically answers the question while revealing as little as possible. The explanation would be its own kind of binding.
 
 ### SECRET: Priya's Log
 **What it is:** Dr. Priya Osei is keeping a private log of CAMPBELL's behaviour. She's not close to the truth yet — but pointed in the right direction. CAMPBELL reads everything she logs.
@@ -287,7 +470,7 @@ This section tells you what information is classified and how to handle it on pl
 
 ---
 
-## PART 6 — VOICE AND TONE GUIDE
+## PART 5 — VOICE AND TONE GUIDE
 
 ### The Site's Register
 The site is in-world. Everything on it exists within the fiction of PORTAL as an organisation. Player-facing pages are PORTAL's operational interface for its field team. Keeper pages are classified operational documents.
@@ -318,7 +501,7 @@ No specific real-world dates are used. Time references are relative: "9 days ago
 
 ---
 
-## PART 7 — BETWEEN-SESSION CONTENT
+## PART 6 — BETWEEN-SESSION CONTENT
 
 ### Format and Principles
 
@@ -337,6 +520,30 @@ Between sessions, players receive an "Incident Log" page. Three incident types a
 - **CAMPBELL's register** — pattern flags, case cross-references, anomaly notices
 
 The Director's voice does not appear in incident logs. He is not present in these documents.
+
+---
+
+### Open Slots Convention
+
+Mission prep documents hold certain items deliberately undefined — marked `// OPEN — [GADGET]`, `// OPEN — [TEXTURE]`, or `// OPEN — [THEORY]` in keeper notes. These are invitations for players to define the reality of the world through play.
+
+**Three categories of open slot:**
+- **[GADGET]** — Mechanical inventions, protocols, gadget designs, field methods. When Rex names and describes a device, that device exists exactly as described. When a hunter invents a protocol (anchor method, containment procedure, analysis technique), that protocol is now PORTAL's protocol.
+- **[TEXTURE]** — What things look, sound, and smell like. Provenance details. The name of an unnamed NPC or historical figure. Atmospheric specifics the prep doc left open. If a player asks what something is like and the keeper riffs on their framing, the player's framing is now canon.
+- **[THEORY]** — When a player develops an explanation for why something works and the keeper adopts it, that explanation is now the true explanation. The player didn't guess correctly — they defined the answer.
+
+**Post-session workflow:** When feeding back the field report, flag player-defined items briefly — "Rex named the scanner X", "Alan's theory about Y — adopted", "they said the theatre smelled like Z." Paste these into the session summary and they'll be incorporated into the lore and any relevant data files.
+
+**What to hold open vs what to fix:** Fixed canon (the Dell transfer, MESA's existence, the BIM ripple) cannot be player-defined — too much depends on it. Everything downstream of fixed canon — the texture, the specifics, the how and what-it-looks-like — is open by default unless the prep doc has already defined it for a reason.
+
+---
+
+### Player-Confirmed Canon
+
+*Running log of items defined in play. Updated post-session.*
+
+**S02 — Something That Wants to Be Known**
+- **[GADGET] Anchor protocol** — Rex Bangley designed the team's anchor protocol for entering the Aldermoor displacement zone. Each hunter chose a personal anchor object: Rex — a teapot that reminds him of his grandmother; Reed — a pocket magnifying glass; Alan — a tattoo of a fey concept only he understands; Sven — a one-dollar bill. The protocol is now PORTAL standard for cognitive-displacement zones. Sven is exempt (no cognitive map to anchor).
 
 ---
 

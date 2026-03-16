@@ -27,13 +27,13 @@ For world lore, NPC detail, CAMPBELL voice, and secrets → use `worldbuilding-l
 The markdown brief always includes: which CSS file to use, which existing pages to reference for patterns, localStorage keys in use, keeper/player split, badge colours, mobile requirements, and any forward links to pages not yet built.
 
 When the Keeper asks you to build a page:
-1. Read Part 3 (Site Architecture) — where does this page fit?
-2. Read Part 4 (Design System) — which CSS file, which classes?
+1. Read Part 1 (Site Architecture) — where does this page fit?
+2. Read Part 2 (Design System) — which CSS file, which classes?
 3. At the end of your output, list any new CSS classes you defined that aren't in the shared stylesheets
 
 ---
 
-## PART 3 — SITE ARCHITECTURE
+## PART 1 — SITE ARCHITECTURE
 
 ### Current Pages (built and delivered)
 
@@ -55,7 +55,7 @@ When the Keeper asks you to build a page:
 | `01-a-promise-is-a-promise.html` | `mission-prep.css` | Keeper | Session 01 full prep (amber/brown palette) |
 | `02-something-that-wants-to-be-known.html` | `mission-prep.css` | Keeper | Session 02 full prep (green/forest palette) — includes inline SVG district map, read-aloud blurbs (.read-aloud class), MESA confrontation appendix with Rook stat block |
 | `arcs.html` | `keeper.css` | Keeper | Arc tracker — renders entirely from `data/hunter-arcs.json`. All 12 hunter arcs (4 hunters × 3 arcs) + 6 cross-hunter intersections. Beat progress, status (DORMANT/ACTIVE/RESOLVED), and resolution notes saved to localStorage (`portal-arcs-v1`). |
-| `threads.html` | `keeper.css` | Keeper | Campaign thread + clock tracker — renders from `data/portal-threads.json` (14 threads: faction/mystery/personal/case categories) and `data/portal-clocks.json` (countdown clocks with pip tracks, segment labels, advancement notes). Read-only display; update JSON files after each session (see runbook step 2.10). |
+| `threads.html` | `keeper.css` | Keeper | Campaign thread + clock tracker — renders from `data/portal-threads.json` and `data/portal-clocks.json`. Has SESSION PREP EXPORT: case picker + ⬡ COPY SESSION CONTEXT FOR CLAUDE button. Export assembles: case briefing, clocks, all threads, last field report (D1), active incident week with saved choices (D1), and data ID roster (sessions.json, last session-data.json entry, NPC IDs, entity IDs). No separate data files needed when handing context to claude.ai. |
 | `report.html` | `keeper.css` | Keeper | Keeper post-session field report — session tab switcher (M01/M02), outcome, hunter cards, per-session scene notes, thread tags, clock status, seeds. Saves to D1. "Copy for Claude" exports Markdown. |
 | `reports/player-report.html` | `player.css` | Player | Operative Field Report — week + hunter selector, 5 rating pips, general feedback, per-week scene questions. Unique save per week+hunter, D1-backed. Always-visible `// KEEPER DEBRIEF` section at bottom fetches keeper field report for each week (`GET /api/v1/reports/{S01\|S02}/state`) and shows outcome badge + directive + summary (pending placeholder if not yet filed). Linked from player nav as "Report". |
 | `reports/keeper-review.html` | `keeper.css` | Keeper | All-reports review — W01/W02 tabs, auto-loads on click, fetches all 5 hunter reports via `Promise.all`, renders 5-col responsive card grid. Filed/not-filed badge, rating pips, text fields, scene notes per hunter. No new API needed — reads existing `player-reports` endpoints. |
@@ -130,7 +130,7 @@ The queue page (`missions/campbell-briefings.html`) renders entirely from `data/
 2. Set the previous week's `"status"` to `"closed"` in the same file
 3. That's it — the new tab appears automatically, the renderer handles all HTML
 
-**No HTML files to create.** See FORMAT 2 in Part 10 for the exact JSON schema.
+**No HTML files to create.** See FORMAT 2 in Part 8 for the exact JSON schema.
 
 **Case colour assignments (briefing.css):**
 - Case A → amber (`case-a`)
@@ -192,7 +192,7 @@ W03: {
 
 ---
 
-## PART 4 — DESIGN SYSTEM
+## PART 2 — DESIGN SYSTEM
 
 ### Four Stylesheets — One Per Page
 
@@ -329,7 +329,7 @@ Every mission-prep page must define all 21 `--mp-*` variables in a `<style>:root
 
 ---
 
-## PART 5 — SESSION-AWARE CONTENT SYSTEM
+## PART 3 — SESSION-AWARE CONTENT SYSTEM
 
 The site uses a `data-session-from` / `data-session-until` attribute system to show or hide HTML elements based on the active campaign session. The active session is set by the Keeper via the keeper toggle widget and stored in D1, so all player pages update globally.
 
@@ -441,7 +441,7 @@ URL param always takes priority. It does **not** update localStorage or D1 — s
 
 ---
 
-## PART 6 — ADDING A NEW CASE
+## PART 4 — ADDING A NEW CASE
 
 ### What the Keeper Provides to Claude
 
@@ -465,7 +465,7 @@ Claude should produce all of the following in one session, in this order:
 #### 2. CAMPBELL Queue Week — `data/briefings.json`
 - Append a new `weeks[]` entry (JSON only — no HTML files)
 - Mark previous week `"status": "closed"` in the same file
-- CAMPBELL voice (see `worldbuilding-lore.md` Part 2)
+- CAMPBELL voice (see `worldbuilding-lore.md` Part 1)
 
 #### 3. Session-Aware HTML Updates
 All four player-facing areas need updating for the new session:
@@ -550,7 +550,7 @@ Every NPC entry in `data/portal-npcs.json` should use this schema. The `keeper_d
 | `session_overrides` | object | — | per-session overrides of `player_description`; null value means not shown |
 | `keeper_description` | string | keeper | full arc role, secrets, pressure points, how they behave |
 | `keeper_scene_notes` | object | keeper | per-scene guidance keyed by `"sNN-scene-slug"`; keeper prep only, not UI |
-| `secrets_involved` | array | — | references secret IDs from `worldbuilding-lore.md` Part 5 |
+| `secrets_involved` | array | — | references secret IDs from `worldbuilding-lore.md` Part 3 |
 
 **`available_from_session` rules:**
 - `"w1"` — appears in contacts.html from the first session (PORTAL staff, pre-known NPCs)
@@ -681,7 +681,7 @@ Each phase is session-gated with `show_from` / `show_until` (same pattern as `da
 
 ---
 
-## PART 7 — CSS CLASSES NOT YET IN SHARED STYLESHEETS
+## PART 5 — CSS CLASSES NOT YET IN SHARED STYLESHEETS
 
 The following classes were defined inline on specific pages and have not been promoted to the shared stylesheets. If you need them, copy from the relevant page or define them inline and flag them at the end of your output.
 
@@ -705,7 +705,7 @@ The following classes were defined inline on specific pages and have not been pr
 
 ---
 
-## PART 8 — DATA FILES DIRECTORY
+## PART 6 — DATA FILES DIRECTORY
 
 Ten static JSON files live in `data/` and cover all game rules, campaign characters, NPCs, entities, hunter arcs, and district maps. **Read this section before building any page or Worker that touches game data.** Full technical documentation for each file — field schemas, consumption patterns, D1 seeding notes — is in `portal-architecture.md` under "Static Data Files Reference".
 
@@ -722,8 +722,8 @@ These files are static assets served by Cloudflare Pages. They are read-only at 
 | `motw-teambooks.json` | All 9 team playbooks from SSK. Research Lab is active (`active: true`, campaign style: Action Science). Other 8 (Artifact Collectors, Coven, Escaped Experiments, Good Monsters, Medical Team, Mundane Monstrosities, Radio Station, Swipe to Slay) are reference-only — useful if the campaign switches team or a new group starts. | Keeper session reference, improvement tracker; `the-lab.html` renders from Research Lab entry |
 | `portal-custom-moves.json` | Substance Θ (roll+Weird), Anchor Spike (situational, no roll), BIM Collection Array recovery (no roll). Plus an empty `house_rules` array. | Roll interface (merged with standard moves), keeper command board |
 | `hunters.json` | All 5 hunters — harm, luck, XP, stats, active moves, gear, bonds, background, keeper arc hooks. Confirmed fields locked; unrecorded picks marked `FILL_FROM_SESSION`. | D1 seed, character sheet pages, offline fallback |
-| `portal-npcs.json` | NPCs — PORTAL inner circle, MESA operatives, case bystanders. Each has `player_description` / `keeper_description` split, `available_from_session` (replaces old `visible_to_players` flag), `session_overrides` per session, and `keeper_scene_notes` per scene. See Part 6 for full schema. | `contacts.html`, keeper NPC panel |
-| `portal-entities.json` | Entities. Status, stat blocks, powers, weaknesses, keeper moves, BIM connection. Each has `available_from_session`, `session_overrides`, and `keeper_scene_notes`. Also drives the **player-facing bestiary** on `index.html` via the `bestiary{}` object (see Part 6). See Part 6 for full schema. | Keeper entity panel, player bestiary (`index.html`) |
+| `portal-npcs.json` | NPCs — PORTAL inner circle, MESA operatives, case bystanders. Each has `player_description` / `keeper_description` split, `available_from_session` (replaces old `visible_to_players` flag), `session_overrides` per session, and `keeper_scene_notes` per scene. See Part 4 for full schema. | `contacts.html`, keeper NPC panel |
+| `portal-entities.json` | Entities. Status, stat blocks, powers, weaknesses, keeper moves, BIM connection. Each has `available_from_session`, `session_overrides`, and `keeper_scene_notes`. Also drives the **player-facing bestiary** on `index.html` via the `bestiary{}` object (see Part 4). See Part 4 for full schema. | Keeper entity panel, player bestiary (`index.html`) |
 | `portal-entity-types.json` | Classification archetypes — 8 theoretical type cards (T-001 → T-008) for `missions/entities.html` Section II. Each has `class_badge`, `tags[]`, `active_case` FK to portal-entities.json, and `sections[]` (HTML content, optional `blurred`/`blur_notice`). **Add a new theoretical type:** append to `types[]` — no HTML edit needed. | `missions/entities.html` Section II |
 | `portal-db-custom.json` | PORTAL-authored custom entries for `missions/entities.html` Section III. Currently: Shōjō. Schema: `id`, `display_name` (HTML string), `tags[]`, `stat_block[]` (items have `label`/`value`/`full`, or `label`/`harm_num`/`harm_sub`/`harm_color` for harm rows), `custom_moves[]`, `notes[]`. **⚠ Schema normalisation pending** — current label/value pattern to be replaced with semantic field keys (see backlog). **Add a new custom entry:** append to `entries[]` — no HTML edit needed. | `missions/entities.html` Section III |
 | `portal-db-deck.json` | 53 Deck of Monsters archive entries for `missions/entities.html` Section III. Schema: `id`, `name`, `tags[]`, `columns[]` (items: `label`, `value`, optional `full` + `flavour` flags). **⚠ Schema normalisation pending** (same as portal-db-custom.json — backlog item). **Add a new deck entry:** append to `entries[]` — no HTML edit needed. | `missions/entities.html` Section III |
@@ -745,11 +745,11 @@ hunters.json
   └── hunter.weird_move        → matches motw-basic-moves.json alternate_weird_moves[].id
 
 portal-npcs.json
-  └── npc.secrets_involved[]   → references secret IDs from worldbuilding-lore.md Part 5
+  └── npc.secrets_involved[]   → references secret IDs from worldbuilding-lore.md Part 3
 
 portal-entities.json
   └── entity.case              → references session/case IDs ('S01', 'case-a', etc.)
-  └── entity.secrets_involved[]→ references secret IDs from worldbuilding-lore.md Part 5
+  └── entity.secrets_involved[]→ references secret IDs from worldbuilding-lore.md Part 3
   └── entity.bestiary.phases[] → drives player-facing bestiary cards on index.html (show_from/show_until gated)
 
 portal-entity-types.json
@@ -781,7 +781,7 @@ The following lives in D1 only — do not try to read it from the static files:
 
 ---
 
-## PART 9 — ARCHITECTURE ROADMAP
+## PART 7 — ARCHITECTURE ROADMAP
 
 ### Current State — Cloudflare Pages + D1
 
@@ -837,30 +837,30 @@ When building new pages or Workers:
 > "This is a mission-prep page. Use `../mission-prep.css`. Define all 21 `--mp-*` variables in a `:root` block. Use a [colour/theme] palette. Start body with a `.keeper-nav` breadcrumb linking back to `keeper.html`."
 
 **For a hunter story page:**
-> "This is a hunter story page in the same pattern as rex-hunter-stories.html. Player section is visible; keeper section is blurred. Use the character's accent colour (see Part 4). Arc III is always the original PORTAL arc with `.arc-custom` class."
+> "This is a hunter story page in the same pattern as rex-hunter-stories.html. Player section is visible; keeper section is blurred. Use the character's accent colour (see Part 2). Arc III is always the original PORTAL arc with `.arc-custom` class."
 
 **For a CAMPBELL briefing page:**
-> "This is a CAMPBELL briefing page. Use `briefing.css`. Write in CAMPBELL's institutional voice (see `worldbuilding-lore.md` Part 2). Case letter → colour: case-a amber, case-b green, case-c purple, case-d teal, case-e rose."
+> "This is a CAMPBELL briefing page. Use `briefing.css`. Write in CAMPBELL's institutional voice (see `worldbuilding-lore.md` Part 1). Case letter → colour: case-a amber, case-b green, case-c purple, case-d teal, case-e rose."
 
 **For adding a new case / session:**
-> "Read Part 6 (Adding a New Case) in `worldbuilding-site.md` for the full checklist. Provide: case brief, location, entity type, NPC list with keeper vs. player knowledge per scene, and current week number. Claude produces: mission-prep doc, CAMPBELL briefing fragment, session-aware HTML variants for missions.html + index.html + contacts.html, NPC JSON entries with `available_from_session` and `session_overrides`, entity JSON entries, report config blocks."
+> "Read Part 4 (Adding a New Case) in `worldbuilding-site.md` for the full checklist. Provide: case brief, location, entity type, NPC list with keeper vs. player knowledge per scene, and current week number. Claude produces: mission-prep doc, CAMPBELL briefing fragment, session-aware HTML variants for missions.html + index.html + contacts.html, NPC JSON entries with `available_from_session` and `session_overrides`, entity JSON entries, report config blocks."
 >
-> For every NPC, author **two tracks** (see Part 6 — NPC Authoring — Two Tracks):
+> For every NPC, author **two tracks** (see Part 4 — NPC Authoring — Two Tracks):
 > - **Track 1** (`session_overrides.wN+1.player_description`): post-resolution state for the contacts page — what players read between sessions after the case closes. Never mid-mission states.
 > - **Track 2** (`keeper_scene_notes`): per-scene guidance for the keeper during the session — what information to push to players at each scene via the live feed. Keyed as `"sNN-scene-slug"`.
 
 **For writing between-session incident content (new week):**
-> "Read Part 10 (Between-Session Content Formats) in `worldbuilding-site.md` for the exact JSON schema. Produce: a single `weeks[]` entry as JSON, ready to append to `data/incidents.json`. Do NOT produce HTML. Use only the documented block types and inline markup syntax. Mark the new week `"status": "active"` and note that the previous active week should be changed to `"closed"`."
+> "Read Part 8 (Between-Session Content Formats) in `worldbuilding-site.md` for the exact JSON schema. Produce: a single `weeks[]` entry as JSON, ready to append to `data/incidents.json`. Do NOT produce HTML. Use only the documented block types and inline markup syntax. Mark the new week `"status": "active"` and note that the previous active week should be changed to `"closed"`."
 
 **For writing the CAMPBELL priority queue (new week):**
-> "Read Part 10 (Between-Session Content Formats) in `worldbuilding-site.md` for the exact JSON schema. Produce: a single `weeks[]` entry as JSON, ready to append to `data/briefings.json`. Do NOT produce HTML. Use only the documented item types, row fields, and inline markup syntax (`{{color:text}}`). Mark the new week `"status": "active"` and note that the previous active week should be changed to `"closed"`. Write case content in CAMPBELL's institutional voice (see `worldbuilding-lore.md` Part 2)."
+> "Read Part 8 (Between-Session Content Formats) in `worldbuilding-site.md` for the exact JSON schema. Produce: a single `weeks[]` entry as JSON, ready to append to `data/briefings.json`. Do NOT produce HTML. Use only the documented item types, row fields, and inline markup syntax (`{{color:text}}`). Mark the new week `"status": "active"` and note that the previous active week should be changed to `"closed"`. Write case content in CAMPBELL's institutional voice (see `worldbuilding-lore.md` Part 1)."
 
 **For advancing the campaign session (after a session plays):**
 > "Read `post-session-runbook.md`. Key steps: update `data/sessions.json` (mark old session `closed`, add new), author W-next HTML content variants in missions.html + index.html + contacts.html, update NPC `session_overrides` for revealed NPCs, update entity `session_overrides` for resolved entities, update D1 active session via keeper toggle."
 
 ---
 
-## PART 10 — BETWEEN-SESSION CONTENT FORMATS
+## PART 8 — BETWEEN-SESSION CONTENT FORMATS
 
 This part is for **Claude.ai (content author)**. It defines exactly what to produce for each recurring between-session content type. Claude Code integrates the output; no translation should be needed.
 
@@ -1281,8 +1281,8 @@ Empty strings in `lines` render as blank lines. Use `·` (middle dot) for bullet
 #### Rules
 
 - **JSON only** — no HTML. The renderer in `campbell-briefings.html` handles all layout.
-- **CAMPBELL voice** — see `worldbuilding-lore.md` Part 2. Formal, precise, institutional. Data-forward. Anomalous observations noted without editorial alarm.
-- **General writing voice** — see `worldbuilding-lore.md` Part 4 (Writing Voice — General Principles). Default register: lead with the finding, one observation per sentence, no restatement. Fuller register only for first appearances or emotional centrepieces.
+- **CAMPBELL voice** — see `worldbuilding-lore.md` Part 1. Formal, precise, institutional. Data-forward. Anomalous observations noted without editorial alarm.
+- **General writing voice** — see `worldbuilding-lore.md` Part 5 (Voice and Tone Guide). Default register: lead with the finding, one observation per sentence, no restatement. Fuller register only for first appearances or emotional centrepieces.
 - **Director's notes** — distinguish "INITIAL" (new case) from "UPDATED POST-[OP]" (carry-over). Director's voice is more direct than CAMPBELL's; `dim_note` holds the personal aside.
 - **Section labels** — include `carry-over` item only if there are carry-over cases; include `new-cases-label` item only if there are new cases. Both are optional.
 - **`closing_note`** — always present, even if brief. Summarises queue state, notes pattern connections, ends with `// END TRANSMISSION`.

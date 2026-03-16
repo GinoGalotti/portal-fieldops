@@ -103,7 +103,8 @@ portal-fieldops/
 │   │   ├── 008_incident_responses.sql # incident_responses ✅ remote + local
 │   │   ├── 009_incident_state.sql     # incident_state ✅ remote + local
 │   │   ├── 010_messages_type.sql      # messages.type + messages.payload ✅ remote + local
-│   │   └── 011_map_state.sql          # map_state ✅ local (apply --remote before deploy)
+│   │   ├── 011_map_state.sql          # map_state ✅ remote + local
+│   │   └── 012_drop_feed_fk.sql       # drop FK constraints on messages + rolls ✅ remote + local
 │   └── src/                   # (Phase 3) Workers source
 │       ├── index.ts           # Main router
 │       └── routes/
@@ -608,7 +609,7 @@ CREATE TABLE IF NOT EXISTS map_state (
   updated_at TEXT NOT NULL
 );
 ```
-⚠ Applied local only — run `wrangler d1 execute portal-db --remote --file=workers/migrations/011_map_state.sql` before deploying.
+Applied remote + local ✅
 
 **New API endpoint:**
 - `GET  /api/v1/maps/:id/state` → returns parsed state or `{}`
@@ -622,6 +623,20 @@ CREATE TABLE IF NOT EXISTS map_state (
 **Player MAP tab**: mission session selector → grid of `loc`/street cells; locked cells show redacted blocks; unlocked cells show label + sublabel + detail card on click; SYNC MAP button.
 
 **Keeper MAP tab**: same grid with order badges (keeper-only, hidden from players), NPC pills per cell, unlock toggle per cell, visited button (○/✓), bulk actions (REVEAL ALL / RESET MAP / ALL VISITED / CLEAR VISITED).
+
+---
+
+### Phase 2.12 — Fix legacy FK constraints on feed tables (COMPLETE)
+
+The remote D1 database was created from an older schema where `messages.session_id` had a FK → `sessions(id)` and `rolls.hunter_id` had a FK → `hunters(id)`. Our code uses free-text keys (`'M02'`, `'reed'`) that don't exist in those legacy tables, causing every INSERT to fail with a FOREIGN KEY constraint error (Cloudflare 1101 "Worker threw exception").
+
+**Migration 012** (`workers/migrations/012_drop_feed_fk.sql`) recreates both tables without FK constraints:
+- `messages` — dropped FK on `session_id`; schema matches migration 007 intent
+- `rolls` — dropped FK on `hunter_id`; schema matches migration 007 intent
+
+Both tables were empty at time of migration (all prior INSERTs had been failing). Applied remote + local ✅
+
+**Regression guard:** `tests/d1-round-trip.spec.js` tests 8 + 9 POST real messages and rolls with realistic keys. Any future FK regression will be caught locally before reaching prod.
 
 ---
 

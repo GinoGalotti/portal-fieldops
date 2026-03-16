@@ -786,6 +786,10 @@
       <label>QUESTIONS FOR AI WHEN DRAFTING NEXT SESSION</label>
       <textarea id="db-ai-prompt" rows="3" placeholder="What do you want Claude to help you figure out? What's still murky?"></textarea>
     </div>
+    <div class="db-field">
+      <label>PLAYER-DEFINED CANON</label>
+      <textarea id="db-canon" rows="4" placeholder="[GADGET] Rex named the device — described it as Y&#10;[TEXTURE] The theatre smelled like Z — adopted as canon&#10;[THEORY] Alan's theory about the mechanism — keeper adopted"></textarea>
+    </div>
   </section>
 
   <!-- OPERATIVE REPORTS -->
@@ -1022,7 +1026,8 @@
       wishes:    document.getElementById('db-wishes').value,
       campbell:  document.getElementById('db-campbell').value,
       setup:     document.getElementById('db-setup').value,
-      aiPrompt:  document.getElementById('db-ai-prompt').value
+      aiPrompt:  document.getElementById('db-ai-prompt').value,
+      canon:     document.getElementById('db-canon').value
     };
 
     document.querySelectorAll('.outcome-btn').forEach(function (btn) {
@@ -1065,6 +1070,7 @@
     document.getElementById('db-campbell').value  = r.campbell || '';
     document.getElementById('db-setup').value     = r.setup    || '';
     document.getElementById('db-ai-prompt').value = r.aiPrompt || '';
+    document.getElementById('db-canon').value     = r.canon    || '';
 
     document.querySelectorAll('.outcome-btn').forEach(function (btn) {
       btn.classList.toggle('active', btn.dataset.outcome === r.outcome);
@@ -1270,6 +1276,12 @@
     lines.push('**CAMPBELL knows:** ' + v(r.campbell));
     lines.push('**Breadcrumbs:** ' + v(r.setup));
     lines.push('**AI prompts:** ' + v(r.aiPrompt));
+
+    if (r.canon && r.canon.trim()) {
+      lines.push('');
+      lines.push('## Player-Defined Canon');
+      lines.push(r.canon.trim());
+    }
 
     // ── Player reports (if loaded) ──
     var cachedReports = opReportsCache[sid];

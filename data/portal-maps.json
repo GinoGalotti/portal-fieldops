@@ -104,5 +104,142 @@
         ]
       ]
     }
+  ],
+  "connection_maps": [
+    {
+      "id": "map-m03-theatre",
+      "session_id": "w3",
+      "type": "connection",
+      "label": "Meridian Theatre — Investigation Map",
+      "nodes": [
+        {
+          "id": "loc-hospital",
+          "order": 1,
+          "route": "A",
+          "label": "ST. BARNABAS HOSPITAL",
+          "sublabel": "WARD C",
+          "npcs": ["daniel-ashworth-as-edmund"],
+          "player_desc": "Two hospitalised understudies. Ward C. Visiting hours flexible if you seem official enough.",
+          "keeper_note": "Route A. Edmund (in Daniel) is here — cooperative, warm, emotional centrepiece. Clara's notebook location: Edmund-as-Daniel knows. Third hospitalised understudy is in a different hospital — treat as extension of this node."
+        },
+        {
+          "id": "loc-theatre-exterior",
+          "order": 2,
+          "route": null,
+          "label": "MERIDIAN THEATRE",
+          "sublabel": "EXTERIOR / STAGE DOOR",
+          "npcs": ["petra-novak"],
+          "player_desc": "Regional repertory company. Stage door at the back. Petra Novak (stage manager) is the gatekeeper — cooperative if you seem professional.",
+          "keeper_note": "Hub node. Entry point to all interior locations. Petra is here. The fey watcher (Alan's seed) is visible from the street near the stage door during Scene 1."
+        },
+        {
+          "id": "loc-foyer",
+          "order": 3,
+          "route": "A",
+          "label": "THEATRE FOYER",
+          "sublabel": "THE PROMPT BOOK",
+          "npcs": [],
+          "player_desc": "Front-of-house. Anniversary season display. A 19th-century prompt book in a glass case.",
+          "keeper_note": "Prompt book here — unlocked, unalarmed. Rex's scanner: significantly elevated BIM — highest fixed-object reading in building. Grant acquisition appendix lists it. The mechanism's physical source."
+        },
+        {
+          "id": "loc-dressing-room",
+          "order": 4,
+          "route": "A",
+          "label": "BACKSTAGE",
+          "sublabel": "CLARA'S DRESSING ROOM",
+          "npcs": [],
+          "player_desc": "Her name is still on the door. The room has been used for storage but her mirror and makeup table are still there.",
+          "keeper_note": "Highest BIM reading in the building. Sven alone: Clara makes contact briefly. Alan alone or with Sven: fey visitor's trace is legible. Key for both Sven arc seed and Alan's fey seed. Clara knows MESA is here — she's been watching."
+        },
+        {
+          "id": "loc-green-room",
+          "order": 5,
+          "route": "B",
+          "label": "GREEN ROOM",
+          "sublabel": "ACTIVE UNDERSTUDIES",
+          "npcs": ["sophie-marsh"],
+          "player_desc": "Between rehearsal sections. Four understudies still performing. Sophie Marsh is the most forthcoming.",
+          "keeper_note": "Route B. Understudies are fully themselves here but they've noticed things. Sophie Marsh: frightened, articulate, already changing (Rex's scanner: partial displacement). Rehearsal observation is adjacent — hunters can watch from wings or stalls."
+        },
+        {
+          "id": "loc-office",
+          "order": 6,
+          "route": "C",
+          "label": "ARTISTIC DIRECTOR'S OFFICE",
+          "sublabel": "MARCUS YUEN",
+          "npcs": ["marcus-yuen"],
+          "player_desc": "Marcus Yuen's office. Unlocked — he left for a board meeting and didn't come back.",
+          "keeper_note": "Route C. Grant documentation here: Solstice Property Group, acquisition appendix (prompt book), performance continuity condition. MESA internal document misfiled among financial records. Marcus returns in Scene 2 — Alan's Agatha Dell seed happens here if pursued."
+        },
+        {
+          "id": "loc-loading-bay",
+          "order": 7,
+          "route": null,
+          "label": "LOADING BAY",
+          "sublabel": "MESA RESPONSE TEAM",
+          "npcs": ["claudia-vasile-rook"],
+          "player_desc": "The back of the theatre. Two vehicles, four people in dark jackets. They've been here for an hour.",
+          "keeper_note": "Scene 3. Rook is here. Three-phase confrontation: negotiation, the arrays, the offer. BIM Collection Arrays are in lighting rig above stage — accessible from here. Where the MESA thread becomes physical."
+        }
+      ],
+      "edges": [
+        {
+          "from": "loc-hospital",
+          "to": "loc-theatre-exterior",
+          "label": "Edmund explains the mechanism — investigation moves here"
+        },
+        {
+          "from": "loc-hospital",
+          "to": "loc-dressing-room",
+          "label": "Edmund mentions Clara's notebook"
+        },
+        {
+          "from": "loc-theatre-exterior",
+          "to": "loc-foyer",
+          "label": "Front-of-house access"
+        },
+        {
+          "from": "loc-theatre-exterior",
+          "to": "loc-dressing-room",
+          "label": "Backstage access"
+        },
+        {
+          "from": "loc-theatre-exterior",
+          "to": "loc-green-room",
+          "label": "Backstage access"
+        },
+        {
+          "from": "loc-theatre-exterior",
+          "to": "loc-office",
+          "label": "Backstage access"
+        },
+        {
+          "from": "loc-theatre-exterior",
+          "to": "loc-loading-bay",
+          "label": "Stage door connection"
+        },
+        {
+          "from": "loc-foyer",
+          "to": "loc-office",
+          "label": "Prompt book listed in grant acquisition"
+        },
+        {
+          "from": "loc-dressing-room",
+          "to": "loc-loading-bay",
+          "label": "Clara has been watching MESA for months"
+        },
+        {
+          "from": "loc-green-room",
+          "to": "loc-loading-bay",
+          "label": "Rehearsal reveals BIM arrays in rig"
+        },
+        {
+          "from": "loc-office",
+          "to": "loc-loading-bay",
+          "label": "Financial documents confirm MESA funded the theatre"
+        }
+      ]
+    }
   ]
 }
