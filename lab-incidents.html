@@ -120,6 +120,37 @@
 .badge-amber  { color: var(--amber);   border-color: var(--amber-dim);  background: rgba(240,165,0,0.06); }
 .badge-purple { color: var(--purple);  border-color: var(--purple-dim); background: var(--purple-glow); }
 .badge-red    { color: var(--red);     border-color: #5c2020;           background: rgba(224,80,80,0.06); }
+.badge-green  { color: var(--green);   border-color: var(--green-dim);  background: rgba(46,204,113,0.06); }
+
+/* ── UPDATES CARD (case status digest) ── */
+.updates-card {
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  padding: 36px 40px;
+  margin-bottom: 48px;
+  position: relative;
+}
+.updates-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--green-dim), transparent);
+}
+.update-item { margin-top: 28px; }
+.update-item-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--green-dim);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.update-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 28px 0 0;
+}
 
 /* ── CAMPBELL BLOCK ── */
 .campbell-block {
@@ -184,6 +215,7 @@
 .callout-amber  .callout-from { color: var(--amber-dim); }
 .callout-purple .callout-from { color: var(--purple); }
 .callout-red    .callout-from { color: var(--red); }
+.callout-dim    .callout-from { color: var(--text-dim); }
 
 /* ── CHOICE BUTTONS ── */
 .choice-grid {
@@ -568,14 +600,16 @@
 
   // ── INCIDENT RENDERER ─────────────────────────────────────────────────
   function renderIncident(inc) {
-    return inc.type === 'teaser' ? renderTeaser(inc) : renderCard(inc);
+    if (inc.type === 'teaser')  return renderTeaser(inc);
+    if (inc.type === 'updates') return renderUpdates(inc);
+    return renderCard(inc);
   }
 
   function renderCard(inc) {
-    var h = '<div class="incident-card ' + inc.color + '" id="incident-' + inc.id + '">';
-    h += '<div class="incident-id">' + esc(inc.item_label) + '</div>';
+    var h = '<div class="incident-card ' + (inc.color || '') + '" id="incident-' + inc.id + '">';
+    h += '<div class="incident-id">' + esc(inc.item_label || '') + '</div>';
     h += '<h2 class="incident-title">' + esc(inc.title)
-      + ' <span class="incident-badge badge-' + inc.badge_color + '">' + esc(inc.badge) + '</span>'
+      + (inc.badge ? ' <span class="incident-badge badge-' + (inc.badge_color || '') + '">' + esc(inc.badge) + '</span>' : '')
       + '</h2>';
     h += inc.blocks.map(renderBlock).join('');
     if (inc.type === 'choice') h += renderChoiceUI(inc);
@@ -596,6 +630,23 @@
     return h;
   }
 
+  function renderUpdates(inc) {
+    var h = '<div class="updates-card" id="incident-' + inc.id + '">';
+    h += '<div class="incident-id">' + esc(inc.item_label) + '</div>';
+    h += '<h2 class="incident-title">' + esc(inc.title)
+      + ' <span class="incident-badge badge-' + (inc.badge_color || 'green') + '">' + esc(inc.badge || 'INFORMATIONAL') + '</span>'
+      + '</h2>';
+    inc.items.forEach(function(item, i) {
+      if (i > 0) h += '<div class="update-divider"></div>';
+      h += '<div class="update-item">';
+      h += '<div class="update-item-title">' + esc(item.title) + '</div>';
+      h += item.blocks.map(renderBlock).join('');
+      h += '</div>';
+    });
+    h += '</div>';
+    return h;
+  }
+
   // ── BLOCK RENDERERS ───────────────────────────────────────────────────
   function renderBlock(block) {
     switch (block.type) {
@@ -607,7 +658,7 @@
         var colorCls = block.color === 'purple' ? ' purple' : '';
         var paras = block.paragraphs.map(function (p) { return inlineMarkup(p); }).join('<br><br>');
         return '<div class="campbell-block' + colorCls + '">'
-          + '<span class="cb-label">' + esc(block.label) + '</span>'
+          + (block.label ? '<span class="cb-label">' + esc(block.label) + '</span>' : '')
           + paras
           + (block.flag ? '<span class="cb-flag">' + inlineMarkup(block.flag) + '</span>' : '')
           + '</div>';

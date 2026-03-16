@@ -1,8 +1,8 @@
 // incidents.spec.js — Tests for lab-incidents.html.
 // This is the most complex page: it fetches data/incidents.json, builds week
-// tabs dynamically, and renders four different incident types (choice, open,
-// informational, teaser). All assertions must wait for networkidle since
-// nothing renders until the JSON fetch completes.
+// tabs dynamically, and renders five incident types (choice, open, informational,
+// teaser, updates). All assertions must wait for networkidle since nothing renders
+// until the JSON fetch completes.
 //
 // DATA-DRIVEN DESIGN: This file reads data/incidents.json at test-load time so
 // that assertions about "which week is active" and "what does the hero eyebrow
@@ -15,10 +15,17 @@ import { resolve } from 'path';
 
 // Load incidents data once at module level so all tests can reference it.
 const incidentsData = JSON.parse(readFileSync(resolve('./data/incidents.json'), 'utf-8'));
-const activeWeek = incidentsData.weeks.find(w => w.status === 'active');
-const closedWeeks = incidentsData.weeks.filter(w => w.status === 'closed');
+const activeWeek   = incidentsData.weeks.find(w => w.status === 'active');
+const closedWeeks  = incidentsData.weeks.filter(w => w.status === 'closed');
 // W1 is the permanent empty-placeholder week — always the first week in the list.
 const w1Week = incidentsData.weeks.find(w => w.id === 'W1');
+const w2Week = incidentsData.weeks.find(w => w.id === 'W2');
+const w3Week = incidentsData.weeks.find(w => w.id === 'W3');
+
+// Pull W3 incident objects for data-driven assertions.
+const w3ChoiceInc  = w3Week.incidents.find(i => i.type === 'choice');
+const w3UpdatesInc = w3Week.incidents.find(i => i.type === 'updates');
+const w3TeaserInc  = w3Week.incidents.find(i => i.type === 'teaser');
 
 test.describe('Lab Incidents page', () => {
 
@@ -54,23 +61,21 @@ test.describe('Lab Incidents page', () => {
 
   test('active week tab is no longer active after clicking W1', async ({ page }) => {
     // Clicking W1 should remove the 'active' class from the current active week.
-    // Note: 'status-active' stays on W2 permanently (it marks the JSON status field).
+    // Note: 'status-active' stays on the active week permanently (it marks the JSON status field).
     const w1Tab = page.locator('.week-tab').filter({ hasText: w1Week.label });
     await w1Tab.click();
-    // W2 loses 'active' (but retains 'status-active') — verified by CSS selector absence.
+    // Active week loses 'active' (but retains 'status-active') — verified by CSS selector absence.
     await expect(page.locator('.week-tab.active').filter({ hasText: activeWeek.label })).not.toBeVisible();
     await expect(page.locator('.week-tab.active').filter({ hasText: w1Week.label })).toBeVisible();
   });
 
-  // ── ACTIVE WEEK CONTENT ─────────────────────────────────────────────────
+  // ── ACTIVE WEEK CONTENT (data-driven) ───────────────────────────────────
 
-  test('active week shows all four incident titles', async ({ page }) => {
-    // W2 has four incidents in incidents.json. Each is rendered with an
-    // .incident-title h2 (or in the teaser case, still an h2.incident-title).
-    await expect(page.getByText('The Eszter Particulate')).toBeVisible();
-    await expect(page.getByText('The Bálint Question')).toBeVisible();
-    await expect(page.getByText('The Lab at 3am')).toBeVisible();
-    await expect(page.getByText('CAMPBELL Activity Logs')).toBeVisible();
+  test('active week shows incident titles derived from incidents.json', async ({ page }) => {
+    // Each visible week renders incident titles from its incidents[] array.
+    // We check the first incident title from the active week — fully data-driven.
+    const firstInc = activeWeek.incidents[0];
+    await expect(page.getByText(firstInc.title, { exact: false })).toBeVisible();
   });
 
   test('active week hero eyebrow matches incidents.json', async ({ page }) => {
@@ -114,135 +119,227 @@ test.describe('Lab Incidents page', () => {
     await expect(eyebrow).toContainText(w1Week.hero_eyebrow.substring(0, 20));
   });
 
-  // ── CHOICE INCIDENT (S01-I01: The Eszter Particulate) ───────────────────
+  // ── W2 INCIDENTS (closed tab — must click W2 to view) ───────────────────
 
-  test('three choice buttons are visible on the Eszter Particulate incident', async ({ page }) => {
-    // renderChoiceUI() creates one .choice-btn per entry in inc.choices[].
-    // S01-I01 has choices A, B, C — each labelled with "A —", "B —", "C —".
-    // This is an exact count assertion: S01-I01 always has exactly 3 choices
-    // (architecturally fixed, not a growing list).
-    const choiceBtns = page.locator('#choice-grid-S01-I01 .choice-btn');
-    await expect(choiceBtns).toHaveCount(3);
+  test.describe('W2 incidents', () => {
+
+    test.beforeEach(async ({ page }) => {
+      // W2 is closed so the page loads W3 by default. Click W2 to switch.
+      await page.locator('.week-tab').filter({ hasText: w2Week.label }).click();
+    });
+
+    test('W2 shows all four incident titles', async ({ page }) => {
+      await expect(page.getByText('The Eszter Particulate')).toBeVisible();
+      await expect(page.getByText('The Bálint Question')).toBeVisible();
+      await expect(page.getByText('The Lab at 3am')).toBeVisible();
+      await expect(page.getByText('CAMPBELL Activity Logs')).toBeVisible();
+    });
+
+    test('W2 choice incident has three choice buttons', async ({ page }) => {
+      // S01-I01 has choices A, B, C.
+      const choiceBtns = page.locator('#choice-grid-S01-I01 .choice-btn');
+      await expect(choiceBtns).toHaveCount(3);
+    });
+
+    test('W2 choice button labels start with A —, B —, C —', async ({ page }) => {
+      await expect(page.locator('.ch-label').filter({ hasText: 'A —' })).toBeVisible();
+      await expect(page.locator('.ch-label').filter({ hasText: 'B —' })).toBeVisible();
+      await expect(page.locator('.ch-label').filter({ hasText: 'C —' })).toBeVisible();
+    });
+
+    test('W2 clicking a choice button gives it the selected class', async ({ page }) => {
+      const btnA = page.locator('#choice-grid-S01-I01 .choice-btn').first();
+      await btnA.click();
+      await expect(btnA).toHaveClass(/selected/);
+    });
+
+    test('W2 selecting a choice enables the SAVE RESPONSES button', async ({ page }) => {
+      const saveBtn = page.locator('#save-btn');
+      await expect(saveBtn).toBeDisabled();
+      const btnA = page.locator('#choice-grid-S01-I01 .choice-btn').first();
+      await btnA.click();
+      await expect(saveBtn).not.toBeDisabled();
+    });
+
+    test('W2 choice incident has allow_custom textarea', async ({ page }) => {
+      // S01-I01 has allow_custom: true.
+      await expect(page.locator('#custom-S01-I01')).toBeVisible();
+    });
+
+    test('W2 SAVE RESPONSES button is present', async ({ page }) => {
+      const saveBtn = page.locator('#save-btn');
+      await expect(saveBtn).toBeVisible();
+      await expect(saveBtn).toHaveText('SAVE RESPONSES');
+    });
+
+    test('W2 open incident has a textarea for freetext response', async ({ page }) => {
+      await expect(page.locator('#resp-text-S01-I02')).toBeVisible();
+    });
+
+    test('W2 open incident has a SUBMIT RESPONSE button', async ({ page }) => {
+      const submitBtn = page.locator('#submit-btn-S01-I02');
+      await expect(submitBtn).toBeVisible();
+      await expect(submitBtn).toHaveText('SUBMIT RESPONSE');
+    });
+
+    test('W2 open incident SUBMIT button is disabled until text is entered', async ({ page }) => {
+      const submitBtn = page.locator('#submit-btn-S01-I02');
+      await expect(submitBtn).toBeDisabled();
+      await page.locator('#resp-text-S01-I02').fill('This is a test response.');
+      await expect(submitBtn).not.toBeDisabled();
+    });
+
+    test('W2 informational incident renders content but has no choice or submit buttons', async ({ page }) => {
+      const card = page.locator('#incident-S01-I03');
+      await expect(card).toBeVisible();
+      await expect(card.locator('.choice-btn')).toHaveCount(0);
+      await expect(card.locator('.submit-btn')).toHaveCount(0);
+    });
+
+    test('W2 informational incident narrative text is visible', async ({ page }) => {
+      await expect(page.locator('#incident-S01-I03 .narrative').first()).toBeVisible();
+    });
+
+    test('W2 teaser renders inside .campbell-log-section (not .incident-card)', async ({ page }) => {
+      const teaserSection = page.locator('#incident-S01-CAMPBELL-LOG');
+      await expect(teaserSection).toBeVisible();
+      await expect(teaserSection).toHaveClass(/campbell-log-section/);
+    });
+
+    test('W2 anomaly spans are rendered in CAMPBELL log excerpts', async ({ page }) => {
+      const anomalySpans = page.locator('#incident-S01-CAMPBELL-LOG .log-anomaly');
+      const count = await anomalySpans.count();
+      expect(count).toBeGreaterThan(0);
+    });
+
+    test('W2 email block from Teddy is visible in the teaser', async ({ page }) => {
+      const emailBlock = page.locator('#incident-S01-CAMPBELL-LOG .email-block');
+      await expect(emailBlock).toBeVisible();
+      await expect(emailBlock.locator('.email-header')).toContainText('teddy.brandt@portal-internal.org');
+    });
+
   });
 
-  test('choice button labels start with A —, B —, C —', async ({ page }) => {
-    // Each choice button contains a .ch-label span with the choice.label value.
-    // From incidents.json: "A — Controlled Exposure Study", "B — Isolation...", "C — Flag..."
-    await expect(page.locator('.ch-label').filter({ hasText: 'A —' })).toBeVisible();
-    await expect(page.locator('.ch-label').filter({ hasText: 'B —' })).toBeVisible();
-    await expect(page.locator('.ch-label').filter({ hasText: 'C —' })).toBeVisible();
-  });
+  // ── W3 INCIDENTS (active week — default on load) ─────────────────────────
 
-  test('clicking a choice button gives it the selected class', async ({ page }) => {
-    // onChoiceClick() calls btn.classList.add('selected') on the clicked button
-    // and removes 'selected' from all others in the same grid.
-    const btnA = page.locator('#choice-grid-S01-I01 .choice-btn').first();
-    await btnA.click();
-    await expect(btnA).toHaveClass(/selected/);
-  });
+  test.describe('W3 incidents', () => {
 
-  test('selecting a choice enables the SAVE RESPONSES button', async ({ page }) => {
-    // updateSaveButton() sets saveBtn.disabled = false when any pendingChoices[k].choice
-    // is set. Before clicking a choice, the button is disabled.
-    const saveBtn = page.locator('#save-btn');
-    // Initially disabled (no selection yet)
-    await expect(saveBtn).toBeDisabled();
-    // Click choice A to make a selection
-    const btnA = page.locator('#choice-grid-S01-I01 .choice-btn').first();
-    await btnA.click();
-    // Now the save button should be enabled
-    await expect(saveBtn).not.toBeDisabled();
-  });
+    // No tab click needed — W3 is active and loads by default.
 
-  test('custom textarea is visible for the choice incident (allow_custom: true)', async ({ page }) => {
-    // S01-I01 has allow_custom: true, so renderChoiceUI() renders a <textarea>
-    // with id="custom-S01-I01". This lets players describe their own approach.
-    const customTextarea = page.locator('#custom-S01-I01');
-    await expect(customTextarea).toBeVisible();
-  });
+    // ── Choice incident (S02-I05) ──
 
-  test('SAVE RESPONSES button is present in the page', async ({ page }) => {
-    // A .save-bar is rendered when any choice incidents exist in the week.
-    // The button text is "SAVE RESPONSES" (set in the static HTML string in renderWeek).
-    const saveBtn = page.locator('#save-btn');
-    await expect(saveBtn).toBeVisible();
-    await expect(saveBtn).toHaveText('SAVE RESPONSES');
-  });
+    test('W3 choice incident renders with two choice buttons', async ({ page }) => {
+      // S02-I05 has choices A and B (no C) — 2 choices.
+      const choiceBtns = page.locator(`#choice-grid-${w3ChoiceInc.id} .choice-btn`);
+      await expect(choiceBtns).toHaveCount(w3ChoiceInc.choices.length);
+    });
 
-  // ── OPEN INCIDENT (S01-I02: The Bálint Question) ────────────────────────
+    test('W3 choice incident has allow_custom textarea', async ({ page }) => {
+      // S02-I05 has allow_custom: true.
+      await expect(page.locator(`#custom-${w3ChoiceInc.id}`)).toBeVisible();
+    });
 
-  test('open incident has a textarea for freetext response', async ({ page }) => {
-    // renderOpenUI() creates a <textarea id="resp-text-S01-I02"> for freetext entry.
-    // This is the "discuss among yourselves" incident — no choice buttons.
-    const textarea = page.locator('#resp-text-S01-I02');
-    await expect(textarea).toBeVisible();
-  });
+    test('W3 SAVE RESPONSES button is present when choice incident is rendered', async ({ page }) => {
+      // W3 has a choice incident so renderWeek() must include the save bar.
+      await expect(page.locator('#save-btn')).toBeVisible();
+    });
 
-  test('open incident has a SUBMIT RESPONSE button (not SAVE)', async ({ page }) => {
-    // The open form has its own submit button (#submit-btn-S01-I02) labelled
-    // "SUBMIT RESPONSE" — distinct from the global "SAVE RESPONSES" button.
-    const submitBtn = page.locator('#submit-btn-S01-I02');
-    await expect(submitBtn).toBeVisible();
-    await expect(submitBtn).toHaveText('SUBMIT RESPONSE');
-  });
+    test('W3 choice incident title is visible', async ({ page }) => {
+      await expect(page.getByText(w3ChoiceInc.title, { exact: false })).toBeVisible();
+    });
 
-  test('open incident SUBMIT button is disabled until text is entered', async ({ page }) => {
-    // The submit button starts disabled. The input event listener on the textarea
-    // enables it only when textEl.value.trim().length > 0.
-    const submitBtn = page.locator('#submit-btn-S01-I02');
-    await expect(submitBtn).toBeDisabled();
-    // Type something to enable it
-    const textarea = page.locator('#resp-text-S01-I02');
-    await textarea.fill('This is a test response.');
-    await expect(submitBtn).not.toBeDisabled();
-  });
+    // ── Informational incident (S02-I06) ──
 
-  // ── INFORMATIONAL INCIDENT (S01-I03: The Lab at 3am) ───────────────────
+    test('W3 informational incident renders with no choice or submit buttons', async ({ page }) => {
+      const card = page.locator('#incident-S02-I06');
+      await expect(card).toBeVisible();
+      await expect(card.locator('.choice-btn')).toHaveCount(0);
+      await expect(card.locator('.submit-btn')).toHaveCount(0);
+    });
 
-  test('informational incident renders content but has no choice or submit buttons', async ({ page }) => {
-    // S01-I03 has type: "informational" — renderCard() only calls renderBlock()
-    // for it, with no renderChoiceUI() or renderOpenUI() call.
-    // So there must be NO .choice-btn or submit button inside this card.
-    const card = page.locator('#incident-S01-I03');
-    await expect(card).toBeVisible();
-    // No choice buttons inside the informational card
-    await expect(card.locator('.choice-btn')).toHaveCount(0);
-    // No submit button inside the informational card
-    await expect(card.locator('.submit-btn')).toHaveCount(0);
-  });
+    test('W3 informational incident item_label does not contain "undefined"', async ({ page }) => {
+      // Regression: incidents missing badge/color fields previously rendered "undefined".
+      const idLine = page.locator('#incident-S02-I06 .incident-id');
+      await expect(idLine).toBeVisible();
+      await expect(idLine).not.toContainText('undefined');
+    });
 
-  test('informational incident narrative text is visible', async ({ page }) => {
-    // The "Lab at 3am" incident contains multiple narrative blocks.
-    // Checking for key text from the first narrative confirms render worked.
-    const card = page.locator('#incident-S01-I03');
-    await expect(card.locator('.narrative').first()).toBeVisible();
-  });
+    // ── Updates digest (S02-UPDATES) ──
 
-  // ── TEASER INCIDENT (S01-CAMPBELL-LOG) ──────────────────────────────────
+    test('W3 updates digest renders as .updates-card not .incident-card', async ({ page }) => {
+      // renderUpdates() produces a .updates-card div, not .incident-card.
+      const card = page.locator('#incident-S02-UPDATES');
+      await expect(card).toBeVisible();
+      await expect(card).toHaveClass(/updates-card/);
+      await expect(card).not.toHaveClass(/incident-card/);
+    });
 
-  test('teaser incident renders inside .campbell-log-section (not .incident-card)', async ({ page }) => {
-    // renderTeaser() produces a .campbell-log-section div, not an .incident-card.
-    // The teaser for CAMPBELL Activity Logs uses id="incident-S01-CAMPBELL-LOG".
-    const teaserSection = page.locator('#incident-S01-CAMPBELL-LOG');
-    await expect(teaserSection).toBeVisible();
-    await expect(teaserSection).toHaveClass(/campbell-log-section/);
-  });
+    test('W3 updates digest has the correct number of update items', async ({ page }) => {
+      // Each entry in items[] renders as .update-item inside the card.
+      const items = page.locator('#incident-S02-UPDATES .update-item');
+      await expect(items).toHaveCount(w3UpdatesInc.items.length);
+    });
 
-  test('anomaly spans are rendered in the CAMPBELL log excerpts', async ({ page }) => {
-    // inlineMarkup() replaces {{anomaly:TEXT}} with <span class="log-anomaly">TEXT</span>.
-    // The log-excerpt blocks in S01-CAMPBELL-LOG contain multiple {{anomaly:...}} tokens.
-    // At least one .log-anomaly span should be present after rendering.
-    const anomalySpans = page.locator('.log-anomaly');
-    const count = await anomalySpans.count();
-    expect(count).toBeGreaterThan(0);
-  });
+    test('W3 updates digest .update-item-title elements are visible', async ({ page }) => {
+      // Each item has a .update-item-title div with the item title.
+      const titles = page.locator('#incident-S02-UPDATES .update-item-title');
+      await expect(titles).toHaveCount(w3UpdatesInc.items.length);
+      // First title matches the first item title from the JSON.
+      await expect(titles.first()).toContainText(w3UpdatesInc.items[0].title);
+    });
 
-  test('the email block from Teddy is visible in the teaser incident', async ({ page }) => {
-    // S01-CAMPBELL-LOG contains a block of type "email" from teddy.brandt@portal-internal.org.
-    // The email-header div renders "FROM: teddy.brandt@portal-internal.org".
-    const emailBlock = page.locator('.email-block');
-    await expect(emailBlock).toBeVisible();
-    await expect(emailBlock.locator('.email-header')).toContainText('teddy.brandt@portal-internal.org');
+    test('W3 updates digest badge shows INFORMATIONAL with badge-green class', async ({ page }) => {
+      // The updates card uses badge_color: "green" → .badge-green CSS class.
+      const badge = page.locator('#incident-S02-UPDATES .incident-badge');
+      await expect(badge).toBeVisible();
+      await expect(badge).toHaveClass(/badge-green/);
+      await expect(badge).toContainText('INFORMATIONAL');
+    });
+
+    test('W3 updates digest item_label does not contain "undefined"', async ({ page }) => {
+      // Regression guard: updates type should render its item_label cleanly.
+      const idLine = page.locator('#incident-S02-UPDATES .incident-id');
+      await expect(idLine).toBeVisible();
+      await expect(idLine).not.toContainText('undefined');
+    });
+
+    test('W3 updates digest dividers separate items', async ({ page }) => {
+      // renderUpdates() inserts .update-divider between items (i > 0 check).
+      // With N items there should be N-1 dividers.
+      const dividers = page.locator('#incident-S02-UPDATES .update-divider');
+      await expect(dividers).toHaveCount(w3UpdatesInc.items.length - 1);
+    });
+
+    // ── Teaser (S02-CAMPBELL-LOG-2) ──
+
+    test('W3 teaser renders inside .campbell-log-section', async ({ page }) => {
+      const teaserSection = page.locator(`#incident-${w3TeaserInc.id}`);
+      await expect(teaserSection).toBeVisible();
+      await expect(teaserSection).toHaveClass(/campbell-log-section/);
+    });
+
+    test('W3 teaser contains email from Teddy about second log review', async ({ page }) => {
+      // The teaser email subject is "re: the campbell thing — more logs".
+      const emailBlock = page.locator(`#incident-${w3TeaserInc.id} .email-block`);
+      await expect(emailBlock).toBeVisible();
+      await expect(emailBlock.locator('.email-header')).toContainText('teddy.brandt@portal-internal.org');
+    });
+
+    test('W3 teaser EXCERPT G has anomaly spans referencing Privacy Protocol 7', async ({ page }) => {
+      // Excerpt G in S02-CAMPBELL-LOG-2 contains {{anomaly:PRIVACY PROTOCOL 7...}}.
+      // inlineMarkup() turns these into .log-anomaly spans.
+      const anomalySpans = page.locator(`#incident-${w3TeaserInc.id} .log-anomaly`);
+      const count = await anomalySpans.count();
+      expect(count).toBeGreaterThan(0);
+      // At least one should mention Privacy Protocol 7.
+      await expect(page.locator(`#incident-${w3TeaserInc.id}`)).toContainText('PRIVACY PROTOCOL 7');
+    });
+
+    test('W3 teaser annotation text is visible for Excerpt D', async ({ page }) => {
+      // Excerpt D has annotation about the 0.34s diagnostic timing anomaly.
+      await expect(page.locator(`#incident-${w3TeaserInc.id}`)).toContainText('0.34 seconds');
+    });
+
   });
 
 });
