@@ -52,6 +52,21 @@ Use this as the primary context handoff to claude.ai for new mission prep, NPC a
 
 ---
 
+## Stage 1.6 — Generate Session Images (after mission prep, before session)
+
+Once the mission prep ingestion package has been ingested (session-data.json updated, handout filenames confirmed), generate the images:
+
+1. The mission prep package includes **Section J** — a `SNN-prompts.py` file (e.g. `S3-prompts.py`)
+2. Run: `python generate_images.py S3-prompts` (adjust session number)
+3. Images output to `images/` — already-generated images are skipped automatically
+4. Verify the generated images match the `src` filenames in `data/session-data.json` handouts
+
+**If incidents reference images** (Section G `"type": "image"` blocks, currently unused but possible), include those in the prompts file too.
+
+**Note:** `OPENAI_API_KEY` must be in `.env` at repo root. If missing, paste it manually — it's gitignored.
+
+---
+
 ## Stage 2 — Before Next Session (Claude Code session)
 
 Hand Claude this file + `portal-architecture.md` + `worldbuilding-site.md` + `worldbuilding-lore.md` + the Keeper Field Report markdown.
@@ -93,7 +108,7 @@ The pattern is always: old card/phase gets `show_until: "wN"`, new card/phase ge
 - Add a new object for the incoming session with: `id`, `session_key`, `label`, `doc`, `entity_ids`, `threats`, `equipment`, `readaloud`, `handouts`
 - `threats[]` = keeper combat reference (stat blocks, moves, harm capacity) for NPCs appearing this session — this is the THREATS tab cheat sheet in feed.html
 - `handouts[]` = all pushable content for the session (readalouds, PDA messages, images, maps) — this is the keeper HANDOUTS tab in feed.html
-- Use the existing W2 entry as a template. See `context/worldbuilding-site.md` Part 10 for the handout format.
+- Use the existing W2 entry as a template. See `context/worldbuilding-site.md` Part 8 for the handout format.
 
 **d) Update NPC `session_overrides` in `data/portal-npcs.json`:**
 - For each NPC first revealed in this session, add a `"wN+1"` entry in `session_overrides` with the post-resolution `player_description`
@@ -152,7 +167,7 @@ W03: {
 
 ### 2.3 — Add new CAMPBELL briefing week
 
-1. Create `missions/briefings/wNN.html` — see `worldbuilding-site.md` Part 10 for exact fragment format and CSS class reference
+1. Create `missions/briefings/wNN.html` — see `worldbuilding-site.md` Part 8 for exact fragment format and CSS class reference
 2. Update `missions/briefings/index.json` — add new entry, set previous week's `status` to `"closed"`
 3. Use "Copy for Claude" output from the Keeper Field Report + CAMPBELL voice rules (`worldbuilding-lore.md`) to draft the briefing content
 
@@ -265,6 +280,7 @@ Or ask Claude to query all reports for a week and summarise the ratings and key 
 ### Files to create (new session)
 - [ ] `missions/briefings/wNN.html` — CAMPBELL queue fragment for the new week
 - [ ] `missions/NN-[title].html` — session prep doc (if prepped before session)
+- [ ] `SNN-prompts.py` — image generation prompts (Section J of ingestion package); run `python generate_images.py SNN-prompts` after ingestion
 - [ ] `reports/sN-[title].html` — player-facing post-session memo (if written)
 
 ### Files to modify (every session)
@@ -310,7 +326,7 @@ Hand Claude these files so it knows the existing state before adding to it:
 - `data/portal-npcs.json` (so Claude knows which NPCs already exist before adding new ones)
 - The mission prep HTML doc if written (e.g. `missions/03-title.html`)
 
-Claude should produce: new entry in `session-data.json` (threats, equipment, handouts, readaloud) + updates to `portal-npcs.json` (new NPCs, session_overrides for any that change).
+Claude should produce: new entry in `session-data.json` (threats, equipment, handouts, readaloud) + updates to `portal-npcs.json` (new NPCs, session_overrides for any that change) + `SNN-prompts.py` (Section J — one entry per `"type": "image"` handout). Share `S2-prompts.py` as the format reference.
 
 ### Lore / NPC / worldbuilding only
 - `context/worldbuilding-lore.md`

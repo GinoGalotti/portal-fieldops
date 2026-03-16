@@ -16,7 +16,7 @@ Claude Code receives that file and ingests each section into the correct JSON ta
 This template serves two moments in the campaign workflow:
 
 ### Post-Session (primary use)
-After a session concludes, claude.ai generates a **full ingestion package** covering all sections with content: session advance (A), new session-data (B), NPC updates (C), entity updates (D), new entity types (E), new briefing week (F), new incidents week (G), arc updates (H).
+After a session concludes, claude.ai generates a **full ingestion package** covering all sections with content: session advance (A), new session-data (B), NPC updates (C), entity updates (D), new entity types (E), new briefing week (F), new incidents week (G), arc updates (H), thread/clock updates (I), image prompts (J).
 
 ### Pre-Session / Mission Prep (new workflow)
 When claude.ai generates a **new mission prep document** (`missions/NN-title.html`), it should also output a **partial ingestion package** covering only the content that's known at prep time:
@@ -25,6 +25,7 @@ When claude.ai generates a **new mission prep document** (`missions/NN-title.htm
 - **Section C:** any new NPCs introduced in the mission
 - **Section D:** any new entities introduced in the mission (with initial bestiary phase, `classified_blurred: true` until resolved)
 - **Section F (partial):** CAMPBELL briefing items if pre-prepped alongside the mission
+- **Section J:** image prompts (`SNN-prompts.py`) — one entry per `"type": "image"` handout in Section B; filenames must match `src` values exactly
 
 **What to omit from pre-session packages:**
 - Section A (sessions.json advance) — not needed until after the previous session closes
@@ -268,7 +269,7 @@ Find "eszter" in portal-entities.json.
 ## SECTION F — briefings.json
 <!-- Target: data/briefings.json -->
 <!-- Action: mark previous week "closed", append new weeks[] entry -->
-<!-- CAMPBELL voice: formal, institutional, data-forward. See worldbuilding-lore.md Part 2 -->
+<!-- CAMPBELL voice: formal, institutional, data-forward. See worldbuilding-lore.md Part 1 -->
 
 Mark w2 as closed.
 Append:
@@ -461,15 +462,32 @@ Find "clock-mesa-response" and increment `filled` by 1 (now 3/4).
 
 ---
 
-## SECTION J — sessions.json session advance summary
+## SECTION J — Image Prompts (`SNN-prompts.py`)
+<!-- Target: SNN-prompts.py at repo root (e.g. S3-prompts.py) -->
+<!-- Action: produce a Python prompts file for generate_images.py -->
+<!-- One entry per "type": "image" handout in Section B -->
+<!-- Note: incidents (Section G) may also reference images — include those too if present -->
 
-<!-- Summary of what changes: -->
-- Mark `w2` as `"closed"`
-- Add `w3` as `"active"` with mission title
+Produce a file `S3-prompts.py` (adjust session number to match). Use the same structure as `S2-prompts.py`: TEMPLATE constant, ADDONS dict, build() function, and PROMPTS list of tuples.
 
-```json
-{ "id": "w3", "label": "WEEK 03", "title": "Mission Title", "status": "active" }
+Tuple format: `("filename-without-extension", build("scene description", "optional-tag"))`
+
+The filename must exactly match the handout `src` value minus the `images/` prefix and `.png` extension (e.g. `src: "images/M3-theatre-exterior.png"` → `"M3-theatre-exterior"`).
+
+Available ADDONS tags: `supernatural`, `indoor`, `outdoor_night`, `closeup`, `outdoor_day`, `dusk`
+
+Example entry:
+```python
+("M3-theatre-exterior", build(
+    "Exterior of a mid-sized regional repertory theatre in a British city.\n"
+    "Victorian brick facade, illuminated marquee, stage door visible at the side.\n"
+    "Evening. Streetlights beginning to glow. A few people near the entrance.",
+    "outdoor_night"
+)),
 ```
+
+Run after ingestion with: `python generate_images.py S3-prompts`
+Already-generated images are skipped automatically.
 ```
 
 ---
@@ -479,7 +497,7 @@ Find "clock-mesa-response" and increment `filled` by 1 (now 3/4).
 ### When generating a new mission (pre-session)
 - Output **two things** in the same response: (1) the mission HTML, (2) a partial ingestion package
 - Use the `MISSION PREP INGESTION PACKAGE` header (see "Pre-Session / Mission Prep" section above)
-- Include Sections B, C, D, and optionally F — omit A, G, H, I
+- Include Sections B, C, D, J, and optionally F — omit A, G, H, I
 - Mark the `session_key` in Section B as `"wN"` with a note to confirm before ingesting if the week isn't locked
 - New entities in Section D should have `classified_blurred: true` in their initial bestiary phase
 
@@ -489,7 +507,7 @@ Find "clock-mesa-response" and increment `filled` by 1 (now 3/4).
 - **Use real session IDs** (`w3`, `w4`, etc.) — never relative labels like "next week".
 - **Bestiary phases** — always include `show_from`. Only include `show_until` if the phase should stop showing after that week. Final phases omit `show_until`.
 - **NPC Track 1 vs Track 2** — `session_overrides` in portal-npcs.json is Track 1 (between-sessions contacts page text). Do not write mid-mission states here. Track 2 lives in `session-data.json threats[]` and the mission prep doc.
-- **CAMPBELL voice** in briefings.json: formal, institutional, data-forward. No emotional register. Never "worrying" or "alarming" — use "anomalous" or "flagged". See `worldbuilding-lore.md` Part 2.
+- **CAMPBELL voice** in briefings.json: formal, institutional, data-forward. No emotional register. Never "worrying" or "alarming" — use "anomalous" or "flagged". See `worldbuilding-lore.md` Part 1.
 - **Incident blocks**: use `{{color:text}}` for inline colour markup in `content` fields (`{{amber:...}}`, `{{red:...}}`, `{{purple:...}}`, `{{green:...}}`, `{{teal:...}}`). Do not use raw HTML inside JSON strings.
 - **All IDs must be unique** within their file. Follow the naming convention: `s03-ra-01`, `w3-i01`, `gordon-avery`, `t009`.
 - **Do not include HTML edits** for any section that's data-driven (bestiary, arcs, briefings, incidents, entity types). Those render from their JSON files automatically.
@@ -501,6 +519,7 @@ Find "clock-mesa-response" and increment `filled` by 1 (now 3/4).
    - **Append** actions: add to the correct array in the target file
    - **Update** actions: find the object by id and modify the specified fields
    - **Mark closed** actions: find the entry by id and set `status: "closed"`
-3. After all sections are processed, verify the ingestion against the `context/worldbuilding-site.md` Part 8 schema.
+3. After all sections are processed, verify the ingestion against the `context/worldbuilding-site.md` Part 6 (Data Files Directory) schema.
 4. Do not infer missing fields — if a required field is absent from the package, note it and ask.
 5. Do not create HTML files from package content. HTML is only needed for new mission prep pages (`missions/0N-title.html`) and field report pages — those are authored separately and handed as HTML drafts.
+6. **Section J** produces a Python file (`SNN-prompts.py`), not a JSON change. Save it to the repo root, then run `python generate_images.py SNN-prompts` to generate images into `images/`. Already-generated images are skipped automatically.
