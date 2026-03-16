@@ -2,8 +2,8 @@ export async function onRequestGet({ params, env }) {
   const row = await env.portal_db.prepare(
     'SELECT enabled FROM player_report_visibility WHERE week = ?'
   ).bind(params.week).first();
-  // No row = not yet set = default enabled (backwards compat for W01/W02)
-  const enabled = row === null ? true : row.enabled === 1;
+  // No row = not yet set = default locked
+  const enabled = row === null ? false : row.enabled === 1;
   return new Response(JSON.stringify({ week: params.week, enabled }), {
     headers: { 'Content-Type': 'application/json' }
   });

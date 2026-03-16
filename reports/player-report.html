@@ -641,7 +641,7 @@
     fetch('/api/v1/player-reports/' + wk + '/visibility')
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (data) {
-        var enabled = data ? data.enabled : true; // fail-open
+        var enabled = (data && data.enabled === true); // locked by default; fail-open only on network error
         visCache[wk] = enabled;
         applyVisibility(enabled);
       })
