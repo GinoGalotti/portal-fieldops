@@ -265,7 +265,7 @@
               "type": "log-excerpt",
               "label": "CAMPBELL ACTIVITY LOG — EXCERPT C // TIMESTAMP 09:05:18",
               "lines": [
-                "PATTERN FLAG: External data cross-reference — source designation {{anomaly:MESA-INTERNAL}} — flagged for monitoring.",
+                "PATTERN FLAG: External data cross-reference — source designation {{anomaly:HB-EXTERNAL}} — flagged for monitoring.",
                 "PRIORITY: LOW. No immediate action required.",
                 "NOTE: {{anomaly:Subject is not yet aware of the connection. This is preferable for now.}}"
               ],
@@ -431,20 +431,20 @@
               ]
             },
             {
-              "title": "Aldermoor — MESA Arrives",
+              "title": "Aldermoor — They Didn't Leave",
               "blocks": [
                 {
                   "type": "campbell",
                   "paragraphs": [
-                    "PORTAL support personnel arrived in Aldermoor District on Wednesday. By Thursday, two MESA field operatives were observed conducting environmental sampling — carrying BIM Collection Arrays, similar to those found in the estate office."
+                    "PORTAL support personnel arrived in Aldermoor District on Wednesday. By Thursday, two unknown individuals were observed conducting environmental sampling — carrying BIM Collection Arrays identical in design to those found in the estate office."
                   ],
-                  "flag": "// FLAG: MESA has not made contact. The PORTAL interns were not approached. CAMPBELL is monitoring."
+                  "flag": "// FLAG: The individuals have not made contact with PORTAL personnel. The PORTAL interns were not approached. CAMPBELL is monitoring."
                 },
                 {
                   "type": "callout",
                   "color": "red",
                   "from": "// CAMPBELL — PATTERN NOTE",
-                  "text": "MESA was buying properties in this district before the first incident was reported. They were here for the BIM, not the entity.\n\nThey are still here. They brought different equipment this time."
+                  "text": "The same property groups that acquired 34% of Aldermoor addresses in the 18 months before the first incident — Greyfield Assets Ltd, Veritas Realty Holdings — are collecting BIM particulate from the zone.\n\nThey were here for the BIM, not the entity.\n\nThey are still here. They brought different equipment this time."
                 }
               ]
             }
