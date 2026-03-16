@@ -233,6 +233,23 @@
   .form-body { display: none; }
   .form-body.unlocked { display: block; }
 
+  #locked-banner {
+    display: none;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    line-height: 1.7;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--amber);
+    background: var(--bg2);
+    padding: 20px 18px;
+    border-radius: 2px;
+    margin-bottom: 28px;
+  }
+  #locked-banner.visible { display: block; }
+  #locked-banner strong  { color: var(--amber); }
+
   /* ─── BOTTOM ACTIONS ─── */
   .page-actions {
     position: fixed;
@@ -382,6 +399,13 @@
   <div class="selection-summary" id="selection-summary">
     <span class="selection-prompt visible" id="sel-prompt">← Select a week and operative to begin.</span>
     <span id="sel-status"></span>
+  </div>
+
+  <!-- LOCKED BANNER (shown when keeper has locked this week) -->
+  <div id="locked-banner">
+    <strong>// ACCESS RESTRICTED</strong><br>
+    This week's field report is not yet available.<br>
+    Check back after the Keeper has debriefed the session.
   </div>
 
   <!-- FORM (hidden until week + hunter selected) -->
@@ -567,7 +591,7 @@
     });
     buildScenes(wk);
     updateSummary();
-    if (currentHunter) loadCurrent();
+    if (currentHunter) checkVisAndLoad();
   }
 
   function selectHunter(hid) {
@@ -577,7 +601,7 @@
       b.classList.toggle('active', b.dataset.hunter === hid);
     });
     updateSummary();
-    if (currentWeek) loadCurrent();
+    if (currentWeek) checkVisAndLoad();
   }
 
   function updateSummary() {
@@ -593,7 +617,6 @@
       var wLabel = WEEKS[currentWeek].label;
       var hLabel = HUNTERS.filter(function (h) { return h.id === currentHunter; })[0].label;
       status.innerHTML = 'Filing as <strong>' + hLabel + '</strong> · <strong>' + wLabel + '</strong> — ' + WEEKS[currentWeek].subtitle;
-      saveBtn.disabled = false;
     } else {
       var parts = [];
       if (currentWeek) parts.push(WEEKS[currentWeek].label);
@@ -602,10 +625,43 @@
         parts.push(h.label);
       }
       status.textContent = parts.length ? parts.join(' · ') : '';
+      form.classList.remove('unlocked');
+      document.getElementById('locked-banner').classList.remove('visible');
       saveBtn.disabled = true;
     }
+  }
 
-    form.classList.toggle('unlocked', !!ready);
+  // ── VISIBILITY GATE ───────────────────────────────────────────────────────
+
+  var visCache = {};
+
+  function checkVisAndLoad() {
+    var wk = currentWeek;
+    if (visCache[wk] !== undefined) { applyVisibility(visCache[wk]); return; }
+    fetch('/api/v1/player-reports/' + wk + '/visibility')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        var enabled = data ? data.enabled : true; // fail-open
+        visCache[wk] = enabled;
+        applyVisibility(enabled);
+      })
+      .catch(function () { visCache[wk] = true; applyVisibility(true); });
+  }
+
+  function applyVisibility(enabled) {
+    var form   = document.getElementById('form-body');
+    var locked = document.getElementById('locked-banner');
+    var btn    = document.getElementById('btn-save-bottom');
+    if (enabled) {
+      locked.classList.remove('visible');
+      form.classList.add('unlocked');
+      btn.disabled = false;
+      loadCurrent();
+    } else {
+      locked.classList.add('visible');
+      form.classList.remove('unlocked');
+      btn.disabled = true;
+    }
   }
 
   // ── LOAD / SAVE ───────────────────────────────────────────────────────────

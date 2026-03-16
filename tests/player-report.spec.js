@@ -20,11 +20,16 @@ import { test, expect } from '@playwright/test';
 
 // ── MOCK HELPERS ──────────────────────────────────────────────────────────────
 
-// Intercepts all player-report D1 calls. GET returns {}, PUT returns 200.
+// Intercepts all player-report D1 calls. GET returns {} (or { enabled: true }
+// for /visibility), PUT returns 200.
 async function mockPlayerReportApi(page) {
   await page.route('**/api/v1/player-reports/**', async route => {
     if (route.request().method() === 'PUT') {
-      return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+      return route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' });
+    }
+    // Visibility endpoint — return enabled:true so existing tests see unlocked form
+    if (route.request().url().includes('/visibility')) {
+      return route.fulfill({ contentType: 'application/json', body: '{"enabled":true}' });
     }
     return route.fulfill({ contentType: 'application/json', body: '{}' });
   });

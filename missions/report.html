@@ -88,6 +88,13 @@
   }
   .save-flash.visible { opacity: 1; }
 
+  /* ─── VISIBILITY TOGGLE ─── */
+  .vis-toggle { display: flex; align-items: center; gap: 8px; }
+  .vis-label  { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--text-dim); }
+  .vis-btn    { font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; padding: 6px 14px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); cursor: pointer; border-radius: 2px; transition: all 0.15s; }
+  .vis-btn.enabled  { border-color: var(--green); color: var(--green); }
+  .vis-btn.disabled { border-color: var(--red);   color: var(--red);   }
+
   /* ─── META BAR ─── */
   .meta-bar {
     display: grid;
@@ -656,6 +663,10 @@
   <div class="data-controls">
     <button class="data-btn data-btn--primary" id="btn-save">// SAVE REPORT</button>
     <button class="data-btn data-btn--claude" id="btn-copy-claude">⬡ COPY FOR CLAUDE</button>
+    <div class="vis-toggle">
+      <span class="vis-label">PLAYER REPORTS</span>
+      <button class="vis-btn" id="btn-vis-toggle">// LOADING…</button>
+    </div>
     <span class="save-flash" id="save-flash"></span>
   </div>
 
@@ -1172,6 +1183,7 @@
     }
 
     loadOperativeReports(sid);
+    loadVisibility(sid);
   }
 
   // ── SAVE ──────────────────────────────────────────────────────────────────
@@ -1518,6 +1530,43 @@
     loadOperativeReports(currentSid);
   });
 
+  // ── PLAYER REPORT VISIBILITY ──────────────────────────────────────────────
+
+  var visibilityCache = {};
+
+  function loadVisibility(sid) {
+    var wk  = SESSION_TO_WEEK[sid];
+    var btn = document.getElementById('btn-vis-toggle');
+    if (!wk) { btn.textContent = '// NO WEEK'; return; }
+    btn.textContent = '// LOADING…';
+    btn.className = 'vis-btn';
+    fetch('/api/v1/player-reports/' + wk + '/visibility')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) { visibilityCache[sid] = data ? data.enabled : true; renderVisBtn(sid); })
+      .catch(function () { visibilityCache[sid] = true; renderVisBtn(sid); });
+  }
+
+  function renderVisBtn(sid) {
+    var btn     = document.getElementById('btn-vis-toggle');
+    var enabled = visibilityCache[sid] !== undefined ? visibilityCache[sid] : true;
+    btn.className   = 'vis-btn ' + (enabled ? 'enabled' : 'disabled');
+    btn.textContent = enabled ? '// OPEN' : '// LOCKED';
+  }
+
+  document.getElementById('btn-vis-toggle').addEventListener('click', function () {
+    var wk      = SESSION_TO_WEEK[currentSid];
+    if (!wk) return;
+    var current = visibilityCache[currentSid] !== undefined ? visibilityCache[currentSid] : true;
+    var next    = !current;
+    visibilityCache[currentSid] = next;
+    renderVisBtn(currentSid);
+    fetch('/api/v1/player-reports/' + wk + '/visibility', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ enabled: next })
+    }).catch(function () { visibilityCache[currentSid] = current; renderVisBtn(currentSid); });
+  });
+
   // ── BOOT ──────────────────────────────────────────────────────────────────
 
   fetch('/data/report-schema.json')
@@ -1553,6 +1602,7 @@
       });
 
       loadOperativeReports(firstSid);
+      loadVisibility(firstSid);
     })
     .catch(function () {
       document.getElementById('session-tabs').innerHTML =
