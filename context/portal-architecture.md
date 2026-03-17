@@ -567,6 +567,7 @@ Hunter pages renamed to `hunters/[name].html` (alan, rex, reed, sven). Each has 
 - Fully data-driven: all content extracted to `data/incidents.json` (week-indexed)
 - **Week tabs** (W1 closed empty state, W2 active with 3 incidents + teaser) — built from JSON at runtime
 - **Incident types:** `choice` (3-button + optional custom text), `open` (freetext, multi-submit), `informational` (read-only), `teaser` (email + log excerpts, read-only)
+- **Updates digest:** if an `updates` incident has a `"digest"` field (`{header, count, lines[], sig}`), `renderUpdates()` renders a compact CAMPBELL-style digest block (`.incident-digest`) instead of the full sub-item cards — `items` array is preserved but not rendered
 - **Block types rendered by JS:** `narrative`, `campbell`, `callout`, `email`, `log-excerpt`
 - **SAVE RESPONSES button** — single end-of-page button collects all `choice` answers for the active week → `PUT /api/v1/incidents/{week}/state` → locks choice buttons; also writes `localStorage('portal-incident-state-{week}')`
 - **Open incidents** (S01-I02) keep independent SUBMIT button → `POST /api/v1/incidents/{id}/responses`

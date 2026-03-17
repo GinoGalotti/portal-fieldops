@@ -482,6 +482,34 @@
   background: linear-gradient(90deg, var(--purple-dim), transparent);
 }
 
+/* ── INCIDENT DIGEST (closed weeks) ── */
+.incident-digest {
+  max-width: 860px;
+  margin: 32px auto 0;
+  padding: 20px 28px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  line-height: 1.9;
+  letter-spacing: 0.06em;
+  border-top: 1px solid var(--border);
+}
+.incident-digest .id-header {
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  color: var(--green-dim);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.incident-digest .id-lines { color: var(--green-dim); line-height: 2; }
+.incident-digest .id-sig {
+  margin-top: 12px;
+  font-size: 0.62rem;
+  color: var(--text-dim);
+}
+
 /* ── MOBILE ── */
 @media (max-width: 700px) {
   .incident-card        { padding: 24px 20px; }
@@ -598,6 +626,19 @@
     attachListeners(week);
   }
 
+  // ── DIGEST RENDERER ────────────────────────────────────────────────────
+  function renderDigest(d) {
+    var html = '<div class="incident-digest">';
+    html += '<div class="id-header">';
+    html += '<span>' + esc(d.header) + '</span>';
+    html += '<span>' + esc(d.count) + '</span>';
+    html += '</div>';
+    html += '<div class="id-lines">' + (d.lines || []).map(esc).join('<br>') + '</div>';
+    html += '<div class="id-sig">' + esc(d.sig) + '</div>';
+    html += '</div>';
+    return html;
+  }
+
   // ── INCIDENT RENDERER ─────────────────────────────────────────────────
   function renderIncident(inc) {
     if (inc.type === 'teaser')  return renderTeaser(inc);
@@ -636,13 +677,17 @@
     h += '<h2 class="incident-title">' + esc(inc.title)
       + ' <span class="incident-badge badge-' + (inc.badge_color || 'green') + '">' + esc(inc.badge || 'INFORMATIONAL') + '</span>'
       + '</h2>';
-    inc.items.forEach(function(item, i) {
-      if (i > 0) h += '<div class="update-divider"></div>';
-      h += '<div class="update-item">';
-      h += '<div class="update-item-title">' + esc(item.title) + '</div>';
-      h += item.blocks.map(renderBlock).join('');
-      h += '</div>';
-    });
+    if (inc.digest) {
+      h += renderDigest(inc.digest);
+    } else {
+      inc.items.forEach(function(item, i) {
+        if (i > 0) h += '<div class="update-divider"></div>';
+        h += '<div class="update-item">';
+        h += '<div class="update-item-title">' + esc(item.title) + '</div>';
+        h += item.blocks.map(renderBlock).join('');
+        h += '</div>';
+      });
+    }
     h += '</div>';
     return h;
   }

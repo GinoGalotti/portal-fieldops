@@ -382,6 +382,17 @@
           "badge": "INFORMATIONAL",
           "badge_color": "green",
           "item_label": "// CAMPBELL — CASE STATUS DIGEST — POST-SESSION 02",
+          "digest": {
+            "header": "// CAMPBELL — POST-ALDERMOOR CASE UPDATES",
+            "count": "4 ITEMS · INFORMATIONAL",
+            "lines": [
+              "THE ESZTER PARTICULATE — Direction logged. Controlled exposure study underway. Sven's recommendation adopted. Priya publishing weekly readings.",
+              "BÁLINT — Welfare contact initiated. Saoirse reached out. Bálint given a direct line — not the voicemail.",
+              "CASE A — Secondary team deployed under Director's directive. Observation and containment only. No field operative contact until assessment complete.",
+              "ALDERMOOR — Unknown individuals still collecting BIM particulate on-site. Greyfield Assets / Veritas Realty confirmed. New equipment. They were here for the BIM."
+            ],
+            "sig": "// CAMPBELL · CASE STATUS DIGEST · POST-SESSION 02"
+          },
           "items": [
             {
               "title": "The Eszter Particulate — Direction Logged",

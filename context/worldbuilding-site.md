@@ -902,6 +902,31 @@ Mark the previous active week as `"status": "closed"`.
 | `hero_desc` | string | One or two sentences — sets up the week's content |
 | `incidents` | array | Ordered list of incident objects (empty `[]` for closed/blank weeks) |
 
+#### Digest Object (`updates` type incidents)
+
+Add a `"digest"` field to any `updates` incident to render a compact CAMPBELL-style summary instead of the full sub-item cards. The `items` array remains in the JSON as the authoritative record.
+
+```json
+"digest": {
+  "header": "// CAMPBELL — POST-ALDERMOOR CASE UPDATES",
+  "count": "4 ITEMS · INFORMATIONAL",
+  "lines": [
+    "THE ESZTER PARTICULATE — Direction logged. Controlled exposure study underway. Priya publishing weekly readings.",
+    "BÁLINT — Welfare contact initiated. Saoirse reached out. Bálint given a direct line.",
+    "CASE A — Secondary team deployed. Observation and containment only. No field contact until assessment complete.",
+    "ALDERMOOR — Unknown individuals still collecting BIM particulate. Greyfield Assets / Veritas confirmed. New equipment."
+  ],
+  "sig": "// CAMPBELL · CASE STATUS DIGEST · POST-SESSION 02"
+}
+```
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `header` | string | Left column of digest header — section label |
+| `count` | string | Right column — item count summary |
+| `lines` | array of strings | One line per update item — format: `TITLE — outcome summary.` |
+| `sig` | string | Closing line in dim text beneath the digest |
+
 #### Incident Object — Base Fields (all types)
 
 ```json
@@ -1092,6 +1117,7 @@ Do not use HTML tags directly in any field. Do not use inline markup outside the
 | Incident order | Incidents render in array order. Put `choice` and `open` first. Put `updates` (status digest) after interactive incidents. Put `teaser` last. |
 | No HTML | Never write HTML tags in any field. The renderer handles all markup. |
 | Empty week | An empty `"incidents": []` renders a "no incidents logged" state — correct for `"closed"` weeks. |
+| Updates digest | An `updates` incident with a `"digest"` field renders a compact CAMPBELL-style summary instead of the full sub-item cards. The `items` array remains as the authoritative record but is not rendered. |
 
 ---
 
