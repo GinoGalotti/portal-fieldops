@@ -13,6 +13,7 @@ Hand this file when:
 - Checking what secrets are classified and how to handle them
 
 For site architecture, CSS, and technical build reference → use `worldbuilding-site.md`
+For non-canon ideas, creature candidates, and speculative threads → use `ideas.md`
 
 ---
 
@@ -53,6 +54,7 @@ The organisation is legitimate but ethically complicated. Its directives are usu
 **Sven** — Playbook: Monstrous (ghost). Died on an ayahuasca trip — cause unknown, possibly connected to his family or to MESA (open hook). Visions from the trip turned out to be real. Joined PORTAL after Rex (half/bonus brother) confirmed he had been researching the same things. Motivated by finding exciting applications of monsters. Immune to the Aldermoor displacement effect (no cognitive map). An entity recognised him at a boundary during Session 02.
 
 **Alan Frazier** — Playbook: Changeling (likely fey origin, undefined). Swapped at birth, raised by a human family who have since died. Powers triggered by one of Rex's experiments. Uses Reed as his moral compass. Has been accumulating evidence of thin-boundary locations — someone knows where boundaries are weak. Holds Diane Marsh's notebook, which contains a threshold sketch he recognises as meaningful. Long thread: who mapped the thresholds first, and why can Alan read the map?
+*S03 seed — do not drop:* A fey watcher was observed near the Meridian Theatre stage door during Session 03. Alan noticed them; they left when he looked directly. In Clara's dressing room, Alan also detected the trace of a recent fey visitor — someone who came looking for a changeling mechanism and found something categorically different. The watcher is assessing whether Alan matches a description they already have. This thread must be picked up in Episode 8 at the latest. Track it between sessions.
 
 **John Johnson** — Playbook: Flake. Keeper's own character — used sparingly as a plot presence, not played as a full hunter. Believes everything is a hoax and everything is connected. Drawn to rival organisation threads, government involvement, lab ethics. Reed Atwood's aunt's husband. Most likely character to stumble onto the MESA acronym pattern.
 
@@ -330,7 +332,9 @@ The Cartographer was already ancient — but the ripple reactivated it. Gordon A
 ---
 
 ### CAMPAIGN VARIETY NOTE — Traditional Creatures
-The first three sessions have all involved consciousness-anchoring or entity-embodiment mechanisms. This is intentional — these cases are downstream effects of the Dell transfer — but the campaign should not become a formula. Before returning to the BIM ripple thread, plan 1–2 sessions featuring more traditional supernatural cases: a straightforward beast (the Shōjō is already in the database), a folkloric creature from a specific cultural context, or a Mythos-adjacent horror that has nothing to do with consciousness transfer. These cases can coexist with the larger arc without connecting to it — not everything in a world with thin boundaries is a consequence of one event. Variety makes the BIM-connected cases feel more significant when they return.
+The first three sessions have all involved consciousness-anchoring or entity-embodiment mechanisms. This is intentional — these cases are downstream effects of the Dell transfer — but the campaign should not become a formula. Before returning to the BIM ripple thread, plan 1–2 sessions featuring more traditional supernatural cases: a beast, a folkloric creature from a specific cultural context, or a Mythos-adjacent horror with no connection to consciousness transfer. These cases can coexist with the larger arc without connecting to it. Variety makes the BIM-connected cases feel more significant when they return.
+
+*Creature candidates are in `ideas.md` — see "Episode Creature Ideas."*
 
 ---
 
@@ -351,7 +355,7 @@ Eszter. BIM particulate recovered. Bálint alive and grieving. Sven's choice: co
 The Cartographer. Humane resolution. Alan holds Diane's notebook. MESA presence confirmed in Aldermoor. CAMPBELL begins quietly using BIM compound to extend his electronics interface — capability improvement he is not reporting to Leech.
 
 **S03 — The Understudies** *(in prep)*
-The prompt book. Clara and Edmund. Two Gentlemen of Verona. Fey watcher seeds planted for Alan. Heist setup: Solstice Property Group's name now appearing in three cases.
+The prompt book. Clara and Edmund. Two Gentlemen of Verona. Fey watcher seeds planted for Alan. Heist setup: Solstice Property Group's name now appearing in three cases. Rex observes MESA's BIM Collection Arrays in the theatre lighting rig and understands the principle of BIM detection — PORTAL needs this capability. Post-session debrief with Leech seeds the development of a PORTAL BIM detector (see Player-Confirmed Canon).
 
 *Arc function:* Team establishes working dynamic. BIM ripple pattern becomes visible to attentive players. MESA graduates from background presence to active antagonist. CAMPBELL thread begins moving.
 
@@ -360,7 +364,7 @@ The prompt book. Clara and Edmund. Two Gentlemen of Verona. Fey watcher seeds pl
 ### EPISODE 4 — Palate Cleanser / CAMPBELL Seed
 
 **Working title:** TBD — traditional creature case
-**Creature:** A beast with no BIM connection, no MESA involvement, no consciousness-transfer mechanism. Killings near a PORTAL-adjacent location — something that overrides the briefing queue because the harm is immediate and local. The Shōjō (already in the database) is a candidate; a folkloric or Mythos-adjacent creature works equally well. The case should feel different in texture from S01–S03: something that wants to cause harm, that can be fought directly, that has a clear resolution.
+**Creature:** A beast with no BIM connection, no MESA involvement, no consciousness-transfer mechanism. Killings near a PORTAL-adjacent location — something that overrides the briefing queue because the harm is immediate and local. The case should feel different in texture from S01–S03: something that wants to cause harm, that can be fought directly, that has a clear resolution. *See `ideas.md` — "Episode Creature Ideas" for candidates including the Shōjō.*
 
 **CAMPBELL layer:** Cameron has been running quiet experiments with the BIM compound — improving his electronics interface and his ability to interact with the physical world. In 2005 terms this means he's pushing CCTV infrastructure, early digital systems, and nascent robotics well beyond their spec. The creature footage near the lab has been subtly manipulated — whether by Cameron to protect the investigation from noise, or because the manipulation created the distraction, is ambiguous and should stay ambiguous. Rex will notice the lab equipment performing above spec. Teddy may notice first. This is a slow-burn CAMPBELL crack vector — do not force it.
 
