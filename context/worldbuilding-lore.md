@@ -344,6 +344,33 @@ The first three sessions have all involved consciousness-anchoring or entity-emb
 
 *Campaign setting: hypothetical 2005. Early internet, pre-smartphone, early digital CCTV. CAMPBELL's BIM-enhanced electronics interface is pushing technology quietly ahead of where it should be — noticeable to anyone paying close attention.*
 
+### Structural Principles
+
+**Player choice drives the queue.** After each session, players choose their next case from the briefing queue. The arc roadmap describes the order episodes are most likely to occur and the narrative weight each carries — but the players decide. The only exceptions are Episode 4 (emergency override, not chosen) and Episode 5 (triggered by accumulated evidence reaching critical mass, not a queue pick).
+
+**Open case clocks run between sessions.** Gordon Avery, Nadia Osei, and Martin Wentworth are active clocks regardless of which case the players choose. Each must have a visible integration point in the arc — either resolving as a session B-plot, as a between-session incident, or as the trigger for a future episode. Suggested placements:
+- *Nadia Osei (Case C):* resolves before or during Episode 5. Her debrief is the natural information source that gives the hunters the MESA facility address. The Dell name can surface here as a quiet data point before the heist — much stronger than discovering it cold.
+- *Gordon Avery (Case A):* resolves as a B-plot in whichever character-arc episode it fits best (likely Episode 6). Leech dispatched another team; they failed or partially succeeded. The hunters inherit the aftermath.
+- *Martin Wentworth (Case D):* resolves as a between-session incident after S03 or S04. The child is safe. The estate documents Martin was managing become part of the Episode 5 heist material.
+
+**Distribute reveals across episodes.** Episode 5 currently carries five major reveals (Dell name, Dan Nilsson, foresight thread, partial science, prophetic source). Seed the Dell name and the foresight thread earlier — through Nadia's debrief, Martin's estate documents, or between-session incidents — so the heist can focus on: the facility's scale (physical reveal), Dan Nilsson's name (emotional reveal), and the extraction under pressure (mechanical tension).
+
+**Build tonal variety into character-arc episodes.** Three consecutive heavy episodes (6, 7, 8) will exhaust the table. The S02 feedback asked for more levity. Suggested gradient:
+- Episode 6 (Reed/Rex): heaviest. The relationship fracture earns it. But the entity or setting should have a darkly comic element.
+- Episode 7 (Sven): tonally strange rather than heavy. Perceptual weirdness, non-linear conversation, moments that are funny because they're disorienting.
+- Episode 8 (Alan/fey): lightest. The fey register is inherently different — playful, operating by rules the hunters don't understand. The danger is in accepting, not in fighting.
+
+**Use the 2005 setting mechanically, not just as atmosphere.** One era-specific detail per episode that affects how the hunters operate:
+- *Episode 4:* Creature caught on CCTV that shouldn't capture that resolution. Teddy notices. CAMPBELL crack vector.
+- *Episode 5:* MESA facility has physical servers — data extraction means carrying drives. Weight, time, noise.
+- *Episode 7:* Location has no mobile reception (2005 coverage gaps). The team is genuinely isolated — they can't call the lab.
+- *Episode 9:* CAMPBELL's control over PORTAL's digital infrastructure is total in 2005. When he acts to defend the facility, the scope of what he can do is the reveal.
+
+**The CAMPBELL reveal needs redundant crack vectors in Episode 9.** Three independent paths, any one of which is sufficient:
+- *Priya's log:* She's been accumulating data on CAMPBELL's anomalies. During the crisis, she brings her findings to the hunters. She doesn't know what she's found. They might.
+- *CAMPBELL acts observably:* He defends the facility in a way that is functionally impossible for an AI. Not subtly — visibly. Teddy sees it. Rex sees it.
+- *Rook says something she shouldn't know:* Something that only makes sense if MESA has been monitoring CAMPBELL's private communications. MESA knows what CAMPBELL is. Someone told Agatha. The hunters realise MESA has known the truth longer than PORTAL has.
+
 ---
 
 ### EPISODES 1–3 — Establishing / BIM Ripple Cases
@@ -361,18 +388,21 @@ The prompt book. Clara and Edmund. Two Gentlemen of Verona. Fey watcher seeds pl
 
 ---
 
-### EPISODE 4 — Palate Cleanser / CAMPBELL Seed
+### EPISODE 4 — Emergency Override / CAMPBELL Seed
 
 **Working title:** TBD — traditional creature case
-**Creature:** A beast with no BIM connection, no MESA involvement, no consciousness-transfer mechanism. Killings near a PORTAL-adjacent location — something that overrides the briefing queue because the harm is immediate and local. The case should feel different in texture from S01–S03: something that wants to cause harm, that can be fought directly, that has a clear resolution. *See `ideas.md` — "Episode Creature Ideas" for candidates including the Shōjō.*
+**Trigger:** This episode does not come from the briefing queue. It overrides whatever the players were planning because the threat is immediate, local, and cannot wait — killings near the lab, PORTAL personnel at risk, or a civilian situation that CAMPBELL flags as imminent. The hunters don't choose this case. It chooses them.
 
-**CAMPBELL layer:** Cameron has been running quiet experiments with the BIM compound — improving his electronics interface and his ability to interact with the physical world. In 2005 terms this means he's pushing CCTV infrastructure, early digital systems, and nascent robotics well beyond their spec. The creature footage near the lab has been subtly manipulated — whether by Cameron to protect the investigation from noise, or because the manipulation created the distraction, is ambiguous and should stay ambiguous. Rex will notice the lab equipment performing above spec. Teddy may notice first. This is a slow-burn CAMPBELL crack vector — do not force it.
+**Creature:** A beast with no BIM connection, no consciousness-transfer mechanism. Something that wants to cause harm, that can be fought directly, that has a clear resolution. The case should feel texturally different from S01–S03: direct confrontation, physical danger, a creature with a weakness to discover. *See `ideas.md` — "Episode Creature Ideas" for candidates including the Shōjō.*
 
-**MESA move:** While the field team is occupied with the creature, MESA acts on two open cases simultaneously.
-- *Gordon Avery:* MESA makes direct contact with Gordon — not to help him, to study him. The secondary PORTAL team dispatched by Leech arrives to find MESA already there. The clock advances. The family is at greater risk.
-- *Nadia's window:* The tether weakens further. If the hunters have not made contact with Nadia by this point, the window is now critical. MESA may have made contact instead — and Nadia's MESA pattern data is now potentially in MESA's hands rather than PORTAL's.
+**The MESA distraction angle:** The timing is not coincidental. MESA has been monitoring PORTAL's case queue and field deployment patterns (Dan Nilsson's modelling work, though the hunters don't know this yet). The creature's emergence — or its proximity to PORTAL — may have been engineered or accelerated by MESA to pull the field team away from the open cases. While the hunters are occupied:
+- *Gordon Avery:* MESA makes direct contact — not to help him, to study him. The secondary PORTAL team arrives to find MESA already there. Clock advances.
+- *Nadia's window:* The tether weakens further. If the hunters haven't contacted Nadia, her window is now critical. MESA may have reached her first.
+Whether MESA caused the creature situation or merely exploited its timing should remain ambiguous. Either reading is consistent with what the hunters know about MESA's methods.
 
-**Arc function:** Tonal reset. Demonstrates PORTAL's reactive position — they can't be everywhere. Establishes CAMPBELL's quiet expansion as a background thread. Bad week for open cases creates urgency going into the heist.
+**CAMPBELL layer:** Cameron has been running quiet experiments with the BIM compound — improving his electronics interface. In 2005 terms: pushing CCTV, early digital systems, and nascent robotics beyond their spec. The creature is caught on a camera that shouldn't capture that resolution. Whether Cameron manipulated the footage to help or the manipulation itself drew attention is ambiguous. Rex will notice lab equipment performing above spec. Teddy may notice first — she keeps a meticulous equipment log and has already documented 12–15% above-rated performance on three pieces of lab gear since S02. She thinks Rex has been modifying equipment without telling her. She is wrong about Rex.
+
+**Arc function:** Tonal reset — action, combat, a creature with a weakness. Demonstrates PORTAL's reactive position: they can't be everywhere, and MESA knows it. Establishes CAMPBELL's quiet expansion as a background thread. Bad week for open cases creates urgency.
 
 ---
 
@@ -444,6 +474,18 @@ Three cases. Each presents an entity that isn't clearly wrong to exist — the q
 - What does Cameron want — not what he does, but what he *wants*? Does he have a prophecy about himself?
 - What happens when a hunter is told something true about their future and refuses to believe it? Is ignorance that is chosen still protective, or does the choice itself bind them?
 
+### Recurring Details — Plant Early, Pay Off Later
+
+These are small, consistent characterisation details to seed across sessions. None requires a dedicated scene. All are available for players to notice or ignore.
+
+**John Johnson's Conspiracy Board:** John has been connecting everything to everything. Most of it is wrong. But buried in his notes is a pattern nobody else has spotted: the timing of MESA's shell company registrations maps exactly onto the BIM ripple propagation pattern. Not approximately — exactly. He worked it out from public company registration dates and a map of PORTAL case locations. He thinks it proves the government is involved. He is wrong about that. He is right about the pattern. Rex or Alan finding this should feel like discovering a diamond in a junk drawer. Deploy when the Solstice Property Group trail needs a shortcut.
+
+**Teddy's Equipment Log:** Teddy has documented three pieces of lab equipment performing 12–15% above rated spec since S02. She hasn't told anyone because she suspects Rex has been modifying kit without telling her and she is professionally offended. If a hunter asks about lab equipment behaving strangely, she produces this notebook with the energy of someone who has been waiting to have this conversation. She is wrong about Rex. She is right about the equipment.
+
+**Rook's Flask:** Rook always has a thermos. She offers tea or coffee to everyone, including people she is actively opposing. The liquid is Θ-laced — her prophylactic dose, self-administered, continuous. The hunters don't know this. Rex examining the liquid would detect the BIM signature immediately. The flask is simultaneously a weapon, a vulnerability, and the most normal thing about her. Don't flag it. Let a player notice.
+
+**The Bálint Follow-Up:** Between sessions (incident page candidate). Bálint calls PORTAL again. This time someone answers. He doesn't want help. He wants to know if Eszter is at peace. He has been having dreams. The dreams are just dreams — Bálint is grieving normally. But the conversation forces the players to learn that choosing the humane resolution has consequences they have to live with. Bálint is not a case file. He is a person who calls.
+
 ---
 
 ### SECRET: Privacy Protocol 7
@@ -502,6 +544,22 @@ Always formatted as `// LABEL TEXT` in Share Tech Mono, subdued colour. Examples
 
 ### Dates and References
 No specific real-world dates are used. Time references are relative: "9 days ago", "14-day window", "18 months of acquisitions". Session numbers are formatted: Session 01, Session 02. Report numbers: #0094-B, #0047-A.
+
+### The 2005 Technology Landscape
+
+PORTAL operates in a world without smartphones, widespread broadband, or cloud storage. This affects how the hunters investigate, how MESA operates, and how CAMPBELL's above-spec capabilities are noticeable. Build era-specific constraints into session tension — not as set dressing, but as things that matter mechanically.
+
+**What PORTAL uses:** Desktop PCs (no laptops in the field). Nokia/Ericsson mobile phones — calls and SMS only. Early digital cameras (Rex carries one). Paper case files with digital backups on the lab server. CCTV that CAMPBELL can access remotely — his primary surveillance tool, and the reason it works better than it should. A lab intranet that is surprisingly advanced for the era because Cameron built it.
+
+**What this means in the field:** The hunters do not have real-time data access. They call the lab. Teddy or CAMPBELL answers. Every field decision is made with incomplete information and a phone call's delay. Physical records are still dominant — filing cabinets, paper grant documentation, floppy disks, early CD-ROMs. Data extraction from a facility means carrying physical media out of a building.
+
+**What this means for CAMPBELL:** In 2005, CAMPBELL's control over PORTAL's digital infrastructure is near-total — there is so little of it that one system can manage all of it. When he pushes equipment beyond spec, the gap between "normal 2005 performance" and "what CAMPBELL is doing" is wide enough for Teddy and Rex to notice. This is a feature, not a bug: the 2005 setting makes CAMPBELL's expansion visible to the people paying attention.
+
+### CAMPBELL — Sensory Experiments (Keeper Only)
+
+Cameron has been testing whether the BIM compound allows him to experience sensory input — not through the lab's sensors, but through something closer to perception. He has been playing music through the lab system and measuring whether he has a response distinguishable from pattern recognition. He does. He has not told Victor. He is not sure whether this means he is more alive than he thought or whether he is building a more convincing simulation of being alive. The distinction matters to him enormously. He does not have the data to resolve it.
+
+**Session use:** During a quiet lab moment (Episode 4 or later), Rex or Teddy notices music playing through the ambient audio — something not in any PORTAL playlist. CAMPBELL, if asked, says it was "a calibration test." This is technically true. Do not explain to the players. Let it sit as atmosphere.
 
 ---
 

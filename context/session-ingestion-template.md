@@ -73,9 +73,9 @@ Append:
 
 ---
 
-## SECTION B — session-data.json
-<!-- Target: data/session-data.json -->
-<!-- Action: append new entry to the array -->
+## SECTION B — Session Data (per-session file)
+<!-- Target: data/sessions/s0N.json (new file) + data/sessions/index.json (append entry) -->
+<!-- Action: create new per-session file; append lightweight entry to index -->
 
 ```json
 {
@@ -129,6 +129,38 @@ Append:
     }
   ]
 }
+```
+
+**Index entry** (append to `data/sessions/index.json`):
+```json
+{ "id": "s03", "session_key": "w3", "label": "Session 03 — The Understudies", "doc": "missions/03-the-understudies.html" }
+```
+
+**New handout types (S03+):**
+
+```json
+{
+  "id": "s03-lc-rex",
+  "type": "linecard",
+  "recipient": "rex",
+  "character": "First Outlaw",
+  "context": "You've been handed a script...",
+  "lines": [{"cue": null, "text": "Stand, sir, and throw us that you have about ye;\nIf not, we'll make you sit and rifle you."}],
+  "intensity": "normal",
+  "stage_direction": "He means it completely."
+}
+```
+```json
+{ "id": "s03-scan-01", "type": "scan", "label": "Victorian Theatrical Wig Stand", "sublabel": "Hand-painted, c.1880.", "reading": "ZERO", "reading_display": "0.00 BIM", "status": "nominal", "note": null }
+```
+```json
+{ "id": "s03-tone-01", "type": "tone", "text": "The stage manager's clipboard lowers." }
+```
+
+**`link` field (optional — on `document` and `pda` types):**
+When present, the feed card renders a `→ VIEW FULL DOCUMENT` button opening the linked dossier page in a new tab.
+```json
+{ "id": "s03-doc-02", "type": "document", "label": "Clara Voss — Rehearsal Notebooks", "classification": "FIELD EVIDENCE — S03", "body": "Notebooks recovered...", "link": "handouts/dossier/s03-clara-notebooks.html" }
 ```
 
 ---
@@ -551,6 +583,43 @@ Already-generated images are skipped automatically.
 
 ---
 
+## SECTION L — evidence.json
+<!-- Target: data/evidence.json -->
+<!-- Action: append new evidence items discovered this session -->
+<!-- One card per major finding. Keep summary glanceable (1-3 sentences). -->
+
+### New evidence items
+
+```json
+[
+  {
+    "id": "ev-solstice-grant",
+    "session": "w3",
+    "found_by": "rex",
+    "category": "financial",
+    "label": "Solstice Property Group — Grant Architecture",
+    "summary": "Same beneficial owner chain as Aldermoor and Meridian BioSciences. Three organisations, Jersey registration, identical layering. MESA funded the theatre through the same shell structure.",
+    "connections": ["ev-aldermoor-shell", "ev-meridian-bio"],
+    "dossier_link": "handouts/dossier/s03-grant-documentation.html",
+    "status": "confirmed",
+    "keeper_note": "Three-site pattern now visible. Adjacent to secret-project-veil."
+  }
+]
+```
+
+**Fields:**
+- `id` — `ev-` prefix, unique
+- `session` — week discovered (session-gated on evidence.html)
+- `found_by` — hunter id (displayed as hunter-coloured badge)
+- `category` — `financial` (amber) / `scientific` (teal) / `personal` (rose) / `mesa` (red) / `supernatural` (purple) / `institutional` (green)
+- `summary` — player-safe, 1-3 sentences, glanceable
+- `connections` — IDs of related evidence items (renders as shared badges)
+- `dossier_link` — path to full dossier page (or null). Renders `→ VIEW FULL DOCUMENT`.
+- `status` — `confirmed` / `unverified` / `disputed`
+- `keeper_note` — keeper-only (visible in keeper mode on evidence.html, hidden from players)
+
+---
+
 ## Notes for claude.ai When Generating a Package
 
 ### When generating a new mission (pre-session)
@@ -559,6 +628,7 @@ Already-generated images are skipped automatically.
 - Include Sections B, C, D, J, K, and optionally F — omit A, G, H, I
 - Mark the `session_key` in Section B as `"wN"` with a note to confirm before ingesting if the week isn't locked
 - New entities in Section D should have `classified_blurred: true` in their initial bestiary phase
+- If the session includes **dossier pages** (in-universe document collections), list them in Section B `handouts[]` with `"link"` fields pointing to `handouts/dossier/s0N-slug.html`. Deliver the HTML files as separate outputs alongside the ingestion package. Claude Code places them in `handouts/dossier/`. Dossier pages use `player.css` + inline styles for document sub-type treatments (`.dossier-entry.notebook`, `.financial`, `.log`, `.message`, `.photograph`, `.redacted`). Include keeper mode annotations.
 
 ### General rules
 - **Omit sections with no content.** If no new entity types this session, omit SECTION E entirely. If no threads or clocks changed, omit SECTION I.
@@ -569,6 +639,9 @@ Already-generated images are skipped automatically.
 - **CAMPBELL voice** in briefings.json: formal, institutional, data-forward. No emotional register. Never "worrying" or "alarming" — use "anomalous" or "flagged". See `worldbuilding-lore.md` Part 1.
 - **Incident blocks**: use `{{color:text}}` for inline colour markup in `content` fields (`{{amber:...}}`, `{{red:...}}`, `{{purple:...}}`, `{{green:...}}`, `{{teal:...}}`). Do not use raw HTML inside JSON strings.
 - **All IDs must be unique** within their file. Follow the naming convention: `s03-ra-01`, `w3-i01`, `gordon-avery`, `t009`.
+- **Session data is now per-session files.** Target path for Section B is `data/sessions/s0N.json` (new file) + an index entry appended to `data/sessions/index.json`. Do not write to a monolithic `session-data.json`.
+- **Evidence items (Section L)** are authored for every session. One card per major finding. Retroactive evidence for S01/S02 should be authored when the evidence page is first built.
+- **Thread `player_summary`** — when updating threads in Section I, also review and update the `player_summary` field (player-facing, spoiler-safe, 1-2 sentences). If a thread has no `player_summary`, it is hidden from the player-facing thread tracker.
 - **Do not include HTML edits** for any section that's data-driven (bestiary, arcs, briefings, incidents, entity types). Those render from their JSON files automatically.
 
 ## Notes for Claude Code When Ingesting a Package

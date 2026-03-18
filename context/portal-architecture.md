@@ -77,7 +77,15 @@ portal-fieldops/
 │   ├── playbook-moves.json        # Move definitions keyed by data-check-key → name, roll, description (feed layer)
 │   ├── portal-npcs.json           # Full NPC roster with player/keeper description split, session_overrides, keeper_scene_notes
 │   ├── portal-entities.json       # Entity/threat database; session_overrides controls player bestiary visibility
-│   └── session-data.json          # Per-session data for feed.html: doc path, entity_ids, threats[], equipment[], readaloud[], handouts[]
+│   ├── sessions/                  # Per-session data (split from former session-data.json)
+│   │   ├── index.json             # Lightweight session index: [{id, session_key, label, doc}]
+│   │   ├── s01.json               # Session 01 full data: entity_ids, threats[], equipment[], readaloud[], handouts[]
+│   │   ├── s02.json               # Session 02 full data
+│   │   └── s03.json               # Session 03 full data (add new files per session)
+│   ├── evidence.json              # Evidence board: accumulated findings across sessions
+│   ├── campbell-logs.json         # CAMPBELL activity logs: batches[], entries[], highlights[]
+│   ├── canon.json                 # Confirmed canon: player-invented facts confirmed by keeper
+│   └── report-schema.json         # Report form configuration: session tabs, scenes, threads, canon_slots
 │
 ├── session-state.js           # Shared session resolution + DOM visibility + keeper toggle injection
 ├── functions/                 # CF Pages Functions (serverless API, auto-routed)
@@ -132,6 +140,8 @@ portal-fieldops/
 │   ├── hunter.js              # Shared script: keeper toggle, D1 save/load, all interactions
 │   ├── alan.html, rex.html, reed.html, sven.html  # Hunter pages (playbook + arcs), use hunter.js
 │   └── hunter.js              # hunterId derived from filename: .replace('.html','') at end
+├── handouts/                  # Player-facing document collections
+│   └── dossier/               # In-universe dossier pages (s03-clara-notebooks.html, etc.)
 ├── images/                    # Active reference images
 ├── player-nav.js              # Shared player nav
 └── missions/keeper-nav.js     # Shared keeper nav
@@ -145,7 +155,7 @@ portal-fieldops/
 - **CF Pages:** Connected to GitHub repo, deploying from `dev` branch
 - **D1 database:** `portal-db` | ID: `aa558dc0-96c4-4c88-ab54-a79611d161d2` | binding: `portal_db`
 - **wrangler.jsonc** at repo root — binding already configured
-- **GitHub Pages** still serves `main` for players while `dev` / CF Pages is in development
+- **Cloudflare Pages is the only deployment.** GitHub Pages is not in use. All player and keeper traffic uses the CF Pages URL.
 
 ---
 
@@ -754,10 +764,8 @@ PUT  /api/v1/session/active     → keeper sets active session (keeper mode only
 
 ## Versioning / GitHub
 
-- `main` → GitHub Pages (current player-facing site, unchanged)
-- `dev` → Cloudflare Pages (all new development, auto-deploys on push)
-
-When everything works on CF, players are pointed to the new URL and GH Pages is retired.
+- `dev` → Cloudflare Pages (auto-deploys on push). This is the only deployment — all player and keeper traffic.
+- `main` → not actively deployed. May be used for stable releases in future.
 
 **What goes in the repo:** All HTML, CSS, JS; `data/` JSON files; Workers code; schema migrations.
 
@@ -993,15 +1001,70 @@ All files in `data/` are static assets served by CF Pages. Never written to at r
 
 ---
 
-## Immediate Next Steps (In Order)
+### `sessions/index.json` + `sessions/s0N.json`
 
-1. **Fill `FILL_FROM_SESSION` fields in `hunters.json`** — stat lines, gear picks, second/third move choices, Sven's curse. Requires actual character sheets.
+**Purpose:** Per-session data, split from former monolithic `session-data.json`. Index provides lightweight session list; per-session files contain full data.
 
-2. **Build Phase 4 feed view** (`app/feed.html`) — load D1 sheet state + `playbook-moves.json`, render active move cards per hunter. Roll interface: click move → roll 2d6+stat → result logged to D1. No WebSockets yet — poll `/api/v1/rolls`.
+**Index schema:** `[{id, session_key, label, doc}]` — enough for session selectors and archive lists.
 
-3. **Scaffold the Workers API** — start with `/hunters` and `/rolls`. Seed D1 from `hunters.json` once stat lines are confirmed.
+**Per-session file:** Same schema as the former `session-data.json` entries: `id`, `session_key`, `label`, `doc`, `entity_ids[]`, `threats[]`, `equipment[]`, `readaloud[]`, `handouts[]`.
 
-4. **Build `command.html`** — keeper command board. Entity panel from `portal-entities.json`; NPC reveal from `portal-npcs.json`; move reference from `playbook-moves.json`.
+**Adding a new session:** Create `data/sessions/s0N.json` with the full session data. Append a lightweight entry to `data/sessions/index.json`.
+
+**Feed rendering:** `feed.html` fetches only the active session's file. Keeper THREATS and HANDOUTS tabs load the same file. Archive pages fetch the index and lazy-load detail on demand.
+
+---
+
+### `evidence.json`
+
+**Purpose:** Evidence board data for `evidence.html`. Accumulated investigative findings across all sessions.
+
+**Each entry:** `id` (ev- prefix), `session`, `found_by`, `category`, `label`, `summary`, `connections[]`, `dossier_link`, `status`, `keeper_note`.
+
+**Session gating:** The `session` field gates visibility — items from future sessions are hidden.
+
+**Keeper mode:** `keeper_note` is visible only in keeper mode (triple-click activation on evidence.html).
+
+---
+
+### `campbell-logs.json`
+
+**Purpose:** CAMPBELL activity log data for `campbell-logs.html`. Continuum design — grows each session.
+
+**Schema:** `batches[]` — one batch per session. Each batch: `id`, `session`, `label`, `introduced_by`, `intro_note`, `entries[]` (timestamp, content, flags), `highlights[]` (term, by, note).
+
+**Highlights:** In-world progressive revelation. Teddy, Priya, or John highlight terms in new and old batches. Highlights on old batches can be added retroactively each session.
+
+---
+
+### `canon.json`
+
+**Purpose:** Persistent canon registry. Player-invented facts confirmed by the keeper.
+
+**Each entry:** `id`, `session`, `category` (GADGET/TEXTURE/THEORY), `label`, `value`, `source_report`, `related_evidence[]`.
+
+**Cumulative:** All confirmed facts from all sessions. Included in session prep export.
+
+---
+
+### `report-schema.json`
+
+**Purpose:** Session-specific configuration for keeper and player report forms. Replaces former inline JS config objects in `report.html` and `player-report.html`.
+
+**Each entry:** `session_id`, `week_id`, `week_label`, `week_subtitle`, `keeper_threads[]`, `keeper_clocks[]`, `keeper_scenes[]`, `player_scenes[]`, `canon_slots[]`.
+
+**Both report pages fetch this file on load.** A missing entry means the session tab won't render.
+
+---
+
+## Immediate Next Steps
+
+See `portal-feature-proposals.md` for the full priority queue. Key phases:
+
+1. **Foundation:** CSS promotion, report schema extraction to `data/report-schema.json`, session-data splitting to `data/sessions/`, doc cleanup.
+2. **S03 Feed Types:** Tone cards, line cards (distortion mechanic), scan results (ad-hoc creator).
+3. **S03 Content:** New session in `data/sessions/s03.json`, dossier pages in `handouts/dossier/`, report-schema entry.
+4. **Post-Session:** Evidence page (`evidence.html`), canon pipeline (`data/canon.json`), CAMPBELL logs continuum (`campbell-logs.html`), player thread summaries.
 
 ---
 

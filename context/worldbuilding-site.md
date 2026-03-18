@@ -60,6 +60,9 @@ When the Keeper asks you to build a page:
 | `reports/player-report.html` | `player.css` | Player | Operative Field Report — week + hunter selector, 5 rating pips, general feedback, per-week scene questions. Unique save per week+hunter, D1-backed. Always-visible `// KEEPER DEBRIEF` section at bottom fetches keeper field report for each week (`GET /api/v1/reports/{S01\|S02}/state`) and shows outcome badge + directive + summary (pending placeholder if not yet filed). Linked from player nav as "Report". |
 | `reports/keeper-review.html` | `keeper.css` | Keeper | All-reports review — W01/W02 tabs, auto-loads on click, fetches all 5 hunter reports via `Promise.all`, renders 5-col responsive card grid. Filed/not-filed badge, rating pips, text fields, scene notes per hunter. No new API needed — reads existing `player-reports` endpoints. |
 | `contacts.html` | `player.css` | Player | NPC Contact Directory — fetches `portal-npcs.json`, renders player-visible NPCs grouped by affiliation (PORTAL staff / field contacts / unknown). Static render, no D1 dependency. |
+| `evidence.html` | `player.css` | Player | Evidence & Investigation Log — accumulated findings across all sessions + player-facing thread tracker. Session-gated evidence cards from `data/evidence.json`, thread section from `data/portal-threads.json` (player_summary field). Category filters, connection badges, dossier links. Keeper mode (triple-click): reveals `keeper_note` per evidence card. |
+| `campbell-logs.html` | `player.css` + inline | Player | CAMPBELL Activity Logs — continuum design. New log batches at top each session, older batches collapse below. Searchable. In-world highlights by Teddy/Priya/John (progressive clue revelation). Data-driven from `data/campbell-logs.json`. Do not link from `lab-incidents.html` until this page exists. |
+| `handouts/dossier/*.html` | `player.css` + inline | Player | In-universe document collection pages. Each dossier is a standalone page in `handouts/dossier/` presenting recovered documents with type-specific visual treatments (notebook, financial, log, message, photograph, redacted). Named with session prefix: `s03-clara-notebooks.html`. Linked from feed via `link` field on document/pda handouts. Keeper mode (5× logo click): shows annotations. |
 | `lab-incidents.html` | `player.css` + inline | Player | Between-session incident log. Fully data-driven from `data/incidents.json`. Week tab switcher (W1 closed/empty, W2 active). Incident types: `choice` (3-button pick + optional custom textarea), `open` (freetext multi-submit), `informational` (read-only), `teaser` (email + log excerpts), `updates` (multi-item status digest — green top stripe, no player input required). Single **SAVE RESPONSES** button collects all choice answers → `PUT /api/v1/incidents/{week}/state` → locks buttons; also writes localStorage. Open incidents keep independent SUBMIT button → `POST /api/v1/incidents/{id}/responses`. EXPORT FOR KEEPER on open incidents. |
 | `feed.html` | `player.css` + inline | Player + Keeper | Live session tool — split layout (feed left, resizable panel right; drag handle saves width to `localStorage('portal_panel_width')`). Hunter picker; **Moves tab** (always-active + playbook + basic moves, inline modifier + ROLL, hover shows description + outcome rows + questions for Investigate/Read); **Contacts tab** (player-visible NPCs, double-click to add per-hunter private note stored in `localStorage('portal_contact_notes')` as `{hunter_id:{npc_id:text}}`); **Handouts tab** (images/maps posted by keeper, session tabs M01/M02, deduplicated 2-column gallery, click to open lightbox — documents/classified/readaloud/PDA entries are feed-only, not shown in gallery); **MAP tab** (player district map — mission session selector, locked/unlocked grid cells, detail card on click, SYNC MAP button). Bottom composer for any player to post to the feed. Feed entries **expand on click** (toggle `.expanded` class); click again to collapse; multiple can be open simultaneously. Roll entries show breakdown `[d1 + d2 + stat + mod = total]`, click shows specific outcome text + question list (for Investigate a Mystery / Read a Bad Situation). **Smart polling**: 6s when tab has focus, 60s when tab hidden or window blurred (immediately re-polls on regain focus). 5s auto-save for harm/luck/xp changes. `?mouseover=true` URL flag restores legacy CSS `:hover` expand behaviour (for A/B testing). Keeper mode (5× logo click) replaces player UI with 6 tabs: **OPERATIVES** (click hunter to view sheet + moves), **CONTACTS** (session filter M01/M02/ALL + NPC visibility toggles persisted to localStorage), **REFERENCES** (MoTW rules cheat sheet: outcomes, harm moves, luck, XP, end-of-session, principles, keeper moves, monster moves, phenomena moves, investigate questions, keeper page links), **THREATS** (session selector, entity stat block from `portal-entities.json`, threats/minions/bystanders + equipment from `session-data.json`), **HANDOUTS** (session selector; per-session list of all handout items with POST / RE-POST buttons persisted to `localStorage('portal_posted_handouts')`; classified items show purple pip; **CLEAR HANDOUTS** button removes all non-message entries from feed DOM + localStorage + D1), **MAP** (keeper district map — mission selector, grid with order badges [keeper-only, hidden from players], NPC pills per cell, unlock toggle, visited button ○/✓, bulk actions: REVEAL ALL / RESET MAP / ALL VISITED / CLEAR VISITED; state schema `{ u: {loc_id: true}, v: {loc_id: true} }` saved to D1 `map_state` table). **CLEAR FEED** (keeper button): posts a `type:'clear'` sentinel to D1; keeper's feed clears immediately; polling clients clear on receipt; `initialLoad()` discards all entries before the sentinel (history still accessible via "↑ LOAD EARLIER HISTORY"). Keeper tab row uses `overflow-x: auto` with styled thin scrollbar for narrow viewports. |
 
@@ -77,6 +80,9 @@ All handouts live in `data/session-data.json` under `handouts[]` per session ent
 | `image` | Captioned photo in 2-column gallery + feed thumbnail | ▶ POST | Yes (2-col) | Scene images, locations, character portraits, artefacts |
 | `map` | Captioned image in 2-column gallery + feed thumbnail | ▶ POST / ↺ RE-POST | Yes (2-col) | District/location maps — posted from Keeper HANDOUTS tab like any other image |
 | `classified` | Black redacted block with 3 censorship bars + `[ CLASSIFIED — KEEPER ACCESS ONLY ]` | ▶ POST | No | Keeper-only reminders, NPC private notes, plot flags — players know *something* arrived but can't read it |
+| `linecard` | Theatrical script card — per-player delivery. Character name, context, verse-formatted lines with CSS distortion (tremor + blur). Intensity levels: normal/high/clear. High auto-reverts to normal after 45s. | ▶ POST (per recipient) | No | Scripted performance lines, per-player secrets, any content that should distort |
+| `scan` | PORTAL instrument readout — dark bg, monospace, colour-coded status pip. Status: nominal (green), trace (amber), alert (amber pulse), critical (red). | ▶ POST | No | Rex scanning objects, BIM readings, instrument outputs. Ad-hoc Quick Scan form in keeper HANDOUTS tab. |
+| `tone` | Single-line atmospheric beat — italic, muted, no expand, no sender badge. Persists in feed. | ▶ POST | No | Stage directions, atmosphere, directorial beats between action |
 
 **JSON shape for each type:**
 ```json
@@ -86,7 +92,19 @@ All handouts live in `data/session-data.json` under `handouts[]` per session ent
 { "id": "s02-img-01", "type": "image",      "label": "Caption",         "src": "images/filename.png" }
 { "id": "s02-map-01", "type": "map",        "label": "Map Title",       "src": "images/map.png", "_note": "keeper note" }
 { "id": "s02-cl-01",  "type": "classified", "label": "Keeper Note — X", "body": "Private text..." }
+{ "id": "s03-lc-rex",  "type": "linecard",  "recipient": "rex",    "character": "First Outlaw", "context": "Stage direction...", "lines": [{"cue": null, "text": "Lines..."}], "intensity": "normal", "stage_direction": "Comedy beat..." }
+{ "id": "s03-scan-01", "type": "scan",      "label": "Object Name", "sublabel": "Description", "reading": "ZERO", "reading_display": "0.00 BIM", "status": "nominal", "note": null }
+{ "id": "s03-tone-01", "type": "tone",      "text": "The stage manager's clipboard lowers." }
 ```
+
+**`link` field (optional — available on `document` and `pda` types):**
+When present, the feed card renders a `→ VIEW FULL DOCUMENT` button that opens the linked page in a new tab. Used to connect feed handouts to full dossier pages in `handouts/dossier/`.
+
+```json
+{ "id": "s03-doc-02", "type": "document", "label": "Clara Voss — Rehearsal Notebooks", "classification": "FIELD EVIDENCE — S03", "body": "Notebooks recovered...", "link": "handouts/dossier/s03-clara-notebooks.html" }
+```
+
+**Naming convention for dossier links:** `handouts/dossier/s{session_num}-{slug}.html`
 
 **Naming convention:** `s{session_num}-{type_abbrev}-{nn}` e.g. `s02-ra-01`, `s02-pda-03`, `s02-doc-02`, `s02-classified-01`.
 
@@ -96,29 +114,31 @@ All handouts live in `data/session-data.json` under `handouts[]` per session ent
 - `classified` is great for keeper-only scene reminders that appear as incoming transmissions — players feel the information asymmetry
 - `readaloud` + matching `image` posted together creates strong visual narrative moments
 - Ordering in `handouts[]` sets the keeper panel display order — arrange narratively, not by type
+- `linecard` with `intensity: "high"` creates pressure — post it when the inhabited understudy nails their line opposite the player. Auto-reverts after 45s.
+- `scan` posted in sequence creates rhythm — four nominals then one alert is a built-in tension tool
+- `tone` cards between other entries create cinematic pacing — use them like stage directions in a script
 
 ---
 
 ### Upcoming Pages (planned, not yet built)
 
-**Immediate priority:** *(feed.html and contacts.html are now built — see Current Pages above)*
-
 **Player-facing:**
 
 | Page | CSS | Priority | Description |
 |------|-----|----------|-------------|
-| `hunters.html` | `player.css` | HIGH | Hunter index — all 4 hunters, one-liners, links to story pages |
-| `case-archive.html` | `player.css` | MEDIUM | Chronological closed case log — grows each session |
-| `glossary.html` | `player.css` | MEDIUM | In-universe PORTAL terminology, written in CAMPBELL's voice |
-| `campbell-logs.html` | `player.css` | MEDIUM | CAMPBELL anomaly log page — Teddy Brandt's discovery of Privacy Protocol 7 and three flagged log excerpts. Teased in `lab-incidents.html`. Do not add a link from `lab-incidents.html` until this page exists. |
+| `glossary.html` | `player.css` | MEDIUM | In-universe PORTAL terminology, written in CAMPBELL's voice. Data-driven from `data/glossary.json`. |
 
 **Keeper-facing:**
 
 | Page | CSS | Priority | Description |
 |------|-----|----------|-------------|
-| `missions/player-reports-review.html` | `keeper.css` | HIGH | Review all player field reports for a given week — aggregated ratings + notes side by side |
 | `secrets.html` | `keeper.css` | MEDIUM | Active secrets tracker — what's hidden, what would crack it open |
 | `countdowns.html` | `keeper.css` | MEDIUM | All active countdowns in one dashboard view |
+
+**Removed from plan:**
+- `hunters.html` — already covered on `index.html`
+- `campbell-logs.html` — replaced by CAMPBELL Logs Continuum page (see Current Pages above)
+- `missions/player-reports-review.html` — keeper report already includes player report summary
 
 ---
 
@@ -144,47 +164,25 @@ The queue page (`missions/campbell-briefings.html`) renders entirely from `data/
 
 ### Adding a New Session to the Reports
 
-After each session, two report config blocks need extending — one in each file. Both follow the same pattern: a JS object keyed by session/week ID.
+Both report pages (`missions/report.html` and `reports/player-report.html`) render their session tabs from `data/report-schema.json`. To add a new session:
 
-**Keeper Field Report** (`missions/report.html`) — extend `SESSIONS`:
-```js
-S03: {
-  title: 'Mission Title Here',
-  threads: ['THREAD ONE', 'THREAD TWO', ...],   // active story threads for this session
-  clocks: [
-    { id: 'clock-id', label: 'Clock description' },
-    ...
-  ],
-  scenes: [
-    { id: 'scene-id', label: 'SCENE LABEL', prompt: 'Keeper prompt for this scene.' },
-    ...  // 2–4 scenes, grounded in what actually happened
-  ]
-}
-```
+1. Append a new entry to `data/report-schema.json` (see `session-ingestion-template.md` Section K for the schema)
+2. That's it — both pages pick up the new session tab automatically
 
-**Player Field Report** (`reports/player-report.html`) — extend `WEEKS`:
-```js
-W03: {
-  label: 'Week 03',
-  subtitle: 'Mission Title Here',
-  scenes: [
-    { id: 'scene-id', label: 'SCENE LABEL', prompt: 'Player-facing question about this scene.' },
-    { id: 'your-moment', label: "YOUR OPERATIVE'S MOMENT", prompt: 'Was there a moment where your operative really felt like themselves? What was it?' }
-  ]
-}
-```
+**No HTML edits needed.** The inline `SESSIONS`/`WEEKS` config objects have been extracted to the JSON file.
 
 **Rules for scene prompts:**
 - Scene IDs and prompts must be grounded in what actually happened — never invent events
 - Player prompts should be open questions, not leading ones
 - The `your-moment` scene is recommended for every week as the last entry
 - Read the mission prep doc (`missions/NN-*.html`) before writing scene prompts — it is the source of truth
+- `canon_slots[]` capture player-defined facts (gadget names, NPC details, world theories). Use categories: `GADGET` (teal), `TEXTURE` (purple), `THEORY` (amber).
 
 ---
 
 ### Navigation Conventions
 
-**Player nav links (in order):** Briefing · Operatives · Bestiary · The Lab · Artefacts · Missions · Contacts · Report · Queue · **Feed**. Injected by `player-nav.js` into `#player-nav`. The script handles base-path from any subdirectory (`missions/`, `hunters/`, `reports/`). Never link to keeper pages from player nav. `contacts.html` is at the repo root (not inside `missions/`).
+**Player nav links (in order):** Briefing · Operatives · Entities · The Lab · Artefacts · Missions · Evidence · Contacts · Glossary · Report · Queue · **Feed**. "Entities" replaces "Bestiary". "Evidence" and "Glossary" added when those pages are built. Injected by `player-nav.js` into `#player-nav`. The script handles base-path from any subdirectory (`missions/`, `hunters/`, `reports/`). Never link to keeper pages from player nav. `contacts.html` is at the repo root (not inside `missions/`).
 
 **Keeper pages:** Must open with `<div class="keeper-banner">KEEPER ACCESS ONLY — DO NOT SHARE THIS URL WITH PLAYERS</div>` as the first element in `<body>`. Nav links: Player Site → `../index.html`, Keeper Index → `keeper.html`.
 
@@ -496,8 +494,13 @@ Also: previous session's ACTIVE card gets `data-session-until="wN-1"` and a new 
 **`data/portal-entities.json`** — add or update entities for this case.
 
 #### 5. Report Configs
-**`missions/report.html`** — add new entry to `SESSIONS` config (threads, clocks, scenes).
-**`reports/player-report.html`** — add new entry to `WEEKS` config (scenes, player prompts).
+Append a new entry to `data/report-schema.json` (see `session-ingestion-template.md` Section K). Both report pages pick up the new session tab automatically — no HTML edits needed.
+
+#### 6. Dossier Pages (if applicable)
+If the case includes recoverable document collections (notebooks, financial records, system logs, intercepted communications), author standalone HTML dossier pages in `handouts/dossier/`. Named `s0N-slug.html`. Use document sub-type CSS classes: `.dossier-entry.notebook`, `.dossier-entry.financial`, `.dossier-entry.log`, `.dossier-entry.message`, `.dossier-entry.photograph`, `.dossier-entry.redacted`. Mix sub-types within a single dossier for texture. Include keeper mode annotations (visible on 5× logo click). Reference from `handouts[]` in session data via the `link` field on `document` or `pda` type entries.
+
+#### 7. Evidence Items
+Author evidence cards for `data/evidence.json` covering the session's key findings. One card per major discovery. Include `dossier_link` where a full dossier page exists. Keep `summary` glanceable (1-3 sentences). Include `keeper_note` for tracking adjacent secrets.
 
 ---
 
@@ -716,6 +719,7 @@ These files are static assets served by Cloudflare Pages. They are read-only at 
 | File | What it contains | Used by |
 |------|-----------------|---------|
 | `sessions.json` | Session registry — id, label, title, status. Orders sessions for the keeper toggle and session-state.js fallback logic. | `session-state.js`, keeper toggle |
+| `sessions/index.json` + `sessions/s0N.json` | **Per-session data** (split from former monolithic `session-data.json`). Index file: lightweight array of `[{id, session_key, label, doc}]`. Per-session files: full data including `entity_ids`, `threats[]`, `equipment[]`, `readaloud[]`, `handouts[]`. The feed loads only the active session's file. Archive pages load the index. **Add a new session:** create `data/sessions/s0N.json` and append to `data/sessions/index.json`. | `feed.html` (active session), keeper HANDOUTS/THREATS tabs |
 | `portal-maps.json` | District map grid data. Each entry: `id`, `session_id`, 5×7 grid matrix (cell types: `loc`/`street-h`/`street-v`/`empty`). Each `loc`: `id`, `order` (narrative 1-7, keeper-only), `label`, `sublabel`, `player_desc`, `keeper_note`, `npcs[]`. | `feed.html` player MAP tab + keeper MAP tab |
 | `motw-basic-moves.json` | All 10 basic moves + 15 Weird move variants (hardcover + SSK). Each move has trigger, stat, and outcome text for 12+/10+/7-9/miss. | Roll interface, move reference panel |
 | `motw-playbooks.json` | 24 playbooks total: 4 PORTAL campaign hunters (rex/reed/alan/sven, each with `hunter` field + `player_choices` block) + 20 generic reference playbooks (`hunter: null`). Full move text, stat options, gear lists, improvements per entry. | Roll interface, character sheet display, keeper move reference; generic entries are reference-only (no code reads them yet) |
@@ -728,8 +732,12 @@ These files are static assets served by Cloudflare Pages. They are read-only at 
 | `portal-db-custom.json` | PORTAL-authored custom entries for `missions/entities.html` Section III. Currently: Shōjō. Schema: `id`, `display_name` (HTML string), `tags[]`, `stat_block[]` (items have `label`/`value`/`full`, or `label`/`harm_num`/`harm_sub`/`harm_color` for harm rows), `custom_moves[]`, `notes[]`. **⚠ Schema normalisation pending** — current label/value pattern to be replaced with semantic field keys (see backlog). **Add a new custom entry:** append to `entries[]` — no HTML edit needed. | `missions/entities.html` Section III |
 | `portal-db-deck.json` | 53 Deck of Monsters archive entries for `missions/entities.html` Section III. Schema: `id`, `name`, `tags[]`, `columns[]` (items: `label`, `value`, optional `full` + `flavour` flags). **⚠ Schema normalisation pending** (same as portal-db-custom.json — backlog item). **Add a new deck entry:** append to `entries[]` — no HTML edit needed. | `missions/entities.html` Section III |
 | `hunter-arcs.json` | **Campaign arcs** — all 4 PORTAL hunters × 3 arcs + 6 cross-hunter intersections. Drives `missions/arcs.html` entirely — no hardcoded arc content. Add a new arc by appending to the hunter's `arcs[]` — no HTML edit needed. Beat/status/notes state lives in localStorage (`portal-arcs-v1`). | `missions/arcs.html` |
-| `portal-threads.json` | **Campaign thread registry** — 14 named threads: faction (MESA, Rook, Dan Nilsson), mystery (CAMPBELL/Cameron, Project Veil, 3am lab incident, Priya's log), personal (Reed's directive, Sven's death, Alan's maps), case (Cases A/C/D/E). Each: `id, name, category, status (active/dormant/resolved), last_moved, summary, notes`. Edit after each session (step 2.10). **ID convention for case threads:** must use `case-{letter}-{slug}` format (e.g. `case-a-volunteer`, `case-d-inheritance`) — the session prep export uses `id.startsWith('case-x-')` to auto-mark the selected case thread with ★. | `missions/threads.html` |
+| `portal-threads.json` | **Campaign thread registry** — 14 named threads: faction (MESA, Rook, Dan Nilsson), mystery (CAMPBELL/Cameron, Project Veil, 3am lab incident, Priya's log), personal (Reed's directive, Sven's death, Alan's maps), case (Cases A/C/D/E). Each: `id, name, category, status (active/dormant/resolved), last_moved, summary, player_summary, notes`. The `player_summary` field (1-2 sentences, spoiler-safe) is used by the player-facing thread tracker on `evidence.html`. If null or absent, the thread is hidden from the player view. Authored in content session — needs voice calibration. Must be reviewed/updated each session alongside keeper thread text. Edit after each session (step 2.10). **ID convention for case threads:** must use `case-{letter}-{slug}` format (e.g. `case-a-volunteer`, `case-d-inheritance`) — the session prep export uses `id.startsWith('case-x-')` to auto-mark the selected case thread with ★. | `missions/threads.html` |
 | `portal-clocks.json` | **Countdown clock registry** — 4 active clocks: Nadia's window (1/4), Mira Okonkwo (2/6), Saturday's performance (2/4), MESA response (2/4). Each: `id, label, description, segments, filled, status, segment_labels[], advancement_note, notes`. Advance `filled` after each session (step 2.10). | `missions/threads.html` |
+| `evidence.json` | **Evidence board** — accumulated investigative findings across all sessions. Each: `id` (ev- prefix), `session` (week discovered, session-gated), `found_by` (hunter id), `category` (financial/scientific/personal/mesa/supernatural/institutional), `label`, `summary` (1-3 sentences, player-safe, glanceable), `connections[]` (IDs of related items), `dossier_link` (path to dossier page or null), `status` (confirmed/unverified/disputed), `keeper_note` (keeper-only, visible in keeper mode). **Add new evidence:** append to array. Authored in content session, ingested via Section L. | `evidence.html` |
+| `campbell-logs.json` | **CAMPBELL activity logs** — continuum design. `batches[]` array, one batch per session. Each batch: `id`, `session`, `label`, `introduced_by` (Teddy/Priya/John), `intro_note`, `entries[]` (timestamp + content + flags), `highlights[]` (term + by + note — in-world progressive highlighting). New batches added each session; highlights can be added to old batches retroactively. | `campbell-logs.html` |
+| `canon.json` | **Confirmed canon registry** — player-invented facts confirmed by the keeper. Each: `id`, `session`, `category` (GADGET/TEXTURE/THEORY), `label`, `value`, `source_report`, `related_evidence[]`. Cumulative across all sessions. Included in session prep export. | `missions/threads.html` (export), `evidence.html` (optional display) |
+| `report-schema.json` | **Report form configuration** — session-specific configs for keeper and player report forms. Each entry: `session_id`, `week_id`, `week_label`, `week_subtitle`, `keeper_threads[]`, `keeper_clocks[]`, `keeper_scenes[]`, `player_scenes[]`, `canon_slots[]`. Both report pages fetch this on load — replaces inline JS config objects. See `session-ingestion-template.md` Section K. | `missions/report.html`, `reports/player-report.html` |
 | `motw-playbook-arcs.json` | **Reference arc library** — all 33 playbooks × 2 arcs from the Hunter's Journal. Schema: `playbooks[]` with `entry_points[]`, `story_beats[]`, `resolution_moves[]` per arc. Read-only inspiration source when picking arcs for new hunters (e.g. Flake for John Johnson). Never rendered by any page — keeper lookup only. | Reference only |
 
 ### Cross-file relationships
@@ -797,18 +805,17 @@ Hosting: Cloudflare Pages (`dev` branch). D1 binding: `portal_db`. Three migrati
 
 ### Build Order (when resuming)
 
-**Phase 1 — Live Feed (next immediate build):**
-- `app/feed.html` — split-screen session tool. Left: roll feed + CAMPBELL messages. Right: playbook panel. Keeper mode via double-click. D1 polling first; Durable Objects later.
+See `portal-feature-proposals.md` for the full priority queue. Summary:
 
-**Phase 2 — Player interactive features:**
-- Character sheet pages (D1-backed, offline-first localStorage fallback)
-- Dice roller (pure JS, logs to visible roll history div)
-- Campaign State export — aggregates sheets + open threads + last session report into one markdown blob for Claude context
+**Phase A — Foundation:** CSS promotion, report schema extraction to `data/report-schema.json`, session-data splitting to `data/sessions/`, doc cleanup.
 
-**Phase 3 — Auth + real-time:**
-- Player login (Cloudflare Access or simple magic-link via Workers)
-- Live roll logging visible to all players
-- Real-time updates via Durable Objects — not essential, nice-to-have
+**Phase B — S03 Feed Types:** Tone cards, line cards (with distortion), scan results (with ad-hoc creator form).
+
+**Phase C — S03 Content:** New session data in `data/sessions/s03.json`, dossier pages, report-schema entry.
+
+**Phase D — Post-Session:** Evidence & Investigation page (`evidence.html`), canon pipeline (persistent registry in `data/canon.json`), CAMPBELL logs continuum (`campbell-logs.html` + `data/campbell-logs.json`), player thread summaries.
+
+**Phase E — When Convenient:** Entity schema normalisation, glossary page, test coverage.
 
 ### Notes for Claude Code Sessions
 
