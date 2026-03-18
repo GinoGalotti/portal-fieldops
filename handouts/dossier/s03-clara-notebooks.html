@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clara Voss — Rehearsal Notebooks</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dossier-bg: #0d0a0e;
+    --page-bg: #f5f0e8;
+    --ink-clara: #2a1a0a;
+    --ink-mid: #2a1a12;
+    --ink-silvia: #1a1a2a;
+    --ink-dim: #6a5a4a;
+    --accent: #4a1a6a;
+    --cream: #faf6ed;
+    --cream-aged: #f0e8d8;
+    --border: #c8b8a0;
+    --red-flag: #8a2a2a;
+    --keeper-bg: #1a0a2a;
+    --keeper-text: #c8a8d8;
+    --hint-bg: rgba(74, 26, 106, 0.15);
+    --hint-border: rgba(74, 26, 106, 0.45);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dossier-bg);
+    color: var(--ink-clara);
+    font-family: 'EB Garamond', 'Crimson Text', Georgia, serif;
+    line-height: 1.6;
+    padding: 2rem 1rem;
+  }
+
+  .dossier-wrapper {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  /* Classification header */
+  .classification {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: #7a6a5a;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #3a2a1a;
+  }
+
+  .dossier-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--cream);
+    margin-bottom: 0.3rem;
+  }
+
+  .dossier-subtitle {
+    font-family: 'Crimson Text', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: #9a8a7a;
+    margin-bottom: 2rem;
+  }
+
+  .provenance {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: #6a5a4a;
+    letter-spacing: 0.08em;
+    padding: 0.6rem 0.8rem;
+    background: rgba(255,255,255,0.03);
+    border-left: 2px solid #3a2a1a;
+    margin-bottom: 2.5rem;
+    line-height: 1.8;
+  }
+
+  /* Notebook entries */
+  .notebook-entry {
+    background: var(--cream);
+    padding: 1.6rem 1.8rem;
+    margin-bottom: 1.2rem;
+    border-radius: 1px;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+
+  .notebook-entry::before {
+    content: '';
+    position: absolute;
+    left: 1.2rem;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: #d4c4b0;
+  }
+
+  .entry-date {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--ink-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+
+  .entry-body {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    padding-left: 0.4rem;
+  }
+
+  .entry-body p { margin-bottom: 0.7rem; }
+  .entry-body p:last-child { margin-bottom: 0; }
+
+  /* Voice shift — progressive colour change */
+  .voice-clara { color: var(--ink-clara); }
+  .voice-early-shift { color: #2a1a0e; }
+  .voice-mid { color: var(--ink-mid); }
+  .voice-late { color: #22182a; }
+  .voice-silvia { color: var(--ink-silvia); }
+
+  /* Aged paper for later entries */
+  .paper-aged { background: var(--cream-aged); }
+  .paper-late { background: #ece0d0; }
+
+  /* ─── Clue highlights ─── */
+  .clue-hint {
+    transition: all 0.4s ease;
+  }
+
+  .clues-revealed .clue-hint {
+    background: var(--hint-bg);
+    border-bottom: 2px solid var(--hint-border);
+    padding: 1px 3px;
+  }
+
+  /* ─── Keeper mode ─── */
+  .keeper-note {
+    display: none;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--keeper-text);
+    background: var(--keeper-bg);
+    padding: 0.5rem 0.7rem;
+    margin-top: 0.8rem;
+    border-left: 2px solid #6a3a8a;
+    line-height: 1.5;
+  }
+
+  .keeper-active .keeper-note { display: block; }
+
+  /* Keeper toolbar — fixed bottom-right, only visible in keeper mode */
+  .keeper-toolbar {
+    display: none;
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 100;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+  }
+
+  .keeper-active .keeper-toolbar { display: flex; gap: 0.4rem; }
+
+  .keeper-btn {
+    background: var(--keeper-bg);
+    color: var(--keeper-text);
+    border: 1px solid #6a3a8a;
+    padding: 0.5rem 0.8rem;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: background 0.2s;
+  }
+
+  .keeper-btn:hover { background: #2a1a3a; }
+
+  .keeper-btn.active {
+    background: #4a1a6a;
+    color: #f0e8f8;
+  }
+
+  .keeper-status {
+    padding: 0.5rem 0.8rem;
+    background: rgba(26, 10, 42, 0.8);
+    color: #8a7a9a;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Break marker between phases */
+  .phase-break {
+    text-align: center;
+    padding: 1.5rem 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    color: #5a4a3a;
+    letter-spacing: 0.15em;
+  }
+
+  /* Final entry */
+  .entry-final { border-left: 2px solid var(--red-flag); }
+  .entry-final::before { background: var(--red-flag); opacity: 0.4; }
+
+  @media (max-width: 600px) {
+    .notebook-entry { padding: 1.2rem 1.4rem; }
+    .entry-body { font-size: 0.95rem; }
+    .keeper-toolbar { bottom: 0.5rem; right: 0.5rem; }
+    .keeper-btn, .keeper-status { padding: 0.4rem 0.6rem; font-size: 0.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="dossier-wrapper">
+
+  <div class="classification">// field evidence — s03 — route a // recovered by reed atwood</div>
+  <h1 class="dossier-title">Clara Voss — Rehearsal Notebooks</h1>
+  <p class="dossier-subtitle">Selected entries, spanning eighteen months. Three notebooks recovered from Clara's flat via Miriam Okafor.</p>
+
+  <div class="provenance">
+    RECOVERED: Bedside drawer, Ward B, St. Barnabas Hospital<br>
+    ORIGINAL LOCATION: Clara Voss's flat — sister had custody, unaware of contents<br>
+    RECOVERED BY: Reed Atwood, during interview with Miriam Okafor<br>
+    NOTEBOOKS: 3 (Moleskine, black, A5). Entries span 18 months.<br>
+    CONDITION: Good. Later entries show heavier pen pressure. Final entry incomplete.
+  </div>
+
+  <!-- PHASE 1: Professional rehearsal notes — Clara's clear voice -->
+
+  <div class="notebook-entry voice-clara">
+    <div class="entry-date">Notebook 1 — Week 2 of Season 1</div>
+    <div class="entry-body">
+      <p>First full run of Act II with Edmund. His Proteus is quieter than I expected — he's finding the betrayal through stillness rather than agitation. It works. I adjusted the Silvia entrance to give him an extra beat before my line. Petra noticed and approved without saying anything, which is how you know it was right.</p>
+      <p>The prompt book arrived for the anniversary display. Marcus is very excited about it. Beautiful object — Victorian, annotated throughout in a hand I can't quite read. <span class="clue-hint" data-clue="book-contact">He let me hold it during the blocking session. Heavier than it looks.</span></p>
+    </div>
+    <div class="keeper-note">// KEEPER: Clara's baseline voice. Professional, specific, observational. CLUE: first physical contact with the prompt book — incidental, she doesn't know what it is yet.</div>
+  </div>
+
+  <div class="notebook-entry voice-clara">
+    <div class="entry-date">Notebook 1 — Week 8 of Season 1</div>
+    <div class="entry-body">
+      <p>Good week. The Act V blocking is finally settled — we landed on playing Proteus's assault as full remorse rather than menace. It's more disturbing this way. Valentine's forgiveness reads as horrifying instead of noble, which I think is correct. Edmund agrees. Marcus is nervous about it. Petra told him it was the right choice, which settled it.</p>
+      <p>I've been using the prompt book as a reference during blocking notes — <span class="clue-hint" data-clue="book-annotations">the Victorian annotations have a logic to them I'm starting to understand. Not stage directions exactly. Something about the relationship between the performer and the space.</span> Whoever wrote these was thinking about performance differently from the way we do.</p>
+    </div>
+    <div class="keeper-note">// KEEPER: Still fully Clara. CLUE: "the relationship between the performer and the space" — she's reading the mechanism's instructions without knowing what they are.</div>
+  </div>
+
+  <div class="notebook-entry voice-clara">
+    <div class="entry-date">Notebook 1 — Week 3 of Season 2</div>
+    <div class="entry-body">
+      <p>Second season opened well. The Silvia choices are more settled now — I don't have to think about the entrances, they just happen. Edmund said my instincts have never been sharper. I said his haven't either. We meant it as a compliment both ways.</p>
+      <p>Something odd in Thursday's matinée. <span class="clue-hint" data-clue="first-symptom">I knew my next line before the cue. Not because I'd memorised the sequence — I've been off-book for a year. This was different. It felt like remembering something that happened rather than something I learned.</span></p>
+      <p>Probably just deep familiarity with the role. Three seasons of the same lines in the same space. The body learns before the mind catches up.</p>
+    </div>
+    <div class="keeper-note">// KEEPER: First symptom. CLUE: "remembering something that happened" — the earliest sign of role-anchored transfer. Clara rationalises it reasonably.</div>
+  </div>
+
+  <div class="phase-break">· · · notebook 2 begins · · ·</div>
+
+  <!-- PHASE 2: The shift begins -->
+
+  <div class="notebook-entry voice-early-shift">
+    <div class="entry-date">Notebook 2 — Week 11 of Season 2</div>
+    <div class="entry-body">
+      <p>It's happening more. Making choices in rehearsal that I don't remember deciding. The blocking adjustments are good — Petra marks them without comment, which means they're working — but <span class="clue-hint" data-clue="choices-not-hers">I can't always trace them back to a thought I had. It's as if the decision happens in the space between intending to move and moving.</span></p>
+      <p>Edmund noticed. He said something about my choices having "a quality of inevitability" that he finds remarkable. He meant it as a compliment. I smiled and said thank you.</p>
+      <p>I did not say: I don't know where the choices are coming from.</p>
+    </div>
+    <div class="keeper-note">// KEEPER: Clara can't name it but documents it precisely. CLUE: decisions arriving without her making them — the mechanism operating below conscious awareness.</div>
+  </div>
+
+  <div class="notebook-entry voice-early-shift paper-aged">
+    <div class="entry-date">Notebook 2 — Week 14 of Season 2</div>
+    <div class="entry-body">
+      <p>I should tell Edmund. I keep not telling Edmund.</p>
+      <p><span class="clue-hint" data-clue="feels-like-excellence">I don't know how to say: I think something is happening to me that I don't have a name for, and it feels like excellence, which is the part that frightens me most.</span></p>
+      <p>Thursday's performance was the best Silvia I've ever given. I could feel the audience — not in the usual way, not the awareness of four hundred people watching, but something more specific. <span class="clue-hint" data-clue="audience-belief">As if I knew what they needed from the scene before they did. As if the scene was already complete and I was arriving inside it.</span></p>
+      <p><span class="clue-hint" data-clue="book-habitual">I held the prompt book for twenty minutes during the notes session afterward. I don't remember picking it up.</span></p>
+    </div>
+    <div class="keeper-note">// KEEPER: "It feels like excellence" — the line the players should carry. CLUE: audience connection describes the BIM amplifier. CLUE: prompt book contact now habitual and unconscious.</div>
+  </div>
+
+  <div class="notebook-entry voice-mid paper-aged">
+    <div class="entry-date">Notebook 2 — Week 6 of Season 3</div>
+    <div class="entry-body">
+      <p><span class="clue-hint" data-clue="silvia-named">Silvia does not like the way Valentine speaks to her in Act III. This is not an interpretation. It is not a character note. I am writing it down because the feeling arrived complete, fully formed, without me thinking it.</span></p>
+      <p>Silvia does not like the way Valentine speaks to her, and when I am onstage in that scene, I adjust my position to create more distance, and Petra has noted this as a deliberate choice, and I have accepted her reading because I don't know how to explain the alternative.</p>
+      <p><span class="clue-hint" data-clue="choice-not-mine">The alternative is that the choice was not mine.</span></p>
+    </div>
+    <div class="keeper-note">// KEEPER: First entry where Clara names Silvia as the source. CLUE: "Silvia does not like" — the fictional character has preferences independent of Clara. CLUE: "the choice was not mine."</div>
+  </div>
+
+  <div class="phase-break">· · · notebook 3 begins · · ·</div>
+
+  <!-- PHASE 3: The voice changes -->
+
+  <div class="notebook-entry voice-late paper-late">
+    <div class="entry-date">Notebook 3 — Week 10 of Season 3</div>
+    <div class="entry-body">
+      <p>The touring production briefing is in two weeks. I have been planning this for two years — my Verona, my staging, the approach to Act V that I've carried since the first season. I want to see it through.</p>
+      <p>Yesterday during the Act II run <span class="clue-hint" data-clue="second-attention">I felt something settle behind my eyes like a second attention. Not intrusive. Patient. Waiting for the scene to require it.</span></p>
+      <p>Edmund was across the stage and I looked at him and knew — not thought, knew — that he would turn upstage on his next line. He did. He always does. I have watched him do it for three years. But the knowing was different. <span class="clue-hint" data-clue="inside-the-scene">It came from inside the scene rather than from beside it.</span></p>
+    </div>
+    <div class="keeper-note">// KEEPER: "A second attention" — Clara names the mechanism. CLUE: the knowing comes from inside the performance. Voice is shifting — "I have watched him do it" has a formality that isn't Clara's register.</div>
+  </div>
+
+  <div class="notebook-entry voice-late paper-late">
+    <div class="entry-date">Notebook 3 — Week 13 of Season 3</div>
+    <div class="entry-body">
+      <p><span class="clue-hint" data-clue="two-of-us">There are two of us in every performance now.</span></p>
+      <p>I do not mean this as metaphor. In the Act IV entrance — the one where Silvia refuses Proteus — I can feel the refusal arriving before I enact it. <span class="clue-hint" data-clue="not-my-refusal">It is not my refusal. It belongs to someone who has refused this particular man in this particular way for longer than I have been alive.</span> I step into the shape of it. The audience sees Silvia. They have always seen Silvia. What has changed is that Silvia is also watching.</p>
+      <p>I have not told Edmund. I will not tell Edmund. <span class="clue-hint" data-clue="edmund-carrying">He is carrying something similar and I can see it in the way his Proteus has stopped being a performance and become a habitation</span>, and if I name it for him the naming will make it real in a way it is not yet real, and I am not prepared to be responsible for that.</p>
+    </div>
+    <div class="keeper-note">// KEEPER: No longer fully Clara's voice. CLUE: "There are two of us" — explicit. CLUE: "longer than I have been alive" — Silvia predates Clara. CLUE: Edmund is also inhabited — "a habitation."</div>
+  </div>
+
+  <div class="notebook-entry voice-silvia paper-late">
+    <div class="entry-date">Notebook 3 — Week 15 of Season 3</div>
+    <div class="entry-body">
+      <p><span class="clue-hint" data-clue="staircase">The staircase is unfamiliar at night. I have climbed it many times but tonight the steps do not correspond to the ones I remember.</span> The upper rehearsal room is dark. The building is quiet. I am alone in it, which is true of me more often now than it used to be.</p>
+      <p>Edmund left after the double bill. He looked tired in a way I recognise — the tiredness of someone who is present inside something that requires more presence than they have. I wanted to tell him. I did not.</p>
+      <p>The touring production briefing is Thursday. I want to see it through.</p>
+      <p>I want to see it through.</p>
+    </div>
+    <div class="keeper-note">// KEEPER: Clara's final entry, the night she died. CLUE: "The staircase is unfamiliar" — for two seconds she was Silvia, and Silvia has never climbed those stairs.</div>
+  </div>
+
+  <div class="notebook-entry entry-final voice-silvia paper-late">
+    <div class="entry-date">Notebook 3 — Final page, undated</div>
+    <div class="entry-body">
+      <p><span class="clue-hint" data-clue="silvia-writes">She was planning something beautiful. I have seen it from inside her and it would have been extraordinary.</span></p>
+      <p><span class="clue-hint" data-clue="silvia-confession">The stairs were dark. She knew them. I did not.</span></p>
+    </div>
+    <div class="keeper-note">// KEEPER: This is NOT Clara. It is Silvia writing after Clara fell. The fictional character wrote a eulogy for the woman it killed.</div>
+  </div>
+
+  <!-- Keeper toolbar -->
+  <div class="keeper-toolbar">
+    <span class="keeper-status" id="hint-status">clues: hidden</span>
+    <button class="keeper-btn" id="toggle-hints">REVEAL CLUES</button>
+  </div>
+
+</div>
+
+<script>
+  const STORAGE_KEY = 'portal-dossier-s03-clara-hints';
+  const wrapper = document.querySelector('.dossier-wrapper');
+  const toggleBtn = document.getElementById('toggle-hints');
+  const statusEl = document.getElementById('hint-status');
+
+  // ─── Keeper mode: 5× click on classification ───
+  let keeperClicks = 0;
+  let keeperTimer = null;
+  const header = document.querySelector('.classification');
+  if (header) {
+    header.style.cursor = 'default';
+    header.addEventListener('click', () => {
+      keeperClicks++;
+      clearTimeout(keeperTimer);
+      keeperTimer = setTimeout(() => { keeperClicks = 0; }, 2000);
+      if (keeperClicks >= 5) {
+        wrapper.classList.toggle('keeper-active');
+        keeperClicks = 0;
+      }
+    });
+  }
+
+  // ─── Clue reveal system ───
+  // State syncs to D1 so the keeper can reveal clues on their device and all
+  // players see the highlights on next page load. Falls back to localStorage if offline.
+
+  const DOSSIER_ID = 's03-clara-notebooks';
+  const API_URL = '/api/v1/dossiers/' + DOSSIER_ID + '/state';
+
+  function applyHints(revealed) {
+    if (revealed) {
+      wrapper.classList.add('clues-revealed');
+      toggleBtn.textContent = 'HIDE CLUES';
+      toggleBtn.classList.add('active');
+      statusEl.textContent = 'clues: visible to all';
+    } else {
+      wrapper.classList.remove('clues-revealed');
+      toggleBtn.textContent = 'REVEAL CLUES';
+      toggleBtn.classList.remove('active');
+      statusEl.textContent = 'clues: hidden';
+    }
+  }
+
+  // On load: fetch from D1, fall back to localStorage
+  fetch(API_URL)
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      const revealed = data && typeof data.revealed === 'boolean'
+        ? data.revealed
+        : localStorage.getItem(STORAGE_KEY) === 'revealed';
+      applyHints(revealed);
+    })
+    .catch(() => {
+      applyHints(localStorage.getItem(STORAGE_KEY) === 'revealed');
+    });
+
+  // Toggle (keeper-only — toolbar only shows in keeper mode)
+  toggleBtn.addEventListener('click', () => {
+    const newState = !wrapper.classList.contains('clues-revealed');
+    applyHints(newState);
+    // Write localStorage immediately
+    try { localStorage.setItem(STORAGE_KEY, newState ? 'revealed' : 'hidden'); } catch {}
+    // Background PUT to D1
+    fetch(API_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ revealed: newState })
+    }).catch(() => {});
+  });
+</script>
+
+</body>
+</html>

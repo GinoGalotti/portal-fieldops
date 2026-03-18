@@ -295,6 +295,8 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
 .document-classification { font-size: 0.65rem; font-family: 'Share Tech Mono', monospace; color: #c8a020; letter-spacing: 0.08em; }
 .document-title { padding: 0.5rem 0.75rem 0.2rem; font-size: 0.8rem; font-weight: 700; color: #d4b060; letter-spacing: 0.04em; text-transform: uppercase; }
 .document-body { padding: 0.3rem 0.75rem 0.7rem; font-size: 0.75rem; line-height: 1.6; color: #c0a050; white-space: pre-wrap; font-family: 'Share Tech Mono', monospace; }
+.document-link { display: block; margin: 0 0.75rem 0.6rem; font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: #a07830; text-decoration: none; border: 1px solid rgba(180,140,32,0.25); padding: 3px 8px; width: fit-content; }
+.document-link:hover { color: #d4b060; border-color: rgba(180,140,32,0.5); }
 
 /* ── CLASSIFIED ENTRIES (keeper view / player redacted) ─────────────────── */
 .feed-entry.feed-classified { border-left: 2px solid rgba(160,100,200,0.6); background: rgba(20,10,30,0.95); }
@@ -3061,6 +3063,7 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
       var label          = payload.label          || entry.subject || '';
       var classification = payload.classification || 'FIELD EVIDENCE';
       var body           = payload.body           || entry.body    || '';
+      var link           = payload.link           || '';
       return '<div class="feed-entry feed-document">' +
         '<div class="document-chrome">' +
           '<span class="document-classification">// ' + escHtml(classification) + '</span>' +
@@ -3068,6 +3071,7 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
         '</div>' +
         (label ? '<div class="document-title">' + escHtml(label) + '</div>' : '') +
         '<div class="document-body">' + escHtml(body) + '</div>' +
+        (link ? '<a class="document-link" href="/' + escHtml(link) + '" target="_blank" rel="noopener">→ VIEW FULL DOCUMENT</a>' : '') +
       '</div>';
     }
 
