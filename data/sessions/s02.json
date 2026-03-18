@@ -65,11 +65,11 @@
   "readaloud": [
     {
       "label": "Cold Open — Arthur gets lost",
-      "text": "Arthur Okafor has walked this route every morning for forty-one years. Left at the gate, past the postbox, right at the phone box, along the back of the park, home. He could do it in his sleep.\n\nThis morning he turns right at the phone box and finds himself standing in front of a house he doesn't recognise. He turns back. The postbox is gone. He walks for six minutes in a direction that should take him past the park, and arrives in a cul-de-sac he has never seen in four decades of living here.\n\nHis dog sits down and will not move.\n\nArthur is not frightened yet. He is seventy-two years old and he knows this street. He sits down on the kerb and waits. Someone will come. Someone always comes."
+      "text": "Arthur Okafor has walked this route every morning for forty-one years. Left at the gate, past the postbox, right at the phone booth, along the back of the park, home. He could do it in his sleep.\n\nThis morning he turns right at the phone booth and finds himself standing in front of a house he doesn't recognise. He turns back. The postbox is gone. He walks for six minutes in a direction that should take him past the park, and arrives in a cul-de-sac he has never seen in four decades of living here.\n\nHis dog sits down and will not move.\n\nArthur is not frightened yet. He is seventy-two years old and he knows this street. He sits down on the kerb and waits. Someone will come. Someone always comes."
     },
     {
       "label": "Arriving at the Perimeter",
-      "text": "Aldermoor looks like any other neighbourhood on a grey afternoon. Terraced houses, recycling bins out, a cat watching from a windowsill. The only signs anything is wrong are the small ones: a hand-lettered note on a front door that says DO NOT GO OUT ALONE. A ball of orange string tied to a garden gate, trailing away down the pavement and vanishing around a corner.\n\nYou can feel the boundary if you stand at it long enough. Not a wall. More like the moment before a word comes to you — that half-second of blankness where the thing you know perfectly well has temporarily left you. Except it doesn't pass."
+      "text": "Aldermoor looks like any other neighbourhood on a grey afternoon. Rowhouses, recycling bins out, a cat watching from a windowsill. The only signs anything is wrong are the small ones: a hand-lettered note on a front door that says DO NOT GO OUT ALONE. A ball of orange string tied to a garden gate, trailing away down the sidewalk and vanishing around a corner.\n\nYou can feel the boundary if you stand at it long enough. Not a wall. More like the moment before a word comes to you — that half-second of blankness where the thing you know perfectly well has temporarily left you. Except it doesn't pass."
     },
     {
       "label": "Entering the Zone",
@@ -98,7 +98,7 @@
       "id": "s02-ra-01",
       "type": "readaloud",
       "label": "Cold Open — Arthur Gets Lost",
-      "text": "Arthur Okafor has walked this route every morning for forty-one years. Left at the gate, past the postbox, right at the phone box, along the back of the park, home. He could do it in his sleep.\n\nThis morning he turns right at the phone box and finds himself standing in front of a house he doesn't recognise. He turns back. The postbox is gone. He walks for six minutes in a direction that should take him past the park, and arrives in a cul-de-sac he has never seen in four decades of living here.\n\nHis dog sits down and will not move.\n\nArthur is not frightened yet. He is seventy-two years old and he knows this street. He sits down on the kerb and waits. Someone will come. Someone always comes."
+      "text": "Arthur Okafor has walked this route every morning for forty-one years. Left at the gate, past the postbox, right at the phone booth, along the back of the park, home. He could do it in his sleep.\n\nThis morning he turns right at the phone booth and finds himself standing in front of a house he doesn't recognise. He turns back. The postbox is gone. He walks for six minutes in a direction that should take him past the park, and arrives in a cul-de-sac he has never seen in four decades of living here.\n\nHis dog sits down and will not move.\n\nArthur is not frightened yet. He is seventy-two years old and he knows this street. He sits down on the kerb and waits. Someone will come. Someone always comes."
     },
     {
       "id": "s02-img-02",
@@ -110,7 +110,7 @@
       "id": "s02-ra-02",
       "type": "readaloud",
       "label": "Arriving at the Perimeter",
-      "text": "Aldermoor looks like any other neighbourhood on a grey afternoon. Terraced houses, recycling bins out, a cat watching from a windowsill. The only signs anything is wrong are the small ones: a hand-lettered note on a front door that says DO NOT GO OUT ALONE. A ball of orange string tied to a garden gate, trailing away down the pavement and vanishing around a corner.\n\nYou can feel the boundary if you stand at it long enough. Not a wall. More like the moment before a word comes to you — that half-second of blankness where the thing you know perfectly well has temporarily left you. Except it doesn't pass."
+      "text": "Aldermoor looks like any other neighbourhood on a grey afternoon. Rowhouses, recycling bins out, a cat watching from a windowsill. The only signs anything is wrong are the small ones: a hand-lettered note on a front door that says DO NOT GO OUT ALONE. A ball of orange string tied to a garden gate, trailing away down the sidewalk and vanishing around a corner.\n\nYou can feel the boundary if you stand at it long enough. Not a wall. More like the moment before a word comes to you — that half-second of blankness where the thing you know perfectly well has temporarily left you. Except it doesn't pass."
     },
     {
       "id": "s02-map-01",
@@ -130,7 +130,7 @@
       "type": "document",
       "label": "Aldermoor Property Services — Whiteboard (photographed)",
       "classification": "FIELD EVIDENCE — S02",
-      "body": "ACQUISITIONS LOG — ALDERMOOR DISTRICT\nCompiled: Aldermoor Property Services, 22 Aldermoor High Street\n\nPROPERTIES ACQUIRED: 47\nPERIOD: 18 months\nBUYING ENTITIES:\n  — Greyfield Assets Ltd\n  — Veritas Realty Holdings\n  — Solstice Property Group\nREGISTERED ADDRESS (all three): JERSEY\n\nDates written at each street address. Earliest entry: 3 weeks before first public navigation report. Most recent entry: 2 weeks ago — after office officially closed.\n\nSomeone still had a key."
+      "body": "ACQUISITIONS LOG — ALDERMOOR DISTRICT\nCompiled: Aldermoor Property Services, 22 Aldermoor High Street\n\nPROPERTIES ACQUIRED: 47\nPERIOD: 18 months\nBUYING ENTITIES:\n  — Greyfield Assets Ltd\n  — Veritas Realty Holdings\n  — Solstice Property Group\nREGISTERED ADDRESS (all three): WILMINGTON, DELAWARE\n\nDates written at each street address. Earliest entry: 3 weeks before first public navigation report. Most recent entry: 2 weeks ago — after office officially closed.\n\nSomeone still had a key."
     },
     {
       "id": "s02-img-07",

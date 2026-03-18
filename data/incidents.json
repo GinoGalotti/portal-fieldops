@@ -106,7 +106,7 @@
               "type": "campbell",
               "label": "// CAMPBELL — INTERNAL NOTICE",
               "paragraphs": [
-                "Bálint remains at his sister's residence in Hackney. He does not know the organisation's name — he was told the individuals who assisted him were \"independent researchers.\" A description that is technically accurate and contextually incomplete.",
+                "Bálint remains at his sister's residence in Arlington. He does not know the organisation's name — he was told the individuals who assisted him were \"independent researchers.\" A description that is technically accurate and contextually incomplete.",
                 "He called the number left by field operatives on three occasions in the week following Case S01. The calls were not answered. Messages have been retained. I am not attaching them to this notice.",
                 "He has not called in three days."
               ],
@@ -501,7 +501,7 @@
               "type": "log-excerpt",
               "label": "CAMPBELL ACTIVITY LOG — EXCERPT E // TIMESTAMP 11:38:55",
               "lines": [
-                "EXTERNAL QUERY: Public records search — company registrations, Jersey jurisdiction.",
+                "EXTERNAL QUERY: Public records search — company registrations, Delaware jurisdiction.",
                 "QUERY PARAMETERS: [REDACTED]",
                 "RESULTS: 3 entities identified. Cross-referenced against active case files.",
                 "NOTE: No match found in current case database. Filing as background reference."

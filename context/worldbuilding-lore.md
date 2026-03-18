@@ -21,7 +21,9 @@ For non-canon ideas, creature candidates, and speculative threads → use `ideas
 
 ### Organisation
 
-**P.O.R.T.A.L** — Paranormal Operations & Research in Theoretical Applied Liminology. A small private research lab, less than a decade old, founded by Dr. Victor Leech. Not government-affiliated. Operates from a central facility. Sends field operatives to investigate anomalous cases. Issues case briefings via an AI system called CAMPBELL.
+**P.O.R.T.A.L** — Paranormal Operations & Research in Theoretical Applied Liminology. A small private research lab, less than a decade old, founded by Dr. Victor Leech. Not government-affiliated. Operates from a facility in central Virginia. Sends field operatives to investigate anomalous cases. Issues case briefings via an AI system called CAMPBELL.
+
+**Default case geography:** East Coast US, within driving distance of the Virginia lab. The team travels by van. International deployment is possible but requires specific operational justification — a case with no local equivalent, an entity that can only be reached at its origin, or MESA activity in a location PORTAL can't ignore.
 
 The organisation is legitimate but ethically complicated. Its directives are usually reasonable, occasionally uncomfortable, and always issued with incomplete information. The hunters are not soldiers — they're investigators who sometimes have to make hard calls PORTAL hasn't anticipated.
 
@@ -62,7 +64,7 @@ The organisation is legitimate but ethically complicated. Its directives are usu
 
 ### Rival Organisation — MESA
 
-**M.E.S.A.** — A rival paranormal research organisation, led in shadow by **Agatha Dell**. Shell companies include: Meridian BioSciences, Greyfield Assets Ltd, Veritas Realty Holdings, Solstice Property Group, Helix Boundary (contact: @helixboundary.com — no public record). All share a Jersey registered address. The MESA acronym pattern is subtly echoed in the names of its shell companies — Agatha's signature, a pattern she cannot resist.
+**M.E.S.A.** — A rival paranormal research organisation, led in shadow by **Agatha Dell**. Shell companies include: Meridian BioSciences, Greyfield Assets Ltd, Veritas Realty Holdings, Solstice Property Group, Helix Boundary (contact: @helixboundary.com — no public record). All share a registered address in Wilmington, Delaware. The MESA acronym pattern is subtly echoed in the names of its shell companies — Agatha's signature, a pattern she cannot resist.
 
 **Agatha Dell** — Cameron's younger sister. Always felt overshadowed by Cameron; the family kept giving Cameron chances. Cameron treated her with genuine love; she kept the bitterness. In Cameron's later years he involved her in some paranormal discoveries. After his death she secured funding and built her own organisation — driven by profit and obscure personal motives. She suspects Victor Leech was involved in Cameron's illness and death (she doesn't know about the consciousness transfer — she believes Cameron is dead). Her suspicion is partly projection from her own guilt about their estrangement. Agatha is on the spectrum, drawn to patterns. The Dell family blames Leech for the estrangement.
 
@@ -113,7 +115,7 @@ Private security contractors. Know they work for a company doing "sensitive envi
 ### Completed Cases
 
 **Case S01 — "A Promise is a Promise" — CLOSED**
-Entity: Eszter (E-001). Classification: Executioner. Location: [residential]. Resolution: HUMANE — entity allowed to disperse. Bálint's wellbeing prioritised.
+Entity: Eszter (E-001). Classification: Executioner. Location: Northern Virginia suburbs. Resolution: HUMANE — entity allowed to disperse. Bálint's wellbeing prioritised.
 Directive outcome: PARTIAL — ash locket not retrieved. Trace particulate recovered incidentally.
 Project Veil flag: Ash analysis reveals anomalous interaction with electronic systems.
 Loose threads: Detective Vasquez (authorities noticed). Bálint alive, grieving. Contact status unresolved.
@@ -123,16 +125,16 @@ Loose threads: Detective Vasquez (authorities noticed). Bálint alive, grieving.
 ### Active Cases (Post-Session 01, pre-Session 02 resolution)
 
 **Session 02 — "Something That Wants To Be Known" — PREP COMPLETE, NOT YET PLAYED**
-Entity: The Cartographer (E-002). Classification: Collector (Urban Sprawler reskin). Location: Aldermoor District.
+Entity: The Cartographer (E-002). Classification: Collector (Urban Sprawler reskin). Location: Aldermoor District, Virginia.
 Pre-human consciousness. Feeds on familiarity — consumes cognitive maps of long-term residents. Does not intend harm. Wants to be known the way it once was. Resolution requires genuine communication via a hunter voluntarily removing their anchor. Sven is the natural contact vector (no cognitive map to lose; entity recognises him at the boundary as something that exists between states).
 
-Scene flow: PC Adeyemi (perimeter) → Arthur Okafor (best witness, Fenwick Road) → Aldermoor Property Services office (22 Aldermoor High Street — whiteboard map, shell company acquisition records, shredded @helixboundary.com email) → observe construction site from outside → anchor up → enter zone → Vera Osei (inside, has string line, knows where Diane went) → 14 Aldermoor Crescent / Margaret Holt (epicentre, not leaving, knows where Diane is) → construction site / Diane Marsh (site office, 9 days, has notebook with threshold sketch) → contact entity → resolution.
+Scene flow: PC Adeyemi (perimeter) → Arthur Okafor (best witness, Fenwick Road) → Aldermoor Property Services office (22 Aldermoor Main Street — whiteboard map, shell company acquisition records, shredded @helixboundary.com email) → observe construction site from outside → anchor up → enter zone → Vera Osei (inside, has string line, knows where Diane went) → 14 Aldermoor Crescent / Margaret Holt (epicentre, not leaving, knows where Diane is) → construction site / Diane Marsh (site office, 9 days, has notebook with threshold sketch) → contact entity → resolution.
 
 District map: inline SVG in the session prep document, 8 numbered markers. Key locations: ① PORTAL entry/cordon, ② PC Adeyemi, ③ estate agent's office, ④ Arthur Okafor, ⑤ Vera Osei (inside zone), ⑥ epicentre No. 14 Aldermoor Crescent, ⑦ construction site/reservoir, ⑧ Diane's shelter (site office).
 
 Alan note: what the Cartographer does is NOT illusion. It consumes the real thing — the cognitive map inside residents' heads. Alan's illusion affinity is not the right tool here, and this is intentional. His gift in this scene is his nature: he reads place the way fey characters do, by resonance and layered memory. He recognises the entity rather than seeing through it. The scene's gift to Alan is realising his powers don't apply — but he does.
 
-Key NPCs in zone: Arthur Okafor (72, retired postal worker, 41 years on Fenwick Road — best witness), PC Yemi Adeyemi (28, neighbourhood liaison — cooperative), Vera Osei (61, retired schoolteacher — calm, won't leave without her cat), Margaret Holt (74, former librarian, 50 years at epicentre — not leaving), Diane Marsh (58, district nurse, missing 9 days — in construction site office, has a notebook containing a threshold sketch Alan will recognise).
+Key NPCs in zone: Arthur Okafor (72, retired postal worker, 41 years on Fenwick Road — best witness), PC Yemi Adeyemi (28, neighbourhood liaison — cooperative), Vera Osei (61, retired schoolteacher — calm, won't leave without her cat), Margaret Holt (74, former librarian, 50 years at epicentre — not leaving), Diane Marsh (58, visiting nurse, missing 9 days — in construction site office, has a notebook containing a threshold sketch Alan will recognise).
 
 MESA thread in zone: 34% of district addresses sold in 18 months via 3 shell companies. Estate agent's office contains acquisition records, whiteboard map, partially shredded email referencing "Specimen ALD-1" and @helixboundary.com. Motion sensor in back office triggered when hunters enter — MESA knows PORTAL was there.
 
@@ -148,7 +150,7 @@ Nadia Osei (38, journalist, deceased 8 weeks). Consciousness anchored to informa
 Martin Wentworth (61, probate lawyer, deceased 22 days). Obligation-anchored consciousness, writing formal letters to clients. Most recent letter describes a planned killing of Mira Okonkwo (9 years old), 14-day window. Was managing the estate of a deceased Meridian researcher — the estate contained a consciousness-anchoring methodology archive. Probate closed unusually fast, likely by MESA. Communicates only through formal letters.
 
 **Case E — The Understudies (PRIORITY: MEDIUM)**
-Meridian Theatre Company. Single classical production — *The Two Gentlemen of Verona*, running three seasons. Lead actors Clara Voss (41, played Silvia) and Edmund Farrow (38, played Proteus) died 14 and 8 months ago respectively — apparently unconnected accidents. Three understudies now hospitalised with complete identity loss: Clara and Edmund are present in them, fully. Remaining understudies at risk. Saturday performance imminent.
+Meridian Theatre Company, Fredericksburg, Virginia — 50 miles from the PORTAL lab. Single classical production — *The Two Gentlemen of Verona*, running three seasons. Lead actors Clara Voss (41, played Silvia) and Edmund Farrow (38, played Proteus) died 14 and 8 months ago respectively — apparently unconnected accidents. Three understudies now hospitalised with complete identity loss: Clara and Edmund are present in them, fully. Remaining understudies at risk. Saturday performance imminent. Marcus Finch flagged this case through family — Daniel Ashworth's sister is married to Marcus's brother.
 
 **The artefact:** A 19th-century prompt book acquired from a private estate auction 20 months ago, paid for by MESA via the Solstice Property Group grant. BIM-saturated — holds the residue of an actor who died fully inside a role after decades of performance. Inert for 150 years until the Cameron Dell transfer provided the ambient BIM charge to activate it. The book is in the theatre foyer, unlocked, in a glass display case.
 
