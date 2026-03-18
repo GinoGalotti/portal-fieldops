@@ -40,6 +40,7 @@ function mockSession(page, sessionId) {
 test.describe('Bestiary render — default session (w2)', () => {
 
   test.beforeEach(async ({ page }) => {
+    await mockSession(page, 'w2');
     await page.goto('/index.html');
     await page.waitForLoadState('networkidle');
   });

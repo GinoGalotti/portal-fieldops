@@ -265,6 +265,9 @@ test.describe('Lab Incidents page', () => {
     });
 
     // ── Updates digest (S02-UPDATES) ──
+    // S02-UPDATES has a `digest` field, so renderUpdates() calls renderDigest()
+    // which produces .incident-digest > .id-header + .id-lines + .id-sig.
+    // (Items are not rendered as .update-item when a digest field is present.)
 
     test('W3 updates digest renders as .updates-card not .incident-card', async ({ page }) => {
       // renderUpdates() produces a .updates-card div, not .incident-card.
@@ -274,18 +277,17 @@ test.describe('Lab Incidents page', () => {
       await expect(card).not.toHaveClass(/incident-card/);
     });
 
-    test('W3 updates digest has the correct number of update items', async ({ page }) => {
-      // Each entry in items[] renders as .update-item inside the card.
-      const items = page.locator('#incident-S02-UPDATES .update-item');
-      await expect(items).toHaveCount(w3UpdatesInc.items.length);
+    test('W3 updates digest renders .incident-digest (compact view)', async ({ page }) => {
+      // When inc.digest exists, renderDigest() is called — produces .incident-digest.
+      const digest = page.locator('#incident-S02-UPDATES .incident-digest');
+      await expect(digest).toBeVisible();
     });
 
-    test('W3 updates digest .update-item-title elements are visible', async ({ page }) => {
-      // Each item has a .update-item-title div with the item title.
-      const titles = page.locator('#incident-S02-UPDATES .update-item-title');
-      await expect(titles).toHaveCount(w3UpdatesInc.items.length);
-      // First title matches the first item title from the JSON.
-      await expect(titles.first()).toContainText(w3UpdatesInc.items[0].title);
+    test('W3 updates digest .id-header contains digest header text', async ({ page }) => {
+      // .id-header spans: left = digest.header, right = digest.count.
+      const header = page.locator('#incident-S02-UPDATES .id-header');
+      await expect(header).toBeVisible();
+      await expect(header).toContainText(w3UpdatesInc.digest.header.substring(0, 20));
     });
 
     test('W3 updates digest badge shows INFORMATIONAL with badge-green class', async ({ page }) => {
@@ -303,11 +305,11 @@ test.describe('Lab Incidents page', () => {
       await expect(idLine).not.toContainText('undefined');
     });
 
-    test('W3 updates digest dividers separate items', async ({ page }) => {
-      // renderUpdates() inserts .update-divider between items (i > 0 check).
-      // With N items there should be N-1 dividers.
-      const dividers = page.locator('#incident-S02-UPDATES .update-divider');
-      await expect(dividers).toHaveCount(w3UpdatesInc.items.length - 1);
+    test('W3 updates digest .id-sig contains signature text', async ({ page }) => {
+      // renderDigest() renders digest.sig into .id-sig.
+      const sig = page.locator('#incident-S02-UPDATES .id-sig');
+      await expect(sig).toBeVisible();
+      await expect(sig).toContainText(w3UpdatesInc.digest.sig.substring(0, 20));
     });
 
     // ── Teaser (S02-CAMPBELL-LOG-2) ──

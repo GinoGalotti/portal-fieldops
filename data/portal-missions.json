@@ -84,7 +84,7 @@
         {
           "show_from": "w3",
           "show_until": null,
-          "anchor": "mission-02",
+          "anchor": "mission-02-resolved",
           "placeholder": false,
           "status": "completed",
           "title": "Something That Wants To Be Known",

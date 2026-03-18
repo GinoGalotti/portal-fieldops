@@ -27,6 +27,8 @@
 | `feed.html` MAP tab (player + keeper) | `tests/map.spec.js` | 24 | ✅ |
 | `missions/report.html` | `tests/report.spec.js` | 15 | ✅ |
 | Campaign data integrity (no browser) | `tests/post-session-integrity.spec.js` | 23 | ✅ |
+| `campbell-logs.html` | `tests/campbell-logs.spec.js` | 35 | ✅ |
+| `evidence.html` | `tests/evidence.spec.js` | 41 | ✅ |
 
 ## ⬆ Next Up (recommended order)
 
@@ -153,6 +155,12 @@ The `playwright.config.js` has `reuseExistingServer: true` — if `wrangler page
 ---
 
 ## Feature Backlog — Pending Implementation
+
+### `lab-incidents.html` → `campbell-logs.html` link [UX]
+
+The incidents page embeds CAMPBELL log excerpts (Excerpts A–G across W2/W3) as `log-excerpt` blocks inside the teaser incidents (`S01-CAMPBELL-LOG`, `S02-CAMPBELL-LOG-2`). These are long; the logs page has the full context. Once `campbell-logs.html` is deployed, add a "VIEW FULL LOGS" link at the bottom of those incident items pointing to `campbell-logs.html`. The link should only render when the target page exists (i.e., Phase D has been deployed). Implementation: add a `link` field to the incident item in `incidents.json`, and render it in `lab-incidents.html`'s item renderer.
+
+
 
 Things not yet built, noted here so they don't get lost.
 

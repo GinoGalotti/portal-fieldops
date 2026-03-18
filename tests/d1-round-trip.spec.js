@@ -35,10 +35,11 @@ test.describe.configure({ mode: 'serial' });
 
 const BASE = 'http://localhost:8788';
 
-// Load incidents data at module level to derive activeWeek.id dynamically
-// (same pattern as incidents.spec.js — never hardcode week IDs).
+// Load incidents data at module level to derive activeWeek and its choice incident dynamically
+// (same pattern as incidents.spec.js — never hardcode week IDs or incident IDs).
 const incidentsData = JSON.parse(readFileSync(resolve('./data/incidents.json'), 'utf-8'));
 const activeWeek = incidentsData.weeks.find(w => w.status === 'active');
+const activeChoiceInc = activeWeek.incidents.find(i => i.type === 'choice');
 
 // ── HELPERS ──────────────────────────────────────────────────────────────────
 
@@ -98,6 +99,10 @@ test.beforeEach(async ({ request }) => {
     // Map state uses JSON body — reset to clean { u:{}, v:{} } structure.
     request.put(`${BASE}/api/v1/maps/aldermoor/state`, {
       data: { u: {}, v: {} },
+    }),
+    // Ensure W01 player report is enabled (no D1 row = default locked, which blocks form unlock).
+    request.put(`${BASE}/api/v1/player-reports/W01/visibility`, {
+      data: { enabled: true },
     }),
     // Clean up any leftover messages from prior round-trip test runs.
     request.delete(`${BASE}/api/v1/messages?session_id=rt-test`),
@@ -167,13 +172,15 @@ test('hunter arc state — choice-opt selection persists across reload', async (
 // ── TEST 3: Incident choice state ────────────────────────────────────────────
 
 test('incident choice state — selection persists across reload', async ({ page }) => {
+  // Use the active week's choice incident — avoids hardcoding IDs that change as weeks advance.
   await clearIncidentStorage(page, activeWeek.id);
 
   await page.goto('/lab-incidents.html');
   await page.waitForLoadState('networkidle');
 
-  // Select choice A (first .choice-btn in the S01-I01 grid).
-  const btnA = page.locator('#choice-grid-S01-I01 .choice-btn').first();
+  // Select choice A (first .choice-btn in the active week's choice grid).
+  const choiceGridId = '#choice-grid-' + activeChoiceInc.id;
+  const btnA = page.locator(choiceGridId + ' .choice-btn').first();
   await btnA.click();
   await expect(btnA).toHaveClass(/selected/);
 
@@ -190,7 +197,7 @@ test('incident choice state — selection persists across reload', async ({ page
   await page.waitForLoadState('networkidle');
 
   // Choice A must still be selected (lockChoiceUI restores it from D1 state).
-  await expect(page.locator('#choice-grid-S01-I01 .choice-btn').first()).toHaveClass(/selected/);
+  await expect(page.locator(choiceGridId + ' .choice-btn').first()).toHaveClass(/selected/);
 });
 
 // ── TEST 4: Player report — rating pip ───────────────────────────────────────
@@ -282,6 +289,9 @@ test('map state — unlock persists across reload', async ({ page }) => {
   const logo = page.locator('.logo');
   for (let i = 0; i < 5; i++) await logo.click();
   await page.locator('[data-ktab="map"]').click();
+  // Select the M02 session — the keeper MAP defaults to the last session (M03)
+  // which has no map. M02 = aldermoor (the only map in portal-maps.json).
+  await page.locator('.data-sess-btn', { hasText: 'M02' }).click();
   await page.waitForLoadState('networkidle');
 
   // Confirm all cells are locked (beforeEach reset state to {}).
@@ -300,9 +310,10 @@ test('map state — unlock persists across reload', async ({ page }) => {
   await page.reload();
   await page.waitForLoadState('networkidle');
 
-  // Re-enter keeper mode and open MAP tab.
+  // Re-enter keeper mode, open MAP tab, re-select M02 (keeperMapSession resets on reload).
   for (let i = 0; i < 5; i++) await logo.click();
   await page.locator('[data-ktab="map"]').click();
+  await page.locator('.data-sess-btn', { hasText: 'M02' }).click();
   await page.waitForLoadState('networkidle');
 
   // First cell must still be unlocked (restored from D1).
@@ -317,6 +328,8 @@ test('map state — visited mark persists across reload', async ({ page }) => {
   const logo = page.locator('.logo');
   for (let i = 0; i < 5; i++) await logo.click();
   await page.locator('[data-ktab="map"]').click();
+  // Select M02 — the only session with a map (aldermoor, session_id=w2).
+  await page.locator('.data-sess-btn', { hasText: 'M02' }).click();
   await page.waitForLoadState('networkidle');
 
   // Mark first cell as visited.
@@ -329,11 +342,12 @@ test('map state — visited mark persists across reload', async ({ page }) => {
   await putPromise;
   await expect(page.locator('.map-loc-visited-btn').first()).toContainText('✓ VISITED');
 
-  // Reload and re-enter keeper MAP tab.
+  // Reload and re-enter keeper MAP tab, re-select M02.
   await page.reload();
   await page.waitForLoadState('networkidle');
   for (let i = 0; i < 5; i++) await logo.click();
   await page.locator('[data-ktab="map"]').click();
+  await page.locator('.data-sess-btn', { hasText: 'M02' }).click();
   await page.waitForLoadState('networkidle');
 
   // Visited mark must still be there (restored from D1).

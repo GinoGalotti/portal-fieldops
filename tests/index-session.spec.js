@@ -39,6 +39,7 @@ function mockSession(page, sessionId) {
 test.describe('index.html session gating — default (w2)', () => {
 
   test.beforeEach(async ({ page }) => {
+    await mockSession(page, 'w2');
     await page.goto('/index.html');
     await page.waitForLoadState('networkidle');
   });
@@ -163,8 +164,8 @@ test.describe('index.html missions — data integrity', () => {
     for (let i = 0; i < count; i++) {
       if (await cards.nth(i).isVisible()) visibleCount++;
     }
-    // w2 shows: M01-completed + M02-active + M03-placeholder
-    expect(visibleCount).toBe(totalPhases - visibleAtW1.length);
+    // w2 shows: M01-completed + M02-active + M03-placeholder (= visibleAtW2 filter)
+    expect(visibleCount).toBe(visibleAtW2.length);
   });
 
 });

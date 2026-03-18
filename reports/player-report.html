@@ -639,9 +639,9 @@
     var wk = currentWeek;
     if (visCache[wk] !== undefined) { applyVisibility(visCache[wk]); return; }
     fetch('/api/v1/player-reports/' + wk + '/visibility')
-      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject('api-error'); })
       .then(function (data) {
-        var enabled = (data && data.enabled === true); // locked by default; fail-open only on network error
+        var enabled = (data && data.enabled === true); // locked by default; fail-open on network error or non-ok response
         visCache[wk] = enabled;
         applyVisibility(enabled);
       })

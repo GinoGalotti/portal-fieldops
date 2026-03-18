@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — CAMPBELL Logs</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="player.css">
+<style>
+/* ── LAYOUT ──────────────────────────────────────────────────────────────── */
+.content-area {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px 100px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── PAGE HEADER ──────────────────────────────────────────────────────────── */
+.page-header {
+  padding: 48px 24px 32px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+}
+.page-header-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.page-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--green-dim);
+  margin-bottom: 12px;
+  cursor: default;
+  user-select: none;
+}
+.page-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #e8f5ee;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.page-subtitle {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* ── SEARCH ───────────────────────────────────────────────────────────────── */
+.search-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+.log-search {
+  width: 100%;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.log-search:focus { border-color: var(--green-dim); }
+.log-search::placeholder { color: var(--text-dim); }
+.search-clear {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  padding: 9px 11px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  line-height: 1;
+}
+.search-clear:hover { border-color: var(--green-dim); color: var(--green); }
+
+/* ── BATCH SECTION ────────────────────────────────────────────────────────── */
+.batch-section {
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+}
+.batch-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+  user-select: none;
+}
+.batch-header:hover { background: rgba(46,204,113,0.04); }
+.batch-section.collapsed .batch-header { border-bottom-color: transparent; }
+.batch-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  color: var(--green);
+}
+.batch-toggle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--green-dim);
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+.batch-header:hover .batch-toggle { color: var(--green); }
+
+/* ── BATCH BODY COLLAPSE ──────────────────────────────────────────────────── */
+.batch-body {
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+  max-height: 9999px;
+  opacity: 1;
+}
+.batch-section.collapsed .batch-body {
+  max-height: 0;
+  opacity: 0;
+}
+
+/* ── BATCH INTRO ──────────────────────────────────────────────────────────── */
+.batch-intro {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.875rem;
+  color: var(--text);
+  line-height: 1.65;
+  padding: 14px 18px;
+  border-left: 3px solid var(--amber-dim);
+  margin: 16px 16px 8px;
+  background: rgba(240,165,0,0.03);
+  font-style: italic;
+}
+
+/* ── LOG ENTRIES ──────────────────────────────────────────────────────────── */
+.entries-list {
+  padding: 8px 0 16px;
+}
+.log-entry {
+  display: grid;
+  grid-template-columns: 82px 1fr;
+  gap: 0 12px;
+  align-items: baseline;
+  padding: 5px 16px;
+  border-left: 3px solid transparent;
+  transition: background 0.1s;
+}
+.log-entry:hover { background: rgba(255,255,255,0.018); }
+.log-entry.anomaly {
+  border-left-color: var(--amber-dim);
+  background: rgba(240,165,0,0.022);
+}
+.log-entry.anomaly:hover { background: rgba(240,165,0,0.045); }
+.log-ts {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.67rem;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  padding-top: 1px;
+  align-self: start;
+}
+.log-content {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.74rem;
+  color: var(--text);
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+/* ── LAYER 1: HIGHLIGHTS ──────────────────────────────────────────────────── */
+.highlight-teddy {
+  border-bottom: 2px solid #d4a04a;
+  cursor: default;
+}
+.highlight-teddy:hover { background: rgba(212,160,74,0.1); }
+
+.highlight-priya {
+  border-bottom: 2px solid #4aa08a;
+}
+
+.highlight-john {
+  border-bottom: 2px solid #a04a4a;
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: #a04a4a;
+}
+
+/* Annotation notes */
+.hl-note {
+  grid-column: 2;
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.71rem;
+  line-height: 1.4;
+  padding: 3px 0 3px 10px;
+  border-left: 2px solid;
+  margin: 3px 0 4px;
+}
+.hl-note-teddy { color: rgba(212,160,74,0.75); border-left-color: rgba(212,160,74,0.3); }
+.hl-note-priya { color: rgba(74,160,138,0.75); border-left-color: rgba(74,160,138,0.3); }
+.hl-note-john  { color: rgba(160,74,74,0.75);  border-left-color: rgba(160,74,74,0.3); }
+
+/* ── LAYER 3: CLUE SPANS ──────────────────────────────────────────────────── */
+.clue-hint {
+  background: rgba(106,58,138,0.15);
+  border-bottom: 2px solid rgba(106,58,138,0.45);
+  padding: 1px 3px;
+  transition: background 0.4s ease, border-color 0.4s ease;
+  cursor: default;
+}
+.clue-keeper-note {
+  grid-column: 2;
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.71rem;
+  color: rgba(168,85,247,0.7);
+  border-left: 2px solid rgba(168,85,247,0.3);
+  padding: 3px 0 3px 10px;
+  margin: 3px 0 4px;
+  line-height: 1.4;
+}
+
+/* ── SEARCH STATES ────────────────────────────────────────────────────────── */
+.log-entry.search-match { background: rgba(46,204,113,0.06); }
+.log-entry.search-dim   { opacity: 0.28; }
+.log-entry.anomaly.search-match { background: rgba(46,204,113,0.08); }
+
+/* ── LOADING / EMPTY ──────────────────────────────────────────────────────── */
+.loading-state, .empty-state {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 80px 20px;
+  border: 1px solid var(--border);
+}
+
+/* ── KEEPER TOOLBAR ───────────────────────────────────────────────────────── */
+.keeper-toolbar {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  align-items: center;
+  gap: 12px;
+  background: rgba(8,12,10,0.96);
+  border: 1px solid rgba(124,58,237,0.4);
+  padding: 10px 16px;
+  z-index: 200;
+  backdrop-filter: blur(8px);
+}
+.keeper-status {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: rgba(168,85,247,0.55);
+}
+.keeper-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid rgba(168,85,247,0.45);
+  color: rgba(168,85,247,0.8);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.keeper-btn:hover {
+  border-color: rgba(168,85,247,0.9);
+  color: rgba(168,85,247,1);
+  background: rgba(168,85,247,0.08);
+}
+.keeper-btn.active {
+  border-color: rgba(168,85,247,0.9);
+  color: #c084fc;
+  background: rgba(168,85,247,0.15);
+}
+
+/* ── MOBILE ───────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .page-header { padding: 32px 16px 24px; }
+  .page-title  { font-size: 1.5rem; }
+  .content-area { padding: 0 14px 100px; }
+  .log-entry {
+    grid-template-columns: 66px 1fr;
+    gap: 0 8px;
+    padding: 5px 12px;
+  }
+  .log-ts      { font-size: 0.62rem; }
+  .log-content { font-size: 0.7rem; }
+  .batch-intro { margin: 12px 12px 6px; font-size: 0.82rem; }
+  .keeper-toolbar { bottom: 16px; right: 16px; padding: 8px 12px; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</a>
+  <nav id="player-nav"></nav>
+</header>
+
+<main>
+  <section class="page-header">
+    <div class="page-header-inner">
+      <div class="page-eyebrow" id="page-eyebrow">// CAMPBELL ACTIVITY LOGS — ANOMALY REVIEW</div>
+      <h1 class="page-title">Things CAMPBELL Does at 3am</h1>
+      <p class="page-subtitle">Flagged entries compiled by T. Brandt, Field Support</p>
+    </div>
+  </section>
+
+  <div class="content-area">
+    <div class="search-bar-wrap">
+      <input type="text" id="log-search" class="log-search" placeholder="// SEARCH ALL ENTRIES..." autocomplete="off" spellcheck="false">
+      <button id="search-clear" class="search-clear" style="display:none" aria-label="Clear search">✕</button>
+    </div>
+
+    <div id="batches-container">
+      <div class="loading-state">// LOADING CAMPBELL LOGS...</div>
+    </div>
+  </div>
+</main>
+
+<!-- Keeper toolbar — hidden until keeper mode activated -->
+<div class="keeper-toolbar" id="keeper-toolbar" style="display:none">
+  <span class="keeper-status" id="hint-status">clues: hidden</span>
+  <button class="keeper-btn" id="toggle-hints">REVEAL CLUES</button>
+</div>
+
+<script src="player-nav.js"></script>
+<script src="session-state.js"></script>
+<script>
+(function () {
+  var HINTS_KEY = 'portal-campbell-logs-hints';
+  var HINTS_API = '/api/v1/campbell-logs/hints';
+
+  var batches = [];
+  var hintsRevealed = false;
+  var keeperMode = false;
+  var eyebrowClicks = 0;
+  var originalCollapse = {}; // batch id -> boolean
+  var currentSearch = '';
+  var pendingSession = null; // holds portalSessionReady detail if it fires before data loads
+
+  /* ── ESCAPE HTML ─────────────────────────────────────────────────────────── */
+  function esc(str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  /* ── LOAD HINTS STATE ────────────────────────────────────────────────────── */
+  function loadHints() {
+    return fetch(HINTS_API)
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (d && d.value !== undefined) {
+          localStorage.setItem(HINTS_KEY, d.value);
+          return d.value === 'revealed';
+        }
+        return localStorage.getItem(HINTS_KEY) === 'revealed';
+      })
+      .catch(function () {
+        return localStorage.getItem(HINTS_KEY) === 'revealed';
+      });
+  }
+
+  /* ── INIT ────────────────────────────────────────────────────────────────── */
+  // Session listener is set up immediately to avoid race with session-state.js
+  document.addEventListener('portalSessionReady', function (e) {
+    if (batches.length > 0) {
+      renderAll(e.detail.session, e.detail.sessions);
+    } else {
+      pendingSession = e.detail; // data not ready yet — store and use on arrival
+    }
+  });
+
+  function init() {
+    Promise.all([
+      fetch('data/campbell-logs.json').then(function (r) { return r.json(); }),
+      loadHints()
+    ]).then(function (results) {
+      batches = results[0].batches;
+      hintsRevealed = results[1];
+      updateHintsUI();
+      // If session event already fired, render now; otherwise listener will call us
+      if (pendingSession) renderAll(pendingSession.session, pendingSession.sessions);
+    }).catch(function () {
+      document.getElementById('batches-container').innerHTML =
+        '<div class="empty-state">// FAILED TO LOAD LOGS</div>';
+    });
+  }
+
+  /* ── RENDER ALL BATCHES ──────────────────────────────────────────────────── */
+  function renderAll(sessionId, sessions) {
+    var ids = sessions.map(function (s) { return s.id; });
+    var sessionIdx = ids.indexOf(sessionId);
+
+    var container = document.getElementById('batches-container');
+    container.innerHTML = '';
+
+    // Filter to sessions already reached; data is newest-first so keep that order
+    var visible = batches.filter(function (b) {
+      var bIdx = ids.indexOf(b.session);
+      return bIdx !== -1 && bIdx <= sessionIdx;
+    });
+
+    if (visible.length === 0) {
+      container.innerHTML = '<div class="empty-state">// NO LOGS AVAILABLE FOR THIS PERIOD</div>';
+      return;
+    }
+
+    visible.forEach(function (batch, i) {
+      var collapsed = i > 0; // newest batch expanded
+      originalCollapse[batch.id] = collapsed;
+      container.appendChild(renderBatch(batch, collapsed));
+    });
+  }
+
+  /* ── RENDER A SINGLE BATCH ───────────────────────────────────────────────── */
+  function renderBatch(batch, collapsed) {
+    var section = document.createElement('div');
+    section.className = 'batch-section' + (collapsed ? ' collapsed' : '');
+    section.id = 'batch-' + batch.id;
+    section.setAttribute('data-batch-id', batch.id);
+
+    // Header
+    var header = document.createElement('div');
+    header.className = 'batch-header';
+
+    var label = document.createElement('span');
+    label.className = 'batch-label';
+    label.textContent = '// ' + batch.label;
+
+    var toggle = document.createElement('span');
+    toggle.className = 'batch-toggle';
+    toggle.textContent = collapsed ? '▶' : '▼';
+
+    header.appendChild(label);
+    header.appendChild(toggle);
+    header.addEventListener('click', function () {
+      var nowCollapsed = section.classList.toggle('collapsed');
+      toggle.textContent = nowCollapsed ? '▶' : '▼';
+    });
+
+    section.appendChild(header);
+
+    // Body
+    var body = document.createElement('div');
+    body.className = 'batch-body';
+
+    // Intro note
+    var intro = document.createElement('div');
+    intro.className = 'batch-intro';
+    intro.textContent = batch.intro_note;
+    body.appendChild(intro);
+
+    // Entries
+    var entriesList = document.createElement('div');
+    entriesList.className = 'entries-list';
+
+    batch.entries.forEach(function (entry) {
+      var row = document.createElement('div');
+      row.className = 'log-entry' + (entry.flags.indexOf('anomaly') !== -1 ? ' anomaly' : '');
+      row.setAttribute('data-content', entry.content); // used by search
+
+      var ts = document.createElement('span');
+      ts.className = 'log-ts';
+      ts.textContent = entry.timestamp;
+
+      var content = document.createElement('span');
+      content.className = 'log-content';
+      content.textContent = entry.content;
+
+      row.appendChild(ts);
+      row.appendChild(content);
+      entriesList.appendChild(row);
+    });
+
+    body.appendChild(entriesList);
+    section.appendChild(body);
+
+    // Apply highlights and clue spans
+    applyDecorations(batch, entriesList);
+
+    return section;
+  }
+
+  /* ── APPLY TEXT DECORATIONS ──────────────────────────────────────────────── */
+  // Applies Layer 1 (highlights) and, when enabled, Layer 3 (clue spans).
+  // Always rebuilds from original entry.content to avoid double-wrapping.
+  function applyDecorations(batch, entriesList) {
+    var entryEls = entriesList.querySelectorAll('.log-entry');
+
+    batch.entries.forEach(function (entry, i) {
+      var entryEl = entryEls[i];
+      if (!entryEl) return;
+      var contentEl = entryEl.querySelector('.log-content');
+      var text = entry.content; // always use original source text
+
+      // Remove existing annotation notes
+      entryEl.querySelectorAll('.hl-note, .clue-keeper-note').forEach(function (n) { n.remove(); });
+
+      // Reset content to plain text before rebuilding HTML
+      contentEl.textContent = text;
+
+      // Collect all replacements for this entry
+      var replacements = [];
+
+      // Layer 1 — highlights
+      batch.highlights.forEach(function (hl) {
+        var idx = text.indexOf(hl.term);
+        if (idx !== -1) {
+          replacements.push({
+            start: idx,
+            end: idx + hl.term.length,
+            html: '<span class="highlight-' + hl.by + '">' + esc(hl.term) + '</span>',
+            note: hl.note,
+            noteClass: 'hl-note hl-note-' + hl.by
+          });
+        }
+      });
+
+      // Layer 3 — clue spans (only when revealed)
+      if (hintsRevealed) {
+        batch.clue_spans.forEach(function (cs) {
+          var idx = text.indexOf(cs.phrase);
+          if (idx !== -1) {
+            replacements.push({
+              start: idx,
+              end: idx + cs.phrase.length,
+              html: '<span class="clue-hint" data-clue="' + esc(cs.clue) + '">' + esc(cs.phrase) + '</span>',
+              note: keeperMode ? cs.keeper_note : null,
+              noteClass: 'clue-keeper-note'
+            });
+          }
+        });
+      }
+
+      if (replacements.length === 0) return;
+
+      // Sort by start position; skip overlaps
+      replacements.sort(function (a, b) { return a.start - b.start; });
+
+      var html = '';
+      var pos = 0;
+      var notes = [];
+
+      replacements.forEach(function (rep) {
+        if (rep.start < pos) return; // overlapping — skip
+        html += esc(text.slice(pos, rep.start));
+        html += rep.html;
+        pos = rep.end;
+        if (rep.note) notes.push({ text: rep.note, cls: rep.noteClass });
+      });
+      html += esc(text.slice(pos));
+
+      contentEl.innerHTML = html;
+
+      notes.forEach(function (n) {
+        var noteEl = document.createElement('div');
+        noteEl.className = n.cls;
+        noteEl.textContent = n.text;
+        entryEl.appendChild(noteEl);
+      });
+    });
+  }
+
+  /* ── RE-APPLY DECORATIONS ACROSS ALL RENDERED BATCHES ───────────────────── */
+  function reapplyAll() {
+    batches.forEach(function (batch) {
+      var batchEl = document.getElementById('batch-' + batch.id);
+      if (!batchEl) return;
+      var entriesList = batchEl.querySelector('.entries-list');
+      if (!entriesList) return;
+      applyDecorations(batch, entriesList);
+    });
+    // Restore search state if active
+    if (currentSearch) applySearchClasses();
+  }
+
+  /* ── KEEPER MODE ─────────────────────────────────────────────────────────── */
+  function activateKeeperMode() {
+    keeperMode = true;
+    document.getElementById('keeper-toolbar').style.display = 'flex';
+    reapplyAll();
+  }
+
+  /* ── HINTS TOGGLE ────────────────────────────────────────────────────────── */
+  function toggleHints() {
+    hintsRevealed = !hintsRevealed;
+    var value = hintsRevealed ? 'revealed' : 'hidden';
+    localStorage.setItem(HINTS_KEY, value);
+    // D1 sync — fire and forget
+    fetch(HINTS_API, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ value: value })
+    }).catch(function () {});
+    updateHintsUI();
+    reapplyAll();
+  }
+
+  function updateHintsUI() {
+    var statusEl = document.getElementById('hint-status');
+    var btnEl    = document.getElementById('toggle-hints');
+    if (!statusEl || !btnEl) return;
+    statusEl.textContent = 'clues: ' + (hintsRevealed ? 'revealed' : 'hidden');
+    btnEl.textContent    = hintsRevealed ? 'HIDE CLUES' : 'REVEAL CLUES';
+    btnEl.classList.toggle('active', hintsRevealed);
+  }
+
+  /* ── SEARCH ──────────────────────────────────────────────────────────────── */
+  function handleSearch(q) {
+    currentSearch = q.trim().toLowerCase();
+    var batchEls = document.querySelectorAll('.batch-section');
+
+    if (!currentSearch) {
+      // Restore original collapse state
+      batchEls.forEach(function (bEl) {
+        var id = bEl.getAttribute('data-batch-id');
+        var wasCollapsed = !!originalCollapse[id];
+        bEl.classList.toggle('collapsed', wasCollapsed);
+        var tog = bEl.querySelector('.batch-toggle');
+        if (tog) tog.textContent = wasCollapsed ? '▶' : '▼';
+        bEl.querySelectorAll('.log-entry').forEach(function (el) {
+          el.classList.remove('search-match', 'search-dim');
+        });
+      });
+      document.getElementById('search-clear').style.display = 'none';
+      return;
+    }
+
+    document.getElementById('search-clear').style.display = '';
+
+    // Expand all batches
+    batchEls.forEach(function (bEl) {
+      bEl.classList.remove('collapsed');
+      var tog = bEl.querySelector('.batch-toggle');
+      if (tog) tog.textContent = '▼';
+    });
+
+    applySearchClasses();
+  }
+
+  function applySearchClasses() {
+    document.querySelectorAll('.log-entry').forEach(function (el) {
+      var content = (el.getAttribute('data-content') || '').toLowerCase();
+      var matches = currentSearch && content.indexOf(currentSearch) !== -1;
+      el.classList.toggle('search-match', matches);
+      el.classList.toggle('search-dim', !!(currentSearch && !matches));
+    });
+  }
+
+  /* ── SETUP ───────────────────────────────────────────────────────────────── */
+  document.addEventListener('DOMContentLoaded', function () {
+    // Keeper mode: 5× click on page eyebrow
+    document.getElementById('page-eyebrow').addEventListener('click', function () {
+      eyebrowClicks++;
+      if (eyebrowClicks >= 5) {
+        eyebrowClicks = 0;
+        activateKeeperMode();
+      }
+    });
+
+    document.getElementById('toggle-hints').addEventListener('click', toggleHints);
+
+    var searchInput = document.getElementById('log-search');
+    searchInput.addEventListener('input', function () { handleSearch(this.value); });
+    document.getElementById('search-clear').addEventListener('click', function () {
+      searchInput.value = '';
+      handleSearch('');
+    });
+  });
+
+  init();
+}());
+</script>
+</body>
+</html>

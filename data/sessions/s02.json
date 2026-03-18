@@ -82,6 +82,12 @@
   ],
   "handouts": [
     {
+      "id": "s02-recap",
+      "type": "readaloud",
+      "label": "Previously On — Operation #0094-B",
+      "text": "The Eszter case closed with a choice the team will carry forward: they let an entity disperse rather than contain it, and a man named Bálint is alive because of it. The ash particulate recovered from the case is in Lab Bay 3, responding to nearby electronics in ways Priya Osei has stopped calling interference.\n\nBálint called the PORTAL contact number three times. Nobody answered. He has stopped calling.\n\nThe briefing queue holds five cases. CAMPBELL has flagged one — Aldermoor District — as priority. A neighbourhood is losing its sense of place. Residents who have lived there for decades cannot find their way home. A visiting nurse named Diane Marsh has been missing for nine days.\n\nThe Director's note is brief: investigate, document, report back. Do not engage the entity without understanding what it is.\n\nThe team has a van, their anchors, and each other. Aldermoor is forty minutes away."
+    },
+    {
       "id": "s02-pda-01",
       "type": "pda",
       "from": "CAMPBELL",
@@ -141,9 +147,10 @@
     {
       "id": "s02-doc-02",
       "type": "document",
-      "label": "Partial Email — Recovered from Jammed Shredder",
-      "classification": "FIELD EVIDENCE — S02 — PARTIAL RECOVERY",
-      "body": "[ UPPER PORTION — RECONSTRUCTED FROM FRAGMENTS ]\n\nFROM: [ILLEGIBLE]@helixboundary.com\nTO: [ILLEGIBLE]\nSUBJECT: ALD-1 // PHASE 2 ANCHOR REVIEW\n\n...boundary expansion has exceeded the Phase 1 model by approximately 0.06 miles. Recommend...\n\n...Specimen ALD-1 is responding to the excavation breach as anticipated. Spatial anchoring protocol to be reviewed before...\n\n...do not approach the epicentre without prophylactic pre-treatment. The cognitive map disruption at ground zero is now...\n\n[ LOWER PORTION — UNRECOVERABLE ]\n\n---\n// NOTE: @helixboundary.com has no public registration. CAMPBELL cannot resolve the domain. — CAMPBELL"
+      "label": "Aldermoor Property Services — Office Recovery",
+      "classification": "FIELD EVIDENCE — S02 — SCENE 1",
+      "body": "Vacated real estate office at 22 Aldermoor Main Street. Whiteboard map with dated addresses tracking the entity's expansion. Filing cabinets with 47 acquisition records across three shell companies. Shredded email referencing Specimen ALD-1 and @helixboundary.com. Motion sensor in the back office — MESA knows we were here.",
+      "link": "handouts/dossier/s02-aldermoor-office.html"
     },
     {
       "id": "s02-pda-03",
@@ -192,9 +199,10 @@
     {
       "id": "s02-doc-03",
       "type": "document",
-      "label": "Diane Marsh's Notebook — Selected Entries",
+      "label": "Diane Marsh — Field Observations (9 Days)",
       "classification": "FIELD EVIDENCE — S02 — RECOVERED DAY 9",
-      "body": "DAY 1\nGot disoriented on Aldermoor Gardens — same street I've done three times a week for twenty years. Walked it twice and ended up back at the same corner. Not lost. The street is wrong, not me. Found the construction site office unlocked. Decided to stay put and observe. Rule one: don't make it worse.\n\nDAY 2\nThe effect intensifies at dusk and again just before dawn. Clearest window is mid-morning, roughly 10am to noon. I've been timing it.\n\nDAY 4\nAnimals are fine. I watched three cats cross the Gardens without hesitation. They know exactly where they're going. Whatever is disrupting the cognitive map, it doesn't work on them. Important.\n\nDAY 6\nSomeone is leaving food parcels at the fence each night. I haven't seen who. I'm grateful.\n\nDAY 7 — NOTE\nSomething in the excavation substrate. Dawn. Low light. There's a shape in the rock — not carved, not structural. The impression of a threshold. Like a doorway that was never built but is remembered anyway. I drew it. I don't know what it is. It isn't architectural.\n\n[ SKETCH — one page — threshold shape, reservoir substrate ]\n\nDAY 9\nSomeone will come. The effect has structure. It can be understood. I've been mapping the intensity cycles — I think the clearest approach is from the north, mid-morning. Whoever finds this: the string-line method works."
+      "body": "Nine days of observations from inside the Aldermoor displacement zone. Intensity cycles, approach windows, navigation data, and one sketch of something in the excavation substrate that Diane couldn't explain.",
+      "link": "handouts/dossier/s02-diane-notebook.html"
     },
     {
       "id": "s02-pda-04",
