@@ -5,7 +5,7 @@
 //   Keeper MAP tab  — order numbers, NPC pills, unlock toggle, visited button,
 //                     bulk actions (REVEAL ALL / RESET MAP / ALL VISITED / CLEAR VISITED)
 //
-// All D1 calls are mocked — portal-maps.json and session-data.json are read
+// All D1 calls are mocked — portal-maps.json and sessions/index.json are read
 // from disk at module level so tests stay in sync with real data.
 
 import { test, expect } from '@playwright/test';
@@ -15,7 +15,7 @@ import { resolve } from 'path';
 // ── MODULE-LEVEL DATA ─────────────────────────────────────────────────────────
 
 const mapsData    = JSON.parse(readFileSync(resolve('./data/portal-maps.json'),   'utf-8'));
-const sessionData = JSON.parse(readFileSync(resolve('./data/session-data.json'),  'utf-8'));
+const sessionData = JSON.parse(readFileSync(resolve('./data/sessions/index.json'), 'utf-8'));
 
 const aldermoorMap    = mapsData.maps.find(m => m.id === 'aldermoor');
 const allLocs         = aldermoorMap.grid.flat().filter(c => c && c.type === 'loc');
@@ -75,7 +75,7 @@ test.describe('feed.html — player MAP tab', () => {
     await mockMapApis(page);
     await page.goto('/feed.html');
     await openPlayerMapTab(page);
-    // One .handout-panel-tab per session entry in session-data.json
+    // One .handout-panel-tab per session entry in sessions/index.json
     await expect(page.locator('#panel-body .handout-panel-tab'))
       .toHaveCount(sessionData.length);
     for (const s of sessionData) {
@@ -96,7 +96,7 @@ test.describe('feed.html — player MAP tab', () => {
     await mockMapApis(page);
     await page.goto('/feed.html');
     await openPlayerMapTab(page);
-    // M02 is the default (last session in session-data.json)
+    // M02 is the default (last session in sessions/index.json)
     await expect(page.locator('.map-grid')).toBeVisible();
     await expect(page.locator('.map-cell-loc').first()).toBeVisible();
   });

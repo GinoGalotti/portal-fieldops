@@ -1273,7 +1273,8 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
   var basic_moves    = null;
   var npcs_data      = null;
   var entities_data  = null;
-  var session_data   = null;
+  var session_data   = null;   // lightweight index [{id, session_key, label, doc}]
+  var session_cache  = {};     // id → full session data (loaded on demand)
   var keeperDataSession = null;   // currently selected session in THREATS tab
   var activeTab      = 'moves';
   var keeperMode          = false;
@@ -1383,7 +1384,7 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
       fetch('/data/motw-basic-moves.json').then(function (r) { return r.ok ? r.json() : null; }),
       fetch('/data/portal-npcs.json').then(function (r) { return r.ok ? r.json() : null; }),
       fetch('/data/portal-entities.json').then(function (r) { return r.ok ? r.json() : null; }),
-      fetch('/data/session-data.json').then(function (r) { return r.ok ? r.json() : null; }),
+      fetch('/data/sessions/index.json').then(function (r) { return r.ok ? r.json() : null; }),
       fetch('/data/portal-maps.json').then(function (r) { return r.ok ? r.json() : null; }),
       fetch('/data/hunters.json').then(function (r) { return r.ok ? r.json() : null; })
     ]).then(function (results) {
@@ -1395,6 +1396,23 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
       maps_data      = results[5];
       hunters_meta   = results[6];
     });
+  }
+
+  // ── SESSION FULL DATA LOADER ──────────────────────────────────────────────
+  // Fetches /data/sessions/s0N.json on first access, caches in session_cache.
+  // Uses session_key (e.g. "M01") to derive filename ("s01.json").
+  function loadSessionFull(id, callback) {
+    if (session_cache[id]) { callback(session_cache[id]); return; }
+    var entry = (session_data || []).filter(function (s) { return s.id === id; })[0];
+    if (!entry) { callback(null); return; }
+    var num = entry.session_key.replace(/\D/g, '');
+    fetch('/data/sessions/s' + num + '.json')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (data) session_cache[id] = data;
+        callback(data);
+      })
+      .catch(function () { callback(null); });
   }
 
   // ── TAB SWITCHING ─────────────────────────────────────────────────────────
@@ -1911,39 +1929,41 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     });
     html += '</div>';
 
-    var sess = session_data.filter(function (s) { return s.id === keeperHandoutSession; })[0];
-    if (!sess || !sess.handouts || sess.handouts.length === 0) {
-      body.innerHTML = html + '<div class="keeper-panel-note">// NO HANDOUTS FOR THIS SESSION</div>';
-      return;
-    }
+    body.innerHTML = html + '<div class="keeper-panel-note">// LOADING…</div>';
+    loadSessionFull(keeperHandoutSession, function (sess) {
+      if (!sess || !sess.handouts || sess.handouts.length === 0) {
+        body.innerHTML = html + '<div class="keeper-panel-note">// NO HANDOUTS FOR THIS SESSION</div>';
+        return;
+      }
 
-    var posted = {};
-    try { posted = JSON.parse(localStorage.getItem('portal_posted_handouts') || '{}'); } catch (x) {}
+      var posted = {};
+      try { posted = JSON.parse(localStorage.getItem('portal_posted_handouts') || '{}'); } catch (x) {}
 
-    html += '<div class="handout-list">';
-    sess.handouts.forEach(function (h) {
-      var isPosted = !!posted[h.id];
-      var pipClass  = 'pip-' + h.type;
-      var typeLabel = h.type.toUpperCase();
-      var itemClass = isPosted ? 'handout-item posted' : 'handout-item';
-      var btnLabel = isPosted ? '↺ RE-POST' : '▶ POST';
-      var btnClass = isPosted ? 'handout-post-btn repost' : 'handout-post-btn';
-      html += '<div class="' + itemClass + '">' +
-        '<span class="handout-type-pip ' + pipClass + '">' + escHtml(typeLabel) + '</span>' +
-        '<div class="handout-meta">' +
-          '<div class="handout-label">' + escHtml(h.label || h.subject || h.id) + '</div>' +
-          (isPosted ? '<div class="handout-posted-time">POSTED ' + escHtml(posted[h.id]) + '</div>' : '') +
-        '</div>' +
-        '<button class="' + btnClass + '" id="hbtn-' + escHtml(h.id) + '" onclick="postHandout(\'' + escHtml(h.id) + '\')">' + btnLabel + '</button>' +
-      '</div>';
+      html += '<div class="handout-list">';
+      sess.handouts.forEach(function (h) {
+        var isPosted = !!posted[h.id];
+        var pipClass  = 'pip-' + h.type;
+        var typeLabel = h.type.toUpperCase();
+        var itemClass = isPosted ? 'handout-item posted' : 'handout-item';
+        var btnLabel = isPosted ? '↺ RE-POST' : '▶ POST';
+        var btnClass = isPosted ? 'handout-post-btn repost' : 'handout-post-btn';
+        html += '<div class="' + itemClass + '">' +
+          '<span class="handout-type-pip ' + pipClass + '">' + escHtml(typeLabel) + '</span>' +
+          '<div class="handout-meta">' +
+            '<div class="handout-label">' + escHtml(h.label || h.subject || h.id) + '</div>' +
+            (isPosted ? '<div class="handout-posted-time">POSTED ' + escHtml(posted[h.id]) + '</div>' : '') +
+          '</div>' +
+          '<button class="' + btnClass + '" id="hbtn-' + escHtml(h.id) + '" onclick="postHandout(\'' + escHtml(h.id) + '\')">' + btnLabel + '</button>' +
+        '</div>';
+      });
+      html += '</div>';
+      html += '<button class="handout-clear-btn" onclick="clearSessionHandouts()">// CLEAR HANDOUTS — ' + escHtml(sess.session_key) + '</button>';
+      body.innerHTML = html;
     });
-    html += '</div>';
-    html += '<button class="handout-clear-btn" onclick="clearSessionHandouts()">// CLEAR HANDOUTS — ' + escHtml(sess.session_key) + '</button>';
-    body.innerHTML = html;
   }
 
   window.clearSessionHandouts = function () {
-    var sess = session_data ? session_data.filter(function (s) { return s.id === keeperHandoutSession; })[0] : null;
+    var sess = session_cache[keeperHandoutSession] || null;
     if (!sess) return;
 
     // Clear localStorage and re-render immediately — no waiting for D1
@@ -1971,7 +1991,7 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
   };
 
   window.postHandout = function (handoutId) {
-    var sess = session_data ? session_data.filter(function (s) { return s.id === keeperHandoutSession; })[0] : null;
+    var sess = session_cache[keeperHandoutSession] || null;
     if (!sess) return;
     var h = (sess.handouts || []).filter(function (x) { return x.id === handoutId; })[0];
     if (!h) return;
@@ -2360,7 +2380,8 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     });
     selHtml += '</div>';
 
-    var sess = session_data.filter(function (s) { return s.id === keeperDataSession; })[0];
+    body.innerHTML = selHtml + '<div class="keeper-panel-note">// LOADING…</div>';
+    loadSessionFull(keeperDataSession, function (sess) {
     if (!sess) { body.innerHTML = selHtml + '<div class="keeper-panel-note">// NO DATA</div>'; return; }
 
     var html = selHtml;
@@ -2498,6 +2519,7 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     }
 
     body.innerHTML = html;
+    }); // end loadSessionFull
   }
 
   // ── FEED MESSAGES ─────────────────────────────────────────────────────────

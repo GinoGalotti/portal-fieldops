@@ -236,7 +236,7 @@ test.describe('feed.html — keeper mode', () => {
     const handoutsTab = page.locator('[data-ktab="handouts"]');
     await expect(handoutsTab).toBeVisible();
     await handoutsTab.click();
-    // session-data.json is a real static file — wait for it to load and render.
+    // sessions/index.json + per-session file are real static files — wait for them to load and render.
     await page.waitForSelector('.handout-list');
     await expect(page.locator('.handout-list')).toBeVisible();
   });

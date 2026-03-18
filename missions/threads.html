@@ -639,13 +639,20 @@ async function buildExportMarkdown() {
     lines.push('');
   }
 
-  // session-data.json — last entry only as format template
+  // sessions/index.json — current session list + last entry as format reference
   if (sessionDataFile && sessionDataFile.length) {
-    lines.push('### session-data.json — last entry (format template for new entry)');
+    lines.push('### sessions/index.json (current session index)');
     lines.push('```json');
-    lines.push(JSON.stringify(sessionDataFile[sessionDataFile.length - 1], null, 2));
+    lines.push(JSON.stringify(sessionDataFile, null, 2));
     lines.push('```');
     lines.push('');
+    var lastSess = sessionDataFile[sessionDataFile.length - 1];
+    if (lastSess) {
+      lines.push('### sessions/s0N.json — last index entry (for session_key reference)');
+      lines.push('*Full per-session data lives in data/sessions/s0N.json — see session-ingestion-template.md Section B*');
+      lines.push('Last session: `' + lastSess.id + '` · key: `' + lastSess.session_key + '` · file: `data/sessions/s' + lastSess.session_key.replace(/\D/g, '') + '.json`');
+      lines.push('');
+    }
   }
 
   // portal-npcs.json — compact roster: id | name | affiliation | status
@@ -830,7 +837,7 @@ Promise.all([
   fetch('/data/briefings.json').then(function (r) { return r.ok ? r.json() : null; }),
   fetch('/data/portal-npcs.json').then(function (r) { return r.ok ? r.json() : null; }),
   fetch('/data/portal-entities.json').then(function (r) { return r.ok ? r.json() : null; }),
-  fetch('/data/session-data.json').then(function (r) { return r.ok ? r.json() : null; }),
+  fetch('/data/sessions/index.json').then(function (r) { return r.ok ? r.json() : null; }),
   fetch('/data/incidents.json').then(function (r) { return r.ok ? r.json() : null; }),
 ]).then(function (results) {
   var threadsData = results[0];

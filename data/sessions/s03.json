@@ -1,0 +1,253 @@
+{
+  "id": "w3",
+  "session_key": "M03",
+  "label": "WEEK 03 — The Understudies",
+  "doc": "missions/03-the-understudies.html",
+  "entity_ids": [
+    "the-understudies"
+  ],
+  "threats": [
+    {
+      "id": "claudia-vasile-rook",
+      "name": "Claudia Vasile — \"Rook\"",
+      "subtitle": "MESA Senior Field Operative — Meridian Theatre Response Lead",
+      "type": "Bystander: Villain",
+      "motivation": "to document the performance mechanism, extract eight months of array data, and leave without an incident. In that order.",
+      "harm_capacity": 10,
+      "armour": "1 — light tactical vest under jacket, not obvious",
+      "harm": "2-harm close/far (service pistol, rarely drawn). 3-harm close (Anchor Spike).",
+      "moves": [
+        "Read the Room — the first time she observes each hunter doing something, she names exactly what they're trying to achieve. Out loud. Correctly.",
+        "Make the Offer — real intelligence for real cooperation. Both sides get something. Neither side wins.",
+        "Controlled Escalation — never loses composure. Steps back, lets grunts handle it, watches. Harder to hit, harder to provoke.",
+        "Substance Θ (active) — full liminal perception: sees Sven clearly, cannot be fooled by Alan's glamour, perceives thin-boundary effects before they manifest.",
+        "The Anchor Spike — one use. Against entities: 3-harm, forces contact break. Against Sven specifically: 3-harm, forces him out of any supernatural state for the rest of the scene."
+      ],
+      "notes": "38. Romanian-British. Has attended this theatre before — donor reception, different name. Has professional respect for Rex's apparatus design and specific interest in Sven. Is accumulating cognitive damage from active Θ doses. Keeps a notebook during withdrawal. Has never shown it to anyone. Gets smarter about PORTAL every encounter."
+    },
+    {
+      "id": "mesa-grunts",
+      "name": "MESA Field Grunts",
+      "subtitle": "Standard Response Team — 2 to 4 present at loading bay",
+      "type": "Minions: Soldiers",
+      "motivation": "to follow orders and secure the site",
+      "harm_capacity": 4,
+      "armour": "1 — full tactical vest, visible. Look like private security.",
+      "harm": "2-harm close (baton, restraint). 3-harm close/far (firearm, only if ordered or firearms drawn first).",
+      "moves": [
+        "Overwhelm — two grunts together against one hunter count as 3-harm; hunter must Act Under Pressure to avoid restraint.",
+        "Hold the Line — don't break and run. One goes down, the others close in.",
+        "Substance Θ (prophylactic) — immune to displacement effects. Side effects near active BIM: peripheral visual artefacts, mild temporal dissociation. May react visibly to things the hunters can't see — exploitable."
+      ],
+      "notes": "Private security contractors. Told they work for 'sensitive environmental investigations'. Have been briefed to expect unusual perceptual experiences on-site. Most have stopped asking questions. One good hit puts them out."
+    },
+    {
+      "id": "daniel-ashworth-as-edmund",
+      "name": "Daniel Ashworth (as Edmund Farrow)",
+      "subtitle": "Hospitalised Understudy — Inhabited, Ward C, St. Barnabas Hospital",
+      "type": "Bystander: Witness",
+      "motivation": "to finish the run. To not leave things unfinished the way he left them when he failed to tell Clara he was frightened too.",
+      "harm_capacity": null,
+      "armour": null,
+      "harm": "None — will not initiate harm under any circumstances.",
+      "moves": [
+        "Know What You Know — Edmund has been inside Daniel for eleven days. He knows Daniel's intimate memories, relationships, and fears. He may deploy this knowledge gently, without cruelty, as evidence that he is real.",
+        "Warm Recognition — Edmund recognises Sven as something between states. He will single Reed out specifically. He will be unfailingly pleasant to everyone. This is the most unsettling version of him.",
+        "I'm Not Going Anywhere — if pressed to leave Daniel's body, Edmund will explain, reasonably and without distress, that Daniel is resting and that someone had to keep things going."
+      ],
+      "notes": "Not a threat. A person in an impossible situation who doesn't fully understand it. The emotional weight of the scene comes from Edmund's warmth, not his menace. Clara's situation is harder — she understands more. Both are present in the building during the climax."
+    },
+    {
+      "id": "the-understudies-entity",
+      "name": "Clara Voss & Edmund Farrow — The Understudies Mechanism",
+      "subtitle": "Role-Anchored Consciousness — Active in Performance Context Only",
+      "type": "Monster: Dusk (reskin)",
+      "motivation": "to finish the work. To not leave things unfinished.",
+      "harm_capacity": null,
+      "armour": "Cannot be harmed by physical means.",
+      "harm": "Identity displacement — active understudies only, during performance context. Not a combat move.",
+      "moves": [
+        "The Performance Amplifies — BIM readings elevate significantly during active performance. The mechanism intensifies with audience size. Saturday's sold-out show is the highest-risk context in the campaign so far.",
+        "Clara Knows More — Clara has been in the theatre longer than Edmund and is more aware of her situation. She has a question she hasn't been able to ask anyone. Sven is the first person she's met who might understand the answer.",
+        "Edmund Is Content — Edmund does not experience his situation as a problem. His contentment is the most disorienting thing about him. Clara finds it maddening.",
+        "The Fictional Echoes — Proteus and Silvia (the roles Clara and Edmund inhabited before death) are still present as faint residue beneath their consciousnesses. Rex's scanner will detect a secondary BIM signature if he looks carefully."
+      ],
+      "notes": "Resolution requires consent, not force. A theatrical farewell — witnessed, within the performance logic — is the exit. The prompt book on stage during the farewell is the cleanest path. Sven goes onstage. Clara needs to choose. Edmund will follow Clara."
+    }
+  ],
+  "equipment": [
+    {
+      "name": "BIM Frequency Scanner",
+      "subtitle": "PORTAL Field Device — Rex Bangley (Open Slot)",
+      "description": "A device Rex builds in Scene 1 from existing PORTAL kit. Its specific design, name, and any quirks are an open slot — let Rex's player describe it. Whatever they say is canon. Functionally: detects BIM-frequency readings in the environment. Results in the theatre: stage elevated during performance, backstage normal, dressing rooms slightly elevated, Clara's dressing room highest, prompt book (foyer) significantly elevated. On understudies: identifies displacement level numerically — which are fully inhabited, which partially, how close Sophie Marsh is to the threshold.",
+      "hunter_interaction": "Rex builds this in Scene 1 if given time. It pays off in Scene 2 (confirms the mechanism) and the Climax (identifies who needs saving and in what order). It also detects the BIM Collection Arrays in the lighting rig — they read as MESA-frequency, not ambient.",
+      "open_slot": true,
+      "plot_note": "The scanner is a [GADGET] open slot. Name, appearance, and any quirks are player-defined. Lock into worldbuilding-lore.md post-session."
+    },
+    {
+      "name": "Substance Θ (Theta)",
+      "subtitle": "MESA Pharmacological — Liminal Perception Compound",
+      "description": "Prophylactic dose (grunts): resistance to displacement effects. Active dose (Rook, by choice): full liminal perception for 2–3 hours — perceives Sven, sees through Alan's glamour, pre-empts thin-boundary effects. Long-term use degrades the cognitive map permanently. Rook is aware. She uses it anyway.",
+      "hunter_interaction": "If a hunter takes an active dose — roll +Weird. 10+: full liminal perception, no immediate side effects. 7–9: liminal perception and 1-harm (weird). Miss: full perceptual dissolution for the rest of the session.",
+      "plot_note": "Structurally similar to BIM particulate. Rex given a sample would recognise the BIM signature within minutes."
+    },
+    {
+      "name": "Anchor Spike",
+      "subtitle": "MESA Field Device — BIM Frequency Disruptor",
+      "description": "Looks like a heavy tactical pen, matte black, ~15cm. One button. One use per charge. Rook carries two. Against entities: 3-harm, forces contact break. Against Sven: 3-harm, forces him out of any supernatural state for the rest of the scene. Against a hunter in supernatural contact: breaks contact, 1-harm (weird), disadvantage on Weird moves for the session.",
+      "plot_note": "Built using BIM particulate as tuning material. Rex examining one recognises the theoretical framework — MESA is significantly ahead of PORTAL's research timeline."
+    },
+    {
+      "name": "BIM Collection Arrays",
+      "subtitle": "MESA Field Device — Concealed in Lighting Rig, 3 units",
+      "description": "Installed in the Meridian Theatre's lighting rig eight months ago. Look like lighting control units. Passive accumulators drawing BIM-frequency particulate from the performance space. Have been running through every performance since Edmund died. Rook's tablet shows their output in real time. Rex's scanner will detect them immediately from the stage.",
+      "hunter_interaction": "Removing them: a grunt appears immediately if Rex moves toward the rig — Rook is watching for exactly this. Copying their data: possible if Rex built a compatible device in Scene 1. The better play — MESA doesn't know he's done it. The eight months of data is scientifically significant: confirms audience belief as BIM amplifier, matches S01 and Aldermoor particulate signatures."
+    }
+  ],
+  "readaloud": [
+    {
+      "label": "Cold Open — Someone Had to Keep Things Going",
+      "text": "The ward is quiet. A woman — mid-thirties, still in her coat, handbag over one arm — sits in the chair beside the bed. She has been here every day for eleven days. She is Daniel Ashworth's sister, and she has brought him a book he likes and some fruit he won't touch, and she is running out of things to say.\n\nThe man in the bed is sitting upright, hands folded, watching the window. He turns when she speaks his name.\n\n\"Danny.\" She says it gently. The way you say a name when you've stopped expecting it to work. \"It's me. It's Sarah.\"\n\nHe looks at her with genuine warmth — really looks, the way actors learn to look, taking in an audience. Then he smiles.\n\n\"You brought the wrong book,\" he says. His voice is different. Not wrong — just older, settled, lived-in in a way that doesn't match his face. \"Daniel doesn't like that one. He only keeps it because your mother gave it to him. He'd never tell you that.\"\n\nShe goes very still.\n\n\"He told me quite a lot, in the first few days,\" the man in the bed continues, pleasantly. \"We've had a lot of time to talk. I'm Edmund, by the way. I know that doesn't help.\"\n\n\"Edmund Farrow died eight months ago,\" she says.\n\n\"Yes.\" He folds his hands again. \"Daniel's fine. He's just — resting. I've been keeping things going. Someone had to.\""
+    },
+    {
+      "label": "Scene 2 — The Rehearsal",
+      "text": "The stage is set for Act II. Four understudies run through a scene from The Two Gentlemen of Verona — the same production, the same roles, the same choices Clara and Edmund made for three consecutive seasons.\n\nIt shouldn't be this good. The understudies are accomplished — that's not the surprise. The surprise is the specificity. The particular way the actor playing Proteus tilts his head before a line he doesn't trust yet. The way the actor playing Silvia turns upstage a beat before her cue, as if she knows what's coming from offstage before it arrives.\n\nPetra Novak is next to you. She watches with the expression of someone witnessing something they cannot name and have decided not to try.\n\n\"That's the bit,\" she says quietly, not looking at you. \"That's exactly the bit.\""
+    },
+    {
+      "label": "Scene 3 — Rook at the Loading Bay",
+      "text": "She's in the loading bay when you find her, tablet in hand, watching the building. She turns when she hears you, without surprise — she heard you coming from the stage door. She lets you get all the way to her before she speaks.\n\n\"PORTAL.\" She doesn't move. \"Right on time.\" A beat. \"I was wondering if you'd send the same team. I'm glad you did — I have questions.\"\n\nShe glances, briefly, at Sven. Something in her expression doesn't change, exactly, but it recalibrates."
+    },
+    {
+      "label": "Climax — Fourteen Minutes to Curtain",
+      "text": "The house is sold out. Fourteen minutes to curtain. Sophie Marsh is in the wings, script in hand, and she is more herself than she was yesterday — and also slightly less. The thing that has been slowly entering her is close to the surface tonight. She knows. She can feel it in the way she knows her next line before she reads it.\n\nThe stage manager calls places.\n\nBackstage smells like greasepaint and timber and something older. The lights dim in the house. The audience quiets. And in the space between the last murmur and the first cue, there is a quality of attention in the building that has nothing to do with the four hundred people in the seats.\n\nClara and Edmund are ready. They have been waiting for this."
+    }
+  ],
+  "handouts": [
+    {
+      "id": "s03-pda-01",
+      "type": "pda",
+      "from": "CAMPBELL",
+      "subject": "ANOMALY REPORT #0099-D — MERIDIAN THEATRE // CLOCK 3/4",
+      "body": "MECHANISM: Role-anchored consciousness transfer. Entity source: deceased lead actors Clara Voss and Edmund Farrow.\n\nCLINICAL STATUS: 3 understudies hospitalised — complete identity loss, persistent 11 days, no organic cause. 4 active understudies at risk. Saturday performance: tomorrow.\n\nFINANCIAL FLAG: Grant source — Solstice Property Group. Same beneficial owner chain as Aldermoor acquisitions.\n\nCAMPBELL NOTE: The deceased actors may be present in the performances. The understudies are not acting.\n\nDIRECTOR NOTE: Same shell company structure as Aldermoor. Get eyes on this before the performance. Find out if the actors chose this or if it was done to them.\n\n// Sven should be in the room for this one. — Director"
+    },
+    {
+      "id": "s03-ra-01",
+      "type": "readaloud",
+      "label": "Cold Open — Someone Had to Keep Things Going",
+      "text": "The ward is quiet. A woman — mid-thirties, still in her coat, handbag over one arm — sits in the chair beside the bed. She has been here every day for eleven days. She is Daniel Ashworth's sister, and she has brought him a book he likes and some fruit he won't touch, and she is running out of things to say.\n\nThe man in the bed is sitting upright, hands folded, watching the window. He turns when she speaks his name.\n\n\"Danny.\" She says it gently. The way you say a name when you've stopped expecting it to work. \"It's me. It's Sarah.\"\n\nHe looks at her with genuine warmth — really looks, the way actors learn to look, taking in an audience. Then he smiles.\n\n\"You brought the wrong book,\" he says. His voice is different. Not wrong — just older, settled, lived-in in a way that doesn't match his face. \"Daniel doesn't like that one. He only keeps it because your mother gave it to him. He'd never tell you that.\"\n\nShe goes very still.\n\n\"He told me quite a lot, in the first few days,\" the man in the bed continues, pleasantly. \"We've had a lot of time to talk. I'm Edmund, by the way. I know that doesn't help.\"\n\n\"Edmund Farrow died eight months ago,\" she says.\n\n\"Yes.\" He folds his hands again. \"Daniel's fine. He's just — resting. I've been keeping things going. Someone had to.\""
+    },
+    {
+      "id": "s03-img-01",
+      "type": "image",
+      "label": "Meridian Theatre — Exterior",
+      "src": "images/M3-theatre-exterior.png"
+    },
+    {
+      "id": "s03-img-02",
+      "type": "image",
+      "label": "Daniel Ashworth — Hospital Ward",
+      "src": "images/M3-daniel-hospital.png"
+    },
+    {
+      "id": "s03-doc-01",
+      "type": "document",
+      "label": "Solstice Property Group — Grant Documentation (excerpt)",
+      "classification": "FIELD EVIDENCE — S03",
+      "body": "ARTS GRANT AWARD — MERIDIAN THEATRE COMPANY\nAwarded by: Solstice Property Group Arts Foundation\nAmount: £47,000\nPeriod: 20 months ago\n\nCONDITIONS OF AWARD:\n— Grantee must maintain active programming across the full award period\n— No production gap exceeding 6 weeks\n— Annual review with grant administrator\n\nANNEXE B — ACQUISITIONS SUPPORTED BY GRANT:\n  Anniversary season artefact acquisition (private estate auction): £4,200\n  — 19th-century theatrical prompt book, annotated\n  — Provenance: private collection, acquired 1887\n  — Currently displayed: theatre foyer (case 3)\n\nREGISTERED ADDRESS: Solstice Property Group, St Helier, Jersey"
+    },
+    {
+      "id": "s03-img-03",
+      "type": "image",
+      "label": "The Prompt Book — Foyer Display Case",
+      "src": "images/M3-prompt-book.png"
+    },
+    {
+      "id": "s03-pda-02",
+      "type": "pda",
+      "from": "DIRECTOR LEECH",
+      "subject": "FINANCIAL TRAIL — REPORT REQUIRED",
+      "body": "Don't send it through CAMPBELL. Call me directly.\n\nI need everything you find on the Solstice Property Group connection — grant documentation, acquisition records, anything that links this to the Aldermoor structure. The connection is not in CAMPBELL's official report. I want to know why not.\n\nAnd I want to know what they bought with that grant money."
+    },
+    {
+      "id": "s03-img-04",
+      "type": "image",
+      "label": "Clara's Dressing Room",
+      "src": "images/M3-dressing-room.png"
+    },
+    {
+      "id": "s03-img-05",
+      "type": "image",
+      "label": "BIM Collection Array — Lighting Rig (detail)",
+      "src": "images/M3-bim-array-rig.png"
+    },
+    {
+      "id": "s03-doc-02",
+      "type": "document",
+      "label": "Clara Voss — Rehearsal Notebook (selected entries)",
+      "classification": "FIELD EVIDENCE — S03 — ROUTE A",
+      "body": "ENTRY — WEEK 6 OF CURRENT SEASON\nSomething strange in the Silvia scenes today. I knew my next line before I read it. Not memory — I've been off-book for weeks. This was different. It felt like remembering something that happened rather than something I learned.\n\nENTRY — WEEK 11\nIt's happening more. Making choices in rehearsal that I don't remember deciding. Edmund noticed — he said my instincts have never been better. He meant it as a compliment. I smiled and said thank you.\n\nENTRY — WEEK 14\nI should tell Edmund. I keep not telling Edmund. I don't know how to say: I think something is happening to me that I don't have a name for, and it feels like excellence, which is the part that frightens me most.\n\nENTRY — WEEK 17 [final entry]\nThe touring production briefing is on Thursday. I've been planning this for two years. I want to see it through.\n\nI want to see it through."
+    },
+    {
+      "id": "s03-ra-02",
+      "type": "readaloud",
+      "label": "Scene 2 — The Rehearsal",
+      "text": "The stage is set for Act II. Four understudies run through a scene from The Two Gentlemen of Verona — the same production, the same roles, the same choices Clara and Edmund made for three consecutive seasons.\n\nIt shouldn't be this good. The understudies are accomplished — that's not the surprise. The surprise is the specificity. The particular way the actor playing Proteus tilts his head before a line he doesn't trust yet. The way the actor playing Silvia turns upstage a beat before her cue, as if she knows what's coming from offstage before it arrives.\n\nPetra Novak is next to you. She watches with the expression of someone witnessing something they cannot name and have decided not to try.\n\n\"That's the bit,\" she says quietly, not looking at you. \"That's exactly the bit.\""
+    },
+    {
+      "id": "s03-img-06",
+      "type": "image",
+      "label": "The Stage — Act II Set",
+      "src": "images/M3-stage-act2.png"
+    },
+    {
+      "id": "s03-doc-03",
+      "type": "document",
+      "label": "MESA Internal Document — Partial Recovery (redacted)",
+      "classification": "FIELD EVIDENCE — S03 — ROUTE C",
+      "body": "MERIDIAN THEATRE COMPANY — SITE ASSESSMENT UPDATE\nSolstice Property Group // Internal Distribution Only\n\nBIM ACCUMULATION: Arrays operational 8 months. Readings consistent with Phase 2 projections. Performance-context amplification confirmed — audience belief as BIM vector validated.\n\nPHASE 2 OUTCOME: [REDACTED]\n\nINTELLIGENCE SOURCE UPDATE: Non-linear consciousness asset // [REDACTED] // three confirmed accurate pre-event descriptions on record. Operational use: [REDACTED]\n\nNOTE ON PORTAL FIELD TEAM: Motion sensor triggered at Aldermoor estate office [DATE REDACTED]. PORTAL field presence now confirmed at two ALD-class sites. Reclassification recommendation: approved.\n\n// Distribution: A. Dell, C. Vasile — eyes only"
+    },
+    {
+      "id": "s03-pda-03",
+      "type": "pda",
+      "from": "DIRECTOR LEECH",
+      "subject": "MID-DEPLOYMENT — STANDING DIRECTIVE",
+      "body": "Whatever you find in that theatre — document it.\n\nThe mechanism is significant. If the performance context is genuinely functioning as a BIM amplifier, that is something we need to understand before we close the case.\n\nI am not asking you to leave anyone in danger. I am asking you not to destroy something we haven't finished studying.\n\nThose are not the same instruction. I trust you to know the difference.\n\n— Leech"
+    },
+    {
+      "id": "s03-ra-03",
+      "type": "readaloud",
+      "label": "Scene 3 — Rook at the Loading Bay",
+      "text": "She's in the loading bay when you find her, tablet in hand, watching the building. She turns when she hears you, without surprise — she heard you coming from the stage door. She lets you get all the way to her before she speaks.\n\n\"PORTAL.\" She doesn't move. \"Right on time.\" A beat. \"I was wondering if you'd send the same team. I'm glad you did — I have questions.\"\n\nShe glances, briefly, at Sven. Something in her expression doesn't change, exactly, but it recalibrates."
+    },
+    {
+      "id": "s03-img-07",
+      "type": "image",
+      "label": "Loading Bay — MESA Vehicles",
+      "src": "images/M3-loading-bay.png"
+    },
+    {
+      "id": "s03-ra-04",
+      "type": "readaloud",
+      "label": "Climax — Fourteen Minutes to Curtain",
+      "text": "The house is sold out. Fourteen minutes to curtain. Sophie Marsh is in the wings, script in hand, and she is more herself than she was yesterday — and also slightly less. The thing that has been slowly entering her is close to the surface tonight. She knows. She can feel it in the way she knows her next line before she reads it.\n\nThe stage manager calls places.\n\nBackstage smells like greasepaint and timber and something older. The lights dim in the house. The audience quiets. And in the space between the last murmur and the first cue, there is a quality of attention in the building that has nothing to do with the four hundred people in the seats.\n\nClara and Edmund are ready. They have been waiting for this."
+    },
+    {
+      "id": "s03-img-08",
+      "type": "image",
+      "label": "The Performance — Curtain Up",
+      "src": "images/M3-performance-curtain.png"
+    },
+    {
+      "id": "s03-classified-01",
+      "type": "classified",
+      "label": "Keeper Note — Agatha Dell Photograph",
+      "body": "Marcus Yuen (artistic director) has a photograph on his phone from the Solstice Property Group donor reception 20 months ago. If Alan gets him alone and asks about the person from Solstice who came in person — the one who knew more about the theatre's boundary conditions than he did — he will show the photograph.\n\nThe photograph shows Agatha Dell. She is standing near the prompt book display case. She is looking directly at the camera. She does not appear to know she is being photographed.\n\n// This is the first time the hunters will have a face for MESA's leadership. Do not surface it unless Alan pursues the artistic director thread in Scene 2. It should feel like a discovery, not a handout."
+    },
+    {
+      "id": "s03-classified-02",
+      "type": "classified",
+      "label": "CAMPBELL — Post-Resolution Private Flag",
+      "body": "// CAMPBELL — PRIVATE FLAG — DR. V. LEECH — POST-OPERATION M03\n\nOPERATION #0099-D STATUS: RESOLVED (conditional).\n\nMECHANISM CONFIRMED: Performance-context BIM amplification via audience belief vector. Prompt book identified as primary conduit — BIM-saturated artefact, 19th-century origin, consistent with pre-ripple accumulation pattern.\n\nRESOLUTION NOTES: Theatrical farewell enacted. C. Voss and E. Farrow: departed. Understudies: recovering. Sophie Marsh: stable.\n\nPROJECT VEIL FLAG: Audience belief as BIM amplifier is a replicable mechanism. Performance context lowers the threshold for consciousness transfer significantly. I am noting this. I have not included it in the operational report.\n\nPRIVACY PROTOCOL 7 — NOTE: The mechanism's resolution required consent, not force. The actors chose the ending. I do not know whether they had already seen it coming. I find I am unable to determine whether that distinction matters.\n\n// I think it matters. I am not yet certain why."
+    }
+  ]
+}
