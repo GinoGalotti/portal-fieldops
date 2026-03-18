@@ -53,11 +53,19 @@ async function activateKeeperMode(page) {
 async function openPlayerMapTab(page) {
   await page.locator('[data-tab="map"]').click();
   await page.waitForLoadState('networkidle');
+  // Explicitly select the mapped session — the default is now the last session
+  // (M03), which uses a connection map type rather than a grid. Select M02 so
+  // tests see the aldermoor grid map, consistent with allLocs / ALL_UNLOCKED.
+  await page.locator(`#panel-body .handout-panel-tab:has-text("${mappedSession.session_key}")`).click();
+  await page.waitForLoadState('networkidle');
 }
 
 async function openKeeperMapTab(page) {
   await activateKeeperMode(page);
   await page.locator('[data-ktab="map"]').click();
+  await page.waitForLoadState('networkidle');
+  // Explicitly select the mapped session (same reason as openPlayerMapTab).
+  await page.locator(`.data-sess-btn:has-text("${mappedSession.session_key}")`).click();
   await page.waitForLoadState('networkidle');
 }
 
@@ -96,13 +104,13 @@ test.describe('feed.html — player MAP tab', () => {
     await mockMapApis(page);
     await page.goto('/feed.html');
     await openPlayerMapTab(page);
-    // M02 is the default (last session in sessions/index.json)
+    // M02 is explicitly selected by openPlayerMapTab (M03 is now the last session)
     await expect(page.locator('.map-grid')).toBeVisible();
     await expect(page.locator('.map-cell-loc').first()).toBeVisible();
   });
 
   test('locked cells show redacted blocks, not location labels', async ({ page }) => {
-    await mockMapApis(page); // all cells locked
+    await mockMapApis(page); // all cells locked — M02 (aldermoor) explicitly selected
     await page.goto('/feed.html');
     await openPlayerMapTab(page);
     await expect(page.locator('.map-cell-loc.locked').first()).toBeVisible();

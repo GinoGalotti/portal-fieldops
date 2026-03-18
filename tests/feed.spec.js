@@ -282,6 +282,10 @@ test.describe('feed.html — clear handouts', () => {
     for (let i = 0; i < 5; i++) await logo.click();
     await page.locator('[data-ktab="handouts"]').click();
     await page.waitForSelector('.handout-list');
+    // Default session is now M03 (last). Switch to M02 where the pre-seeded
+    // localStorage keys (s02-*) live.
+    await page.locator('.data-sess-btn:has-text("M02")').click();
+    await page.waitForSelector('.handout-list');
 
     // At least one button should be in RE-POST state (from localStorage seed).
     await expect(page.locator('.handout-post-btn.repost').first()).toBeVisible();
@@ -734,6 +738,9 @@ test.describe('feed.html — handout coexistence', () => {
 
     // Open keeper HANDOUTS tab and wait for the handout list
     await page.locator('[data-ktab="handouts"]').click();
+    await page.waitForSelector('.handout-list');
+    // Default session is now M03 (last). Switch to M02 which has the s02-* handouts.
+    await page.locator('.data-sess-btn:has-text("M02")').click();
     await page.waitForSelector('.handout-list');
 
     // Post the PDA handout (s02-pda-01 — CAMPBELL Anomaly Report)
