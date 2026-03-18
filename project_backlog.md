@@ -82,12 +82,16 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 ---
 
+## RECENTLY DONE ✅
+
+### Connection map rendering — feed.html (2026-03-18)
+- `feed.html` — `_findMapById`, `_findMapForSession` search both `maps[]` and `connection_maps[]; `_findAllLocs`, `_findMapLoc` handle `map.type === 'connection'`; `_renderAnyMap` dispatcher routes to `_renderConnectionMap` or `_renderMapGrid`; `_renderConnectionMap` — 3-col CSS grid, locked/unlocked nodes, keeper order+route badges, NPC pills, REVEAL ALL / RESET MAP only; `_buildConnDetail` — player_desc + edges (both directions, unlocked only); `keeperSelectMapSession` now resets `selectedMapLoc`
+- CSS — `.conn-map-grid`, `.conn-node`, `.conn-route-badge` (A/B/C), `.conn-order-badge`, `.conn-detail-edges`
+- `tests/map.spec.js` — +14 tests (38 total): player M03 locked/unlocked/detail/edges; keeper M03 all nodes, order/route badges, NPC pills, bulk buttons, click toggle, REVEAL ALL, RESET MAP
+
 ## NEXT UP
 
-452 tests passing across 19 files. Suite: `smoke` (5) · `nav` (22) · `contacts` (7) · `incidents` (18) · `feed` (29) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (29) · `d1-round-trip` (7) · `map` (24) · `report` (15) · `index-session` (16) · `evidence` (41).
-
-**1. Connection map rendering — feed.html (HIGH — S03 prerequisite)**
-`portal-maps.json` has a `connection_maps[]` entry for M03 (7 nodes, 11 edges, theatre investigation board). feed.html MAP tab only handles `type: "grid"`. Needs node/edge layout for S03.
+541 tests passing across 20 files. Suite: `smoke` (5) · `nav` (22) · `contacts` (7) · `incidents` (18) · `feed` (29) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (29) · `d1-round-trip` (9) · `map` (38) · `report` (15) · `index-session` (16) · `evidence` (41) · `threads` (20+).
 
 ---
 

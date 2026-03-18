@@ -1417,6 +1417,31 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
 .map-sync-btn { display: block; width: 100%; margin-top: 0.6rem; padding: 5px; background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; cursor: pointer; }
 .map-sync-btn:hover { border-color: var(--green-dim); color: var(--green-dim); }
 
+/* ── CONNECTION MAP ─────────────────────────────────────────────────── */
+.conn-map-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 0.5rem; }
+.conn-node { position: relative; border: 1px solid var(--border); padding: 8px; min-height: 68px; cursor: pointer; transition: border-color 0.15s; }
+.conn-node.unlocked { border-color: var(--green-dim); background: rgba(46,204,113,0.04); }
+.conn-node.locked { cursor: default; background: var(--bg); }
+.conn-node.selected { border-color: var(--green); background: rgba(46,204,113,0.09); }
+.conn-node-badges { display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: 4px; }
+.conn-route-badge { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; letter-spacing: 0.06em; padding: 1px 5px; border-radius: 2px; font-weight: bold; }
+.conn-route-A { background: rgba(167,139,250,0.18); color: #a78bfa; border: 1px solid rgba(167,139,250,0.35); }
+.conn-route-B { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+.conn-route-C { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+.conn-order-badge { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; color: var(--amber-dim); border: 1px solid var(--border); padding: 1px 4px; border-radius: 2px; }
+.conn-node-label { font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; color: var(--text); line-height: 1.3; }
+.conn-node-sublabel { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; letter-spacing: 0.05em; color: var(--text-dim); margin-top: 2px; }
+.conn-node-keepernote { font-size: 0.55rem; color: var(--amber-dim); letter-spacing: 0.03em; margin-top: 4px; line-height: 1.4; }
+.conn-node-toggle { font-family: 'Share Tech Mono', monospace; font-size: 0.48rem; letter-spacing: 0.08em; margin-top: 5px; color: var(--text-dim); }
+.conn-node.unlocked .conn-node-toggle { color: var(--green-dim); }
+.conn-node-redacted { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; color: var(--border); line-height: 1.4; }
+.conn-node-classified { font-size: 0.48rem; letter-spacing: 0.1em; color: var(--border); margin-top: 3px; }
+.conn-node-npc-row { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 5px; }
+.conn-node-npc { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; letter-spacing: 0.05em; color: var(--amber); border: 1px solid var(--amber-dim); padding: 1px 5px; border-radius: 2px; }
+.conn-detail-edges { margin-top: 8px; border-top: 1px solid var(--border); padding-top: 6px; }
+.conn-detail-edge { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: var(--text-dim); padding: 2px 0; letter-spacing: 0.04em; }
+.conn-detail-edge .conn-edge-target { color: var(--green-dim); }
+
 /* Keeper message composer */
 .msg-composer { margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.75rem; }
 .msg-composer-label { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--green-dim); margin-bottom: 0.4rem; letter-spacing: 0.1em; }
@@ -3500,11 +3525,26 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
   }
 
   function _findAllLocs(map) {
+    if (map.type === 'connection') return map.nodes || [];
     var locs = [];
     map.grid.forEach(function (row) {
       row.forEach(function (cell) { if (cell && cell.type === 'loc') locs.push(cell); });
     });
     return locs;
+  }
+
+  function _findMapById(mapId) {
+    var grids = (maps_data && maps_data.maps) || [];
+    var conn  = (maps_data && maps_data.connection_maps) || [];
+    return grids.find(function (m) { return m.id === mapId; }) ||
+           conn.find(function (m) { return m.id === mapId; }) || null;
+  }
+
+  function _findMapForSession(sessId) {
+    var grids = (maps_data && maps_data.maps) || [];
+    var conn  = (maps_data && maps_data.connection_maps) || [];
+    return grids.find(function (m) { return m.session_id === sessId; }) ||
+           conn.find(function (m) { return m.session_id === sessId; }) || null;
   }
 
   // ── MAP SESSION SELECTOR HELPERS ────────────────────────────────────────────
@@ -3539,7 +3579,7 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     }
     if (!playerMapSession) playerMapSession = session_data[session_data.length - 1].id;
     var selHtml = _buildPlayerMapSelHtml();
-    var map = maps_data && maps_data.maps ? maps_data.maps.find(function (m) { return m.session_id === playerMapSession; }) : null;
+    var map = _findMapForSession(playerMapSession);
     if (!map) {
       body.innerHTML = selHtml + '<div class="keeper-panel-note">// NO MAP FOR THIS MISSION</div>';
       return;
@@ -3549,11 +3589,11 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
       .then(function (r) { return r.ok ? r.json() : {}; })
       .then(function (state) {
         mapState = _normaliseMapState(state);
-        _renderMapGrid(body, map, false, selHtml);
+        _renderAnyMap(body, map, false, selHtml);
       })
       .catch(function () {
         mapState = { u: {}, v: {} };
-        _renderMapGrid(body, map, false, selHtml);
+        _renderAnyMap(body, map, false, selHtml);
       });
   }
 
@@ -3572,7 +3612,7 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     }
     if (!keeperMapSession) keeperMapSession = session_data[session_data.length - 1].id;
     var selHtml = _buildKeeperMapSelHtml();
-    var map = maps_data && maps_data.maps ? maps_data.maps.find(function (m) { return m.session_id === keeperMapSession; }) : null;
+    var map = _findMapForSession(keeperMapSession);
     if (!map) {
       body.innerHTML = selHtml + '<div class="keeper-panel-note">// NO MAP FOR THIS MISSION</div>';
       return;
@@ -3582,16 +3622,17 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
       .then(function (r) { return r.ok ? r.json() : {}; })
       .then(function (state) {
         mapState = _normaliseMapState(state);
-        _renderMapGrid(body, map, true, selHtml);
+        _renderAnyMap(body, map, true, selHtml);
       })
       .catch(function () {
         mapState = { u: {}, v: {} };
-        _renderMapGrid(body, map, true, selHtml);
+        _renderAnyMap(body, map, true, selHtml);
       });
   }
 
   window.keeperSelectMapSession = function (sessId) {
     keeperMapSession = sessId;
+    selectedMapLoc = null;
     renderKeeperMapTab();
   };
 
@@ -3682,55 +3723,159 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     body.innerHTML = html;
   }
 
+  // ── MAP TYPE DISPATCHER ──────────────────────────────────────────────────────
+  function _renderAnyMap(body, map, keeperView, prefixHtml) {
+    if (map.type === 'connection') {
+      _renderConnectionMap(body, map, keeperView, prefixHtml);
+    } else {
+      _renderMapGrid(body, map, keeperView, prefixHtml);
+    }
+  }
+
+  // ── CONNECTION MAP RENDERER ──────────────────────────────────────────────────
+  function _renderConnectionMap(body, map, keeperView, prefixHtml) {
+    var html = (prefixHtml || '') + '<div class="map-wrap">';
+    html += '<div class="map-header">';
+    html += '<div class="map-title">// ' + escHtml(map.title) + '</div>';
+    html += '<div class="map-subtitle">' + escHtml(map.subtitle) + '</div>';
+    html += '</div>';
+
+    html += '<div class="conn-map-grid">';
+    (map.nodes || []).forEach(function (node) {
+      var unlocked = !!(mapState.u && mapState.u[node.id]);
+      var isSelected = !keeperView && selectedMapLoc === node.id;
+      var cls = 'conn-node' +
+        (unlocked ? ' unlocked' : ' locked') +
+        (isSelected ? ' selected' : '');
+
+      if (keeperView) {
+        html += '<div class="' + cls + '" onclick="toggleMapLocation(\'' +
+          escHtml(map.id) + '\',\'' + escHtml(node.id) + '\')">';
+        html += '<div class="conn-node-badges">';
+        if (node.order) html += '<span class="conn-order-badge">' + node.order + '</span>';
+        if (node.route) html += '<span class="conn-route-badge conn-route-' + escHtml(node.route) + '">' + escHtml(node.route) + '</span>';
+        html += '</div>';
+        html += '<div class="conn-node-label">' + escHtml(node.label) + '</div>';
+        html += '<div class="conn-node-sublabel">' + escHtml(node.sublabel) + '</div>';
+        if (node.npcs && node.npcs.length) {
+          html += '<div class="conn-node-npc-row">';
+          node.npcs.forEach(function (n) { html += '<span class="conn-node-npc">' + escHtml(n) + '</span>'; });
+          html += '</div>';
+        }
+        if (node.keeper_note) {
+          html += '<div class="conn-node-keepernote">↳ ' + escHtml(node.keeper_note) + '</div>';
+        }
+        html += '<div class="conn-node-toggle">' + (unlocked ? '● VISIBLE' : '○ LOCKED') + '</div>';
+        html += '</div>';
+      } else if (unlocked) {
+        html += '<div class="' + cls + '" onclick="showMapDetail(\'' + escHtml(node.id) + '\')">';
+        html += '<div class="conn-node-label">' + escHtml(node.label) + '</div>';
+        html += '<div class="conn-node-sublabel">' + escHtml(node.sublabel) + '</div>';
+        html += '</div>';
+      } else {
+        html += '<div class="' + cls + '">';
+        html += '<div class="conn-node-redacted">░░░░░░<br>░░░░░░<br>░░░░░░</div>';
+        html += '<div class="conn-node-classified">// CLASSIFIED</div>';
+        html += '</div>';
+      }
+    });
+    html += '</div>'; // .conn-map-grid
+
+    if (keeperView) {
+      html += '<div class="map-bulk-btns">' +
+        '<button class="map-bulk-btn" onclick="toggleAllMap(\'' + escHtml(map.id) + '\',true)">// REVEAL ALL</button>' +
+        '<button class="map-bulk-btn" onclick="toggleAllMap(\'' + escHtml(map.id) + '\',false)">// RESET MAP</button>' +
+        '</div>';
+    } else {
+      html += '<div id="map-detail">';
+      if (selectedMapLoc) {
+        var nodeData = (map.nodes || []).find(function (n) { return n.id === selectedMapLoc; });
+        if (nodeData && mapState.u && mapState.u[nodeData.id]) {
+          html += _buildConnDetail(nodeData, map);
+        }
+      }
+      html += '</div>';
+      html += '<button class="map-sync-btn" onclick="renderMapPanel()">// SYNC MAP</button>';
+    }
+
+    html += '</div>'; // .map-wrap
+    body.innerHTML = html;
+  }
+
+  function _buildConnDetail(node, map) {
+    var edges = map.edges || [];
+    var connected = edges.filter(function (e) { return e.from === node.id || e.to === node.id; });
+    var unlockedConnected = connected.filter(function (e) {
+      var otherId = e.from === node.id ? e.to : e.from;
+      return mapState.u && mapState.u[otherId];
+    });
+    var html = '<div class="map-detail-card">' +
+      '<div class="map-detail-label">' + escHtml(node.label) + '</div>' +
+      '<div class="map-detail-sublabel">' + escHtml(node.sublabel) + '</div>' +
+      '<div class="map-detail-desc">' + escHtml(node.player_desc) + '</div>';
+    if (unlockedConnected.length) {
+      html += '<div class="conn-detail-edges">';
+      unlockedConnected.forEach(function (e) {
+        var otherId = e.from === node.id ? e.to : e.from;
+        var otherNode = (map.nodes || []).find(function (n) { return n.id === otherId; });
+        var otherLabel = otherNode ? otherNode.label : otherId;
+        var edgeLabel = e.label ? ' — ' + e.label : '';
+        html += '<div class="conn-detail-edge">→ <span class="conn-edge-target">' +
+          escHtml(otherLabel) + '</span>' + escHtml(edgeLabel) + '</div>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
+
   window.showMapDetail = function (locId) {
     selectedMapLoc = (selectedMapLoc === locId) ? null : locId;
-    if (!maps_data || !maps_data.maps) return;
-    var map = maps_data.maps.find(function (m) { return m.session_id === playerMapSession; });
+    var map = _findMapForSession(playerMapSession);
     if (!map) return;
-    _renderMapGrid(document.getElementById('panel-body'), map, false, _buildPlayerMapSelHtml());
+    _renderAnyMap(document.getElementById('panel-body'), map, false, _buildPlayerMapSelHtml());
   };
 
   window.toggleMapLocation = function (mapId, locId) {
     mapState.u = mapState.u || {};
     mapState.u[locId] = !mapState.u[locId];
     _saveMapState(mapId);
-    if (!maps_data || !maps_data.maps) return;
-    var map = maps_data.maps.find(function (m) { return m.id === mapId; });
-    if (map) _renderMapGrid(document.getElementById('panel-body'), map, true, _buildKeeperMapSelHtml());
+    var map = _findMapById(mapId);
+    if (map) _renderAnyMap(document.getElementById('panel-body'), map, true, _buildKeeperMapSelHtml());
   };
 
   window.toggleMapVisited = function (mapId, locId) {
     mapState.v = mapState.v || {};
     mapState.v[locId] = !mapState.v[locId];
     _saveMapState(mapId);
-    if (!maps_data || !maps_data.maps) return;
-    var map = maps_data.maps.find(function (m) { return m.id === mapId; });
-    if (map) _renderMapGrid(document.getElementById('panel-body'), map, true, _buildKeeperMapSelHtml());
+    var map = _findMapById(mapId);
+    if (map) _renderAnyMap(document.getElementById('panel-body'), map, true, _buildKeeperMapSelHtml());
   };
 
   window.toggleAllMap = function (mapId, unlock) {
-    if (!maps_data || !maps_data.maps) return;
-    var map = maps_data.maps.find(function (m) { return m.id === mapId; });
+    var map = _findMapById(mapId);
     if (!map) return;
     mapState.u = mapState.u || {};
     _findAllLocs(map).forEach(function (cell) { mapState.u[cell.id] = unlock || undefined; });
     if (!unlock) mapState.u = {};
     _saveMapState(mapId);
-    _renderMapGrid(document.getElementById('panel-body'), map, true, _buildKeeperMapSelHtml());
+    _renderAnyMap(document.getElementById('panel-body'), map, true, _buildKeeperMapSelHtml());
   };
 
   window.toggleAllVisited = function (mapId, mark) {
-    if (!maps_data || !maps_data.maps) return;
-    var map = maps_data.maps.find(function (m) { return m.id === mapId; });
+    var map = _findMapById(mapId);
     if (!map) return;
     mapState.v = mapState.v || {};
     _findAllLocs(map).forEach(function (cell) { mapState.v[cell.id] = mark || undefined; });
     if (!mark) mapState.v = {};
     _saveMapState(mapId);
-    _renderMapGrid(document.getElementById('panel-body'), map, true, _buildKeeperMapSelHtml());
+    _renderAnyMap(document.getElementById('panel-body'), map, true, _buildKeeperMapSelHtml());
   };
 
   function _findMapLoc(map, locId) {
+    if (map.type === 'connection') {
+      return (map.nodes || []).find(function (n) { return n.id === locId; }) || null;
+    }
     for (var r = 0; r < map.grid.length; r++) {
       for (var c = 0; c < map.grid[r].length; c++) {
         var cell = map.grid[r][c];

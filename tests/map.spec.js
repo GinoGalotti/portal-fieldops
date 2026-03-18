@@ -4,6 +4,7 @@
 //   Player MAP tab  — mission selector, locked/unlocked cells, detail card
 //   Keeper MAP tab  — order numbers, NPC pills, unlock toggle, visited button,
 //                     bulk actions (REVEAL ALL / RESET MAP / ALL VISITED / CLEAR VISITED)
+//   Connection MAP  — M03 theatre investigation board (node/edge layout)
 //
 // All D1 calls are mocked — portal-maps.json and sessions/index.json are read
 // from disk at module level so tests stay in sync with real data.
@@ -23,10 +24,19 @@ const firstLoc        = allLocs[0];
 const locsWithNpcs    = allLocs.filter(c => c.npcs && c.npcs.length > 0);
 const locsWithOrder   = allLocs.filter(c => c.order);
 const mappedSession   = sessionData.find(s => s.id === aldermoorMap.session_id);
-const unmappedSession = sessionData.find(s => s.id !== aldermoorMap.session_id);
+const unmappedSession = sessionData.find(s => s.id !== aldermoorMap.session_id && !mapsData.connection_maps.find(cm => cm.session_id === s.id));
 
 // Pre-built fully-unlocked state for bulk-action tests.
 const ALL_UNLOCKED = { u: Object.fromEntries(allLocs.map(c => [c.id, true])), v: {} };
+
+// ── CONNECTION MAP DATA ───────────────────────────────────────────────────────
+const theatreMap       = mapsData.connection_maps.find(m => m.id === 'map-m03-theatre');
+const theatreNodes     = theatreMap.nodes;
+const firstNode        = theatreNodes[0];
+const nodesWithNpcs    = theatreNodes.filter(n => n.npcs && n.npcs.length > 0);
+const nodesWithRoute   = theatreNodes.filter(n => n.route);
+const theatreSession   = sessionData.find(s => s.id === theatreMap.session_id);
+const ALL_NODES_UNLOCKED = { u: Object.fromEntries(theatreNodes.map(n => [n.id, true])), v: {} };
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 
@@ -317,6 +327,160 @@ test.describe('feed.html — keeper MAP tab', () => {
     for (let i = 0; i < count; i++) {
       await expect(btns.nth(i)).toContainText('○ NOT VISITED');
     }
+  });
+
+});
+
+// ── CONNECTION MAP (M03 theatre investigation board) ──────────────────────────
+
+test.describe('feed.html — connection MAP (M03)', () => {
+
+  async function openPlayerConnMap(page) {
+    await page.locator('[data-tab="map"]').click();
+    await page.waitForLoadState('networkidle');
+    await page.locator(`#panel-body .handout-panel-tab:has-text("${theatreSession.session_key}")`).click();
+    await page.waitForLoadState('networkidle');
+  }
+
+  async function openKeeperConnMap(page) {
+    await activateKeeperMode(page);
+    await page.locator('[data-ktab="map"]').click();
+    await page.waitForLoadState('networkidle');
+    await page.locator(`.data-sess-btn:has-text("${theatreSession.session_key}")`).click();
+    await page.waitForLoadState('networkidle');
+  }
+
+  test('player M03 renders .conn-map-grid (not .map-grid)', async ({ page }) => {
+    await mockMapApis(page);
+    await page.goto('/feed.html');
+    await openPlayerConnMap(page);
+    await expect(page.locator('.conn-map-grid')).toBeVisible();
+    await expect(page.locator('.map-grid')).toHaveCount(0);
+  });
+
+  test('player M03 — all nodes locked: shows redacted blocks', async ({ page }) => {
+    await mockMapApis(page); // empty map state = all locked
+    await page.goto('/feed.html');
+    await openPlayerConnMap(page);
+    await expect(page.locator('.conn-node.locked').first()).toBeVisible();
+    await expect(page.locator('.conn-node-redacted').first()).toBeVisible();
+    await expect(page.locator('.conn-node-label')).toHaveCount(0);
+  });
+
+  test('player M03 — unlocked node shows label and sublabel', async ({ page }) => {
+    await mockMapApis(page, { mapState: { u: { [firstNode.id]: true }, v: {} } });
+    await page.goto('/feed.html');
+    await openPlayerConnMap(page);
+    await expect(page.locator('.conn-node.unlocked')).toBeVisible();
+    await expect(page.locator('.conn-node-label').first()).toContainText(firstNode.label.slice(0, 8));
+    await expect(page.locator('.conn-node-sublabel').first()).toBeVisible();
+  });
+
+  test('player M03 — clicking unlocked node shows detail card', async ({ page }) => {
+    await mockMapApis(page, { mapState: { u: { [firstNode.id]: true }, v: {} } });
+    await page.goto('/feed.html');
+    await openPlayerConnMap(page);
+    await expect(page.locator('.map-detail-card')).toHaveCount(0);
+    await page.locator('.conn-node.unlocked').first().click();
+    await expect(page.locator('.map-detail-card')).toBeVisible();
+    await expect(page.locator('.map-detail-desc')).toContainText(firstNode.player_desc.slice(0, 20));
+  });
+
+  test('player M03 — clicking unlocked node twice collapses detail card', async ({ page }) => {
+    await mockMapApis(page, { mapState: { u: { [firstNode.id]: true }, v: {} } });
+    await page.goto('/feed.html');
+    await openPlayerConnMap(page);
+    const cell = page.locator('.conn-node.unlocked').first();
+    await cell.click();
+    await expect(page.locator('.map-detail-card')).toBeVisible();
+    await cell.click();
+    await expect(page.locator('.map-detail-card')).toHaveCount(0);
+  });
+
+  test('player M03 — connected unlocked nodes appear as edges in detail card', async ({ page }) => {
+    // Unlock the first node + one of its neighbours (loc-foyer, linked via "Investigation Route A")
+    const neighbour = theatreMap.edges.find(e => e.from === firstNode.id || e.to === firstNode.id);
+    const neighbourId = neighbour.from === firstNode.id ? neighbour.to : neighbour.from;
+    await mockMapApis(page, { mapState: { u: { [firstNode.id]: true, [neighbourId]: true }, v: {} } });
+    await page.goto('/feed.html');
+    await openPlayerConnMap(page);
+    await page.locator('.conn-node.unlocked').first().click();
+    await expect(page.locator('.conn-detail-edges')).toBeVisible();
+    await expect(page.locator('.conn-detail-edge').first()).toBeVisible();
+  });
+
+  test('keeper M03 — renders all nodes as .conn-node cells', async ({ page }) => {
+    await mockMapApis(page);
+    await page.goto('/feed.html');
+    await openKeeperConnMap(page);
+    await expect(page.locator('.conn-node')).toHaveCount(theatreNodes.length);
+  });
+
+  test('keeper M03 — order badges visible on nodes that have order', async ({ page }) => {
+    await mockMapApis(page);
+    await page.goto('/feed.html');
+    await openKeeperConnMap(page);
+    await expect(page.locator('.conn-order-badge')).toHaveCount(theatreNodes.filter(n => n.order).length);
+  });
+
+  test('keeper M03 — route badges visible on nodes that have a route', async ({ page }) => {
+    await mockMapApis(page);
+    await page.goto('/feed.html');
+    await openKeeperConnMap(page);
+    await expect(page.locator('.conn-route-badge')).toHaveCount(nodesWithRoute.length);
+  });
+
+  test('keeper M03 — NPC pills render on nodes with npcs', async ({ page }) => {
+    await mockMapApis(page);
+    await page.goto('/feed.html');
+    await openKeeperConnMap(page);
+    const totalExpected = nodesWithNpcs.reduce((n, node) => n + node.npcs.length, 0);
+    await expect(page.locator('.conn-node-npc')).toHaveCount(totalExpected);
+  });
+
+  test('keeper M03 — only REVEAL ALL and RESET MAP bulk buttons (no visited buttons)', async ({ page }) => {
+    await mockMapApis(page);
+    await page.goto('/feed.html');
+    await openKeeperConnMap(page);
+    await expect(page.locator('.map-bulk-btn:has-text("REVEAL ALL")')).toBeVisible();
+    await expect(page.locator('.map-bulk-btn:has-text("RESET MAP")')).toBeVisible();
+    await expect(page.locator('.map-bulk-btn:has-text("ALL VISITED")')).toHaveCount(0);
+    await expect(page.locator('.map-bulk-btn:has-text("CLEAR VISITED")')).toHaveCount(0);
+    await expect(page.locator('.conn-node-toggle').first()).toBeVisible();
+  });
+
+  test('keeper M03 — clicking node sends PUT and toggles to unlocked', async ({ page }) => {
+    await mockMapApis(page);
+    await page.goto('/feed.html');
+    await openKeeperConnMap(page);
+    const firstCell = page.locator('.conn-node').first();
+    await expect(firstCell).toHaveClass(/locked/);
+    const putPromise = page.waitForResponse(
+      r => r.url().includes('/api/v1/maps/') && r.request().method() === 'PUT'
+    );
+    await firstCell.click();
+    await putPromise;
+    await expect(page.locator('.conn-node').first()).toHaveClass(/unlocked/);
+  });
+
+  test('keeper M03 — REVEAL ALL unlocks every node', async ({ page }) => {
+    await mockMapApis(page);
+    await page.goto('/feed.html');
+    await openKeeperConnMap(page);
+    await expect(page.locator('.conn-node.locked')).toHaveCount(theatreNodes.length);
+    await page.locator('.map-bulk-btn:has-text("REVEAL ALL")').click();
+    await expect(page.locator('.conn-node.unlocked')).toHaveCount(theatreNodes.length);
+    await expect(page.locator('.conn-node.locked')).toHaveCount(0);
+  });
+
+  test('keeper M03 — RESET MAP re-locks all nodes', async ({ page }) => {
+    await mockMapApis(page, { mapState: ALL_NODES_UNLOCKED });
+    await page.goto('/feed.html');
+    await openKeeperConnMap(page);
+    await expect(page.locator('.conn-node.unlocked')).toHaveCount(theatreNodes.length);
+    await page.locator('.map-bulk-btn:has-text("RESET MAP")').click();
+    await expect(page.locator('.conn-node.locked')).toHaveCount(theatreNodes.length);
+    await expect(page.locator('.conn-node.unlocked')).toHaveCount(0);
   });
 
 });
