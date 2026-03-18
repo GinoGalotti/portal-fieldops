@@ -352,6 +352,268 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
   margin-bottom: 0.35rem;
 }
 
+/* ── TONE CARDS ──────────────────────────────────────────────────────────── */
+.feed-entry.feed-tone {
+  border: none;
+  background: transparent;
+  padding: 0.35rem 1rem;
+  border-top: 1px solid var(--border);
+  margin-top: 0.25rem;
+}
+.feed-tone-text {
+  font-family: 'Barlow', sans-serif;
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+  opacity: 0.7;
+}
+
+/* ── LINECARD ENTRIES ────────────────────────────────────────────────────── */
+@keyframes lc-tremor-n {
+  0%,100% { transform: translate(0,0); }
+  20%     { transform: translate(-0.5px, 0.5px); }
+  40%     { transform: translate(0.5px,-0.5px); }
+  60%     { transform: translate(-0.5px,0); }
+  80%     { transform: translate(0.5px, 0.5px); }
+}
+@keyframes lc-tremor-h {
+  0%,100% { transform: translate(0,0); }
+  15%     { transform: translate(-2px, 1.5px); }
+  30%     { transform: translate(1.5px,-2px); }
+  50%     { transform: translate(-1.5px,0.5px); }
+  70%     { transform: translate(2px,-1px); }
+  85%     { transform: translate(-1px, 2px); }
+}
+@keyframes lc-blur-n {
+  0%,100% { filter: blur(0); }
+  50%     { filter: blur(0.6px); }
+}
+@keyframes lc-blur-h {
+  0%,100% { filter: blur(0); }
+  40%     { filter: blur(1.2px); }
+  70%     { filter: blur(0.4px); }
+}
+.feed-entry.feed-linecard {
+  background: #0a0a0e;
+  border: 1px solid rgba(180,160,255,0.25);
+  border-left: 3px solid rgba(180,160,255,0.5);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.linecard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 0.75rem;
+  background: rgba(100,80,200,0.15);
+  border-bottom: 1px solid rgba(180,160,255,0.15);
+}
+.linecard-header-character {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  color: #b8a0ff;
+  text-transform: uppercase;
+}
+.linecard-header-recipient {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  color: #6a5a9a;
+}
+.linecard-body { padding: 0.6rem 0.75rem 0.7rem; }
+.linecard-context {
+  font-family: 'Barlow', sans-serif;
+  font-style: italic;
+  font-size: 0.73rem;
+  color: #8070b0;
+  line-height: 1.5;
+  margin-bottom: 0.6rem;
+}
+.linecard-lines { display: flex; flex-direction: column; gap: 0.6rem; }
+.linecard-cue {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: #5a4a8a;
+  margin-bottom: 0.2rem;
+}
+.linecard-text {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.82rem;
+  color: #d4c8ff;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+.linecard-stage-dir {
+  font-family: 'Barlow', sans-serif;
+  font-style: italic;
+  font-size: 0.7rem;
+  color: #6a5a9a;
+  margin-top: 0.6rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(180,160,255,0.1);
+}
+/* Distortion by intensity */
+.lc-intensity-normal .linecard-text {
+  animation: lc-tremor-n 3.2s cubic-bezier(.45,.05,.55,.95) infinite,
+             lc-blur-n   4.1s ease-in-out infinite;
+}
+.lc-intensity-high .linecard-text {
+  animation: lc-tremor-h 1.8s cubic-bezier(.3,0,.7,1) infinite,
+             lc-blur-h   2.3s ease-in-out infinite;
+}
+.lc-intensity-high .linecard-text::after {
+  content: attr(data-bleed);
+  position: absolute;
+  inset: 0;
+  color: #c0b0ff;
+  opacity: 0.15;
+  transform: translate(1px, 2px);
+  font-size: 0.78rem;
+  pointer-events: none;
+  white-space: pre-wrap;
+}
+.lc-intensity-high .linecard-text { position: relative; }
+.linecard-redacted {
+  padding: 0.55rem 0.75rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: #3a3a5a;
+  border-top: 1px solid rgba(100,80,200,0.1);
+}
+
+/* ── SCAN RESULT ENTRIES ─────────────────────────────────────────────────── */
+.feed-entry.feed-scan {
+  background: #080d10;
+  border: 1px solid rgba(100,180,220,0.2);
+  border-left: 3px solid rgba(100,180,220,0.4);
+  border-radius: 2px;
+}
+.feed-entry.feed-scan.scan-alert  { border-left-color: rgba(220,160,40,0.7);  border-color: rgba(220,160,40,0.3); }
+.feed-entry.feed-scan.scan-critical{ border-left-color: rgba(220,60,60,0.8);   border-color: rgba(220,60,60,0.35); }
+.scan-chrome {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.28rem 0.75rem;
+  background: rgba(40,80,100,0.25);
+  border-bottom: 1px solid rgba(100,180,220,0.12);
+}
+.feed-scan.scan-alert  .scan-chrome { background: rgba(100,70,10,0.35); border-bottom-color: rgba(220,160,40,0.15); }
+.feed-scan.scan-critical .scan-chrome { background: rgba(100,20,20,0.4); border-bottom-color: rgba(220,60,60,0.2); }
+.scan-chrome-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.18em;
+  color: #4a8aaa;
+}
+.feed-scan.scan-alert   .scan-chrome-label { color: #c8a030; }
+.feed-scan.scan-critical .scan-chrome-label { color: #e03030; }
+.scan-chrome-time { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; color: #304050; letter-spacing: 0.06em; }
+.scan-body { padding: 0.5rem 0.75rem 0.6rem; }
+.scan-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #90c8e0;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+.feed-scan.scan-alert   .scan-label { color: #d8a840; }
+.feed-scan.scan-critical .scan-label { color: #e84040; }
+.scan-sublabel {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.56rem;
+  color: #3a6070;
+  letter-spacing: 0.06em;
+  margin-top: 2px;
+  margin-bottom: 0.4rem;
+}
+.scan-reading-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+.scan-reading-value {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.05rem;
+  color: #60b0d0;
+  letter-spacing: 0.04em;
+}
+.feed-scan.scan-alert   .scan-reading-value { color: #e8b840; font-size: 1.15rem; }
+.feed-scan.scan-critical .scan-reading-value { color: #ff4040; font-size: 1.2rem; }
+.scan-status-pip {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  padding: 1px 5px;
+  border-radius: 2px;
+  background: rgba(60,120,160,0.2);
+  color: #5090b0;
+  border: 1px solid rgba(60,120,160,0.3);
+}
+.feed-scan.scan-alert   .scan-status-pip { background: rgba(160,100,20,0.25); color: #d09030; border-color: rgba(180,120,20,0.4); }
+.feed-scan.scan-critical .scan-status-pip { background: rgba(160,30,30,0.3);  color: #e84040; border-color: rgba(200,40,40,0.5); }
+.scan-note {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: #3a6070;
+  letter-spacing: 0.04em;
+  margin-top: 0.35rem;
+  line-height: 1.5;
+}
+.feed-scan.scan-alert   .scan-note { color: #8a6020; }
+.feed-scan.scan-critical .scan-note { color: #9a3030; }
+
+/* ── QUICK SCAN FORM (keeper handouts tab) ────────────────────────────────── */
+.quick-scan-form {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(100,180,220,0.2);
+  border-radius: 2px;
+  background: rgba(8,13,16,0.8);
+}
+.quick-scan-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.18em;
+  color: #4a8aaa;
+  margin-bottom: 0.55rem;
+}
+.quick-scan-field { display: flex; flex-direction: column; gap: 2px; margin-bottom: 0.4rem; }
+.quick-scan-label { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; letter-spacing: 0.1em; color: #305060; }
+.quick-scan-input, .quick-scan-select {
+  background: #0d1820;
+  border: 1px solid rgba(100,180,220,0.15);
+  color: #80b0c8;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  padding: 3px 6px;
+  border-radius: 1px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.quick-scan-input:focus, .quick-scan-select:focus { outline: none; border-color: rgba(100,180,220,0.4); }
+.quick-scan-submit {
+  width: 100%;
+  margin-top: 0.4rem;
+  padding: 4px;
+  background: transparent;
+  border: 1px solid rgba(100,180,220,0.3);
+  color: #4a8aaa;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  border-radius: 1px;
+}
+.quick-scan-submit:hover { border-color: rgba(100,180,220,0.6); color: #60b0d0; }
+
 /* ── LIGHTBOX ────────────────────────────────────────────────────────────── */
 .lightbox {
   position: fixed;
@@ -416,6 +678,9 @@ body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-hei
 .pip-map        { background: rgba(180,100,255,0.1); color: #c07aff; border: 1px solid rgba(180,100,255,0.2); }
 .pip-document   { background: rgba(180,140,32,0.12); color: #c8a020; border: 1px solid rgba(180,140,32,0.2); }
 .pip-classified { background: rgba(160,100,200,0.12); color: #a060d0; border: 1px solid rgba(160,100,200,0.2); }
+.pip-tone       { background: rgba(80,80,80,0.12);    color: #888;    border: 1px solid rgba(80,80,80,0.2); }
+.pip-linecard   { background: rgba(140,120,255,0.12); color: #9080e0; border: 1px solid rgba(140,120,255,0.25); }
+.pip-scan       { background: rgba(60,160,200,0.12);  color: #40a0c8; border: 1px solid rgba(60,160,200,0.25); }
 .handout-meta  { flex: 1; min-width: 0; }
 .handout-label {
   font-family: 'Share Tech Mono', monospace;
@@ -1947,16 +2212,41 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
         var itemClass = isPosted ? 'handout-item posted' : 'handout-item';
         var btnLabel = isPosted ? '↺ RE-POST' : '▶ POST';
         var btnClass = isPosted ? 'handout-post-btn repost' : 'handout-post-btn';
+        // Linecard: show recipient name beneath handout label
+        var recipientNote = (h.type === 'linecard' && h.recipient)
+          ? '<div class="handout-posted-time">→ ' + escHtml(h.recipient.toUpperCase()) + '</div>'
+          : '';
         html += '<div class="' + itemClass + '">' +
           '<span class="handout-type-pip ' + pipClass + '">' + escHtml(typeLabel) + '</span>' +
           '<div class="handout-meta">' +
-            '<div class="handout-label">' + escHtml(h.label || h.subject || h.id) + '</div>' +
+            '<div class="handout-label">' + escHtml(h.label || h.character || h.subject || h.id) + '</div>' +
+            recipientNote +
             (isPosted ? '<div class="handout-posted-time">POSTED ' + escHtml(posted[h.id]) + '</div>' : '') +
           '</div>' +
           '<button class="' + btnClass + '" id="hbtn-' + escHtml(h.id) + '" onclick="postHandout(\'' + escHtml(h.id) + '\')">' + btnLabel + '</button>' +
         '</div>';
       });
       html += '</div>';
+      // Quick Scan form — for improvised Rex scans
+      html += '<div class="quick-scan-form">' +
+        '<div class="quick-scan-title">⚡ QUICK SCAN</div>' +
+        '<div class="quick-scan-field"><label class="quick-scan-label">OBJECT / LOCATION</label>' +
+          '<input class="quick-scan-input" id="qs-label" placeholder="e.g. Victorian Wig Stand"></div>' +
+        '<div class="quick-scan-field"><label class="quick-scan-label">DESCRIPTION</label>' +
+          '<input class="quick-scan-input" id="qs-sublabel" placeholder="Brief description"></div>' +
+        '<div class="quick-scan-field"><label class="quick-scan-label">STATUS</label>' +
+          '<select class="quick-scan-select" id="qs-status" onchange="qsSyncReading()">' +
+            '<option value="nominal">NOMINAL</option>' +
+            '<option value="trace">TRACE</option>' +
+            '<option value="alert">ALERT</option>' +
+            '<option value="critical">CRITICAL</option>' +
+          '</select></div>' +
+        '<div class="quick-scan-field"><label class="quick-scan-label">READING</label>' +
+          '<input class="quick-scan-input" id="qs-reading" placeholder="e.g. 0.00 BIM"></div>' +
+        '<div class="quick-scan-field"><label class="quick-scan-label">NOTE (optional)</label>' +
+          '<input class="quick-scan-input" id="qs-note" placeholder=""></div>' +
+        '<button class="quick-scan-submit" onclick="postQuickScan()">▶ POST SCAN</button>' +
+      '</div>';
       html += '<button class="handout-clear-btn" onclick="clearSessionHandouts()">// CLEAR HANDOUTS — ' + escHtml(sess.session_key) + '</button>';
       body.innerHTML = html;
     });
@@ -1976,7 +2266,7 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
       return !(e.session_id === sess.session_key && e.type && e.type !== 'message');
     });
     var feedContainer = document.getElementById('feed-entries');
-    feedContainer.querySelectorAll('.feed-readaloud, .feed-pda, .feed-image, .feed-document, .feed-classified, .feed-redacted').forEach(function (el) {
+    feedContainer.querySelectorAll('.feed-readaloud, .feed-pda, .feed-image, .feed-document, .feed-classified, .feed-redacted, .feed-tone, .feed-linecard, .feed-scan').forEach(function (el) {
       el.remove();
     });
     renderKeeperHandoutsTab();
@@ -1988,6 +2278,44 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
       method: 'DELETE'
     }).then(function (r) { return r.json(); })
       .catch(function (err) { console.error('clearSessionHandouts D1 delete failed', err); });
+  };
+
+  // Quick Scan status → default reading_display helper
+  var QS_READING_DEFAULTS = { nominal: '0.00 BIM', trace: '0.04–0.12 BIM', alert: '0.38 BIM', critical: '1.20+ BIM' };
+  window.qsSyncReading = function () {
+    var sel = document.getElementById('qs-status');
+    var inp = document.getElementById('qs-reading');
+    if (sel && inp && !inp.dataset.userEdited) inp.value = QS_READING_DEFAULTS[sel.value] || '';
+  };
+
+  window.postQuickScan = function () {
+    var label    = (document.getElementById('qs-label')    || {}).value || '';
+    var sublabel = (document.getElementById('qs-sublabel') || {}).value || '';
+    var status   = (document.getElementById('qs-status')   || {}).value || 'nominal';
+    var reading  = (document.getElementById('qs-reading')  || {}).value || QS_READING_DEFAULTS[status];
+    var note     = (document.getElementById('qs-note')     || {}).value || '';
+    if (!label) { var el = document.getElementById('qs-label'); if (el) el.focus(); return; }
+    var sess = session_cache[keeperHandoutSession] || null;
+    var payload = { label: label, sublabel: sublabel, status: status, reading: reading, reading_display: reading, note: note || null };
+    fetch('/api/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        session_id: sess ? sess.session_key : null,
+        sender: 'KEEPER',
+        subject: label,
+        body: reading,
+        type: 'scan',
+        payload: payload
+      })
+    }).then(function (r) { return r.json(); }).then(function (res) {
+      if (!res.ok) { console.error('postQuickScan failed', res); return; }
+      // Clear form
+      ['qs-label','qs-sublabel','qs-reading','qs-note'].forEach(function (id) {
+        var el = document.getElementById(id); if (el) { el.value = ''; delete el.dataset.userEdited; }
+      });
+      var sel = document.getElementById('qs-status'); if (sel) sel.value = 'nominal';
+    }).catch(function (err) { console.error('postQuickScan error', err); });
   };
 
   window.postHandout = function (handoutId) {
@@ -2790,6 +3118,91 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
       '</div>';
     }
 
+    // ── Tone card ──────────────────────────────────────────────────────────
+    if (entryType === 'tone') {
+      var payload = {};
+      try { payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      var text = payload.text || entry.body || '';
+      return '<div class="feed-entry feed-tone">' +
+        '<div class="feed-tone-text">' + escHtml(text) + '</div>' +
+      '</div>';
+    }
+
+    // ── Linecard ───────────────────────────────────────────────────────────
+    if (entryType === 'linecard') {
+      var payload = {};
+      try { payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      var recipient     = (payload.recipient || '').toLowerCase();
+      var character     = payload.character    || 'UNKNOWN';
+      var context       = payload.context      || '';
+      var lines         = Array.isArray(payload.lines) ? payload.lines : [];
+      var intensity     = payload.intensity    || 'normal';
+      var stageDir      = payload.stage_direction || '';
+      var isRecipient   = recipient && hunterId && hunterId.toLowerCase() === recipient;
+      // Non-recipients see a compact redacted notice
+      if (!isRecipient) {
+        return '<div class="feed-entry feed-linecard">' +
+          '<div class="linecard-header">' +
+            '<span class="linecard-header-character">// LINECARD — ' + escHtml(character.toUpperCase()) + '</span>' +
+            '<span class="linecard-header-recipient">→ ' + escHtml(recipient.toUpperCase()) + '</span>' +
+          '</div>' +
+          '<div class="linecard-redacted">[ LINECARD DELIVERED — ' + escHtml(character.toUpperCase()) + ' → ' + escHtml(recipient.toUpperCase()) + ' ]</div>' +
+        '</div>';
+      }
+      var intensityClass = intensity === 'high' ? 'lc-intensity-high'
+                         : intensity === 'clear' ? '' : 'lc-intensity-normal';
+      var bleedText = intensity === 'high'
+        ? 'Upon the heath;\nthere to meet with\nMacbeth. I come, Graymalkin!\nPaddock calls. Anon!'
+        : '';
+      var linesHtml = '';
+      lines.forEach(function (ln) {
+        var cueHtml  = ln.cue ? '<div class="linecard-cue">' + escHtml(ln.cue) + '</div>' : '';
+        var textAttr = bleedText ? ' data-bleed="' + escHtml(bleedText) + '"' : '';
+        linesHtml += '<div class="linecard-line">' + cueHtml +
+          '<div class="linecard-text"' + textAttr + '>' + escHtml(ln.text || '') + '</div>' +
+        '</div>';
+      });
+      return '<div class="feed-entry feed-linecard ' + intensityClass + '" id="lc-' + escHtml(entry.id || '') + '">' +
+        '<div class="linecard-header">' +
+          '<span class="linecard-header-character">// ' + escHtml(character.toUpperCase()) + '</span>' +
+          '<span class="linecard-header-recipient">→ ' + escHtml(recipient.toUpperCase()) + '</span>' +
+        '</div>' +
+        '<div class="linecard-body">' +
+          (context ? '<div class="linecard-context">' + escHtml(context) + '</div>' : '') +
+          '<div class="linecard-lines">' + linesHtml + '</div>' +
+          (stageDir ? '<div class="linecard-stage-dir">(' + escHtml(stageDir) + ')</div>' : '') +
+        '</div>' +
+      '</div>';
+    }
+
+    // ── Scan result ────────────────────────────────────────────────────────
+    if (entryType === 'scan') {
+      var payload = {};
+      try { payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      var label    = payload.label           || entry.subject || '';
+      var sublabel = payload.sublabel        || '';
+      var reading  = payload.reading_display || payload.reading || '—';
+      var status   = payload.status          || 'nominal';
+      var note     = payload.note            || '';
+      var statusClass = (status === 'alert' || status === 'critical') ? ' scan-' + status : '';
+      var statusLabel = status.toUpperCase();
+      return '<div class="feed-entry feed-scan' + statusClass + '">' +
+        '<div class="scan-chrome">' +
+          '<span class="scan-chrome-label">// PORTAL SCANNER · BIM ANALYSIS</span>' +
+          '<span class="scan-chrome-time">' + fmtTime(entry.delivered_at || entry.created_at) + '</span>' +
+        '</div>' +
+        '<div class="scan-body">' +
+          (label    ? '<div class="scan-label">'    + escHtml(label)    + '</div>' : '') +
+          (sublabel ? '<div class="scan-sublabel">' + escHtml(sublabel) + '</div>' : '') +
+          '<div class="scan-reading-row">' +
+            '<span class="scan-reading-value">' + escHtml(reading) + '</span>' +
+            '<span class="scan-status-pip">' + escHtml(statusLabel) + '</span>' +
+          '</div>' +
+          (note ? '<div class="scan-note">' + escHtml(note) + '</div>' : '') +
+        '</div>' +
+      '</div>';
+    }
+
     // ── Standard chat / CAMPBELL message ──────────────────────────────────
     if (entryType === 'message' || entry._msg || entry.sender) {
       return '<div class="feed-entry msg-entry">' +
@@ -2823,12 +3236,33 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     '</div>';
   }
 
+  // Linecard high-intensity auto-revert — one timer per page (cancelled on new post).
+  var _linecardRevertTimer = null;
+
   function appendFeedEntry(entry) {
     var container = document.getElementById('feed-entries');
     var div = document.createElement('div');
     div.innerHTML = buildFeedEntryHtml(entry);
     container.appendChild(div.firstElementChild);
     feedEntries.push(entry);
+
+    // Linecard high-intensity → auto-revert to normal after 45s.
+    if (entry.type === 'linecard') {
+      var lc_payload = {};
+      try { lc_payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      if (lc_payload.intensity === 'high') {
+        if (_linecardRevertTimer) clearTimeout(_linecardRevertTimer);
+        _linecardRevertTimer = setTimeout(function () {
+          var el = document.getElementById('lc-' + (entry.id || ''));
+          if (el) {
+            el.classList.remove('lc-intensity-high');
+            el.classList.add('lc-intensity-normal');
+          }
+          _linecardRevertTimer = null;
+        }, 45000);
+      }
+    }
+
     // If the player has the HANDOUTS tab open, refresh it so new reveals appear immediately.
     // Guard keeperMode — in keeper mode the panel body belongs to renderKeeperPanel(),
     // and calling renderHandoutsPanel() here would wipe the keeper's handout list.
