@@ -5,213 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clara Voss — Rehearsal Notebooks</title>
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dossier.css">
 <style>
   :root {
-    --dossier-bg: #0d0a0e;
-    --page-bg: #f5f0e8;
-    --ink-clara: #2a1a0a;
-    --ink-mid: #2a1a12;
-    --ink-silvia: #1a1a2a;
-    --ink-dim: #6a5a4a;
-    --accent: #4a1a6a;
-    --cream: #faf6ed;
-    --cream-aged: #f0e8d8;
-    --border: #c8b8a0;
-    --red-flag: #8a2a2a;
-    --keeper-bg: #1a0a2a;
-    --keeper-text: #c8a8d8;
-    --hint-bg: rgba(74, 26, 106, 0.15);
+    --ink:         #2a1a0a;              /* warm brown — Clara's baseline hand */
+    --ink-dim:     #6a5a4a;
+    --cream:       #faf6ed;
+    --cream-aged:  #f0e8d8;
+    --paper-late:  #ece0d0;
+    --accent:      #4a1a6a;              /* purple — provenance border */
+    --rule-color:  #d4c4b0;
+    --hint-bg:     rgba(74, 26, 106, 0.15);
     --hint-border: rgba(74, 26, 106, 0.45);
+    --red-flag:    #8a2a2a;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--dossier-bg);
-    color: var(--ink-clara);
-    font-family: 'EB Garamond', 'Crimson Text', Georgia, serif;
-    line-height: 1.6;
-    padding: 2rem 1rem;
-  }
-
-  .dossier-wrapper {
-    max-width: 680px;
-    margin: 0 auto;
-  }
-
-  /* Classification header */
-  .classification {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.7rem;
-    color: #7a6a5a;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #3a2a1a;
-  }
-
-  .dossier-title {
-    font-family: 'EB Garamond', serif;
-    font-size: 1.6rem;
-    font-weight: 500;
-    color: var(--cream);
-    margin-bottom: 0.3rem;
-  }
-
-  .dossier-subtitle {
-    font-family: 'Crimson Text', serif;
-    font-size: 0.95rem;
-    font-style: italic;
-    color: #9a8a7a;
-    margin-bottom: 2rem;
-  }
-
-  .provenance {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.65rem;
-    color: #6a5a4a;
-    letter-spacing: 0.08em;
-    padding: 0.6rem 0.8rem;
-    background: rgba(255,255,255,0.03);
-    border-left: 2px solid #3a2a1a;
-    margin-bottom: 2.5rem;
-    line-height: 1.8;
-  }
-
-  /* Notebook entries */
-  .notebook-entry {
-    background: var(--cream);
-    padding: 1.6rem 1.8rem;
-    margin-bottom: 1.2rem;
-    border-radius: 1px;
-    position: relative;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-  }
-
-  .notebook-entry::before {
-    content: '';
-    position: absolute;
-    left: 1.2rem;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: #d4c4b0;
-  }
-
-  .entry-date {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--ink-dim);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 0.6rem;
-  }
-
-  .entry-body {
-    font-size: 1.05rem;
-    line-height: 1.7;
-    padding-left: 0.4rem;
-  }
-
-  .entry-body p { margin-bottom: 0.7rem; }
-  .entry-body p:last-child { margin-bottom: 0; }
-
-  /* Voice shift — progressive colour change */
-  .voice-clara { color: var(--ink-clara); }
+  /* Voice progression — colour shift as Silvia bleeds through */
+  .voice-clara       { color: #2a1a0a; }
   .voice-early-shift { color: #2a1a0e; }
-  .voice-mid { color: var(--ink-mid); }
-  .voice-late { color: #22182a; }
-  .voice-silvia { color: var(--ink-silvia); }
+  .voice-mid         { color: #2a1a12; }
+  .voice-late        { color: #22182a; }
+  .voice-silvia      { color: #1a1a2a; }
 
-  /* Aged paper for later entries */
+  /* Extra paper states */
   .paper-aged { background: var(--cream-aged); }
-  .paper-late { background: #ece0d0; }
 
-  /* ─── Clue highlights ─── */
-  .clue-hint {
-    transition: all 0.4s ease;
-  }
-
-  .clues-revealed .clue-hint {
-    background: var(--hint-bg);
-    border-bottom: 2px solid var(--hint-border);
-    padding: 1px 3px;
-  }
-
-  /* ─── Keeper mode ─── */
-  .keeper-note {
-    display: none;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--keeper-text);
-    background: var(--keeper-bg);
-    padding: 0.5rem 0.7rem;
-    margin-top: 0.8rem;
-    border-left: 2px solid #6a3a8a;
-    line-height: 1.5;
-  }
-
-  .keeper-active .keeper-note { display: block; }
-
-  /* Keeper toolbar — fixed bottom-right, only visible in keeper mode */
-  .keeper-toolbar {
-    display: none;
-    position: fixed;
-    bottom: 1rem;
-    right: 1rem;
-    z-index: 100;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.65rem;
-  }
-
-  .keeper-active .keeper-toolbar { display: flex; gap: 0.4rem; }
-
-  .keeper-btn {
-    background: var(--keeper-bg);
-    color: var(--keeper-text);
-    border: 1px solid #6a3a8a;
-    padding: 0.5rem 0.8rem;
-    cursor: pointer;
-    letter-spacing: 0.05em;
-    transition: background 0.2s;
-  }
-
-  .keeper-btn:hover { background: #2a1a3a; }
-
-  .keeper-btn.active {
-    background: #4a1a6a;
-    color: #f0e8f8;
-  }
-
-  .keeper-status {
-    padding: 0.5rem 0.8rem;
-    background: rgba(26, 10, 42, 0.8);
-    color: #8a7a9a;
-    display: flex;
-    align-items: center;
-  }
-
-  /* Break marker between phases */
-  .phase-break {
-    text-align: center;
-    padding: 1.5rem 0;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.6rem;
-    color: #5a4a3a;
-    letter-spacing: 0.15em;
-  }
-
-  /* Final entry */
+  /* Final entry — red-flag left border */
   .entry-final { border-left: 2px solid var(--red-flag); }
   .entry-final::before { background: var(--red-flag); opacity: 0.4; }
-
-  @media (max-width: 600px) {
-    .notebook-entry { padding: 1.2rem 1.4rem; }
-    .entry-body { font-size: 0.95rem; }
-    .keeper-toolbar { bottom: 0.5rem; right: 0.5rem; }
-    .keeper-btn, .keeper-status { padding: 0.4rem 0.6rem; font-size: 0.6rem; }
-  }
 </style>
 </head>
 <body>
@@ -347,77 +168,8 @@
 
 </div>
 
-<script>
-  const STORAGE_KEY = 'portal-dossier-s03-clara-hints';
-  const wrapper = document.querySelector('.dossier-wrapper');
-  const toggleBtn = document.getElementById('toggle-hints');
-  const statusEl = document.getElementById('hint-status');
-
-  // ─── Keeper mode: 5× click on classification ───
-  let keeperClicks = 0;
-  let keeperTimer = null;
-  const header = document.querySelector('.classification');
-  if (header) {
-    header.style.cursor = 'default';
-    header.addEventListener('click', () => {
-      keeperClicks++;
-      clearTimeout(keeperTimer);
-      keeperTimer = setTimeout(() => { keeperClicks = 0; }, 2000);
-      if (keeperClicks >= 5) {
-        wrapper.classList.toggle('keeper-active');
-        keeperClicks = 0;
-      }
-    });
-  }
-
-  // ─── Clue reveal system ───
-  // State syncs to D1 so the keeper can reveal clues on their device and all
-  // players see the highlights on next page load. Falls back to localStorage if offline.
-
-  const DOSSIER_ID = 's03-clara-notebooks';
-  const API_URL = '/api/v1/dossiers/' + DOSSIER_ID + '/state';
-
-  function applyHints(revealed) {
-    if (revealed) {
-      wrapper.classList.add('clues-revealed');
-      toggleBtn.textContent = 'HIDE CLUES';
-      toggleBtn.classList.add('active');
-      statusEl.textContent = 'clues: visible to all';
-    } else {
-      wrapper.classList.remove('clues-revealed');
-      toggleBtn.textContent = 'REVEAL CLUES';
-      toggleBtn.classList.remove('active');
-      statusEl.textContent = 'clues: hidden';
-    }
-  }
-
-  // On load: fetch from D1, fall back to localStorage
-  fetch(API_URL)
-    .then(r => r.ok ? r.json() : null)
-    .then(data => {
-      const revealed = data && typeof data.revealed === 'boolean'
-        ? data.revealed
-        : localStorage.getItem(STORAGE_KEY) === 'revealed';
-      applyHints(revealed);
-    })
-    .catch(() => {
-      applyHints(localStorage.getItem(STORAGE_KEY) === 'revealed');
-    });
-
-  // Toggle (keeper-only — toolbar only shows in keeper mode)
-  toggleBtn.addEventListener('click', () => {
-    const newState = !wrapper.classList.contains('clues-revealed');
-    applyHints(newState);
-    // Write localStorage immediately
-    try { localStorage.setItem(STORAGE_KEY, newState ? 'revealed' : 'hidden'); } catch {}
-    // Background PUT to D1
-    fetch(API_URL, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ revealed: newState })
-    }).catch(() => {});
-  });
-</script>
+<script>const DOSSIER_ID = 's03-clara-notebooks';</script>
+<script src="dossier.js"></script>
 
 </body>
 </html>

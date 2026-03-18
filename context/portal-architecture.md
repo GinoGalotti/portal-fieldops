@@ -141,7 +141,7 @@ portal-fieldops/
 │   ├── alan.html, rex.html, reed.html, sven.html  # Hunter pages (playbook + arcs), use hunter.js
 │   └── hunter.js              # hunterId derived from filename: .replace('.html','') at end
 ├── handouts/                  # Player-facing document collections
-│   └── dossier/               # In-universe dossier pages (s03-clara-notebooks.html, etc.)
+│   └── dossier/               # In-universe dossier pages. Shared: dossier.css + dossier.js. Per-page: variable overrides + character-specific classes only. DOSSIER_ID set before dossier.js. D1: dossier_state table, /api/v1/dossiers/:id/state.
 ├── images/                    # Active reference images
 ├── player-nav.js              # Shared player nav
 └── missions/keeper-nav.js     # Shared keeper nav

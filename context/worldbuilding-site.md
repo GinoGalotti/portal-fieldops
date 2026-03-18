@@ -62,7 +62,7 @@ When the Keeper asks you to build a page:
 | `contacts.html` | `player.css` | Player | NPC Contact Directory — fetches `portal-npcs.json`, renders player-visible NPCs grouped by affiliation (PORTAL staff / field contacts / unknown). Static render, no D1 dependency. |
 | `evidence.html` | `player.css` | Player | Evidence & Investigation Log — accumulated findings across all sessions + player-facing thread tracker. Session-gated evidence cards from `data/evidence.json`, thread section from `data/portal-threads.json` (player_summary field). Category filters, connection badges, dossier links. Keeper mode (triple-click): reveals `keeper_note` per evidence card. |
 | `campbell-logs.html` | `player.css` + inline | Player | CAMPBELL Activity Logs — continuum design. New log batches at top each session, older batches collapse below. Searchable. In-world highlights by Teddy/Priya/John (progressive clue revelation). Data-driven from `data/campbell-logs.json`. Do not link from `lab-incidents.html` until this page exists. |
-| `handouts/dossier/*.html` | `player.css` + inline | Player | In-universe document collection pages. Each dossier is a standalone page in `handouts/dossier/` presenting recovered documents with type-specific visual treatments (notebook, financial, log, message, photograph, redacted). Named with session prefix: `s03-clara-notebooks.html`. Linked from feed via `link` field on document/pda handouts. Keeper mode (5× logo click): shows annotations. |
+| `handouts/dossier/*.html` | `dossier.css` + `dossier.js` + per-page `<style>` | Player | In-universe document collection pages. Each dossier is a standalone page in `handouts/dossier/` with its own palette. **Shared files:** `dossier.css` (all structural CSS, keeper UI, clue system) + `dossier.js` (keeper mode + D1-synced clue reveal). **Per-page:** `<style>` block overrides CSS variables and adds character-specific classes only. Set `const DOSSIER_ID = 'sNN-slug';` before `<script src="dossier.js">`. Named `sNN-slug.html`. D1 table `dossier_state (dossier_id PK, state, updated_at)`; API `GET/PUT /api/v1/dossiers/:id/state` → `{ revealed: bool }`. Keeper mode: 5× click on `.classification`. Existing: `s02-diane-notebook.html` (Aldermoor, cool green palette), `s03-clara-notebooks.html` (voice-shift notebooks, warm purple palette). |
 | `lab-incidents.html` | `player.css` + inline | Player | Between-session incident log. Fully data-driven from `data/incidents.json`. Week tab switcher (W1 closed/empty, W2 active). Incident types: `choice` (3-button pick + optional custom textarea), `open` (freetext multi-submit), `informational` (read-only), `teaser` (email + log excerpts), `updates` (multi-item status digest — green top stripe, no player input required). Single **SAVE RESPONSES** button collects all choice answers → `PUT /api/v1/incidents/{week}/state` → locks buttons; also writes localStorage. Open incidents keep independent SUBMIT button → `POST /api/v1/incidents/{id}/responses`. EXPORT FOR KEEPER on open incidents. |
 | `feed.html` | `player.css` + inline | Player + Keeper | Live session tool — split layout (feed left, resizable panel right; drag handle saves width to `localStorage('portal_panel_width')`). Hunter picker; **Moves tab** (always-active + playbook + basic moves, inline modifier + ROLL, hover shows description + outcome rows + questions for Investigate/Read); **Contacts tab** (player-visible NPCs, double-click to add per-hunter private note stored in `localStorage('portal_contact_notes')` as `{hunter_id:{npc_id:text}}`); **Handouts tab** (images/maps posted by keeper, session tabs M01/M02, deduplicated 2-column gallery, click to open lightbox — documents/classified/readaloud/PDA entries are feed-only, not shown in gallery); **MAP tab** (player district map — mission session selector, locked/unlocked grid cells, detail card on click, SYNC MAP button). Bottom composer for any player to post to the feed. Feed entries **expand on click** (toggle `.expanded` class); click again to collapse; multiple can be open simultaneously. Roll entries show breakdown `[d1 + d2 + stat + mod = total]`, click shows specific outcome text + question list (for Investigate a Mystery / Read a Bad Situation). **Smart polling**: 6s when tab has focus, 60s when tab hidden or window blurred (immediately re-polls on regain focus). 5s auto-save for harm/luck/xp changes. `?mouseover=true` URL flag restores legacy CSS `:hover` expand behaviour (for A/B testing). Keeper mode (5× logo click) replaces player UI with 6 tabs: **OPERATIVES** (click hunter to view sheet + moves), **CONTACTS** (session filter M01/M02/ALL + NPC visibility toggles persisted to localStorage), **REFERENCES** (MoTW rules cheat sheet: outcomes, harm moves, luck, XP, end-of-session, principles, keeper moves, monster moves, phenomena moves, investigate questions, keeper page links), **THREATS** (session selector, entity stat block from `portal-entities.json`, threats/minions/bystanders + equipment from `session-data.json`), **HANDOUTS** (session selector; per-session list of all handout items with POST / RE-POST buttons persisted to `localStorage('portal_posted_handouts')`; classified items show purple pip; **CLEAR HANDOUTS** button removes all non-message entries from feed DOM + localStorage + D1), **MAP** (keeper district map — mission selector, grid with order badges [keeper-only, hidden from players], NPC pills per cell, unlock toggle, visited button ○/✓, bulk actions: REVEAL ALL / RESET MAP / ALL VISITED / CLEAR VISITED; state schema `{ u: {loc_id: true}, v: {loc_id: true} }` saved to D1 `map_state` table). **CLEAR FEED** (keeper button): posts a `type:'clear'` sentinel to D1; keeper's feed clears immediately; polling clients clear on receipt; `initialLoad()` discards all entries before the sentinel (history still accessible via "↑ LOAD EARLIER HISTORY"). Keeper tab row uses `overflow-x: auto` with styled thin scrollbar for narrow viewports. |
 
@@ -497,7 +497,39 @@ Also: previous session's ACTIVE card gets `data-session-until="wN-1"` and a new 
 Append a new entry to `data/report-schema.json` (see `session-ingestion-template.md` Section K). Both report pages pick up the new session tab automatically — no HTML edits needed.
 
 #### 6. Dossier Pages (if applicable)
-If the case includes recoverable document collections (notebooks, financial records, system logs, intercepted communications), author standalone HTML dossier pages in `handouts/dossier/`. Named `s0N-slug.html`. Use document sub-type CSS classes: `.dossier-entry.notebook`, `.dossier-entry.financial`, `.dossier-entry.log`, `.dossier-entry.message`, `.dossier-entry.photograph`, `.dossier-entry.redacted`. Mix sub-types within a single dossier for texture. Include keeper mode annotations (visible on 5× logo click). Reference from `handouts[]` in session data via the `link` field on `document` or `pda` type entries.
+If the case includes recoverable document collections (notebooks, financial records, system logs, intercepted communications), author standalone HTML dossier pages in `handouts/dossier/`. Named `sNN-slug.html`.
+
+**Shared infrastructure (do not duplicate in new pages):**
+- `handouts/dossier/dossier.css` — all structural CSS; override CSS variables per-page only
+- `handouts/dossier/dossier.js` — keeper mode (5× `.classification` click) + D1-synced clue reveal
+
+**Head template for new dossiers:**
+```html
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dossier.css">
+<style>
+  :root {
+    --ink:         #...;    /* Main body text */
+    --ink-dim:     #...;    /* Dates, labels */
+    --cream:       #...;    /* Entry background */
+    --paper-late:  #...;    /* Tired/late entries */
+    --accent:      #...;    /* Provenance border */
+    --rule-color:  #...;    /* Left margin rule */
+    --hint-bg:     rgba(..., 0.15);
+    --hint-border: rgba(..., 0.45);
+  }
+  /* add only character-specific classes here */
+</style>
+```
+Before `</body>`:
+```html
+<script>const DOSSIER_ID = 'sNN-slug';</script>
+<script src="dossier.js"></script>
+```
+
+**Palette convention:** warm/human → ink browns, purple accents; cool/analytical → ink greens, teal accents; MESA → near-black, red/grey; supernatural → ink blues/purples. The full authoring guide with all class names is in `dossier.css` (header comment block).
+
+Reference from `handouts[]` in session data via the `link` field on `document` or `pda` type entries.
 
 #### 7. Evidence Items
 Author evidence cards for `data/evidence.json` covering the session's key findings. One card per major discovery. Include `dossier_link` where a full dossier page exists. Keep `summary` glanceable (1-3 sentences). Include `keeper_note` for tracking adjacent secrets.
