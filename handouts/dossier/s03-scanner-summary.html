@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIM Frequency Scanner — Field Summary</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dossier.css">
+<style>
+  :root {
+    --ink:         #1a2a2a;
+    --ink-dim:     #5a6a6a;
+    --cream:       #f0f2ee;
+    --paper-late:  #e4e8e0;
+    --accent:      #2a5a5a;
+    --rule-color:  #a0b8b0;
+    --hint-bg:     rgba(42, 90, 90, 0.15);
+    --hint-border: rgba(42, 90, 90, 0.45);
+  }
+
+  /* Reading status indicators */
+  .reading-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #d8e0d8;
+  }
+
+  .reading-row:last-child { border-bottom: none; }
+
+  .reading-label {
+    flex: 1;
+    font-size: 0.95rem;
+  }
+
+  .reading-sublabel {
+    font-size: 0.8rem;
+    color: var(--ink-dim);
+    font-style: italic;
+    margin-top: 0.15rem;
+  }
+
+  .reading-value {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .reading-pip {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 0.4rem;
+    vertical-align: middle;
+  }
+
+  .status-nominal .reading-value { color: #4a7a4a; }
+  .status-nominal .reading-pip { background: #4a7a4a; }
+
+  .status-trace .reading-value { color: #8a7a2a; }
+  .status-trace .reading-pip { background: #8a7a2a; }
+
+  .status-alert .reading-value { color: #aa6a1a; }
+  .status-alert .reading-pip { background: #aa6a1a; }
+
+  .status-critical .reading-value { color: #8a2a2a; }
+  .status-critical .reading-pip { background: #8a2a2a; }
+
+  .status-mesa .reading-value { color: #6a2a2a; }
+  .status-mesa .reading-pip { background: #6a2a2a; border: 1px solid #aa4a4a; }
+
+  /* Section headers within the summary */
+  .scan-section {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--ink-dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.8rem 0 0.3rem;
+    margin-top: 0.5rem;
+  }
+
+  /* Annotation blocks — Rex's notes */
+  .rex-note {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #3a4a4a;
+    padding: 0.5rem 0 0.3rem;
+    margin-top: 0.3rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="dossier-wrapper">
+
+  <div class="classification">// field evidence — s03 — compiled post-operation // rex bangley</div>
+  <h1 class="dossier-title">BIM Frequency Scanner — Field Summary</h1>
+  <p class="dossier-subtitle">All readings taken during Operation #0099-D. Meridian Theatre Company, one day.</p>
+
+  <div class="provenance">
+    DEVICE: [OPEN SLOT — scanner name TBD, player-defined]<br>
+    OPERATOR: Rex Bangley<br>
+    CALIBRATION: Improvised from PORTAL field kit. Readings relative, not absolute.<br>
+    BASELINE: Lab ambient = 0.00 BIM. Aldermoor zone edge (S02 reference) = 0.34 BIM.<br>
+    NOTE: This device is a prototype. MESA's arrays do this better. We should fix that.
+  </div>
+
+  <!-- FOYER ACQUISITIONS -->
+
+  <div class="notebook-entry">
+    <div class="scan-section">Foyer Display Case — Anniversary Acquisitions</div>
+    <div class="entry-body">
+      <div class="reading-row status-nominal">
+        <div class="reading-label">
+          Victorian Theatrical Wig Stand
+          <div class="reading-sublabel">Hand-painted, c.1880. Attributed to Henry Irving.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.00 BIM</div>
+      </div>
+      <div class="reading-row status-nominal">
+        <div class="reading-label">
+          Collection of 47 Victorian Playbills
+          <div class="reading-sublabel">Three London theatres, 1882–1898. Water damage. One marginal note: "magnificent, do not repeat."</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.00 BIM</div>
+      </div>
+      <div class="reading-row status-nominal">
+        <div class="reading-label">
+          The Ghost Light
+          <div class="reading-sublabel">Antique oil lantern, converted to electric. Centre stage every night for three seasons.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.00 BIM</div>
+      </div>
+      <div class="reading-row status-nominal">
+        <div class="reading-label">
+          Cast-Iron Theatre Seat, Lyceum 1903
+          <div class="reading-sublabel">Original upholstery. Currently serving as a doorstop.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.00 BIM</div>
+      </div>
+      <div class="reading-row status-critical">
+        <div class="reading-label">
+          <span class="clue-hint" data-clue="prompt-book-reading">19th-Century Theatrical Prompt Book</span>
+          <div class="reading-sublabel">Annotated throughout. Acquired via Solstice Property Group grant, £4,200.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>1.72 BIM</div>
+      </div>
+      <p class="rex-note">Four items at zero. One at 1.72 — five times the Aldermoor zone edge. The grant paid for this specifically. MESA knew what it was before the theatre did.</p>
+    </div>
+    <div class="keeper-note">// KEEPER: The four zeroes make the prompt book reading land. The contrast is the discovery. Rex's annotation connects the grant — players should already have the Solstice documentation by this point.</div>
+  </div>
+
+  <!-- THEATRE SPACES -->
+
+  <div class="notebook-entry">
+    <div class="scan-section">Theatre Spaces — Ambient Readings</div>
+    <div class="entry-body">
+      <div class="reading-row status-nominal">
+        <div class="reading-label">
+          Foyer
+          <div class="reading-sublabel">Public space. Prompt book display case excluded (scanned separately).</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.04 BIM</div>
+      </div>
+      <div class="reading-row status-nominal">
+        <div class="reading-label">
+          Green Room
+          <div class="reading-sublabel">Between rehearsal blocks. Four understudies present.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.08 BIM</div>
+      </div>
+      <div class="reading-row status-trace">
+        <div class="reading-label">
+          Backstage / Wings
+          <div class="reading-sublabel">During rehearsal. Stage-adjacent but not performance space.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.12 BIM</div>
+      </div>
+      <div class="reading-row status-alert">
+        <div class="reading-label">
+          <span class="clue-hint" data-clue="stage-elevated">Stage — During Active Rehearsal</span>
+          <div class="reading-sublabel">Act II run-through. Four understudies performing. ~30 observers (company + crew).</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.89 BIM</div>
+      </div>
+      <div class="reading-row status-nominal">
+        <div class="reading-label">
+          Stage — Empty (between runs)
+          <div class="reading-sublabel">Ghost light on. No performers. No audience.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.06 BIM</div>
+      </div>
+      <p class="rex-note"><span class="clue-hint" data-clue="performance-amplifier">The stage reads 0.06 empty and 0.89 during rehearsal — with thirty people watching. Saturday's show has four hundred. The reading will scale. The building isn't the mechanism. The performance is.</span></p>
+    </div>
+    <div class="keeper-note">// KEEPER: CLUE: the 0.06 → 0.89 jump is the proof that audience belief amplifies the mechanism. Rex's annotation says it outright. The Saturday extrapolation is the urgency driver — four hundred people will push this well above the displacement threshold.</div>
+  </div>
+
+  <!-- DRESSING ROOMS -->
+
+  <div class="notebook-entry">
+    <div class="scan-section">Dressing Rooms</div>
+    <div class="entry-body">
+      <div class="reading-row status-trace">
+        <div class="reading-label">
+          Shared Dressing Room (company)
+          <div class="reading-sublabel">Six stations. Currently in use.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.14 BIM</div>
+      </div>
+      <div class="reading-row status-alert">
+        <div class="reading-label">
+          <span class="clue-hint" data-clue="clara-dressing-room">Clara Voss's Dressing Room</span>
+          <div class="reading-sublabel">Preserved intact. Mirror, makeup table, one costume piece on the door.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>1.38 BIM</div>
+      </div>
+      <p class="rex-note">Highest ambient reading in the building outside the prompt book itself. She's here. Not always — the reading fluctuates. But she comes back to this room.</p>
+    </div>
+    <div class="keeper-note">// KEEPER: CLUE: Clara's dressing room at 1.38 confirms her presence in the building outside the performance context. The fluctuation note tells the hunters she moves — she's choosing where to be.</div>
+  </div>
+
+  <!-- UNDERSTUDIES -->
+
+  <div class="notebook-entry">
+    <div class="scan-section">Active Understudies — Individual Readings (During Rehearsal)</div>
+    <div class="entry-body">
+      <div class="reading-row status-alert">
+        <div class="reading-label">
+          <span class="clue-hint" data-clue="sophie-threshold">Sophie Marsh — Silvia (Clara's lead role)</span>
+          <div class="reading-sublabel">Six months in the role. Highest displacement of active understudies.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.71 BIM</div>
+      </div>
+      <div class="reading-row status-trace">
+        <div class="reading-label">
+          Leo Kaminski — Proteus (Edmund's lead role)
+          <div class="reading-sublabel">Current season only. Lower exposure than Sophie but in the highest-risk role.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.42 BIM</div>
+      </div>
+      <div class="reading-row status-trace">
+        <div class="reading-label">
+          Nina Gallagher — Julia (Clara-originated supporting role)
+          <div class="reading-sublabel">Second season. Regular book contact during blocking notes.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.28 BIM</div>
+      </div>
+      <div class="reading-row status-nominal">
+        <div class="reading-label">
+          Amir Hossain — Launce (supporting role)
+          <div class="reading-sublabel">First season. Minimal book contact.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.09 BIM</div>
+      </div>
+      <p class="rex-note"><span class="clue-hint" data-clue="displacement-correlates">Displacement correlates with two factors: time in a role originated by Clara or Edmund, and frequency of prompt book contact during rehearsal.</span> Sophie has both. She's closest to the threshold. During Saturday's show, with a full audience amplifying the mechanism, she'll cross it.</p>
+    </div>
+    <div class="keeper-note">// KEEPER: CLUE: the two-factor correlation (role + book contact) is the mechanism's key. CLUE: Sophie at 0.71 is close to the hospitalised understudies' levels — Saturday will push her over. This is the data that turns a judgment call into a decision with information.</div>
+  </div>
+
+  <!-- METHOD ACTORS — CONTROL GROUP -->
+
+  <div class="notebook-entry">
+    <div class="scan-section">Control Readings — Method Actors</div>
+    <div class="entry-body">
+      <div class="reading-row status-nominal">
+        <div class="reading-label">
+          <span class="clue-hint" data-clue="james-zero">James Whitfield — Valentine (voluntary character immersion, 4 days)</span>
+          <div class="reading-sublabel">Has not broken character since Tuesday. Completely voluntary. Completely normal.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.00 BIM</div>
+      </div>
+      <div class="reading-row status-nominal">
+        <div class="reading-label">
+          Constance Webb — Julia (character diary, early modern English)
+          <div class="reading-sublabel">47 pages of 16th-century feelings. No supernatural component.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.00 BIM</div>
+      </div>
+      <p class="rex-note">Zero on both. Method acting without the prompt book and without three seasons of repetition produces exactly nothing on the scanner. The mechanism requires the artefact and the accumulation. Commitment alone is not enough.</p>
+    </div>
+    <div class="keeper-note">// KEEPER: CLUE: James at 0.00 is the control that proves the mechanism isn't about acting intensity — it's about the book and the repetition. This is the reading that makes the prompt book discovery feel conclusive rather than suggestive.</div>
+  </div>
+
+  <!-- MESA ARRAYS -->
+
+  <div class="notebook-entry paper-late">
+    <div class="scan-section">Anomalous Equipment — Lighting Rig</div>
+    <div class="entry-body">
+      <div class="reading-row status-mesa">
+        <div class="reading-label">
+          <span class="clue-hint" data-clue="mesa-arrays">BIM Collection Array — Unit 1 (lighting rig, stage left)</span>
+          <div class="reading-sublabel">Disguised as lighting control unit. Not theatre equipment.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>MESA FREQ</div>
+      </div>
+      <div class="reading-row status-mesa">
+        <div class="reading-label">
+          BIM Collection Array — Unit 2 (lighting rig, stage right)
+          <div class="reading-sublabel">Identical signature to Unit 1. Passive accumulator.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>MESA FREQ</div>
+      </div>
+      <div class="reading-row status-mesa">
+        <div class="reading-label">
+          BIM Collection Array — Unit 3 (lighting rig, centre)
+          <div class="reading-sublabel">Positioned for maximum performance-space coverage.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>MESA FREQ</div>
+      </div>
+      <p class="rex-note"><span class="clue-hint" data-clue="mesa-collection">Three units. Eight months of continuous collection. BIM signature matches the S01 particulate and the Aldermoor substrate — same class of material, same frequency band.</span> They're not monitoring the theatre. They're harvesting from it.</p>
+      <p class="rex-note">These do what my scanner does, but properly. Passively. Continuously. We should have built this already.</p>
+    </div>
+    <div class="keeper-note">// KEEPER: CLUE: three-site BIM signature match (S01, Aldermoor, Meridian) — this is the Project Veil breadcrumb. Rex's "we should have built this already" seeds the PORTAL BIM detector development in post-session. Do not rush that thread.</div>
+  </div>
+
+  <!-- HOSPITALISED UNDERSTUDIES — REFERENCE -->
+
+  <div class="notebook-entry paper-late">
+    <div class="scan-section">Reference — Hospitalised Understudies (Readings via Hospital Visit)</div>
+    <div class="entry-body">
+      <div class="reading-row status-critical">
+        <div class="reading-label">
+          Daniel Ashworth (as Edmund Farrow)
+          <div class="reading-sublabel">Ward C, St. Barnabas. Full displacement. 11 days.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>1.84 BIM</div>
+      </div>
+      <div class="reading-row status-alert">
+        <div class="reading-label">
+          Miriam Okafor (as Clara Voss — partial)
+          <div class="reading-sublabel">Ward B, St. Barnabas. Partial displacement. Clara visits intermittently.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>0.62 BIM (fluctuating)</div>
+      </div>
+      <div class="reading-row status-critical">
+        <div class="reading-label">
+          <span class="clue-hint" data-clue="tom-different-signature">Tom Ashby (as Valentine — fictional residue)</span>
+          <div class="reading-sublabel">Ward A, Royal London. Full displacement. Different BIM signature from the other two.</div>
+        </div>
+        <div class="reading-value"><span class="reading-pip"></span>1.41 BIM ⚠</div>
+      </div>
+      <p class="rex-note"><span class="clue-hint" data-clue="two-layer-mechanism">Daniel and Miriam read on the same frequency band — Clara and Edmund's signature. Tom reads on a different one. He's not inhabited by the actors. He's inhabited by the character. There are two layers to this mechanism.</span></p>
+    </div>
+    <div class="keeper-note">// KEEPER: CLUE: Tom's different BIM signature is the proof of the two-layer mechanism — fictional residue underneath the actor consciousness. This is what tells the hunters the prompt book has been doing something for longer than Clara and Edmund have been dead. The ⚠ symbol on Tom's reading is Rex flagging the anomaly.</div>
+  </div>
+
+  <!-- Keeper toolbar -->
+  <div class="keeper-toolbar">
+    <span class="keeper-status" id="hint-status">clues: hidden</span>
+    <button class="keeper-btn" id="toggle-hints">REVEAL CLUES</button>
+  </div>
+
+</div>
+
+<script>const DOSSIER_ID = 's03-scanner-summary';</script>
+<script src="dossier.js"></script>
+
+</body>
+</html>
