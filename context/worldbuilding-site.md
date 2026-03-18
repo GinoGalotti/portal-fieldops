@@ -182,7 +182,7 @@ Both report pages (`missions/report.html` and `reports/player-report.html`) rend
 
 ### Navigation Conventions
 
-**Player nav links (in order):** Briefing · Operatives · Entities · The Lab · Artefacts · Missions · Evidence · Contacts · Glossary · Report · Queue · **Feed**. "Entities" replaces "Bestiary". "Evidence" and "Glossary" added when those pages are built. Injected by `player-nav.js` into `#player-nav`. The script handles base-path from any subdirectory (`missions/`, `hunters/`, `reports/`). Never link to keeper pages from player nav. `contacts.html` is at the repo root (not inside `missions/`).
+**Player nav links (in order, 13 items):** Briefing · Operatives · Bestiary · The Lab · Logs · Artefacts · Missions · Evidence · Contacts · Report · Queue · Incidents · **Feed**. Injected by `player-nav.js` into `#player-nav`. The script handles base-path from any subdirectory (`missions/`, `hunters/`, `reports/`). Never link to keeper pages from player nav. `contacts.html` is at the repo root (not inside `missions/`). At ≤640px the hamburger (≡) activates and collapses the nav to a full-width dropdown.
 
 **Keeper pages:** Must open with `<div class="keeper-banner">KEEPER ACCESS ONLY — DO NOT SHARE THIS URL WITH PLAYERS</div>` as the first element in `<body>`. Nav links: Player Site → `../index.html`, Keeper Index → `keeper.html`.
 
@@ -845,7 +845,7 @@ See `portal-feature-proposals.md` for the full priority queue. Summary:
 
 **Phase C — S03 Content:** New session data in `data/sessions/s03.json`, dossier pages, report-schema entry.
 
-**Phase D — Post-Session:** Evidence & Investigation page (`evidence.html`), canon pipeline (persistent registry in `data/canon.json`), CAMPBELL logs continuum (`campbell-logs.html` + `data/campbell-logs.json`), player thread summaries.
+**Phase D — Post-Session ✅ DONE:** Evidence & Investigation page (`evidence.html`), canon pipeline (persistent registry in `data/canon.json`), CAMPBELL logs continuum (`campbell-logs.html` + `data/campbell-logs.json`), player thread summaries. Migration 015 (`global_flags` table) applied remote + local.
 
 **Phase E — When Convenient:** Entity schema normalisation, glossary page, test coverage.
 

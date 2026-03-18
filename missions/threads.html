@@ -381,6 +381,7 @@ var npcsData        = null;
 var entitiesData    = null;
 var sessionDataFile = null;
 var incidentsData   = null;
+var canonData       = null;
 
 // ── CASE PICKER ─────────────────────────────────────────────────────────────
 
@@ -624,6 +625,32 @@ async function buildExportMarkdown() {
     });
   }
 
+  // ── Confirmed canon ─────────────────────────────────────────────────────
+  var canon = Array.isArray(canonData) ? canonData : [];
+  if (canon.length) {
+    lines.push('---');
+    lines.push('');
+    lines.push('## CONFIRMED CANON');
+    lines.push('*Accumulated campaign facts from keeper field reports. Use these as authoritative continuity references.*');
+    lines.push('');
+
+    var catOrder = ['GADGET', 'TEXTURE', 'THEORY'];
+    var catLabels = { GADGET: '### GADGETS', TEXTURE: '### TEXTURES', THEORY: '### THEORIES' };
+    catOrder.forEach(function (cat) {
+      var items = canon.filter(function (c) { return c.category === cat; });
+      if (!items.length) return;
+      lines.push(catLabels[cat]);
+      items.forEach(function (c) {
+        var line = '- **' + c.label + '** (' + c.session.toUpperCase() + '): ' + c.value;
+        if (c.related_evidence && c.related_evidence.length) {
+          line += '  *(evidence: ' + c.related_evidence.join(', ') + ')*';
+        }
+        lines.push(line);
+      });
+      lines.push('');
+    });
+  }
+
   lines.push('---');
   lines.push('');
   lines.push('## EXISTING DATA — IDs AND FORMAT REFERENCE');
@@ -839,6 +866,7 @@ Promise.all([
   fetch('/data/portal-entities.json').then(function (r) { return r.ok ? r.json() : null; }),
   fetch('/data/sessions/index.json').then(function (r) { return r.ok ? r.json() : null; }),
   fetch('/data/incidents.json').then(function (r) { return r.ok ? r.json() : null; }),
+  fetch('/data/canon.json').then(function (r) { return r.ok ? r.json() : null; }),
 ]).then(function (results) {
   var threadsData = results[0];
   var clocksData  = results[1];
@@ -848,6 +876,7 @@ Promise.all([
   entitiesData    = results[5];
   sessionDataFile = results[6];
   incidentsData   = results[7];
+  canonData       = results[8];
 
   allThreads = threadsData ? threadsData.threads : [];
   allClocks  = clocksData  ? clocksData.clocks   : [];

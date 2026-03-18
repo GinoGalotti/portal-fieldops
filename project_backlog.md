@@ -84,32 +84,17 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 ## NEXT UP
 
-353 tests passing across 18 files. Suite: `smoke` (5) · `nav` (22) · `contacts` (7) · `incidents` (18) · `feed` (29) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (29) · `d1-round-trip` (7) · `map` (24) · `report` (15) · `index-session` (16).
+452 tests passing across 19 files. Suite: `smoke` (5) · `nav` (22) · `contacts` (7) · `incidents` (18) · `feed` (29) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (29) · `d1-round-trip` (7) · `map` (24) · `report` (15) · `index-session` (16) · `evidence` (41).
 
-**1. John Johnson — complete arc data**
-`hunters/john.html` exists and tests pass. Still needed:
-- Add John's 3 arcs to `data/hunter-arcs.json` (arc IDs: `arc-deeper`, `arc-benign`, `arc-pattern`; source in `motw-playbook-arcs.json` Flake entries, campaign-adapted)
-- Without this, `missions/arcs.html` doesn't show John's arcs
+**1. Connection map rendering — feed.html (HIGH — S03 prerequisite)**
+`portal-maps.json` has a `connection_maps[]` entry for M03 (7 nodes, 11 edges, theatre investigation board). feed.html MAP tab only handles `type: "grid"`. Needs node/edge layout for S03.
 
 ---
 
 ## BACKLOG
 
-### Post-Session Workflow Improvements — HIGH
-
-Four related features that close gaps in the current session-summary → next-session-prep pipeline.
-
-#### 1. Campaign thread + clock tracker — `missions/threads.html` [MEDIUM]
-**Problem:** Threads and clocks are tracked per session in the field report, but there's no continuous view across sessions. The arc tracker (`missions/arcs.html`) does this beautifully for hunter arcs — nothing equivalent exists for campaign-level threads.
-**Goal:** A keeper-facing page showing all named threads (PROJECT VEIL, MESA, CAMPBELL, etc.) and all countdown clocks with their current status, last-updated session, and any notes — the campaign's shape at a glance.
-**Implementation:**
-- New `data/portal-threads.json` — thread registry: `id`, `name`, `category` (faction/personal/mystery), `status` (active/resolved/dormant), `sessions[]` (per-session notes/state)
-- New `data/portal-clocks.json` — clock registry: `id`, `label`, `max_ticks`, `ticks`, `status`, `notes`
-- Both rendered as a keeper dashboard — threads grouped by category, clocks as visual pip tracks
-- State saved to D1 (new migration) or to these JSON files directly (simpler if clocks don't change mid-session)
-**Why now:** Makes campaign structure visible. Directly feeds into next-session prep and the COPY FOR CLAUDE export.
-
----
+### ~~Campaign thread + clock tracker~~ — ✅ DONE (2026-03-14)
+`missions/threads.html`, `data/portal-threads.json`, `data/portal-clocks.json` all built and tested.
 
 ### ~~Playbook data architecture refactor~~ — ✅ DONE (2026-03-14)
 
@@ -202,4 +187,5 @@ S03 uses a connection map (investigation board) instead of the Aldermoor spatial
 ---
 
 ### Minor / polish
-- John Johnson hunter page — playbook architecture refactor complete; now unblocked. See NEXT UP #1 for remaining steps.
+- ~~John Johnson hunter page~~ — ✅ DONE. `hunters/john.html`, arcs in `hunter-arcs.json`, Flake moves wired via playbook field.
+- Nav breakpoint — hamburger at ≤640px doesn't help intermediate widths (~641–900px) where 13 items overflow. Fix: raise media query to ~900px.

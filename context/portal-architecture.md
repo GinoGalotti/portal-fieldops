@@ -112,7 +112,10 @@ portal-fieldops/
 │   │   ├── 009_incident_state.sql     # incident_state ✅ remote + local
 │   │   ├── 010_messages_type.sql      # messages.type + messages.payload ✅ remote + local
 │   │   ├── 011_map_state.sql          # map_state ✅ remote + local
-│   │   └── 012_drop_feed_fk.sql       # drop FK constraints on messages + rolls ✅ remote + local
+│   │   ├── 012_drop_feed_fk.sql       # drop FK constraints on messages + rolls ✅ remote + local
+│   │   ├── 013_player_report_visibility.sql # player_report_visibility ✅ remote + local
+│   │   ├── 014_dossier_state.sql      # dossier_state ✅ remote + local
+│   │   └── 015_global_flags.sql       # global_flags (campbell-logs hints + evidence visibility) ✅ remote + local
 │   └── src/                   # (Phase 3) Workers source
 │       ├── index.ts           # Main router
 │       └── routes/

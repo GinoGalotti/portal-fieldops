@@ -264,14 +264,12 @@ git push origin dev
 
 Player feedback is stored in D1 (`player_reports` table, keyed by `week` + `hunter_id`).
 
-**Future:** a keeper review page will display all reports for a given week — aggregated ratings and notes side by side.
+**`reports/keeper-review.html`** — keeper review page is built. W01/W02 tabs, auto-loads on click, fetches all 5 hunter reports via `Promise.all`, 5-col responsive card grid. Filed/not-filed badge, rating pips, text fields, scene notes per hunter.
 
-**For now**, to read a specific player's report:
+To query raw D1 directly (fallback):
 ```bash
 wrangler d1 execute portal-db --command "SELECT hunter_id, state FROM player_reports WHERE week = 'W01'" --remote
 ```
-
-Or ask Claude to query all reports for a week and summarise the ratings and key feedback.
 
 ---
 
@@ -285,8 +283,9 @@ Or ask Claude to query all reports for a week and summarise the ratings and key 
 
 ### Files to modify (every session)
 - [ ] `data/portal-missions.json` — cap resolved mission phase with `show_until`; add completed + next active phases (step 2.0b)
-- [ ] `data/portal-threads.json` — update `last_moved`, `status`, summaries; add new threads (step 2.10)
+- [ ] `data/portal-threads.json` — update `last_moved`, `status`, summaries, `player_summary` fields; add new threads (step 2.10)
 - [ ] `data/portal-clocks.json` — advance `filled` on any ticking clocks; add new clocks (step 2.10)
+- [ ] `data/evidence.json` — append new evidence items for this session (Section L of ingestion package). After ingesting, consider whether any `hidden: true` items should now be `hidden: false` (keeper has revealed them in play). Keeper can also toggle visibility live on `evidence.html` without touching the JSON.
 - [ ] `data/sessions.json` — add new session entry, mark previous `"closed"` (step 2.0a)
 - [ ] `missions/briefings/index.json` — add new week entry, close previous
 - [ ] `missions/report.html` — add new session to `SESSIONS` config

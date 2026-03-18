@@ -120,6 +120,9 @@ nav a:hover, nav a.active { color: var(--green); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ── ANCHOR SCROLL OFFSET — accounts for sticky header (64px) ── */
+section[id] { scroll-margin-top: 72px; }
+
 /* ── SECTION HEADER ── */
 .section-header {
   display: flex;

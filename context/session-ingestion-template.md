@@ -602,6 +602,7 @@ Already-generated images are skipped automatically.
     "connections": ["ev-aldermoor-shell", "ev-meridian-bio"],
     "dossier_link": "handouts/dossier/s03-grant-documentation.html",
     "status": "confirmed",
+    "hidden": false,
     "keeper_note": "Three-site pattern now visible. Adjacent to secret-project-veil."
   }
 ]
@@ -609,14 +610,16 @@ Already-generated images are skipped automatically.
 
 **Fields:**
 - `id` — `ev-` prefix, unique
-- `session` — week discovered (session-gated on evidence.html)
-- `found_by` — hunter id (displayed as hunter-coloured badge)
-- `category` — `financial` (amber) / `scientific` (teal) / `personal` (rose) / `mesa` (red) / `supernatural` (purple) / `institutional` (green)
-- `summary` — player-safe, 1-3 sentences, glanceable
-- `connections` — IDs of related evidence items (renders as shared badges)
-- `dossier_link` — path to full dossier page (or null). Renders `→ VIEW FULL DOCUMENT`.
+- `session` — week discovered (session-gated on evidence.html; use `w1`/`w2`/`w3` format)
+- `found_by` — `"team"` for group discoveries, or a hunter id (`"alan"`, `"reed"`, etc.) for personal finds (displayed as hunter-coloured badge)
+- `category` — `financial` (amber) / `scientific` (teal) / `personal` (rose) / `rival` (red) / `supernatural` (purple) / `institutional` (green)
+- `label` — short title for the card (e.g. `"Three Shell Companies — Delaware Registration"`)
+- `summary` — player-safe, 1-3 sentences, glanceable. No keeper secrets.
+- `connections` — IDs of related evidence items (renders as connection badges on the card)
+- `dossier_link` — path to full dossier page, e.g. `"handouts/dossier/s03-rook-intel.html"` (or `null`). Renders `→ VIEW FULL DOCUMENT` button.
 - `status` — `confirmed` / `unverified` / `disputed`
-- `keeper_note` — keeper-only (visible in keeper mode on evidence.html, hidden from players)
+- `hidden` — `true` if this item should be hidden from players until the keeper reveals it (use for items not yet surfaced in play, even if the session gate has opened). `false` = shown normally when the session gate opens. Keeper can toggle live on `evidence.html` without changing the JSON.
+- `keeper_note` — keeper-only (visible in keeper mode on evidence.html, hidden from players). Use for adjacent secrets, crack vectors, cross-references.
 
 ---
 
