@@ -391,6 +391,38 @@ test.describe('CAMPBELL logs — search', () => {
 
 });
 
+// ── CLUE PERSISTENCE ───────────────────────────────────────────────────────────
+//
+// When D1 stores value='revealed', the page loads with hintsRevealed=true and
+// renders .clue-hint spans immediately — no keeper toolbar interaction required.
+
+test.describe('CAMPBELL logs — clue persistence (pre-revealed from D1)', () => {
+
+  test('clue-hint spans render on load when D1 says revealed', async ({ page }) => {
+    await mockSession(page, 'w3');
+    await mockHints(page, 'revealed');
+    await page.goto('/campbell-logs.html');
+    await page.waitForLoadState('networkidle');
+    // Clues must appear without any keeper toolbar click
+    const visibleBatches = batchesVisibleAt('w3');
+    const totalClueSpans = visibleBatches.reduce((sum, b) => sum + b.clue_spans.length, 0);
+    expect(totalClueSpans).toBeGreaterThan(0);
+    await expect(page.locator('.clue-hint')).toHaveCount(totalClueSpans);
+  });
+
+  test('toggle button reads HIDE CLUES when activated in revealed state', async ({ page }) => {
+    await mockSession(page, 'w3');
+    await mockHints(page, 'revealed');
+    await page.goto('/campbell-logs.html');
+    await page.waitForLoadState('networkidle');
+    // Activate keeper toolbar to inspect button state
+    const eyebrow = page.locator('#page-eyebrow');
+    for (let i = 0; i < 5; i++) await eyebrow.click();
+    await expect(page.locator('#toggle-hints')).toContainText('HIDE CLUES');
+  });
+
+});
+
 test.describe('CAMPBELL logs — search expands batches', () => {
 
   test('typing a search term expands all collapsed batches', async ({ page }) => {

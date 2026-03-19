@@ -107,6 +107,30 @@ const MOCK_SCAN_ALERT = {
   }),
 };
 
+const MOCK_READALOUD = {
+  id: 34, type: 'readaloud', sender: 'KEEPER',
+  body: '',
+  subject: null,
+  payload: JSON.stringify({
+    label: 'Cold Open — Someone Had to Keep Things Going',
+    text: 'The ward is quiet. A woman sits in the chair beside the bed.',
+  }),
+  delivered: 1, delivered_at: '2025-01-01 12:05:00', session_id: 'M03',
+};
+
+const MOCK_DOCUMENT = {
+  id: 35, type: 'document', sender: 'KEEPER',
+  body: '',
+  subject: null,
+  payload: JSON.stringify({
+    label: 'Solstice Property Group — Grant Documentation',
+    classification: 'FIELD EVIDENCE — S03 — ROUTE C',
+    body: 'Arts grant award to Meridian Theatre Company. $47,000.',
+    link: 'handouts/dossier/s03-grant-documentation.html',
+  }),
+  delivered: 1, delivered_at: '2025-01-01 12:06:00', session_id: 'M03',
+};
+
 // ── ROUTE HELPER ─────────────────────────────────────────────────────────────
 
 // Intercepts all D1-backed API calls. Static files (/data/*.json) pass through.
@@ -1033,6 +1057,89 @@ test.describe('feed.html — keeper tabs', () => {
     // M01 is selected by default; it has Eszter as an entity
     await page.waitForSelector('.data-entity-block', { timeout: 5000 });
     await expect(page.locator('.data-entity-block').first()).toBeVisible();
+  });
+
+});
+
+// ── READALOUD HANDOUTS ────────────────────────────────────────────────────────
+//
+// Readaloud entries: keeper-read prose blocks. No sender/timestamp meta row.
+// Payload: { label, text }. Rendered as .feed-readaloud with eyebrow + body.
+
+test.describe('feed.html — readaloud handouts', () => {
+
+  test('readaloud entry renders with .feed-readaloud class', async ({ page }) => {
+    await mockFeedApis(page, { messages: [MOCK_READALOUD] });
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-readaloud');
+    await expect(page.locator('.feed-readaloud')).toBeVisible();
+  });
+
+  test('readaloud eyebrow contains KEEPER READALOUD and uppercased label', async ({ page }) => {
+    await mockFeedApis(page, { messages: [MOCK_READALOUD] });
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-readaloud');
+    const eyebrow = page.locator('.feed-readaloud-eyebrow');
+    await expect(eyebrow).toContainText('KEEPER READALOUD');
+    // Label is uppercased by escHtml().toUpperCase() in the renderer
+    await expect(eyebrow).toContainText('COLD OPEN');
+  });
+
+  test('readaloud renders text content in .feed-readaloud-text', async ({ page }) => {
+    await mockFeedApis(page, { messages: [MOCK_READALOUD] });
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-readaloud');
+    await expect(page.locator('.feed-readaloud-text')).toContainText('ward is quiet');
+  });
+
+});
+
+// ── DOCUMENT HANDOUTS ─────────────────────────────────────────────────────────
+//
+// Document entries: amber evidence-dossier cards. Payload: { label, classification,
+// body, link? }. Optional link renders as .document-link "→ VIEW FULL DOCUMENT".
+
+test.describe('feed.html — document handouts', () => {
+
+  test('document entry renders with .feed-document class', async ({ page }) => {
+    await mockFeedApis(page, { messages: [MOCK_DOCUMENT] });
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-document');
+    await expect(page.locator('.feed-document')).toBeVisible();
+  });
+
+  test('document shows classification stamp in .document-classification', async ({ page }) => {
+    await mockFeedApis(page, { messages: [MOCK_DOCUMENT] });
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-document');
+    await expect(page.locator('.document-classification').first()).toContainText('FIELD EVIDENCE');
+  });
+
+  test('document shows title in .document-title and body in .document-body', async ({ page }) => {
+    await mockFeedApis(page, { messages: [MOCK_DOCUMENT] });
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-document');
+    await expect(page.locator('.document-title')).toContainText('Solstice Property Group');
+    await expect(page.locator('.document-body')).toContainText('$47,000');
+  });
+
+  test('document with link renders .document-link with VIEW FULL DOCUMENT text', async ({ page }) => {
+    await mockFeedApis(page, { messages: [MOCK_DOCUMENT] });
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-document');
+    await expect(page.locator('.document-link')).toBeVisible();
+    await expect(page.locator('.document-link')).toContainText('VIEW FULL DOCUMENT');
+  });
+
+  test('document without link has no .document-link element', async ({ page }) => {
+    const docNoLink = {
+      ...MOCK_DOCUMENT, id: 36,
+      payload: JSON.stringify({ label: 'Field Notes', classification: 'UNCLASSIFIED', body: 'Quick notes.' }),
+    };
+    await mockFeedApis(page, { messages: [docNoLink] });
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-document');
+    await expect(page.locator('.document-link')).toHaveCount(0);
   });
 
 });

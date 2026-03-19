@@ -218,6 +218,14 @@ test.describe('Lab Incidents page', () => {
       await expect(emailBlock.locator('.email-header')).toContainText('teddy.brandt@portal-internal.org');
     });
 
+    test('W2 teaser VIEW FULL LOGS link points to campbell-logs.html', async ({ page }) => {
+      const link = page.locator('#incident-S01-CAMPBELL-LOG .log-full-link a');
+      await expect(link).toBeVisible();
+      await expect(link).toContainText('VIEW FULL LOGS');
+      const href = await link.getAttribute('href');
+      expect(href).toContain('campbell-logs.html');
+    });
+
   });
 
   // ── W3 INCIDENTS (active week — default on load) ─────────────────────────
@@ -340,6 +348,14 @@ test.describe('Lab Incidents page', () => {
     test('W3 teaser annotation text is visible for Excerpt D', async ({ page }) => {
       // Excerpt D has annotation about the 0.34s diagnostic timing anomaly.
       await expect(page.locator(`#incident-${w3TeaserInc.id}`)).toContainText('0.34 seconds');
+    });
+
+    test('W3 teaser VIEW FULL LOGS link points to campbell-logs.html', async ({ page }) => {
+      const link = page.locator(`#incident-${w3TeaserInc.id} .log-full-link a`);
+      await expect(link).toBeVisible();
+      await expect(link).toContainText('VIEW FULL LOGS');
+      const href = await link.getAttribute('href');
+      expect(href).toContain('campbell-logs.html');
     });
 
   });

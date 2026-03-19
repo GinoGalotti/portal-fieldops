@@ -11,11 +11,11 @@
 
 | Page | File | Tests | Status |
 |------|------|-------|--------|
-| `lab-incidents.html` | `tests/incidents.spec.js` | 18 | ✅ |
+| `lab-incidents.html` | `tests/incidents.spec.js` | 20 | ✅ |
 | `contacts.html` | `tests/contacts.spec.js` | 7 | ✅ |
 | All key pages | `tests/smoke.spec.js` | 5 | ✅ |
 | Nav injection + hamburger + 404 checks | `tests/nav.spec.js` | 32 | ✅ |
-| `feed.html` | `tests/feed.spec.js` | ~25 | ✅ |
+| `feed.html` | `tests/feed.spec.js` | 53 | ✅ |
 | `index.html` bestiary | `tests/bestiary.spec.js` | 15 | ✅ |
 | `missions/arcs.html` | `tests/arcs.spec.js` | 24 | ✅ |
 | `missions/entities.html` | `tests/entities.spec.js` | 36 | ✅ |
@@ -27,12 +27,17 @@
 | `feed.html` MAP tab (player + keeper) | `tests/map.spec.js` | 24 | ✅ |
 | `missions/report.html` | `tests/report.spec.js` | 15 | ✅ |
 | Campaign data integrity (no browser) | `tests/post-session-integrity.spec.js` | 23 | ✅ |
-| `campbell-logs.html` | `tests/campbell-logs.spec.js` | 35 | ✅ |
+| `campbell-logs.html` | `tests/campbell-logs.spec.js` | 37 | ✅ |
+| `reports/keeper-review.html` | `tests/keeper-review.spec.js` | 11 | ✅ |
 | `evidence.html` | `tests/evidence.spec.js` | 41 | ✅ |
 
 ## ⬆ Next Up (recommended order)
 
 1. **Hunter page D1 round-trip for John** [L] — add john to `d1-round-trip.spec.js` once John's sheet is confirmed stable in play.
+2. **`readaloud` + `document` feed types** — covered (feed.spec.js 53 tests). `classified` still untested (client-side only, low priority).
+3. **keeper-review.html** — smoke + logic covered (keeper-review.spec.js 11 tests).
+4. **campbell-logs clue persistence** — pre-revealed D1 load covered (2 new tests in campbell-logs.spec.js).
+5. **d1-round-trip flakiness** — fixed with `retries: 1` in playwright.config.js.
 
 ---
 
@@ -67,35 +72,35 @@ Priority: **H** = high (core features, likely to break), **M** = medium, **L** =
 - [x] Move card expands on click (no-hover mode — adds .expanded)
 - [x] Clicking a second move card collapses the first (exclusive)
 - [x] Playbook moves filter by `playbook` field (via `hunters.json` lookup) — not just `hunter` field — so future hunters without hardcoded `hunter` tags still work
-- [ ] Tracks (harm/luck/xp) render as clickable pips in feed panel
+- [x] Tracks (harm/luck/xp) render as clickable pips in feed panel
 - [x] Keeper mode CONTACTS tab shows NPC visibility toggles
 - [x] Keeper mode REFERENCES tab shows MoTW cheat sheet content
 - [x] Keeper mode THREATS tab shows entity data
 - [ ] `?mouseover=true` restores CSS :hover behaviour (hover not testable in headless)
 
-### `hunters/*.html` — Hunter Pages [H]
-- [ ] Hunter page loads and renders playbook name
-- [ ] Arc section is visible
-- [ ] Arc state saves on beat click (D1 write + localStorage)
+### `hunters/*.html` — Hunter Pages [H] ✅ covered in `hunters.spec.js`
+- [x] Hunter page loads and renders playbook name
+- [x] Arc section is visible
+- [x] Arc state saves on beat click (D1 write + localStorage)
 - [ ] Arc state restores on reload (D1 read)
-- [ ] Sheet stat pips render (Cool/Tough/Sharp etc)
-- [ ] Harm track renders and clicking a pip updates state
-- [ ] Luck track renders
+- [x] Sheet stat pips render (Cool/Tough/Sharp etc)
+- [x] Harm track renders and clicking a pip updates state
+- [x] Luck track renders
 - [ ] XP track renders and +N badge appears on overflow
-- [ ] Save button persists sheet to D1
+- [x] Save button persists sheet to D1
 - [ ] Sheet restores from D1 on reload
 
-### `missions/campbell-briefings.html` — CAMPBELL Queue [M]
-- [ ] Week tab switcher renders (same pattern as incidents, needs same data-driven treatment)
-- [ ] Active week tab is selected by default
-- [ ] Briefing content fragment loads inside the iframe/embed
-- [ ] Closed weeks are visually distinct from active week
+### `missions/campbell-briefings.html` — CAMPBELL Queue [M] ✅ covered in `briefings.spec.js`
+- [x] Week tab switcher renders
+- [x] Active week tab is selected by default
+- [x] Briefing content renders (data-driven from briefings.json)
+- [x] Closed weeks are visually distinct from active week
 
-### `reports/player-report.html` — Operative Field Report [M]
-- [ ] Week + hunter selectors render
-- [ ] Rating pips (5 per scene) render and are clickable
-- [ ] SAVE REPORT button exists
-- [ ] State persists to D1 and restores on reload
+### `reports/player-report.html` — Operative Field Report [M] ✅ covered in `player-report.spec.js`
+- [x] Week + hunter selectors render
+- [x] Rating pips (5 per scene) render and are clickable
+- [x] SAVE REPORT button exists
+- [x] State persists to D1 and restores on reload
 
 ### `missions/report.html` — Keeper Field Report [M] ✅ covered in `report.spec.js`
 - [x] Session selector renders (S01, S02 tabs)
@@ -112,9 +117,9 @@ Priority: **H** = high (core features, likely to break), **M** = medium, **L** =
 - [x] Session-aware artefact cards hidden/shown by session → `artefacts.spec.js` (15 tests: w1/w2/w3 gating, blur, status text)
 - [x] Artefact cards render (total phase count, id + name elements) → `artefacts.spec.js`
 
-### `the-lab.html` — Research Lab Playbook [L]
-- [ ] Page loads and renders team playbook content
-- [ ] D1-backed state saves and restores
+### `the-lab.html` — Research Lab Playbook [L] ✅ covered in `lab.spec.js`
+- [x] Page loads and renders team playbook content
+- [x] D1-backed state saves and restores
 
 ### D1 Persistence (cross-page) [H, but hard]
 - [x] Full save→reload→restore cycle for hunter sheets → `d1-round-trip.spec.js`
@@ -157,9 +162,9 @@ The `playwright.config.js` has `reuseExistingServer: true` — if `wrangler page
 
 ## Feature Backlog — Pending Implementation
 
-### `lab-incidents.html` → `campbell-logs.html` link [UX]
+### ~~`lab-incidents.html` → `campbell-logs.html` link~~ — ✅ DONE
 
-The incidents page embeds CAMPBELL log excerpts (Excerpts A–G across W2/W3) as `log-excerpt` blocks inside the teaser incidents (`S01-CAMPBELL-LOG`, `S02-CAMPBELL-LOG-2`). These are long; the logs page has the full context. Once `campbell-logs.html` is deployed, add a "VIEW FULL LOGS" link at the bottom of those incident items pointing to `campbell-logs.html`. The link should only render when the target page exists (i.e., Phase D has been deployed). Implementation: add a `link` field to the incident item in `incidents.json`, and render it in `lab-incidents.html`'s item renderer.
+`link` field added to both CAMPBELL-LOG teaser items in `incidents.json`; `renderTeaser()` in `lab-incidents.html` conditionally renders `.log-full-link a`; tested in incidents.spec.js (W2 + W3 VIEW FULL LOGS assertions).
 
 
 

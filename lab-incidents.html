@@ -457,6 +457,9 @@
 .log-anomaly { color: var(--purple); }
 .incident-ref-link { color: var(--green-dim); text-decoration: underline; text-underline-offset: 2px; }
 .incident-ref-link:hover { color: var(--green); }
+.log-full-link { margin-top: 16px; font-size: 0.7rem; letter-spacing: 0.08em; }
+.log-full-link a { color: var(--purple); text-decoration: none; }
+.log-full-link a:hover { color: #a78bfa; }
 .log-excerpt .le-annotation {
   margin-top: 12px;
   padding-top: 10px;
@@ -667,6 +670,7 @@
       + ' <span class="incident-badge badge-' + inc.badge_color + '">' + esc(inc.badge) + '</span>'
       + '</h2>';
     h += inc.blocks.map(renderBlock).join('');
+    if (inc.link) h += '<div class="log-full-link"><a href="' + esc(inc.link) + '">// VIEW FULL LOGS →</a></div>';
     h += '</div>';
     return h;
   }

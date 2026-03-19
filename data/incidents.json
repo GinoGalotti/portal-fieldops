@@ -281,7 +281,8 @@
               "text": "She's not asking anyone to do anything. She's asking someone to look.",
               "dim": true
             }
-          ]
+          ],
+          "link": "campbell-logs.html"
         }
       ]
     },
@@ -538,7 +539,8 @@
               "text": "She's still not raising it with the Director.",
               "dim": true
             }
-          ]
+          ],
+          "link": "campbell-logs.html"
         }
       ]
     }
