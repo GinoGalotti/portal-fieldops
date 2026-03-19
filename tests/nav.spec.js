@@ -4,15 +4,15 @@
 // and produces the expected links on multiple pages.
 //
 // Also tests the mobile hamburger toggle injected by player-nav.js:
-// .nav-toggle appears at ≤640px (CSS media query), clicking it opens the nav.
+// .nav-toggle appears at ≤900px (CSS media query), clicking it opens the nav.
 //
 // Subdirectory path tests verify that player-nav.js adjusts hrefs correctly for
 // pages in hunters/, missions/, and reports/ (b = '../') vs root pages (b = '').
 
-// All 11 nav item labels defined in player-nav.js, in order.
+// All 12 nav item labels defined in player-nav.js, in order.
 const NAV_LABELS = [
-  'Briefing', 'Operatives', 'Bestiary', 'The Lab', 'Artefacts',
-  'Missions', 'Contacts', 'Report', 'Queue', 'Incidents', 'Feed',
+  'Briefing', 'Operatives', 'Bestiary', 'Logs', 'Artefacts',
+  'Missions', 'Evidence', 'Contacts', 'Report', 'Queue', 'Incidents', 'Feed',
 ];
 
 import { test, expect } from '@playwright/test';
@@ -69,7 +69,7 @@ test.describe('Mobile hamburger toggle', () => {
   test.use({ viewport: { width: 375, height: 812 } });
 
   test('.nav-toggle is visible at 375px viewport', async ({ page }) => {
-    // player-nav.js injects a .nav-toggle button. CSS shows it only at ≤640px.
+    // player-nav.js injects a .nav-toggle button. CSS shows it only at ≤900px.
     await page.goto('/index.html');
     await expect(page.locator('.nav-toggle')).toBeVisible();
   });
@@ -98,10 +98,21 @@ test.describe('Mobile hamburger toggle', () => {
 
 });
 
+test.describe('Nav toggle visible at intermediate widths (641–900px)', () => {
+
+  test('.nav-toggle is visible at 800px viewport', async ({ page }) => {
+    // 13 nav items overflow the header at 641–900px — hamburger must show in this range.
+    await page.setViewportSize({ width: 800, height: 800 });
+    await page.goto('/index.html');
+    await expect(page.locator('.nav-toggle')).toBeVisible();
+  });
+
+});
+
 test.describe('Nav toggle hidden at desktop', () => {
 
   test('.nav-toggle is not visible at 1280px viewport', async ({ page }) => {
-    // At desktop width (>640px), CSS sets .nav-toggle { display: none }.
+    // At desktop width (>900px), CSS sets .nav-toggle { display: none }.
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto('/index.html');
     await expect(page.locator('.nav-toggle')).toBeHidden();
@@ -229,5 +240,36 @@ test.describe('Nav root paths — no ../ prefix', () => {
     const link = page.locator('#player-nav a').filter({ hasText: 'Contacts' });
     await expect(link).toHaveAttribute('href', 'contacts.html');
   });
+
+});
+
+// ── NAV 404 LINK CHECKS ───────────────────────────────────────────────────────
+//
+// Verify that every unique page reachable via player nav actually exists and
+// returns HTTP 200. Anchor-only variants (index.html#sessions etc.) are
+// deduplicated to their base page.
+
+test.describe('Nav 404 link checks', () => {
+
+  // Unique HTML pages reachable from the player nav (anchors stripped, deduped).
+  // Matches the hrefs in player-nav.js as seen from a root-level page.
+  const NAV_PAGES = [
+    'index.html',
+    'campbell-logs.html',
+    'missions/missions.html',
+    'evidence.html',
+    'contacts.html',
+    'reports/player-report.html',
+    'missions/campbell-briefings.html',
+    'lab-incidents.html',
+    'feed.html',
+  ];
+
+  for (const path of NAV_PAGES) {
+    test(`${path} returns HTTP 200`, async ({ request }) => {
+      const response = await request.get('/' + path);
+      expect(response.status()).toBe(200);
+    });
+  }
 
 });

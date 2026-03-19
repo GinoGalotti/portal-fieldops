@@ -269,7 +269,7 @@ main { position: relative; z-index: 10; max-width: 1100px; margin: 0 auto; paddi
 .nav-toggle:hover { color: var(--green); border-color: var(--green-dim); }
 
 /* ── MOBILE ── */
-@media (max-width: 640px) {
+@media (max-width: 900px) {
   nav { display: none; }
   nav.open {
     display: flex;
