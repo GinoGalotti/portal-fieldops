@@ -984,9 +984,7 @@ All files in `data/` are static assets served by CF Pages. Never written to at r
 
 **Purpose:** PORTAL-original entities for the Gathered Database (Section III of `entities.html`). Entities observed/documented by PORTAL that aren't in the standard Deck of Monsters.
 
-**Each entry:** `id`, `display_name` (may contain inline HTML/styling), `tags[]` (`{ label, color }`), `stat_block[]` (same harm_num variant schema as `portal-entities.json display{}`), `custom_moves[]` (`{ name, text }`), `notes[]` (`{ label, text }`).
-
-**⚠ Schema normalisation pending** (backlog): the `stat_block[]` column/value pattern is layout-coupled rather than semantic. See backlog item "Entity JSON schema normalisation".
+**Semantic schema (v2):** `id`, `display_name` (HTML string), `custom: true`, `type`, `harm`, `armour`, `extra_tags[]` (`{ label, color }`), `motivation`, `type_detail`, `harm_color`, `harm_note`, `armour_detail`, `origin`, `attacks[]` (`{ name, value, full }`), `weakness`, `custom_moves[]` (`{ name, text }`), `notes[]` (`{ label, text }`).
 
 **Adding a new custom entity:** Append to `entries[]`. Rendered by `buildCustomDBCard()` in `entities.html` — no HTML edits needed.
 
@@ -996,9 +994,7 @@ All files in `data/` are static assets served by CF Pages. Never written to at r
 
 **Purpose:** All 53 Deck of Monsters entries for the Gathered Database (Section III of `entities.html`). Source data extracted from original hardcoded HTML.
 
-**Each entry:** `id`, `name`, `tags[]` (`{ label, color }`), `columns[]` where each column has `label`, `value`, optional `full: true` (full-width layout), `flavour: true` (italic description style).
-
-**⚠ Schema normalisation pending** (backlog): the generic `columns[]` pattern mirrors HTML layout rather than data semantics. See backlog item "Entity JSON schema normalisation". Proposed fix: semantic field keys (`harm`, `armour`, `motivation`, `powers`, `attacks[]`, `weakness`, `custom_moves[]`, `description`).
+**Semantic schema (v2):** `id`, `name`, `type`, `harm`, `armour`, `motivation`, `powers`, `attacks[]` (`{ name, value }`), `weakness`, `custom_moves[]` (`{ name, text }`), `description`.
 
 **Adding new Deck of Monsters entries:** Append to `entries[]`. Rendered by `buildDeckDBCard()` in `entities.html` — no HTML edits needed.
 

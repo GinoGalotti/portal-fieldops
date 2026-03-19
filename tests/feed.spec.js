@@ -60,6 +60,53 @@ const MOCK_MSG = {
   session_id: 'S02',
 };
 
+// ── NEW HANDOUT TYPE MOCK DATA ────────────────────────────────────────────────
+
+const MOCK_TONE = {
+  id: 30, type: 'tone', sender: 'KEEPER',
+  body: 'The stage manager\'s clipboard lowers.',
+  subject: null,
+  payload: JSON.stringify({ text: 'The stage manager\'s clipboard lowers.' }),
+  delivered: 1, delivered_at: '2025-01-01 12:02:00', session_id: 'M03',
+};
+
+const MOCK_LINECARD_REX = {
+  id: 31, type: 'linecard', sender: 'KEEPER',
+  body: '[LINECARD — FIRST OUTLAW → REX]',
+  subject: null,
+  payload: JSON.stringify({
+    recipient: 'rex',
+    character: 'First Outlaw',
+    context: 'You are an outlaw in a forest.',
+    lines: [{ cue: null, text: 'Stand, sir, and throw us that you have about ye.' }],
+    intensity: 'normal',
+    stage_direction: null,
+  }),
+  delivered: 1, delivered_at: '2025-01-01 12:03:00', session_id: 'M03',
+};
+
+const MOCK_SCAN_NOMINAL = {
+  id: 32, type: 'scan', sender: 'KEEPER',
+  body: 'Victorian Wig Stand',
+  subject: null,
+  payload: JSON.stringify({
+    label: 'Victorian Wig Stand', sublabel: 'c.1850',
+    reading: '0.00 BIM', reading_display: '0.00 BIM',
+    status: 'nominal', note: null,
+  }),
+  delivered: 1, delivered_at: '2025-01-01 12:04:00', session_id: 'M03',
+};
+
+const MOCK_SCAN_ALERT = {
+  ...MOCK_SCAN_NOMINAL, id: 33,
+  body: 'The Prompt Book',
+  payload: JSON.stringify({
+    label: 'The Prompt Book', sublabel: 'Victorian theatrical prompt book, annotated',
+    reading: '4.2 BIM', reading_display: '4.20 BIM',
+    status: 'alert', note: 'Secondary signature detected.',
+  }),
+};
+
 // ── ROUTE HELPER ─────────────────────────────────────────────────────────────
 
 // Intercepts all D1-backed API calls. Static files (/data/*.json) pass through.
@@ -763,6 +810,229 @@ test.describe('feed.html — handout coexistence', () => {
     await expect(page.locator('.feed-entry')).toHaveCount(2);
     await expect(page.locator('.feed-pda')).toHaveCount(1);
     await expect(page.locator('.feed-image')).toHaveCount(1);
+  });
+
+});
+
+// ── TONE CARDS ────────────────────────────────────────────────────────────────
+
+test.describe('feed.html — tone cards', () => {
+
+  test('tone card renders as .feed-tone with italic text', async ({ page }) => {
+    await mockFeedApis(page, { messages: [MOCK_TONE] });
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-tone');
+    await expect(page.locator('.feed-tone')).toBeVisible();
+    await expect(page.locator('.feed-tone-text')).toContainText('clipboard lowers');
+  });
+
+  test('tone card has no sender badge or timestamp row', async ({ page }) => {
+    await mockFeedApis(page, { messages: [MOCK_TONE] });
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-tone');
+    // Tone entries intentionally omit the meta row (sender + timestamp).
+    await expect(page.locator('.feed-tone .feed-entry-meta')).toHaveCount(0);
+  });
+
+});
+
+// ── SCAN RESULTS ──────────────────────────────────────────────────────────────
+
+test.describe('feed.html — scan results', () => {
+
+  test('nominal scan renders as .feed-scan without alert/critical class', async ({ page }) => {
+    await mockFeedApis(page, { messages: [MOCK_SCAN_NOMINAL] });
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-scan');
+    await expect(page.locator('.feed-scan')).toBeVisible();
+    await expect(page.locator('.feed-scan')).not.toHaveClass(/scan-alert/);
+    await expect(page.locator('.feed-scan')).not.toHaveClass(/scan-critical/);
+    await expect(page.locator('.scan-label')).toContainText('Victorian Wig Stand');
+  });
+
+  test('alert scan renders with .scan-alert class', async ({ page }) => {
+    await mockFeedApis(page, { messages: [MOCK_SCAN_ALERT] });
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-scan');
+    await expect(page.locator('.feed-scan')).toHaveClass(/scan-alert/);
+    await expect(page.locator('.scan-label')).toContainText('Prompt Book');
+  });
+
+  test('scan shows reading value and status pip', async ({ page }) => {
+    await mockFeedApis(page, { messages: [MOCK_SCAN_ALERT] });
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-scan');
+    await expect(page.locator('.scan-reading-value')).toContainText('4.20 BIM');
+    await expect(page.locator('.scan-status-pip')).toContainText('ALERT');
+  });
+
+});
+
+// ── LINECARDS ─────────────────────────────────────────────────────────────────
+//
+// Linecards are recipient-sensitive: a player sees the full card only if the
+// selected hunter matches the linecard recipient. Keeper mode bypasses this
+// and always shows the full card regardless of selected hunter.
+
+test.describe('feed.html — linecards', () => {
+
+  test('linecard renders as .feed-linecard in the feed', async ({ page }) => {
+    await mockFeedApis(page, { messages: [MOCK_LINECARD_REX] });
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-linecard');
+    await expect(page.locator('.feed-linecard')).toBeVisible();
+  });
+
+  test('linecard shows redacted notice when no hunter is selected', async ({ page }) => {
+    await mockFeedApis(page, { messages: [MOCK_LINECARD_REX] });
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-linecard');
+    await expect(page.locator('.linecard-redacted')).toBeVisible();
+    await expect(page.locator('.linecard-body')).toHaveCount(0);
+  });
+
+  test('linecard shows full card when recipient hunter is selected', async ({ page }) => {
+    await mockFeedApis(page, { messages: [MOCK_LINECARD_REX] });
+    await page.route('**/api/v1/hunters/rex/sheet', r =>
+      r.fulfill({ json: { stats: { charm: 1, cool: 0, sharp: 0, tough: 1, weird: 1 }, harm: 0, luck: 7, xp: 0, checks: {}, bonds: [] } })
+    );
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-linecard');
+    // Select rex — onHunterChange sets hunterId and calls refreshLinecardEntries()
+    await page.selectOption('#hunter-select', 'rex');
+    await expect(page.locator('.linecard-body')).toBeVisible();
+    await expect(page.locator('.linecard-body')).toContainText('Stand, sir');
+    await expect(page.locator('.linecard-redacted')).toHaveCount(0);
+  });
+
+  test('linecard reverts to redacted when a different hunter is selected', async ({ page }) => {
+    await mockFeedApis(page, { messages: [MOCK_LINECARD_REX] });
+    await page.route('**/api/v1/hunters/rex/sheet', r =>
+      r.fulfill({ json: { stats: {}, harm: 0, luck: 7, xp: 0, checks: {}, bonds: [] } })
+    );
+    await page.route('**/api/v1/hunters/reed/sheet', r =>
+      r.fulfill({ json: { stats: {}, harm: 0, luck: 7, xp: 0, checks: {}, bonds: [] } })
+    );
+    await page.goto('/feed.html');
+    await page.waitForSelector('.feed-linecard');
+    await page.selectOption('#hunter-select', 'rex');
+    await expect(page.locator('.linecard-body')).toBeVisible();
+    // Switch to a different hunter — card must revert to redacted immediately
+    await page.selectOption('#hunter-select', 'reed');
+    await expect(page.locator('.linecard-redacted')).toBeVisible();
+    await expect(page.locator('.linecard-body')).toHaveCount(0);
+  });
+
+  test('keeper mode shows full linecard regardless of selected hunter', async ({ page }) => {
+    // Initial load is empty; linecard arrives on first poll after keeper mode is active.
+    await page.clock.install({ time: new Date('2025-01-01T12:00:00Z') });
+    let pollCount = 0;
+    await page.route('**/api/v1/rolls**', r => r.fulfill({ json: [] }));
+    await page.route('**/api/v1/messages**', async r => {
+      if (r.request().method() !== 'GET') return r.fulfill({ json: { ok: true, id: 99 } });
+      if (r.request().url().includes('after=')) {
+        pollCount++;
+        return pollCount === 1
+          ? r.fulfill({ json: [MOCK_LINECARD_REX] })
+          : r.fulfill({ json: [] });
+      }
+      return r.fulfill({ json: [] }); // initial load: empty
+    });
+    await page.route('**/api/v1/hunters/**', r => r.fulfill({ json: null }));
+
+    await page.goto('/feed.html');
+    await page.waitForLoadState('networkidle');
+
+    // Activate keeper mode before the poll fires
+    const logo = page.locator('.logo');
+    for (let i = 0; i < 5; i++) await logo.click();
+    await expect(page.locator('.keeper-tab').first()).toBeVisible();
+
+    // Advance past the poll interval — linecard arrives and is rendered in keeper mode
+    await page.clock.runFor(7000);
+    await page.waitForSelector('.feed-linecard');
+
+    // Keeper sees full card, not redacted notice
+    await expect(page.locator('.linecard-body')).toBeVisible();
+    await expect(page.locator('.linecard-body')).toContainText('Stand, sir');
+    await expect(page.locator('.linecard-redacted')).toHaveCount(0);
+  });
+
+});
+
+// ── KEEPER TABS — CONTACTS / REFERENCES / THREATS ────────────────────────────
+
+test.describe('feed.html — keeper tabs', () => {
+
+  async function activateKeeper(page) {
+    const logo = page.locator('.logo');
+    for (let i = 0; i < 5; i++) await logo.click();
+    await expect(page.locator('.keeper-tab').first()).toBeVisible();
+  }
+
+  test('CONTACTS tab shows NPC rows with visibility buttons', async ({ page }) => {
+    await mockFeedApis(page);
+    await page.goto('/feed.html');
+    await page.waitForLoadState('networkidle');
+    await activateKeeper(page);
+    await page.locator('[data-ktab="contacts"]').click();
+    // portal-npcs.json is a static file — wait for it to render
+    await page.waitForSelector('.npc-row');
+    await expect(page.locator('.npc-row').first()).toBeVisible();
+    await expect(page.locator('.npc-vis-btn').first()).toBeVisible();
+  });
+
+  test('CONTACTS tab shows session filter pills', async ({ page }) => {
+    await mockFeedApis(page);
+    await page.goto('/feed.html');
+    await page.waitForLoadState('networkidle');
+    await activateKeeper(page);
+    await page.locator('[data-ktab="contacts"]').click();
+    await page.waitForSelector('.session-filter');
+    await expect(page.locator('.session-pill:has-text("S01")')).toBeVisible();
+    await expect(page.locator('.session-pill:has-text("ALL")')).toBeVisible();
+  });
+
+  test('REFERENCES tab shows roll outcomes section', async ({ page }) => {
+    await mockFeedApis(page);
+    await page.goto('/feed.html');
+    await activateKeeper(page);
+    await page.locator('[data-ktab="references"]').click();
+    await expect(page.locator('.ref-section').first()).toBeVisible();
+    await expect(page.locator('.ref-label').first()).toContainText('ROLL OUTCOMES');
+  });
+
+  test('REFERENCES tab shows 13+ advanced success threshold', async ({ page }) => {
+    await mockFeedApis(page);
+    await page.goto('/feed.html');
+    await activateKeeper(page);
+    await page.locator('[data-ktab="references"]').click();
+    await expect(page.locator('.ref-row').first()).toContainText('13+');
+  });
+
+  test('THREATS tab shows session selector with all sessions', async ({ page }) => {
+    await mockFeedApis(page);
+    await page.goto('/feed.html');
+    await page.waitForLoadState('networkidle');
+    await activateKeeper(page);
+    await page.locator('[data-ktab="threats"]').click();
+    await page.waitForSelector('.data-session-selector');
+    // sessions/index.json has M01, M02, M03
+    await expect(page.locator('.data-sess-btn:has-text("M01")')).toBeVisible();
+    await expect(page.locator('.data-sess-btn:has-text("M02")')).toBeVisible();
+    await expect(page.locator('.data-sess-btn:has-text("M03")')).toBeVisible();
+  });
+
+  test('THREATS tab renders entity data for selected session', async ({ page }) => {
+    await mockFeedApis(page);
+    await page.goto('/feed.html');
+    await page.waitForLoadState('networkidle');
+    await activateKeeper(page);
+    await page.locator('[data-ktab="threats"]').click();
+    await page.waitForSelector('.data-session-selector');
+    // M01 is selected by default; it has Eszter as an entity
+    await page.waitForSelector('.data-entity-block', { timeout: 5000 });
+    await expect(page.locator('.data-entity-block').first()).toBeVisible();
   });
 
 });

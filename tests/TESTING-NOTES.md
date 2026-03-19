@@ -68,9 +68,9 @@ Priority: **H** = high (core features, likely to break), **M** = medium, **L** =
 - [x] Clicking a second move card collapses the first (exclusive)
 - [x] Playbook moves filter by `playbook` field (via `hunters.json` lookup) — not just `hunter` field — so future hunters without hardcoded `hunter` tags still work
 - [ ] Tracks (harm/luck/xp) render as clickable pips in feed panel
-- [ ] Keeper mode CONTACTS tab shows NPC visibility toggles
-- [ ] Keeper mode REFERENCES tab shows MoTW cheat sheet content
-- [ ] Keeper mode THREATS tab shows entity data
+- [x] Keeper mode CONTACTS tab shows NPC visibility toggles
+- [x] Keeper mode REFERENCES tab shows MoTW cheat sheet content
+- [x] Keeper mode THREATS tab shows entity data
 - [ ] `?mouseover=true` restores CSS :hover behaviour (hover not testable in headless)
 
 ### `hunters/*.html` — Hunter Pages [H]
