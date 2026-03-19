@@ -1656,9 +1656,26 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     var nameEl = document.getElementById('composer-name');
     if (nameEl) nameEl.value = id ? (HUNTER_NAMES[id] || '') : '';
     hunterSheet = null;
+    refreshLinecardEntries();
     if (id) loadHunterSheet(id).then(renderPanel);
     else renderPanel();
   };
+
+  // Re-render all linecard entries in the feed when hunterId changes.
+  // Linecards are recipient-sensitive — the same entry renders differently
+  // depending on which hunter the player has selected.
+  function refreshLinecardEntries() {
+    var container = document.getElementById('feed-entries');
+    if (!container) return;
+    var lcEntries = feedEntries.filter(function (e) { return e.type === 'linecard'; });
+    var lcDoms    = container.querySelectorAll('.feed-linecard');
+    if (lcEntries.length !== lcDoms.length) return;
+    lcEntries.forEach(function (entry, i) {
+      var tmp = document.createElement('div');
+      tmp.innerHTML = buildFeedEntryHtml(entry);
+      lcDoms[i].parentNode.replaceChild(tmp.firstElementChild, lcDoms[i]);
+    });
+  }
 
   function loadHunterSheet(id) {
     return fetch('/api/v1/hunters/' + id + '/sheet')
@@ -2350,7 +2367,8 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     if (!sess) return;
     var h = (sess.handouts || []).filter(function (x) { return x.id === handoutId; })[0];
     if (!h) return;
-    var bodyText = h.text || h.body || h.label || '';
+    var bodyText = h.text || h.body || h.label ||
+      (h.type === 'linecard' ? '[LINECARD — ' + (h.character || '?') + ' → ' + (h.recipient || '?') + ']' : '');
     fetch('/api/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -3167,7 +3185,7 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
       var lines         = Array.isArray(payload.lines) ? payload.lines : [];
       var intensity     = payload.intensity    || 'normal';
       var stageDir      = payload.stage_direction || '';
-      var isRecipient   = recipient && hunterId && hunterId.toLowerCase() === recipient;
+      var isRecipient   = keeperMode || (recipient && hunterId && hunterId.toLowerCase() === recipient);
       // Non-recipients see a compact redacted notice
       if (!isRecipient) {
         return '<div class="feed-entry feed-linecard">' +

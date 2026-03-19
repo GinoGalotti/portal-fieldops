@@ -27,7 +27,8 @@ export async function onRequestGet({ request, env }) {
 
 export async function onRequestPost({ request, env }) {
   const body = await request.json().catch(() => null);
-  if (!body || !body.body) {
+  const isStructured = body && body.type && body.type !== 'message';
+  if (!body || (!isStructured && !body.body)) {
     return Response.json({ error: 'invalid body' }, { status: 400 });
   }
 
@@ -39,7 +40,7 @@ export async function onRequestPost({ request, env }) {
       body.sender     || 'CAMPBELL',
       body.recipient  || 'all',
       body.subject    || null,
-      body.body,
+      body.body || '',
       body.type       || 'message',
       body.payload    ? JSON.stringify(body.payload) : null
     )
