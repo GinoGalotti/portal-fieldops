@@ -1,6 +1,8 @@
 // GET  /api/v1/maps/:id/state  — returns { location_id: true, ... } of unlocked areas
 // PUT  /api/v1/maps/:id/state  — persists full unlock state (JSON object)
 
+import { validateAuth, unauthorized, forbidden } from '../../_auth.js';
+
 export async function onRequestGet({ params, env }) {
   const row = await env.portal_db
     .prepare('SELECT state FROM map_state WHERE map_id = ?')
@@ -15,6 +17,10 @@ export async function onRequestGet({ params, env }) {
 }
 
 export async function onRequestPut({ params, env, request }) {
+  const user = await validateAuth(request, env);
+  if (!user) return unauthorized();
+  if (user.role !== 'admin') return forbidden();
+
   const body = await request.json();
   const state = JSON.stringify(body);
   const now = new Date().toISOString();

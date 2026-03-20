@@ -1,3 +1,5 @@
+import { validateAuth, unauthorized, forbidden } from '../../_auth.js';
+
 export async function onRequestGet({ params, env }) {
   const row = await env.portal_db.prepare(
     'SELECT enabled FROM player_report_visibility WHERE week = ?'
@@ -10,6 +12,10 @@ export async function onRequestGet({ params, env }) {
 }
 
 export async function onRequestPut({ params, env, request }) {
+  const user = await validateAuth(request, env);
+  if (!user) return unauthorized();
+  if (user.role !== 'admin') return forbidden();
+
   let parsed;
   try { parsed = await request.json(); } catch {
     return new Response('{"error":"invalid JSON"}', { status: 400, headers: { 'Content-Type': 'application/json' } });

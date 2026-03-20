@@ -1,6 +1,8 @@
 // GET  /api/v1/incidents/:id/state — load saved choice state for a week
 // PUT  /api/v1/incidents/:id/state — persist choice state for a week
 
+import { validateAuth, unauthorized } from '../../_auth.js';
+
 export async function onRequestGet({ params, env }) {
   const { id } = params;
   const row = await env.portal_db
@@ -16,6 +18,9 @@ export async function onRequestGet({ params, env }) {
 }
 
 export async function onRequestPut({ params, env, request }) {
+  const user = await validateAuth(request, env);
+  if (!user) return unauthorized();
+
   const { id } = params;
   const body = await request.json();
   const state = JSON.stringify(body);

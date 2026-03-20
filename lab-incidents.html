@@ -905,7 +905,9 @@
     localStorage.setItem('portal-incident-state-' + activeWeekId, JSON.stringify(stateBlob));
 
     // PUT to D1
-    fetch('/api/v1/incidents/' + activeWeekId + '/state', {
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/incidents/' + activeWeekId + '/state', {
       method:  'PUT',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify(stateBlob)
@@ -993,7 +995,9 @@
     statusEl.textContent = 'SENDING...';
     statusEl.className   = 'form-status';
 
-    fetch('/api/v1/incidents/' + inc.id + '/responses', {
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/incidents/' + inc.id + '/responses', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ name: name, text: text })

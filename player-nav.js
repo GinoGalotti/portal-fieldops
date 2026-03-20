@@ -78,6 +78,11 @@
     }
   });
 
+  // Load auth module (auth.js lives next to player-nav.js)
+  var authScr = document.createElement('script');
+  authScr.src = b + 'auth.js';
+  document.head.appendChild(authScr);
+
   // Site credit footer — deferred so it always lands at end of body
   // even when this script runs synchronously inside <header>
   function appendSiteFooter() {

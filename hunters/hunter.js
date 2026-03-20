@@ -1,12 +1,10 @@
 (function () {
 
   // ── KEEPER TOGGLE ─────────────────────────────────────────────────────────
-  var trigger = document.createElement('div');
-  trigger.id = 'keeper-trigger';
-  document.body.appendChild(trigger);
-
-  var unlocked = false;
-  var lastTap  = 0;
+  // 5 rapid clicks on .hero-eyebrow reveals/re-blurs keeper content.
+  var unlocked    = false;
+  var keeperClicks = 0;
+  var keeperTimer  = null;
 
   function toggleKeeper() {
     unlocked = !unlocked;
@@ -16,14 +14,21 @@
     document.querySelectorAll('.blur-notice').forEach(function (el) {
       el.style.display = unlocked ? 'none' : '';
     });
-    trigger.classList.toggle('unlocked', unlocked);
   }
 
-  trigger.addEventListener('dblclick', function (e) { e.preventDefault(); toggleKeeper(); });
-  trigger.addEventListener('touchend', function (e) {
-    var now = Date.now(), delta = now - lastTap;
-    if (delta > 0 && delta < 350) { e.preventDefault(); toggleKeeper(); }
-    lastTap = now;
+  document.addEventListener('DOMContentLoaded', function () {
+    var eyebrow = document.querySelector('.hero-eyebrow');
+    if (!eyebrow) return;
+    eyebrow.addEventListener('click', function () {
+      keeperClicks++;
+      clearTimeout(keeperTimer);
+      if (keeperClicks >= 5) {
+        keeperClicks = 0;
+        toggleKeeper();
+      } else {
+        keeperTimer = setTimeout(function () { keeperClicks = 0; }, 2000);
+      }
+    });
   });
 
 
@@ -38,6 +43,76 @@
   var SHEET_KEY   = 'portal_sheet_'  + hunterId;
   var API_BASE    = '/api/v1/hunters/' + hunterId + '/arc-state';
   var SHEET_API   = '/api/v1/hunters/' + hunterId + '/sheet';
+
+  var pendingImprovements = 0;
+
+
+  // ── HARM STATUS + PENDING IMPROVEMENTS UI ────────────────────────────────
+
+  function injectHarmStatusUI() {
+    var harmPip = document.querySelector('.track-pip[data-track="harm"]');
+    if (!harmPip) return;
+    var row = harmPip.closest('.track-row');
+    if (!row) return;
+    var el = document.createElement('span');
+    el.id = 'harm-status';
+    el.className = 'harm-status okay';
+    el.textContent = '// OKAY';
+    row.appendChild(el);
+  }
+
+  function updateHarmStatus() {
+    var el = document.getElementById('harm-status');
+    if (!el) return;
+    var count = 0;
+    document.querySelectorAll('.track-pip[data-track="harm"]').forEach(function (pip) {
+      if (pip.classList.contains('filled-harm')) count++;
+    });
+    if (count >= 7) {
+      el.textContent = '// DYING';
+      el.className = 'harm-status dying';
+    } else if (count >= 3) {
+      el.textContent = '// UNSTABLE';
+      el.className = 'harm-status unstable';
+    } else {
+      el.textContent = '// OKAY';
+      el.className = 'harm-status okay';
+    }
+  }
+
+  function injectPendingImprovementsUI() {
+    var xpPip = document.querySelector('.track-pip[data-track="xp"]');
+    if (!xpPip) return;
+    var row = xpPip.closest('.track-row');
+    if (!row) return;
+    var el = document.createElement('div');
+    el.id = 'pending-improvements-counter';
+    el.className = 'pending-improvements';
+    el.style.display = 'none';
+    el.innerHTML =
+      '<span class="pi-label">// PENDING IMPROVEMENTS</span>' +
+      '<span class="pi-count">0</span>' +
+      '<button class="pi-use-btn" title="Spend improvement">−</button>';
+    el.querySelector('.pi-use-btn').addEventListener('click', function () {
+      if (pendingImprovements > 0) {
+        pendingImprovements--;
+        updatePendingImprovementsUI();
+        save();
+      }
+    });
+    row.insertAdjacentElement('afterend', el);
+  }
+
+  function updatePendingImprovementsUI() {
+    var el = document.getElementById('pending-improvements-counter');
+    if (!el) return;
+    if (pendingImprovements > 0) {
+      el.style.display = '';
+      el.querySelector('.pi-count').textContent = pendingImprovements;
+    } else {
+      el.style.display = 'none';
+    }
+  }
 
 
   // ── ARC SERIALISE / APPLY ─────────────────────────────────────────────────
@@ -147,6 +222,8 @@
       if (el.id) sheet.hiddenLists.push(el.id);
     });
 
+    sheet.pendingImprovements = pendingImprovements;
+
     return sheet;
   }
 
@@ -207,6 +284,11 @@
         if (btn) btn.textContent = '// SHOW ALL';
       });
     }
+
+    // Pending improvements + harm status
+    if (typeof sheet.pendingImprovements === 'number') pendingImprovements = sheet.pendingImprovements;
+    updatePendingImprovementsUI();
+    updateHarmStatus();
   }
 
 
@@ -227,27 +309,91 @@
       pip.addEventListener('click', function () {
         var currentFill = 0;
         pips.forEach(function (p, j) { if (p.classList.contains('filled-' + name)) currentFill = j + 1; });
-        setTrack(name, currentFill === i + 1 ? i : i + 1);
+        var newVal = currentFill === i + 1 ? i : i + 1;
+        // XP overflow: filling the last pip earns an improvement instead
+        if (name === 'xp' && newVal === pips.length) {
+          setTrack('xp', 0);
+          pendingImprovements++;
+          updatePendingImprovementsUI();
+        } else {
+          setTrack(name, newVal);
+        }
+        if (name === 'harm') updateHarmStatus();
         save();
       });
     });
   });
 
 
+  // ── AUTH HELPERS ───────────────────────────────────────────────────────────
+
+  function _authFetch() {
+    return (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+  }
+
+  function _canEdit() {
+    var auth = window.portalAuth;
+    if (!auth) return false;
+    var user = auth.getUser();
+    if (!user) return false;
+    return user.role === 'admin' || user.username === hunterId;
+  }
+
+  function _applyAuthGating() {
+    var editable = _canEdit();
+    // Disable interactive elements for non-owners
+    document.querySelectorAll(
+      '.choice-opt, .beat-box, .res-move, .track-pip, .stat-input, ' +
+      '[data-sheet], .pb-special-input, .check-item:not(.mandatory), .choice-open input, .pi-use-btn'
+    ).forEach(function (el) {
+      el.style.pointerEvents = editable ? '' : 'none';
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.disabled = !editable;
+    });
+
+    // Show/hide explicit save buttons
+    document.querySelectorAll('[onclick*="saveNow"], [onclick*="resetAll"]').forEach(function (btn) {
+      btn.style.display = editable ? '' : 'none';
+    });
+
+    // Auth notice
+    var noticeId = 'hunter-auth-notice';
+    var existing = document.getElementById(noticeId);
+    if (!editable && !existing) {
+      var notice = document.createElement('div');
+      notice.id = noticeId;
+      notice.style.cssText = 'font-family:"Share Tech Mono",monospace;font-size:0.65rem;' +
+        'color:var(--text-dim,#5a7a62);text-align:center;padding:0.75rem 0 0.25rem';
+      var user = window.portalAuth ? window.portalAuth.getUser() : null;
+      notice.textContent = user
+        ? '// NOT AUTHORISED TO EDIT THIS OPERATIVE'
+        : '// LOG IN TO EDIT THIS OPERATIVE';
+      var anchor = document.querySelector('.pb-save-bar, .arc-save, .page-actions, header');
+      if (anchor) anchor.insertAdjacentElement('afterend', notice);
+      else document.body.prepend(notice);
+    } else if (editable && existing) {
+      existing.remove();
+    }
+  }
+
+
   // ── SAVE ──────────────────────────────────────────────────────────────────
 
   function save() {
+    if (!_canEdit()) return;
     var arcState   = serialise();
     var sheetState = serialiseSheet();
 
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arcState));   } catch (e) {}
     try { localStorage.setItem(SHEET_KEY,   JSON.stringify(sheetState)); } catch (e) {}
 
-    fetch(API_BASE,  { method: 'PUT', body: JSON.stringify(arcState),   headers: { 'Content-Type': 'application/json' } }).catch(function () {});
-    fetch(SHEET_API, { method: 'PUT', body: JSON.stringify(sheetState), headers: { 'Content-Type': 'application/json' } }).catch(function () {});
+    var af = _authFetch();
+    af(API_BASE,  { method: 'PUT', body: JSON.stringify(arcState),   headers: { 'Content-Type': 'application/json' } }).catch(function () {});
+    af(SHEET_API, { method: 'PUT', body: JSON.stringify(sheetState), headers: { 'Content-Type': 'application/json' } }).catch(function () {});
   }
 
   window.saveNow = function (btn) {
+    if (!_canEdit()) return;
     var arcState   = serialise();
     var sheetState = serialiseSheet();
 
@@ -258,9 +404,10 @@
     btn.disabled = true;
     btn.textContent = '// SAVING…';
 
+    var af = _authFetch();
     Promise.all([
-      fetch(API_BASE,  { method: 'PUT', body: JSON.stringify(arcState),   headers: { 'Content-Type': 'application/json' } }),
-      fetch(SHEET_API, { method: 'PUT', body: JSON.stringify(sheetState), headers: { 'Content-Type': 'application/json' } })
+      af(API_BASE,  { method: 'PUT', body: JSON.stringify(arcState),   headers: { 'Content-Type': 'application/json' } }),
+      af(SHEET_API, { method: 'PUT', body: JSON.stringify(sheetState), headers: { 'Content-Type': 'application/json' } })
     ])
       .then(function (responses) {
         btn.textContent = responses.every(function (r) { return r.ok; }) ? '// SAVED ✓' : '// ERROR';
@@ -434,12 +581,16 @@
     document.querySelectorAll('[data-sheet]').forEach(function (el) { el.value = ''; });
     document.querySelectorAll('.pb-special-input').forEach(function (el) { el.value = ''; });
     ['harm', 'luck', 'xp'].forEach(function (name) { setTrack(name, 0); });
+    pendingImprovements = 0;
+    updatePendingImprovementsUI();
+    updateHarmStatus();
 
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
     try { localStorage.removeItem(SHEET_KEY);   } catch (e) {}
 
-    fetch(API_BASE,  { method: 'PUT', body: '{}', headers: { 'Content-Type': 'application/json' } }).catch(function () {});
-    fetch(SHEET_API, { method: 'PUT', body: '{}', headers: { 'Content-Type': 'application/json' } }).catch(function () {});
+    var af = _authFetch();
+    af(API_BASE,  { method: 'PUT', body: '{}', headers: { 'Content-Type': 'application/json' } }).catch(function () {});
+    af(SHEET_API, { method: 'PUT', body: '{}', headers: { 'Content-Type': 'application/json' } }).catch(function () {});
   };
 
   // Arc nav smooth scroll
@@ -480,6 +631,15 @@
 
 
   // ── BOOT ─────────────────────────────────────────────────────────────────
+  injectHarmStatusUI();
+  injectPendingImprovementsUI();
+
+  if (window.portalAuth) {
+    _applyAuthGating();
+  } else {
+    window.addEventListener('portalAuthReady', _applyAuthGating, { once: true });
+  }
+
   load();
   loadLuckSpecial();
 

@@ -440,10 +440,15 @@ textarea.lab-field { resize: vertical; }
   }
 
   // ── SAVE ──
+  function _labAuthFetch() {
+    return (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+  }
+
   function save() {
     var state = serialise();
     try { localStorage.setItem(LKEY, JSON.stringify(state)); } catch (e) {}
-    fetch(API, { method: 'PUT', body: JSON.stringify(state), headers: { 'Content-Type': 'application/json' } }).catch(function () {});
+    _labAuthFetch()(API, { method: 'PUT', body: JSON.stringify(state), headers: { 'Content-Type': 'application/json' } }).catch(function () {});
   }
 
   window.saveNow = function (btn) {
@@ -452,7 +457,7 @@ textarea.lab-field { resize: vertical; }
     var original = btn.textContent;
     btn.disabled = true;
     btn.textContent = '// SAVING…';
-    fetch(API, { method: 'PUT', body: JSON.stringify(state), headers: { 'Content-Type': 'application/json' } })
+    _labAuthFetch()(API, { method: 'PUT', body: JSON.stringify(state), headers: { 'Content-Type': 'application/json' } })
       .then(function (r) { btn.textContent = r.ok ? '// SAVED ✓' : '// ERROR'; })
       .catch(function () { btn.textContent = '// OFFLINE'; })
       .finally(function () {
@@ -474,7 +479,7 @@ textarea.lab-field { resize: vertical; }
     if (mandatory) mandatory.classList.add('checked');
     document.querySelectorAll('[data-lab]').forEach(function (el) { el.value = ''; });
     try { localStorage.removeItem(LKEY); } catch (e) {}
-    fetch(API, { method: 'PUT', body: '{}', headers: { 'Content-Type': 'application/json' } }).catch(function () {});
+    _labAuthFetch()(API, { method: 'PUT', body: '{}', headers: { 'Content-Type': 'application/json' } }).catch(function () {});
   };
 
   // ── LOAD ──

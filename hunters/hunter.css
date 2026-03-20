@@ -732,6 +732,55 @@ main { position: relative; z-index: 10; max-width: 1100px; margin: 0 auto; paddi
   color: var(--text-dim);
   margin-left: 4px;
 }
+.harm-status {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  margin-left: 10px;
+  flex-shrink: 0;
+}
+.harm-status.okay     { color: var(--green-dim); }
+.harm-status.unstable { color: var(--amber); }
+.harm-status.dying    { color: var(--red); }
+.pending-improvements {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: -6px;
+  margin-bottom: 12px;
+  padding: 5px 10px;
+  background: rgba(240, 165, 0, 0.05);
+  border: 1px solid var(--amber-dim);
+}
+.pi-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--amber);
+  flex: 1;
+}
+.pi-count {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--amber);
+  min-width: 16px;
+  text-align: center;
+}
+.pi-use-btn {
+  background: none;
+  border: 1px solid var(--amber-dim);
+  color: var(--amber);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  transition: background 0.12s;
+}
+.pi-use-btn:hover { background: rgba(240, 165, 0, 0.08); }
 
 /* ── GENERIC FIELDS ── */
 .pb-block { margin-bottom: 4px; }

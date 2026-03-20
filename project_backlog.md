@@ -84,12 +84,42 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 ## RECENTLY DONE ✅
 
+### Auth system + tests (2026-03-20)
+- `functions/api/v1/_auth.js` — shared JWT utilities: `signJWT`, `validateAuth`, `unauthorized`, `forbidden`. Web Crypto API (HS256 HMAC), no npm dependencies.
+- `functions/api/auth/login.js` — `POST /api/auth/login`; validates against `AUTH_PASSWORDS` env secret; returns 30-day HS256 JWT.
+- `auth.js` (root) — `window.portalAuth` client module: `getUser`, `isLoggedIn`, `getHunterId`, `canWrite`, `fetch` wrapper, `login`, `logout`. Injects LOG IN button (unauthenticated) or user dropdown (authenticated) into page `<header>`. Loaded dynamically by `player-nav.js`. Fires `portalAuthReady` event synchronously.
+- 12 write endpoints auth-gated: `hunters/*` (owner or admin), `reports/*` (admin), `player-reports/*` (owner or admin), `incidents/*` + `team/playbook` (any auth), `messages` (any auth; structured types admin-only; sender override), `maps/*` + `session/active` (admin only).
+- `hunters/hunter.js` — `_authFetch`, `_canEdit`, `_applyAuthGating` added. Save/reset gated. Non-owners see "NOT AUTHORISED" notice + disabled inputs + hidden save buttons.
+- `reports/player-report.html` — save button gated by `canWrite('report', currentHunter)`; logged-in player's hunter auto-selected via `tryAutoSelect()`.
+- `feed.html` — keeper mode activated by `applyAuthState()` (admin auto-activates); all write fetches use `authFetch` pattern.
+- `the-lab.html`, `lab-incidents.html` — write paths use `_labAuthFetch` / `authFetch`.
+- `hunters/hunter.js` — **keeper trigger moved** from invisible top-right overlay div to 5 rapid clicks on `.hero-eyebrow` (fixes conflict with auth LOG IN button in top-right corner).
+- `.gitignore` — added `.dev.vars` (local env secrets for wrangler dev).
+- `tests/auth.spec.js` — 24 tests (all passing): unauthenticated UI, player gating (own vs. others), admin access, login/logout flow, server 401 handling. No real passwords needed — fake JWT tokens injected via `addInitScript`.
+- Total: **615 tests across 24 files** (591 + 24 new auth tests).
+
 ### Connection map rendering — feed.html (2026-03-18)
 - `feed.html` — `_findMapById`, `_findMapForSession` search both `maps[]` and `connection_maps[]; `_findAllLocs`, `_findMapLoc` handle `map.type === 'connection'`; `_renderAnyMap` dispatcher routes to `_renderConnectionMap` or `_renderMapGrid`; `_renderConnectionMap` — 3-col CSS grid, locked/unlocked nodes, keeper order+route badges, NPC pills, REVEAL ALL / RESET MAP only; `_buildConnDetail` — player_desc + edges (both directions, unlocked only); `keeperSelectMapSession` now resets `selectedMapLoc`
 - CSS — `.conn-map-grid`, `.conn-node`, `.conn-route-badge` (A/B/C), `.conn-order-badge`, `.conn-detail-edges`
 - `tests/map.spec.js` — +14 tests (38 total): player M03 locked/unlocked/detail/edges; keeper M03 all nodes, order/route badges, NPC pills, bulk buttons, click toggle, REVEAL ALL, RESET MAP
 
 ## NEXT UP
+
+### Auth — feed keeper mode auto-activate for admin [LOW]
+- `feed.html` keeper mode (6 tabs) currently activates via `applyAuthState()` when role === 'admin', but the old 5-click logo trigger was removed. Verify the auth-based auto-activate path works end to end in a live session (requires real auth token with admin role).
+- Add to `tests/feed.spec.js`: inject admin token → verify keeper tabs auto-appear without 5-click.
+
+### Auth — token revocation [OPTIONAL / LOW]
+- Current logout is client-side only (removes token from localStorage). Server has no blacklist — a stolen token remains valid until expiry (30 days).
+- If ever needed: add a `revoked_tokens` table in D1; `validateAuth` checks it; add `POST /api/auth/logout` endpoint that writes to D1. Not critical for a small private campaign site.
+
+### Hunter tests — keeper trigger update [LOW]
+- `tests/hunters.spec.js` may have tests that double-click the old `#keeper-trigger` overlay. Check and update to use `.hero-eyebrow` 5-click if so.
+
+### Hunter page — harm status marker + pending improvements counter
+- **Harm status**: dynamic label inline with harm pips. 0–2 = `// OKAY` (green-dim), 3–6 = `// UNSTABLE` (amber), 7 = `// DYING` (red). Injected by `hunter.js` via `injectHarmStatusUI()` + `updateHarmStatus()`. No HTML edits needed — all 5 hunter pages covered.
+- **Pending improvements**: when XP fills to 5, auto-reset to 0 and increment a counter. Amber counter bar below XP track row; `−` button to spend when player picks an improvement. Persisted in D1 sheet state as `pendingImprovements`. Injected by `hunter.js` via `injectPendingImprovementsUI()` + `updatePendingImprovementsUI()`.
+- Files: `hunters/hunter.js` (pip click handler, serialise/apply, inject/update fns, resetAll, auth gating) + `hunters/hunter.css` (`.harm-status`, `.pending-improvements`).
 
 591 tests passing across 23 files. Suite: `smoke` (5) · `nav` (32) · `contacts` (7) · `incidents` (41) · `feed` (53) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (29) · `briefings` (12) · `player-report` (29) · `d1-round-trip` (9) · `map` (38) · `report` (15) · `index-session` (16) · `evidence` (41) · `threads` (30) · `campbell-logs` (37) · `keeper-review` (11) · `post-session-integrity` (23).
 

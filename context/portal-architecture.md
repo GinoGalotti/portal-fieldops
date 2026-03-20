@@ -20,7 +20,6 @@ These share the same data layer. The async hub feeds the live tool. A session re
 - A general TTRPG platform
 - A Roll20 replacement for other games
 - Anything requiring a native app
-- Anything with complex auth (no passwords — see auth section)
 
 ---
 
@@ -32,7 +31,7 @@ These share the same data layer. The async hub feeds the live tool. A session re
 | API | **Cloudflare Workers** | Serverless, runs at the edge, free tier vast, same deployment as Pages |
 | Database | **Cloudflare D1** | SQLite at the edge, free tier sufficient (5GB, 25M reads/day), no separate service to manage |
 | Realtime (live session) | **Cloudflare Durable Objects** | Stateful WebSocket rooms, same CF account, free tier includes 400k requests/day |
-| Auth | **Cloudflare Access** (keeper) + **URL tokens** (players) | No passwords, no signup. Keeper gets Google SSO. Players get a session link. |
+| Auth | **Username + password → JWT** | Lightweight: passwords in CF env secret, HS256 JWT (30-day), client stores in localStorage |
 | Version control | **GitHub** | Stays. CF Pages deploys from the repo. |
 | Existing static pages | **Unchanged** | All current HTML/CSS pages stay exactly as built. Workers API is additive. |
 
@@ -378,14 +377,38 @@ All endpoints under `/api/v1/`. Keeper endpoints require a header token; player 
 
 **Live endpoints (CF Pages Functions in `functions/`):**
 ```
-GET  /api/v1/hunters/:id/arc-state                  → hunter arc state (no auth)
-PUT  /api/v1/hunters/:id/arc-state                  → upsert arc state (no auth)
-GET  /api/v1/reports/:id/state                      → keeper field report for session (no auth)
-PUT  /api/v1/reports/:id/state                      → upsert keeper field report (no auth)
-GET  /api/v1/player-reports/:week/:hunter/state     → player debrief for week+hunter (no auth)
-PUT  /api/v1/player-reports/:week/:hunter/state     → upsert player debrief (no auth)
-GET  /api/v1/session/active                         → { session_id } — active session from D1 (no auth)
-PUT  /api/v1/session/active                         → { session_id } — set active session; keeper toggle only
+POST /api/auth/login                                → { token, user } — login with username+password
+GET  /api/v1/hunters/:id/arc-state                  → hunter arc state (public read)
+PUT  /api/v1/hunters/:id/arc-state                  → upsert arc state (owner or admin)
+GET  /api/v1/hunters/:id/sheet                      → hunter sheet (public read)
+PUT  /api/v1/hunters/:id/sheet                      → upsert hunter sheet (owner or admin)
+GET  /api/v1/reports/:id/state                      → keeper field report (public read)
+PUT  /api/v1/reports/:id/state                      → upsert keeper field report (admin only)
+GET  /api/v1/player-reports/:week/:hunter/state     → player debrief (public read)
+PUT  /api/v1/player-reports/:week/:hunter/state     → upsert player debrief (owner or admin)
+GET  /api/v1/player-reports/:week/visibility        → { enabled } — whether reports open for week
+PUT  /api/v1/player-reports/:week/visibility        → set visibility (admin only)
+GET  /api/v1/session/active                         → { session_id } — active session
+PUT  /api/v1/session/active                         → set active session (admin only)
+GET  /api/v1/rolls                                  → roll feed (public; after=/offset= params)
+POST /api/v1/rolls                                  → log a roll (any authenticated)
+GET  /api/v1/messages                               → message feed (public; after=/offset= params)
+POST /api/v1/messages                               → post message (any auth; structured types = admin; sender overridden to display name)
+DELETE /api/v1/messages                             → clear feed (admin only)
+GET  /api/v1/incidents/:id/state                    → incident state for week
+PUT  /api/v1/incidents/:id/state                    → save incident choices (any authenticated)
+GET  /api/v1/incidents/:id/responses                → open-text responses for incident
+POST /api/v1/incidents/:id/responses                → submit response (any authenticated)
+GET  /api/v1/team/playbook                          → team playbook state
+PUT  /api/v1/team/playbook                          → save team playbook (any authenticated)
+GET  /api/v1/maps/:id/state                         → map unlock/visited state
+PUT  /api/v1/maps/:id/state                         → update map state (admin only)
+GET  /api/v1/campbell-logs/hints                    → revealed clue spans (no auth)
+PUT  /api/v1/campbell-logs/hints                    → save hints (no auth)
+GET  /api/v1/evidence/visibility                    → revealed evidence items (no auth)
+PUT  /api/v1/evidence/visibility                    → update visibility (no auth)
+GET  /api/v1/dossiers/:id/state                     → dossier state (no auth)
+PUT  /api/v1/dossiers/:id/state                     → save dossier state (no auth)
 ```
 
 **Planned (Phase 3, Workers):**
@@ -423,13 +446,39 @@ GET  /api/v1/handouts?session=S02&visible=true  → revealed handouts (players)
 
 ---
 
-## Auth Strategy (No Passwords)
+## Auth System (Implemented — Phase 2, 2026-03-20)
 
-**Keeper access:** Cloudflare Access with Google SSO. Your Google account is the key. Protects all `/command.html`, `/api/v1/` write endpoints, and keeper pages.
+**How it works:**
+- Username + password → `POST /api/auth/login` → HS256 JWT (30-day expiry)
+- Token stored in `localStorage('portal-auth-token')`; auto-added as `Authorization: Bearer` header by `portalAuth.fetch()`
+- Client decodes JWT payload for UI (no signature check); server verifies signature on every write
 
-**Player access:** URL tokens. Generate a session link like:
-`https://portal-fieldops.pages.dev/session.html?token=rex-s02-a8f3k2`
-Players bookmark it. Same token works across all sessions. Tokens live in `player_tokens` table. If a token leaks, revoke it and send a new link.
+**Key files:**
+- `auth.js` (repo root) — `window.portalAuth` object; login popover + user dropdown injected into `<header>`; loaded dynamically by `player-nav.js`
+- `functions/api/auth/login.js` — POST handler; validates password against `AUTH_PASSWORDS` env secret
+- `functions/api/v1/_auth.js` — shared JWT utilities (`signJWT`, `validateAuth`, `unauthorized`, `forbidden`)
+
+**Environment secrets (set in CF Pages dashboard + `.dev.vars` locally):**
+- `AUTH_PASSWORDS` — JSON string: `{"rex":"pass","alan":"pass",...,"admin":"keeperpass"}`
+- `AUTH_JWT_SECRET` — 64-char hex string (same value on both local and remote)
+
+**Permission matrix:**
+| Resource | Who can write |
+|---|---|
+| `hunter` (arc-state, sheet) | owner (`sub === hunterId`) or admin |
+| `report` (keeper field report) | admin only |
+| `player-reports` | owner (`sub === hunter param`) or admin |
+| `incident` (state, responses) | any authenticated user |
+| `lab` (team playbook) | any authenticated user |
+| `feed` (rolls, messages) | any authenticated; structured handout types = admin only |
+| `maps`, `session/active` | admin only |
+
+**Endpoints NOT auth-gated** (by design — read-only public or keeper-only via keeper.html):
+- `campbell-logs/hints`, `evidence/visibility`, `dossiers/[id]/state` — no auth gating
+
+**Keeper mode trigger change:** hunter pages — double-click on invisible overlay replaced with **5 rapid clicks on `.hero-eyebrow`** (avoids conflict with login button at top-right).
+
+**Local dev:** create `.dev.vars` at repo root (gitignored) with the same env var values as CF dashboard. Restart wrangler after creating/editing it.
 
 ---
 

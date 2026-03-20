@@ -34,12 +34,15 @@
 | `evidence.html` | `tests/evidence.spec.js` | 41 | ✅ |
 | D1 round-trip (hunter sheet, arc, incident, player report, map) | `tests/d1-round-trip.spec.js` | 9 | ✅ |
 | Campaign data integrity (no browser) | `tests/post-session-integrity.spec.js` | 23 | ✅ |
+| Auth system (login UI, player/admin gating, server 401) | `tests/auth.spec.js` | 24 | ✅ |
 
 ## ⬆ Next Up (recommended order)
 
 1. **Hunter D1 restore tests** [M] — arc state restore on reload, XP overflow badge, sheet restore from D1. 3 unchecked items in `hunters.spec.js`.
-2. **Hunter page D1 round-trip for John** [L] — add john to `d1-round-trip.spec.js` once John's sheet is confirmed stable in play.
-3. **`classified` feed type** [L] — client-side only, purely cosmetic, low priority.
+2. **Auth — feed keeper auto-activate** [M] — inject admin token in `feed.spec.js`; verify keeper tabs appear without any click sequence.
+3. **Auth — hunter keeper trigger update** [L] — verify `hunters.spec.js` doesn't reference old `#keeper-trigger` double-click; update to `.hero-eyebrow` 5-click if needed.
+4. **Hunter page D1 round-trip for John** [L] — add john to `d1-round-trip.spec.js` once John's sheet is confirmed stable in play.
+5. **`classified` feed type** [L] — client-side only, purely cosmetic, low priority.
 
 ---
 

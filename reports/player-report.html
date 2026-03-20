@@ -655,7 +655,11 @@
     if (enabled) {
       locked.classList.remove('visible');
       form.classList.add('unlocked');
-      btn.disabled = false;
+      // Only allow save when user has permission for this hunter
+      var auth    = window.portalAuth;
+      var user    = auth ? auth.getUser() : null;
+      var canSave = user ? auth.canWrite('report', currentHunter) : false;
+      btn.disabled = !canSave;
       loadCurrent();
     } else {
       locked.classList.add('visible');
@@ -737,7 +741,9 @@
     btn.disabled = true;
     btn.textContent = '// SAVING…';
 
-    fetch(apiUrl(), { method: 'PUT', body: json, headers: { 'Content-Type': 'application/json' } })
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch(apiUrl(), { method: 'PUT', body: json, headers: { 'Content-Type': 'application/json' } })
       .then(function (r) {
         flash.textContent = r.ok ? '✓ FILED' : '⚠ ERROR';
         flash.classList.add('visible');
@@ -836,6 +842,24 @@
       buildRatings();
       updateSummary();
       loadRecap();
+
+      // Auto-select logged-in player's hunter if none selected yet
+      function tryAutoSelect() {
+        var auth = window.portalAuth;
+        var user = auth ? auth.getUser() : null;
+        if (user && user.role === 'player' && !currentHunter) {
+          selectHunter(user.username);
+        }
+        // Re-evaluate save button permission when auth state is known
+        if (currentWeek && currentHunter) {
+          var btn = document.getElementById('btn-save-bottom');
+          if (btn && !btn.disabled) {
+            if (!auth || !auth.canWrite('report', currentHunter)) btn.disabled = true;
+          }
+        }
+      }
+      tryAutoSelect();
+      window.addEventListener('portalAuthReady', tryAutoSelect, { once: true });
     })
     .catch(function () {
       document.getElementById('week-selector').innerHTML =

@@ -1,3 +1,5 @@
+import { validateAuth, unauthorized, forbidden } from '../_auth.js';
+
 export async function onRequestGet({ env }) {
   const result = await env.portal_db.prepare(
     'SELECT session_id FROM active_session WHERE id = ?'
@@ -9,6 +11,10 @@ export async function onRequestGet({ env }) {
 }
 
 export async function onRequestPut({ env, request }) {
+  const user = await validateAuth(request, env);
+  if (!user) return unauthorized();
+  if (user.role !== 'admin') return forbidden();
+
   const body = await request.text();
   let parsed;
   try { parsed = JSON.parse(body); } catch {

@@ -1570,8 +1570,6 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
   var keeperDataSession = null;   // currently selected session in THREATS tab
   var activeTab      = 'moves';
   var keeperMode          = false;
-  var keeperClicks        = 0;
-  var keeperTimer         = null;
   var keeperViewHunter    = null;
   var keeperTab           = 'operatives';  // 'operatives' | 'contacts' | 'references'
   var keeperSessionFilter = 'S02';         // 'S01' | 'S02' | 'ALL'
@@ -1615,25 +1613,30 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
   var HUNTER_COLORS = { rex: '#f0a500', reed: '#3ab5b0', alan: '#3ab5b0', sven: '#a78bfa', john: '#c8ddd0' };
   var STAT_NAMES    = { charm: 'CHM', cool: 'COL', sharp: 'SHP', tough: 'TGH', weird: 'WRD' };
 
-  // ── KEEPER TOGGLE ─────────────────────────────────────────────────────────
-  document.querySelector('.logo').addEventListener('click', function (e) {
-    e.preventDefault();
-    keeperClicks++;
-    clearTimeout(keeperTimer);
-    keeperTimer = setTimeout(function () { keeperClicks = 0; }, 1500);
-    if (keeperClicks >= 5) {
-      keeperClicks = 0;
-      keeperMode = !keeperMode;
-      document.body.classList.toggle('keeper-active', keeperMode);
-      if (keeperMode) {
-        // Sync keeper tab UI state
-        document.querySelectorAll('.keeper-tab').forEach(function (btn) {
-          btn.classList.toggle('active', btn.dataset.ktab === keeperTab);
-        });
-      }
-      renderPanel();
+  // ── KEEPER MODE — activated by admin login (auth replaces 5× click for the feed) ──
+  function activateKeeperMode() {
+    keeperMode = true;
+    document.body.classList.add('keeper-active');
+    document.querySelectorAll('.keeper-tab').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.ktab === keeperTab);
+    });
+  }
+
+  function applyAuthState() {
+    var auth = window.portalAuth;
+    var user = auth ? auth.getUser() : null;
+    if (user && user.role === 'admin' && !keeperMode) {
+      activateKeeperMode();
     }
-  });
+    // Auto-select the logged-in player's hunter if none is selected
+    if (user && user.role === 'player' && !hunterId) {
+      var sel = document.getElementById('hunter-select');
+      if (sel && user.username) {
+        sel.value = user.username;
+        window.onHunterChange(user.username);
+      }
+    }
+  }
 
   // ── HUNTER SELECTION ─────────────────────────────────────────────────────
   try {
@@ -1839,8 +1842,17 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     return html;
   }
 
+  function _canEditTracker() {
+    var auth = window.portalAuth;
+    var user = auth ? auth.getUser() : null;
+    if (!user) return false;
+    if (user.role === 'admin') return true;
+    return user.username === hunterId;
+  }
+
   window.setTrack = function (name, pipIndex) {
     if (!hunterId || !hunterSheet) return;
+    if (!_canEditTracker()) return;
     var current = hunterSheet[name] || 0;
     hunterSheet[name] = current > pipIndex ? pipIndex : pipIndex + 1;
     sheetDirty = true;
@@ -1849,6 +1861,7 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
 
   window.bumpTrack = function (name) {
     if (!hunterId || !hunterSheet) return;
+    if (!_canEditTracker()) return;
     hunterSheet[name] = (hunterSheet[name] || 0) + 1;
     sheetDirty = true;
     renderMovesPanel();
@@ -1857,7 +1870,9 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
   function saveSheet() {
     if (!hunterId || !hunterSheet || !sheetDirty) return;
     sheetDirty = false; // clear before fetch; re-set on failure
-    fetch('/api/v1/hunters/' + hunterId + '/sheet', {
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/hunters/' + hunterId + '/sheet', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(hunterSheet)
@@ -2004,7 +2019,9 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
 
       // POST to D1
       var session = getCurrentSession();
-      fetch('/api/v1/rolls', {
+      var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+        ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+      authFetch('/api/v1/rolls', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -2318,7 +2335,9 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     if (activeTab === 'handouts') renderHandoutsPanel();
 
     // Also delete from D1 in background (ensures cleared state survives reload)
-    fetch('/api/v1/messages?session_id=' + encodeURIComponent(sess.session_key), {
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/messages?session_id=' + encodeURIComponent(sess.session_key), {
       method: 'DELETE'
     }).then(function (r) { return r.json(); })
       .catch(function (err) { console.error('clearSessionHandouts D1 delete failed', err); });
@@ -2341,7 +2360,9 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     if (!label) { var el = document.getElementById('qs-label'); if (el) el.focus(); return; }
     var sess = session_cache[keeperHandoutSession] || null;
     var payload = { label: label, sublabel: sublabel, status: status, reading: reading, reading_display: reading, note: note || null };
-    fetch('/api/v1/messages', {
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -2369,7 +2390,9 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     if (!h) return;
     var bodyText = h.text || h.body || h.label ||
       (h.type === 'linecard' ? '[LINECARD — ' + (h.character || '?') + ' → ' + (h.recipient || '?') + ']' : '');
-    fetch('/api/v1/messages', {
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -2904,7 +2927,9 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     var body   = msgEl.value.trim();
     if (!body) return;
 
-    fetch('/api/v1/messages', {
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ sender: name, body: body, session_id: getCurrentSession() })
@@ -2932,7 +2957,9 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
       container.removeChild(container.lastChild);
     }
     // Post clear sentinel — other clients wipe on next poll; reloads start fresh
-    fetch('/api/v1/messages', {
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ sender: 'KEEPER', body: '// FEED CLEARED', type: 'clear', session_id: getCurrentSession() })
@@ -2946,10 +2973,12 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     var sender = document.getElementById('msg-sender').value;
     var body   = document.getElementById('msg-body').value.trim();
     if (!body) return;
-    fetch('/api/v1/messages', {
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sender: sender, body: body, session_id: getCurrentSession() })
+      body: JSON.stringify({ sender: sender, body: body, session_id: getCurrentSession(), type: 'message' })
     }).then(function (r) { return r.json(); })
       .then(function (data) {
         if (data.id) {
@@ -3516,6 +3545,14 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
 
   // ── BOOT ──────────────────────────────────────────────────────────────────
   loadStaticData().then(function () {
+    // Apply auth state (keeper mode or player auto-select).
+    // portalAuth is loaded async from player-nav.js; use event fallback.
+    if (window.portalAuth) {
+      applyAuthState();
+    } else {
+      window.addEventListener('portalAuthReady', applyAuthState, { once: true });
+    }
+
     if (hunterId) {
       loadHunterSheet(hunterId).then(function () {
         renderPanel();
@@ -3535,7 +3572,9 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
   }
 
   function _saveMapState(mapId) {
-    fetch('/api/v1/maps/' + mapId + '/state', {
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/maps/' + mapId + '/state', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(mapState)

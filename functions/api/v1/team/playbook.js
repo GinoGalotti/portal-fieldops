@@ -1,3 +1,5 @@
+import { validateAuth, unauthorized } from '../_auth.js';
+
 export async function onRequestGet({ env }) {
   const result = await env.portal_db.prepare(
     'SELECT state FROM team_state WHERE key = ?'
@@ -9,8 +11,10 @@ export async function onRequestGet({ env }) {
 }
 
 export async function onRequestPut({ env, request }) {
-  const body = await request.text();
+  const user = await validateAuth(request, env);
+  if (!user) return unauthorized();
 
+  const body = await request.text();
   try { JSON.parse(body); } catch {
     return new Response('{"error":"invalid JSON"}', { status: 400, headers: { 'Content-Type': 'application/json' } });
   }
