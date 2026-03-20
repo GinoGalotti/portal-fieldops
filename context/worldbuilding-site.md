@@ -182,7 +182,7 @@ Both report pages (`missions/report.html` and `reports/player-report.html`) rend
 
 ### Navigation Conventions
 
-**Player nav links (in order, 13 items):** Briefing · Operatives · Bestiary · The Lab · Logs · Artefacts · Missions · Evidence · Contacts · Report · Queue · Incidents · **Feed**. Injected by `player-nav.js` into `#player-nav`. The script handles base-path from any subdirectory (`missions/`, `hunters/`, `reports/`). Never link to keeper pages from player nav. `contacts.html` is at the repo root (not inside `missions/`). At ≤640px the hamburger (≡) activates and collapses the nav to a full-width dropdown.
+**Player nav links (in order, 12 items):** Briefing · Operatives · Bestiary · Logs · Artefacts · Missions · Evidence · Contacts · Report · Queue · Incidents · **Feed**. Injected by `player-nav.js` into `#player-nav`. The script handles base-path from any subdirectory (`missions/`, `hunters/`, `reports/`). Never link to keeper pages from player nav. `contacts.html` is at the repo root (not inside `missions/`). At ≤900px the hamburger (≡) activates and collapses the nav to a full-width dropdown.
 
 **Keeper pages:** Must open with `<div class="keeper-banner">KEEPER ACCESS ONLY — DO NOT SHARE THIS URL WITH PLAYERS</div>` as the first element in `<body>`. Nav links: Player Site → `../index.html`, Keeper Index → `keeper.html`.
 
