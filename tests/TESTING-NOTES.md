@@ -11,33 +11,35 @@
 
 | Page | File | Tests | Status |
 |------|------|-------|--------|
-| `lab-incidents.html` | `tests/incidents.spec.js` | 20 | ✅ |
-| `contacts.html` | `tests/contacts.spec.js` | 7 | ✅ |
 | All key pages | `tests/smoke.spec.js` | 5 | ✅ |
 | Nav injection + hamburger + 404 checks | `tests/nav.spec.js` | 32 | ✅ |
-| `feed.html` | `tests/feed.spec.js` | 53 | ✅ |
-| `index.html` bestiary | `tests/bestiary.spec.js` | 15 | ✅ |
+| `contacts.html` | `tests/contacts.spec.js` | 7 | ✅ |
+| `lab-incidents.html` | `tests/incidents.spec.js` | 41 | ✅ |
+| `feed.html` (feed entries, handout types, keeper tabs) | `tests/feed.spec.js` | 53 | ✅ |
+| `feed.html` MAP tab (grid + connection, player + keeper) | `tests/map.spec.js` | 38 | ✅ |
+| `index.html` bestiary (session-gated) | `tests/bestiary.spec.js` | 15 | ✅ |
+| `index.html` artefacts (session-gated) | `tests/artefacts.spec.js` | 15 | ✅ |
+| `index.html` session gating | `tests/index-session.spec.js` | 16 | ✅ |
 | `missions/arcs.html` | `tests/arcs.spec.js` | 24 | ✅ |
 | `missions/entities.html` | `tests/entities.spec.js` | 36 | ✅ |
-| `hunters/*.html` | `tests/hunters.spec.js` | 29 | ✅ |
+| `missions/missions.html` | `tests/missions.spec.js` | 23 | ✅ |
+| `missions/campbell-briefings.html` | `tests/briefings.spec.js` | 12 | ✅ |
 | `missions/threads.html` (threads, clocks, prep export) | `tests/threads.spec.js` | 30 | ✅ |
-| `missions/campbell-briefings.html` | `tests/briefings.spec.js` | ~12 | ✅ |
-| `reports/player-report.html` | `tests/player-report.spec.js` | ~15 | ✅ |
-| D1 round-trip (hunter sheet, arc, incident, player report, map, messages, rolls) | `tests/d1-round-trip.spec.js` | 9 | ✅ |
-| `feed.html` MAP tab (player + keeper) | `tests/map.spec.js` | 24 | ✅ |
 | `missions/report.html` | `tests/report.spec.js` | 15 | ✅ |
-| Campaign data integrity (no browser) | `tests/post-session-integrity.spec.js` | 23 | ✅ |
-| `campbell-logs.html` | `tests/campbell-logs.spec.js` | 37 | ✅ |
+| `hunters/*.html` | `tests/hunters.spec.js` | 29 | ✅ |
+| `reports/player-report.html` | `tests/player-report.spec.js` | 29 | ✅ |
 | `reports/keeper-review.html` | `tests/keeper-review.spec.js` | 11 | ✅ |
+| `the-lab.html` | `tests/lab.spec.js` | 20 | ✅ |
+| `campbell-logs.html` | `tests/campbell-logs.spec.js` | 37 | ✅ |
 | `evidence.html` | `tests/evidence.spec.js` | 41 | ✅ |
+| D1 round-trip (hunter sheet, arc, incident, player report, map) | `tests/d1-round-trip.spec.js` | 9 | ✅ |
+| Campaign data integrity (no browser) | `tests/post-session-integrity.spec.js` | 23 | ✅ |
 
 ## ⬆ Next Up (recommended order)
 
-1. **Hunter page D1 round-trip for John** [L] — add john to `d1-round-trip.spec.js` once John's sheet is confirmed stable in play.
-2. **`readaloud` + `document` feed types** — covered (feed.spec.js 53 tests). `classified` still untested (client-side only, low priority).
-3. **keeper-review.html** — smoke + logic covered (keeper-review.spec.js 11 tests).
-4. **campbell-logs clue persistence** — pre-revealed D1 load covered (2 new tests in campbell-logs.spec.js).
-5. **d1-round-trip flakiness** — fixed with `retries: 1` in playwright.config.js.
+1. **Hunter D1 restore tests** [M] — arc state restore on reload, XP overflow badge, sheet restore from D1. 3 unchecked items in `hunters.spec.js`.
+2. **Hunter page D1 round-trip for John** [L] — add john to `d1-round-trip.spec.js` once John's sheet is confirmed stable in play.
+3. **`classified` feed type** [L] — client-side only, purely cosmetic, low priority.
 
 ---
 
@@ -166,22 +168,6 @@ The `playwright.config.js` has `reuseExistingServer: true` — if `wrangler page
 
 `link` field added to both CAMPBELL-LOG teaser items in `incidents.json`; `renderTeaser()` in `lab-incidents.html` conditionally renders `.log-full-link a`; tested in incidents.spec.js (W2 + W3 VIEW FULL LOGS assertions).
 
+### ~~`feed.html` click-expand behaviour~~ — ✅ DONE
 
-
-Things not yet built, noted here so they don't get lost.
-
-### `feed.html` — Move card / feed entry expand behaviour [UX]
-
-**Current:** move cards in the MOVES panel and roll entries in the feed expand (show description/outcome detail) on hover (`CSS :hover` with `opacity` + `max-height` transition).
-
-**Desired default:** expand on **click** instead — feels more intentional during play, less noisy.
-
-**Feature flag:** `?mouseover=true` in the URL restores hover behaviour for A/B testing with players.
-
-**Implementation notes:**
-- Read `new URLSearchParams(location.search).get('mouseover')` on boot; store as a boolean `hoverMode`
-- If `hoverMode` is false (default): add a click listener to each `.feed-entry` / move card that toggles an `.expanded` class; CSS `:hover` rule replaced by `.expanded` rule
-- If `hoverMode` is true: keep current CSS hover behaviour as-is
-- Both modes should work for: move cards in MOVES panel, roll entries in feed, outcome detail blocks
-- **Decided UX:** click toggles expand/collapse; multiple entries can be open simultaneously; clicking the ROLL button on a move card does NOT collapse it
-- Tests to add once implemented: click to expand, click again to collapse, two entries can both be open, ROLL button click doesn't collapse card, `?mouseover=true` restores hover behaviour
+Feed entries and move cards expand on click (`.expanded` toggle). `?mouseover=true` URL flag restores CSS `:hover` behaviour. Tested in feed.spec.js.

@@ -91,7 +91,7 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 ## NEXT UP
 
-541 tests passing across 20 files. Suite: `smoke` (5) · `nav` (22) · `contacts` (7) · `incidents` (18) · `feed` (29) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (19) · `briefings` (12) · `player-report` (29) · `d1-round-trip` (9) · `map` (38) · `report` (15) · `index-session` (16) · `evidence` (41) · `threads` (20+).
+591 tests passing across 23 files. Suite: `smoke` (5) · `nav` (32) · `contacts` (7) · `incidents` (41) · `feed` (53) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (29) · `briefings` (12) · `player-report` (29) · `d1-round-trip` (9) · `map` (38) · `report` (15) · `index-session` (16) · `evidence` (41) · `threads` (30) · `campbell-logs` (37) · `keeper-review` (11) · `post-session-integrity` (23).
 
 ---
 
@@ -100,74 +100,23 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 ### ~~Campaign thread + clock tracker~~ — ✅ DONE (2026-03-14)
 `missions/threads.html`, `data/portal-threads.json`, `data/portal-clocks.json` all built and tested.
 
-### ~~Playbook data architecture refactor~~ — ✅ DONE (2026-03-14)
+### ~~Playbook data architecture refactor (phase 1)~~ — ✅ DONE (2026-03-14)
 
-**Completed:** `playbook-moves.json` 42 campaign-hunter moves now have `playbook` populated; `feed.html` filters by `playbook` via `hunters.json` lookup with `hunter` fallback. See RECENTLY DONE above.
+`playbook-moves.json` 42 campaign-hunter moves now have `playbook` populated; `feed.html` filters by `playbook` via `hunters.json` lookup with `hunter` fallback.
 
-~~**Problem:** `playbook-moves.json` has moves keyed to specific hunters (rex, alan, reed, sven) rather than to playbooks (Action Scientist, Sidekick, etc.). Meanwhile `motw-playbooks.json` has 5 playbooks (action-scientist, sidekick, changeling, monstrous, flake) with full reference data. These two layers don't connect cleanly.~~
-
-**Current state:**
-- `motw-playbooks.json` — 5 playbooks from the book: full stat options, moves list, gear, improvements, `"hunter": "rex"` field tying it to a specific campaign hunter
-- `playbook-moves.json` — 34 moves keyed by `data-check-key`, each with `"hunter": "rex"` etc. — hunter-specific, not playbook-generic
-- `hunters.json` — 5 hunters with identity data, each references a playbook implicitly
-
-**The problem in practice:** When John Johnson (Flake playbook) needs a hunter page, his moves aren't in `playbook-moves.json`. You'd have to add them manually. If another group wanted to use the site, every hunter would need manual move entries.
-
-**Proposed two-layer architecture:**
-
-*Layer 1 — Reference (playbook-generic):*
-- `motw-playbooks.json` — already exists, keep as canonical playbook definitions. Remove `"hunter"` field (it's campaign-specific, not book data). Each playbook has `id`, `name`, `moves[]` with full text.
-- `playbook-moves.json` — refactor to be playbook-keyed, not hunter-keyed. Each move entry: `playbook_id`, `move_id`, `name`, `roll`, `description`. The `data-check-key` becomes `{playbook_id}-{move_id}`.
-
-*Layer 2 — Campaign (hunter-specific):*
-- `hunters.json` — add `playbook_id` field linking each hunter to their playbook. Already has `"hunter": "rex"` → `"playbook_id": "action-scientist"`.
-- D1 `hunter_sheets` — unchanged. Stores which move keys are checked (`checks{}`), plus stats/harm/luck/xp.
-
-*How hunter pages work after refactor:*
-1. Load hunter identity from `hunters.json` → get `playbook_id`
-2. Load playbook definition from `motw-playbooks.json` by `playbook_id` → get move list
-3. Load sheet state from D1 → get which moves are checked
-4. Render only checked moves as active cards in the panel (same as now, different data path)
-
-**Adding John Johnson (Flake):**
-- Flake playbook already exists in `motw-playbooks.json`
-- Add John to `hunters.json` with `"playbook_id": "flake"`
-- Create `hunters/john.html` pointing to `hunters/hunter.js`
-- Flake moves render automatically — no manual move entries needed
-
-**Scope:** `data/hunters.json`, `data/playbook-moves.json`, `data/motw-playbooks.json`, `hunters/hunter.js` (move lookup path), `feed.html` (move card render), tests.
-
-**Why this matters beyond John Johnson:** Makes the site genuinely reusable for any MoTW group. The reference layer is the book data; the campaign layer is your group's choices. Clean separation.
-
-**Reference data is now available** (2026-03-13 migration complete):
-- `motw-playbooks.json` — 24 playbooks (4 PORTAL + 20 generic, including Flake)
-- `playbook-moves.json` — 177 moves across all playbooks; `always_active_moves` preserved
-- `motw-playbook-arcs.json` — 33 playbooks × 2 arcs including Flake arcs
-- `motw-teambooks.json` — all 9 team playbooks
-
-The refactor above is now unblocked. All reference data exists; it's just a matter of connecting the layers.
+**Future enhancement (non-urgent):** full refactor to playbook-keyed moves so any new hunter with an existing MoTW playbook needs no manual move entries. Only matters when adding a 6th hunter whose playbook isn't already in `playbook-moves.json`. All reference data exists (`motw-playbooks.json`, `motw-playbook-arcs.json`) — it's a data-path change in `hunter.js` + `feed.html` when needed.
 
 ---
 
 ### ~~Adding John Johnson (Flake)~~ — ✅ DONE
 
-### Connection map rendering — feed.html — HIGH (S03 prerequisite)
+### ~~Connection map rendering — feed.html~~ — ✅ DONE (2026-03-18)
 
-S03 uses a connection map (investigation board) instead of the Aldermoor spatial grid. Data is in `portal-maps.json` as a `connection_maps[]` entry with `type: "connection"`.
-
-**What needs building:**
-- `feed.html` player MAP tab: detect `type: "connection"` vs `"grid"` from the loaded map data, render nodes-and-edges layout (SVG or CSS flexbox) instead of the grid matrix
-- Player view: nodes showing `label`, `sublabel`, `player_desc`; connection threads between them; unlocked/locked state per node
-- Keeper view: same + `keeper_note` per node, route badges (A/B/C), NPC pills, visited state, bulk actions
-- State schema for connection maps: probably same `{ u: { node_id: true }, v: { node_id: true } }` as grid maps — D1 `map_state` table already supports any map id
-- Mission selector in MAP tab should offer both grid and connection maps (M02 = grid, M03 = connection)
-
-**Data:** `data/portal-maps.json` `connection_maps[]` — 7 nodes + 11 edges for M03 theatre investigation
-
-**Design reference:** `s03-map-description.md` (deleted after integration; content in portal-maps.json nodes/edges)
+Player + keeper connection map tab for M03 theatre investigation board. See RECENTLY DONE above.
 
 ---
 
-### Minor / polish
-- ~~John Johnson hunter page~~ — ✅ DONE. `hunters/john.html`, arcs in `hunter-arcs.json`, Flake moves wired via playbook field.
-- Nav breakpoint — hamburger at ≤640px doesn't help intermediate widths (~641–900px) where 13 items overflow. Fix: raise media query to ~900px.
+### ~~Minor / polish~~ — ✅ ALL DONE
+- ~~John Johnson hunter page~~ — `hunters/john.html`, arcs in `hunter-arcs.json`, Flake moves wired.
+- ~~Nav breakpoint~~ — raised to 900px, hamburger shows at ≤900px.
+- ~~The Lab removed from player nav~~ — lab lore + team playbook link remain on `index.html` after `#operatives`.
