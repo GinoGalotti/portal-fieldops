@@ -1,3 +1,4 @@
+// portal-fieldops — Cloudflare Pages config
 {
   "name": "portal-fieldops",
   "pages_build_output_dir": ".",
