@@ -105,16 +105,15 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 
 ## NEXT UP
 
-### Auth — feed keeper mode auto-activate for admin [LOW]
-- `feed.html` keeper mode (6 tabs) currently activates via `applyAuthState()` when role === 'admin', but the old 5-click logo trigger was removed. Verify the auth-based auto-activate path works end to end in a live session (requires real auth token with admin role).
-- Add to `tests/feed.spec.js`: inject admin token → verify keeper tabs auto-appear without 5-click.
+### ~~Auth — feed keeper mode auto-activate for admin~~ — ✅ DONE (2026-03-21)
+- `tests/feed.spec.js` — added `injectAdminToken()` helper (base64url-encoded JWT, no real server needed); updated all keeper-mode tests to use JWT injection instead of 5-click logo. Deleted obsolete "keeper mode activates after 5 logo clicks" test. 53 feed tests all pass.
 
 ### Auth — token revocation [OPTIONAL / LOW]
 - Current logout is client-side only (removes token from localStorage). Server has no blacklist — a stolen token remains valid until expiry (30 days).
 - If ever needed: add a `revoked_tokens` table in D1; `validateAuth` checks it; add `POST /api/auth/logout` endpoint that writes to D1. Not critical for a small private campaign site.
 
-### Hunter tests — keeper trigger update [LOW]
-- `tests/hunters.spec.js` may have tests that double-click the old `#keeper-trigger` overlay. Check and update to use `.hero-eyebrow` 5-click if so.
+### ~~Hunter tests — keeper trigger update~~ — ✅ DONE (2026-03-21)
+- Verified `tests/hunters.spec.js` has no `#keeper-trigger` or `dblclick` references. Already clean — no changes needed.
 
 ### ~~Hunter page — harm status marker + pending improvements counter~~ — ✅ DONE (2026-03-21)
 - `hunters/hunter.js` — `injectHarmStatusUI()` + `updateHarmStatus()` appended to harm track row; `injectPendingImprovementsUI()` inserted after XP row. XP overflow: fill last pip → reset to 0 + increment `pendingImprovements`. `−` button spends. All serialised in D1 sheet state as `pendingImprovements`. Both called at boot, wired into `applySheet`, `resetAll`, auth gating.

@@ -133,6 +133,21 @@ const MOCK_DOCUMENT = {
 
 // ── ROUTE HELPER ─────────────────────────────────────────────────────────────
 
+// Injects a fake admin JWT into localStorage before page load.
+// auth.js decodes the payload client-side (no signature verification), so any
+// base64url-encoded payload with role:'admin' and a future exp activates keeper mode.
+async function injectAdminToken(page) {
+  await page.addInitScript(() => {
+    var header  = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
+      .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    var payload = btoa(JSON.stringify({
+      sub: 'admin', role: 'admin', display: 'Keeper',
+      iat: 1700000000, exp: 9999999999,
+    })).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    localStorage.setItem('portal-auth-token', header + '.' + payload + '.fakesig');
+  });
+}
+
 // Intercepts all D1-backed API calls. Static files (/data/*.json) pass through.
 // rolls / messages — configurable response arrays (DESC order, as the API returns).
 async function mockFeedApis(page, { rolls = [], messages = [] } = {}) {
@@ -288,24 +303,36 @@ test.describe('feed.html — expand/collapse on click', () => {
 
 test.describe('feed.html — keeper mode', () => {
 
-  test('keeper mode activates after 5 logo clicks', async ({ page }) => {
+  test('admin JWT token auto-activates keeper mode without logo clicks', async ({ page }) => {
+    // Inject a structurally valid admin token before the page loads.
+    // auth.js decodes the JWT payload client-side (no signature verification),
+    // so any base64url-encoded payload with role:'admin' and a future exp works.
+    await page.addInitScript(() => {
+      var header  = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+      var payload = btoa(JSON.stringify({
+        sub: 'admin', role: 'admin', display: 'Keeper',
+        iat: 1700000000, exp: 9999999999,
+      })).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+      localStorage.setItem('portal-auth-token', header + '.' + payload + '.fakesig');
+    });
+
     await mockFeedApis(page);
     await page.goto('/feed.html');
-    // isKeeperMode is false by default; keeper tabs are hidden.
-    await expect(page.locator('.keeper-tab').first()).not.toBeVisible();
-    const logo = page.locator('.logo');
-    for (let i = 0; i < 5; i++) await logo.click();
-    // After the 5th click, keeper tabs replace player tabs.
-    await expect(page.locator('.keeper-tab').first()).toBeVisible();
+    await page.waitForLoadState('networkidle');
+
+    // applyAuthState() is called once auth.js fires portalAuthReady.
+    // Admin role triggers activateKeeperMode() — no logo clicks required.
+    await expect(page.locator('.keeper-tab').first()).toBeVisible({ timeout: 5000 });
   });
 
   test('keeper HANDOUTS tab is present and clickable in keeper mode', async ({ page }) => {
+    await injectAdminToken(page);
     await mockFeedApis(page);
     await page.goto('/feed.html');
-    const logo = page.locator('.logo');
-    for (let i = 0; i < 5; i++) await logo.click();
+    await page.waitForLoadState('networkidle');
     const handoutsTab = page.locator('[data-ktab="handouts"]');
-    await expect(handoutsTab).toBeVisible();
+    await expect(handoutsTab).toBeVisible({ timeout: 5000 });
     await handoutsTab.click();
     // sessions/index.json + per-session file are real static files — wait for them to load and render.
     await page.waitForSelector('.handout-list');
@@ -313,10 +340,10 @@ test.describe('feed.html — keeper mode', () => {
   });
 
   test('keeper handout list shows POST buttons for S02 session', async ({ page }) => {
+    await injectAdminToken(page);
     await mockFeedApis(page);
     await page.goto('/feed.html');
-    const logo = page.locator('.logo');
-    for (let i = 0; i < 5; i++) await logo.click();
+    await page.waitForLoadState('networkidle');
     await page.locator('[data-ktab="handouts"]').click();
     await page.waitForSelector('.handout-list');
     // Every non-map handout should have a ▶ POST button by default (none posted yet).
@@ -347,10 +374,10 @@ test.describe('feed.html — clear handouts', () => {
         's02-img-01': '12:00',
       }));
     });
+    await injectAdminToken(page);
     await mockFeedApis(page);
     await page.goto('/feed.html');
-    const logo = page.locator('.logo');
-    for (let i = 0; i < 5; i++) await logo.click();
+    await page.waitForLoadState('networkidle');
     await page.locator('[data-ktab="handouts"]').click();
     await page.waitForSelector('.handout-list');
     // Default session is now M03 (last). Switch to M02 where the pre-seeded
@@ -379,6 +406,7 @@ test.describe('feed.html — clear handouts', () => {
         's02-img-01': '12:00',
       }));
     });
+    await injectAdminToken(page);
     const IMG_ENTRY = {
       id: 20,
       type: 'image',
@@ -397,9 +425,7 @@ test.describe('feed.html — clear handouts', () => {
     // Confirm image entry is in the feed before clearing.
     await expect(page.locator('.feed-image')).toBeVisible();
 
-    // Activate keeper mode and clear handouts for S02.
-    const logo = page.locator('.logo');
-    for (let i = 0; i < 5; i++) await logo.click();
+    // Open keeper HANDOUTS tab and clear.
     await page.locator('[data-ktab="handouts"]').click();
     await page.waitForSelector('.handout-clear-btn');
     await page.locator('.handout-clear-btn').click();
@@ -421,14 +447,12 @@ test.describe('feed.html — clear handouts', () => {
 test.describe('feed.html — clear feed', () => {
 
   test('clear feed view removes all entries from DOM immediately', async ({ page }) => {
+    await injectAdminToken(page);
     await mockFeedApis(page, { rolls: [MOCK_ROLL], messages: [MOCK_MSG] });
     await page.goto('/feed.html');
     await page.waitForSelector('.feed-entry');
     await expect(page.locator('.feed-entry').first()).toBeVisible();
-
-    // Activate keeper mode.
-    const logo = page.locator('.logo');
-    for (let i = 0; i < 5; i++) await logo.click();
+    await expect(page.locator('.keeper-tab').first()).toBeVisible({ timeout: 5000 });
 
     // Click CLEAR FEED VIEW (in the OPERATIVES tab controls).
     await page.locator('button:has-text("CLEAR FEED VIEW")').click();
@@ -800,12 +824,10 @@ test.describe('feed.html — handout coexistence', () => {
     });
     await page.route('**/api/v1/hunters/**', route => route.fulfill({ json: null }));
 
+    await injectAdminToken(page);
     await page.clock.install();
     await page.goto('/feed.html');
-
-    // Enter keeper mode (5× logo click)
-    const logo = page.locator('.logo');
-    for (let i = 0; i < 5; i++) await logo.click();
+    await expect(page.locator('.keeper-tab').first()).toBeVisible({ timeout: 5000 });
 
     // Open keeper HANDOUTS tab and wait for the handout list
     await page.locator('[data-ktab="handouts"]').click();
@@ -964,13 +986,11 @@ test.describe('feed.html — linecards', () => {
     });
     await page.route('**/api/v1/hunters/**', r => r.fulfill({ json: null }));
 
+    await injectAdminToken(page);
     await page.goto('/feed.html');
     await page.waitForLoadState('networkidle');
-
-    // Activate keeper mode before the poll fires
-    const logo = page.locator('.logo');
-    for (let i = 0; i < 5; i++) await logo.click();
-    await expect(page.locator('.keeper-tab').first()).toBeVisible();
+    // Keeper mode auto-activates via admin JWT before the poll fires
+    await expect(page.locator('.keeper-tab').first()).toBeVisible({ timeout: 5000 });
 
     // Advance past the poll interval — linecard arrives and is rendered in keeper mode
     await page.clock.runFor(7000);
@@ -989,12 +1009,12 @@ test.describe('feed.html — linecards', () => {
 test.describe('feed.html — keeper tabs', () => {
 
   async function activateKeeper(page) {
-    const logo = page.locator('.logo');
-    for (let i = 0; i < 5; i++) await logo.click();
-    await expect(page.locator('.keeper-tab').first()).toBeVisible();
+    // Keeper mode is activated automatically via admin JWT (injected before goto).
+    await expect(page.locator('.keeper-tab').first()).toBeVisible({ timeout: 5000 });
   }
 
   test('CONTACTS tab shows NPC rows with visibility buttons', async ({ page }) => {
+    await injectAdminToken(page);
     await mockFeedApis(page);
     await page.goto('/feed.html');
     await page.waitForLoadState('networkidle');
@@ -1007,6 +1027,7 @@ test.describe('feed.html — keeper tabs', () => {
   });
 
   test('CONTACTS tab shows session filter pills', async ({ page }) => {
+    await injectAdminToken(page);
     await mockFeedApis(page);
     await page.goto('/feed.html');
     await page.waitForLoadState('networkidle');
@@ -1018,6 +1039,7 @@ test.describe('feed.html — keeper tabs', () => {
   });
 
   test('REFERENCES tab shows roll outcomes section', async ({ page }) => {
+    await injectAdminToken(page);
     await mockFeedApis(page);
     await page.goto('/feed.html');
     await activateKeeper(page);
@@ -1027,6 +1049,7 @@ test.describe('feed.html — keeper tabs', () => {
   });
 
   test('REFERENCES tab shows 13+ advanced success threshold', async ({ page }) => {
+    await injectAdminToken(page);
     await mockFeedApis(page);
     await page.goto('/feed.html');
     await activateKeeper(page);
@@ -1035,6 +1058,7 @@ test.describe('feed.html — keeper tabs', () => {
   });
 
   test('THREATS tab shows session selector with all sessions', async ({ page }) => {
+    await injectAdminToken(page);
     await mockFeedApis(page);
     await page.goto('/feed.html');
     await page.waitForLoadState('networkidle');
@@ -1048,6 +1072,7 @@ test.describe('feed.html — keeper tabs', () => {
   });
 
   test('THREATS tab renders entity data for selected session', async ({ page }) => {
+    await injectAdminToken(page);
     await mockFeedApis(page);
     await page.goto('/feed.html');
     await page.waitForLoadState('networkidle');
