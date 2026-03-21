@@ -116,12 +116,11 @@ Prioritised pending work. Update as tasks are completed or reprioritised.
 ### Hunter tests — keeper trigger update [LOW]
 - `tests/hunters.spec.js` may have tests that double-click the old `#keeper-trigger` overlay. Check and update to use `.hero-eyebrow` 5-click if so.
 
-### Hunter page — harm status marker + pending improvements counter
-- **Harm status**: dynamic label inline with harm pips. 0–2 = `// OKAY` (green-dim), 3–6 = `// UNSTABLE` (amber), 7 = `// DYING` (red). Injected by `hunter.js` via `injectHarmStatusUI()` + `updateHarmStatus()`. No HTML edits needed — all 5 hunter pages covered.
-- **Pending improvements**: when XP fills to 5, auto-reset to 0 and increment a counter. Amber counter bar below XP track row; `−` button to spend when player picks an improvement. Persisted in D1 sheet state as `pendingImprovements`. Injected by `hunter.js` via `injectPendingImprovementsUI()` + `updatePendingImprovementsUI()`.
-- Files: `hunters/hunter.js` (pip click handler, serialise/apply, inject/update fns, resetAll, auth gating) + `hunters/hunter.css` (`.harm-status`, `.pending-improvements`).
+### ~~Hunter page — harm status marker + pending improvements counter~~ — ✅ DONE (2026-03-21)
+- `hunters/hunter.js` — `injectHarmStatusUI()` + `updateHarmStatus()` appended to harm track row; `injectPendingImprovementsUI()` inserted after XP row. XP overflow: fill last pip → reset to 0 + increment `pendingImprovements`. `−` button spends. All serialised in D1 sheet state as `pendingImprovements`. Both called at boot, wired into `applySheet`, `resetAll`, auth gating.
+- `hunters/hunter.css` — `.harm-status` (`.okay`/`.unstable`/`.dying`) + `.pending-improvements` amber bar + `.pi-label`/`.pi-count`/`.pi-use-btn`.
 
-591 tests passing across 23 files. Suite: `smoke` (5) · `nav` (32) · `contacts` (7) · `incidents` (41) · `feed` (53) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (29) · `briefings` (12) · `player-report` (29) · `d1-round-trip` (9) · `map` (38) · `report` (15) · `index-session` (16) · `evidence` (41) · `threads` (30) · `campbell-logs` (37) · `keeper-review` (11) · `post-session-integrity` (23).
+615 tests passing across 24 files. Suite: `smoke` (5) · `nav` (32) · `contacts` (7) · `incidents` (41) · `feed` (53) · `bestiary` (15) · `arcs` (24) · `artefacts` (15) · `missions` (23) · `lab` (20) · `entities` (36) · `hunters` (29) · `briefings` (12) · `player-report` (29) · `d1-round-trip` (9) · `map` (38) · `report` (15) · `index-session` (16) · `evidence` (41) · `threads` (30) · `campbell-logs` (37) · `keeper-review` (11) · `post-session-integrity` (23) · `auth` (24).
 
 ---
 
