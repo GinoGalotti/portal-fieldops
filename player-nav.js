@@ -11,18 +11,22 @@
   var dir   = parts[parts.length - 2] || '';
 
   // Base paths relative to current directory
-  var b = (dir === 'missions' || dir === 'hunters') ? '../' : '';
+  var b = (dir === 'missions' || dir === 'hunters' || dir === 'reports') ? '../' : '';
   var m = b + 'missions/';
 
   var items = [
     { label: 'Briefing',   href: b + 'index.html#sessions' },
     { label: 'Operatives', href: b + 'index.html#operatives' },
     { label: 'Bestiary',   href: b + 'index.html#bestiary' },
-    { label: 'The Lab',    href: b + 'index.html#lab' },
+    { label: 'Logs',       href: b + 'campbell-logs.html',      match: 'campbell-logs.html' },
     { label: 'Artefacts',  href: b + 'index.html#artefacts' },
     { label: 'Missions',   href: m + 'missions.html',  match: 'missions.html' },
-    { label: 'Contacts',   href: m + 'contacts.html',  match: 'contacts.html' },
-    { label: 'Queue',      href: m + '01-portal-campbell-briefings.html', match: '01-portal-campbell-briefings.html' },
+    { label: 'Evidence',   href: b + 'evidence.html',   match: 'evidence.html' },
+    { label: 'Contacts',   href: b + 'contacts.html',   match: 'contacts.html' },
+    { label: 'Report',     href: b + 'reports/player-report.html',    match: 'player-report.html' },
+    { label: 'Queue',      href: m + 'campbell-briefings.html',        match: 'campbell-briefings.html' },
+    { label: 'Incidents',  href: b + 'lab-incidents.html',             match: 'lab-incidents.html' },
+    { label: 'Feed',       href: b + 'feed.html',       match: 'feed.html' },
   ];
 
   // Status dot
@@ -73,4 +77,23 @@
       toggle.textContent = '≡';
     }
   });
+
+  // Load auth module (auth.js lives next to player-nav.js)
+  var authScr = document.createElement('script');
+  authScr.src = b + 'auth.js';
+  document.head.appendChild(authScr);
+
+  // Site credit footer — deferred so it always lands at end of body
+  // even when this script runs synchronously inside <header>
+  function appendSiteFooter() {
+    var footer = document.createElement('footer');
+    footer.style.cssText = 'display:flex;justify-content:center;align-items:center;padding:1.5rem 1rem;font-size:0.7rem;color:var(--text-dim);letter-spacing:0.05em;border-top:1px solid var(--border);margin-top:2rem;';
+    footer.innerHTML = 'Made by Gino with Claude &nbsp;·&nbsp; <a href="https://github.com/GinoGalotti/portal-fieldops" target="_blank" rel="noopener" style="color:var(--text-dim);text-decoration:underline;">GitHub</a>';
+    document.body.appendChild(footer);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', appendSiteFooter);
+  } else {
+    appendSiteFooter();
+  }
 }());

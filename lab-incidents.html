@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Incident Log</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="player.css">
+<style>
+:root {
+  --purple:     #7c3aed;
+  --purple-dim: #4a1d96;
+  --purple-glow: rgba(124,58,237,0.12);
+}
+
+/* ── WEEK SWITCHER ── */
+.week-switcher {
+  max-width: var(--max-w, 860px);
+  margin: 0 auto 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.sw-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+}
+.week-tabs {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.week-tab {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  padding: 7px 22px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.week-tab:hover { border-color: var(--green-dim); color: var(--green); }
+.week-tab.active { border-color: var(--green); background: rgba(46,204,113,0.06); color: var(--green); }
+.week-tab.status-active::after { content: ' ●'; color: var(--green); font-size: 0.5rem; vertical-align: middle; }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 80px 20px;
+  border: 1px solid var(--border);
+  margin-bottom: 48px;
+}
+
+/* ── LOADING STATE ── */
+.loading {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 80px 20px;
+}
+
+/* ── INCIDENT CARD ── */
+.incident-card {
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  padding: 36px 40px;
+  margin-bottom: 48px;
+  position: relative;
+}
+.incident-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.incident-card.amber::before  { background: linear-gradient(90deg, var(--amber-dim), transparent); }
+.incident-card.purple::before { background: linear-gradient(90deg, var(--purple-dim), transparent); }
+.incident-card.red::before    { background: linear-gradient(90deg, #5c2020, transparent); }
+
+/* ── INCIDENT HEADER ── */
+.incident-id {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+.incident-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.incident-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  padding: 3px 9px;
+  border: 1px solid;
+}
+.badge-amber  { color: var(--amber);   border-color: var(--amber-dim);  background: rgba(240,165,0,0.06); }
+.badge-purple { color: var(--purple);  border-color: var(--purple-dim); background: var(--purple-glow); }
+.badge-red    { color: var(--red);     border-color: #5c2020;           background: rgba(224,80,80,0.06); }
+.badge-green  { color: var(--green);   border-color: var(--green-dim);  background: rgba(46,204,113,0.06); }
+
+/* ── UPDATES CARD (case status digest) ── */
+.updates-card {
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  padding: 36px 40px;
+  margin-bottom: 48px;
+  position: relative;
+}
+.updates-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--green-dim), transparent);
+}
+.update-item { margin-top: 28px; }
+.update-item-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--green-dim);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.update-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 28px 0 0;
+}
+
+/* ── CAMPBELL BLOCK ── */
+.campbell-block {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  line-height: 1.95;
+  color: var(--text-dim);
+  border-left: 2px solid var(--green-dim);
+  background: rgba(46,204,113,0.03);
+  padding: 20px 24px;
+  margin: 24px 0;
+}
+.campbell-block .cb-label {
+  color: var(--green-dim);
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  display: block;
+  margin-bottom: 12px;
+}
+.campbell-block .cb-flag {
+  color: var(--green);
+  display: block;
+  margin-top: 12px;
+}
+.campbell-block.purple {
+  border-left-color: var(--purple-dim);
+  background: var(--purple-glow);
+}
+.campbell-block.purple .cb-label { color: var(--purple); }
+.campbell-block.purple .cb-flag  { color: var(--purple); }
+
+/* ── NARRATIVE TEXT ── */
+.narrative {
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  font-size: 0.95rem;
+  line-height: 1.85;
+  color: var(--text);
+  margin: 16px 0;
+}
+
+/* ── CALLOUT BLOCK ── */
+.callout {
+  padding: 16px 22px;
+  margin: 20px 0;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  font-size: 0.88rem;
+  line-height: 1.8;
+  color: var(--text-dim);
+}
+.callout-amber  { border-left: 3px solid var(--amber-dim); background: rgba(240,165,0,0.04); }
+.callout-purple { border-left: 3px solid var(--purple-dim); background: var(--purple-glow); }
+.callout-red    { border-left: 3px solid #5c2020; background: rgba(224,80,80,0.04); }
+.callout-from {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  display: block;
+  margin-bottom: 10px;
+}
+.callout-amber  .callout-from { color: var(--amber-dim); }
+.callout-purple .callout-from { color: var(--purple); }
+.callout-red    .callout-from { color: var(--red); }
+.callout-dim    .callout-from { color: var(--text-dim); }
+
+/* ── CHOICE BUTTONS ── */
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 24px 0 14px;
+}
+.choice-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  line-height: 1.65;
+  text-align: left;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.choice-btn .ch-label {
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 7px;
+}
+.choice-btn:hover:not(:disabled)        { border-color: var(--amber-dim); color: var(--text); }
+.choice-btn.selected                    { border-color: var(--amber); background: rgba(240,165,0,0.06); color: var(--text); }
+.choice-btn.selected .ch-label         { color: var(--amber); }
+.choice-btn:disabled                    { cursor: default; }
+.choice-btn:disabled:not(.selected)    { opacity: 0.3; }
+
+/* ── CUSTOM TEXT AREA ── */
+.custom-row {
+  margin: 4px 0 16px;
+}
+
+/* ── SAVE BAR ── */
+.save-bar {
+  margin: 0 0 64px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 20px 0;
+  border-top: 1px solid var(--border);
+}
+.save-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  padding: 10px 28px;
+  border: 1px solid var(--amber-dim);
+  background: transparent;
+  color: var(--amber-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.save-btn:hover:not(:disabled) { border-color: var(--amber); color: var(--amber); background: rgba(240,165,0,0.06); }
+.save-btn:disabled              { opacity: 0.35; cursor: default; }
+.save-btn.locked                { border-color: var(--green-dim); color: var(--green); cursor: default; }
+.save-status { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; color: var(--text-dim); }
+.save-status.ok { color: var(--green); }
+
+/* ── RESPONSE FORM ── */
+.form-hint {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-bottom: 16px;
+}
+.form-label {
+  display: block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+.form-input, .form-textarea {
+  width: 100%;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  font-size: 0.9rem;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.15s;
+  resize: vertical;
+}
+.form-input  { height: 40px; resize: none; }
+.form-textarea { min-height: 120px; }
+.form-input:focus, .form-textarea:focus { border-color: var(--green-dim); }
+.form-row { margin-bottom: 12px; }
+.form-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.submit-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  padding: 8px 20px;
+  border: 1px solid var(--green-dim);
+  background: transparent;
+  color: var(--green-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.submit-btn:hover:not(:disabled) { border-color: var(--green); color: var(--green); background: rgba(46,204,113,0.06); }
+.submit-btn:disabled             { opacity: 0.35; cursor: default; }
+.export-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.export-btn:hover { border-color: var(--text-dim); color: var(--text); }
+.form-status {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+}
+.form-status.ok { color: var(--green); }
+
+/* ── SUBMISSION PREVIEWS ── */
+.submissions-list { margin-top: 20px; }
+.submissions-list-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+.submission-preview {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 14px 18px;
+  margin-bottom: 8px;
+}
+.submission-preview .sp-name {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  color: var(--green-dim);
+  margin-bottom: 6px;
+}
+.submission-preview .sp-text {
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+/* ── STAMP BAR ── */
+.stamp-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.stamp {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.54rem;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+}
+
+/* ── EMAIL BLOCK ── */
+.email-block {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  margin: 24px 0;
+}
+.email-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  line-height: 2.1;
+  color: var(--text-dim);
+}
+.email-header span { color: var(--text); }
+.email-body {
+  padding: 22px 24px;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  font-size: 0.92rem;
+  line-height: 1.85;
+  color: var(--text);
+}
+.email-body p { margin-bottom: 14px; }
+.email-body em { font-style: italic; color: var(--text-dim); }
+.email-sig {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  line-height: 2;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── LOG EXCERPTS ── */
+.log-excerpt {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--border);
+  padding: 16px 20px;
+  margin: 14px 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  line-height: 2;
+  color: var(--text-dim);
+}
+.log-excerpt .le-header {
+  color: var(--purple);
+  display: block;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  margin-bottom: 10px;
+}
+.log-anomaly { color: var(--purple); }
+.incident-ref-link { color: var(--green-dim); text-decoration: underline; text-underline-offset: 2px; }
+.incident-ref-link:hover { color: var(--green); }
+.log-full-link { margin-top: 16px; font-size: 0.7rem; letter-spacing: 0.08em; }
+.log-full-link a { color: var(--purple); text-decoration: none; }
+.log-full-link a:hover { color: #a78bfa; }
+.log-excerpt .le-annotation {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  color: var(--amber-dim);
+  font-style: italic;
+  font-size: 0.64rem;
+}
+
+/* ── CAMPBELL LOG SECTION ── */
+.campbell-log-section {
+  border: 1px solid var(--purple-dim);
+  background: linear-gradient(180deg, rgba(124,58,237,0.04) 0%, transparent 100%);
+  padding: 36px 40px;
+  margin-top: 64px;
+  position: relative;
+}
+.campbell-log-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--purple-dim), transparent);
+}
+
+/* ── INCIDENT DIGEST (closed weeks) ── */
+.incident-digest {
+  max-width: 860px;
+  margin: 32px auto 0;
+  padding: 20px 28px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  line-height: 1.9;
+  letter-spacing: 0.06em;
+  border-top: 1px solid var(--border);
+}
+.incident-digest .id-header {
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  color: var(--green-dim);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.incident-digest .id-lines { color: var(--green-dim); line-height: 2; }
+.incident-digest .id-sig {
+  margin-top: 12px;
+  font-size: 0.62rem;
+  color: var(--text-dim);
+}
+
+/* ── MOBILE ── */
+@media (max-width: 700px) {
+  .incident-card        { padding: 24px 20px; }
+  .campbell-log-section { padding: 24px 20px; }
+  .choice-grid          { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</div>
+  <nav id="player-nav"></nav><script src="player-nav.js"></script>
+</header>
+
+<div class="week-switcher">
+  <div class="sw-label">// INCIDENT LOG — SELECT REPORTING PERIOD</div>
+  <div class="week-tabs" id="week-tabs"></div>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow" id="hero-eyebrow"></div>
+  <h1 class="hero-title">Incident <span class="accent">Log</span></h1>
+  <p class="hero-desc" id="hero-desc"></p>
+</div>
+
+<main id="incidents-main">
+  <div class="loading">// LOADING INCIDENT DATA...</div>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var weekData     = null;
+  var activeWeekId = null;
+  var weekState    = {};  // D1-loaded state for current week
+  var pendingChoices = {}; // { incId: { choice, custom } }
+
+  // ── INIT ──────────────────────────────────────────────────────────────
+  fetch('data/incidents.json')
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      weekData = data;
+      buildTabs(data.weeks);
+      var hashId    = location.hash.slice(1);
+      var fromHash  = data.weeks.filter(function (w) { return w.id === hashId; })[0];
+      var defWeek   = data.weeks.filter(function (w) { return w.status === 'active'; })[0]
+                   || data.weeks[data.weeks.length - 1];
+      activateWeek((fromHash || defWeek).id);
+    })
+    .catch(function () {
+      document.getElementById('incidents-main').innerHTML =
+        '<p class="narrative" style="color:var(--red);">// ERROR — Failed to load incident data.</p>';
+    });
+
+  // ── TABS ──────────────────────────────────────────────────────────────
+  function buildTabs(weeks) {
+    var container = document.getElementById('week-tabs');
+    weeks.forEach(function (week) {
+      var btn = document.createElement('button');
+      btn.className = 'week-tab' + (week.status === 'active' ? ' status-active' : '');
+      btn.dataset.id = week.id;
+      btn.textContent = week.label;
+      btn.addEventListener('click', function () { activateWeek(week.id); });
+      container.appendChild(btn);
+    });
+  }
+
+  function activateWeek(id) {
+    if (activeWeekId === id) return;
+    activeWeekId   = id;
+    pendingChoices = {};
+    weekState      = {};
+
+    document.querySelectorAll('.week-tab').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.id === id);
+    });
+    history.replaceState(null, '', '#' + id);
+
+    var week = weekData.weeks.filter(function (w) { return w.id === id; })[0];
+    if (!week) return;
+
+    updateHero(week);
+    renderWeek(week);
+    loadWeekState(week.id);
+  }
+
+  // ── HERO ──────────────────────────────────────────────────────────────
+  function updateHero(week) {
+    document.getElementById('hero-eyebrow').textContent = week.hero_eyebrow;
+    document.getElementById('hero-desc').textContent    = week.hero_desc;
+  }
+
+  // ── RENDER WEEK ───────────────────────────────────────────────────────
+  function renderWeek(week) {
+    var main = document.getElementById('incidents-main');
+    if (!week.incidents || week.incidents.length === 0) {
+      main.innerHTML = '<div class="empty-state">// NO INCIDENTS LOGGED — THIS PERIOD IS CLOSED.</div>';
+      return;
+    }
+
+    var html = week.incidents.map(renderIncident).join('');
+
+    var choiceIncs = week.incidents.filter(function (inc) { return inc.type === 'choice'; });
+    if (choiceIncs.length > 0) {
+      html += '<div class="save-bar" id="save-bar">'
+            + '<button class="save-btn" id="save-btn" disabled>SAVE RESPONSES</button>'
+            + '<span class="save-status" id="save-status">— select a direction to enable save</span>'
+            + '</div>';
+    }
+
+    main.innerHTML = html;
+    attachListeners(week);
+  }
+
+  // ── DIGEST RENDERER ────────────────────────────────────────────────────
+  function renderDigest(d) {
+    var html = '<div class="incident-digest">';
+    html += '<div class="id-header">';
+    html += '<span>' + esc(d.header) + '</span>';
+    html += '<span>' + esc(d.count) + '</span>';
+    html += '</div>';
+    html += '<div class="id-lines">' + (d.lines || []).map(esc).join('<br>') + '</div>';
+    html += '<div class="id-sig">' + esc(d.sig) + '</div>';
+    html += '</div>';
+    return html;
+  }
+
+  // ── INCIDENT RENDERER ─────────────────────────────────────────────────
+  function renderIncident(inc) {
+    if (inc.type === 'teaser')  return renderTeaser(inc);
+    if (inc.type === 'updates') return renderUpdates(inc);
+    return renderCard(inc);
+  }
+
+  function renderCard(inc) {
+    var h = '<div class="incident-card ' + (inc.color || '') + '" id="incident-' + inc.id + '">';
+    h += '<div class="incident-id">' + esc(inc.item_label || '') + '</div>';
+    h += '<h2 class="incident-title">' + esc(inc.title)
+      + (inc.badge ? ' <span class="incident-badge badge-' + (inc.badge_color || '') + '">' + esc(inc.badge) + '</span>' : '')
+      + '</h2>';
+    h += inc.blocks.map(renderBlock).join('');
+    if (inc.type === 'choice') h += renderChoiceUI(inc);
+    if (inc.type === 'open')   h += renderOpenUI(inc);
+    if (inc.stamps)            h += renderStamps(inc.stamps);
+    h += '</div>';
+    return h;
+  }
+
+  function renderTeaser(inc) {
+    var h = '<div class="campbell-log-section" id="incident-' + inc.id + '">';
+    h += '<div class="incident-id">' + esc(inc.item_label) + '</div>';
+    h += '<h2 class="incident-title">' + esc(inc.title)
+      + ' <span class="incident-badge badge-' + inc.badge_color + '">' + esc(inc.badge) + '</span>'
+      + '</h2>';
+    h += inc.blocks.map(renderBlock).join('');
+    if (inc.link) h += '<div class="log-full-link"><a href="' + esc(inc.link) + '">// VIEW FULL LOGS →</a></div>';
+    h += '</div>';
+    return h;
+  }
+
+  function renderUpdates(inc) {
+    var h = '<div class="updates-card" id="incident-' + inc.id + '">';
+    h += '<div class="incident-id">' + esc(inc.item_label) + '</div>';
+    h += '<h2 class="incident-title">' + esc(inc.title)
+      + ' <span class="incident-badge badge-' + (inc.badge_color || 'green') + '">' + esc(inc.badge || 'INFORMATIONAL') + '</span>'
+      + '</h2>';
+    if (inc.digest) {
+      h += renderDigest(inc.digest);
+    } else {
+      inc.items.forEach(function(item, i) {
+        if (i > 0) h += '<div class="update-divider"></div>';
+        h += '<div class="update-item">';
+        h += '<div class="update-item-title">' + esc(item.title) + '</div>';
+        h += item.blocks.map(renderBlock).join('');
+        h += '</div>';
+      });
+    }
+    h += '</div>';
+    return h;
+  }
+
+  // ── BLOCK RENDERERS ───────────────────────────────────────────────────
+  function renderBlock(block) {
+    switch (block.type) {
+      case 'narrative': {
+        var style = block.dim ? ' style="color:var(--text-dim);"' : '';
+        return '<p class="narrative"' + style + '>' + esc(block.text) + '</p>';
+      }
+      case 'campbell': {
+        var colorCls = block.color === 'purple' ? ' purple' : '';
+        var paras = block.paragraphs.map(function (p) { return inlineMarkup(p); }).join('<br><br>');
+        return '<div class="campbell-block' + colorCls + '">'
+          + (block.label ? '<span class="cb-label">' + esc(block.label) + '</span>' : '')
+          + paras
+          + (block.flag ? '<span class="cb-flag">' + inlineMarkup(block.flag) + '</span>' : '')
+          + '</div>';
+      }
+      case 'callout': {
+        var text = esc(block.text).replace(/\n\n/g, '<br><br>');
+        return '<div class="callout callout-' + block.color + '">'
+          + '<span class="callout-from">' + esc(block.from) + '</span>'
+          + text
+          + '</div>';
+      }
+      case 'email': {
+        var bodyHtml = block.body_paras.map(function (p) {
+          return '<p>' + inlineMarkup(p) + '</p>';
+        }).join('');
+        var sigHtml = esc(block.sig).replace(/\n/g, '<br>');
+        return '<div class="email-block">'
+          + '<div class="email-header">'
+          + 'FROM: <span>' + esc(block.from) + '</span><br>'
+          + 'TO: <span>' + esc(block.to) + '</span><br>'
+          + 'SUBJECT: <span>' + esc(block.subject) + '</span><br>'
+          + 'DATE: <span>' + esc(block.date) + '</span>'
+          + '</div>'
+          + '<div class="email-body">'
+          + bodyHtml
+          + '<div class="email-sig">' + sigHtml + '</div>'
+          + '</div>'
+          + '</div>';
+      }
+      case 'log-excerpt': {
+        var linesHtml = block.lines.map(function (l) { return inlineMarkup(l); }).join('<br>');
+        var annHtml   = block.annotation
+          ? '<div class="le-annotation">' + esc(block.annotation) + '</div>'
+          : '';
+        return '<div class="log-excerpt">'
+          + '<span class="le-header">' + esc(block.label) + '</span>'
+          + linesHtml
+          + annHtml
+          + '</div>';
+      }
+      default: return '';
+    }
+  }
+
+  function renderChoiceUI(inc) {
+    var h = '<div class="choice-grid" id="choice-grid-' + inc.id + '">';
+    inc.choices.forEach(function (ch) {
+      h += '<button class="choice-btn" data-choice="' + ch.id + '" data-inc="' + inc.id + '">'
+        + '<span class="ch-label">' + esc(ch.label) + '</span>'
+        + esc(ch.text)
+        + '</button>';
+    });
+    h += '</div>';
+    if (inc.allow_custom) {
+      h += '<div class="form-row custom-row" id="custom-row-' + inc.id + '">'
+        + '<label class="form-label" for="custom-' + inc.id + '">OR DESCRIBE YOUR OWN APPROACH (OPTIONAL)</label>'
+        + '<textarea class="form-textarea" id="custom-' + inc.id + '" rows="3" placeholder="Describe your approach..."></textarea>'
+        + '</div>';
+    }
+    return h;
+  }
+
+  function renderOpenUI(inc) {
+    return '<div class="form-hint">' + esc(inc.form_hint) + '</div>'
+      + '<div class="form-row">'
+      + '<label class="form-label" for="resp-name-' + inc.id + '">OPERATIVE NAME (optional)</label>'
+      + '<input class="form-input" id="resp-name-' + inc.id + '" type="text" placeholder="Anonymous" maxlength="80">'
+      + '</div>'
+      + '<div class="form-row">'
+      + '<textarea class="form-textarea" id="resp-text-' + inc.id + '" placeholder="Your response..."></textarea>'
+      + '</div>'
+      + '<div class="form-actions">'
+      + '<button class="submit-btn" id="submit-btn-' + inc.id + '" disabled>SUBMIT RESPONSE</button>'
+      + '<button class="export-btn" id="export-btn-' + inc.id + '" style="display:none">EXPORT FOR KEEPER</button>'
+      + '<span class="form-status" id="form-status-' + inc.id + '"></span>'
+      + '</div>'
+      + '<div class="submissions-list" id="submissions-list-' + inc.id + '" style="display:none">'
+      + '<div class="submissions-list-label">// RESPONSES LOGGED FROM THIS DEVICE</div>'
+      + '</div>';
+  }
+
+  function renderStamps(stamps) {
+    if (!stamps || stamps.length === 0) return '';
+    return '<div class="stamp-bar">'
+      + stamps.map(function (s) { return '<span class="stamp">' + esc(s) + '</span>'; }).join('')
+      + '</div>';
+  }
+
+  // ── ATTACH LISTENERS ──────────────────────────────────────────────────
+  function attachListeners(week) {
+    // Save button
+    var saveBtn = document.getElementById('save-btn');
+    if (saveBtn) saveBtn.addEventListener('click', handleSave);
+
+    if (!week.incidents) return;
+
+    week.incidents.forEach(function (inc) {
+      // Choice buttons
+      if (inc.type === 'choice') {
+        var grid = document.getElementById('choice-grid-' + inc.id);
+        if (grid) {
+          grid.querySelectorAll('.choice-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () { onChoiceClick(btn, inc.id); });
+          });
+        }
+        // Custom textarea
+        if (inc.allow_custom) {
+          var ta = document.getElementById('custom-' + inc.id);
+          if (ta) {
+            ta.addEventListener('input', function () {
+              if (!pendingChoices[inc.id]) pendingChoices[inc.id] = {};
+              pendingChoices[inc.id].custom = ta.value;
+            });
+          }
+        }
+      }
+
+      // Open response form
+      if (inc.type === 'open') {
+        var textEl   = document.getElementById('resp-text-' + inc.id);
+        var submitEl = document.getElementById('submit-btn-' + inc.id);
+        var exportEl = document.getElementById('export-btn-' + inc.id);
+        if (textEl && submitEl) {
+          textEl.addEventListener('input', function () {
+            submitEl.disabled = textEl.value.trim().length === 0;
+          });
+          submitEl.addEventListener('click', function () { submitOpenResponse(inc); });
+        }
+        if (exportEl) {
+          exportEl.addEventListener('click', function () { exportResponses(inc); });
+        }
+      }
+    });
+  }
+
+  // ── CHOICE SELECTION ──────────────────────────────────────────────────
+  function onChoiceClick(btn, incId) {
+    var grid = document.getElementById('choice-grid-' + incId);
+    if (!grid) return;
+    var first = grid.querySelector('.choice-btn');
+    if (first && first.disabled) return; // locked
+
+    grid.querySelectorAll('.choice-btn').forEach(function (b) { b.classList.remove('selected'); });
+    btn.classList.add('selected');
+
+    if (!pendingChoices[incId]) pendingChoices[incId] = {};
+    pendingChoices[incId].choice = btn.dataset.choice;
+    updateSaveButton();
+  }
+
+  function updateSaveButton() {
+    var saveBtn = document.getElementById('save-btn');
+    var saveSt  = document.getElementById('save-status');
+    if (!saveBtn) return;
+    var hasSelection = Object.keys(pendingChoices).some(function (k) {
+      return pendingChoices[k] && pendingChoices[k].choice;
+    });
+    saveBtn.disabled = !hasSelection;
+    if (hasSelection) {
+      saveSt.textContent = '— ready to save';
+      saveSt.className   = 'save-status';
+    }
+  }
+
+  // ── SAVE (choice incidents) ───────────────────────────────────────────
+  function handleSave() {
+    var saveBtn = document.getElementById('save-btn');
+    var saveSt  = document.getElementById('save-status');
+    if (!saveBtn || saveBtn.disabled || saveBtn.classList.contains('locked')) return;
+
+    saveBtn.disabled = true;
+    saveSt.textContent = 'SAVING...';
+    saveSt.className   = 'save-status';
+
+    var now       = new Date().toISOString();
+    var stateBlob = JSON.parse(JSON.stringify(weekState)); // copy existing state
+    var week      = weekData.weeks.filter(function (w) { return w.id === activeWeekId; })[0];
+    if (!week) return;
+
+    week.incidents.forEach(function (inc) {
+      if (inc.type !== 'choice') return;
+      var p = pendingChoices[inc.id];
+      if (!p || !p.choice) return;
+      stateBlob[inc.id] = {
+        type:              'choice',
+        choice:            p.choice,
+        custom:            (p.custom || '').slice(0, 2000),
+        question_snapshot: inc.title,
+        locked:            true,
+        saved_at:          now
+      };
+    });
+
+    // Write to localStorage immediately
+    localStorage.setItem('portal-incident-state-' + activeWeekId, JSON.stringify(stateBlob));
+
+    // PUT to D1
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/incidents/' + activeWeekId + '/state', {
+      method:  'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(stateBlob)
+    })
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function () {
+      onSaveComplete(stateBlob, saveSt, saveBtn, '— directions logged');
+    })
+    .catch(function () {
+      onSaveComplete(stateBlob, saveSt, saveBtn, '— saved locally (offline)');
+    });
+  }
+
+  function onSaveComplete(stateBlob, saveSt, saveBtn, statusText) {
+    weekState = stateBlob;
+    saveBtn.textContent = 'SAVED';
+    saveBtn.classList.add('locked');
+    saveSt.textContent  = statusText;
+    saveSt.className    = 'save-status ok';
+    for (var incId in stateBlob) {
+      var s = stateBlob[incId];
+      if (s.type === 'choice' && s.locked) lockChoiceUI(incId, s.choice, s.custom);
+    }
+  }
+
+  function lockChoiceUI(incId, choice, custom) {
+    var grid = document.getElementById('choice-grid-' + incId);
+    if (!grid) return;
+    grid.querySelectorAll('.choice-btn').forEach(function (b) {
+      b.disabled = true;
+      b.classList.toggle('selected', b.dataset.choice === choice);
+    });
+    var ta = document.getElementById('custom-' + incId);
+    if (ta) { ta.value = custom || ''; ta.disabled = true; }
+    delete pendingChoices[incId];
+  }
+
+  // ── LOAD D1 STATE ─────────────────────────────────────────────────────
+  function loadWeekState(weekId) {
+    fetch('/api/v1/incidents/' + weekId + '/state')
+      .then(function (r) { return r.ok ? r.json() : {}; })
+      .then(function (state) {
+        weekState = state || {};
+        applyState();
+      })
+      .catch(function () {
+        try { weekState = JSON.parse(localStorage.getItem('portal-incident-state-' + weekId) || '{}'); }
+        catch (e) { weekState = {}; }
+        applyState();
+      });
+  }
+
+  function applyState() {
+    for (var incId in weekState) {
+      var s = weekState[incId];
+      if (s.type === 'choice' && s.locked) lockChoiceUI(incId, s.choice, s.custom);
+    }
+    // If any choices are locked, reflect that on the save bar
+    var saveBtn = document.getElementById('save-btn');
+    var saveSt  = document.getElementById('save-status');
+    if (!saveBtn) return;
+    var anyLocked = Object.keys(weekState).some(function (k) {
+      return weekState[k].type === 'choice' && weekState[k].locked;
+    });
+    if (anyLocked) {
+      saveBtn.textContent = 'SAVED';
+      saveBtn.classList.add('locked');
+      saveBtn.disabled   = true;
+      saveSt.textContent = '— directions logged';
+      saveSt.className   = 'save-status ok';
+    }
+  }
+
+  // ── OPEN RESPONSE (submit) ────────────────────────────────────────────
+  function submitOpenResponse(inc) {
+    var nameEl   = document.getElementById('resp-name-' + inc.id);
+    var textEl   = document.getElementById('resp-text-' + inc.id);
+    var submitEl = document.getElementById('submit-btn-' + inc.id);
+    var statusEl = document.getElementById('form-status-' + inc.id);
+    var name = (nameEl ? nameEl.value.trim() : '') || 'Anonymous';
+    var text = textEl ? textEl.value.trim() : '';
+    if (!text) return;
+
+    submitEl.disabled  = true;
+    statusEl.textContent = 'SENDING...';
+    statusEl.className   = 'form-status';
+
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/incidents/' + inc.id + '/responses', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ name: name, text: text })
+    })
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function () {
+      onOpenSubmitSuccess(inc, name, text, statusEl, nameEl, textEl, submitEl);
+    })
+    .catch(function () {
+      var stored = JSON.parse(localStorage.getItem('portal-responses-' + inc.id) || '[]');
+      stored.push({ hunter_name: name, response_text: text, submitted_at: new Date().toISOString(), offline: true });
+      localStorage.setItem('portal-responses-' + inc.id, JSON.stringify(stored));
+      statusEl.textContent = 'SAVED LOCALLY (offline)';
+      onOpenSubmitSuccess(inc, name, text, statusEl, nameEl, textEl, submitEl);
+    });
+  }
+
+  function onOpenSubmitSuccess(inc, name, text, statusEl, nameEl, textEl, submitEl) {
+    if (statusEl.textContent === 'SENDING...') {
+      statusEl.textContent = 'LOGGED';
+      statusEl.className   = 'form-status ok';
+    }
+    appendSubmissionPreview(inc.id, name, text);
+    if (textEl) textEl.value = '';
+    if (nameEl) nameEl.value = '';
+    submitEl.disabled = true;
+    var exportEl = document.getElementById('export-btn-' + inc.id);
+    var listEl   = document.getElementById('submissions-list-' + inc.id);
+    if (exportEl) exportEl.style.display = '';
+    if (listEl)   listEl.style.display   = '';
+  }
+
+  function appendSubmissionPreview(incId, name, text) {
+    var list = document.getElementById('submissions-list-' + incId);
+    if (!list) return;
+    var el = document.createElement('div');
+    el.className = 'submission-preview';
+    el.innerHTML = '<div class="sp-name">// ' + esc(name.toUpperCase()) + '</div>'
+                 + '<div class="sp-text">' + esc(text).replace(/\n/g, '<br>') + '</div>';
+    list.appendChild(el);
+  }
+
+  function exportResponses(inc) {
+    var statusEl = document.getElementById('form-status-' + inc.id);
+    statusEl.textContent = 'FETCHING...';
+    fetch('/api/v1/incidents/' + inc.id + '/responses')
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (rows) { renderExport(rows, statusEl, inc.title); })
+      .catch(function () {
+        var stored = JSON.parse(localStorage.getItem('portal-responses-' + inc.id) || '[]');
+        renderExport(stored, statusEl, inc.title);
+      });
+  }
+
+  function renderExport(rows, statusEl, title) {
+    var lines = ['# PORTAL — Incident Log Responses', '## ' + title, ''];
+    rows.forEach(function (row) {
+      var ts = row.submitted_at ? new Date(row.submitted_at).toLocaleString() : '';
+      lines.push('**' + (row.hunter_name || 'Anonymous') + '** (' + ts + ')');
+      lines.push('');
+      lines.push(row.response_text);
+      lines.push('');
+      lines.push('---');
+      lines.push('');
+    });
+    var md = lines.join('\n');
+    navigator.clipboard.writeText(md).then(function () {
+      statusEl.textContent = 'COPIED TO CLIPBOARD';
+      statusEl.className   = 'form-status ok';
+    }).catch(function () {
+      var ta = document.createElement('textarea');
+      ta.value = md;
+      ta.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:55vh;z-index:9999;'
+        + 'background:var(--bg3);color:var(--text);padding:20px;font-family:monospace;'
+        + 'font-size:0.75rem;border:none;border-bottom:2px solid var(--border);outline:none;';
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      statusEl.textContent = 'SELECT ALL AND COPY';
+      ta.addEventListener('blur', function () { document.body.removeChild(ta); });
+    });
+  }
+
+  // ── HELPERS ───────────────────────────────────────────────────────────
+  function esc(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function inlineMarkup(text) {
+    return esc(text)
+      .replace(/\{\{anomaly:(.*?)\}\}/g, '<span class="log-anomaly">$1</span>')
+      .replace(/\{\{em:(.*?)\}\}/g, '<em>$1</em>')
+      .replace(/\{\{link:(.*?)\|(.*?)\}\}/g, '<a href="$2" class="incident-ref-link">$1</a>');
+  }
+
+})();
+</script>
+
+</body>
+</html>

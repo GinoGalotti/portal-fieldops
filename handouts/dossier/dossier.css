@@ -1,0 +1,269 @@
+/*
+ * PORTAL DOSSIER STYLESHEET — handouts/dossier/dossier.css
+ * ─────────────────────────────────────────────────────────────────────────────
+ *
+ * HOW TO CREATE A NEW DOSSIER PAGE (for Claude.ai)
+ * ─────────────────────────────────────────────────
+ * 1. Copy the HEAD template below into a new .html file in handouts/dossier/
+ * 2. Set DOSSIER_ID to the file's base name (e.g. 's04-foo-notebook')
+ * 3. Override CSS variables in your <style> block to match the character's palette
+ * 4. Add per-dossier unique classes (voice shifts, paper states, special elements)
+ * 5. Write content using the documented class names below
+ *
+ * HEAD TEMPLATE
+ * ─────────────
+ * <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+ * <link rel="stylesheet" href="dossier.css">
+ * <style>
+ *   :root {
+ *     --ink:         #1a2a1a;              Main body text colour
+ *     --ink-dim:     #5a6a5a;              Dates, secondary labels
+ *     --cream:       #f4f0e6;              Default entry background
+ *     --paper-late:  #e6e0d2;              Late/final entries (darker)
+ *     --accent:      #2a4a3a;              Provenance border, theme accent
+ *     --rule-color:  #c4d0c0;             Notebook left-margin rule line
+ *     --hint-bg:     rgba(42,74,58,0.15); Clue highlight fill
+ *     --hint-border: rgba(42,74,58,0.45); Clue highlight underline
+ *   }
+ *   (add any character-specific classes here)
+ * </style>
+ * ...then before </body>:
+ * <script>const DOSSIER_ID = 'your-dossier-id-here';</script>
+ * <script src="dossier.js"></script>
+ *
+ * PALETTE GUIDELINES
+ * ──────────────────
+ * Warm/human characters  → ink browns (#2a1a0a), aged paper, purple accents
+ * Cool/analytical chars  → ink greens (#1a2a1a), clean paper, teal accents
+ * MESA/institutional     → near-black ink, white/grey paper, red accents
+ * Supernatural documents → ink purples/blues, cream paper, violet accents
+ *
+ * CONTENT CLASS REFERENCE
+ * ────────────────────────
+ * .notebook-entry          Cream paper card — one journal/field entry
+ * .notebook-entry::before  Auto-generated left-margin rule (colour = --rule-color)
+ * .entry-date              Monospace date/label above entry text
+ * .entry-body              Entry prose — wrap all <p> tags here
+ *
+ * Paper state modifiers (apply to .notebook-entry):
+ *   .paper-late            Darker paper for tired/late entries
+ *   (add your own, e.g. .paper-tired, .paper-aged — define in per-page <style>)
+ *
+ * .phase-break             Centred section divider (e.g. "· · · notebook 2 begins · · ·")
+ *
+ * Clue system:
+ *   <span class="clue-hint" data-clue="clue-id">highlighted text</span>
+ *   Highlights appear when keeper reveals clues. data-clue is arbitrary — use
+ *   a short slug describing what the clue reveals (e.g. data-clue="first-symptom")
+ *
+ * Keeper annotations:
+ *   <div class="keeper-note">// KEEPER: annotation text</div>
+ *   Place inside .notebook-entry, after .entry-body. Hidden from players.
+ *
+ * Keeper toolbar (place once, just before closing </div> of .dossier-wrapper):
+ *   <div class="keeper-toolbar">
+ *     <span class="keeper-status" id="hint-status">clues: hidden</span>
+ *     <button class="keeper-btn" id="toggle-hints">REVEAL CLUES</button>
+ *   </div>
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+/* ── GLOBAL DEFAULTS ─────────────────────────────────────────────────────── */
+/* Fixed dossier globals — never change between dossiers */
+:root {
+  --dossier-bg:  #0d0a0e;
+  --keeper-bg:   #1a0a2a;
+  --keeper-text: #c8a8d8;
+
+  /* Per-dossier defaults — override in page <style>:root */
+  --ink:         #1a2a1a;
+  --ink-dim:     #5a6a5a;
+  --cream:       #f4f0e6;
+  --paper-late:  #e8e0d2;
+  --accent:      #3a3a3a;
+  --rule-color:  #d0c8b8;
+  --hint-bg:     rgba(80, 40, 120, 0.15);
+  --hint-border: rgba(80, 40, 120, 0.45);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--dossier-bg);
+  color: var(--ink);
+  font-family: 'EB Garamond', 'Crimson Text', Georgia, serif;
+  line-height: 1.6;
+  padding: 2rem 1rem;
+}
+
+/* ── PAGE STRUCTURE ──────────────────────────────────────────────────────── */
+.dossier-wrapper {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* Keeper mode activation trigger — top-of-page classification line */
+.classification {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: #7a6a5a;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #3a2a1a;
+}
+
+.dossier-title {
+  font-family: 'EB Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--cream);
+  margin-bottom: 0.3rem;
+}
+
+.dossier-subtitle {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #9a8a7a;
+  margin-bottom: 2rem;
+}
+
+/* Provenance block — recovery metadata */
+.provenance {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: #6a5a4a;
+  letter-spacing: 0.08em;
+  padding: 0.6rem 0.8rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 2px solid var(--accent);
+  margin-bottom: 2.5rem;
+  line-height: 1.8;
+}
+
+/* ── NOTEBOOK ENTRIES ────────────────────────────────────────────────────── */
+.notebook-entry {
+  background: var(--cream);
+  color: var(--ink);
+  padding: 1.6rem 1.8rem;
+  margin-bottom: 1.2rem;
+  border-radius: 1px;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+/* Notebook margin rule — left vertical line */
+.notebook-entry::before {
+  content: '';
+  position: absolute;
+  left: 1.2rem;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--rule-color);
+}
+
+.entry-date {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--ink-dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+
+.entry-body {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  padding-left: 0.4rem;
+}
+
+.entry-body p { margin-bottom: 0.7rem; }
+.entry-body p:last-child { margin-bottom: 0; }
+
+/* Paper state — late/final entries. Override or add variants per dossier. */
+.paper-late { background: var(--paper-late); }
+
+/* Section divider between phases/notebooks */
+.phase-break {
+  text-align: center;
+  padding: 1.5rem 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: #5a4a3a;
+  letter-spacing: 0.15em;
+}
+
+/* ── CLUE HIGHLIGHT SYSTEM ───────────────────────────────────────────────── */
+/* Inactive by default. Keeper toggles .clues-revealed on .dossier-wrapper. */
+.clue-hint {
+  transition: background 0.4s ease, border-bottom 0.4s ease, padding 0.4s ease;
+}
+
+.clues-revealed .clue-hint {
+  background: var(--hint-bg);
+  border-bottom: 2px solid var(--hint-border);
+  padding: 1px 3px;
+}
+
+/* ── KEEPER MODE ─────────────────────────────────────────────────────────── */
+/* Activated by 5× clicking .classification. Handled by dossier.js. */
+
+.keeper-note {
+  display: none;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--keeper-text);
+  background: var(--keeper-bg);
+  padding: 0.5rem 0.7rem;
+  margin-top: 0.8rem;
+  border-left: 2px solid #6a3a8a;
+  line-height: 1.5;
+}
+
+.keeper-active .keeper-note { display: block; }
+
+/* Keeper toolbar — fixed bottom-right, only shown in keeper mode */
+.keeper-toolbar {
+  display: none;
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 100;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+}
+
+.keeper-active .keeper-toolbar { display: flex; gap: 0.4rem; }
+
+.keeper-btn {
+  background: var(--keeper-bg);
+  color: var(--keeper-text);
+  border: 1px solid #6a3a8a;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: background 0.2s;
+}
+
+.keeper-btn:hover  { background: #2a1a3a; }
+.keeper-btn.active { background: #4a1a6a; color: #f0e8f8; }
+
+.keeper-status {
+  padding: 0.5rem 0.8rem;
+  background: rgba(26, 10, 42, 0.8);
+  color: #8a7a9a;
+  display: flex;
+  align-items: center;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .notebook-entry { padding: 1.2rem 1.4rem; }
+  .entry-body { font-size: 0.95rem; }
+  .keeper-toolbar { bottom: 0.5rem; right: 0.5rem; }
+  .keeper-btn, .keeper-status { padding: 0.4rem 0.6rem; font-size: 0.6rem; }
+}

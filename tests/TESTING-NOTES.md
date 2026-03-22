@@ -1,0 +1,174 @@
+# P.O.R.T.A.L — E2E Testing Notes
+
+## Principles
+
+- **Data-driven, not content-driven**: read source JSON files at test time rather than hardcoding content strings. If the app reads `data/incidents.json`, so should the tests.
+- **Anchor on structure, not counts**: assert that elements *exist* and *work*, not that there are exactly N of them. Exception: exact-count assertions are fine when the count is architecturally fixed (e.g., "3 choice buttons on S01-I01 which always has 3 choices").
+- **Old content stays**: when new sessions are added, existing incident/NPC IDs don't get removed. Tests anchored to S01-I01, S01-I02, CAMPBELL etc. will remain valid indefinitely.
+- **networkidle on data-driven pages**: all pages that fetch JSON before rendering need `waitForLoadState('networkidle')` before asserting.
+
+## Current Coverage
+
+| Page | File | Tests | Status |
+|------|------|-------|--------|
+| All key pages | `tests/smoke.spec.js` | 5 | ✅ |
+| Nav injection + hamburger + 404 checks | `tests/nav.spec.js` | 32 | ✅ |
+| `contacts.html` | `tests/contacts.spec.js` | 7 | ✅ |
+| `lab-incidents.html` | `tests/incidents.spec.js` | 41 | ✅ |
+| `feed.html` (feed entries, handout types, keeper tabs) | `tests/feed.spec.js` | 53 | ✅ |
+| `feed.html` MAP tab (grid + connection, player + keeper) | `tests/map.spec.js` | 38 | ✅ |
+| `index.html` bestiary (session-gated) | `tests/bestiary.spec.js` | 15 | ✅ |
+| `index.html` artefacts (session-gated) | `tests/artefacts.spec.js` | 15 | ✅ |
+| `index.html` session gating | `tests/index-session.spec.js` | 16 | ✅ |
+| `missions/arcs.html` | `tests/arcs.spec.js` | 24 | ✅ |
+| `missions/entities.html` | `tests/entities.spec.js` | 36 | ✅ |
+| `missions/missions.html` | `tests/missions.spec.js` | 23 | ✅ |
+| `missions/campbell-briefings.html` | `tests/briefings.spec.js` | 12 | ✅ |
+| `missions/threads.html` (threads, clocks, prep export) | `tests/threads.spec.js` | 30 | ✅ |
+| `missions/report.html` | `tests/report.spec.js` | 15 | ✅ |
+| `hunters/*.html` | `tests/hunters.spec.js` | 29 | ✅ |
+| `reports/player-report.html` | `tests/player-report.spec.js` | 29 | ✅ |
+| `reports/keeper-review.html` | `tests/keeper-review.spec.js` | 11 | ✅ |
+| `the-lab.html` | `tests/lab.spec.js` | 20 | ✅ |
+| `campbell-logs.html` | `tests/campbell-logs.spec.js` | 37 | ✅ |
+| `evidence.html` | `tests/evidence.spec.js` | 41 | ✅ |
+| D1 round-trip (hunter sheet, arc, incident, player report, map) | `tests/d1-round-trip.spec.js` | 9 | ✅ |
+| Campaign data integrity (no browser) | `tests/post-session-integrity.spec.js` | 23 | ✅ |
+| Auth system (login UI, player/admin gating, server 401) | `tests/auth.spec.js` | 24 | ✅ |
+
+## ⬆ Next Up (recommended order)
+
+1. **Hunter D1 restore tests** [M] — arc state restore on reload, XP overflow badge, sheet restore from D1. 3 unchecked items in `hunters.spec.js`.
+2. **Hunter page D1 round-trip for John** [L] — add john to `d1-round-trip.spec.js` once John's sheet is confirmed stable in play.
+3. **`classified` feed type** [L] — client-side only, purely cosmetic, low priority.
+
+---
+
+## Test Backlog — Not Yet Covered
+
+Priority: **H** = high (core features, likely to break), **M** = medium, **L** = low (nice to have).
+
+### `feed.html` — Live Session Feed [H]
+- [x] Page loads, feed-entries area and composer present
+- [x] Roll entries from API render in the feed
+- [x] Message entries from API render in the feed
+- [x] Feed entry expands on click (adds .expanded)
+- [x] Clicking expanded entry collapses it (removes .expanded)
+- [x] Clicking a second entry collapses the first (exclusive expansion)
+- [x] Keeper mode activates on 5× logo click (keeper tabs appear)
+- [x] Keeper HANDOUTS tab visible and renders handout list (S02)
+- [x] Keeper handout POST buttons default to ▶ POST (not RE-POST)
+- [x] Clear handouts immediately resets RE-POST buttons to POST (no reload)
+- [x] Clear handouts removes .feed-image entries from feed DOM
+- [x] Clear feed view removes all entries from DOM immediately
+- [x] On reload, messages before clear sentinel are discarded
+- [x] Clear sentinel received via polling wipes the visible feed
+- [x] Feed composer sends POST with correct sender and body
+- [x] Posting image after PDA does not remove PDA from feed DOM (regression — image covers PDA visually if too tall; fixed with max-height: 560px on .feed-image-card img)
+- [ ] **Known issue (not tested):** posting multiple handouts in rapid succession (faster than the 6s poll interval) may cause ordering issues — repost or clear to recover
+- [x] Hunter picker dropdown renders and selecting a hunter loads their data
+- [x] Move cards render after hunter selection (at least one visible)
+- [x] Roll button exists on move cards
+- [x] ROLL button sends a roll entry to the feed
+- [x] Feed composer: name auto-fills from selected hunter
+- [x] Track pips (.track-mini-pip) render when sheet has stats
+- [x] Move card expands on click (no-hover mode — adds .expanded)
+- [x] Clicking a second move card collapses the first (exclusive)
+- [x] Playbook moves filter by `playbook` field (via `hunters.json` lookup) — not just `hunter` field — so future hunters without hardcoded `hunter` tags still work
+- [x] Tracks (harm/luck/xp) render as clickable pips in feed panel
+- [x] Keeper mode CONTACTS tab shows NPC visibility toggles
+- [x] Keeper mode REFERENCES tab shows MoTW cheat sheet content
+- [x] Keeper mode THREATS tab shows entity data
+- [ ] `?mouseover=true` restores CSS :hover behaviour (hover not testable in headless)
+
+### `hunters/*.html` — Hunter Pages [H] ✅ covered in `hunters.spec.js`
+- [x] Hunter page loads and renders playbook name
+- [x] Arc section is visible
+- [x] Arc state saves on beat click (D1 write + localStorage)
+- [ ] Arc state restores on reload (D1 read)
+- [x] Sheet stat pips render (Cool/Tough/Sharp etc)
+- [x] Harm track renders and clicking a pip updates state
+- [x] Luck track renders
+- [ ] XP track renders and +N badge appears on overflow
+- [x] Save button persists sheet to D1
+- [ ] Sheet restores from D1 on reload
+
+### `missions/campbell-briefings.html` — CAMPBELL Queue [M] ✅ covered in `briefings.spec.js`
+- [x] Week tab switcher renders
+- [x] Active week tab is selected by default
+- [x] Briefing content renders (data-driven from briefings.json)
+- [x] Closed weeks are visually distinct from active week
+
+### `reports/player-report.html` — Operative Field Report [M] ✅ covered in `player-report.spec.js`
+- [x] Week + hunter selectors render
+- [x] Rating pips (5 per scene) render and are clickable
+- [x] SAVE REPORT button exists
+- [x] State persists to D1 and restores on reload
+
+### `missions/report.html` — Keeper Field Report [M] ✅ covered in `report.spec.js`
+- [x] Session selector renders (S01, S02 tabs)
+- [x] S01 active by default; switching tab updates title
+- [x] SAVE REPORT button exists (top + bottom)
+- [x] COPY FOR CLAUDE button exists
+- [x] Save triggers PUT to D1 and shows feedback
+- [x] Outcome buttons render and toggle correctly
+- [x] Scene textareas render per session
+- [x] Thread tags render and toggle
+
+### `index.html` — Home Page [M]
+- [x] Bestiary cards render (data-driven from portal-entities.json, session-gated) → `bestiary.spec.js`
+- [x] Session-aware artefact cards hidden/shown by session → `artefacts.spec.js` (15 tests: w1/w2/w3 gating, blur, status text)
+- [x] Artefact cards render (total phase count, id + name elements) → `artefacts.spec.js`
+
+### `the-lab.html` — Research Lab Playbook [L] ✅ covered in `lab.spec.js`
+- [x] Page loads and renders team playbook content
+- [x] D1-backed state saves and restores
+
+### D1 Persistence (cross-page) [H, but hard]
+- [x] Full save→reload→restore cycle for hunter sheets → `d1-round-trip.spec.js`
+- [x] Full save→reload→restore cycle for incident choice state → `d1-round-trip.spec.js`
+- [x] Full save→reload→restore cycle for player report (rating pip + textarea) → `d1-round-trip.spec.js`
+- [ ] Offline fallback: when D1 is unreachable, localStorage state is used
+
+### Nav injection correctness [M]
+- [x] Mobile hamburger toggle: visible at ≤900px, click opens/closes nav → `nav.spec.js`
+- [x] Intermediate widths (641–900px): `.nav-toggle` visible → `nav.spec.js`
+- [x] Desktop: `.nav-toggle` hidden → `nav.spec.js`
+- [x] All player-facing pages inject nav with the same set of links → `nav.spec.js`
+- [x] Subdirectory pages (`hunters/`, `missions/`, `reports/`) get correct relative paths in nav links → `nav.spec.js`
+- [x] Nav links resolve to valid pages (no 404s) → `nav.spec.js`
+
+## Running the Tests
+
+```bash
+# Install dependencies (first time only)
+npm install
+npx playwright install chromium
+
+# Run all tests
+npm test
+
+# Run with UI (recommended for debugging)
+npm run test:ui
+
+# Run a single spec file
+npx playwright test tests/incidents.spec.js
+
+# Run with server already running (faster)
+wrangler pages dev .  # in one terminal
+npx playwright test   # in another
+```
+
+The `playwright.config.js` has `reuseExistingServer: true` — if `wrangler pages dev .` is already running, Playwright will use it. Otherwise it starts it automatically.
+
+---
+
+## Feature Backlog — Pending Implementation
+
+### ~~`lab-incidents.html` → `campbell-logs.html` link~~ — ✅ DONE
+
+`link` field added to both CAMPBELL-LOG teaser items in `incidents.json`; `renderTeaser()` in `lab-incidents.html` conditionally renders `.log-full-link a`; tested in incidents.spec.js (W2 + W3 VIEW FULL LOGS assertions).
+
+### ~~`feed.html` click-expand behaviour~~ — ✅ DONE
+
+Feed entries and move cards expand on click (`.expanded` toggle). `?mouseover=true` URL flag restores CSS `:hover` behaviour. Tested in feed.spec.js.

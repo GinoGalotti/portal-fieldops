@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Alan Frazier</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="hunter.css">
+</head>
+<body>
+
+<header>
+  <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</a>
+  <nav id="player-nav"></nav>
+  <script src="../player-nav.js"></script>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">// HUNTER DOSSIER · CHANGELING · HUNTER STORIES</div>
+  <h1 class="hero-title">ALAN <span class="accent">FRAZIER</span></h1>
+  <p class="hero-desc">You were swapped at birth and raised by a human family. They're gone now. You still don't know what you are — only that you're not quite what everyone assumed. Rex's experiment triggered something, and the world has felt slightly wrong ever since. The right kind of wrong. The kind with edges you can almost see.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">PLAYBOOK: <span>Changeling</span></div>
+    <div class="hero-meta-item">ORIGIN: <span>Fey — Undefined</span></div>
+    <div class="hero-meta-item">MORAL COMPASS: <span>Reed Atwood</span></div>
+    <div class="hero-meta-item">STATUS: <span>Active · PORTAL Field Operative</span></div>
+  </div>
+  <div class="campbell-note">
+    <span class="c-label">// CAMPBELL — OPERATIVE NOTE</span>
+    Hunter stories are personal arcs that develop alongside active cases. You choose if and when to start one. Each arc has a player section (your choices and beats) and a Keeper section (blurred). The Keeper section contains things that are true regardless of your choices — how the world will push back.
+  </div>
+</div>
+
+<main>
+<!-- ══ PLAYBOOK SECTION ══ -->
+<div id="playbook" class="playbook">
+  <div class="playbook-header">
+    <div class="playbook-eyebrow">// OPERATIVE PLAYBOOK</div>
+    <div class="playbook-title">The Changeling</div>
+  </div>
+  <div class="playbook-body">
+
+    <div class="playbook-section-label">// STATS</div>
+    <div class="stats-grid">
+      <div class="stat-cell"><div class="stat-label">Charm</div><input class="stat-input" type="number" data-stat="charm" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Cool</div><input class="stat-input" type="number" data-stat="cool" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Sharp</div><input class="stat-input" type="number" data-stat="sharp" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Tough</div><input class="stat-input" type="number" data-stat="tough" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Weird</div><input class="stat-input" type="number" data-stat="weird" min="-3" max="3" placeholder="0"></div>
+    </div>
+
+    <div class="playbook-section-label">// HARM · LUCK · EXPERIENCE</div>
+    <div class="track-row">
+      <div class="track-label">Harm</div>
+      <div class="track-pips">
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+      </div>
+    </div>
+    <div class="track-row">
+      <div class="track-label">Luck</div>
+      <div class="track-pips">
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+      </div>
+    </div>
+    <div class="track-row">
+      <div class="track-label">XP</div>
+      <div class="track-pips">
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+      </div>
+    </div>
+
+    <div id="luck-special" class="luck-special-block"></div>
+
+    <div class="playbook-section-label">// UNKNOWN HERITAGE TAGS</div>
+    <div class="pb-block">
+      <div class="pb-special">
+        <span class="pb-special-label">Tag 1</span>
+        <input class="pb-special-input" type="text" data-special-idx="0" placeholder="e.g. Dietary restriction, Strange thoughts…">
+      </div>
+      <div class="pb-special">
+        <span class="pb-special-label">Tag 2</span>
+        <input class="pb-special-input" type="text" data-special-idx="1" placeholder="e.g. Sensory bombardment, Erratic power…">
+      </div>
+      <div class="pb-special">
+        <span class="pb-special-label">Tag 3</span>
+        <input class="pb-special-input" type="text" data-special-idx="2" placeholder="e.g. Obsession with…, Allergy to…">
+      </div>
+    </div>
+
+    <div class="playbook-section-label">// PLAYBOOK MOVES <button class="hide-toggle" onclick="toggleHide(this,'alan-moves')">// HIDE UNCHOSEN</button></div>
+    <div class="pick-note">Glamour is mandatory. Pick 2 more.</div>
+    <ul class="check-list" id="alan-moves">
+      <li class="check-item mandatory checked" data-check-key="move-glamour">
+        <span class="check-box"></span>
+        <span><span class="check-name">Glamour</span><span class="check-mandatory-tag">// MANDATORY</span>
+        <div class="check-desc">When feeling calm, you can maintain an illusion of humanity. You may drop your glamour and display your supernatural power to turn any roll into a 10. Your unknown heritage stirs up trouble right away or soon after.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-inhuman-talent">
+        <span class="check-box"></span>
+        <span><span class="check-name">Inhuman Talent</span>
+        <div class="check-desc">+1 ongoing when you use a basic Weird move that uses your specific powers (plants, ice, illusions, summer, etc.). At the start of each session, hold 2. Spend your hold for +1 forward on a move your powers can enhance.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-they-are-my-people">
+        <span class="check-box"></span>
+        <span><span class="check-name">They Are My People</span>
+        <div class="check-desc">Once per session, when you protect someone, act as if you rolled a 12. You gain +1 forward when acting under pressure to resist instincts like your unknown heritage, dark urges, and fight-or-flight situations.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-force-of-nature">
+        <span class="check-box"></span>
+        <span><span class="check-name">Force of Nature</span><span class="check-roll">roll +Weird</span>
+        <div class="check-desc">You have a supernatural attack from your heritage. On 10+: summon a 1-harm close weapon, pick two extras. On 7–9: pick one extra. Miss: the power turns against you. Extras: +1 harm, hand, far, autonomous, distracting, ignore-armour, area, grab, blind, stun.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-lockdown">
+        <span class="check-box"></span>
+        <span><span class="check-name">Lockdown</span><span class="check-roll">roll +Weird</span>
+        <div class="check-desc">You can stun people with a petrifying gaze, overwhelming illusions, or bewildering moths. On 10+: target immobilised for a few minutes or until something snaps them out. On 7–9: immobilised while you focus. Miss: magical backlash.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-faerie-gossip">
+        <span class="check-box"></span>
+        <span><span class="check-name">Faerie Gossip</span><span class="check-roll">roll +Weird</span>
+        <div class="check-desc">You can communicate with local spirits and mystical creatures. When investigating a mystery by questioning these beings, roll +Weird instead of +Sharp and ask extra questions: Is anything affecting the supernatural environment? How long has ____ been in the area? When did ____ first arrive?</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-renewal">
+        <span class="check-box"></span>
+        <span><span class="check-name">Renewal</span>
+        <div class="check-desc">When teammates and allies in your presence recover harm by any means, they recover 1 extra harm.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-strange-paths">
+        <span class="check-box"></span>
+        <span><span class="check-name">Strange Paths</span><span class="check-roll">roll +Weird</span>
+        <div class="check-desc">You can walk (or drive) between worlds, though you don't know the way well. On 10+: arrive quicker than possible. On 7–9: find trouble along the way. Miss: arrive a little too late or deal with something blocking the way.</div></span>
+      </li>
+    </ul>
+
+    <div class="playbook-section-label">// GEAR &amp; EQUIPMENT <button class="hide-toggle" onclick="toggleHide(this,'alan-gear')">// HIDE UNCHOSEN</button></div>
+    <div class="pick-note">Pick 1 transport · Pick 1 weapon · Pick 2 mementos</div>
+    <ul class="check-list" id="alan-gear">
+      <li class="check-item" data-check-key="gear-skateboard"><span class="check-box"></span><span><span class="check-name">Skateboard</span><span class="check-roll">transport</span></span></li>
+      <li class="check-item" data-check-key="gear-roller-skates"><span class="check-box"></span><span><span class="check-name">Roller skates</span><span class="check-roll">transport</span></span></li>
+      <li class="check-item" data-check-key="gear-bicycle"><span class="check-box"></span><span><span class="check-name">Bicycle</span><span class="check-roll">transport</span></span></li>
+      <li class="check-item" data-check-key="gear-pickup-truck"><span class="check-box"></span><span><span class="check-name">Old pickup truck</span><span class="check-roll">transport</span></span></li>
+      <li class="check-item" data-check-key="gear-motorcycle"><span class="check-box"></span><span><span class="check-name">Motorcycle</span><span class="check-roll">transport</span></span></li>
+      <li class="check-item" data-check-key="gear-van"><span class="check-box"></span><span><span class="check-name">Van</span><span class="check-roll">transport</span></span></li>
+      <li class="check-item" data-check-key="gear-decent-car"><span class="check-box"></span><span><span class="check-name">Fairly new car in decent condition</span><span class="check-roll">transport</span></span></li>
+      <li class="check-item" data-check-key="gear-classic-car"><span class="check-box"></span><span><span class="check-name">Classic car in poor condition</span><span class="check-roll">transport</span></span></li>
+      <li class="check-item" data-check-key="gear-sport-club"><span class="check-box"></span><span><span class="check-name">Sport club</span><span class="check-roll">weapon · 2-harm hand innocuous messy</span></span></li>
+      <li class="check-item" data-check-key="gear-pocket-knife"><span class="check-box"></span><span><span class="check-name">Pocket knife / multitool</span><span class="check-roll">weapon · 1-harm hand useful small</span></span></li>
+      <li class="check-item" data-check-key="gear-small-handgun"><span class="check-box"></span><span><span class="check-name">Small handgun</span><span class="check-roll">weapon · 2-harm close loud</span></span></li>
+      <li class="check-item" data-check-key="gear-hunting-rifle"><span class="check-box"></span><span><span class="check-name">Hunting rifle</span><span class="check-roll">weapon · 3-harm far loud reload</span></span></li>
+      <li class="check-item" data-check-key="gear-sledgehammer"><span class="check-box"></span><span><span class="check-name">Sledgehammer</span><span class="check-roll">weapon · 2-harm hand messy slow</span></span></li>
+      <li class="check-item" data-check-key="gear-fire-axe"><span class="check-box"></span><span><span class="check-name">Fire axe</span><span class="check-roll">weapon · 2-harm hand messy heavy</span></span></li>
+      <li class="check-item" data-check-key="gear-talisman"><span class="check-box"></span><span><span class="check-name">Talisman or artifact</span><span class="check-roll">weapon · 1-harm close magic ignore-armour</span></span></li>
+      <li class="check-item" data-check-key="gear-childhood-toy"><span class="check-box"></span><span><span class="check-name">A childhood toy</span><span class="check-roll">memento</span></span></li>
+      <li class="check-item" data-check-key="gear-laptop"><span class="check-box"></span><span><span class="check-name">A laptop</span><span class="check-roll">memento</span></span></li>
+      <li class="check-item" data-check-key="gear-knapsack"><span class="check-box"></span><span><span class="check-name">A knapsack, backpack, or purse</span><span class="check-roll">memento</span></span></li>
+      <li class="check-item" data-check-key="gear-smartphone"><span class="check-box"></span><span><span class="check-name">A smartphone, mobile game device, or music player</span><span class="check-roll">memento</span></span></li>
+      <li class="check-item" data-check-key="gear-old-photos"><span class="check-box"></span><span><span class="check-name">Old photos</span><span class="check-roll">memento</span></span></li>
+      <li class="check-item" data-check-key="gear-jewellery"><span class="check-box"></span><span><span class="check-name">Jewellery</span><span class="check-roll">memento</span></span></li>
+      <li class="check-item" data-check-key="gear-clothing"><span class="check-box"></span><span><span class="check-name">A favourite piece of clothing</span><span class="check-roll">memento</span></span></li>
+      <li class="check-item" data-check-key="gear-journal"><span class="check-box"></span><span><span class="check-name">A journal</span><span class="check-roll">memento</span></span></li>
+      <li class="check-item" data-check-key="gear-letters"><span class="check-box"></span><span><span class="check-name">Letters or emails from home</span><span class="check-roll">memento</span></span></li>
+    </ul>
+
+    <div class="playbook-section-label">// BONDS <button class="hide-toggle" onclick="addBond()">// + ADD</button></div>
+    <div class="pb-block" id="bonds-container">
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 1…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 2…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 3…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
+    </div>
+
+    <div class="playbook-section-label">// NOTES</div>
+    <div class="pb-block">
+      <textarea class="pb-field" data-sheet="notes" rows="4" placeholder="Session notes, backstory, reminders…"></textarea>
+    </div>
+
+    <div class="playbook-section-label">// IMPROVEMENTS <button class="hide-toggle" onclick="toggleHide(this,'alan-impr')">// HIDE UNCHOSEN</button></div>
+    <ul class="check-list" id="alan-impr">
+      <li class="check-item" data-check-key="impr-weird-3"><span class="check-box"></span><span><span class="check-name">+1 Weird</span><span class="check-roll">max +3</span></span></li>
+      <li class="check-item" data-check-key="impr-cool-2"><span class="check-box"></span><span><span class="check-name">+1 Cool</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-sharp-2"><span class="check-box"></span><span><span class="check-name">+1 Sharp</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-charm-2"><span class="check-box"></span><span><span class="check-name">+1 Charm</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-changeling-move-1"><span class="check-box"></span><span><span class="check-name">Take another Changeling move</span></span></li>
+      <li class="check-item" data-check-key="impr-changeling-move-2"><span class="check-box"></span><span><span class="check-name">Take another Changeling move</span></span></li>
+      <li class="check-item" data-check-key="impr-ally"><span class="check-box"></span><span><span class="check-name">Gain an ally</span><div class="check-desc">Associated with either the mortal or supernatural worlds.</div></span></li>
+      <li class="check-item" data-check-key="impr-advanced-weird"><span class="check-box"></span><span><span class="check-name">Mark use magic (or alternate Weird move) as advanced</span></span></li>
+      <li class="check-item" data-check-key="impr-other-move-1"><span class="check-box"></span><span><span class="check-name">Take a move from another playbook</span></span></li>
+      <li class="check-item" data-check-key="impr-other-move-2"><span class="check-box"></span><span><span class="check-name">Take a move from another playbook</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-any-3"><span class="check-box"></span><span><span class="check-name">+1 to any rating</span><span class="check-roll">advanced · max +3</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-new-playbook"><span class="check-box"></span><span><span class="check-name">Change this hunter to a new playbook</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-second-hunter"><span class="check-box"></span><span><span class="check-name">Create a second hunter to play in addition to this one</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-basic-advanced-1"><span class="check-box"></span><span><span class="check-name">Mark two basic moves as advanced</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-basic-advanced-2"><span class="check-box"></span><span><span class="check-name">Mark another two basic moves as advanced</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-retire"><span class="check-box"></span><span><span class="check-name">Retire this hunter to safety</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-erase-luck"><span class="check-box"></span><span><span class="check-name">Erase one used Luck mark</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-heritage-tag"><span class="check-box"></span><span><span class="check-name">Remove one Unknown Heritage tag</span><span class="check-roll">advanced</span><div class="check-desc">You've integrated well enough to avoid issues.</div></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-second-area"><span class="check-box"></span><span><span class="check-name">New interest: add a second area of study</span><span class="check-roll">advanced</span></span></li>
+    </ul>
+
+  </div>
+</div>
+
+<div class="arc-nav">
+  <a href="#playbook">Playbook</a>
+  <a href="#arc-villains">Arc I — Villains Like Myself</a>
+  <a href="#arc-awakened">Arc II — The Awakened One</a>
+  <a href="#arc-thresholds" class="custom">Arc III — The Map Before the Territory ✦ PORTAL</a>
+</div>
+
+<div class="how-it-works">
+  <div class="how-title">// ABOUT HUNTER STORIES</div>
+  <div class="how-grid">
+    <div class="how-item"><strong>Starting a Story</strong><p>Tell the Keeper you want to begin a hunter story. They'll weave its pressures into the campaign alongside active cases — at first in the background, then increasingly front and centre.</p></div>
+    <div class="how-item"><strong>Story Beats</strong><p>Earn a beat each time a story moment happens — five specific to your arc, plus general triggers. Gather five beats, erase them, and gain a concrete benefit.</p></div>
+    <div class="how-item"><strong>Resolution</strong><p>After each session, decide if the story's main conflict has resolved. If so, take one resolution move — a permanent change that reflects how the arc changed you, for better and worse.</p></div>
+  </div>
+</div>
+
+<!-- ══ ARC I: VILLAINS LIKE MYSELF ══ -->
+<div id="arc-villains" class="arc">
+  <div class="arc-header">
+    <div class="arc-eyebrow">// ARC I — ADAPTED FROM HUNTER'S JOURNAL</div>
+    <div class="arc-name">Villains Like Myself</div>
+    <p class="arc-intro">A group of creatures of your kind — whatever your kind is — are causing serious harm. Worse, they're connected to you. They make your life harder and your nature more suspicious. For Alan, the question isn't just "what am I?" but "what does my kind do?" — and the answer is being written right now by people you've never met, in ways you'll be blamed for.</p>
+  </div>
+  <div class="arc-player">
+    <div class="arc-section-label">// FOR ALAN — PLAYER SECTION</div>
+    <div class="entry-points">
+      <h3>When to Start This Arc</h3>
+      <ul class="entry-list">
+        <li>The team encounters a creature with properties that echo your own — something about how it moves through space, how it relates to the human world, or what it wants from it.</li>
+        <li>Something you do gets called into question by another hunter — not accusingly, but as a genuine question about your nature.</li>
+        <li>You find evidence that you're not the only changeling in PORTAL's casework history. You're not even the most recent.</li>
+      </ul>
+    </div>
+    <div class="choices-block">
+      <div class="choice-group">
+        <h3>What Villainy Are They Engaged In?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Preying on people's life-force, memory, or sense of self — the specific currency of fey exchange.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Kidnapping people — specifically taking children or young adults and leaving something in their place.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Creating exploitative arrangements — organisations, relationships, binding agreements that look consensual from outside.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Something that looks harmless and isn't. Something that mirrors how Alan navigates the world.</span></label>
+          <div class="choice-open" style="grid-column:1/-1"><label>Something else:</label><input type="text" placeholder="Their villainy…"></div>
+        </div>
+      </div>
+      <div class="choice-group">
+        <h3>How Are They Connected to You?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They're the ones who left you with your human family. They know exactly what you are and they've been watching.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">You're part of the same nest, breed, or lineage — which means their actions have implications for your nature.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The same force hunts you both — you just didn't know they were also being hunted.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">You're mentioned in the same prophecy, accord, or binding — none of which you agreed to.</span></label>
+          <div class="choice-open" style="grid-column:1/-1"><label>Something else:</label><input type="text" placeholder="Your connection…"></div>
+        </div>
+      </div>
+      <div class="choice-group">
+        <h3>How Do Their Actions Target You Specifically?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They want to convince or force you to join them. What they're doing, they want Alan's skills and access to do better.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They make other dangerous people hunt your kind — including people who might otherwise help you.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">You have a connection — not psychic, but structural. When they act, you feel something adjacent to guilt.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They're actively using your identity — your human name, your PORTAL affiliation — to make someone trust them.</span></label>
+          <div class="choice-open" style="grid-column:1/-1"><label>Something else:</label><input type="text" placeholder="How they target you…"></div>
+        </div>
+      </div>
+    </div>
+    <div class="beats-block">
+      <h3>Story Beats <span style="font-weight:300;font-size:0.8rem;color:var(--text-dim)">&nbsp;— mark five to gain a benefit</span></h3>
+      <div class="beats-track"><div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div></div>
+      <ul class="beats-list">
+        <li>You behave similarly to the Villains — not maliciously, but in a way another hunter might notice and not say.</li>
+        <li>You try to reason with the Villains, or with a creature who might be connected to them.</li>
+        <li>You do something deliberately different from what they would do, in a situation where both paths were available.</li>
+        <li>You protect another hunter or an ordinary person specifically from the Villains' actions.</li>
+        <li>You learn something true about your own nature because of what you observe in them.</li>
+      </ul>
+    </div>
+    <div class="resolution-block">
+      <h3>Resolution Moves</h3>
+      <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
+      <div class="resolution-moves">
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>Companion of Monsters</div>
+          <p>You know how creatures of your kind think. When you successfully <strong>investigate a mystery</strong> about a fey or changeling entity, you may ask an extra question — but if you do, the entity learns something about you, as though you'd failed the roll.</p>
+        </div>
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>Alone in Humanity</div>
+          <p>When you try to keep humans safe from creatures of your kind, <strong>take –1 forward</strong> and <strong>mark experience</strong>. The cost of being the bridge is that you stand on neither shore.</p>
+        </div>
+      </div>
+    </div>
+    <div class="portal-note">// PORTAL HOOK: CAMPBELL has no specific intelligence on fey activity in the PORTAL casework history — which is itself unusual. Alan interrogating CAMPBELL about other-plane entities, fey lineages, or the history of changeling cases will get precise, careful answers that reveal CAMPBELL has been tracking this thread without flagging it for Victor. Ask the Keeper why.</div>
+  </div>
+  <div class="blur-wrap">
+    <div class="blur-notice">// KEEPER ACCESS ONLY — DO NOT READ</div>
+    <div class="arc-keeper blurred">
+      <div class="keeper-label">// FOR THE KEEPER — ARC: VILLAINS LIKE MYSELF</div>
+      <p class="keeper-intro">This arc is Alan's first real contact with what he is. The Villains should feel like a corrupted version of Alan's best traits — his adaptability, his ability to move between worlds, his instinct for what people need. What they're doing with those traits should be ugly enough that Alan is disgusted, and recognisable enough that he's uncomfortable being disgusted.</p>
+      <p class="keeper-intro">The connection to thin-boundary locations is the natural hook here. If the Villains are operating near or through liminal spaces — the kind Alan has been accumulating evidence about — this arc and Arc III (The Map Before the Territory) can be run in parallel, with the same locations serving both stories. The Villains may even know more about the threshold map than Alan does.</p>
+      <p class="keeper-intro"><em>Key note:</em> The Villains should have one motive that Alan genuinely finds sympathetic. They are not simply evil. They are doing something that made sense from inside a worldview Alan might have had if different things had happened to him first.</p>
+      <table class="countdown-table">
+        <tr><td>Day</td><td>The Villains commit an act of harm in the PORTAL area. Evidence implicates something of Alan's general description — humanoid, fey-adjacent, apparently trusted by victims.</td></tr>
+        <tr><td>Shadows</td><td>Victims (or their advocates) find PORTAL and seek help. They are suspicious of Alan specifically. The team will have to navigate this.</td></tr>
+        <tr><td>Sunset</td><td>The Villains approach Alan's Caretakers — the human networks Alan trusts. They know who Alan cares about. They are offering something.</td></tr>
+        <tr><td>Dusk</td><td>The Villains confront Alan directly — not violently. They make the case for why he should join them, or at minimum stop obstructing them. The case is not entirely unconvincing.</td></tr>
+        <tr><td>Nightfall</td><td>The Victims turn against Alan. Whatever PORTAL's stance, Alan is now associated with the Villains in the eyes of people he wanted to protect.</td></tr>
+        <tr><td>Midnight</td><td>The Villains complete their objective. Alan is implicated, associated, or changed — whether or not he was involved. The question of who he is has been answered by people other than him.</td></tr>
+      </table>
+      <div class="threats-grid">
+        <div class="threat-card">
+          <div class="threat-name">The Villains</div>
+          <div class="threat-type">Appropriate fey or changeling monster type</div>
+          <p class="threat-desc">Experienced, effective, and fundamentally similar to Alan in kind if not in choice. They have resources and abilities Alan hasn't developed yet — they've been doing this longer. They're not trying to destroy Alan. They want him in their orbit.</p>
+          <ul class="threat-moves">
+            <li>Commit harmful acts in ways that draw suspicion toward Alan.</li>
+            <li>Tempt Alan with answers — real ones — about his origin and nature.</li>
+            <li>Ruin Alan's connections and reputation among people who matter to him.</li>
+          </ul>
+          <div class="custom-move"><strong>Custom Move — Beaten at My Own Game:</strong> Alan takes –1 ongoing to use Weird-based moves against the Villains — they're more practised at these abilities than he is. The first time Alan successfully uses those powers against them in a mystery, however, mark experience.</div>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">Villains' Victims</div>
+          <div class="threat-type">Bystanders: Officials (motivation: to be suspicious)</div>
+          <p class="threat-desc">People hurt by the Villains. They will be hostile or suspicious toward anyone who reminds them of who hurt them — which includes Alan, and may include the whole PORTAL team by association.</p>
+          <ul class="threat-moves">
+            <li>Seek help against the Villains — and be unsure whether Alan qualifies as help.</li>
+            <li>Mistake Alan for a Villain, especially in stressful field situations.</li>
+            <li>Research the Villains' connections and find Alan's name in the adjacent data.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">Alan's Caretakers</div>
+          <div class="threat-type">Bystanders: Innocents (motivation: to do the right thing)</div>
+          <p class="threat-desc">The human networks Alan has maintained — professional contacts, people from his family's community, anyone Alan trusts as a connection to his human life. The Villains are probably aware of these people. They may approach them before Alan warns them.</p>
+          <ul class="threat-moves">
+            <li>Stand up to the Villains without understanding what they're standing up to.</li>
+            <li>Reveal information about Alan — and the Villains — to people who shouldn't have it.</li>
+            <li>Make a deal with the Villains, or reveal one that was already made.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">Reed</div>
+          <div class="threat-type">Bystander: Innocent — specifically, Alan's moral compass</div>
+          <p class="threat-desc">Alan uses Reed as his moral compass. During this arc, Reed may have opinions about what Alan should do that are well-intentioned and not quite right. The Villains may notice this dynamic and attempt to manipulate it — Reed can be appealed to via what will make the group happy, which is a known vulnerability.</p>
+          <ul class="threat-moves">
+            <li>Offer Alan a clear moral position that is sincere but incomplete.</li>
+            <li>Be targeted by the Villains as a pressure point on Alan.</li>
+            <li>Ask Alan a direct question about his nature that Alan hasn't answered for himself yet.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ARC II: THE AWAKENED ONE ══ -->
+<div id="arc-awakened" class="arc">
+  <div class="arc-header">
+    <div class="arc-eyebrow">// ARC II — ADAPTED FROM HUNTER'S JOURNAL</div>
+    <div class="arc-name">The Awakened One</div>
+    <p class="arc-intro">Someone connected to you turns out to be not-so-ordinary. Maybe they're a changeling too — different powers, same displacement. Maybe something woke in them near one of the thin-boundary locations Alan has been mapping. Either way, they're lost, dangerous, and yours to guide. Alan never had a guide. That's the whole complication.</p>
+  </div>
+  <div class="arc-player">
+    <div class="arc-section-label">// FOR ALAN — PLAYER SECTION</div>
+    <div class="entry-points">
+      <h3>When to Start This Arc</h3>
+      <ul class="entry-list">
+        <li>The team meets a bystander during a case who responds to the anomalous environment in a way that isn't quite right — too calm, or too aware.</li>
+        <li>Alan has a moment of feeling entirely alone in what he is — and then encounters evidence that he isn't.</li>
+        <li>Something happens near a thin-boundary location that wakes a power in someone who had no prior contact with the supernatural.</li>
+      </ul>
+    </div>
+    <div class="choices-block">
+      <div class="choice-group">
+        <h3>Who Is the Awakened One?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Someone from Alan's human family — a cousin, a sibling of the family that raised him, someone he hasn't seen in years.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A professional contact — someone who works adjacent to PORTAL's operational area and has been noticing things.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Someone important to the Aldermoor district or another thin-boundary location — a local who absorbed something from prolonged proximity.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Someone who was briefly adjacent to one of Rex's experiments. Powers triggered externally, the same way Alan's were.</span></label>
+          <div class="choice-open" style="grid-column:1/-1"><label>Someone else:</label><input type="text" placeholder="Who they are…"></div>
+        </div>
+      </div>
+      <div class="choice-group">
+        <h3>What Power Woke in Them?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They're a changeling — similar to Alan. Maybe from the same lineage. The resemblance is uncomfortable.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They're a changeling — different kind entirely. Their powers and Alan's are not the same language. Understanding each other will take work.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They have threshold sensitivity — they can feel where the boundaries between living and dead consciousness are thin. Which means they've been feeling it for years without knowing what it was.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They're turning into something — slowly, not violently. The transformation is gradual enough that they can pretend it isn't happening.</span></label>
+          <div class="choice-open" style="grid-column:1/-1"><label>Something else:</label><input type="text" placeholder="What woke in them…"></div>
+        </div>
+      </div>
+      <div class="choice-group">
+        <h3>What Danger Are They In?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Their powers attract entities — specifically entities associated with thin-boundary locations. They've been a beacon without knowing.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Their powers can make them into something dangerous — not evil, but genuinely harmful to people around them.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Their powers make their community push them away. They're losing their human anchors faster than Alan lost his.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Someone else has noticed. MESA, a fey entity, or another organisation has them flagged and is waiting for Alan to make a move first.</span></label>
+          <div class="choice-open" style="grid-column:1/-1"><label>Something else:</label><input type="text" placeholder="Their danger…"></div>
+        </div>
+      </div>
+    </div>
+    <div class="beats-block">
+      <h3>Story Beats <span style="font-weight:300;font-size:0.8rem;color:var(--text-dim)">&nbsp;— mark five to gain a benefit</span></h3>
+      <div class="beats-track"><div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div></div>
+      <ul class="beats-list">
+        <li>You devote significant time to the Awakened One — time that costs you in terms of cases or team availability.</li>
+        <li>The Awakened One's powers cause trouble — directly, in a case or in Alan's life.</li>
+        <li>The Awakened One's powers offer genuine help — something Alan can't do alone and couldn't have planned for.</li>
+        <li>The Awakened One is rejected because of their powers — by someone who mattered to them.</li>
+        <li>The Awakened One's approach to their powers changes — in a direction Alan didn't anticipate and has to adapt to.</li>
+      </ul>
+    </div>
+    <div class="resolution-block">
+      <h3>Resolution Moves</h3>
+      <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
+      <div class="resolution-moves">
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>Mentor</div>
+          <p>When people act on your advice about the supernatural, <strong>mark experience</strong>. When they ignore your advice, <strong>take –1 forward</strong>. You've become someone whose knowledge has weight. That has consequences.</p>
+        </div>
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>Can't Save Everyone</div>
+          <p>When you ignore someone in need to help someone or something else, <strong>take –1 forward</strong> and <strong>mark experience</strong>. The Awakened One taught you that being a guide means making impossible choices about who gets your attention.</p>
+        </div>
+      </div>
+    </div>
+    <div class="portal-note">// PORTAL HOOK: If the Awakened One has threshold sensitivity — the ability to feel where boundaries are thin — they may already have data Alan doesn't. They might be able to describe places Alan hasn't visited yet. Alan has been accumulating evidence of thin-boundary locations. The Awakened One might be the key to understanding why those locations exist, not just where they are.</div>
+  </div>
+  <div class="blur-wrap">
+    <div class="blur-notice">// KEEPER ACCESS ONLY — DO NOT READ</div>
+    <div class="arc-keeper blurred">
+      <div class="keeper-label">// FOR THE KEEPER — ARC: THE AWAKENED ONE</div>
+      <p class="keeper-intro">Alan never had a guide. That's the emotional engine of this arc. He's going to mentor someone through a process he navigated alone, and the gap between what he needed and what he received will shape how he does it. He may over-correct — giving the Awakened One too much support, or the wrong kind. He may under-correct — assuming they need the independence he had to develop by necessity. Neither is right.</p>
+      <p class="keeper-intro">If the Awakened One has threshold sensitivity, use them to seed information about the thin-boundary location network ahead of Arc III. They can describe locations Alan hasn't found yet. They can also attract entity attention near those locations — making Alan's role in the scene ambiguous to anyone watching from outside.</p>
+      <p class="keeper-intro"><em>Reed note:</em> Reed is Alan's moral compass. During this arc, the Awakened One may try to use Reed as their moral compass instead — seeking the team member who seems most approachable. This can create a productive triangle, or a source of friction if Reed's advice diverges from Alan's.</p>
+      <table class="countdown-table">
+        <tr><td>Day</td><td>The Awakened One uses their powers — clumsily, in a way that causes localised chaos. They don't understand what happened. Alan is the only one who might.</td></tr>
+        <tr><td>Shadows</td><td>The Awakened One is punished or pushed away by someone important to them — family, employer, community. The rejection is specific and human.</td></tr>
+        <tr><td>Sunset</td><td>The Awakened One inadvertently harms someone Alan cares about — not maliciously. The harm is real. The intent is irrelevant to the person hurt.</td></tr>
+        <tr><td>Dusk</td><td>The Awakened One becomes estranged from the people who were rejecting them — they've stopped trying to maintain the connection. This is both safer and much more dangerous.</td></tr>
+        <tr><td>Nightfall</td><td>The Awakened One retreats to a self-made refuge and begins using their powers to defend it. They're not hostile to Alan — but reaching them will cost something.</td></tr>
+        <tr><td>Midnight</td><td>Someone gets seriously hurt trying to reach the Awakened One's refuge. Alan has to decide how much of this is his responsibility — and what he's willing to do about it.</td></tr>
+      </table>
+      <div class="threats-grid">
+        <div class="threat-card">
+          <div class="threat-name">The Awakened One</div>
+          <div class="threat-type">Bystander: Victim (motivation: to put themselves in danger)</div>
+          <p class="threat-desc">Less experienced than Alan, processing a transformation Alan navigated alone. They will not react to their situation the way Alan did — they're a different person. Resist the urge to play them as a younger Alan. Give them one trait Alan finds genuinely difficult to work with.</p>
+          <ul class="threat-moves">
+            <li>Use their powers at exactly the wrong moment.</li>
+            <li>Try to silence their powers through suppression — which doesn't work and makes it worse.</li>
+            <li>Ask Alan questions he doesn't have good answers to yet.</li>
+          </ul>
+          <div class="custom-move"><strong>Custom Move — Tutoring:</strong> When the Awakened One uses their powers with Alan's help, Alan rolls +Charm. On 10+, hold 1. The Awakened One uses their power with one side effect chosen by Alan. On 7-9, the Keeper chooses the side effect. On a miss, the Keeper chooses three. The Awakened One can spend 2 hold to reduce a side effect.</div>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">The Rejecting Ones</div>
+          <div class="threat-type">Bystanders: Skeptics or Busybodies</div>
+          <p class="threat-desc">People close to the Awakened One who can't handle what they're becoming — family members, a partner, a community. They're not villains. They're frightened people doing frightening things in response.</p>
+          <ul class="threat-moves">
+            <li>Scold, punish, or push away the Awakened One in ways that make the situation worse.</li>
+            <li>Seek help — from PORTAL, from authorities — that will complicate everything.</li>
+            <li>Support the Awakened One in ways that are toxic or counterproductive.</li>
+          </ul>
+        </div>
+        <div class="threat-card full">
+          <div class="threat-name">The Interested Party</div>
+          <div class="threat-type">Villain or Minion — MESA, fey entity, or other</div>
+          <p class="threat-desc">Someone has noticed the Awakened One. In PORTAL's world, the most natural candidate is MESA — they have been studying thin-boundary interactions, and an individual with spontaneous threshold sensitivity is exactly what their research requires. They are patient. They will not move until Alan does something that gives them an opening.</p>
+          <ul class="threat-moves">
+            <li>Observe without intervening — for longer than seems reasonable.</li>
+            <li>Approach the Awakened One directly when Alan is occupied with something else.</li>
+            <li>Offer the Awakened One something Alan genuinely cannot — answers about their specific nature, or stability, or belonging.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ARC III: THE MAP BEFORE THE TERRITORY ══ -->
+<div id="arc-thresholds" class="arc arc-custom">
+  <div class="arc-header">
+    <div class="arc-eyebrow">// ARC III — ORIGINAL · P.O.R.T.A.L CAMPAIGN</div>
+    <div class="arc-name">The Map Before the Territory</div>
+    <p class="arc-intro">You've been accumulating evidence. The Aldermoor reservoir. The Meridian Theatre. The sketch in Diane Marsh's notebook — a threshold diagram that you recognised before you understood why. Someone mapped where the boundaries between living and dead consciousness are thin — before any of this started, before PORTAL was involved, maybe before Alan himself arrived in this city. The question isn't whether there's a map. The question is who made it first, and what they were planning to do with it.</p>
+  </div>
+  <div class="arc-player">
+    <div class="arc-section-label">// FOR ALAN — PLAYER SECTION</div>
+    <div class="entry-points">
+      <h3>When to Start This Arc</h3>
+      <ul class="entry-list">
+        <li>Alan recognises a pattern in the thin-boundary locations that couldn't be coincidental — they're arranged, not discovered.</li>
+        <li>Diane Marsh's notebook sketch appears in a case, and Alan notices the threshold diagram before anyone else understands what they're looking at.</li>
+        <li>Alan encounters a place — possibly during a case — that feels immediately, specifically familiar, despite having no memory of visiting it. The familiarity is spatial, not emotional.</li>
+        <li>CAMPBELL, in answering a question about something else, mentions a thin-boundary location that isn't on Alan's current list. And then doesn't explain how it's in the database.</li>
+      </ul>
+    </div>
+    <div class="choices-block">
+      <div class="choice-group">
+        <h3>What Does Alan's Evidence Currently Show?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The locations form a geometric pattern when mapped — not perfect, but deliberate. Something is being enclosed or connected.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The locations correspond to sites of historical significance — not to humans, but to something older. The district history doesn't explain them.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The boundaries weren't always thin. Something happened to thin them — and the events at each location happened in a sequence Alan is still reconstructing.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The map is incomplete. There are locations that should be there — structurally, the pattern demands them — that Alan hasn't found yet.</span></label>
+          <div class="choice-open" style="grid-column:1/-1"><label>Something else:</label><input type="text" placeholder="What the evidence shows…"></div>
+        </div>
+      </div>
+      <div class="choice-group">
+        <h3>What Does Alan Fear the Map Is For?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">It's a door. Something is using the thin-boundary locations as points of entry into this world — or exit from it.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">It's a hunting ground. The thin-boundary locations attract entities that then harm people — and the map ensures those entities arrive in predictable places.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">It's a claim. Someone has mapped these locations because they intend to own them — or already does, in a legal sense Alan is only beginning to understand.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">It's a record of Alan specifically. The thin-boundary locations correspond to everywhere Alan has ever spent significant time. The map is about him.</span></label>
+          <div class="choice-open" style="grid-column:1/-1"><label>Something else:</label><input type="text" placeholder="What you fear it means…"></div>
+        </div>
+      </div>
+      <div class="choice-group">
+        <h3>What Could Knowing the Truth Cost?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Alan's fey origin. The map's creator may be the same entity or lineage that put Alan in this world in the first place. Knowing who made the map means knowing who made Alan.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Reed. If the map was drawn by something that has been watching the team, Reed's presence in Alan's life may not be coincidental. Alan uses Reed as a moral compass. What if Reed was placed there?</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">PORTAL. If the thin-boundary locations are being deliberately maintained or expanded, and PORTAL's casework keeps happening near them, PORTAL may be a tool — used knowingly or not.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Alan's sense of agency. If the map predates Alan, if the locations were chosen before he arrived, then every choice he's made in relation to them has been anticipated. He's been moving on a board laid out for him.</span></label>
+          <div class="choice-open" style="grid-column:1/-1"><label>Something else:</label><input type="text" placeholder="What the truth might cost…"></div>
+        </div>
+      </div>
+    </div>
+    <div class="beats-block">
+      <h3>Story Beats <span style="font-weight:300;font-size:0.8rem;color:var(--text-dim)">&nbsp;— mark five to gain a benefit</span></h3>
+      <div class="beats-track"><div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div></div>
+      <ul class="beats-list">
+        <li>Alan successfully identifies a new thin-boundary location — and finds evidence it was known before PORTAL arrived.</li>
+        <li>Alan interrogates a supernatural entity (in a case context) specifically about the nature of thresholds or other planes. The entity answers. The answer changes something.</li>
+        <li>Alan shares the threshold map evidence with another hunter or PORTAL team member — accepts that he can't solve this alone.</li>
+        <li>Alan visits a location on the map and experiences something that his fey nature makes possible — that no other hunter on the team could have had.</li>
+        <li>Alan learns something about his own origin — not the whole truth, but a fragment of it — specifically because of where the map leads.</li>
+      </ul>
+    </div>
+    <div class="resolution-block">
+      <h3>Resolution Moves</h3>
+      <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
+      <div class="resolution-moves">
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>The Map Is Mine Now</div>
+          <p>You know the thresholds. When you act at or through a thin-boundary location, <strong>take +1 forward</strong>. When you're somewhere that should be thin-boundary but isn't — because something has changed, closed, or moved — <strong>take –1 forward</strong> and feel it, physically, before you know why.</p>
+        </div>
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>I Was Expected</div>
+          <p>Whatever the map was for, you were part of it. When you act in direct opposition to the map's apparent purpose, <strong>mark experience</strong>. When you act in accordance with it — knowingly or not — <strong>take 1-harm ignore-armour</strong> from the cost of being exactly where you were supposed to be.</p>
+        </div>
+      </div>
+    </div>
+    <div class="portal-note">// PORTAL HOOK: Diane Marsh's notebook is in PORTAL's evidence archive from the Aldermoor case. The threshold sketch is on page 14. Alan is the only person on the team who would recognise what it is. The Keeper will decide whether Diane drew it herself, copied it from somewhere, or was guided to draw it in a way she doesn't remember.</div>
+  </div>
+  <div class="blur-wrap">
+    <div class="blur-notice">// KEEPER ACCESS ONLY — DO NOT READ</div>
+    <div class="arc-keeper blurred">
+      <div class="keeper-label">// FOR THE KEEPER — ARC: THE MAP BEFORE THE TERRITORY</div>
+      <p class="keeper-intro">This is Alan's origin arc, dressed as an investigation. The thin-boundary locations are real and have been mapped — the question is who did it and why. The answer connects directly to Alan's fey origin, but you don't need to resolve that connection to run the arc. The arc rewards Alan for accumulating evidence, sharing it, and engaging with entities. It punishes isolation and over-caution.</p>
+      <p class="keeper-intro">The MESA thread is relevant here. MESA has been acquiring property at thin-boundary locations — Aldermoor, Meridian Theatre. They are not necessarily the original mapmakers. They may have found the map the same way Alan is finding it — through accumulated casework — and acted on it faster. This means Alan and MESA are parallel investigators of the same question, with very different resources and ethics. The race is structural, not declared.</p>
+      <p class="keeper-intro"><em>CAMPBELL flag:</em> Cameron Dell was a researcher who died investigating consciousness-anchoring mechanics. The thin-boundary locations are where consciousness anchors most readily. CAMPBELL has data on these locations that predates PORTAL's field operations. If Alan asks CAMPBELL directly about the threshold map, CAMPBELL will answer accurately — but the accuracy of his answer will reveal that he's known for longer than Victor has.</p>
+      <p class="keeper-intro"><em>The Replacer (T-005):</em> This arc is the natural entry point for the Replacer entity in the theoretical bestiary. The Replacer is connected to Alan's fey lineage and to whoever originally made the map. Introduce it only when the arc is close to resolution — and only if Alan's choices have led him toward his origin rather than away from it.</p>
+      <table class="countdown-table">
+        <tr><td>Day</td><td>Alan identifies a new thin-boundary location and finds evidence it has been known and documented before — a survey, a deed restriction, a note in an archive. The documentation is clean. Too clean.</td></tr>
+        <tr><td>Shadows</td><td>Something uses a thin-boundary location during a PORTAL case in a way that suggests it knows the map exists — moving through the threshold deliberately, using it as infrastructure.</td></tr>
+        <tr><td>Sunset</td><td>Diane Marsh is reachable. She has more information about the threshold sketch than her notebook shows. Whether she shares it depends on how Alan approaches her.</td></tr>
+        <tr><td>Dusk</td><td>MESA moves on a thin-boundary location before PORTAL does. They're not there for the case. They're there for the location. Alan recognises the significance of which location they chose.</td></tr>
+        <tr><td>Nightfall</td><td>The map's apparent purpose becomes clear enough that Alan has to act on it — defend a location, expose it, close it, or use it. The action will have consequences for all the other locations on the map.</td></tr>
+        <tr><td>Midnight</td><td>The map is complete — Alan has it, or someone else does. What it's for is now undeniable. Alan's origin is in the answer. Whether he looks directly at that fact is up to him.</td></tr>
+      </table>
+      <div class="threats-grid">
+        <div class="threat-card">
+          <div class="threat-name">The Map</div>
+          <div class="threat-type">Phenomenon: Ancient Claim (motivation: to be completed)</div>
+          <p class="threat-desc">Not a villain. Not an entity. A structure — geographical, metaphysical, possibly temporal — that has been laid across the world and is exerting pressure toward completion. The pressure is not malicious. It is structural. When the map is complete, something will happen. What that thing is has been Alan's question all along.</p>
+          <ul class="threat-moves">
+            <li>Make a thin-boundary location become more accessible to entities — whether Alan is ready or not.</li>
+            <li>Pull Alan toward an unvisited threshold location through a case, a coincidence, or a dream.</li>
+            <li>Respond to Alan's presence at a threshold in a way that suggests the map knows he's there.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">The Original Cartographer</div>
+          <div class="threat-type">Villain or Monster — fey, ancient, or institutional</div>
+          <p class="threat-desc">Whoever made the map first. Their identity is one of the arc's core revelations — defer this until the arc is at Dusk or later. The Cartographer may be a fey entity, a long-dead human researcher, an organisation older than PORTAL, or something Alan hasn't had a category for yet. They are not necessarily aware that Alan is following their work.</p>
+          <ul class="threat-moves">
+            <li>Act through the thin-boundary locations without appearing in person — using them as infrastructure, not territory.</li>
+            <li>Become aware of Alan's investigation and adjust accordingly.</li>
+            <li>Make contact — not confrontation — in a language Alan recognises before he understands why.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">MESA</div>
+          <div class="threat-type">Minions: Agents (motivation: to acquire)</div>
+          <p class="threat-desc">MESA has the same map Alan is building — or a version of it. They've been moving on thin-boundary locations through property acquisition. They are a parallel investigator with more resources and fewer scruples. They may not know Alan is following the same thread. When they find out, Agatha Dell will have an opinion about what that means.</p>
+          <ul class="threat-moves">
+            <li>Acquire or secure a threshold location before PORTAL can engage with it.</li>
+            <li>Demonstrate knowledge of the map's structure that Alan recognises as matching his own findings.</li>
+            <li>Approach Alan — not the team, Alan specifically — with an offer related to threshold access.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">Diane Marsh</div>
+          <div class="threat-type">Bystander: Witness (motivation: to make sense of what she saw)</div>
+          <p class="threat-desc">Diane survived the Aldermoor district displacement with her notebook intact. The threshold sketch is on page 14. She drew it during the nine days she was sheltering in the construction site office. She doesn't know what it means — she drew it because it felt important to draw. Alan is the only person who can tell her what she was drawing.</p>
+          <ul class="threat-moves">
+            <li>Share more information than she knows she's sharing, in response to the right questions.</li>
+            <li>Ask Alan what she drew, directly, in a way that requires an honest answer.</li>
+            <li>Become a target — for MESA, for the Cartographer — because of what she documented.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<div class="page-actions">
+  <button class="action-btn" id="save-btn" onclick="saveNow(this)">// SAVE</button>
+  <button class="action-btn" onclick="resetAll()">// RESET</button>
+</div>
+
+<script src="hunter.js"></script>
+</body>
+</html>

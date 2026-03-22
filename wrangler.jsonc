@@ -1,0 +1,13 @@
+// portal-fieldops — Cloudflare Pages config
+{
+  "name": "portal-fieldops",
+  "pages_build_output_dir": ".",
+  "compatibility_date": "2026-03-10",
+  "d1_databases": [
+    {
+      "binding": "portal_db",
+      "database_name": "portal-db",
+      "database_id": "aa558dc0-96c4-4c88-ab54-a79611d161d2"
+    }
+  ]
+}

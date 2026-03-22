@@ -1,0 +1,1133 @@
+# P.O.R.T.A.L — Full Architecture & Roadmap
+*Technical planning document. Hand to Claude Code at the start of any infrastructure session.*
+
+---
+
+## The Vision (Plain Language)
+
+Two modes, one codebase:
+
+**Between sessions (async):** A campaign hub. Keeper and players can access character sheets, arc progress, session reports, NPC contact list, CAMPBELL briefings with history, open leads per session. All persistent, versioned, accessible from any device.
+
+**During sessions (live):** A table tool. Players roll dice, see outcomes, receive CAMPBELL terminal messages and Director PDA dispatches, view handouts and images, access their moves and sheet. Keeper has a command board: push content to players, reveal NPCs, display monster stats, trigger scene flavour, run the session.
+
+These share the same data layer. The async hub feeds the live tool. A session report filed after play becomes context for the next briefing.
+
+---
+
+## What We Are NOT Building
+
+- A general TTRPG platform
+- A Roll20 replacement for other games
+- Anything requiring a native app
+
+---
+
+## Stack Decision
+
+| Layer | Choice | Why |
+|---|---|---|
+| Hosting (static) | **Cloudflare Pages** | Free, fast, deploys from GitHub, global CDN |
+| API | **Cloudflare Workers** | Serverless, runs at the edge, free tier vast, same deployment as Pages |
+| Database | **Cloudflare D1** | SQLite at the edge, free tier sufficient (5GB, 25M reads/day), no separate service to manage |
+| Realtime (live session) | **Cloudflare Durable Objects** | Stateful WebSocket rooms, same CF account, free tier includes 400k requests/day |
+| Auth | **Username + password → JWT** | Lightweight: passwords in CF env secret, HS256 JWT (30-day), client stores in localStorage |
+| Version control | **GitHub** | Stays. CF Pages deploys from the repo. |
+| Existing static pages | **Unchanged** | All current HTML/CSS pages stay exactly as built. Workers API is additive. |
+
+### Why Cloudflare over alternatives
+
+- **vs Supabase:** No free-tier project pauses. No external dependency. Everything in one CF account (currently $0).
+- **vs GitHub API as backend:** Works for one keeper. Breaks for multi-user, real-time, player sheets.
+- **vs Vercel + PlanetScale / Neon:** More moving parts, more potential costs, more configuration.
+- **vs self-hosted:** Zero ops burden.
+
+### CF Free-Tier Budget Awareness
+
+This is a personal campaign site — all CF services stay on the free tier. Design decisions should respect those limits:
+
+| Service | Free limit | Design implication |
+|---|---|---|
+| Pages Functions (Workers) | 100k requests/day | Avoid background polling from idle tabs |
+| D1 reads | 25M/day | Polling 6s active / 60s hidden; immediate poll on focus regain |
+| D1 writes | 100k/day | POST/PUT only on user action or explicit save — never on timers alone |
+
+**Implemented mitigations:**
+- `feed.html` uses smart polling: 6s when the page is active, 60s when the tab is hidden OR the browser window loses OS focus. Uses `visibilitychange` + `window.blur/focus` + `document.hasFocus()`. Triggers an immediate poll when focus is regained (if >6s since last poll).
+
+---
+
+## Repository Structure (Actual)
+
+```
+portal-fieldops/
+├── context/                   # Claude reference docs — hand these at session start
+│   ├── worldbuilding-lore.md  # World, NPCs, MESA, CAMPBELL voice (for content sessions)
+│   ├── worldbuilding-site.md  # Site architecture, CSS, data formats, authoring schemas
+│   └── portal-architecture.md # This file — technical stack, schema, build phases
+│
+├── data/                      # Static game data (not in DB) — see "Static Data Files" section
+│   ├── motw-basic-moves.json      # All basic moves, alternate Weird moves, new Weird moves
+│   ├── motw-playbooks.json        # Active hunter playbooks (Action Scientist, Sidekick, Changeling, Monstrous, Flake)
+│   ├── motw-teambooks.json        # Research Lab team playbook (PORTAL's active team book)
+│   ├── portal-custom-moves.json   # MESA equipment moves + house rules
+│   ├── sessions.json              # Session registry — id, label, title, status (drives keeper toggle + session-state.js)
+│   ├── hunters.json               # Hunter identity layer: playbook, accent colour, lore, luck_special, area_of_study, keeper notes
+│   ├── playbook-moves.json        # Move definitions keyed by data-check-key → name, roll, description (feed layer)
+│   ├── portal-npcs.json           # Full NPC roster with player/keeper description split, session_overrides, keeper_scene_notes
+│   ├── portal-entities.json       # Entity/threat database; session_overrides controls player bestiary visibility
+│   ├── sessions/                  # Per-session data (split from former session-data.json)
+│   │   ├── index.json             # Lightweight session index: [{id, session_key, label, doc}]
+│   │   ├── s01.json               # Session 01 full data: entity_ids, threats[], equipment[], readaloud[], handouts[]
+│   │   ├── s02.json               # Session 02 full data
+│   │   └── s03.json               # Session 03 full data (add new files per session)
+│   ├── evidence.json              # Evidence board: accumulated findings across sessions
+│   ├── campbell-logs.json         # CAMPBELL activity logs: batches[], entries[], highlights[]
+│   ├── canon.json                 # Confirmed canon: player-invented facts confirmed by keeper
+│   └── report-schema.json         # Report form configuration: session tabs, scenes, threads, canon_slots
+│
+├── session-state.js           # Shared session resolution + DOM visibility + keeper toggle injection
+├── functions/                 # CF Pages Functions (serverless API, auto-routed)
+│   └── api/v1/
+│       ├── hunters/[id]/arc-state.js          # GET + PUT hunter arc state → D1
+│       ├── hunters/[id]/sheet.js              # GET + PUT full hunter sheet (stats, harm, luck, xp, checks, bonds) → D1
+│       ├── reports/[id]/state.js              # GET + PUT keeper field report per session → D1
+│       ├── player-reports/[week]/[hunter]/state.js  # GET + PUT player debrief per week+hunter → D1
+│       ├── session/active.js                 # GET active session from D1; PUT to set (keeper toggle)
+│       ├── rolls.js                           # GET (after= polling / offset= pagination) + POST → D1 rolls table
+│       └── messages.js                        # GET (after= / offset=) + POST + DELETE(?session_id=) → D1 messages table
+│
+├── workers/                   # Cloudflare Workers API (Phase 3+)
+│   ├── schema.sql             # D1 schema — already applied to remote DB
+│   ├── migrations/            # Numbered SQL migration files
+│   │   ├── 001_arc_state.sql      # hunter_arc_state ✅ remote + local
+│   │   ├── 002_field_reports.sql  # field_reports ✅ remote + local
+│   │   ├── 003_player_reports.sql # player_reports ✅ remote + local
+│   │   ├── 004_active_session.sql # active_session ✅ remote + local
+│   │   ├── 005_hunter_sheets.sql  # hunter_sheets ✅ remote + local
+│   │   ├── 006_team_state.sql     # team_state ✅ remote + local
+│   │   ├── 007_feed_tables.sql    # rolls + messages ✅ remote + local
+│   │   ├── 008_incident_responses.sql # incident_responses ✅ remote + local
+│   │   ├── 009_incident_state.sql     # incident_state ✅ remote + local
+│   │   ├── 010_messages_type.sql      # messages.type + messages.payload ✅ remote + local
+│   │   ├── 011_map_state.sql          # map_state ✅ remote + local
+│   │   ├── 012_drop_feed_fk.sql       # drop FK constraints on messages + rolls ✅ remote + local
+│   │   ├── 013_player_report_visibility.sql # player_report_visibility ✅ remote + local
+│   │   ├── 014_dossier_state.sql      # dossier_state ✅ remote + local
+│   │   └── 015_global_flags.sql       # global_flags (campbell-logs hints + evidence visibility) ✅ remote + local
+│   └── src/                   # (Phase 3) Workers source
+│       ├── index.ts           # Main router
+│       └── routes/
+│           ├── characters.ts
+│           ├── rolls.ts
+│           ├── session.ts
+│           ├── npcs.ts
+│           ├── messages.ts
+│           └── leads.ts
+│
+├── app/                       # (Phase 3+) New interactive pages
+│   ├── session.html           # Live session tool (player view)
+│   ├── command.html           # Live session tool (keeper command board)
+│   ├── sheet.html             # Character sheet (player-editable)
+│   ├── hub.html               # Campaign hub (combined dashboard)
+│   └── contacts.html          # NPC contact list (player-facing)
+│
+├── wrangler.jsonc             # CF Pages + D1 config (root)
+├── index.html                 # Player-facing site
+├── missions/                  # Keeper + player mission pages
+├── reports/                   # Post-session player-facing reports
+│   ├── player-report.html     # Player debrief form (week + hunter selector, ratings, scene notes)
+│   └── s1-ash-veil-memo.html  # S01 redacted ash/veil lab report (static)
+├── hunters/                   # Hunter story pages (arc choices + beats persist to D1)
+│   ├── hunter.js              # Shared script: keeper toggle, D1 save/load, all interactions
+│   ├── alan.html, rex.html, reed.html, sven.html  # Hunter pages (playbook + arcs), use hunter.js
+│   └── hunter.js              # hunterId derived from filename: .replace('.html','') at end
+├── handouts/                  # Player-facing document collections
+│   └── dossier/               # In-universe dossier pages. Shared: dossier.css + dossier.js. Per-page: variable overrides + character-specific classes only. DOSSIER_ID set before dossier.js. D1: dossier_state table, /api/v1/dossiers/:id/state.
+├── images/                    # Active reference images
+├── player-nav.js              # Shared player nav
+└── missions/keeper-nav.js     # Shared keeper nav
+```
+
+---
+
+## Cloudflare Configuration (Live)
+
+- **CF account:** gino.galotti@gmail.com | Account ID: `16173cc8b08eab625480fc137852403b`
+- **CF Pages:** Connected to GitHub repo, deploying from `dev` branch
+- **D1 database:** `portal-db` | ID: `aa558dc0-96c4-4c88-ab54-a79611d161d2` | binding: `portal_db`
+- **wrangler.jsonc** at repo root — binding already configured
+- **Cloudflare Pages is the only deployment.** GitHub Pages is not in use. All player and keeper traffic uses the CF Pages URL.
+
+---
+
+## Database Schema (D1 / SQLite)
+
+Schema is in `workers/schema.sql` and has been applied to the remote D1 database. All 13 tables created.
+
+Migrations are numbered files in `workers/migrations/`. Each must be applied to **both** remote and local D1:
+```bash
+wrangler d1 execute portal-db --file=workers/migrations/001_arc_state.sql          # local
+wrangler d1 execute portal-db --file=workers/migrations/001_arc_state.sql --remote # remote
+```
+
+**Migration 004 — `active_session`** (applied ✅ local + remote)
+
+```sql
+CREATE TABLE IF NOT EXISTS active_session (
+  id         TEXT PRIMARY KEY DEFAULT 'global',
+  session_id TEXT NOT NULL DEFAULT 'w2',
+  updated_at TEXT DEFAULT (datetime('now'))
+);
+INSERT OR IGNORE INTO active_session (id, session_id) VALUES ('global', 'w2');
+```
+
+**Migration 001 — `hunter_arc_state`** (applied ✅)
+
+```sql
+-- ─── FIELD REPORTS (migration 002) ────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS field_reports (
+  session_id TEXT PRIMARY KEY,   -- 'M01' | 'M02' etc (keeper report, one per session)
+  state      TEXT NOT NULL,      -- JSON blob: { session, mission, date, outcome, directive, summary,
+                                 --   energy, intensity, best, surprise, flat,
+                                 --   hunters: { rex/reed/alan/sven: { action, arc, note } },
+                                 --   threads: [], unresolved, questions, npcs,
+                                 --   clocks: [], clockNotes, scenes: { scene_id: text },
+                                 --   spine, stars, wishes, campbell, setup, aiPrompt }
+  updated_at TEXT DEFAULT (datetime('now'))
+);
+
+-- ─── PLAYER REPORTS (migration 003) ─────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS player_reports (
+  week       TEXT NOT NULL,   -- 'W01' | 'W02' etc (player-facing week numbering)
+  hunter_id  TEXT NOT NULL,   -- 'alan' | 'reed' | 'rex' | 'sven' | 'john'
+  state      TEXT NOT NULL,   -- JSON blob: { week, hunter,
+                              --   ratings: { story, atmosphere, role, emotion, overall } (0-5),
+                              --   favourite, different, operative, other,
+                              --   scenes: { scene_id: text } }
+  updated_at TEXT DEFAULT (datetime('now')),
+  PRIMARY KEY (week, hunter_id)
+);
+
+-- ─── HUNTER ARC STATE (migration 001) ──────────────────────────────────────
+CREATE TABLE IF NOT EXISTS hunter_arc_state (
+  hunter_id  TEXT PRIMARY KEY,   -- 'alan' | 'reed' | 'rex' | 'sven'
+  state      TEXT NOT NULL,      -- JSON blob matching hunter.js data model (see below)
+  updated_at TEXT DEFAULT (datetime('now'))
+);
+-- JSON blob schema: { "arc-id": { choices: {"gi-oi": true}, texts: {"i": "val"}, beats: N, resolution: N|null } }
+
+-- ─── HUNTERS ───────────────────────────────────────────────────────────────
+CREATE TABLE hunters (
+  id           TEXT PRIMARY KEY,        -- 'rex' | 'reed' | 'alan' | 'sven'
+  name         TEXT NOT NULL,
+  playbook     TEXT NOT NULL,
+  harm         INTEGER DEFAULT 0,
+  harm_max     INTEGER DEFAULT 7,
+  stability    INTEGER DEFAULT 7,       -- for Monstrous/Changeling
+  luck         INTEGER DEFAULT 7,
+  xp           INTEGER DEFAULT 0,
+  xp_threshold INTEGER DEFAULT 5,
+  updated_at   TEXT DEFAULT (datetime('now'))
+);
+
+CREATE TABLE hunter_stats (
+  hunter_id TEXT REFERENCES hunters(id),
+  stat      TEXT NOT NULL,             -- cool | tough | sharp | charm | weird
+  value     INTEGER NOT NULL,
+  PRIMARY KEY (hunter_id, stat)
+);
+
+CREATE TABLE hunter_moves (
+  id        INTEGER PRIMARY KEY AUTOINCREMENT,
+  hunter_id TEXT REFERENCES hunters(id),
+  move_name TEXT NOT NULL,
+  source    TEXT,                       -- 'basic' | 'playbook' | 'advanced' | 'custom'
+  notes     TEXT
+);
+
+CREATE TABLE hunter_bonds (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  hunter_id   TEXT REFERENCES hunters(id),
+  target      TEXT NOT NULL,
+  description TEXT
+);
+
+CREATE TABLE hunter_gear (
+  id        INTEGER PRIMARY KEY AUTOINCREMENT,
+  hunter_id TEXT REFERENCES hunters(id),
+  name      TEXT NOT NULL,
+  tags      TEXT,                       -- JSON array: ["hand", "2-harm", "loud"]
+  notes     TEXT
+);
+
+-- ─── ROLL LOG ──────────────────────────────────────────────────────────────
+CREATE TABLE rolls (
+  id        INTEGER PRIMARY KEY AUTOINCREMENT,
+  hunter_id TEXT REFERENCES hunters(id),
+  session   TEXT NOT NULL,             -- 'S01' | 'S02' etc
+  move_name TEXT NOT NULL,
+  stat_used TEXT,
+  roll_1    INTEGER NOT NULL,
+  roll_2    INTEGER NOT NULL,
+  modifier  INTEGER DEFAULT 0,
+  total     INTEGER NOT NULL,
+  outcome   TEXT NOT NULL,             -- custom thresholds: 'advanced' (13+) | 'hit' (11-12) | 'partial' (7-10) | 'miss' (6-)
+  note      TEXT,
+  rolled_at TEXT DEFAULT (datetime('now'))
+  -- append-only: never UPDATE or DELETE rows
+);
+
+CREATE TABLE IF NOT EXISTS messages (
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  session_id   TEXT,
+  sender       TEXT DEFAULT 'CAMPBELL',  -- 'CAMPBELL' | 'DIRECTOR' | 'MESA' | 'SYSTEM' | operative name
+  recipient    TEXT DEFAULT 'all',
+  subject      TEXT,
+  body         TEXT NOT NULL,
+  type         TEXT DEFAULT 'message',   -- 'message' | 'readaloud' | 'pda' | 'document' | 'image' | 'map' | 'classified' | 'clear'
+  payload      TEXT,                     -- JSON blob (handout metadata: src, label, from, classification, body, etc.)
+  delivered    INTEGER DEFAULT 1,
+  delivered_at TEXT DEFAULT (datetime('now'))
+);
+-- type:'clear' is a sentinel: clients discard all messages/rolls with earlier timestamps on receipt.
+-- type:'classified' entries render as REDACTED to players; keeper sees full content.
+-- DELETE /api/v1/messages?session_id=S02 removes all non-'message' rows for a session (clears handouts + classified).
+
+-- ─── SESSION STATE ──────────────────────────────────────────────────────────
+CREATE TABLE sessions (
+  id         TEXT PRIMARY KEY,         -- 'S01' | 'S02' etc
+  title      TEXT,
+  status     TEXT DEFAULT 'upcoming',  -- 'upcoming' | 'live' | 'closed'
+  outcome    TEXT,                     -- 'humane' | 'partial' | 'bad'
+  created_at TEXT DEFAULT (datetime('now'))
+);
+
+CREATE TABLE clocks (
+  id            TEXT PRIMARY KEY,
+  session_id    TEXT REFERENCES sessions(id),
+  case_name     TEXT NOT NULL,
+  clock_max     INTEGER DEFAULT 6,
+  clock_current INTEGER DEFAULT 0,
+  notes         TEXT,
+  updated_at    TEXT DEFAULT (datetime('now'))
+);
+
+CREATE TABLE leads (
+  id             INTEGER PRIMARY KEY AUTOINCREMENT,
+  session_id     TEXT REFERENCES sessions(id),
+  closed_session TEXT,
+  title          TEXT NOT NULL,
+  description    TEXT,
+  priority       TEXT DEFAULT 'medium', -- 'high' | 'medium' | 'low'
+  tags           TEXT                   -- JSON: ["MESA", "Project Veil"]
+);
+
+-- ─── NPCS ──────────────────────────────────────────────────────────────────
+CREATE TABLE npcs (
+  id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+  name               TEXT NOT NULL,
+  affiliation        TEXT,             -- 'PORTAL' | 'MESA' | 'civilian' | 'unknown'
+  status             TEXT DEFAULT 'alive',
+  first_seen         TEXT,
+  visible_to_players BOOLEAN DEFAULT false,
+  player_notes       TEXT,
+  keeper_notes       TEXT,
+  updated_at         TEXT DEFAULT (datetime('now'))
+);
+
+-- ─── MESSAGES ───────────────────────────────────────────────────────────────
+CREATE TABLE messages (
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  session_id   TEXT REFERENCES sessions(id),
+  sender       TEXT NOT NULL,          -- 'CAMPBELL' | 'DIRECTOR' | 'MESA' | 'SYSTEM'
+  recipient    TEXT DEFAULT 'all',
+  subject      TEXT,
+  body         TEXT NOT NULL,
+  delivered    BOOLEAN DEFAULT false,
+  delivered_at TEXT,
+  created_at   TEXT DEFAULT (datetime('now'))
+);
+
+-- ─── HANDOUTS ───────────────────────────────────────────────────────────────
+CREATE TABLE handouts (
+  id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+  session_id         TEXT REFERENCES sessions(id),
+  title              TEXT NOT NULL,
+  type               TEXT DEFAULT 'text', -- 'text' | 'image' | 'document'
+  content            TEXT,
+  visible_to_players BOOLEAN DEFAULT false,
+  revealed_at        TEXT
+);
+
+-- ─── AUTH ───────────────────────────────────────────────────────────────────
+CREATE TABLE player_tokens (
+  token      TEXT PRIMARY KEY,
+  hunter_id  TEXT REFERENCES hunters(id),
+  created_at TEXT DEFAULT (datetime('now')),
+  revoked    BOOLEAN DEFAULT false
+);
+```
+
+---
+
+## Workers API (Routes)
+
+All endpoints under `/api/v1/`. Keeper endpoints require a header token; player endpoints require a session URL token.
+
+**Live endpoints (CF Pages Functions in `functions/`):**
+```
+POST /api/auth/login                                → { token, user } — login with username+password
+GET  /api/v1/hunters/:id/arc-state                  → hunter arc state (public read)
+PUT  /api/v1/hunters/:id/arc-state                  → upsert arc state (owner or admin)
+GET  /api/v1/hunters/:id/sheet                      → hunter sheet (public read)
+PUT  /api/v1/hunters/:id/sheet                      → upsert hunter sheet (owner or admin)
+GET  /api/v1/reports/:id/state                      → keeper field report (public read)
+PUT  /api/v1/reports/:id/state                      → upsert keeper field report (admin only)
+GET  /api/v1/player-reports/:week/:hunter/state     → player debrief (public read)
+PUT  /api/v1/player-reports/:week/:hunter/state     → upsert player debrief (owner or admin)
+GET  /api/v1/player-reports/:week/visibility        → { enabled } — whether reports open for week
+PUT  /api/v1/player-reports/:week/visibility        → set visibility (admin only)
+GET  /api/v1/session/active                         → { session_id } — active session
+PUT  /api/v1/session/active                         → set active session (admin only)
+GET  /api/v1/rolls                                  → roll feed (public; after=/offset= params)
+POST /api/v1/rolls                                  → log a roll (any authenticated)
+GET  /api/v1/messages                               → message feed (public; after=/offset= params)
+POST /api/v1/messages                               → post message (any auth; structured types = admin; sender overridden to display name)
+DELETE /api/v1/messages                             → clear feed (admin only)
+GET  /api/v1/incidents/:id/state                    → incident state for week
+PUT  /api/v1/incidents/:id/state                    → save incident choices (any authenticated)
+GET  /api/v1/incidents/:id/responses                → open-text responses for incident
+POST /api/v1/incidents/:id/responses                → submit response (any authenticated)
+GET  /api/v1/team/playbook                          → team playbook state
+PUT  /api/v1/team/playbook                          → save team playbook (any authenticated)
+GET  /api/v1/maps/:id/state                         → map unlock/visited state
+PUT  /api/v1/maps/:id/state                         → update map state (admin only)
+GET  /api/v1/campbell-logs/hints                    → revealed clue spans (no auth)
+PUT  /api/v1/campbell-logs/hints                    → save hints (no auth)
+GET  /api/v1/evidence/visibility                    → revealed evidence items (no auth)
+PUT  /api/v1/evidence/visibility                    → update visibility (no auth)
+GET  /api/v1/dossiers/:id/state                     → dossier state (no auth)
+PUT  /api/v1/dossiers/:id/state                     → save dossier state (no auth)
+```
+
+**Planned (Phase 3, Workers):**
+```
+GET  /api/v1/hunters                    → all hunters (public fields)
+GET  /api/v1/hunters/:id                → single hunter sheet
+PUT  /api/v1/hunters/:id                → update sheet (keeper or own hunter)
+
+POST /api/v1/rolls                      → log a roll
+GET  /api/v1/rolls?session=S02          → roll log for a session
+GET  /api/v1/rolls?hunter=rex           → roll log for a hunter
+
+GET  /api/v1/sessions                   → session list
+GET  /api/v1/sessions/:id               → session detail + clocks + leads
+PUT  /api/v1/sessions/:id/status        → set live | closed (keeper)
+
+GET  /api/v1/leads?session=S02          → leads open at end of session
+POST /api/v1/leads                      → create lead (keeper)
+PUT  /api/v1/leads/:id                  → update/close lead (keeper)
+
+GET  /api/v1/npcs?visible=true          → player-visible NPCs
+GET  /api/v1/npcs                       → all NPCs (keeper)
+POST /api/v1/npcs                       → create NPC (keeper)
+PUT  /api/v1/npcs/:id                   → update NPC (keeper)
+PUT  /api/v1/npcs/:id/reveal            → make visible to players (keeper)
+
+POST /api/v1/messages                   → create message (keeper)
+PUT  /api/v1/messages/:id/deliver       → push message to players (keeper)
+GET  /api/v1/messages?session=S02       → messages for a session (players see delivered only)
+
+POST /api/v1/handouts                   → upload handout (keeper)
+PUT  /api/v1/handouts/:id/reveal        → reveal to players (keeper)
+GET  /api/v1/handouts?session=S02&visible=true  → revealed handouts (players)
+```
+
+---
+
+## Auth System (Implemented — Phase 2, 2026-03-20)
+
+**How it works:**
+- Username + password → `POST /api/auth/login` → HS256 JWT (30-day expiry)
+- Token stored in `localStorage('portal-auth-token')`; auto-added as `Authorization: Bearer` header by `portalAuth.fetch()`
+- Client decodes JWT payload for UI (no signature check); server verifies signature on every write
+
+**Key files:**
+- `auth.js` (repo root) — `window.portalAuth` object; login popover + user dropdown injected into `<header>`; loaded dynamically by `player-nav.js`
+- `functions/api/auth/login.js` — POST handler; validates password against `AUTH_PASSWORDS` env secret
+- `functions/api/v1/_auth.js` — shared JWT utilities (`signJWT`, `validateAuth`, `unauthorized`, `forbidden`)
+
+**Environment secrets (set in CF Pages dashboard + `.dev.vars` locally):**
+- `AUTH_PASSWORDS` — JSON string: `{"rex":"pass","alan":"pass",...,"admin":"keeperpass"}`
+- `AUTH_JWT_SECRET` — 64-char hex string (same value on both local and remote)
+
+**Permission matrix:**
+| Resource | Who can write |
+|---|---|
+| `hunter` (arc-state, sheet) | owner (`sub === hunterId`) or admin |
+| `report` (keeper field report) | admin only |
+| `player-reports` | owner (`sub === hunter param`) or admin |
+| `incident` (state, responses) | any authenticated user |
+| `lab` (team playbook) | any authenticated user |
+| `feed` (rolls, messages) | any authenticated; structured handout types = admin only |
+| `maps`, `session/active` | admin only |
+
+**Endpoints NOT auth-gated** (by design — read-only public or keeper-only via keeper.html):
+- `campbell-logs/hints`, `evidence/visibility`, `dossiers/[id]/state` — no auth gating
+
+**Keeper mode trigger change:** hunter pages — double-click on invisible overlay replaced with **5 rapid clicks on `.hero-eyebrow`** (avoids conflict with login button at top-right).
+
+**Local dev:** create `.dev.vars` at repo root (gitignored) with the same env var values as CF dashboard. Restart wrangler after creating/editing it.
+
+---
+
+## The Live Session Tool (Durable Objects)
+
+**How it works:**
+1. Keeper opens `/command.html`, starts a session → creates/connects to a Durable Object room keyed by session ID
+2. Players open their session URL → connect to the same room via WebSocket
+3. Keeper actions broadcast events to all connected clients:
+   - `roll_result` → appears in everyone's roll feed
+   - `message_deliver` → CAMPBELL terminal message appears for players
+   - `handout_reveal` → image/document appears for players
+   - `npc_reveal` → NPC card appears in player contacts
+   - `clock_update` → keeper's clock ticks, players can optionally see it
+4. Player rolls fire from the player's browser → logged to D1 via Worker → broadcast to all clients as `roll_result`
+
+**Keeper command board contains:**
+- Hunter sheets (read-only overview of all hunters)
+- Active case clocks
+- Message composer (CAMPBELL / Director / custom sender)
+- Handout/image uploader with reveal button
+- NPC reveal panel
+- Move reference for current session (from JSON, not DB)
+- Monster/entity stat block (from `portal-entities.json`)
+- Roll log feed (live, all hunters)
+- Scene flavour text blocks (pre-loaded from session prep)
+
+**Player session view contains:**
+- Their own character sheet (harm, luck, stats, moves)
+- Roll interface: move picker → stat auto-filled → roll 2d6+stat → result shown → logged
+- Roll feed (all players visible, real-time)
+- CAMPBELL terminal (messages appear as typed, not all at once)
+- Director PDA (styled differently — more urgent, warmer)
+- Revealed handouts and images
+- Contacts (NPCs revealed so far)
+
+---
+
+## Dynamic CAMPBELL Briefings
+
+Currently: static HTML files, one per session.
+
+**Target:** CAMPBELL briefings generated from live data and session reports.
+- Case data, NPC status, clock readings, and open leads fetched from D1 at page load
+- Keeper drafts briefing text, previews, and publishes (`delivered = true` in a `briefings` table)
+- Players see the briefing once published; prior briefings accessible in history view
+
+**The "feed to Claude" moment:** After a session, keeper files the report, exports `.md`, and drops it here. That report + the current D1 state becomes context for the next briefing draft. Claude generates the CAMPBELL voice briefing; keeper edits and publishes.
+
+---
+
+## Build Phases
+
+### Phase 0 — Data Foundation ✅ COMPLETE
+All seven static data files built from source (MOTW hardcover, Slayer's Survival Kit, worldbuilding-lore.md). Live in `data/`, ready to serve. No backend required to use them.
+
+**Files delivered:**
+- `data/motw-basic-moves.json` — all basic moves + alternate/new Weird moves
+- `data/motw-playbooks.json` — Action Scientist, Sidekick, Changeling, Monstrous, Flake
+- `data/motw-teambooks.json` — Research Lab team playbook
+- `data/portal-custom-moves.json` — Substance Θ, Anchor Spike, BIM Collection Array + house_rules
+- `data/hunters.json` — all 5 hunters seeded; `FILL_FROM_SESSION` markers for unrecorded picks
+- `data/portal-npcs.json` — 21 NPCs with player/keeper description split
+- `data/portal-entities.json` — 7 entities (E-001 through E-006 + T-006)
+
+**Outstanding:** Fill `FILL_FROM_SESSION` fields in `hunters.json` from actual character sheets (stat lines, gear picks, second/third moves, Sven's curse).
+
+### Phase 1 — Still on GH Pages (no Cloudflare yet)
+- Dice roller component (pure JS, reads from moves JSON, displays result + outcome text)
+- Character sheet pages (localStorage, same pattern as `report.html`)
+- Campaign State export: single button aggregating sheets + open leads + last report into one markdown blob
+
+### Phase 2 — Cloudflare Setup ✅ COMPLETE
+- CF account created (gino.galotti@gmail.com)
+- CF Pages connected to GitHub repo, deploying from `dev` branch
+- D1 database `portal-db` created and schema applied (13 tables + migration 001)
+- `wrangler.jsonc` configured at repo root with D1 binding
+- Node.js v24.14.0, npm 11.11.0, Wrangler 4.71.0 installed locally
+- GH Pages still serves `main` for players during development
+
+### Phase 2.5 — Hunter Arc Persistence ✅ COMPLETE
+- **`functions/api/v1/hunters/[id]/arc-state.js`** — live CF Pages Function
+  - `GET /api/v1/hunters/:id/arc-state` → returns state JSON from D1 (or `{}`)
+  - `PUT /api/v1/hunters/:id/arc-state` → upserts state JSON to D1
+- **`hunters/hunter.js`** — shared script for all hunter pages
+  - `load()`: fetches from D1 on page open; falls back to localStorage if offline/file://
+  - `save()`: writes localStorage immediately + fires background PUT to D1
+  - `saveNow(btn)`: explicit save with button feedback (SAVING → SAVED ✓ / ERROR / OFFLINE)
+  - `resetAll()`: clears DOM, localStorage, and sends `PUT {}` to D1
+  - Keeper toggle (double-click/double-tap top-right corner)
+- All four hunter pages (alan, reed, rex, sven): inline scripts removed, `// SAVE` button replaces `// PRINT`
+- State shared across all users/browsers in real time via D1
+
+### Phase 2.6 — Field Reports + Player Debrief ✅ COMPLETE
+- **`missions/report.html`** — rebuilt keeper field report
+  - Session tab switcher (S01/S02); each session has distinct threads, countdowns, and scene note prompts
+  - D1 via `/api/v1/reports/:id/state` (GET + PUT); localStorage fallback; explicit Save with feedback
+  - Copy for Claude exports full report as Markdown including scene notes
+  - Removed: report history log, Export MD, Backup JSON, Restore JSON
+- **`reports/player-report.html`** — player-facing Operative Field Report
+  - Week selector (Week 01 / Week 02, etc.) + Hunter selector (Alan / Reed / Rex / Sven / John)
+  - State is unique per week+hunter; loads from D1 on selection, Save button persists to D1
+  - **Ratings** (5 pip selectors, 1–5): Story Quality, Atmosphere & Tone, Operative's Role, Emotional Impact, Overall
+  - **General feedback** textareas: favourite moment, something different, operative's feelings, other
+  - **Scene by Scene** section — per-week prompts about specific events (dynamic, config-driven)
+  - D1 via `/api/v1/player-reports/:week/:hunter/state`; localStorage fallback
+  - Linked from player nav as "Report" (before Queue)
+- **Session config pattern** (used by both reports): threads, clocks, and scenes defined in a JS `SESSIONS`/`WEEKS` object at the top of the script — add new sessions by extending the config
+- **Future**: keeper review view for all player debriefs (read all rows for a given week, display aggregated ratings + notes)
+
+### Phase 2.7 — Hunter Playbook Sections + Character Data in D1 (COMPLETE)
+
+Hunter pages renamed to `hunters/[name].html` (alan, rex, reed, sven). Each has a **Playbook** section above arc content, showing the full character sheet. D1-backed via `GET/PUT /api/v1/hunters/:id/sheet`.
+
+**Playbook section contains:**
+- Stats (Charm, Cool, Sharp, Tough, Weird) — `data-stat` inputs
+- Harm/Luck (7 pips), XP (5 pips) — `data-track` pip clicks with cumulative fill
+- Hunter-specific features (Alan: 3 Unknown Heritage tag inputs; Rex: static Area of Study + Weird Move; Reed: static Hero; Sven: static Breed + editable Curse)
+- Active moves (5 text inputs), Gear (4), Bonds (3), Notes (textarea) — `data-sheet` + `data-sheet-idx`
+
+**Persistence:**
+- API: `GET/PUT /api/v1/hunters/:id/sheet` → `hunter_sheets` table (migration 005)
+- `hunterId` derived from filename: `pathname.split('/').pop().replace('-hunter-stories.html','').replace('-hunter.html','').replace('.html','')`
+- Team playbook: `GET/PUT /api/v1/team/playbook` → `team_state` table (migration 006)
+
+### Phase 2.8 — Hunter Sheet Enhancements (COMPLETE)
+
+- **Dynamic bonds:** All 4 hunter pages — replace 3 fixed bond inputs with add/remove rows (`// + ADD` / `−` button). Serialised as `sheet.bonds[]` array, rebuilt on load. Minimum 1 row enforced.
+- **Move/gear/improvement checklists:** All picks on each hunter page are now `check-item` elements with `data-check-key`. Players can tick their chosen moves, gear, improvements. Each list has a `// HIDE UNCHOSEN` toggle that collapses unchosen items; hide state is persisted in D1 sheet state as `sheet.hiddenLists[]`.
+- **Luck special:** Fetched from `data/hunters.json` at page load via `loadHunterMeta()`; injected into `#luck-special` block below the XP track. All 4 hunters now have `luck_special` populated.
+- **Area of Study effect (Rex):** `loadHunterMeta()` also injects `area_of_study.effect` into `#area-of-study-effect` below the Violence label.
+- **Reed hero item text input:** Free-text field inside the Hero's item gear check-item; saved via `pb-special-input` mechanism.
+- **`data/playbook-moves.json`:** New file — move definitions keyed by `data-check-key`. Each entry: `hunter`, `name`, `roll` (stat string or null), `description`. Plus `always_active_moves` per hunter (e.g. Rex's Violence area of study). This is the static definition layer for the feed view.
+
+**Data layer split (confirmed architecture):**
+| Layer | Where | What it holds |
+|-------|-------|---------------|
+| Static identity | `data/hunters.json` | Playbook, accent colour, lore, luck_special, area_of_study, keeper notes |
+| Move definitions | `data/playbook-moves.json` | name, roll, description per check-key — feed rendering source |
+| Dynamic choices | D1 `hunter_sheets` | Stats, harm/luck/xp, checked moves/gear/improvements, bonds text, hide state |
+| Arc story | D1 `hunter_arc_state` | Beat fills, resolution picks, open-text answers |
+
+**Feed rendering logic (planned):** load D1 sheet → check which `check-key` values are true → look up each in `playbook-moves.json` → render move cards. `always_active_moves` from the same file render unconditionally.
+
+### Phase 2.10 — Incident Log: Data-Driven Refactor + D1 Save (COMPLETE)
+
+`lab-incidents.html` — between-session incident log page.
+- Fully data-driven: all content extracted to `data/incidents.json` (week-indexed)
+- **Week tabs** (W1 closed empty state, W2 active with 3 incidents + teaser) — built from JSON at runtime
+- **Incident types:** `choice` (3-button + optional custom text), `open` (freetext, multi-submit), `informational` (read-only), `teaser` (email + log excerpts, read-only)
+- **Updates digest:** if an `updates` incident has a `"digest"` field (`{header, count, lines[], sig}`), `renderUpdates()` renders a compact CAMPBELL-style digest block (`.incident-digest`) instead of the full sub-item cards — `items` array is preserved but not rendered
+- **Block types rendered by JS:** `narrative`, `campbell`, `callout`, `email`, `log-excerpt`
+- **SAVE RESPONSES button** — single end-of-page button collects all `choice` answers for the active week → `PUT /api/v1/incidents/{week}/state` → locks choice buttons; also writes `localStorage('portal-incident-state-{week}')`
+- **Open incidents** (S01-I02) keep independent SUBMIT button → `POST /api/v1/incidents/{id}/responses`
+- State blob shape: `{ "S01-I01": { type, choice, custom, question_snapshot, locked, saved_at } }`
+
+**New D1 table — `incident_state`** (migration 009):
+```sql
+CREATE TABLE IF NOT EXISTS incident_state (
+  week       TEXT PRIMARY KEY,
+  state      TEXT NOT NULL DEFAULT '{}',
+  updated_at TEXT
+);
+```
+
+**New API endpoints:**
+- `GET  /api/v1/incidents/{week}/state` → returns state blob for week (or `{}`)
+- `PUT  /api/v1/incidents/{week}/state` → `INSERT OR REPLACE` with new state blob
+- `GET  /api/v1/incidents/{id}/responses` → all open responses for incident (keeper export)
+- `POST /api/v1/incidents/{id}/responses` → submit open response (existing, migration 008)
+
+**Key files:**
+- `data/incidents.json` — week-indexed incident data (all content, all block types)
+- `functions/api/v1/incidents/[id]/state.js` — GET+PUT incident state (week is `params.id`)
+- `functions/api/v1/incidents/[id]/responses.js` — GET+POST open responses (existing)
+- `workers/migrations/009_incident_state.sql` — new table (applied local; apply --remote before deploy)
+
+---
+
+### Phase 2.11 — Interactive District Map (COMPLETE)
+
+**`data/portal-maps.json`** — explicit grid matrix for Aldermoor (M02). Each map: `id`, `session_id`, grid (5-row × 7-col; cells: `loc`, `street-h`, `street-v`, `empty`). Each `loc` cell: `id`, `order` (1-7 narrative progression), `label`, `sublabel`, `player_desc`, `keeper_note`, `npcs[]`.
+
+**Map state schema:** `{ u: { loc_id: true }, v: { loc_id: true } }` — `u` = player-unlocked, `v` = keeper-visited. Legacy flat format `{ loc_id: true }` is auto-migrated by `_normaliseMapState()` in `feed.html`.
+
+**New D1 table — `map_state`** (migration 011):
+```sql
+CREATE TABLE IF NOT EXISTS map_state (
+  map_id     TEXT PRIMARY KEY,
+  state      TEXT NOT NULL DEFAULT '{}',
+  updated_at TEXT NOT NULL
+);
+```
+Applied remote + local ✅
+
+**New API endpoint:**
+- `GET  /api/v1/maps/:id/state` → returns parsed state or `{}`
+- `PUT  /api/v1/maps/:id/state` → `INSERT OR REPLACE` with new state blob
+
+**Key files:**
+- `data/portal-maps.json` — map grid data (static asset)
+- `functions/api/v1/maps/[id]/state.js` — GET+PUT map state
+- `workers/migrations/011_map_state.sql` — new table
+
+**Player MAP tab**: mission session selector → grid of `loc`/street cells; locked cells show redacted blocks; unlocked cells show label + sublabel + detail card on click; SYNC MAP button.
+
+**Keeper MAP tab**: same grid with order badges (keeper-only, hidden from players), NPC pills per cell, unlock toggle per cell, visited button (○/✓), bulk actions (REVEAL ALL / RESET MAP / ALL VISITED / CLEAR VISITED).
+
+---
+
+### Phase 2.12 — Fix legacy FK constraints on feed tables (COMPLETE)
+
+The remote D1 database was created from an older schema where `messages.session_id` had a FK → `sessions(id)` and `rolls.hunter_id` had a FK → `hunters(id)`. Our code uses free-text keys (`'M02'`, `'reed'`) that don't exist in those legacy tables, causing every INSERT to fail with a FOREIGN KEY constraint error (Cloudflare 1101 "Worker threw exception").
+
+**Migration 012** (`workers/migrations/012_drop_feed_fk.sql`) recreates both tables without FK constraints:
+- `messages` — dropped FK on `session_id`; schema matches migration 007 intent
+- `rolls` — dropped FK on `hunter_id`; schema matches migration 007 intent
+
+Both tables were empty at time of migration (all prior INSERTs had been failing). Applied remote + local ✅
+
+**Regression guard:** `tests/d1-round-trip.spec.js` tests 8 + 9 POST real messages and rolls with realistic keys. Any future FK regression will be caught locally before reaching prod.
+
+---
+
+## E2E Testing (branch: `playwright-testing`)
+
+Playwright test suite — chromium only, targets `wrangler pages dev .` on localhost:8788.
+
+**Run:**
+```bash
+git checkout playwright-testing
+npm install && npx playwright install chromium
+npm test              # headless
+npm run test:ui       # interactive
+```
+
+**Current coverage — 303 tests across 17 files:**
+| File | Tests | Page |
+|------|-------|------|
+| `tests/smoke.spec.js` | 5 | All key pages — HTTP 200 + element |
+| `tests/nav.spec.js` | 22 | `player-nav.js` injection + subdirectory path correctness |
+| `tests/contacts.spec.js` | 7 | NPC card rendering |
+| `tests/incidents.spec.js` | 18 | Full incidents page (tabs, choice, open, info, teaser) |
+| `tests/feed.spec.js` | ~25 | Live feed (mocked D1) + hunter panel |
+| `tests/bestiary.spec.js` | 15 | Player bestiary session gating |
+| `tests/arcs.spec.js` | 24 | Hunter arcs reference |
+| `tests/artefacts.spec.js` | 15 | Artefacts section |
+| `tests/missions.spec.js` | 23 | Mission archive |
+| `tests/lab.spec.js` | 20 | Research Lab playbook |
+| `tests/entities.spec.js` | 36 | Entity registry (3 sections) |
+| `tests/hunters.spec.js` | 19 | Hunter pages (reed + rex) |
+| `tests/briefings.spec.js` | 12 | CAMPBELL briefings tab switcher |
+| `tests/player-report.spec.js` | 15 | Player operative field report |
+| `tests/d1-round-trip.spec.js` | 7 | Full save→reload→restore cycle (real D1) |
+| `tests/map.spec.js` | 24 | Interactive district map (player + keeper) |
+| `tests/report.spec.js` | 15 | Keeper field report (session tabs, save, copy) |
+
+**Tests are data-driven**: spec files read source JSON at module level — adding new content won't break existing tests.
+
+**Backlog:** see `tests/TESTING-NOTES.md`. Key remaining gaps: `index.html` session-aware cards, offline D1 fallback, nav 404 checks.
+
+---
+
+### Phase 2.9 — The Lab Team Playbook Page (COMPLETE)
+
+`the-lab.html` at root — player-facing Research Lab team playbook page.
+- Style: **Hazardous Research** — end-of-session Q: "Did we find safe and beneficial applications for the dangerous things we learned about?"
+- Interactive: XP track, moves checklist, assets checklist, ally/enemy fields, notes
+- D1-backed via `/api/v1/team/playbook`, localStorage key `portal_lab_playbook`
+- Linked from "The Lab" in player-nav.js and from Lab section of index.html
+
+**Data model for `hunter_sheet` state:**
+```json
+{
+  "stats": { "cool": 1, "tough": 2, "sharp": 0, "charm": 1, "weird": 2 },
+  "harm": 0,
+  "luck": 7,
+  "xp": 0,
+  "moves": ["move-id-1", "move-id-2"],
+  "gear": ["Item one", "Item two"],
+  "bonds": ["Bond with Reed: ...", "Bond with Alan: ..."]
+}
+```
+
+### Phase 3 — Workers API + NPC/Lead Data
+- NPC roster API + dynamic `contacts.html`
+- Leads API + dynamic leads display per session
+- Seed D1 `hunters` table from `hunters.json` once playbook sheets are populated
+
+### Phase 4 — Live Feed (NEXT AFTER 2.7)
+
+Split-screen session tool. Single page at `app/feed.html` (or `session.html`).
+
+**Layout:**
+- **Left half:** Feed/chat — scrolling log of rolls, CAMPBELL messages, Director dispatches, handout reveals, system events. Styled like a terminal. New entries append at the bottom.
+- **Right half:** Tabbed panel —
+  - **Sheet tab:** Player selects their operative → sees playbook (stats, moves, harm/luck). Clickable moves trigger a roll.
+  - **NPCs tab:** Active NPCs for the current session (from `portal-npcs.json`, filtered by `visible_to_players`). Always-available lab contacts shown separately.
+  - **Handouts tab:** Revealed documents/images for the session.
+- **Keeper mode:** Double-click top-right corner (same pattern as hunter pages) → reveals keeper overlay on Sheet tab (all hunters visible, not just one), NPC tab shows hidden NPCs, extra Keeper tools panel.
+
+**First version scope (no Durable Objects yet):**
+- No WebSockets — feed built from D1 `rolls` table, polled every 3 seconds
+- Polling pauses automatically when the tab is hidden (`visibilitychange` → `stopPolling()`), resumes on tab focus — preserves CF free-tier request budget
+- Roll flow: player clicks move → selects stat → rolls 2d6+stat locally → result shown → PUT to `/api/v1/rolls` → appears in feed for all players on next poll
+- CAMPBELL messages: Keeper types in a text field → POST to `/api/v1/messages` → appears in feed
+- Handouts: static for now (link to existing report files)
+- New D1 tables needed: `rolls` (already in schema), `messages` (already in schema), `session_state` (which session is active, which NPCs visible)
+
+**New API endpoints needed:**
+```
+POST /api/v1/rolls              → log a roll, returns the saved roll with id
+GET  /api/v1/rolls?session=S02  → all rolls for active session (feed poll)
+POST /api/v1/messages           → keeper sends CAMPBELL/Director message
+GET  /api/v1/messages?session=S02 → delivered messages for session (feed poll)
+GET  /api/v1/session/active     → which session is live, active NPC list
+PUT  /api/v1/session/active     → keeper sets active session (keeper mode only)
+```
+
+**Real-time upgrade path:** Once first version works, replace polling with Cloudflare Durable Objects (WebSocket room per session). The API surface stays the same — just the delivery mechanism changes.
+
+### Phase 5 — Dynamic CAMPBELL Briefings
+- Briefing data model in D1
+- Keeper briefing editor
+- Player briefing history view
+- Integration with session report export
+
+### Phase 5 — Dynamic CAMPBELL Briefings
+- Briefing data model in D1
+- Keeper briefing editor
+- Player briefing history view
+- Integration with session report export
+
+---
+
+## Versioning / GitHub
+
+- `dev` → Cloudflare Pages (auto-deploys on push). This is the only deployment — all player and keeper traffic.
+- `main` → not actively deployed. May be used for stable releases in future.
+
+**What goes in the repo:** All HTML, CSS, JS; `data/` JSON files; Workers code; schema migrations.
+
+**What does NOT go in the repo:** CF API tokens or secrets; player session tokens; D1 data.
+
+---
+
+## Mobile Plan — feed.html (DEFERRED)
+
+*Not implementing yet — document the plan so it's ready when needed.*
+
+### Problem
+
+`feed.html` uses a fixed side-by-side layout: feed column (left) + panel column (right, 420px). On a phone this either stacks awkwardly or both columns become unusably narrow.
+
+### Audience split
+
+- **Players on mobile:** primarily need FEED + their MOVES (to roll). Contacts and Handouts are secondary.
+- **Keeper on mobile:** less likely, but may want CONTACTS or THREATS for quick lookup. Rolls are less important.
+
+### Alternative options to evaluate first
+
+**Option A — Force landscape orientation**
+Add `<meta name="screen-orientation" content="landscape">` + CSS `@media (orientation: portrait) { … }` showing a "rotate your device" nudge. Simplest possible fix — the desktop split layout works fine in landscape on most phones (≥ 667px wide). No layout changes needed. Downside: annoying if you just want to glance at the feed quickly.
+
+**Option B — Portrait stacked split (feed top, panel bottom)**
+In portrait mode, keep both columns visible but stack them vertically: feed takes ~55% height, panel takes ~45%. Panel tabs stay horizontal. Feed scroll area shrinks but remains usable. Panel becomes a compact bottom sheet. No tab switching needed — both areas visible at once, like a tall desktop. This may actually be the best UX — closest to the desktop experience without hiding anything.
+
+**Option C — bottom tab bar (≤ 768px portrait only)**
+The fuller option described below — full-width single view with tab switching. Most work, best small-screen UX.
+
+**Recommendation when tackling this:** try Option A first (10 minutes), then Option B (30 minutes). Only build Option C if both feel wrong.
+
+### Option C detail — bottom tab bar (≤ 768px)
+
+Below a breakpoint, collapse the two-column layout into a single full-width column and add a fixed bottom tab bar to switch views. No changes to desktop layout.
+
+**Two tabs for players:**
+
+```
+[ 📡 FEED ]  [ ⚡ PANEL ]
+```
+
+- **FEED** — full-width feed scroll + composer at bottom. Default view.
+- **PANEL** — full-width panel (hunter picker + existing tabs: MOVES / CONTACTS / HANDOUTS). Panel tabs stay as-is.
+
+**Keeper mode adds a label but same two tabs** — FEED and the keeper panel tabs work identically.
+
+### Implementation notes
+
+- Add `data-view="feed"` / `data-view="panel"` to the two columns.
+- A `window.switchMobileView(v)` function toggles `display: none / flex` on each column.
+- Bottom tab bar is a `<div class="mobile-tab-bar">` rendered via CSS `@media (max-width: 768px)`, `display: none` on desktop.
+- The tab bar can be appended to the feed page body — two buttons calling `switchMobileView`.
+- No structural changes to the panel internals — they just become full-width.
+- Active badge on PANEL tab button when new feed entries arrive while viewing panel (so player knows to switch back).
+
+### CSS skeleton (not yet applied)
+
+```css
+@media (max-width: 768px) {
+  .feed-layout    { flex-direction: column; }
+  .feed-col       { display: none; width: 100%; }
+  .panel-col      { display: none; width: 100%; }
+  .feed-col.active, .panel-col.active { display: flex; }
+  .mobile-tab-bar { display: flex; }
+}
+.mobile-tab-bar {
+  display: none; /* hidden on desktop */
+  position: fixed; bottom: 0; left: 0; right: 0;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  z-index: 200;
+}
+```
+
+### Composer on mobile
+
+The feed composer (text box + send button) is currently at the bottom of the feed column. On mobile, when in FEED view it sits above the tab bar. When in PANEL view it's hidden. This is acceptable — rolling from MOVES view doesn't need the composer visible.
+
+### Keeper mode on mobile
+
+Same two-tab layout. The keeper panel tabs (OPERATIVES / CONTACTS / REFERENCES / THREATS / HANDOUTS / MAP) stack horizontally — the tab row uses `overflow-x: auto; flex-wrap: nowrap` with a styled thin scrollbar so all 6 tabs remain accessible.
+
+---
+
+## Static Data Files Reference
+
+All files in `data/` are static assets served by CF Pages. Never written to at runtime — all campaign state goes in D1. Read from browser via `fetch('/data/<filename>.json')`.
+
+**General rules:**
+- Fields marked `FILL_FROM_SESSION` are genuine unknowns — treat as `null` at runtime, show placeholder in UI
+- All `id` fields use kebab-case — stable as DOM IDs, map keys, and D1 foreign keys
+- `keeper_description` / `keeper_notes` fields must **never** be sent to player-facing endpoints or rendered on player pages
+
+---
+
+### `motw-basic-moves.json`
+
+**Purpose:** Complete MOTW move reference for the roll interface.
+
+**Top-level:** `version`, `source`, `note`, `basic_moves` (10 moves), `alternate_weird_moves` (8), `new_weird_moves` (7 from SSK).
+
+**Each move:** `id`, `name`, `trigger` ("When you..."), `roll` (stat or null), `outcomes` (keys: `12_plus`, `10_plus`, `7_9`, `miss` or `general`), optional `choices` array and `choices_note`.
+
+**Roll interface:** Filter `basic_moves` by `roll !== null`. Read `roll` to auto-fill stat. Select outcome key after rolling; render `choices` as pick list if present.
+
+**Weird move:** Each hunter has one active Weird move. Check `hunters.json` → `hunter.weird_move`.
+
+---
+
+### `motw-playbooks.json`
+
+**Purpose:** Playbook move reference for each active hunter. Used by roll interface, character sheet display, and keeper command board move reference panel.
+
+**Each playbook:** `id`, `name`, `hunter`, `moves`, `stats`, `gear`, `improvements`, `player_choices`.
+
+**`player_choices`:** Confirmed picks are set; unrecorded fields are `FILL_FROM_SESSION`. Use to initialise hunter's sheet in D1.
+
+**Confirmed picks:**
+- Rex: `area_of_study: Violence`, `weird_move: weird-science`
+- Reed: `hero: rex`, mandatory move `there's-no-i-in-team`
+- Sven: `breed: ghost`, `curse: vulnerability (rock salt suggested)`, `attacks: magical force + hand range`, `moves: incorporeal + immortal`
+
+---
+
+### `motw-teambooks.json`
+
+**Purpose:** Reference for the Research Lab team playbook.
+
+**Key fields:** `campaign_style: action-science`, end-of-session question: "Did we defeat extreme danger with science?" (yes = +1 mark, yes and prominent = +2), `improvement_track.marks_to_advance: 5`.
+
+---
+
+### `portal-custom-moves.json`
+
+**Purpose:** Campaign-specific moves merged with standard move lists at runtime.
+
+**Current entries:**
+- `substance-theta-active-dose` — roll+Weird; Project Veil breadcrumb
+- `anchor-spike-discharge` — no roll; `target_effects` covers liminal entities, hunters, Sven (revelation moment), and the Cartographer
+- `bim-collection-array-recovery` — no roll; most plot-significant retrievable object in a MESA encounter
+
+**Adding house rules:** Push to `house_rules` array using the same structure.
+
+---
+
+### `hunters.json`
+
+**Purpose:** Static identity layer for hunters. Also used as offline fallback in Phase 1.
+
+**Each hunter:** `id`, `playbook`, `accent_colour`, `luck_special` (fully populated — all 4 hunters + John Johnson), `area_of_study` (Rex: `id`, `name`, `effect`), `stats` (confirmed or `FILL_FROM_SESSION`), `active_moves` (with `confirmed` flag), `gear`, `bonds`, `keeper_notes` (arc_hooks, secrets_involved).
+
+**Loaded at runtime by `hunter.js`:** `loadHunterMeta()` fetches this file, finds the hunter by `id === hunterId`, injects `luck_special` into `#luck-special` and (if present) `area_of_study.effect` into `#area-of-study-effect`.
+
+**D1 seeding (Phase 3):** Map stats → `hunter_stats`; active_moves → `hunter_moves`; gear → `hunter_gear`; bonds → `hunter_bonds`. Skip `FILL_FROM_SESSION` rows.
+
+---
+
+### `playbook-moves.json`
+
+**Purpose:** Move definition layer for the feed view. Maps `data-check-key` → move mechanics.
+
+**Top-level:** `version`, `note`, `moves` (flat object keyed by check-key), `always_active_moves` (per-hunter array of moves that are always on, e.g. Violence area of study for Rex).
+
+**Each move:** `hunter` (which hunter owns it), `name`, `roll` (stat string like `"+Sharp"` or `null` for passive), `description`.
+
+**Feed rendering:** Load D1 sheet state → for each `checks[key] === true`, look up `moves[key]` → render move card (name + roll badge + description). Then render `always_active_moves[hunterId]` unconditionally.
+
+**Currently covers:** All 4 hunters (Rex 6 moves, Alan 8 moves, Reed 8 moves, Sven 12 moves) + Rex's Violence always-active move. All descriptions extracted from hunter HTML pages.
+
+---
+
+### `portal-npcs.json`
+
+**Purpose:** Seed data for D1 `npcs` table. Static source for `contacts.html` and keeper NPC reveal panel.
+
+**Each NPC:** `id`, `affiliation`, `visible_to_players`, `player_description` (safe for players), `keeper_description` (never send to player endpoints), `secrets_involved`.
+
+**Player contacts flow:** Filter `visible_to_players === true`, render only `player_description`. Toggling `visible_to_players` pushes to D1 and broadcasts via Durable Object.
+
+**Counts:** 21 NPCs — 6 PORTAL, 4 MESA, 11 civilian. 12 visible to players; 9 keeper-only.
+
+---
+
+### `portal-entities.json`
+
+**Purpose:** Entity/threat database for keeper command board and `missions/entities.html` Section I.
+
+**Each entity (base fields):** `id`, `designation` (E-001 etc.), `classification`, `case`, `status`, `player_description`, `keeper_description`, `powers`, `harm`, `harm_capacity`, `armour`, `weakness`, `bim_connection`, `bim_note` (highlight in command board — Project Veil thread), `keeper_moves`, optional `keeper_only`.
+
+**`display{}` block (optional — adds entity to Section I of entities.html):** Add to an entity to make it appear in the "Confirmed Entities" keeper registry. Fields:
+- `id` — DOM id for the card (e.g. `"e001"`)
+- `num` — zero-padded display number (e.g. `"001"`)
+- `eyebrow` — status line (e.g. `"// CONFIRMED · RESOLVED · SESSION 01"`)
+- `name` — display name
+- `sub` — subtitle / classification line
+- `card_class` — CSS class: `"resolved"` or `"active"`
+- `tags[]` — `{ label, color }` badge chips
+- `stat_block[]` — stat rows; each is either `{ label, value, full? }` or `{ label, harm_num, harm_sub, harm_color, full? }` (harm_num variant renders the `.harm-row` layout)
+- `named_moves[]` — `{ name, text }` — entity moves rendered in expanded body
+- `notes[]` — `{ label, text }` — keeper resolution / context notes
+
+**Adding a new confirmed entity to entities.html:** Add `display{}` to the entity's entry in this file. No HTML edits needed — `entities.html` renders Section I dynamically from all entries that have a `display` key.
+
+**Command board:** Load entity by case ID when session is active. Highlight `bim_note` — keeper's reminder of which Project Veil breadcrumbs are live in this scene.
+
+**Current state:** E-001 (Eszter) resolved + display block. E-002 (Cartographer) active + display block — Session 02. E-003–E-006 active. T-006 (The Hollow) theoretical/keeper-only.
+
+---
+
+### `portal-db-custom.json`
+
+**Purpose:** PORTAL-original entities for the Gathered Database (Section III of `entities.html`). Entities observed/documented by PORTAL that aren't in the standard Deck of Monsters.
+
+**Semantic schema (v2):** `id`, `display_name` (HTML string), `custom: true`, `type`, `harm`, `armour`, `extra_tags[]` (`{ label, color }`), `motivation`, `type_detail`, `harm_color`, `harm_note`, `armour_detail`, `origin`, `attacks[]` (`{ name, value, full }`), `weakness`, `custom_moves[]` (`{ name, text }`), `notes[]` (`{ label, text }`).
+
+**Adding a new custom entity:** Append to `entries[]`. Rendered by `buildCustomDBCard()` in `entities.html` — no HTML edits needed.
+
+---
+
+### `portal-db-deck.json`
+
+**Purpose:** All 53 Deck of Monsters entries for the Gathered Database (Section III of `entities.html`). Source data extracted from original hardcoded HTML.
+
+**Semantic schema (v2):** `id`, `name`, `type`, `harm`, `armour`, `motivation`, `powers`, `attacks[]` (`{ name, value }`), `weakness`, `custom_moves[]` (`{ name, text }`), `description`.
+
+**Adding new Deck of Monsters entries:** Append to `entries[]`. Rendered by `buildDeckDBCard()` in `entities.html` — no HTML edits needed.
+
+---
+
+### `sessions/index.json` + `sessions/s0N.json`
+
+**Purpose:** Per-session data, split from former monolithic `session-data.json`. Index provides lightweight session list; per-session files contain full data.
+
+**Index schema:** `[{id, session_key, label, doc}]` — enough for session selectors and archive lists.
+
+**Per-session file:** Same schema as the former `session-data.json` entries: `id`, `session_key`, `label`, `doc`, `entity_ids[]`, `threats[]`, `equipment[]`, `readaloud[]`, `handouts[]`.
+
+**Adding a new session:** Create `data/sessions/s0N.json` with the full session data. Append a lightweight entry to `data/sessions/index.json`.
+
+**Feed rendering:** `feed.html` fetches only the active session's file. Keeper THREATS and HANDOUTS tabs load the same file. Archive pages fetch the index and lazy-load detail on demand.
+
+---
+
+### `evidence.json`
+
+**Purpose:** Evidence board data for `evidence.html`. Accumulated investigative findings across all sessions.
+
+**Each entry:** `id` (ev- prefix), `session`, `found_by`, `category`, `label`, `summary`, `connections[]`, `dossier_link`, `status`, `keeper_note`.
+
+**Session gating:** The `session` field gates visibility — items from future sessions are hidden.
+
+**Keeper mode:** `keeper_note` is visible only in keeper mode (triple-click activation on evidence.html).
+
+---
+
+### `campbell-logs.json`
+
+**Purpose:** CAMPBELL activity log data for `campbell-logs.html`. Continuum design — grows each session.
+
+**Schema:** `batches[]` — one batch per session. Each batch: `id`, `session`, `label`, `introduced_by`, `intro_note`, `entries[]` (timestamp, content, flags), `highlights[]` (term, by, note).
+
+**Highlights:** In-world progressive revelation. Teddy, Priya, or John highlight terms in new and old batches. Highlights on old batches can be added retroactively each session.
+
+---
+
+### `canon.json`
+
+**Purpose:** Persistent canon registry. Player-invented facts confirmed by the keeper.
+
+**Each entry:** `id`, `session`, `category` (GADGET/TEXTURE/THEORY), `label`, `value`, `source_report`, `related_evidence[]`.
+
+**Cumulative:** All confirmed facts from all sessions. Included in session prep export.
+
+---
+
+### `report-schema.json`
+
+**Purpose:** Session-specific configuration for keeper and player report forms. Replaces former inline JS config objects in `report.html` and `player-report.html`.
+
+**Each entry:** `session_id`, `week_id`, `week_label`, `week_subtitle`, `keeper_threads[]`, `keeper_clocks[]`, `keeper_scenes[]`, `player_scenes[]`, `canon_slots[]`.
+
+**Both report pages fetch this file on load.** A missing entry means the session tab won't render.
+
+---
+
+## Immediate Next Steps
+
+See `portal-feature-proposals.md` for the full priority queue. Key phases:
+
+1. **Foundation:** CSS promotion, report schema extraction to `data/report-schema.json`, session-data splitting to `data/sessions/`, doc cleanup.
+2. **S03 Feed Types:** Tone cards, line cards (distortion mechanic), scan results (ad-hoc creator).
+3. **S03 Content:** New session in `data/sessions/s03.json`, dossier pages in `handouts/dossier/`, report-schema entry.
+4. **Post-Session:** Evidence page (`evidence.html`), canon pipeline (`data/canon.json`), CAMPBELL logs continuum (`campbell-logs.html`), player thread summaries.
+
+---
+
+## Notes for Claude Code Sessions
+
+When picking this up:
+- Check `wrangler.jsonc` at repo root — has D1 binding name (`portal_db`) and database ID
+- Workers use TypeScript; client-side JS in `app/` pages is vanilla JS (no framework)
+- The existing design system (four CSS files, `--mp-*` variables, keeper/player split, terminal aesthetic) applies to all new pages — read `context/worldbuilding-site.md`
+- Roll log is append-only: INSERT only, never UPDATE or DELETE
+- Player pages use D1-first persistence: on load fetch from API, fall back to localStorage if offline; on save write localStorage immediately then PUT to API in background
+- Hunter arc state pattern is the reference implementation — see `hunters/hunter.js` and `functions/api/v1/hunters/[id]/arc-state.js`
+- New migrations go in `workers/migrations/` as `NNN_description.sql`; apply to both local and remote D1 (see migration command above)
+- Keeper pages write directly to D1; player pages write their own data only
+- CAMPBELL's voice rules are in `context/worldbuilding-lore.md` — any generated message must sound like CAMPBELL
+- Never add passwords or a signup flow — keeper uses CF Access (Google), players use URL tokens
+- All nine `data/` JSON files are built and ready — read the "Static Data Files Reference" section above before writing any code that touches moves, hunters, NPCs, or entities. Do not reconstruct data that already exists in those files.
+- `keeper_description` and `keeper_notes` fields must never appear in player-facing API responses or page renders

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Contacts</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="player.css">
+<style>
+.contacts-section { max-width: 860px; margin: 0 auto 3rem; padding: 0 1rem; }
+
+.contacts-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--green-dim);
+  margin: 2.5rem 0 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+.contacts-eyebrow:first-child { margin-top: 0; }
+
+.npc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.npc-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.npc-card::before {
+  content: '';
+  display: block;
+  height: 3px;
+}
+.npc-card.affil-portal::before  { background: var(--green-dim); }
+.npc-card.affil-civilian::before { background: #5a7fa0; }
+.npc-card.affil-unknown::before  { background: #6b5a7f; }
+
+.npc-card:hover { border-color: var(--green-dim); }
+
+.npc-header { padding: 0.85rem 1rem 0.5rem; }
+
+.npc-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-bright);
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+}
+
+.npc-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.npc-affil {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  padding: 0.1rem 0.4rem;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+.npc-affil.portal   { color: var(--green); background: rgba(46,204,113,0.08); border: 1px solid rgba(46,204,113,0.2); }
+.npc-affil.civilian { color: #7bafd4; background: rgba(91,127,160,0.08); border: 1px solid rgba(91,127,160,0.2); }
+.npc-affil.unknown  { color: #a08ac8; background: rgba(107,90,127,0.08); border: 1px solid rgba(107,90,127,0.2); }
+
+.npc-role {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 0.06em;
+}
+
+.npc-body {
+  padding: 0.5rem 1rem 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.npc-desc {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.84rem;
+  color: var(--text);
+  line-height: 1.55;
+}
+
+.npc-session {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  margin-top: 0.6rem;
+}
+
+.npc-status-deceased .npc-name { color: var(--text-dim); text-decoration: line-through; }
+.npc-status-deceased::before { opacity: 0.4; }
+
+.loading-msg {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  padding: 2rem 0;
+  letter-spacing: 0.1em;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</a>
+  <nav id="player-nav"></nav>
+  <script src="player-nav.js"></script>
+</header>
+
+<main>
+  <section class="contacts-section">
+
+    <div class="page-header" style="margin-bottom:2rem">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;color:var(--green-dim);margin-bottom:0.4rem">// OPERATIVE CONTACTS</div>
+      <h1 style="font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:700;letter-spacing:0.06em;color:var(--text-bright);text-transform:uppercase;margin:0 0 0.4rem">Field Contact Directory</h1>
+      <p style="font-family:'Barlow',sans-serif;font-size:0.9rem;color:var(--text-dim);margin:0">Known contacts encountered during active operations. Keeper-cleared for operative access.</p>
+    </div>
+
+    <div id="contacts-root">
+      <div class="loading-msg">// LOADING CONTACT DATABASE…</div>
+    </div>
+
+  </section>
+</main>
+
+<script>
+(function () {
+  var AFFIL_ORDER = ['PORTAL', 'civilian', 'unknown'];
+  var AFFIL_LABELS = { PORTAL: '// PORTAL STAFF', civilian: '// FIELD CONTACTS', unknown: '// UNKNOWN AFFILIATION' };
+
+  function affilClass(a) {
+    if (a === 'PORTAL') return 'portal';
+    if (a === 'civilian') return 'civilian';
+    return 'unknown';
+  }
+
+  function sessionLabel(s) {
+    if (!s) return null;
+    return 'First encountered: ' + s.replace('S0', 'Session ').replace('S', 'Session ');
+  }
+
+  function renderNpc(npc) {
+    var ac = affilClass(npc.affiliation);
+    var statusClass = npc.status === 'deceased' ? ' npc-status-deceased' : '';
+    var session = npc.first_session ? '<div class="npc-session">// ' + sessionLabel(npc.first_session) + '</div>' : '';
+
+    return '<div class="npc-card affil-' + ac + statusClass + '">' +
+      '<div class="npc-header">' +
+        '<div class="npc-name">' + npc.name + '</div>' +
+        '<div class="npc-meta">' +
+          '<span class="npc-affil ' + ac + '">' + npc.affiliation.toUpperCase() + '</span>' +
+          '<span class="npc-role">' + npc.role + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="npc-body">' +
+        '<div class="npc-desc">' + npc.player_description + '</div>' +
+        session +
+      '</div>' +
+    '</div>';
+  }
+
+  function render(npcs) {
+    var visible = npcs.filter(function (n) { return n.visible_to_players; });
+
+    // Group by affiliation
+    var groups = {};
+    visible.forEach(function (n) {
+      var a = n.affiliation || 'unknown';
+      if (!groups[a]) groups[a] = [];
+      groups[a].push(n);
+    });
+
+    var html = '';
+    AFFIL_ORDER.forEach(function (affil) {
+      if (!groups[affil] || groups[affil].length === 0) return;
+      html += '<div class="contacts-eyebrow">' + (AFFIL_LABELS[affil] || '// ' + affil.toUpperCase()) + '</div>';
+      html += '<div class="npc-grid">';
+      groups[affil].forEach(function (npc) { html += renderNpc(npc); });
+      html += '</div>';
+    });
+
+    document.getElementById('contacts-root').innerHTML = html;
+  }
+
+  fetch('/data/portal-npcs.json')
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function (data) { render(data.npcs); })
+    .catch(function () {
+      document.getElementById('contacts-root').innerHTML =
+        '<div class="loading-msg">// CONTACT DATABASE UNAVAILABLE</div>';
+    });
+}());
+</script>
+
+</body>
+</html>

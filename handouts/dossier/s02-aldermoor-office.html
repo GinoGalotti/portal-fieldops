@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aldermoor Property Services — Office Recovery</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dossier.css">
+<style>
+  :root {
+    --ink:         #1a1a1a;
+    --ink-dim:     #6a6a6a;
+    --cream:       #f6f4f0;
+    --paper-late:  #eceae4;
+    --accent:      #8a6a1a;
+    --rule-color:  #d0c8b0;
+    --hint-bg:     rgba(138, 106, 26, 0.12);
+    --hint-border: rgba(138, 106, 26, 0.40);
+  }
+
+  /* Whiteboard styling */
+  .whiteboard {
+    background: #f8f8f8;
+    border: 2px solid #c0c0c0;
+    padding: 1rem;
+    margin: 0.8rem 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    line-height: 1.8;
+    position: relative;
+  }
+
+  .whiteboard::before {
+    content: 'WHITEBOARD — REAR WALL';
+    position: absolute;
+    top: -0.5rem;
+    left: 0.5rem;
+    background: var(--cream);
+    padding: 0 0.3rem;
+    font-size: 0.5rem;
+    color: var(--ink-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .wb-address {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.15rem 0;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  .wb-address:last-child { border-bottom: none; }
+
+  .wb-date { color: #8a2a2a; }
+  .wb-recent { color: #8a2a2a; font-weight: bold; }
+
+  /* Shredded email styling */
+  .shredded {
+    background: #faf8f4;
+    padding: 0.8rem 1rem;
+    margin: 0.8rem 0;
+    border: 1px dashed #c0b8a0;
+    position: relative;
+  }
+
+  .shredded-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--ink-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .shredded-line {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    margin-bottom: 0.2rem;
+  }
+
+  .shredded-gap {
+    color: #c0b8a0;
+    font-style: italic;
+    font-size: 0.8rem;
+  }
+
+  /* Filing cabinet document style */
+  .doc-field {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.3rem 0;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #e8e4e0;
+  }
+
+  .doc-field:last-child { border-bottom: none; }
+
+  .doc-field-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    min-width: 120px;
+    padding-top: 0.15rem;
+  }
+
+  .doc-field-value { flex: 1; }
+
+  .rex-note {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #4a4a3a;
+    padding: 0.5rem 0 0.3rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="dossier-wrapper">
+
+  <div class="classification">// field evidence — s02 — scene 1 // 22 aldermoor main street</div>
+  <h1 class="dossier-title">Aldermoor Property Services — Office Recovery</h1>
+  <p class="dossier-subtitle">Vacated real estate office. Filing cabinets, whiteboard map, shredded correspondence. First physical surface of the MESA acquisition trail.</p>
+
+  <div class="provenance">
+    LOCATION: 22 Aldermoor Main Street, Virginia<br>
+    STATUS: Vacated approximately 4 months ago. Company dissolved. Door unlocked.<br>
+    CONTENTS: Filing cabinets (intact), whiteboard map (intact), desk, broken printer, one partially shredded email<br>
+    RECOVERED BY: Field team, during S02 investigation
+  </div>
+
+  <!-- The Whiteboard -->
+
+  <div class="notebook-entry">
+    <div class="entry-date">The Whiteboard Map</div>
+    <div class="entry-body">
+      <p>Hand-drawn map of the Aldermoor district in black marker. Every residential address has a date written beside it. <span class="clue-hint" data-clue="dates-advance">The dates start eighteen months ago and run forward to two weeks ago — after the office officially closed. Someone still had a key.</span></p>
+
+      <div class="whiteboard">
+        <div class="wb-address"><span>14 Aldermoor Crescent</span> <span class="wb-date">18 mo</span></div>
+        <div class="wb-address"><span>16 Aldermoor Crescent</span> <span class="wb-date">17 mo</span></div>
+        <div class="wb-address"><span>7 Fenwick Road</span> <span class="wb-date">16 mo</span></div>
+        <div class="wb-address"><span>9 Fenwick Road</span> <span class="wb-date">15 mo</span></div>
+        <div class="wb-address"><span>22 Fenwick Road (Okafor)</span> <span class="wb-date">14 mo</span></div>
+        <div class="wb-address"><span>3 Aldermoor Gardens</span> <span class="wb-date">11 mo</span></div>
+        <div class="wb-address"><span>…47 addresses total…</span> <span></span></div>
+        <div class="wb-address"><span>114 Rosemont Ave</span> <span class="wb-recent">6 wk</span></div>
+        <div class="wb-address"><span>8 Cedar Lane</span> <span class="wb-recent">4 wk</span></div>
+        <div class="wb-address"><span>201 Aldermoor Main St</span> <span class="wb-recent">2 wk</span></div>
+      </div>
+
+      <p class="rex-note"><span class="clue-hint" data-clue="mapped-in-advance">The entity's expansion mapped in advance — more accurately than CAMPBELL managed. The dates at each address correspond to acquisition dates, not distortion onset. Someone was buying properties along the entity's projected growth path before the growth happened.</span></p>
+    </div>
+    <div class="keeper-note">// KEEPER: CLUE: the whiteboard dates are acquisition dates, and they predict the entity's expansion path. MESA was modelling the Cartographer's growth before PORTAL knew it existed. The most recent date (2 weeks ago, after the office closed) means someone returned to update the map. They're still tracking this.</div>
+  </div>
+
+  <!-- Filing Cabinets -->
+
+  <div class="notebook-entry">
+    <div class="entry-date">Filing Cabinets — Acquisition Records</div>
+    <div class="entry-body">
+      <p>47 property acquisitions over 18 months. All residential. All purchased through three companies:</p>
+
+      <div class="doc-field">
+        <span class="doc-field-label">Company 1</span>
+        <span class="doc-field-value"><span class="clue-hint" data-clue="greyfield">Greyfield Assets Ltd — 19 properties acquired</span></span>
+      </div>
+      <div class="doc-field">
+        <span class="doc-field-label">Company 2</span>
+        <span class="doc-field-value"><span class="clue-hint" data-clue="veritas">Veritas Realty Holdings — 16 properties acquired</span></span>
+      </div>
+      <div class="doc-field">
+        <span class="doc-field-label">Company 3</span>
+        <span class="doc-field-value">Solstice Property Group — 12 properties acquired</span>
+      </div>
+      <div class="doc-field">
+        <span class="doc-field-label">Registered address</span>
+        <span class="doc-field-value"><span class="clue-hint" data-clue="delaware-address">All three: Wilmington, Delaware. Same registered agent.</span></span>
+      </div>
+      <div class="doc-field">
+        <span class="doc-field-label">Beneficial owner</span>
+        <span class="doc-field-value">Not resolvable from public data. CAMPBELL confirms: corporate layering designed to obscure.</span>
+      </div>
+
+      <p class="rex-note"><span class="clue-hint" data-clue="same-architecture">Same corporate architecture as Meridian BioSciences — the company from the Hargrove trial. Three shells, one owner, Delaware registration. Someone is buying environments where something is about to happen, using the same playbook every time.</span></p>
+    </div>
+    <div class="keeper-note">// KEEPER: CLUE: three shell companies, same Delaware address, same architecture as the Hargrove trial. This is the first time the hunters see the MESA pattern laid out physically. Rex recognising the Meridian BioSciences connection is the moment the campaign's financial thread becomes legible.</div>
+  </div>
+
+  <!-- The Shredded Email -->
+
+  <div class="notebook-entry paper-late">
+    <div class="entry-date">Back Office — Shredded Correspondence</div>
+    <div class="entry-body">
+      <p>A cross-cut shredder in the back office, jammed. One printed email chain partially legible — the rest destroyed.</p>
+
+      <div class="shredded">
+        <div class="shredded-label">Recovered email fragment — partially legible</div>
+        <div class="shredded-line">From: <span class="clue-hint" data-clue="helix-boundary">j.morris@helixboundary.com</span></div>
+        <div class="shredded-line">To: <span class="shredded-gap">[destroyed]</span></div>
+        <div class="shredded-line">Subject: Re: <span class="clue-hint" data-clue="specimen-ald1">Specimen ALD-1</span> — spatial anchoring prot<span class="shredded-gap">[destroyed]</span></div>
+        <div class="shredded-line" style="margin-top: 0.5rem;"><span class="shredded-gap">[3–4 lines destroyed]</span></div>
+        <div class="shredded-line">…confirmed at the perimeter. Expansion rate con<span class="shredded-gap">[destroyed]</span></div>
+        <div class="shredded-line">…recommend maintaining acquisition schedule through Q<span class="shredded-gap">[destroyed]</span></div>
+        <div class="shredded-line"><span class="shredded-gap">[remaining lines destroyed]</span></div>
+      </div>
+
+      <p class="rex-note"><span class="clue-hint" data-clue="helix-no-record">@helixboundary.com — no public DNS record. No company registration. No web presence. CAMPBELL ran a full search: the domain exists on private infrastructure only. Whoever these people are, they don't want to be found through normal channels.</span></p>
+
+      <p class="rex-note">"Specimen ALD-1" — they have a designation for the entity. They've been studying it. The acquisition schedule is tied to expansion rate — they're buying along the growth path as it develops.</p>
+    </div>
+    <div class="keeper-note">// KEEPER: CLUE: @helixboundary.com is the MESA contact domain — listed in worldbuilding-lore.md under shell companies. CLUE: "Specimen ALD-1" is MESA's internal designation for the Cartographer. CLUE: "maintaining acquisition schedule" confirms the whiteboard — MESA is buying properties along the entity's projected path. The jammed shredder is deliberate convenience — someone left in a hurry but not so much of a hurry that they didn't try to destroy evidence.</div>
+  </div>
+
+  <!-- Motion Sensor -->
+
+  <div class="notebook-entry paper-late">
+    <div class="entry-date">Back Office — Motion Sensor (discovered post-entry)</div>
+    <div class="entry-body">
+      <p><span class="clue-hint" data-clue="motion-sensor">A small wireless motion sensor, concealed behind the filing cabinet nearest the door. Battery-powered. Active. It transmitted when the hunters entered the office.</span></p>
+      <p class="rex-note">MESA knows we were here. The sensor was positioned to catch anyone accessing the filing cabinets. They left the evidence but rigged the room to know when someone found it. Probably triggered a notification to a mobile device. Time to assume they know our faces.</p>
+    </div>
+    <div class="keeper-note">// KEEPER: CLUE: MESA left the evidence accessible but monitored. They know PORTAL was in the office. This is what triggers Rook's awareness of PORTAL's field team — she arrives at the S02 optional confrontation because this sensor fired. It also foreshadows S03, where MESA is already in the building when the hunters arrive.</div>
+  </div>
+
+  <!-- Keeper toolbar -->
+  <div class="keeper-toolbar">
+    <span class="keeper-status" id="hint-status">clues: hidden</span>
+    <button class="keeper-btn" id="toggle-hints">REVEAL CLUES</button>
+  </div>
+
+</div>
+
+<script>const DOSSIER_ID = 's02-aldermoor-office';</script>
+<script src="dossier.js"></script>
+
+</body>
+</html>

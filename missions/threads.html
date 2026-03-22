@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Keeper · Campaign Threads</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../keeper.css">
+<style>
+
+/* ── THREAD CARDS ─────────────────────────────────────────────────────────── */
+
+.threads-category { margin-bottom: 48px; }
+
+.category-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--keeper-dim);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.category-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.threads-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 2px;
+}
+
+.thread-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 20px 24px;
+  position: relative;
+}
+.thread-card.status-active { border-left: 3px solid var(--amber); }
+.thread-card.status-dormant { border-left: 3px solid var(--border); }
+.thread-card.status-resolved { border-left: 3px solid var(--green); }
+
+.thread-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.thread-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.03em;
+  line-height: 1.3;
+}
+
+.thread-badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.status-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  padding: 2px 7px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+.status-badge.active { color: var(--amber); border-color: var(--amber); }
+.status-badge.dormant { color: var(--keeper-dim); border-color: var(--border); }
+.status-badge.resolved { color: var(--green); border-color: var(--green); }
+
+.session-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: var(--keeper-dim);
+}
+
+.thread-summary {
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.65;
+  margin-bottom: 10px;
+}
+
+.thread-notes {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--keeper-dim);
+  line-height: 1.7;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+
+/* ── CLOCK CARDS ──────────────────────────────────────────────────────────── */
+
+.clocks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+  gap: 2px;
+  margin-bottom: 48px;
+}
+
+.clock-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 22px 24px;
+}
+.clock-card.status-active { border-left: 3px solid var(--red, #e05c5c); }
+.clock-card.status-resolved { border-left: 3px solid var(--green); }
+
+.clock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.clock-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.03em;
+}
+
+.clock-progress-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--keeper-dim);
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+}
+
+.clock-description {
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.clock-pips {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.clock-pip {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  position: relative;
+  flex-shrink: 0;
+}
+.clock-pip.filled { background: var(--red, #e05c5c); border-color: var(--red, #e05c5c); }
+.clock-pip.current { border-color: var(--amber); }
+
+.clock-current-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--amber);
+  letter-spacing: 0.05em;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+.clock-advancement {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--keeper-dim);
+  line-height: 1.65;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  margin-bottom: 8px;
+}
+
+.clock-notes {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--keeper-dim);
+  line-height: 1.6;
+  opacity: 0.75;
+}
+
+/* ── MISC ─────────────────────────────────────────────────────────────────── */
+
+.empty-state {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--keeper-dim);
+  padding: 24px;
+  border: 1px dashed var(--border);
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .threads-grid, .clocks-grid { grid-template-columns: 1fr; }
+}
+
+/* ── SESSION PREP EXPORT ──────────────────────────────────────────────────── */
+
+.prep-section {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 24px;
+  margin-bottom: 48px;
+}
+
+.prep-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--keeper-dim);
+  margin-bottom: 14px;
+}
+
+.case-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.case-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.case-btn:hover { border-color: var(--amber); color: var(--amber); }
+.case-btn.selected {
+  border-color: var(--amber);
+  color: var(--amber);
+  background: rgba(240,165,0,0.08);
+}
+
+.prep-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.prep-copy-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  padding: 8px 20px;
+  border: 1px solid var(--keeper-dim);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.prep-copy-btn:hover { border-color: var(--text); }
+.prep-copy-btn:disabled { opacity: 0.5; cursor: default; }
+
+.prep-feedback {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--green);
+  letter-spacing: 0.08em;
+}
+
+</style>
+</head>
+<body>
+
+<div class="keeper-banner">KEEPER ACCESS ONLY — DO NOT SHARE THIS URL WITH PLAYERS</div>
+
+<header>
+  <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L <span style="font-size:0.7rem;color:var(--keeper-dim);margin-left:8px;">// KEEPER</span></a>
+  <nav id="keeper-nav"></nav><script src="keeper-nav.js"></script>
+  <div><span class="keeper-dot"></span><span style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--keeper-dim)">RESTRICTED ACCESS</span></div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">// KEEPER — CAMPAIGN THREADS & CLOCKS</div>
+  <h1 class="hero-title">Thread<br><span class="accent">Tracker</span></h1>
+  <p class="hero-desc">Active threads, dormant hooks, and countdown clocks across all sessions. Update <code>data/portal-threads.json</code> and <code>data/portal-clocks.json</code> after each session. See the post-session runbook step 2.10 for guidance.</p>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <span class="stat-label">// ACTIVE THREADS</span>
+      <div class="stat-val amber" id="stat-active">—</div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">// DORMANT</span>
+      <div class="stat-val" id="stat-dormant">—</div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">// RESOLVED</span>
+      <div class="stat-val green" id="stat-resolved">—</div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">// CLOCKS ACTIVE</span>
+      <div class="stat-val red" id="stat-clocks">—</div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- ── SESSION PREP EXPORT ──────────────────────────────────────────────── -->
+
+  <div class="section-header">
+    <h2>Session Prep Export</h2>
+    <span class="section-tag">// SELECT NEXT CASE · COPY CONTEXT FOR CLAUDE</span>
+  </div>
+
+  <div class="prep-section">
+    <div class="prep-label">// NEXT CASE —</div>
+    <div class="case-picker" id="case-picker">
+      <span style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--keeper-dim)">// LOADING CASES…</span>
+    </div>
+    <div class="prep-actions">
+      <button class="prep-copy-btn" id="prep-copy-btn">⬡ COPY SESSION CONTEXT FOR CLAUDE</button>
+      <span class="prep-feedback" id="prep-feedback"></span>
+    </div>
+  </div>
+
+  <!-- ── COUNTDOWN CLOCKS ──────────────────────────────────────────────────── -->
+
+  <div class="section-header">
+    <h2>Countdown Clocks</h2>
+    <span class="section-tag">// TIME-SENSITIVE THREATS — ADVANCE AFTER EACH SESSION</span>
+  </div>
+
+  <div class="clocks-grid" id="clocks-container">
+    <div class="empty-state">// LOADING CLOCKS…</div>
+  </div>
+
+  <!-- ── CAMPAIGN THREADS ──────────────────────────────────────────────────── -->
+
+  <div class="section-header">
+    <h2>Campaign Threads</h2>
+    <span class="section-tag">// NAMED ARCS AND OPEN HOOKS — EDIT JSON TO UPDATE</span>
+  </div>
+
+  <div id="threads-container">
+    <div class="empty-state">// LOADING THREADS…</div>
+  </div>
+
+</main>
+
+<footer>
+  <span>// P.O.R.T.A.L — KEEPER DOCUMENT — CAMPAIGN THREAD & CLOCK TRACKER</span>
+</footer>
+
+<script>
+
+// ── PREP STATE ─────────────────────────────────────────────────────────────
+
+var selectedCaseId  = null;
+var allThreads      = [];
+var allClocks       = [];
+var sessionsData    = null;
+var briefingsData   = null;
+var npcsData        = null;
+var entitiesData    = null;
+var sessionDataFile = null;
+var incidentsData   = null;
+var canonData       = null;
+
+// ── CASE PICKER ─────────────────────────────────────────────────────────────
+
+function extractActiveCases(briefings) {
+  if (!briefings || !briefings.weeks) return [];
+  // Find the latest non-closed week, or the last week if all closed
+  var latest = null;
+  for (var i = briefings.weeks.length - 1; i >= 0; i--) {
+    latest = briefings.weeks[i];
+    if (briefings.weeks[i].status !== 'closed') break;
+  }
+  if (!latest) return [];
+  return (latest.items || []).filter(function (it) { return it.type === 'case'; });
+}
+
+function renderCasePicker(briefings) {
+  var picker = document.getElementById('case-picker');
+  var cases = extractActiveCases(briefings);
+  if (!cases.length) {
+    picker.innerHTML = '<span style="font-family:\'Share Tech Mono\',monospace;font-size:0.7rem;color:var(--keeper-dim)">// NO ACTIVE CASES FOUND</span>';
+    return;
+  }
+  picker.innerHTML = '';
+  cases.forEach(function (c) {
+    var letter = c.id.replace('case-', '').toUpperCase();
+    var btn = document.createElement('button');
+    btn.className = 'case-btn';
+    btn.dataset.caseId = c.id;
+    btn.textContent = 'CASE ' + letter + ' — ' + c.title;
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.case-btn').forEach(function (b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      selectedCaseId = c.id;
+      document.getElementById('prep-feedback').textContent = '';
+    });
+    picker.appendChild(btn);
+  });
+}
+
+// ── EXPORT BUILDER ──────────────────────────────────────────────────────────
+
+var OUTCOME_LABEL = { humane: 'HUMANE ENDING', partial: 'PARTIAL RESOLUTION', bad: 'BAD ENDING' };
+
+async function buildExportMarkdown() {
+  var lines = [];
+  var today = new Date().toISOString().slice(0, 10);
+
+  // ── Find selected case briefing ──────────────────────────────────────────
+  var cases = extractActiveCases(briefingsData);
+  var selCase = selectedCaseId ? cases.filter(function (c) { return c.id === selectedCaseId; })[0] : null;
+
+  // ── Fetch last session field report ─────────────────────────────────────
+  var lastReport = null;
+  var lastSession = null;
+  if (sessionsData) {
+    var closed = sessionsData.filter(function (s) { return s.status === 'closed'; });
+    if (closed.length) {
+      lastSession = closed[closed.length - 1];
+      var idx = sessionsData.indexOf(lastSession) + 1;
+      var reportId = 'S' + String(idx).padStart(2, '0');
+      try {
+        var r = await fetch('/api/v1/reports/' + reportId + '/state');
+        if (r.ok) {
+          var raw = await r.json();
+          lastReport = raw && raw.state ? (typeof raw.state === 'string' ? JSON.parse(raw.state) : raw.state) : null;
+        }
+      } catch (e) {}
+    }
+  }
+
+  // ── Header ───────────────────────────────────────────────────────────────
+  lines.push('# P.O.R.T.A.L — SESSION PREP CONTEXT');
+  lines.push('Generated: ' + today + (selCase ? ' · Next case: CASE ' + selectedCaseId.replace('case-','').toUpperCase() + ' — ' + selCase.title : ''));
+  lines.push('');
+  lines.push('---');
+  lines.push('');
+
+  // ── Selected case ────────────────────────────────────────────────────────
+  if (selCase) {
+    var cLetter = selectedCaseId.replace('case-', '').toUpperCase();
+    lines.push('## CASE ' + cLetter + ' — ' + selCase.title);
+    lines.push('*' + (selCase.subtitle || '') + '*');
+    lines.push('');
+    if (selCase.footer_status) lines.push('**Status:** ' + selCase.footer_status);
+    lines.push('');
+    (selCase.rows || []).forEach(function (row) {
+      if (row.divider) { lines.push(''); return; }
+      lines.push('**' + row.k + ':** ' + row.v + (row.note ? ' ' + row.note : ''));
+    });
+    lines.push('');
+    if (selCase.directive) {
+      lines.push('*' + selCase.directive.label + '*');
+      lines.push('');
+      (selCase.directive.paragraphs || []).forEach(function (p) { lines.push(p); lines.push(''); });
+      if (selCase.directive.dim_note) { lines.push(selCase.directive.dim_note); lines.push(''); }
+    }
+  } else {
+    lines.push('## NO CASE SELECTED');
+    lines.push('');
+    lines.push('Select a case before copying to include briefing content in the export.');
+    lines.push('');
+  }
+
+  lines.push('---');
+  lines.push('');
+
+  // ── Clocks ───────────────────────────────────────────────────────────────
+  lines.push('## COUNTDOWN CLOCKS');
+  lines.push('');
+  (allClocks || []).forEach(function (clock) {
+    var bar = '';
+    for (var i = 0; i < clock.segments; i++) bar += i < clock.filled ? '▓' : '░';
+    var fired = clock.filled >= clock.segments;
+    lines.push('### ' + clock.label + '  [' + bar + ']  ' + clock.filled + '/' + clock.segments);
+    if (fired) {
+      lines.push('⚠ CLOCK FIRED — ' + clock.segment_labels[clock.segments - 1]);
+    } else {
+      lines.push('Current state: ' + clock.segment_labels[clock.filled]);
+    }
+    lines.push('Advance when: ' + clock.advancement_note);
+    if (clock.notes) lines.push('Note: ' + clock.notes);
+    lines.push('');
+  });
+
+  lines.push('---');
+  lines.push('');
+
+  // ── Threads ──────────────────────────────────────────────────────────────
+  lines.push('## CAMPAIGN THREADS');
+  lines.push('');
+
+  var active   = (allThreads || []).filter(function (t) { return t.status === 'active'; });
+  var dormant  = (allThreads || []).filter(function (t) { return t.status === 'dormant'; });
+  var resolved = (allThreads || []).filter(function (t) { return t.status === 'resolved'; });
+
+  function threadFocus(t) {
+    // Highlight the thread that belongs to the selected case
+    return selectedCaseId && t.id.startsWith(selectedCaseId + '-') ? '  ★ SELECTED CASE' : '';
+  }
+
+  if (active.length) {
+    lines.push('### ACTIVE — ' + active.length + ' in motion');
+    lines.push('');
+    active.forEach(function (t) {
+      lines.push('**[' + t.category.toUpperCase() + '] ' + t.name + '**' + threadFocus(t));
+      lines.push('Last moved: ' + (t.last_moved ? t.last_moved.toUpperCase() : '—'));
+      lines.push(t.summary);
+      if (t.notes) lines.push(t.notes);
+      lines.push('');
+    });
+  }
+
+  if (dormant.length) {
+    lines.push('### DORMANT — ' + dormant.length + ' background hooks');
+    lines.push('');
+    dormant.forEach(function (t) {
+      lines.push('**[' + t.category.toUpperCase() + '] ' + t.name + '**  [dormant · ' + (t.last_moved ? t.last_moved.toUpperCase() : '—') + ']');
+      lines.push(t.summary);
+      if (t.notes) lines.push(t.notes);
+      lines.push('');
+    });
+  }
+
+  if (resolved.length) {
+    lines.push('### RESOLVED — for reference');
+    resolved.forEach(function (t) { lines.push('- ' + t.name); });
+    lines.push('');
+  }
+
+  lines.push('---');
+  lines.push('');
+
+  // ── Last session summary ─────────────────────────────────────────────────
+  lines.push('## LAST SESSION SUMMARY');
+  lines.push('');
+  if (lastSession && lastReport) {
+    lines.push('Session: ' + lastSession.label + ' — ' + lastSession.title);
+    if (lastReport.outcome) lines.push('Outcome: ' + (OUTCOME_LABEL[lastReport.outcome] || lastReport.outcome));
+    if (lastReport.directive) { lines.push(''); lines.push('**Directive:** ' + lastReport.directive); }
+    if (lastReport.summary) { lines.push(''); lines.push(lastReport.summary); }
+    lines.push('');
+  } else if (lastSession) {
+    lines.push('Session: ' + lastSession.label + ' — ' + lastSession.title);
+    lines.push('// Field report not found in D1. Use ⬡ COPY FOR CLAUDE on the Field Report page and paste it here.');
+    lines.push('');
+  } else {
+    lines.push('// No completed sessions yet.');
+    lines.push('');
+  }
+
+  // ── Between-session incidents (active week) ──────────────────────────────
+  var activeIncidentWeek = incidentsData
+    ? (incidentsData.weeks || []).filter(function (w) { return w.status === 'active'; })[0]
+    : null;
+
+  if (activeIncidentWeek && activeIncidentWeek.incidents && activeIncidentWeek.incidents.length) {
+    lines.push('---');
+    lines.push('');
+    lines.push('## BETWEEN-SESSION INCIDENTS — ' + activeIncidentWeek.id + ' (' + activeIncidentWeek.label + ')');
+    lines.push('');
+    lines.push(activeIncidentWeek.hero_desc || '');
+    lines.push('');
+
+    // Fetch saved state for this week from D1
+    var incidentState = {};
+    try {
+      var ir = await fetch('/api/v1/incidents/' + activeIncidentWeek.id + '/state');
+      if (ir.ok) incidentState = await ir.json();
+    } catch (e) {}
+
+    activeIncidentWeek.incidents.forEach(function (inc) {
+      var saved = incidentState[inc.id] || null;
+      var statusTag = saved && saved.locked ? ' ✓ LOCKED' : (saved ? ' (draft)' : ' (not filed)');
+      lines.push('### ' + inc.id + ' — ' + inc.title + ' [' + inc.type.toUpperCase() + statusTag + ']');
+      lines.push('');
+
+      // First narrative block as context summary
+      var firstNarrative = (inc.blocks || []).filter(function (b) { return b.type === 'narrative'; })[0];
+      if (firstNarrative) { lines.push(firstNarrative.text); lines.push(''); }
+
+      // Choices (for choice type)
+      if (inc.type === 'choice' && inc.choices) {
+        lines.push('**Options:**');
+        inc.choices.forEach(function (ch) { lines.push('- ' + ch.label + ': ' + ch.text); });
+        lines.push('');
+      }
+
+      // Saved state
+      if (saved) {
+        if (saved.type === 'choice') {
+          lines.push('**Choice filed:** ' + (saved.choice || '—'));
+          if (saved.custom) lines.push('**Operative note:** ' + saved.custom);
+        } else if (saved.type === 'open') {
+          if (saved.response) lines.push('**Response filed:** ' + saved.response);
+        }
+        lines.push('');
+      } else {
+        lines.push('*Not yet filed.*');
+        lines.push('');
+      }
+    });
+  }
+
+  // ── Confirmed canon ─────────────────────────────────────────────────────
+  var canon = Array.isArray(canonData) ? canonData : [];
+  if (canon.length) {
+    lines.push('---');
+    lines.push('');
+    lines.push('## CONFIRMED CANON');
+    lines.push('*Accumulated campaign facts from keeper field reports. Use these as authoritative continuity references.*');
+    lines.push('');
+
+    var catOrder = ['GADGET', 'TEXTURE', 'THEORY'];
+    var catLabels = { GADGET: '### GADGETS', TEXTURE: '### TEXTURES', THEORY: '### THEORIES' };
+    catOrder.forEach(function (cat) {
+      var items = canon.filter(function (c) { return c.category === cat; });
+      if (!items.length) return;
+      lines.push(catLabels[cat]);
+      items.forEach(function (c) {
+        var line = '- **' + c.label + '** (' + c.session.toUpperCase() + '): ' + c.value;
+        if (c.related_evidence && c.related_evidence.length) {
+          line += '  *(evidence: ' + c.related_evidence.join(', ') + ')*';
+        }
+        lines.push(line);
+      });
+      lines.push('');
+    });
+  }
+
+  lines.push('---');
+  lines.push('');
+  lines.push('## EXISTING DATA — IDs AND FORMAT REFERENCE');
+  lines.push('*Use these only to write correct IDs and avoid collisions. Do not repeat them in your output.*');
+  lines.push('');
+
+  // sessions.json — full (small file, gives last session ID + format)
+  if (sessionsData) {
+    lines.push('### sessions.json (current)');
+    lines.push('```json');
+    lines.push(JSON.stringify(sessionsData, null, 2));
+    lines.push('```');
+    lines.push('');
+  }
+
+  // sessions/index.json — current session list + last entry as format reference
+  if (sessionDataFile && sessionDataFile.length) {
+    lines.push('### sessions/index.json (current session index)');
+    lines.push('```json');
+    lines.push(JSON.stringify(sessionDataFile, null, 2));
+    lines.push('```');
+    lines.push('');
+    var lastSess = sessionDataFile[sessionDataFile.length - 1];
+    if (lastSess) {
+      lines.push('### sessions/s0N.json — last index entry (for session_key reference)');
+      lines.push('*Full per-session data lives in data/sessions/s0N.json — see session-ingestion-template.md Section B*');
+      lines.push('Last session: `' + lastSess.id + '` · key: `' + lastSess.session_key + '` · file: `data/sessions/s' + lastSess.session_key.replace(/\D/g, '') + '.json`');
+      lines.push('');
+    }
+  }
+
+  // portal-npcs.json — compact roster: id | name | affiliation | status
+  if (npcsData && npcsData.npcs) {
+    lines.push('### portal-npcs.json — existing NPC IDs');
+    npcsData.npcs.forEach(function (npc) {
+      lines.push('- `' + npc.id + '` | ' + npc.name + ' | ' + (npc.affiliation || '—') + ' | ' + (npc.status || 'alive'));
+    });
+    lines.push('');
+  }
+
+  // portal-entities.json — compact roster: id | designation | name | status
+  if (entitiesData && entitiesData.entities) {
+    lines.push('### portal-entities.json — existing entity IDs');
+    entitiesData.entities.forEach(function (e) {
+      lines.push('- `' + e.id + '` | ' + (e.designation || '—') + ' | ' + e.name + ' | ' + (e.status || 'active'));
+    });
+    lines.push('');
+  }
+
+  return lines.join('\n');
+}
+
+// ── COPY BUTTON ─────────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', function () {
+  var btn = document.getElementById('prep-copy-btn');
+  var fb  = document.getElementById('prep-feedback');
+  btn.addEventListener('click', async function () {
+    btn.disabled = true;
+    btn.textContent = '// BUILDING…';
+    fb.textContent = '';
+    try {
+      var md = await buildExportMarkdown();
+      await navigator.clipboard.writeText(md);
+      fb.textContent = '// COPIED ✓';
+      btn.textContent = '⬡ COPY SESSION CONTEXT FOR CLAUDE';
+      setTimeout(function () { fb.textContent = ''; }, 4000);
+    } catch (e) {
+      fb.style.color = 'var(--red, #e05c5c)';
+      fb.textContent = '// CLIPBOARD ERROR — check console';
+      btn.textContent = '⬡ COPY SESSION CONTEXT FOR CLAUDE';
+    }
+    btn.disabled = false;
+  });
+});
+
+// ── EXISTING RENDER HELPERS ─────────────────────────────────────────────────
+
+var CATEGORY_LABELS = {
+  faction:  '// FACTION THREADS',
+  mystery:  '// MYSTERIES & SECRETS',
+  personal: '// PERSONAL THREADS',
+  case:     '// OPEN CASES',
+};
+
+var CATEGORY_ORDER = ['faction', 'mystery', 'personal', 'case'];
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function sessionLabel(id) {
+  if (!id) return '';
+  return 'LAST MOVED: ' + id.toUpperCase().replace('W', 'W0').replace('W00', 'W0');
+}
+
+// ── RENDER CLOCKS ──────────────────────────────────────────────────────────
+
+function renderClocks(clocks) {
+  var container = document.getElementById('clocks-container');
+  if (!clocks || !clocks.length) {
+    container.innerHTML = '<div class="empty-state">// NO ACTIVE CLOCKS</div>';
+    return;
+  }
+
+  var html = '';
+  clocks.forEach(function (clock) {
+    var progressText = clock.filled + ' / ' + clock.segments;
+    var pctFill = Math.round((clock.filled / clock.segments) * 100);
+    var currentLabel = clock.filled >= clock.segments
+      ? clock.segment_labels[clock.segments - 1]
+      : clock.segment_labels[clock.filled] || '';
+
+    html += '<div class="clock-card status-' + esc(clock.status) + '">';
+    html += '<div class="clock-header">';
+    html += '<div class="clock-label">' + esc(clock.label) + '</div>';
+    html += '<div class="clock-progress-text">' + progressText + ' SEGMENTS — ' + pctFill + '%</div>';
+    html += '</div>';
+    html += '<div class="clock-description">' + esc(clock.description) + '</div>';
+
+    html += '<div class="clock-pips">';
+    for (var i = 0; i < clock.segments; i++) {
+      var cls = 'clock-pip';
+      if (i < clock.filled) cls += ' filled';
+      else if (i === clock.filled && clock.filled < clock.segments) cls += ' current';
+      html += '<div class="' + cls + '" title="' + esc(clock.segment_labels[i] || '') + '"></div>';
+    }
+    html += '</div>';
+
+    if (clock.filled < clock.segments) {
+      html += '<div class="clock-current-label">▶ ' + esc(clock.segment_labels[clock.filled] || '') + '</div>';
+    } else {
+      html += '<div class="clock-current-label" style="color:var(--red,#e05c5c)">⚠ CLOCK FIRED — ' + esc(clock.segment_labels[clock.segments - 1]) + '</div>';
+    }
+
+    html += '<div class="clock-advancement">// ADVANCE WHEN: ' + esc(clock.advancement_note) + '</div>';
+    if (clock.notes) {
+      html += '<div class="clock-notes">' + esc(clock.notes) + '</div>';
+    }
+    html += '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+// ── RENDER THREADS ─────────────────────────────────────────────────────────
+
+function renderThreads(threads) {
+  var container = document.getElementById('threads-container');
+  if (!threads || !threads.length) {
+    container.innerHTML = '<div class="empty-state">// NO THREADS REGISTERED</div>';
+    return;
+  }
+
+  var grouped = {};
+  CATEGORY_ORDER.forEach(function (cat) { grouped[cat] = []; });
+  threads.forEach(function (t) {
+    if (grouped[t.category]) grouped[t.category].push(t);
+    else grouped['faction'].push(t);
+  });
+
+  var html = '';
+  CATEGORY_ORDER.forEach(function (cat) {
+    if (!grouped[cat].length) return;
+    html += '<div class="threads-category">';
+    html += '<div class="category-label">' + esc(CATEGORY_LABELS[cat] || cat) + '</div>';
+    html += '<div class="threads-grid">';
+    grouped[cat].forEach(function (thread) {
+      html += '<div class="thread-card status-' + esc(thread.status) + '">';
+      html += '<div class="thread-header">';
+      html += '<div class="thread-name">' + esc(thread.name) + '</div>';
+      html += '<div class="thread-badges">';
+      html += '<span class="status-badge ' + esc(thread.status) + '">' + esc(thread.status.toUpperCase()) + '</span>';
+      if (thread.last_moved) {
+        html += '<span class="session-badge">' + esc(sessionLabel(thread.last_moved)) + '</span>';
+      }
+      html += '</div>';
+      html += '</div>';
+      html += '<div class="thread-summary">' + esc(thread.summary) + '</div>';
+      if (thread.notes) {
+        html += '<div class="thread-notes">' + esc(thread.notes) + '</div>';
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+// ── STATS ──────────────────────────────────────────────────────────────────
+
+function updateStats(threads, clocks) {
+  var active = threads.filter(function (t) { return t.status === 'active'; }).length;
+  var dormant = threads.filter(function (t) { return t.status === 'dormant'; }).length;
+  var resolved = threads.filter(function (t) { return t.status === 'resolved'; }).length;
+  var clocksActive = clocks.filter(function (c) { return c.status === 'active' && c.filled < c.segments; }).length;
+  document.getElementById('stat-active').textContent = active;
+  document.getElementById('stat-dormant').textContent = dormant;
+  document.getElementById('stat-resolved').textContent = resolved;
+  document.getElementById('stat-clocks').textContent = clocksActive;
+}
+
+// ── BOOT ───────────────────────────────────────────────────────────────────
+
+Promise.all([
+  fetch('/data/portal-threads.json').then(function (r) { return r.ok ? r.json() : null; }),
+  fetch('/data/portal-clocks.json').then(function (r) { return r.ok ? r.json() : null; }),
+  fetch('/data/sessions.json').then(function (r) { return r.ok ? r.json() : null; }),
+  fetch('/data/briefings.json').then(function (r) { return r.ok ? r.json() : null; }),
+  fetch('/data/portal-npcs.json').then(function (r) { return r.ok ? r.json() : null; }),
+  fetch('/data/portal-entities.json').then(function (r) { return r.ok ? r.json() : null; }),
+  fetch('/data/sessions/index.json').then(function (r) { return r.ok ? r.json() : null; }),
+  fetch('/data/incidents.json').then(function (r) { return r.ok ? r.json() : null; }),
+  fetch('/data/canon.json').then(function (r) { return r.ok ? r.json() : null; }),
+]).then(function (results) {
+  var threadsData = results[0];
+  var clocksData  = results[1];
+  sessionsData    = results[2];
+  briefingsData   = results[3];
+  npcsData        = results[4];
+  entitiesData    = results[5];
+  sessionDataFile = results[6];
+  incidentsData   = results[7];
+  canonData       = results[8];
+
+  allThreads = threadsData ? threadsData.threads : [];
+  allClocks  = clocksData  ? clocksData.clocks   : [];
+
+  renderClocks(allClocks);
+  renderThreads(allThreads);
+  updateStats(allThreads, allClocks);
+  renderCasePicker(briefingsData);
+}).catch(function (err) {
+  console.error('[PORTAL] threads/clocks load error:', err);
+  document.getElementById('threads-container').innerHTML = '<div class="empty-state">// LOAD ERROR — CHECK CONSOLE</div>';
+  document.getElementById('clocks-container').innerHTML  = '<div class="empty-state">// LOAD ERROR — CHECK CONSOLE</div>';
+});
+
+</script>
+</body>
+</html>

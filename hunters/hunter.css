@@ -562,5 +562,416 @@ main { position: relative; z-index: 10; max-width: 1100px; margin: 0 auto; paddi
   animation: pulse 2s ease-in-out infinite;
 }
 
+/* ── NAV TOGGLE (mobile hamburger) ── */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--border-bright);
+  color: var(--text-dim);
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.nav-toggle:hover { color: var(--green); border-color: var(--green-dim); }
+
 /* ── MOBILE ── */
-@media (max-width: 600px) { nav { display: none; } }
+@media (max-width: 600px) {
+  nav { display: none; }
+  nav.open {
+    display: flex;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    flex-direction: column;
+    align-items: stretch;
+    background: rgba(8,12,10,0.97);
+    border-bottom: 1px solid var(--border-bright);
+    backdrop-filter: blur(8px);
+    padding: 0;
+    gap: 0;
+  }
+  nav.open .status-dot { display: none; }
+  nav.open a {
+    display: block;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+  nav.open a:last-child { border-bottom: none; }
+  .nav-toggle { display: block; }
+}
+
+/* ══════════════════════════════════════════════════
+   PLAYBOOK SECTION
+   ══════════════════════════════════════════════════ */
+
+.playbook {
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  margin-bottom: 48px;
+  position: relative;
+  overflow: hidden;
+  scroll-margin-top: 80px;
+}
+.playbook::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--green), transparent 60%);
+}
+.playbook-header {
+  padding: 28px 36px 22px;
+  border-bottom: 1px solid var(--border);
+}
+.playbook-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.25em;
+  color: var(--green-dim);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.playbook-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  letter-spacing: 0.05em;
+  color: var(--text);
+  text-transform: uppercase;
+  line-height: 1;
+}
+.playbook-body { padding: 28px 36px 32px; }
+
+.playbook-section-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: var(--green-dim);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  margin-top: 24px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.playbook-section-label:first-child { margin-top: 0; }
+
+/* ── STATS ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-bottom: 4px;
+}
+@media (max-width: 560px) { .stats-grid { grid-template-columns: repeat(3, 1fr); } }
+.stat-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  padding: 12px 6px 10px;
+}
+.stat-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.stat-input {
+  width: 52px;
+  text-align: center;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.1rem;
+  padding: 4px 0;
+  outline: none;
+  -moz-appearance: textfield;
+}
+.stat-input::-webkit-outer-spin-button,
+.stat-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.stat-input:focus { border-color: var(--green-dim); }
+
+/* ── TRACKS ── */
+.track-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.track-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  width: 44px;
+  flex-shrink: 0;
+}
+.track-pips { display: flex; gap: 6px; flex-wrap: wrap; }
+.track-pip {
+  width: 26px; height: 26px;
+  border: 1px solid var(--border-bright);
+  cursor: pointer;
+  transition: all 0.12s;
+  flex-shrink: 0;
+}
+.track-pip:hover { border-color: var(--text-dim); }
+.track-pip.filled-harm  { background: var(--red);       border-color: var(--red); }
+.track-pip.filled-luck  { background: var(--amber);     border-color: var(--amber); }
+.track-pip.filled-xp   { background: var(--green-dim); border-color: var(--green); }
+.track-value {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  margin-left: 4px;
+}
+.harm-status {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  margin-left: 10px;
+  flex-shrink: 0;
+}
+.harm-status.okay     { color: var(--green-dim); }
+.harm-status.unstable { color: var(--amber); }
+.harm-status.dying    { color: var(--red); }
+.pending-improvements {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: -6px;
+  margin-bottom: 12px;
+  padding: 5px 10px;
+  background: rgba(240, 165, 0, 0.05);
+  border: 1px solid var(--amber-dim);
+}
+.pi-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--amber);
+  flex: 1;
+}
+.pi-count {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--amber);
+  min-width: 16px;
+  text-align: center;
+}
+.pi-use-btn {
+  background: none;
+  border: 1px solid var(--amber-dim);
+  color: var(--amber);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  transition: background 0.12s;
+}
+.pi-use-btn:hover { background: rgba(240, 165, 0, 0.08); }
+
+/* ── GENERIC FIELDS ── */
+.pb-block { margin-bottom: 4px; }
+.pb-field {
+  display: block;
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 300;
+  padding: 8px 12px;
+  outline: none;
+  margin-bottom: 6px;
+  box-sizing: border-box;
+  resize: none;
+  transition: border-color 0.15s;
+}
+.pb-field:focus { border-color: var(--green-dim); }
+textarea.pb-field { min-height: 72px; resize: vertical; }
+
+/* ── SPECIAL FIELD ── */
+.pb-special {
+  margin-top: 24px;
+  margin-bottom: 4px;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+}
+.pb-special-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--green-dim);
+  margin-bottom: 8px;
+  display: block;
+}
+.pb-special-label + .pb-special-label { margin-top: 14px; }
+.pb-special-static {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  display: block;
+  margin-bottom: 4px;
+}
+.pb-special-input {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 300;
+  padding: 4px 0 6px;
+  outline: none;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+.pb-special-input:focus { border-bottom-color: var(--green-dim); }
+
+/* ── MOVE/GEAR/IMPROVEMENT CHECKLISTS ───────────────────────────────────── */
+
+.check-list { list-style: none; padding: 0; margin: 0 0 0.5rem; display: flex; flex-direction: column; gap: 0.3rem; }
+
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.12s, border-color 0.12s;
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.82rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+.check-item:hover:not(.mandatory) { background: var(--accent-a04); border-color: var(--border); }
+.check-item.checked { background: var(--accent-a06); border-color: var(--accent-glow); }
+.check-item.mandatory { cursor: default; opacity: 0.95; }
+
+.check-box {
+  flex-shrink: 0;
+  width: 13px; height: 13px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  margin-top: 3px;
+  position: relative;
+  background: transparent;
+}
+.check-item.checked .check-box { border-color: var(--accent); background: var(--accent-dim); }
+.check-item.checked .check-box::after {
+  content: '✓';
+  position: absolute;
+  top: -3px; left: 1px;
+  font-size: 0.65rem;
+  color: var(--accent);
+  font-family: 'Share Tech Mono', monospace;
+}
+.check-item.mandatory .check-box { border-color: var(--accent-dim); background: var(--accent-dim); opacity: 0.6; }
+.check-item.mandatory .check-box::after {
+  content: '✓';
+  position: absolute;
+  top: -3px; left: 1px;
+  font-size: 0.65rem;
+  color: var(--accent);
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.check-name { font-weight: 600; color: var(--text-bright); }
+.check-roll { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--accent-dim); margin-left: 0.4rem; letter-spacing: 0.05em; }
+.check-desc { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.15rem; line-height: 1.4; }
+.check-mandatory-tag { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--accent-dim); margin-left: 0.3rem; letter-spacing: 0.08em; }
+
+/* Hide-unchosen toggle */
+.hide-toggle {
+  float: right;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: var(--accent-dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0.1rem 0.4rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.hide-toggle:hover { border-color: var(--accent-dim); color: var(--accent); }
+
+.check-list.hide-unchecked .check-item:not(.checked):not(.mandatory) { display: none; }
+
+/* ── LUCK SPECIAL ─────────────────────────────────────────────────────────── */
+.luck-special-block {
+  margin: 0.6rem 0 0.9rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 2px solid var(--accent-dim);
+  background: rgba(0,0,0,0.15);
+  border-radius: 0 4px 4px 0;
+}
+.luck-special-label {
+  display: block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--accent-dim);
+  margin-bottom: 0.25rem;
+}
+.luck-special-text {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+  font-style: italic;
+}
+
+/* Pick-note guidance */
+.pick-note {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.4rem;
+  padding: 0.2rem 0;
+}
+
+/* Improvement section variant */
+.check-item.impr-advanced { border-left: 2px solid var(--accent-dim); margin-top: 0.2rem; }
+
+/* ── DYNAMIC BOND ROWS ───────────────────────────────────────────────────── */
+.bond-row { display: flex; gap: 0.4rem; align-items: center; margin-bottom: 0.35rem; }
+.bond-row .pb-field { flex: 1; min-width: 0; }
+.remove-bond-btn {
+  flex-shrink: 0;
+  width: 26px; height: 26px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: color 0.15s, border-color 0.15s;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Share Tech Mono', monospace;
+}
+.remove-bond-btn:hover { color: #e74c3c; border-color: #e74c3c; }

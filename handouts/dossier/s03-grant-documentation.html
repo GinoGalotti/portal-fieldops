@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian Theatre — Grant Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dossier.css">
+<style>
+  :root {
+    --ink:         #1a1a1a;
+    --ink-dim:     #6a6a6a;
+    --cream:       #f8f8f6;
+    --paper-late:  #f0ede8;
+    --accent:      #8a6a1a;
+    --rule-color:  #d0c8b0;
+    --hint-bg:     rgba(138, 106, 26, 0.12);
+    --hint-border: rgba(138, 106, 26, 0.40);
+  }
+
+  /* Financial document styling */
+  .doc-header {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid #2a2a2a;
+    margin-bottom: 0.8rem;
+  }
+
+  .doc-field {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.3rem 0;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #e8e4e0;
+  }
+
+  .doc-field:last-child { border-bottom: none; }
+
+  .doc-field-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    min-width: 120px;
+    padding-top: 0.15rem;
+  }
+
+  .doc-field-value {
+    flex: 1;
+  }
+
+  /* Line item table */
+  .line-items {
+    width: 100%;
+    margin: 0.8rem 0;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  .line-items th {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    text-align: left;
+    padding: 0.4rem 0.5rem;
+    border-bottom: 2px solid #2a2a2a;
+  }
+
+  .line-items td {
+    padding: 0.4rem 0.5rem;
+    border-bottom: 1px solid #e8e4e0;
+    vertical-align: top;
+  }
+
+  .line-items .amount {
+    text-align: right;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+  }
+
+  .line-highlight {
+    background: rgba(138, 42, 42, 0.05);
+  }
+
+  /* Redaction bars */
+  .redacted {
+    background: #1a1a1a;
+    color: #1a1a1a;
+    padding: 0 0.3rem;
+    user-select: none;
+  }
+
+  /* Rex's analysis notes */
+  .rex-note {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #4a4a3a;
+    padding: 0.5rem 0 0.3rem;
+  }
+
+  /* Condition clause styling */
+  .condition-clause {
+    padding: 0.5rem 0.8rem;
+    margin: 0.5rem 0;
+    border-left: 2px solid var(--accent);
+    font-size: 0.9rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="dossier-wrapper">
+
+  <div class="classification">// field evidence — s03 — route c // recovered from artistic director's office</div>
+  <h1 class="dossier-title">Meridian Theatre — Grant Documentation</h1>
+  <p class="dossier-subtitle">Solstice Property Group Arts Foundation grant file. Recovered from Marcus Yuen's office during investigation.</p>
+
+  <div class="provenance">
+    RECOVERED: Artistic director's office, Meridian Theatre Company, Fredericksburg, VA<br>
+    FILE: Physical grant folder — correspondence, award letter, conditions, acquisition appendix<br>
+    RECOVERED BY: Alan Frazier / Rex Bangley<br>
+    NOTE: Office was unlocked. Yuen was at a board meeting. He did not object to the recovery.
+  </div>
+
+  <!-- Grant Award Letter -->
+
+  <div class="notebook-entry">
+    <div class="doc-header">Arts Grant Award — Meridian Theatre Company</div>
+    <div class="entry-body">
+      <div class="doc-field">
+        <span class="doc-field-label">Awarded by</span>
+        <span class="doc-field-value">Solstice Property Group Arts Foundation</span>
+      </div>
+      <div class="doc-field">
+        <span class="doc-field-label">Amount</span>
+        <span class="doc-field-value">$47,000</span>
+      </div>
+      <div class="doc-field">
+        <span class="doc-field-label">Period</span>
+        <span class="doc-field-value">24 months from date of award (20 months ago)</span>
+      </div>
+      <div class="doc-field">
+        <span class="doc-field-label">Purpose</span>
+        <span class="doc-field-value">"To support the Meridian Theatre Company's classical repertory programming and preserve the cultural heritage of live performance in the Fredericksburg community."</span>
+      </div>
+      <div class="doc-field">
+        <span class="doc-field-label">Contact</span>
+        <span class="doc-field-value">Solstice Property Group, <span class="redacted">████████</span>, Wilmington, Delaware</span>
+      </div>
+    </div>
+    <div class="keeper-note">// KEEPER: The grant language sounds generous. It is not. The purpose statement is cover — "preserve the cultural heritage of live performance" means "keep performing so the mechanism has an active context."</div>
+  </div>
+
+  <!-- Conditions -->
+
+  <div class="notebook-entry">
+    <div class="doc-header">Conditions of Award</div>
+    <div class="entry-body">
+      <div class="condition-clause">
+        <span class="clue-hint" data-clue="must-perform">1. Grantee must maintain active programming across the full award period. No production gap exceeding six weeks.</span>
+      </div>
+      <div class="condition-clause">
+        2. Annual review with grant administrator. Review to include audience figures, production schedule, and facility condition report.
+      </div>
+      <div class="condition-clause">
+        3. Grant funds may be used for production costs, facility maintenance, and approved acquisitions (see Annexe B).
+      </div>
+      <div class="condition-clause">
+        <span class="clue-hint" data-clue="breach-clause">4. In the event of a breach of Condition 1, the Foundation reserves the right to reclaim the full grant amount and any assets acquired under Annexe B.</span>
+      </div>
+      <p class="rex-note"><span class="clue-hint" data-clue="conditions-trap">Condition 1 is why the company absorbed two deaths without going to the press. A cancellation would breach the grant. Condition 4 means they'd lose $47,000 and the acquisitions. Marcus Yuen made that calculation fourteen months ago. He's been living with it since.</span></p>
+    </div>
+    <div class="keeper-note">// KEEPER: CLUE: the conditions are a trap. The theatre can't stop performing without losing the grant. MESA designed this — an active performance context is required for the mechanism to operate. The grant ensures the theatre can never go dark. Marcus Yuen understood this implicitly, even if he couldn't name the mechanism.</div>
+  </div>
+
+  <!-- Acquisition Appendix -->
+
+  <div class="notebook-entry paper-late">
+    <div class="doc-header">Annexe B — Acquisitions Supported by Grant</div>
+    <div class="entry-body">
+      <p style="font-size: 0.85rem; color: var(--ink-dim); margin-bottom: 0.8rem;">Anniversary season artefact acquisitions. All items displayed in the theatre foyer.</p>
+      <table class="line-items">
+        <tr><th>Item</th><th>Source</th><th class="amount">Cost</th></tr>
+        <tr>
+          <td>Victorian theatrical wig stand, c.1880 (attr. Henry Irving)</td>
+          <td>Auction — Cheswick & Associates, London</td>
+          <td class="amount">$800</td>
+        </tr>
+        <tr>
+          <td>Collection of 47 Victorian playbills, 1882–1898</td>
+          <td>Auction — Cheswick & Associates, London</td>
+          <td class="amount">$620</td>
+        </tr>
+        <tr>
+          <td>Antique oil lantern (converted), theatrical ghost light</td>
+          <td>Private sale — estate of R. Pemberton</td>
+          <td class="amount">$340</td>
+        </tr>
+        <tr>
+          <td>Cast-iron theatre seat, Lyceum Theatre, 1903</td>
+          <td>Auction — Cheswick & Associates, London</td>
+          <td class="amount">$440</td>
+        </tr>
+        <tr class="line-highlight">
+          <td><span class="clue-hint" data-clue="book-line-item"><strong>19th-century theatrical prompt book, annotated</strong><br><span style="font-size:0.8rem; color: var(--ink-dim);">Provenance: private collection, acquired 1887. Leather-bound, approximately 200pp. Annotations throughout in a single hand.</span></span></td>
+          <td>Auction — Cheswick & Associates, London<br><span style="font-size:0.8rem; color: var(--ink-dim);">Lot 47. Pre-auction viewing attended by Solstice representative.</span></td>
+          <td class="amount"><strong>$2,000</strong></td>
+        </tr>
+      </table>
+      <p style="font-size:0.8rem; color: var(--ink-dim); margin-top: 0.5rem;">Total acquisitions: $4,200. Approved under Annexe B.</p>
+      <p class="rex-note"><span class="clue-hint" data-clue="preauction-viewing">A Solstice representative attended the pre-auction viewing. They knew what the prompt book was before the theatre did. They funded the grant to ensure the theatre could buy it. The other four items are cover — legitimate acquisitions that make the prompt book look like one purchase among several.</span></p>
+    </div>
+    <div class="keeper-note">// KEEPER: CLUE: "Pre-auction viewing attended by Solstice representative" — MESA scouted the book in advance. They placed the grant before the auction. The entire $47,000 grant exists to get this one $2,000 object into an active performance space. The other $45,000 funds the conditions that keep the theatre performing.</div>
+  </div>
+
+  <!-- Corporate Registration Trail -->
+
+  <div class="notebook-entry paper-late">
+    <div class="doc-header">Corporate Registration — Rex Bangley Analysis</div>
+    <div class="entry-body">
+      <div class="doc-field">
+        <span class="doc-field-label">Entity</span>
+        <span class="doc-field-value">Solstice Property Group Arts Foundation</span>
+      </div>
+      <div class="doc-field">
+        <span class="doc-field-label">Registered</span>
+        <span class="doc-field-value">Wilmington, Delaware</span>
+      </div>
+      <div class="doc-field">
+        <span class="doc-field-label">Beneficial Owner</span>
+        <span class="doc-field-value"><span class="redacted">████████████</span></span>
+      </div>
+      <div class="doc-field">
+        <span class="doc-field-label">Related entities</span>
+        <span class="doc-field-value"><span class="clue-hint" data-clue="shell-match">Greyfield Assets Ltd (Aldermoor acquisitions)<br>Veritas Realty Holdings (Aldermoor acquisitions)<br>Meridian BioSciences (Hargrove trial)</span></span>
+      </div>
+      <div class="doc-field">
+        <span class="doc-field-label">Pattern match</span>
+        <span class="doc-field-value">Identical corporate layering. Same registered agent. Same Delaware address. Three cases, same architecture.</span>
+      </div>
+      <p class="rex-note"><span class="clue-hint" data-clue="mesa-pattern">Third time. Same structure. Same beneficial owner chain. Whoever is behind Greyfield, Veritas, and Solstice has been funding environments where the boundary between the living and the dead is thin. They didn't cause these situations. They found them, funded them, and waited.</span></p>
+    </div>
+    <div class="keeper-note">// KEEPER: CLUE: three-site pattern match confirms MESA's systematic approach. Rex's "they found them, funded them, and waited" is the correct read. The redacted beneficial owner is Agatha Dell — the hunters don't have her name yet unless Alan gets the photograph from Marcus Yuen.</div>
+  </div>
+
+  <!-- Keeper toolbar -->
+  <div class="keeper-toolbar">
+    <span class="keeper-status" id="hint-status">clues: hidden</span>
+    <button class="keeper-btn" id="toggle-hints">REVEAL CLUES</button>
+  </div>
+
+</div>
+
+<script>const DOSSIER_ID = 's03-grant-documentation';</script>
+<script src="dossier.js"></script>
+
+</body>
+</html>

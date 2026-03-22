@@ -51,7 +51,10 @@ footer { padding: 24px; }
 .meta-tag.amber { border-color: var(--amber-dim); color: var(--amber); }
 .meta-tag.green { border-color: var(--green-dim); color: var(--green); }
 .mission-redacted { margin-top: 14px; font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.1em; padding: 8px 12px; border: 1px solid var(--border); background: var(--bg); }
-.mission-outcome { margin-top: 14px; padding: 10px 14px; background: rgba(46,204,113,0.04); border: 1px solid var(--green-dim); font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; color: var(--green-dim); letter-spacing: 0.08em; line-height: 1.8; display: none; }
+.mission-outcome { margin-top: 14px; padding: 10px 14px; background: rgba(46,204,113,0.04); border: 1px solid var(--green-dim); font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; color: var(--green-dim); letter-spacing: 0.08em; line-height: 1.8; }
+.mission-actions { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; }
+.mission-action-link { font-family: 'Share Tech Mono', monospace; font-size: 0.64rem; letter-spacing: 0.12em; color: var(--green-dim); text-decoration: none; border: 1px solid var(--border); padding: 4px 10px; transition: color 0.15s, border-color 0.15s; }
+.mission-action-link:hover { color: var(--green); border-color: var(--green-dim); }
 
 @media (max-width: 600px) {
   .mission-card { grid-template-columns: 1fr; gap: 16px; }
@@ -72,7 +75,14 @@ footer { padding: 24px; }
   <p class="hero-desc">
     Documented field deployments. Each entry reflects what CAMPBELL flagged, what the team found, and what it cost. Classified details are withheld pending full debrief.
   </p>
-  <div class="campbell-note">
+  <div class="campbell-note" data-session-from="w1" data-session-until="w1">
+    <span class="c-label">// CAMPBELL — ARCHIVE STATUS</span>
+    TOTAL MISSIONS LOGGED: 1<br>
+    ACTIVE DEPLOYMENTS: 1<br>
+    ENTITIES CONFIRMED: 0 &nbsp;<span style="color:var(--text-dim)">// 1 active — unclassified</span><br>
+    DIRECTIVES PENDING RESOLUTION: <span style="color:var(--amber)">1</span>
+  </div>
+  <div class="campbell-note" data-session-from="w2">
     <span class="c-label">// CAMPBELL — ARCHIVE STATUS</span>
     TOTAL MISSIONS LOGGED: 2<br>
     ACTIVE DEPLOYMENTS: 1<br>
@@ -87,85 +97,7 @@ footer { padding: 24px; }
     <span class="section-tag">// CHRONOLOGICAL — MOST RECENT FIRST</span>
   </div>
 
-  <div class="missions-list">
-
-    <!-- MISSION 01 -->
-    <div class="mission-card">
-      <div class="mission-id-col">
-        <span class="m-num">01</span>
-        KELLER UNIV.<br>
-        STATUS:<br>
-        <span class="mission-status completed">COMPLETED</span>
-      </div>
-      <div class="mission-body">
-        <div class="mission-title">A Promise is a Promise</div>
-        <div class="mission-subtitle">// CAMPBELL ANOMALY REPORT #0047-C — CLASS 2 ECTOPLASMIC RESIDUE</div>
-        <div class="mission-summary">
-          Three incidents at Keller University in four weeks. One critical. CAMPBELL flagged an unclassified particulate at all three scenes — a substance it had never encountered before, rated 99th percentile rarity. The field team deployed. What they found was not what the briefing suggested. The source was not what the victims deserved.
-        </div>
-        <div class="mission-meta">
-          <span class="meta-tag">LOCATION: KELLER UNIVERSITY</span>
-          <span class="meta-tag red">ENTITY: INCORPOREAL SPIRIT — EXECUTIONER</span>
-          <span class="meta-tag green">RESOLVED</span>
-          <span class="meta-tag">CASUALTIES: 1 CRITICAL (NON-FATAL)</span>
-        </div>
-        <div class="mission-redacted">
-          ENTITY IDENTITY: Eszter &nbsp;·&nbsp;
-          ANCHOR OBJECT: Not recovered — dispersed at scene &nbsp;·&nbsp;
-          DIRECTIVE OUTCOME: Partial — trace ash recovered, locket not retrieved
-        </div>
-      </div>
-    </div>
-
-    <!-- MISSION 02 -->
-    <div class="mission-card">
-      <div class="mission-id-col">
-        <span class="m-num">02</span>
-        ALDERMOOR<br>
-        DISTRICT<br>
-        <span class="mission-status active">ACTIVE</span>
-      </div>
-      <div class="mission-body">
-        <div class="mission-title">One That Wants To Be Known</div>
-        <div class="mission-subtitle">// CAMPBELL ANOMALY REPORT #0094-B — TOPOGRAPHICAL DISTORTION, CLASS 2</div>
-        <div class="mission-summary">
-          Seven residents of the same neighbourhood reported getting lost — on streets they have lived on for decades. One of them never came home. The streets haven't changed. Something else has. The field team is en route.
-        </div>
-        <div class="mission-meta">
-          <span class="meta-tag">LOCATION: ALDERMOOR DISTRICT</span>
-          <span class="meta-tag red">ENTITY: <span class="redact">████████████████</span></span>
-          <span class="meta-tag amber">DIRECTIVE: ACTIVE</span>
-          <span class="meta-tag">MISSING PERSONS: 1</span>
-        </div>
-        <div class="mission-redacted">
-          ENTITY CLASS: <span class="redact">████████████████████</span> &nbsp;·&nbsp;
-          EPICENTRE: <span class="redact">███████████████████</span> &nbsp;·&nbsp;
-          DIRECTIVE OUTCOME: <span class="redact">███ PENDING RESOLUTION</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- MISSION 03 PLACEHOLDER -->
-    <div class="mission-card upcoming">
-      <div class="mission-id-col">
-        <span class="m-num" style="color:var(--amber-dim)">03</span>
-        LOCATION:<br>UNKNOWN<br>
-        <span class="mission-status upcoming">PENDING</span>
-      </div>
-      <div class="mission-body">
-        <div class="mission-title" style="color:var(--text-dim)">— Classification Pending —</div>
-        <div class="mission-subtitle">// CAMPBELL HAS FLAGGED A NEW ANOMALY</div>
-        <div class="mission-summary">
-          Details available post-deployment. CAMPBELL continues monitoring.
-        </div>
-        <div class="mission-meta">
-          <span class="meta-tag">ENTITY: UNCLASSIFIED</span>
-          <span class="meta-tag">DIRECTIVE: AWAITING BRIEFING</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
+  <div class="missions-list"></div>
 </main>
 
 <footer>
@@ -174,9 +106,117 @@ footer { padding: 24px; }
 </footer>
 
 <script>
+/* Missions: data-driven render from portal-missions.json */
+(function () {
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function renderRedacted(text) {
+    return esc(text)
+      .replace(/\[REDACT\]/g, '<span class="redact">████████████████████</span>')
+      .replace(/ · /g, ' &nbsp;·&nbsp; ');
+  }
+
+  function renderMissions(missions) {
+    var list = document.querySelector('.missions-list');
+    if (!list) return;
+    var html = '';
+    missions.forEach(function (mission) {
+      mission.phases.forEach(function (phase) {
+        var attrs = '';
+        if (phase.show_from) attrs += ' data-session-from="' + esc(phase.show_from) + '"';
+        if (phase.show_until) attrs += ' data-session-until="' + esc(phase.show_until) + '"';
+        if (phase.anchor) attrs += ' id="' + esc(phase.anchor) + '"';
+
+        var cardClass = 'mission-card' + (phase.status === 'upcoming' ? ' upcoming' : '');
+        html += '<div class="' + cardClass + '"' + attrs + '>';
+
+        var numStyle = phase.status === 'upcoming' ? ' style="color:var(--amber-dim)"' : '';
+        var locationHtml = mission.location_short
+          ? mission.location_short.split('\n').map(function (l) { return esc(l); }).join('<br>') + '<br>'
+          : '';
+        var statusText = phase.status === 'upcoming' ? 'PENDING' : phase.status.toUpperCase();
+        html += '<div class="mission-id-col">';
+        html += '<span class="m-num"' + numStyle + '>' + esc(mission.num) + '</span>';
+        html += locationHtml;
+        html += '<span class="mission-status ' + esc(phase.status) + '">' + statusText + '</span>';
+        html += '</div>';
+
+        var titleStyle = phase.status === 'upcoming' ? ' style="color:var(--text-dim)"' : '';
+        html += '<div class="mission-body">';
+        html += '<div class="mission-title"' + titleStyle + '>' + esc(phase.title) + '</div>';
+        if (phase.subtitle) html += '<div class="mission-subtitle">' + esc(phase.subtitle) + '</div>';
+        html += '<div class="mission-summary">' + esc(phase.summary) + '</div>';
+
+        if (phase.meta_tags && phase.meta_tags.length) {
+          html += '<div class="mission-meta">';
+          phase.meta_tags.forEach(function (tag) {
+            var cls = 'meta-tag' + (tag.class ? ' ' + esc(tag.class) : '');
+            html += '<span class="' + cls + '">' + renderRedacted(tag.label) + '</span>';
+          });
+          html += '</div>';
+        }
+
+        if (phase.archive_redacted) {
+          html += '<div class="mission-redacted">' + renderRedacted(phase.archive_redacted) + '</div>';
+        }
+
+        if (phase.outcome) {
+          html += '<div class="mission-outcome">' + esc(phase.outcome).replace(/\n/g, '<br>') + '</div>';
+        }
+
+        if (phase.actions && phase.actions.length) {
+          html += '<div class="mission-actions">';
+          phase.actions.forEach(function (action) {
+            html += '<a href="' + esc(action.href) + '" class="mission-action-link">' + esc(action.label) + '</a>';
+          });
+          html += '</div>';
+        }
+
+        html += '</div>'; // .mission-body
+        html += '</div>'; // .mission-card
+      });
+    });
+    list.innerHTML = html;
+  }
+
+  function applyMissionsSession() {
+    var sessions = window.PORTAL_SESSIONS;
+    var sessionId = window.PORTAL_SESSION;
+    if (!sessions || !sessionId) return;
+    var ids = sessions.map(function (s) { return s.id; });
+    var idx = ids.indexOf(sessionId);
+    document.querySelectorAll('.missions-list [data-session-from],[data-session-until]').forEach(function (el) {
+      var visible = true;
+      if (el.hasAttribute('data-session-from')) {
+        var fromIdx = ids.indexOf(el.dataset.sessionFrom);
+        if (fromIdx === -1 || fromIdx > idx) visible = false;
+      }
+      if (el.hasAttribute('data-session-until')) {
+        var untilIdx = ids.indexOf(el.dataset.sessionUntil);
+        if (untilIdx !== -1 && untilIdx < idx) visible = false;
+      }
+      el.style.display = visible ? '' : 'none';
+    });
+  }
+
+  fetch('../data/portal-missions.json')
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      renderMissions(data.missions);
+      if (window.PORTAL_SESSION) {
+        applyMissionsSession();
+      } else {
+        document.addEventListener('portalSessionReady', applyMissionsSession, { once: true });
+      }
+    })
+    .catch(function (err) { console.error('[PORTAL] missions load error:', err); });
+}());
+</script>
+<script src="../session-state.js"></script>
+<script>
   document.getElementById('ver').textContent =
     '2.' + (Math.floor(Math.random()*9)+1) + '.' + (Math.floor(Math.random()*89)+10);
-
 </script>
 </body>
 </html>

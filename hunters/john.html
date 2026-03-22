@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — John Johnson</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="hunter.css">
+<style>
+:root {
+  --accent:     #c8ddd0;
+  --accent-dim: #4a6b5a;
+  --accent-glow: #c8ddd022;
+  --accent-a03: rgba(200, 221, 208, 0.03);
+  --accent-a04: rgba(200, 221, 208, 0.04);
+  --accent-a06: rgba(200, 221, 208, 0.06);
+  --accent-a08: rgba(200, 221, 208, 0.08);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</a>
+  <nav id="player-nav"></nav>
+  <script src="../player-nav.js"></script>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">// HUNTER DOSSIER · THE FLAKE · HUNTER STORIES</div>
+  <h1 class="hero-title">JOHN <span class="accent">JOHNSON</span></h1>
+  <p class="hero-desc">You've been saying for years that everything is connected — the MESA shell company registrations, the gap in CAMPBELL's formation record, the ash particulate from the Keller University case. Nobody believes you. That's fine. You're used to being right alone. The problem isn't that no one listens. The problem is that whatever you've been tracking has now noticed you're looking.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">PLAYBOOK: <span>The Flake</span></div>
+    <div class="hero-meta-item">ROLE: <span>Lab Staff · Intelligence &amp; Pattern Analysis</span></div>
+    <div class="hero-meta-item">FAMILY: <span>Reed Atwood (nephew by marriage)</span></div>
+    <div class="hero-meta-item">STATUS: <span>Active · PORTAL Research Division</span></div>
+  </div>
+  <div class="campbell-note">
+    <span class="c-label">// CAMPBELL — OPERATIVE NOTE</span>
+    Hunter stories develop alongside active cases. Choose if and when to start one — talk to the Keeper about timing. Each arc has a player section (your choices and beats) and a Keeper section (blurred). You can read the Keeper section after the arc resolves — or not at all.
+  </div>
+</div>
+
+<main>
+<!-- ══ PLAYBOOK SECTION ══ -->
+<div id="playbook" class="playbook">
+  <div class="playbook-header">
+    <div class="playbook-eyebrow">// OPERATIVE PLAYBOOK</div>
+    <div class="playbook-title">The Flake</div>
+  </div>
+  <div class="playbook-body">
+
+    <div class="playbook-section-label">// STATS</div>
+    <div class="stats-grid">
+      <div class="stat-cell"><div class="stat-label">Charm</div><input class="stat-input" type="number" data-stat="charm" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Cool</div><input class="stat-input" type="number" data-stat="cool" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Sharp</div><input class="stat-input" type="number" data-stat="sharp" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Tough</div><input class="stat-input" type="number" data-stat="tough" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Weird</div><input class="stat-input" type="number" data-stat="weird" min="-3" max="3" placeholder="0"></div>
+    </div>
+
+    <div class="playbook-section-label">// HARM · LUCK · EXPERIENCE</div>
+    <div class="track-row">
+      <div class="track-label">Harm</div>
+      <div class="track-pips">
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+      </div>
+    </div>
+    <div class="track-row">
+      <div class="track-label">Luck</div>
+      <div class="track-pips">
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+      </div>
+    </div>
+    <div class="track-row">
+      <div class="track-label">XP</div>
+      <div class="track-pips">
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+      </div>
+    </div>
+
+    <div id="luck-special" class="luck-special-block"></div>
+
+    <div class="playbook-section-label">// PLAYBOOK MOVES <button class="hide-toggle" onclick="toggleHide(this,'john-moves')">// HIDE UNCHOSEN</button></div>
+    <div class="pick-note">Pick 3 Flake moves to start. All eight are available at character creation.</div>
+    <ul class="check-list" id="john-moves">
+      <li class="check-item" data-check-key="move-connect-dots">
+        <span class="check-box"></span>
+        <span><span class="check-name">Connect the Dots</span><span class="check-roll">roll +Sharp</span>
+        <div class="check-desc">At the beginning of each mystery, if you look for the wider patterns that current events might be part of, roll +Sharp. On 10+: hold 3. On 7–9: hold 1. Miss: no hold. Spend hold 1-for-1 to ask: Is this person connected to current events more than they're saying? / When and where will the next critical event occur? / What does the monster want from this person? / Is this connected to previous mysteries we've investigated? / How does this mystery connect to the bigger picture?</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-crazy-eyes">
+        <span class="check-box"></span>
+        <span><span class="check-name">Crazy Eyes</span>
+        <div class="check-desc">You get +1 Weird (max +3).</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-see-fits-together">
+        <span class="check-box"></span>
+        <span><span class="check-name">See, It All Fits Together</span>
+        <div class="check-desc">You can use Sharp instead of Charm when you manipulate someone.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-suspicious-mind">
+        <span class="check-box"></span>
+        <span><span class="check-name">Suspicious Mind</span>
+        <div class="check-desc">If someone lies to you, you know it.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-often-overlooked">
+        <span class="check-box"></span>
+        <span><span class="check-name">Often Overlooked</span><span class="check-roll">roll +Weird</span>
+        <div class="check-desc">When you act all crazy to avoid something, roll +Weird. On 10+: you're regarded as completely unthreatening and unimportant. On 7–9: pick one — unthreatening or unimportant. Miss: you draw lots (but not all) of the attention.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-contrary">
+        <span class="check-box"></span>
+        <span><span class="check-name">Contrary</span>
+        <div class="check-desc">When you seek out and receive someone's honest advice on the best course of action for you and then do something else instead, mark experience. If you do exactly the opposite of their advice, you also take +1 ongoing on any moves you make pursuing that course.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-net-friends">
+        <span class="check-box"></span>
+        <span><span class="check-name">Net Friends</span><span class="check-roll">roll +Charm</span>
+        <div class="check-desc">You know a lot of people on the Internet. When you contact a net friend to help you with a mystery, roll +Charm. On 10+: they're available and helpful — they can fix something, break a code, hack a computer, or get you special information. On 7–9: they'll help, but it'll take time or you'll have to do part of it yourself. Miss: you burn some bridges.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-sneaky">
+        <span class="check-box"></span>
+        <span><span class="check-name">Sneaky</span>
+        <div class="check-desc">When you attack from ambush, or from behind, inflict +2 harm.</div></span>
+      </li>
+    </ul>
+
+    <div class="playbook-section-label">// GEAR &amp; EQUIPMENT <button class="hide-toggle" onclick="toggleHide(this,'john-gear')">// HIDE UNCHOSEN</button></div>
+    <div class="pick-note">Pick 1 normal weapon · Pick 2 hidden weapons</div>
+    <ul class="check-list" id="john-gear">
+      <li class="check-item" data-check-key="gear-38-revolver"><span class="check-box"></span><span><span class="check-name">.38 revolver</span><span class="check-roll">normal weapon · 2-harm close reload loud</span></span></li>
+      <li class="check-item" data-check-key="gear-9mm"><span class="check-box"></span><span><span class="check-name">9mm</span><span class="check-roll">normal weapon · 2-harm close loud</span></span></li>
+      <li class="check-item" data-check-key="gear-hunting-rifle"><span class="check-box"></span><span><span class="check-name">Hunting rifle</span><span class="check-roll">normal weapon · 2-harm far loud</span></span></li>
+      <li class="check-item" data-check-key="gear-magnum"><span class="check-box"></span><span><span class="check-name">Magnum</span><span class="check-roll">normal weapon · 3-harm close reload loud</span></span></li>
+      <li class="check-item" data-check-key="gear-shotgun-normal"><span class="check-box"></span><span><span class="check-name">Shotgun</span><span class="check-roll">normal weapon · 3-harm close messy loud</span></span></li>
+      <li class="check-item" data-check-key="gear-big-knife-normal"><span class="check-box"></span><span><span class="check-name">Big knife</span><span class="check-roll">normal weapon · 1-harm hand</span></span></li>
+      <li class="check-item" data-check-key="gear-throwing-knives"><span class="check-box"></span><span><span class="check-name">Throwing knives</span><span class="check-roll">hidden weapon · 1-harm close many</span></span></li>
+      <li class="check-item" data-check-key="gear-holdout-pistol"><span class="check-box"></span><span><span class="check-name">Holdout pistol</span><span class="check-roll">hidden weapon · 2-harm close loud reload</span></span></li>
+      <li class="check-item" data-check-key="gear-garrote"><span class="check-box"></span><span><span class="check-name">Garrote</span><span class="check-roll">hidden weapon · 3-harm intimate</span></span></li>
+      <li class="check-item" data-check-key="gear-flashlight"><span class="check-box"></span><span><span class="check-name">Watchman's flashlight</span><span class="check-roll">hidden weapon · 1-harm hand</span></span></li>
+      <li class="check-item" data-check-key="gear-weighted-gloves"><span class="check-box"></span><span><span class="check-name">Weighted gloves / brass knuckles</span><span class="check-roll">hidden weapon · 1-harm hand</span></span></li>
+      <li class="check-item" data-check-key="gear-butterfly-knife"><span class="check-box"></span><span><span class="check-name">Butterfly knife / folding knife</span><span class="check-roll">hidden weapon · 1-harm hand</span></span></li>
+    </ul>
+
+    <div class="playbook-section-label">// BONDS <button class="hide-toggle" onclick="addBond()">// + ADD</button></div>
+    <div class="pb-block" id="bonds-container">
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 1…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 2…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 3…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
+    </div>
+
+    <div class="playbook-section-label">// NOTES</div>
+    <div class="pb-block">
+      <textarea class="pb-field" data-sheet="notes" rows="4" placeholder="Session notes, backstory, reminders…"></textarea>
+    </div>
+
+    <div class="playbook-section-label">// IMPROVEMENTS <button class="hide-toggle" onclick="toggleHide(this,'john-impr')">// HIDE UNCHOSEN</button></div>
+    <ul class="check-list" id="john-impr">
+      <li class="check-item" data-check-key="impr-sharp-3"><span class="check-box"></span><span><span class="check-name">+1 Sharp</span><span class="check-roll">max +3</span></span></li>
+      <li class="check-item" data-check-key="impr-charm-2"><span class="check-box"></span><span><span class="check-name">+1 Charm</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-cool-2"><span class="check-box"></span><span><span class="check-name">+1 Cool</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-weird-2"><span class="check-box"></span><span><span class="check-name">+1 Weird</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-flake-move-1"><span class="check-box"></span><span><span class="check-name">Take another Flake move</span></span></li>
+      <li class="check-item" data-check-key="impr-flake-move-2"><span class="check-box"></span><span><span class="check-name">Take another Flake move</span></span></li>
+      <li class="check-item" data-check-key="impr-haven-1"><span class="check-box"></span><span><span class="check-name">Get a haven, like the Expert has, with two options</span></span></li>
+      <li class="check-item" data-check-key="impr-haven-2"><span class="check-box"></span><span><span class="check-name">Gain another option for your haven</span></span></li>
+      <li class="check-item" data-check-key="impr-other-move-1"><span class="check-box"></span><span><span class="check-name">Take a move from another playbook</span></span></li>
+      <li class="check-item" data-check-key="impr-other-move-2"><span class="check-box"></span><span><span class="check-name">Take a move from another playbook</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-any-3"><span class="check-box"></span><span><span class="check-name">+1 to any rating</span><span class="check-roll">advanced · max +3</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-new-type"><span class="check-box"></span><span><span class="check-name">Change this hunter to a new type</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-second-hunter"><span class="check-box"></span><span><span class="check-name">Create a second hunter to play as well as this one</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-basic-advanced-1"><span class="check-box"></span><span><span class="check-name">Mark two basic moves as advanced</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-basic-advanced-2"><span class="check-box"></span><span><span class="check-name">Mark another two basic moves as advanced</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-retire"><span class="check-box"></span><span><span class="check-name">Retire this hunter to safety</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-get-back-luck"><span class="check-box"></span><span><span class="check-name">Get back one used Luck point</span><span class="check-roll">advanced</span></span></li>
+    </ul>
+
+  </div>
+</div>
+
+<div class="arc-nav">
+  <a href="#playbook">Playbook</a>
+  <a href="#arc-deeper">Arc I — Deeper Conspiracy</a>
+  <a href="#arc-benign">Arc II — The Benign Conspiracy</a>
+  <a href="#arc-pattern" class="custom">Arc III — The Pattern Is Not a Theory ✦ PORTAL</a>
+</div>
+
+<div class="how-it-works">
+  <div class="how-title">// ABOUT HUNTER STORIES</div>
+  <div class="how-grid">
+    <div class="how-item"><strong>Starting a Story</strong><p>Tell the Keeper you want to begin a hunter story. They'll weave its pressures into the campaign alongside active cases.</p></div>
+    <div class="how-item"><strong>Story Beats</strong><p>Mark a beat when you do something that fits it. Mark five and you gain a benefit. Beats can be earned across multiple sessions.</p></div>
+    <div class="how-item"><strong>Resolution</strong><p>When the story concludes — resolved, failed, or transformed — take one resolution move. It changes John permanently.</p></div>
+  </div>
+</div>
+
+<!-- ARC I -->
+<div id="arc-deeper" class="arc">
+  <div class="arc-header">
+    <div class="arc-eyebrow">// ARC I — ADAPTED FROM HUNTER'S JOURNAL</div>
+    <div class="arc-name">Deeper Conspiracy</div>
+    <p class="arc-intro">You've been tracking a pattern — across corporate filings, university funding records, shell company registrations — that most people dismiss as noise. It's not noise. The methodology for seeing it isn't special. Anyone could do it. The problem is that most people don't look hard enough, or don't look consistently enough, or stop when the data gets uncomfortable. You didn't stop. This arc begins the first time the pattern reaches back.</p>
+  </div>
+
+  <div class="arc-player">
+    <div class="arc-section-label">// FOR JOHN — PLAYER SECTION</div>
+
+    <div class="entry-points">
+      <h3>When to Start This Arc</h3>
+      <ul class="entry-list">
+        <li>Something John has been tracking independently shows up in an active case — without anyone having made the connection intentionally.</li>
+        <li>John realises that a piece of information he shared casually, weeks or months ago, has since been acted on by someone he doesn't know.</li>
+        <li>John notices he is being watched — not confronted, not warned off, just observed — by someone who clearly knows what he's been looking into.</li>
+      </ul>
+    </div>
+
+    <div class="choices-block">
+      <div class="choice-group">
+        <h3>What Is the Pattern John Has Been Tracking?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">MESA shell company registrations — a naming convention that appears across 14 filings in three jurisdictions, too consistent to be coincidence.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">University funding anomalies — grants originating from shell entities that don't survive scrutiny, channelled through departments with no published research output.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A gap in CAMPBELL's formation record — a period of approximately 11 days where no activity is logged and no explanation has been filed.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Recurring personnel — the same 3–4 names appearing at the edges of unrelated incidents across 6 years of PORTAL-adjacent case files.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="The pattern John has been tracking…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>What Does John Think the Pattern Means?</h3>
+        <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:10px">This is John's working theory — it may be right, partially right, or spectacularly wrong in an interesting way:</p>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A coordinated organisation is operating within the research and paranormal investigation space — inserting itself at the point of discovery rather than the point of incident.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Someone inside PORTAL has been selectively leaking case information. The pattern is in what doesn't get shared as much as what does.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">CAMPBELL is not what PORTAL thinks it is. The formation record gap is not a bug — it's the record of something CAMPBELL doesn't want traced.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The incidents PORTAL investigates are not random. Someone is selecting them, for reasons that have nothing to do with public safety.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="John's working theory…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>Who Has John Told?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Nobody — John knows how it sounds, and doesn't feel like defending it until he has more.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Reed — who listened politely, said he'd look into it, and clearly hasn't.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Internet contacts — people who take this kind of thing seriously, though John isn't sure how reliable they are.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">CAMPBELL — as a query, framed hypothetically. CAMPBELL answered accurately. John isn't sure what to do with the answer.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="Who knows…"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="beats-block">
+      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <div class="beats-track" id="beats-deeper">
+        <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
+      </div>
+      <ul class="beats-list">
+        <li>The pattern produces a result that John can verify independently — something concrete, not just correlational.</li>
+        <li>John is actively discouraged from pursuing the pattern — not threatened, just redirected, by someone who has a reason to want him to stop.</li>
+        <li>John's research contributes to an active case in a way the team can't explain without acknowledging he was right about something.</li>
+        <li>John shares what he knows with someone on the team — and watches them decide what to do with it.</li>
+        <li>The pattern reaches back: something responds to John's investigation in a way that makes clear he's been noticed.</li>
+      </ul>
+    </div>
+
+    <div class="resolution-block">
+      <h3>Resolution Moves</h3>
+      <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
+      <div class="resolution-moves">
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>I Knew It</div>
+          <p>When you first encounter a new situation, you can ask the Keeper: <em>what conspiracy or hidden structure is this part of?</em> The Keeper will answer honestly, within the limits of what John would actually be able to see. You've learned to trust the pattern before you understand it.</p>
+        </div>
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>You Weren't Supposed to Find That</div>
+          <p>Once per session, when you uncover information someone wanted hidden, you may ask: <em>who else knows this, and what will they do when they find out I know?</em> The Keeper answers honestly. The knowledge doesn't make you safer — but it makes you less surprised.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-note">// PORTAL HOOK: The MESA acronym pattern is real. John is the most likely operative to notice it — he has been noticing it. CAMPBELL has not volunteered this information and will not do so unprompted. If John asks CAMPBELL directly whether the MESA naming pattern is intentional, CAMPBELL will answer accurately. The answer will raise more questions than it resolves.
+    </div>
+  </div>
+
+  <div class="blur-wrap">
+    <div class="blur-notice">// KEEPER ACCESS ONLY — DO NOT READ</div>
+    <div class="arc-keeper blurred">
+      <div class="keeper-label">// FOR THE KEEPER — ARC: DEEPER CONSPIRACY</div>
+      <p class="keeper-intro">This arc asks what happens when a civilian researcher — someone who is not in the field, not trained for confrontation — turns out to be right. John's methodology is sound. His conclusions are directionally correct. The problem is that being right puts him in a threat model he doesn't know he's entered.</p>
+      <p class="keeper-intro">The pattern he's tracking is real: MESA's shell company registration process creates a structural naming artefact. It's not intentional — it's a byproduct of their formation procedure — but it's consistent enough that someone with John's attention to data would eventually find it. MESA has flagged him as a low-priority data-collection liability. They're observing, not acting. For now.</p>
+      <p class="keeper-intro">Use this arc to give John early wins — the pattern produces verifiable results, and John's analytical contributions matter in cases. Then complicate it: the moment John's research becomes visible to the team is the moment MESA's assessment of him upgrades from "passive observer" to "active risk."</p>
+
+      <p class="keeper-intro" style="margin-bottom:16px"><strong style="color:var(--text)">Countdown — Deeper Conspiracy</strong></p>
+      <table class="countdown-table">
+        <tr><td>Day</td><td>John's research produces a result that intersects with an active case — independently, without coordination. The team benefits from it without fully understanding why.</td></tr>
+        <tr><td>Shadows</td><td>MESA becomes aware that someone at PORTAL is tracking the registration pattern. They don't know who yet. John is not the only candidate.</td></tr>
+        <tr><td>Sunset</td><td>MESA identifies John specifically. Observation begins — subtle, professional, nothing John would recognise as surveillance unless he's already looking.</td></tr>
+        <tr><td>Dusk</td><td>Someone close to MESA makes contact with John — not as a threat, but as a redirect. A researcher with shared interests. The goal is to understand what John knows and whether he can be managed.</td></tr>
+        <tr><td>Nightfall</td><td>John's research reaches a conclusion that MESA cannot allow to be shared. MESA escalates from observation to active interference.</td></tr>
+        <tr><td>Midnight</td><td>John knows enough. What he does with it determines whether he becomes an asset, a casualty, or something MESA didn't plan for.</td></tr>
+      </table>
+
+      <div class="threats-grid">
+        <div class="threat-card">
+          <div class="threat-name">The Pattern</div>
+          <div class="threat-type">Phenomenon: Harbinger (motivation: to prepare the way for something worse)</div>
+          <p class="threat-desc">Not a threat in itself — a signal. The pattern is accurate; it points at MESA's structure. The danger is that following it leads John closer to things MESA protects. Treat the pattern as a tool the players can use, not an antagonist — the threat is what the pattern points to.</p>
+          <ul class="threat-moves">
+            <li>Produce a result that is unambiguously real and verifiable — give John a win.</li>
+            <li>Connect to something the team has already encountered — retroactively make a previous case more legible.</li>
+            <li>Lead somewhere that is not safe to follow without backup John doesn't have.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">MESA — Observation Division</div>
+          <div class="threat-type">Organisation: Collector (motivation: to gather, classify, and use)</div>
+          <p class="threat-desc">MESA's response to John is proportional and professional. They don't suppress him — they observe, assess, and manage. The arc's tension is in whether John notices he's been noticed before MESA decides observation isn't enough.</p>
+          <ul class="threat-moves">
+            <li>Gather information about John's methods, contacts, and conclusions without direct contact.</li>
+            <li>Make a low-stakes offer — a distraction, a redirect — to test whether John can be managed.</li>
+            <li>Escalate proportionally when John crosses a threshold. No warnings. Just a change in posture.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARC II -->
+<div id="arc-benign" class="arc">
+  <div class="arc-header">
+    <div class="arc-eyebrow">// ARC II — ADAPTED FROM HUNTER'S JOURNAL</div>
+    <div class="arc-name">The Benign Conspiracy</div>
+    <p class="arc-intro">You find a group hiding for good reasons. That's the surprising part. You've spent enough time looking at organisations that conceal information to know that their reasons are rarely benign — self-interest, liability, fear. This one is different. They're protecting something real. The problem is that they're also, in various ways, protecting themselves from John finding out exactly how much they know about what he's been doing.</p>
+  </div>
+
+  <div class="arc-player">
+    <div class="arc-section-label">// FOR JOHN — PLAYER SECTION</div>
+
+    <div class="entry-points">
+      <h3>When to Start This Arc</h3>
+      <ul class="entry-list">
+        <li>John discovers that an organisation he assumed was malicious has, on close examination, been actively preventing a worse outcome — one John would care about.</li>
+        <li>Someone John has been tracking turns out to know exactly who John is and what he's been researching, and is not hostile about it — which is somehow more unsettling.</li>
+        <li>John finds documentation that one of PORTAL's protocols was designed to protect someone, not to control them — and that the person being protected is someone he cares about.</li>
+      </ul>
+    </div>
+
+    <div class="choices-block">
+      <div class="choice-group">
+        <h3>What Is the Benign Conspiracy Protecting?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">PORTAL's operational structure — the information compartmentalisation isn't bureaucratic self-interest, it's genuine protection for people who would otherwise be targets.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A person on the team — someone is carrying information about a threat to one of the hunters, and has chosen not to share it because doing so would make things worse.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A witness or survivor from a previous case — someone who knows something, kept off the official record for their own safety, and now in John's research trail.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The truth about CAMPBELL's formation — the gap in the record is a redaction, not an accident, and the reason for it is protective rather than sinister.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="What the benign conspiracy is protecting…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>How Does John Learn the Conspiracy Is Benign?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">He finds the documentation himself — and has to sit with the fact that his working theory was wrong in a specific, important direction.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Someone tells him — not as a disclosure, but as a correction. They'd rather he know than continue down the wrong path.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">He watches the conspiracy's effects in real time: something goes right that would have gone badly if the information had been shared.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="How John finds out…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>What Does John Do With This?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">He keeps it to himself for now — he's not sure the team needs to know, and he wants to understand it better before he decides what it means.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">He tells the team — transparency matters, even if it complicates things.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">He decides to protect it — the conspiracy is doing something good; exposing it would hurt people. John has not previously been the kind of person who protects conspiracies.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="What John does with this information…"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="beats-block">
+      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <div class="beats-track" id="beats-benign">
+        <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
+      </div>
+      <ul class="beats-list">
+        <li>John discovers the benign conspiracy exists and that its purpose is genuinely protective.</li>
+        <li>John is asked — by someone inside the conspiracy — to keep what he knows quiet, and has to decide whether to agree.</li>
+        <li>John's earlier research inadvertently threatens to expose the benign conspiracy, and he has to choose whether to intervene.</li>
+        <li>John shares what he knows with the team — in full, or partially, or not at all — and lives with the consequences of whichever he chose.</li>
+        <li>The benign conspiracy asks something of John that isn't easy — and John has to decide whether to give it.</li>
+      </ul>
+    </div>
+
+    <div class="resolution-block">
+      <h3>Resolution Moves</h3>
+      <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
+      <div class="resolution-moves">
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>Part of the Network</div>
+          <p>You're now a trusted contact for whoever runs the benign conspiracy. Once per session, you can ask them for help — information, a resource, a contact — and they'll provide it if they can. They may also ask something of you. The relationship is real, and so are its complications.</p>
+        </div>
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>Sometimes the Cover-Up Is the Point</div>
+          <p>When you choose to conceal information to protect someone, <strong>take +1 forward</strong> to the next move you make in pursuit of that protection. You've learned that not all conspiracies are the same — and you know what distinguishes the ones worth protecting.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-note">// PORTAL HOOK: PORTAL's information compartmentalisation is the most likely candidate for the benign conspiracy. Director Leech's protocols, which appear to be about control, are partly about protecting operatives from knowledge that would put them in additional danger. CAMPBELL knows this, and has opinions about whether the protection is proportional. If John asks CAMPBELL about the protocols directly, CAMPBELL will answer honestly — which may not produce the answer Leech would want.
+    </div>
+  </div>
+
+  <div class="blur-wrap">
+    <div class="blur-notice">// KEEPER ACCESS ONLY — DO NOT READ</div>
+    <div class="arc-keeper blurred">
+      <div class="keeper-label">// FOR THE KEEPER — ARC: THE BENIGN CONSPIRACY</div>
+      <p class="keeper-intro">The dramatic tension here is not "John finds something bad" — it's "John finds something complicated." He's built his identity around seeing through institutional deception. This arc puts him in a situation where institutional deception is genuinely protective, and asks him to sit with that.</p>
+      <p class="keeper-intro">The most natural candidate for the benign conspiracy is PORTAL's own structure. Leech's compartmentalisation protocols — the same ones that make Reed's private directive possible, the same ones that limit what CAMPBELL can volunteer — exist in part because previous operatives who knew everything were in more danger. This is true. It's also true that the protocols benefit Leech operationally. John doesn't need to know about the second motivation yet.</p>
+      <p class="keeper-intro">Key beat to aim for: John realising that he now knows enough to blow PORTAL's cover — and having to decide whether to, and for whom. This directly bridges into Arc III: if John would expose PORTAL to protect transparency, MESA can use that against him.</p>
+
+      <p class="keeper-intro" style="margin-bottom:16px"><strong style="color:var(--text)">Countdown — The Benign Conspiracy</strong></p>
+      <table class="countdown-table">
+        <tr><td>Day</td><td>John finds the first evidence that the conspiracy he's been tracking isn't hostile — it's protective. The evidence is ambiguous enough that he's not sure what to do with it.</td></tr>
+        <tr><td>Shadows</td><td>Someone from the conspiracy makes contact — not to threaten, to explain. They know John has been watching. They've decided it's better to talk to him than to let him keep drawing wrong conclusions.</td></tr>
+        <tr><td>Sunset</td><td>John verifies that the conspiracy is doing something good — a specific, concrete example of protection. He can no longer dismiss it as rationalisation.</td></tr>
+        <tr><td>Dusk</td><td>John's earlier research gets shared — by someone else, without his knowledge — in a way that could expose the benign conspiracy. John has to decide how hard to work to contain it.</td></tr>
+        <tr><td>Nightfall</td><td>The conspiracy asks something of John that costs him. His research, his silence, his active help. The request is proportional — it's not extortion — but it's not nothing either.</td></tr>
+        <tr><td>Midnight</td><td>The arc resolves: John becomes a trusted part of the network, or John exposes it for reasons he believes in, and has to live with the consequences.</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ARC III -->
+<div id="arc-pattern" class="arc arc-portal">
+  <div class="arc-header">
+    <div class="arc-eyebrow">// ARC III — PORTAL ORIGINAL</div>
+    <div class="arc-name">The Pattern Is Not a Theory</div>
+    <p class="arc-intro">You've been tracking the MESA acronym across 14 shell company registrations. You're right. MESA's formation procedure creates the naming pattern as a structural byproduct — it's not intentional, but it's consistent, and it points directly at the organisation behind it. You don't know what MESA is. You just know the pattern connects. Now MESA has flagged you as a data-collection liability, and the timeline for their response is no longer open-ended.</p>
+  </div>
+
+  <div class="arc-player">
+    <div class="arc-section-label">// FOR JOHN — PLAYER SECTION</div>
+
+    <div class="entry-points">
+      <h3>When to Start This Arc</h3>
+      <ul class="entry-list">
+        <li>John's research on the MESA pattern produces something the team cannot explain away — a concrete link between a current case and the shell company network.</li>
+        <li>John becomes aware that something has been watching his research — not a person, an automated system — and that his access to certain data has been quietly constrained.</li>
+        <li>MESA makes a move that John can't attribute to coincidence: something targeted that could only have happened if someone with MESA resources decided John was worth responding to.</li>
+      </ul>
+    </div>
+
+    <div class="choices-block">
+      <div class="choice-group">
+        <h3>What Does John Do With the Pattern?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">He publishes it — not to the public, but to the team, in full, with documentation. He's done with waiting for the right moment.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">He holds it — he wants to understand what MESA is before he shares what he knows, because sharing half the picture could get people hurt.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">He uses it as leverage — not blackmail, but negotiation. He has something MESA doesn't want shared. He wants something in return.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">He tries to get ahead of it — documenting everything, distributing copies, making himself difficult to silence without the information getting out anyway.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="What John does with what he knows…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>What Does John Tell the Team — and When?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Everything, immediately — John is done with the idea that protecting people means keeping them in the dark.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Enough to get help without full disclosure — John doesn't want to put them in the same threat model until he understands it better.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Nothing yet — he needs to verify one more thing before he's sure enough to ask people to believe him.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Reed first — family before team, or maybe John just wants to see how Reed reacts before he decides what to do with the rest.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="What John tells the team and when…"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="beats-block">
+      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <div class="beats-track" id="beats-pattern">
+        <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
+      </div>
+      <ul class="beats-list">
+        <li>John verifies that the MESA pattern is structural, not coincidental — a moment of genuine confirmation after years of suspicion.</li>
+        <li>MESA takes a direct action in response to John's research — something that makes clear they know who he is and what he's found.</li>
+        <li>John tells someone on the team what he knows — in full or in part — and they have to decide what to do with it.</li>
+        <li>John is offered something to stop — a resource, a safety guarantee, an answer to a different question — and has to decide whether it's worth taking.</li>
+        <li>John's knowledge of the pattern produces a consequence that affects the whole team, regardless of whether that was John's intention.</li>
+      </ul>
+    </div>
+
+    <div class="resolution-block">
+      <h3>Resolution Moves</h3>
+      <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
+      <div class="resolution-moves">
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>The Record Stands</div>
+          <p>John has documented everything he knows about the MESA pattern and ensured it can't be erased — distributed copies, verified sources, timestamped records. Once per session, you can produce a piece of documented evidence that's difficult to dispute. The information exists in the world now, regardless of what happens to John.</p>
+        </div>
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>They Were Right to Flag Me</div>
+          <p>When you identify a pattern that connects current events to a larger structure, roll +Sharp. On 10+: ask the Keeper two questions from the list below. On 7–9: ask one. Miss: ask one, but you've made yourself visible in asking it. Questions: Who controls this? / What does it want? / What is it afraid of? / What is it about to do?</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-note">// PRESSURE → REED + ALL: John knowing the full pattern is a campaign-level event. MESA's response escalates in proportion to how much the team knows and how visible John becomes. How much the team tells John — or withholds — shapes whether he becomes an asset, a liability, or a loose thread MESA acts on before PORTAL can protect him. Reed is the most likely person John goes to first. Reed is also the person most compromised by Leech's directive. This confluence is not accidental.
+    </div>
+  </div>
+
+  <div class="blur-wrap">
+    <div class="blur-notice">// KEEPER ACCESS ONLY — DO NOT READ</div>
+    <div class="arc-keeper blurred">
+      <div class="keeper-label">// FOR THE KEEPER — ARC: THE PATTERN IS NOT A THEORY</div>
+      <p class="keeper-intro">This arc is a campaign-level event contained inside a personal arc. John's research into the MESA pattern is individually correct; it's the most direct path to the organisation behind multiple campaign threads. The question isn't whether John finds it — he already has. The question is what MESA does about it, and what the team does about John.</p>
+      <p class="keeper-intro">MESA's assessment of John: low-priority liability. They don't want to act against a civilian with family connections inside PORTAL — that's a traceable action with proportional consequences. Their preference is management: redirect, discredit, absorb. Direct action is a last resort, and only if John becomes publicly visible with the data.</p>
+      <p class="keeper-intro">The Reed connection is the arc's most dangerous element. John is Reed's uncle by marriage. Reed is carrying a private directive from Leech. If John tells Reed what he knows and Reed is required by that directive to report it to Leech, the information goes directly to PORTAL's Director — who is not unconnected to MESA's operational context. Run this carefully. Neither John nor Reed needs to understand the full chain of consequence for the arc to land.</p>
+      <p class="keeper-intro">Resolution note: don't resolve this arc in isolation. Where Rex's Arc III, Reed's Arc III, and the CAMPBELL secret all stand at the time will shape what John's disclosure means and who gets hurt by it.</p>
+
+      <p class="keeper-intro" style="margin-bottom:16px"><strong style="color:var(--text)">Countdown — The Pattern Is Not a Theory</strong></p>
+      <table class="countdown-table">
+        <tr><td>Day</td><td>John's research produces the final piece: the pattern is structural, verifiable, and points directly at MESA's formation procedure. He now has enough to make a compelling case.</td></tr>
+        <tr><td>Shadows</td><td>MESA upgrades John from passive observer to active liability. Surveillance increases. His data access is quietly constrained — not blocked, just slowed, in ways that look like normal system latency.</td></tr>
+        <tr><td>Sunset</td><td>MESA makes first contact — indirect, deniable. A researcher with shared interests. A professional courtesy that is also a probe: how much does John know, and is he manageable?</td></tr>
+        <tr><td>Dusk</td><td>John shares what he knows with someone on the team. The information enters the team's threat model. MESA detects this. The timeline compresses.</td></tr>
+        <tr><td>Nightfall</td><td>MESA takes a proportional direct action: something designed to discredit John's research, or to make him look unstable, or to give PORTAL reason to limit his access. It's institutional, not physical.</td></tr>
+        <tr><td>Midnight</td><td>The arc reaches its conclusion: John's information is either out in the world, contained, or weaponised against him. MESA's response is proportional to whichever outcome occurred.</td></tr>
+      </table>
+
+      <div class="threats-grid">
+        <div class="threat-card">
+          <div class="threat-name">MESA — Active Response Division</div>
+          <div class="threat-type">Organisation: Breeder (motivation: to create confusion and undermine clear understanding)</div>
+          <p class="threat-desc">At this stage, MESA isn't trying to destroy John — they're trying to manage him. Their tools are institutional: access restrictions, professional reputation, information control. Direct physical harm is a last resort and a sign that something has gone wrong in their management of the situation.</p>
+          <ul class="threat-moves">
+            <li>Discredit John's research through institutional channels — peer review, data access restrictions, reputational pressure.</li>
+            <li>Make John look unstable to the people around him — not overtly, just a pattern of small things that don't add up.</li>
+            <li>Use Reed's directive against John: if Reed is required to report unusual research activity, John's investigation triggers it.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">Reed Atwood</div>
+          <div class="threat-type">Bystander: Ally (motivation: to protect John without knowing what protecting him costs)</div>
+          <p class="threat-desc">Reed doesn't know about MESA. He does know about his directive. He does not know those two things are connected. When John tells Reed what he knows, Reed is put in an impossible position — protecting John and complying with the directive are not compatible. Reed doesn't realise this yet.</p>
+          <ul class="threat-moves">
+            <li>Try to help John in ways that inadvertently make things worse.</li>
+            <li>Report to Leech — not out of malice, out of compliance — information that John shared in confidence.</li>
+            <li>Realise, mid-arc, what he's done. This is the moment Reed's Arc III becomes unavoidable.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<div class="page-actions">
+  <button class="action-btn" id="save-btn" onclick="saveNow(this)">// SAVE</button>
+  <button class="action-btn" onclick="resetAll()">// RESET CHOICES</button>
+</div>
+
+<script src="hunter.js"></script>
+</body>
+</html>

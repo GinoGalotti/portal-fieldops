@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Investigation Log</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="player.css">
+<style>
+/* ── LAYOUT ──────────────────────────────────────────────────────────────── */
+.content-area {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px 100px;
+}
+
+/* ── PAGE HEADER ──────────────────────────────────────────────────────────── */
+.page-header {
+  padding: 48px 24px 32px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+.page-header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+.page-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--green-dim);
+  margin-bottom: 12px;
+  cursor: default;
+  user-select: none;
+}
+.page-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #e8f5ee;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.page-subtitle {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* ── KEEPER TOOLBAR ───────────────────────────────────────────────────────── */
+#keeper-toolbar {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 24px;
+  background: rgba(168,85,247,0.06);
+  border-bottom: 1px solid rgba(168,85,247,0.2);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: rgba(168,85,247,0.7);
+}
+#keeper-toolbar .kt-label {
+  color: rgba(168,85,247,0.5);
+}
+
+/* ── SECTION HEADINGS ─────────────────────────────────────────────────────── */
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 20px;
+}
+.section-heading-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: var(--green-dim);
+  white-space: nowrap;
+}
+.section-heading-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── THREADS SECTION ──────────────────────────────────────────────────────── */
+.threads-section {
+  margin-bottom: 52px;
+}
+
+.thread-group {
+  margin-bottom: 12px;
+}
+.thread-group-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+.thread-group-header:hover { background: rgba(46,204,113,0.04); }
+.thread-group-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  color: var(--green);
+  flex: 1;
+}
+.thread-group-count {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+}
+.thread-group-toggle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--green-dim);
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+.thread-group-header:hover .thread-group-toggle { color: var(--green); }
+
+/* Active threads: no collapse chrome — header is a static label */
+.thread-group-header.no-toggle { cursor: default; }
+.thread-group-header.no-toggle:hover { background: var(--bg2); }
+
+.thread-group-body {
+  overflow: hidden;
+  max-height: 9999px;
+  opacity: 1;
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+}
+.thread-group.collapsed .thread-group-body {
+  max-height: 0;
+  opacity: 0;
+}
+.thread-group.collapsed .thread-group-header { border-bottom-color: var(--border); }
+
+.thread-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 12px 0 4px;
+}
+@media (max-width: 640px) {
+  .thread-list { grid-template-columns: 1fr; }
+}
+
+.thread-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
+  padding: 14px 16px;
+  transition: background 0.1s;
+}
+.thread-card:hover { background: rgba(255,255,255,0.015); }
+.thread-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.thread-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #e8f5ee;
+  text-transform: uppercase;
+}
+.thread-cat-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.12em;
+  flex-shrink: 0;
+}
+.thread-summary {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.83rem;
+  line-height: 1.6;
+  color: var(--text-dim);
+  margin: 0;
+}
+
+/* ── EVIDENCE SECTION ─────────────────────────────────────────────────────── */
+.evidence-section {
+  margin-bottom: 40px;
+}
+
+/* ── FILTER BAR ───────────────────────────────────────────────────────────── */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+.filter-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  margin-right: 4px;
+}
+.filter-pill {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.63rem;
+  letter-spacing: 0.1em;
+  padding: 5px 10px;
+  border: 1px solid;
+  border-color: color-mix(in srgb, var(--cat-color) 40%, transparent);
+  background: color-mix(in srgb, var(--cat-color) 8%, transparent);
+  color: color-mix(in srgb, var(--cat-color) 60%, #7f8d88);
+  cursor: pointer;
+  transition: all 0.15s;
+  --cat-color: #7f8d88;
+}
+.filter-pill.active {
+  border-color: var(--cat-color);
+  background: color-mix(in srgb, var(--cat-color) 15%, transparent);
+  color: var(--cat-color);
+}
+.filter-pill:hover {
+  border-color: var(--cat-color);
+  background: color-mix(in srgb, var(--cat-color) 20%, transparent);
+  color: var(--cat-color);
+}
+
+/* ── EVIDENCE GRID ────────────────────────────────────────────────────────── */
+.evidence-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 640px) {
+  .evidence-grid { grid-template-columns: 1fr; }
+}
+
+/* ── EVIDENCE CARD ────────────────────────────────────────────────────────── */
+.evidence-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--border);
+  padding: 14px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: background 0.1s;
+  --cat-color: #7f8d88;
+}
+.evidence-card:hover { background: rgba(255,255,255,0.015); }
+
+.ev-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.ev-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ev-session-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+}
+.ev-status {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  padding: 1px 6px;
+  border: 1px solid;
+}
+.ev-status.status-confirmed {
+  color: var(--green-dim);
+  border-color: rgba(46,204,113,0.3);
+}
+.ev-status.status-unverified {
+  color: #d4a04a;
+  border-color: rgba(212,160,74,0.35);
+}
+.ev-status.status-disputed {
+  color: #ef4444;
+  border-color: rgba(239,68,68,0.35);
+}
+.ev-cat-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.12em;
+  flex-shrink: 0;
+}
+
+.ev-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: #e8f5ee;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.3;
+}
+.ev-summary {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--text-dim);
+  margin: 0;
+  flex: 1;
+}
+
+.ev-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+}
+.ev-hunter-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  --hunter-color: #7f8d88;
+}
+.hunter-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--hunter-color);
+  flex-shrink: 0;
+}
+.ev-dossier-link {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: var(--green-dim);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s;
+}
+.ev-dossier-link:hover {
+  color: var(--green);
+  border-bottom-color: var(--green-dim);
+}
+
+.ev-connections {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+.ev-conn-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  background: rgba(255,255,255,0.035);
+  border: 1px solid var(--border);
+  padding: 2px 7px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── KEEPER NOTE ──────────────────────────────────────────────────────────── */
+.keeper-note {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: rgba(168,85,247,0.75);
+  background: rgba(168,85,247,0.05);
+  border-left: 2px solid rgba(168,85,247,0.3);
+  padding: 6px 10px;
+  margin-top: 4px;
+}
+.keeper-note-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  color: rgba(168,85,247,0.5);
+  display: block;
+  margin-bottom: 3px;
+}
+
+/* ── KEEPER VISIBILITY UI (per card, keeper mode only) ───────────────────── */
+.keeper-vis-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(168,85,247,0.15);
+}
+.keeper-vis-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.12em;
+  padding: 2px 7px;
+  border: 1px solid;
+}
+.keeper-vis-badge.is-hidden {
+  color: #d4a04a;
+  border-color: rgba(212,160,74,0.4);
+  background: rgba(212,160,74,0.06);
+}
+.keeper-vis-badge.is-revealed {
+  color: var(--green-dim);
+  border-color: rgba(46,204,113,0.3);
+  background: rgba(46,204,113,0.05);
+}
+.keeper-vis-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  padding: 3px 9px;
+  border: 1px solid;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.keeper-vis-btn.reveal-btn {
+  color: var(--green-dim);
+  border-color: rgba(46,204,113,0.3);
+}
+.keeper-vis-btn.reveal-btn:hover {
+  color: var(--green);
+  border-color: var(--green-dim);
+  background: rgba(46,204,113,0.08);
+}
+.keeper-vis-btn.hide-btn {
+  color: #d4a04a;
+  border-color: rgba(212,160,74,0.35);
+}
+.keeper-vis-btn.hide-btn:hover {
+  border-color: #d4a04a;
+  background: rgba(212,160,74,0.08);
+}
+
+/* ── EMPTY STATE ──────────────────────────────────────────────────────────── */
+.empty-state {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  padding: 20px 0;
+  text-align: center;
+  grid-column: 1 / -1;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <nav id="player-nav"></nav>
+</header>
+
+<div id="keeper-toolbar">
+  <span class="kt-label">// KEEPER MODE</span>
+</div>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-eyebrow" id="page-eyebrow">P.O.R.T.A.L — FIELD OPERATIONS</div>
+    <h1 class="page-title">// Investigation Log</h1>
+    <p class="page-subtitle">Evidence board · Campaign threads · Field intelligence</p>
+  </div>
+</div>
+
+<div class="content-area">
+
+  <!-- ── CAMPAIGN THREADS ──────────────────────────────────────────────────── -->
+  <section class="threads-section" id="threads-section" aria-label="Campaign Threads">
+    <div class="section-heading">
+      <span class="section-heading-label">CAMPAIGN THREADS</span>
+      <span class="section-heading-rule"></span>
+    </div>
+
+    <!-- Active threads: not collapsible -->
+    <div class="thread-group" id="active-threads-group">
+      <div class="thread-group-header no-toggle">
+        <span class="thread-group-label">ACTIVE</span>
+        <span class="thread-group-count" id="active-count"></span>
+      </div>
+      <div class="thread-group-body">
+        <div class="thread-list" id="active-threads">
+          <p class="empty-state" style="grid-column:1/-1">Loading threads…</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dormant threads: collapsible, starts collapsed -->
+    <div class="thread-group collapsed" id="dormant-threads-group" style="display:none">
+      <div class="thread-group-header" id="dormant-header">
+        <span class="thread-group-label">DORMANT</span>
+        <span class="thread-group-count" id="dormant-count"></span>
+        <span class="thread-group-toggle">▶</span>
+      </div>
+      <div class="thread-group-body">
+        <div class="thread-list" id="dormant-threads"></div>
+      </div>
+    </div>
+
+    <!-- Resolved threads: collapsible, starts collapsed -->
+    <div class="thread-group collapsed" id="resolved-threads-group" style="display:none">
+      <div class="thread-group-header" id="resolved-header">
+        <span class="thread-group-label">RESOLVED</span>
+        <span class="thread-group-count" id="resolved-count"></span>
+        <span class="thread-group-toggle">▶</span>
+      </div>
+      <div class="thread-group-body">
+        <div class="thread-list" id="resolved-threads"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── EVIDENCE BOARD ────────────────────────────────────────────────────── -->
+  <section class="evidence-section" id="evidence-section" aria-label="Evidence Board">
+    <div class="section-heading">
+      <span class="section-heading-label">EVIDENCE BOARD</span>
+      <span class="section-heading-rule"></span>
+    </div>
+
+    <div class="filter-bar" id="filter-bar">
+      <span class="filter-label">FILTER</span>
+    </div>
+
+    <div class="evidence-grid" id="evidence-grid">
+      <p class="empty-state">Loading evidence…</p>
+    </div>
+  </section>
+
+</div>
+
+<script src="player-nav.js"></script>
+<script src="session-state.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* ── CONSTANTS ────────────────────────────────────────────────────────────── */
+  var CATEGORY_COLORS = {
+    financial:    '#f0a500',
+    scientific:   '#3ab5b0',
+    personal:     '#f06880',
+    rival:        '#ef4444',
+    supernatural: '#a78bfa',
+    institutional:'#2ecc71'
+  };
+
+  var CATEGORY_LABELS = {
+    financial:    'Financial',
+    scientific:   'Scientific',
+    personal:     'Personal',
+    rival:        'Rival',
+    supernatural: 'Supernatural',
+    institutional:'Institutional'
+  };
+
+  var THREAD_CAT_COLORS = {
+    faction: '#f0a500',
+    mystery: '#a78bfa',
+    personal:'#3ab5b0',
+    case:    '#2ecc71'
+  };
+
+  var HUNTER_ACCENTS = {
+    rex:    '#f0a500',
+    reed:   '#3ab5b0',
+    alan:   '#3ab5b0',
+    sven:   '#a78bfa',
+    john:   '#c8ddd0',
+    team:   '#7f8d88',
+    marcus: '#7f8d88',
+    teddy:  '#7f8d88'
+  };
+
+  var HUNTER_NAMES = {
+    rex:    'Rex',
+    reed:   'Reed',
+    alan:   'Alan',
+    sven:   'Sven',
+    john:   'John',
+    team:   'Team',
+    marcus: 'Marcus',
+    teddy:  'Teddy'
+  };
+
+  var VISIBILITY_API = '/api/v1/evidence/visibility';
+  var VISIBILITY_LS  = 'portal_evidence_visibility';
+
+  /* ── STATE ────────────────────────────────────────────────────────────────── */
+  var evidenceItems = [];
+  var threads       = [];
+  var keeperMode    = false;
+  var eyebrowClicks = 0;
+  var hiddenCats    = new Set(); // categories user has toggled OFF
+  var revealedIds      = new Set(); // keeper revealed a hidden:true item
+  var manuallyHiddenIds = new Set(); // keeper hid a hidden:false item
+  var activeSessions  = [];
+  var activeSessionId = null;
+  var dataLoaded      = false;
+
+  /* ── HELPERS ──────────────────────────────────────────────────────────────── */
+  function esc(s) {
+    if (s == null) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function sessionIndex(sessionId) {
+    if (!activeSessions.length) return -1;
+    return activeSessions.findIndex(function (s) { return s.id === sessionId; });
+  }
+
+  function isItemVisible(itemSession) {
+    if (!activeSessionId) return false;
+    var itemIdx   = sessionIndex(itemSession);
+    var activeIdx = sessionIndex(activeSessionId);
+    return itemIdx >= 0 && activeIdx >= 0 && itemIdx <= activeIdx;
+  }
+
+  /* ── KEEPER MODE ──────────────────────────────────────────────────────────── */
+  function activateKeeperMode() {
+    keeperMode = true;
+    document.getElementById('keeper-toolbar').style.display = 'flex';
+    document.querySelectorAll('.keeper-note').forEach(function (el) { el.style.display = ''; });
+    applyFiltersAndSession(); // re-render with keeper visibility
+  }
+
+  /* ── VISIBILITY STATE — LOAD & SAVE ──────────────────────────────────────── */
+  function loadVisibility() {
+    // Apply localStorage immediately as a fast start
+    try {
+      var cached = JSON.parse(localStorage.getItem(VISIBILITY_LS) || '{}');
+      if (Array.isArray(cached.revealed))        revealedIds       = new Set(cached.revealed);
+      if (Array.isArray(cached.manually_hidden)) manuallyHiddenIds = new Set(cached.manually_hidden);
+    } catch (e) {}
+
+    // Fetch D1 (authoritative); overwrite localStorage on success
+    return fetch(VISIBILITY_API)
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (Array.isArray(data.revealed))        revealedIds       = new Set(data.revealed);
+        if (Array.isArray(data.manually_hidden)) manuallyHiddenIds = new Set(data.manually_hidden);
+        persistLocally();
+      })
+      .catch(function () {});
+  }
+
+  function persistLocally() {
+    localStorage.setItem(VISIBILITY_LS, JSON.stringify({
+      revealed:         Array.from(revealedIds),
+      manually_hidden:  Array.from(manuallyHiddenIds)
+    }));
+  }
+
+  function saveVisibility() {
+    persistLocally();
+    fetch(VISIBILITY_API, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        revealed:        Array.from(revealedIds),
+        manually_hidden: Array.from(manuallyHiddenIds)
+      })
+    }).catch(function () {});
+  }
+
+  // Returns true if item is effectively hidden from players right now
+  function isEffectivelyHidden(id, defaultHidden) {
+    if (defaultHidden) {
+      return !revealedIds.has(id);      // hidden:true → hidden unless keeper revealed
+    } else {
+      return manuallyHiddenIds.has(id); // hidden:false → visible unless keeper hid
+    }
+  }
+
+  function toggleItemVisibility(id, defaultHidden) {
+    if (isEffectivelyHidden(id, defaultHidden)) {
+      // Currently hidden → reveal it
+      if (defaultHidden) { revealedIds.add(id); }
+      else               { manuallyHiddenIds.delete(id); }
+    } else {
+      // Currently visible → hide it
+      if (defaultHidden) { revealedIds.delete(id); }
+      else               { manuallyHiddenIds.add(id); }
+    }
+    saveVisibility();
+    applyFiltersAndSession();
+  }
+
+  /* ── THREAD RENDERING ─────────────────────────────────────────────────────── */
+  function buildThreadCard(t) {
+    var card  = document.createElement('div');
+    card.className = 'thread-card';
+    var color = THREAD_CAT_COLORS[t.category] || '#7f8d88';
+    card.style.borderLeftColor = color;
+
+    var name = esc(t.player_name || t.name);
+
+    var meta = document.createElement('div');
+    meta.className = 'thread-meta';
+    meta.innerHTML =
+      '<span class="thread-name">' + name + '</span>' +
+      '<span class="thread-cat-badge" style="color:' + color + '">' +
+        esc(t.category.toUpperCase()) +
+      '</span>';
+
+    var summary = document.createElement('p');
+    summary.className = 'thread-summary';
+    summary.textContent = t.player_summary;
+
+    card.appendChild(meta);
+    card.appendChild(summary);
+    return card;
+  }
+
+  function renderThreads() {
+    var active   = threads.filter(function (t) { return t.status === 'active'   && t.player_summary; });
+    var dormant  = threads.filter(function (t) { return t.status === 'dormant'  && t.player_summary; });
+    var resolved = threads.filter(function (t) { return t.status === 'resolved' && t.player_summary; });
+
+    // Active
+    var activeList = document.getElementById('active-threads');
+    var activeCount = document.getElementById('active-count');
+    activeList.innerHTML = '';
+    if (active.length === 0) {
+      activeList.innerHTML = '<p class="empty-state">No active threads with player summaries.</p>';
+    } else {
+      active.forEach(function (t) { activeList.appendChild(buildThreadCard(t)); });
+    }
+    if (activeCount) activeCount.textContent = active.length + ' thread' + (active.length !== 1 ? 's' : '');
+
+    // Dormant
+    var dormantGroup = document.getElementById('dormant-threads-group');
+    var dormantCount = document.getElementById('dormant-count');
+    if (dormant.length > 0) {
+      var dormantList = document.getElementById('dormant-threads');
+      dormant.forEach(function (t) { dormantList.appendChild(buildThreadCard(t)); });
+      if (dormantCount) dormantCount.textContent = dormant.length + ' thread' + (dormant.length !== 1 ? 's' : '');
+      dormantGroup.style.display = '';
+    } else {
+      dormantGroup.style.display = 'none';
+    }
+
+    // Resolved
+    var resolvedGroup = document.getElementById('resolved-threads-group');
+    var resolvedCount = document.getElementById('resolved-count');
+    if (resolved.length > 0) {
+      var resolvedList = document.getElementById('resolved-threads');
+      resolved.forEach(function (t) { resolvedList.appendChild(buildThreadCard(t)); });
+      if (resolvedCount) resolvedCount.textContent = resolved.length + ' thread' + (resolved.length !== 1 ? 's' : '');
+      resolvedGroup.style.display = '';
+    } else {
+      resolvedGroup.style.display = 'none';
+    }
+  }
+
+  /* ── EVIDENCE RENDERING ───────────────────────────────────────────────────── */
+  function buildEvidenceLookup() {
+    var map = {};
+    evidenceItems.forEach(function (item) { map[item.id] = item; });
+    return map;
+  }
+
+  function buildFilterBar(categories) {
+    var bar = document.getElementById('filter-bar');
+    bar.innerHTML = '<span class="filter-label">FILTER</span>';
+    categories.forEach(function (cat) {
+      var pill = document.createElement('button');
+      pill.className = 'filter-pill active';
+      pill.setAttribute('data-cat', cat);
+      pill.style.setProperty('--cat-color', CATEGORY_COLORS[cat] || '#7f8d88');
+      pill.textContent = CATEGORY_LABELS[cat] || cat;
+      pill.addEventListener('click', function () { toggleCategory(cat); });
+      bar.appendChild(pill);
+    });
+  }
+
+  function buildEvidenceCard(item, lookup) {
+    var card = document.createElement('div');
+    card.className = 'evidence-card';
+    card.setAttribute('data-id',       item.id);
+    card.setAttribute('data-category', item.category);
+    card.setAttribute('data-session',  item.session);
+    card.setAttribute('data-hidden',   item.hidden ? 'true' : 'false');
+
+    var catColor     = CATEGORY_COLORS[item.category]  || '#7f8d88';
+    var hunterColor  = HUNTER_ACCENTS[item.found_by]   || '#7f8d88';
+    var hunterName   = HUNTER_NAMES[item.found_by]     || item.found_by;
+    var statusClass  = 'status-' + (item.status || 'confirmed');
+    var statusLabel  = (item.status || 'confirmed').toUpperCase();
+    var sessionLabel = 'W' + (item.session || '').slice(1);
+    var catLabel     = CATEGORY_LABELS[item.category]  || item.category;
+
+    card.style.borderTopColor = catColor;
+    card.style.setProperty('--cat-color', catColor);
+
+    // Header row
+    var header = document.createElement('div');
+    header.className = 'ev-header';
+    header.innerHTML =
+      '<div class="ev-meta">' +
+        '<span class="ev-session-badge">' + esc(sessionLabel) + '</span>' +
+        '<span class="ev-status ' + statusClass + '">' + esc(statusLabel) + '</span>' +
+      '</div>' +
+      '<span class="ev-cat-badge" style="color:' + catColor + '">' + esc(catLabel) + '</span>';
+
+    // Label
+    var labelEl = document.createElement('h3');
+    labelEl.className = 'ev-label';
+    labelEl.textContent = item.label;
+
+    // Summary
+    var summaryEl = document.createElement('p');
+    summaryEl.className = 'ev-summary';
+    summaryEl.textContent = item.summary;
+
+    // Footer: hunter badge + dossier link
+    var footer = document.createElement('div');
+    footer.className = 'ev-footer';
+
+    var hunterBadge = document.createElement('span');
+    hunterBadge.className = 'ev-hunter-badge';
+    hunterBadge.style.setProperty('--hunter-color', hunterColor);
+    hunterBadge.innerHTML = '<span class="hunter-dot"></span>' + esc(hunterName);
+    footer.appendChild(hunterBadge);
+
+    if (item.dossier_link) {
+      var dossierLink = document.createElement('a');
+      dossierLink.className = 'ev-dossier-link';
+      dossierLink.href = item.dossier_link;
+      dossierLink.textContent = '→ VIEW FULL DOCUMENT';
+      footer.appendChild(dossierLink);
+    }
+
+    // Connections
+    var connEl = null;
+    if (item.connections && item.connections.length > 0) {
+      connEl = document.createElement('div');
+      connEl.className = 'ev-connections';
+      item.connections.forEach(function (cid) {
+        var connected = lookup[cid];
+        var label = connected ? connected.label : cid;
+        var badge = document.createElement('span');
+        badge.className = 'ev-conn-badge';
+        badge.title = label;
+        // Truncate displayed text; full text in title attr
+        badge.textContent = label.length > 38 ? label.slice(0, 37) + '…' : label;
+        connEl.appendChild(badge);
+      });
+    }
+
+    // Keeper note
+    var keeperNoteEl = document.createElement('div');
+    keeperNoteEl.className = 'keeper-note';
+    keeperNoteEl.style.display = keeperMode ? '' : 'none';
+    keeperNoteEl.innerHTML =
+      '<span class="keeper-note-label">KEEPER</span>' + esc(item.keeper_note || '');
+
+    card.appendChild(header);
+    card.appendChild(labelEl);
+    card.appendChild(summaryEl);
+    card.appendChild(footer);
+    if (connEl) card.appendChild(connEl);
+    card.appendChild(keeperNoteEl);
+
+    return card;
+  }
+
+  function renderEvidenceBoard() {
+    var lookup = buildEvidenceLookup();
+
+    // Collect ordered unique categories (in order of first appearance)
+    var cats = [];
+    var seenCats = {};
+    evidenceItems.forEach(function (item) {
+      if (!seenCats[item.category]) {
+        seenCats[item.category] = true;
+        cats.push(item.category);
+      }
+    });
+    buildFilterBar(cats);
+
+    var grid = document.getElementById('evidence-grid');
+    grid.innerHTML = '';
+
+    // Empty sentinel
+    var emptyEl = document.createElement('p');
+    emptyEl.className = 'empty-state';
+    emptyEl.id = 'evidence-empty';
+    emptyEl.style.display = 'none';
+    emptyEl.textContent = 'No evidence available for the current session.';
+    grid.appendChild(emptyEl);
+
+    evidenceItems.forEach(function (item) {
+      grid.appendChild(buildEvidenceCard(item, lookup));
+    });
+
+    applyFiltersAndSession();
+  }
+
+  /* ── FILTER + SESSION VISIBILITY ──────────────────────────────────────────── */
+  function toggleCategory(cat) {
+    if (hiddenCats.has(cat)) {
+      hiddenCats.delete(cat);
+    } else {
+      hiddenCats.add(cat);
+    }
+    document.querySelectorAll('.filter-pill').forEach(function (pill) {
+      var c = pill.getAttribute('data-cat');
+      pill.classList.toggle('active', !hiddenCats.has(c));
+    });
+    applyFiltersAndSession();
+  }
+
+  function applyFiltersAndSession() {
+    var anyVisible = false;
+    document.querySelectorAll('.evidence-card').forEach(function (card) {
+      var cat            = card.getAttribute('data-category');
+      var session        = card.getAttribute('data-session');
+      var id             = card.getAttribute('data-id');
+      var defaultHidden  = card.getAttribute('data-hidden') === 'true';
+      var catFiltered    = hiddenCats.has(cat);
+      var effectivelyHidden = isEffectivelyHidden(id, defaultHidden);
+
+      var visible;
+      if (keeperMode) {
+        // Keeper sees all items regardless of session or hidden state; category filter only
+        visible = !catFiltered;
+      } else {
+        // Player: must pass session gate AND not be effectively hidden
+        visible = !catFiltered && isItemVisible(session) && !effectivelyHidden;
+      }
+
+      card.style.display = visible ? '' : 'none';
+      if (visible) anyVisible = true;
+
+      // Keeper visibility row — show on every card in keeper mode
+      if (keeperMode) {
+        refreshKeeperVisRow(card, id, defaultHidden, effectivelyHidden);
+      } else {
+        var old = card.querySelector('.keeper-vis-row');
+        if (old) old.remove();
+      }
+    });
+
+    var emptyEl = document.getElementById('evidence-empty');
+    if (emptyEl) emptyEl.style.display = anyVisible ? 'none' : '';
+  }
+
+  function refreshKeeperVisRow(card, id, defaultHidden, effectivelyHidden) {
+    var existing = card.querySelector('.keeper-vis-row');
+    if (existing) existing.remove();
+
+    var row = document.createElement('div');
+    row.className = 'keeper-vis-row';
+
+    var badge = document.createElement('span');
+    badge.className = 'keeper-vis-badge ' + (effectivelyHidden ? 'is-hidden' : 'is-revealed');
+    badge.textContent = effectivelyHidden ? 'HIDDEN FROM PLAYERS' : 'VISIBLE TO PLAYERS';
+
+    var btn = document.createElement('button');
+    btn.className = 'keeper-vis-btn ' + (effectivelyHidden ? 'reveal-btn' : 'hide-btn');
+    btn.textContent = effectivelyHidden ? '▶ REVEAL' : 'HIDE';
+    btn.addEventListener('click', function () { toggleItemVisibility(id, defaultHidden); });
+
+    row.appendChild(badge);
+    row.appendChild(btn);
+
+    var keeperNoteEl = card.querySelector('.keeper-note');
+    card.insertBefore(row, keeperNoteEl);
+  }
+
+  /* ── COLLAPSE TOGGLE FOR DORMANT/RESOLVED ─────────────────────────────────── */
+  function attachCollapsibleHeader(headerId, groupId) {
+    var header = document.getElementById(headerId);
+    var group  = document.getElementById(groupId);
+    if (!header || !group) return;
+    header.addEventListener('click', function () {
+      var isCollapsed = group.classList.toggle('collapsed');
+      var toggle = header.querySelector('.thread-group-toggle');
+      if (toggle) toggle.textContent = isCollapsed ? '▶' : '▼';
+    });
+  }
+
+  /* ── MAIN RENDER ──────────────────────────────────────────────────────────── */
+  function renderAll() {
+    renderThreads();
+    renderEvidenceBoard();
+  }
+
+  /* ── DATA LOADING ─────────────────────────────────────────────────────────── */
+  function init() {
+    Promise.all([
+      fetch('data/portal-threads.json').then(function (r) { return r.json(); }),
+      fetch('data/evidence.json').then(function (r) { return r.json(); }),
+      loadVisibility()
+    ]).then(function (results) {
+      var threadsData = results[0];
+      threads       = (threadsData && threadsData.threads) ? threadsData.threads : threadsData;
+      evidenceItems = results[1];
+      dataLoaded = true;
+      renderAll();
+    }).catch(function (err) {
+      console.error('[PORTAL] evidence init error:', err);
+    });
+  }
+
+  /* ── SESSION EVENT ────────────────────────────────────────────────────────── */
+  // Register before fetch so we don't miss a fast event
+  document.addEventListener('portalSessionReady', function (e) {
+    activeSessionId = e.detail.session;
+    activeSessions  = e.detail.sessions || [];
+    if (dataLoaded) {
+      applyFiltersAndSession();
+    }
+    // else: init() will call applyFiltersAndSession() via renderAll() after data loads
+  });
+
+  /* ── DOM READY ────────────────────────────────────────────────────────────── */
+  document.addEventListener('DOMContentLoaded', function () {
+    // Triple-click on eyebrow = keeper mode
+    document.getElementById('page-eyebrow').addEventListener('click', function () {
+      eyebrowClicks++;
+      if (eyebrowClicks >= 3) {
+        eyebrowClicks = 0;
+        activateKeeperMode();
+      }
+    });
+
+    // Collapsible dormant/resolved headers
+    attachCollapsibleHeader('dormant-header',  'dormant-threads-group');
+    attachCollapsibleHeader('resolved-header', 'resolved-threads-group');
+
+    init();
+  });
+
+}());
+</script>
+</body>
+</html>

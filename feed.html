@@ -1,0 +1,3992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Feed</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="player.css">
+<style>
+/* ── LAYOUT ──────────────────────────────────────────────────────────────── */
+body { overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+header { flex-shrink: 0; position: relative; }
+.feed-layout {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── FEED (LEFT) ─────────────────────────────────────────────────────────── */
+.feed-col {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+  min-width: 0;
+}
+.feed-header {
+  flex-shrink: 0;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.feed-header-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--green-dim);
+}
+
+.feed-entries {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* "Load earlier" lives at top of the scrollable feed area */
+.feed-load-more-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.feed-load-more {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.75rem;
+  border-radius: 2px;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  transition: color 0.15s, border-color 0.15s;
+}
+.feed-load-more:hover { color: var(--green); border-color: var(--green-dim); }
+.feed-load-more:disabled { opacity: 0.4; cursor: default; }
+
+/* ── FEED ENTRY ──────────────────────────────────────────────────────────── */
+.feed-entry {
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  cursor: default;
+  transition: background 0.1s;
+  position: relative;
+}
+.feed-entry:hover { background: rgba(255,255,255,0.02); }
+/* Default: click to expand (hover disabled via body.no-hover class added by JS) */
+.feed-entry.expanded .feed-outcome-detail { opacity: 1; max-height: 500px; }
+/* ?mouseover=true: keep legacy hover behaviour, no .expanded class used */
+body:not(.no-hover) .feed-entry:hover .feed-outcome-detail { opacity: 1; max-height: 500px; }
+
+.feed-entry-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+.feed-hunter-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  padding: 0.1rem 0.35rem;
+  border-radius: 2px;
+  border: 1px solid transparent;
+}
+.feed-move-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-bright);
+  text-transform: uppercase;
+}
+.feed-time {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  color: var(--text-dim);
+  margin-left: auto;
+}
+
+.feed-roll-line {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.feed-breakdown {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+.feed-breakdown .die { color: var(--text); }
+.feed-breakdown .stat-val { color: var(--green-dim); }
+.feed-breakdown .mod-val { color: #7bafd4; }
+.feed-breakdown .total { color: var(--text-bright); font-weight: bold; }
+
+.feed-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 2px;
+  font-weight: bold;
+}
+.feed-badge.advanced { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.3); }
+.feed-badge.hit      { background: rgba(46,204,113,0.15);  color: #2ecc71; border: 1px solid rgba(46,204,113,0.3); }
+.feed-badge.partial  { background: rgba(241,196,15,0.12);  color: #f1c40f; border: 1px solid rgba(241,196,15,0.25); }
+.feed-badge.miss     { background: rgba(231,76,60,0.12);   color: #e74c3c; border: 1px solid rgba(231,76,60,0.25); }
+
+.feed-outcome-detail {
+  margin-top: 0.4rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.2s, max-height 0.3s;
+}
+.feed-detail-text {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+.feed-detail-questions {
+  margin-bottom: 0.45rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.feed-detail-qlabel {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  margin-bottom: 0.25rem;
+}
+.feed-detail-qlist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.feed-detail-qlist li {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--text);
+  line-height: 1.65;
+  padding-left: 0.9rem;
+  position: relative;
+}
+.feed-detail-qlist li::before { content: '·'; position: absolute; left: 0.15rem; color: #3ab5b0; }
+
+/* Message entries */
+.feed-entry.msg-entry { border-left: 2px solid var(--green-dim); padding-left: calc(1rem - 2px); }
+.feed-msg-sender {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--green-dim);
+  margin-bottom: 0.2rem;
+}
+.feed-msg-body {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* ── READALOUD ENTRIES ───────────────────────────────────────────────────── */
+.feed-entry.feed-readaloud {
+  border-left: 2px solid var(--green);
+  padding: 0.75rem 1rem 0.75rem calc(1rem - 2px);
+  background: rgba(46,204,113,0.03);
+}
+.feed-readaloud-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.14em;
+  color: var(--green-dim);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+.feed-readaloud-text {
+  font-family: 'Barlow', sans-serif;
+  font-style: italic;
+  font-size: 0.83rem;
+  color: var(--text);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+/* ── PDA MESSAGE ENTRIES ─────────────────────────────────────────────────── */
+.feed-entry.feed-pda {
+  padding: 0;
+  background: #111108;
+  border: 1px solid #3a3a20;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.pda-chrome {
+  background: #1c1c0e;
+  padding: 0.28rem 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #3a3a20;
+}
+.pda-chrome-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.18em;
+  color: #6a6a40;
+}
+.pda-chrome-status {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  color: #4a4a30;
+  letter-spacing: 0.08em;
+}
+.pda-body { padding: 0.6rem 0.75rem 0.7rem; }
+.pda-header-row {
+  display: flex;
+  gap: 0.4rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  line-height: 1.7;
+  padding-bottom: 0.45rem;
+  margin-bottom: 0.45rem;
+  border-bottom: 1px solid #2a2a18;
+}
+.pda-field-label { color: #5a5a38; min-width: 3.5rem; }
+.feed-pda.pda-campbell .pda-field-value { color: #4aaa6a; }
+.feed-pda.pda-other    .pda-field-value { color: #b89a30; }
+.pda-message-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+.feed-pda.pda-campbell .pda-message-text { color: #78c890; }
+.feed-pda.pda-other    .pda-message-text { color: #c0a050; }
+.pda-footer {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  color: #3a3a22;
+  margin-top: 0.5rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid #2a2a18;
+  letter-spacing: 0.1em;
+}
+
+/* ── DOCUMENT ENTRIES ───────────────────────────────────────────────────── */
+.feed-entry.feed-document { border-left: 2px solid rgba(180,140,80,0.5); background: rgba(15,12,8,0.95); }
+.document-chrome {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.3rem 0.75rem;
+  background: rgba(100,70,20,0.3);
+  border-bottom: 1px solid rgba(180,140,80,0.2);
+}
+.document-classification { font-size: 0.65rem; font-family: 'Share Tech Mono', monospace; color: #c8a020; letter-spacing: 0.08em; }
+.document-title { padding: 0.5rem 0.75rem 0.2rem; font-size: 0.8rem; font-weight: 700; color: #d4b060; letter-spacing: 0.04em; text-transform: uppercase; }
+.document-body { padding: 0.3rem 0.75rem 0.7rem; font-size: 0.75rem; line-height: 1.6; color: #c0a050; white-space: pre-wrap; font-family: 'Share Tech Mono', monospace; }
+.document-link { display: block; margin: 0 0.75rem 0.6rem; font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: #a07830; text-decoration: none; border: 1px solid rgba(180,140,32,0.25); padding: 3px 8px; width: fit-content; }
+.document-link:hover { color: #d4b060; border-color: rgba(180,140,32,0.5); }
+
+/* ── CLASSIFIED ENTRIES (keeper view / player redacted) ─────────────────── */
+.feed-entry.feed-classified { border-left: 2px solid rgba(160,100,200,0.6); background: rgba(20,10,30,0.95); }
+.classified-chrome {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.3rem 0.75rem;
+  background: rgba(80,40,120,0.3);
+  border-bottom: 1px solid rgba(160,100,200,0.2);
+}
+.classified-eyebrow { font-size: 0.65rem; font-family: 'Share Tech Mono', monospace; color: #a060d0; letter-spacing: 0.08em; }
+.classified-time { font-size: 0.65rem; font-family: 'Share Tech Mono', monospace; color: #5a3a7a; }
+.classified-title { padding: 0.5rem 0.75rem 0.2rem; font-size: 0.8rem; font-weight: 700; color: #c080e0; letter-spacing: 0.04em; text-transform: uppercase; }
+.classified-body { padding: 0.3rem 0.75rem 0.7rem; font-size: 0.75rem; line-height: 1.6; color: #b090d0; white-space: pre-wrap; font-family: 'Share Tech Mono', monospace; }
+.feed-entry.feed-redacted { border-left: 2px solid rgba(60,60,60,0.5); background: rgba(10,10,10,0.95); }
+.redacted-chrome {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.3rem 0.75rem;
+  background: rgba(25,25,25,0.8);
+  border-bottom: 1px solid rgba(60,60,60,0.3);
+}
+.redacted-label { font-size: 0.65rem; font-family: 'Share Tech Mono', monospace; color: #383838; letter-spacing: 0.08em; }
+.redacted-body { padding: 0.6rem 0.75rem 0.7rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.redacted-bar { height: 0.65rem; background: #1e1e1e; border-radius: 2px; }
+.redacted-bar:nth-child(1) { width: 82%; }
+.redacted-bar:nth-child(2) { width: 64%; }
+.redacted-bar:nth-child(3) { width: 74%; }
+.redacted-footer { font-size: 0.6rem; color: #2a2a2a; letter-spacing: 0.12em; text-align: center; padding-top: 0.3rem; font-family: 'Share Tech Mono', monospace; }
+
+/* ── IMAGE / MAP ENTRIES ─────────────────────────────────────────────────── */
+.feed-entry.feed-image {
+  padding: 0.6rem 1rem;
+}
+.feed-image-card { position: relative; cursor: zoom-in; }
+.feed-image-card img {
+  width: 100%;
+  max-height: 560px;
+  object-fit: contain;
+  display: block;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+}
+.feed-image-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  color: var(--text-dim);
+  letter-spacing: 0.06em;
+  margin-top: 0.4rem;
+}
+.feed-image-type-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  opacity: 0.5;
+  margin-bottom: 0.35rem;
+}
+
+/* ── TONE CARDS ──────────────────────────────────────────────────────────── */
+.feed-entry.feed-tone {
+  border: none;
+  background: transparent;
+  padding: 0.35rem 1rem;
+  border-top: 1px solid var(--border);
+  margin-top: 0.25rem;
+}
+.feed-tone-text {
+  font-family: 'Barlow', sans-serif;
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+  opacity: 0.7;
+}
+
+/* ── LINECARD ENTRIES ────────────────────────────────────────────────────── */
+@keyframes lc-tremor-n {
+  0%,100% { transform: translate(0,0); }
+  20%     { transform: translate(-0.5px, 0.5px); }
+  40%     { transform: translate(0.5px,-0.5px); }
+  60%     { transform: translate(-0.5px,0); }
+  80%     { transform: translate(0.5px, 0.5px); }
+}
+@keyframes lc-tremor-h {
+  0%,100% { transform: translate(0,0); }
+  15%     { transform: translate(-2px, 1.5px); }
+  30%     { transform: translate(1.5px,-2px); }
+  50%     { transform: translate(-1.5px,0.5px); }
+  70%     { transform: translate(2px,-1px); }
+  85%     { transform: translate(-1px, 2px); }
+}
+@keyframes lc-blur-n {
+  0%,100% { filter: blur(0); }
+  50%     { filter: blur(0.6px); }
+}
+@keyframes lc-blur-h {
+  0%,100% { filter: blur(0); }
+  40%     { filter: blur(1.2px); }
+  70%     { filter: blur(0.4px); }
+}
+.feed-entry.feed-linecard {
+  background: #0a0a0e;
+  border: 1px solid rgba(180,160,255,0.25);
+  border-left: 3px solid rgba(180,160,255,0.5);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.linecard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 0.75rem;
+  background: rgba(100,80,200,0.15);
+  border-bottom: 1px solid rgba(180,160,255,0.15);
+}
+.linecard-header-character {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  color: #b8a0ff;
+  text-transform: uppercase;
+}
+.linecard-header-recipient {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  color: #6a5a9a;
+}
+.linecard-body { padding: 0.6rem 0.75rem 0.7rem; }
+.linecard-context {
+  font-family: 'Barlow', sans-serif;
+  font-style: italic;
+  font-size: 0.73rem;
+  color: #8070b0;
+  line-height: 1.5;
+  margin-bottom: 0.6rem;
+}
+.linecard-lines { display: flex; flex-direction: column; gap: 0.6rem; }
+.linecard-cue {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: #5a4a8a;
+  margin-bottom: 0.2rem;
+}
+.linecard-text {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.82rem;
+  color: #d4c8ff;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+.linecard-stage-dir {
+  font-family: 'Barlow', sans-serif;
+  font-style: italic;
+  font-size: 0.7rem;
+  color: #6a5a9a;
+  margin-top: 0.6rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(180,160,255,0.1);
+}
+/* Distortion by intensity */
+.lc-intensity-normal .linecard-text {
+  animation: lc-tremor-n 3.2s cubic-bezier(.45,.05,.55,.95) infinite,
+             lc-blur-n   4.1s ease-in-out infinite;
+}
+.lc-intensity-high .linecard-text {
+  animation: lc-tremor-h 1.8s cubic-bezier(.3,0,.7,1) infinite,
+             lc-blur-h   2.3s ease-in-out infinite;
+}
+.lc-intensity-high .linecard-text::after {
+  content: attr(data-bleed);
+  position: absolute;
+  inset: 0;
+  color: #c0b0ff;
+  opacity: 0.15;
+  transform: translate(1px, 2px);
+  font-size: 0.78rem;
+  pointer-events: none;
+  white-space: pre-wrap;
+}
+.lc-intensity-high .linecard-text { position: relative; }
+.linecard-redacted {
+  padding: 0.55rem 0.75rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: #3a3a5a;
+  border-top: 1px solid rgba(100,80,200,0.1);
+}
+
+/* ── SCAN RESULT ENTRIES ─────────────────────────────────────────────────── */
+.feed-entry.feed-scan {
+  background: #080d10;
+  border: 1px solid rgba(100,180,220,0.2);
+  border-left: 3px solid rgba(100,180,220,0.4);
+  border-radius: 2px;
+}
+.feed-entry.feed-scan.scan-alert  { border-left-color: rgba(220,160,40,0.7);  border-color: rgba(220,160,40,0.3); }
+.feed-entry.feed-scan.scan-critical{ border-left-color: rgba(220,60,60,0.8);   border-color: rgba(220,60,60,0.35); }
+.scan-chrome {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.28rem 0.75rem;
+  background: rgba(40,80,100,0.25);
+  border-bottom: 1px solid rgba(100,180,220,0.12);
+}
+.feed-scan.scan-alert  .scan-chrome { background: rgba(100,70,10,0.35); border-bottom-color: rgba(220,160,40,0.15); }
+.feed-scan.scan-critical .scan-chrome { background: rgba(100,20,20,0.4); border-bottom-color: rgba(220,60,60,0.2); }
+.scan-chrome-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.18em;
+  color: #4a8aaa;
+}
+.feed-scan.scan-alert   .scan-chrome-label { color: #c8a030; }
+.feed-scan.scan-critical .scan-chrome-label { color: #e03030; }
+.scan-chrome-time { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; color: #304050; letter-spacing: 0.06em; }
+.scan-body { padding: 0.5rem 0.75rem 0.6rem; }
+.scan-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #90c8e0;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+.feed-scan.scan-alert   .scan-label { color: #d8a840; }
+.feed-scan.scan-critical .scan-label { color: #e84040; }
+.scan-sublabel {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.56rem;
+  color: #3a6070;
+  letter-spacing: 0.06em;
+  margin-top: 2px;
+  margin-bottom: 0.4rem;
+}
+.scan-reading-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+.scan-reading-value {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.05rem;
+  color: #60b0d0;
+  letter-spacing: 0.04em;
+}
+.feed-scan.scan-alert   .scan-reading-value { color: #e8b840; font-size: 1.15rem; }
+.feed-scan.scan-critical .scan-reading-value { color: #ff4040; font-size: 1.2rem; }
+.scan-status-pip {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  padding: 1px 5px;
+  border-radius: 2px;
+  background: rgba(60,120,160,0.2);
+  color: #5090b0;
+  border: 1px solid rgba(60,120,160,0.3);
+}
+.feed-scan.scan-alert   .scan-status-pip { background: rgba(160,100,20,0.25); color: #d09030; border-color: rgba(180,120,20,0.4); }
+.feed-scan.scan-critical .scan-status-pip { background: rgba(160,30,30,0.3);  color: #e84040; border-color: rgba(200,40,40,0.5); }
+.scan-note {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: #3a6070;
+  letter-spacing: 0.04em;
+  margin-top: 0.35rem;
+  line-height: 1.5;
+}
+.feed-scan.scan-alert   .scan-note { color: #8a6020; }
+.feed-scan.scan-critical .scan-note { color: #9a3030; }
+
+/* ── QUICK SCAN FORM (keeper handouts tab) ────────────────────────────────── */
+.quick-scan-form {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(100,180,220,0.2);
+  border-radius: 2px;
+  background: rgba(8,13,16,0.8);
+}
+.quick-scan-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.18em;
+  color: #4a8aaa;
+  margin-bottom: 0.55rem;
+}
+.quick-scan-field { display: flex; flex-direction: column; gap: 2px; margin-bottom: 0.4rem; }
+.quick-scan-label { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; letter-spacing: 0.1em; color: #305060; }
+.quick-scan-input, .quick-scan-select {
+  background: #0d1820;
+  border: 1px solid rgba(100,180,220,0.15);
+  color: #80b0c8;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  padding: 3px 6px;
+  border-radius: 1px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.quick-scan-input:focus, .quick-scan-select:focus { outline: none; border-color: rgba(100,180,220,0.4); }
+.quick-scan-submit {
+  width: 100%;
+  margin-top: 0.4rem;
+  padding: 4px;
+  background: transparent;
+  border: 1px solid rgba(100,180,220,0.3);
+  color: #4a8aaa;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  border-radius: 1px;
+}
+.quick-scan-submit:hover { border-color: rgba(100,180,220,0.6); color: #60b0d0; }
+
+/* ── LIGHTBOX ────────────────────────────────────────────────────────────── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  cursor: zoom-out;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.lightbox.open {
+  display: flex;
+}
+.lightbox.visible { opacity: 1; }
+.lightbox img {
+  max-width: 92vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 2px;
+  box-shadow: 0 0 60px rgba(0,0,0,0.8);
+}
+.lightbox-caption {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+/* ── KEEPER HANDOUT BUTTONS ──────────────────────────────────────────────── */
+.handout-list { display: flex; flex-direction: column; gap: 0.4rem; padding: 0.5rem 0; }
+.handout-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: rgba(255,255,255,0.02);
+}
+.handout-item.posted { opacity: 0.5; border-color: rgba(46,204,113,0.2); }
+.handout-type-pip {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  padding: 0.15rem 0.4rem;
+  border-radius: 2px;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  text-transform: uppercase;
+}
+.pip-readaloud { background: rgba(46,204,113,0.12); color: var(--green-dim); border: 1px solid rgba(46,204,113,0.2); }
+.pip-pda        { background: rgba(200,160,32,0.12); color: #c8a020; border: 1px solid rgba(200,160,32,0.2); }
+.pip-image      { background: rgba(100,140,255,0.1); color: #7a9bff; border: 1px solid rgba(100,140,255,0.2); }
+.pip-map        { background: rgba(180,100,255,0.1); color: #c07aff; border: 1px solid rgba(180,100,255,0.2); }
+.pip-document   { background: rgba(180,140,32,0.12); color: #c8a020; border: 1px solid rgba(180,140,32,0.2); }
+.pip-classified { background: rgba(160,100,200,0.12); color: #a060d0; border: 1px solid rgba(160,100,200,0.2); }
+.pip-tone       { background: rgba(80,80,80,0.12);    color: #888;    border: 1px solid rgba(80,80,80,0.2); }
+.pip-linecard   { background: rgba(140,120,255,0.12); color: #9080e0; border: 1px solid rgba(140,120,255,0.25); }
+.pip-scan       { background: rgba(60,160,200,0.12);  color: #40a0c8; border: 1px solid rgba(60,160,200,0.25); }
+.handout-meta  { flex: 1; min-width: 0; }
+.handout-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text);
+  margin-bottom: 0.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.handout-posted-time {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.52rem;
+  color: var(--green-dim);
+  letter-spacing: 0.06em;
+}
+.handout-post-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.55rem;
+  border-radius: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+  background: rgba(46,204,113,0.08);
+  border: 1px solid rgba(46,204,113,0.25);
+  color: var(--green);
+}
+.handout-post-btn:hover { background: rgba(46,204,113,0.16); }
+.handout-post-btn.repost {
+  background: rgba(255,255,255,0.04);
+  border-color: var(--border);
+  color: var(--text-dim);
+}
+.handout-post-btn.repost:hover { background: rgba(255,255,255,0.08); }
+
+/* ── PLAYER HANDOUTS PANEL ───────────────────────────────────────────────── */
+.handout-panel-tabs {
+  display: flex;
+  gap: 0.3rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+.handout-panel-tab {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 2px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  transition: all 0.15s;
+}
+.handout-panel-tab.active {
+  background: rgba(46,204,113,0.1);
+  border-color: rgba(46,204,113,0.35);
+  color: var(--green);
+}
+.handout-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+.handout-gallery-item { cursor: zoom-in; }
+.handout-gallery-item img {
+  width: 100%;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+  display: block;
+}
+.handout-gallery-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.52rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  margin-top: 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* ── KEEPER HANDOUT MAP NOTE + CLEAR BUTTON ──────────────────────────────── */
+.handout-map-note {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.52rem;
+  color: #c07aff;
+  letter-spacing: 0.06em;
+  margin-top: 0.15rem;
+}
+.handout-clear-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.55rem;
+  border-radius: 2px;
+  cursor: pointer;
+  background: rgba(231,76,60,0.06);
+  border: 1px solid rgba(231,76,60,0.2);
+  color: #e74c3c;
+  transition: background 0.15s;
+  width: 100%;
+  margin-top: 0.6rem;
+}
+.handout-clear-btn:hover { background: rgba(231,76,60,0.12); }
+
+/* ── FEED COMPOSER ───────────────────────────────────────────────────────── */
+.feed-composer {
+  flex-shrink: 0;
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid var(--border);
+  background: rgba(0,0,0,0.1);
+}
+.composer-name {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.3rem 0.5rem;
+  border-radius: 3px;
+  width: 110px;
+  flex-shrink: 0;
+}
+.composer-msg {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.82rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.3rem 0.5rem;
+  border-radius: 3px;
+  flex: 1;
+}
+.composer-name:focus, .composer-msg:focus { outline: none; border-color: var(--green-dim); }
+.composer-send {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--green);
+  background: rgba(46,204,113,0.08);
+  border: 1px solid rgba(46,204,113,0.25);
+  padding: 0.3rem 0.65rem;
+  border-radius: 3px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.composer-send:hover { background: rgba(46,204,113,0.15); }
+
+/* ── PANEL RESIZE HANDLE ─────────────────────────────────────────────────── */
+.panel-resize-handle {
+  width: 5px;
+  flex-shrink: 0;
+  cursor: col-resize;
+  background: var(--border);
+  transition: background 0.15s;
+  position: relative;
+  z-index: 10;
+}
+.panel-resize-handle:hover,
+.panel-resize-handle.dragging { background: rgba(167,139,250,0.45); }
+
+/* ── RIGHT PANEL ─────────────────────────────────────────────────────────── */
+.panel-col {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  width: 420px;
+  flex-shrink: 0;
+  background: var(--card-bg);
+}
+.panel-header {
+  flex-shrink: 0;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.hunter-select {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.3rem 0.5rem;
+  border-radius: 3px;
+  flex: 1;
+  cursor: pointer;
+}
+.hunter-select:focus { outline: none; border-color: var(--green-dim); }
+.hunter-select option { background: #0d1a13; }
+
+.panel-tabs {
+  flex-shrink: 0;
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+.panel-tab {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 0.85rem;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.panel-tab:hover { color: var(--text); }
+.panel-tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(46,204,113,0.25) transparent;
+}
+.panel-body::-webkit-scrollbar { width: 3px; }
+.panel-body::-webkit-scrollbar-track { background: transparent; }
+.panel-body::-webkit-scrollbar-thumb { background: rgba(46,204,113,0.25); border-radius: 2px; }
+.panel-body::-webkit-scrollbar-thumb:hover { background: rgba(46,204,113,0.5); }
+.keeper-active .panel-body { scrollbar-color: rgba(167,139,250,0.25) transparent; }
+.keeper-active .panel-body::-webkit-scrollbar-thumb { background: rgba(167,139,250,0.25); }
+.keeper-active .panel-body::-webkit-scrollbar-thumb:hover { background: rgba(167,139,250,0.5); }
+
+/* ── MOVE CARDS ──────────────────────────────────────────────────────────── */
+.move-section-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--green-dim);
+  padding: 0.5rem 0 0.35rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.4rem;
+}
+.move-section-label:first-child { padding-top: 0; }
+
+.move-card {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-bottom: 0.4rem;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.move-card:hover { border-color: var(--green-dim); }
+
+.move-card-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.65rem;
+  user-select: none;
+}
+.move-card-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-bright);
+  text-transform: uppercase;
+  flex: 1;
+}
+.move-card-roll {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--green-dim);
+  background: rgba(46,204,113,0.07);
+  border: 1px solid rgba(46,204,113,0.15);
+  padding: 0.1rem 0.35rem;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.move-card-roll.passive {
+  color: var(--text-dim);
+  background: transparent;
+  border-color: var(--border);
+}
+
+/* Move description — shown on hover */
+.move-desc {
+  display: none;
+  padding: 0.5rem 0.65rem 0.6rem;
+  border-top: 1px solid var(--border);
+  background: rgba(0,0,0,0.12);
+}
+.move-card:hover .move-desc { display: block; }
+body.no-hover .move-card:hover .move-desc { display: none; }
+body.no-hover .move-card.expanded .move-desc { display: block; }
+.move-desc-trigger {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-bottom: 0.45rem;
+  line-height: 1.45;
+}
+.move-desc-text {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+.move-outcomes { display: flex; flex-direction: column; gap: 0.25rem; }
+.move-outcome { display: flex; gap: 0.5rem; align-items: baseline; }
+.outcome-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.07em;
+  white-space: nowrap;
+  padding: 0.1rem 0.3rem;
+  border-radius: 2px;
+  flex-shrink: 0;
+  min-width: 3.8rem;
+  text-align: center;
+}
+.outcome-label.adv     { color: #f0a500; background: rgba(240,165,0,0.1);   border: 1px solid rgba(240,165,0,0.25); }
+.outcome-label.hit     { color: #3ab5b0; background: rgba(58,181,176,0.08); border: 1px solid rgba(58,181,176,0.2); }
+.outcome-label.partial { color: #a3a3a3; background: rgba(163,163,163,0.07); border: 1px solid rgba(163,163,163,0.18); }
+.outcome-label.miss    { color: #f87171; background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); }
+.outcome-text {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.73rem;
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+.move-questions { margin-top: 0.5rem; }
+.move-questions-label { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 0.25rem; }
+
+/* Roll UI — always visible for rollable moves */
+.move-roll-ui {
+  display: flex;
+  padding: 0.4rem 0.65rem 0.55rem;
+  border-top: 1px solid var(--border);
+  background: rgba(0,0,0,0.15);
+  gap: 0.5rem;
+  align-items: center;
+}
+.mod-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.mod-input {
+  width: 52px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  background: var(--input-bg, rgba(0,0,0,0.3));
+  border: 1px solid var(--border);
+  color: var(--text-bright);
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  text-align: center;
+}
+.mod-input:focus { outline: none; border-color: var(--green); }
+.roll-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--green);
+  background: rgba(46,204,113,0.08);
+  border: 1px solid rgba(46,204,113,0.3);
+  padding: 0.25rem 0.7rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.roll-btn:hover { background: rgba(46,204,113,0.15); border-color: var(--green); }
+.roll-btn.rolling-anim { opacity: 0.6; }
+
+/* Stats bar */
+.stats-bar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.85rem;
+}
+.stat-chip {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.stat-chip strong { color: var(--text-bright); }
+
+/* Harm / Luck / XP mini-track */
+.track-mini { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.5rem; }
+.track-mini-label { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--text-dim); width: 2.5rem; }
+.track-mini-pips { display: flex; gap: 3px; }
+.track-mini-pip {
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+}
+.track-mini-pip:hover { border-color: var(--text-dim); }
+.track-mini-pip.on-harm    { background: #e74c3c; border-color: #e74c3c; }
+.track-mini-pip.on-luck    { background: var(--green-dim); border-color: var(--green); }
+.track-mini-pip.on-xp      { background: #7bafd4; border-color: #5a9ab5; }
+.track-bump {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+.track-bump:hover { color: var(--text); border-color: var(--text-dim); }
+.xp-overflow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: #7bafd4;
+  background: rgba(123,175,212,0.1);
+  border: 1px solid rgba(123,175,212,0.25);
+  padding: 0.1rem 0.3rem;
+  border-radius: 2px;
+}
+
+/* Operative page link */
+.operative-page-link {
+  display: inline-block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.55rem;
+  margin-bottom: 0.75rem;
+  transition: color 0.15s, border-color 0.15s;
+}
+.operative-page-link:hover { color: var(--text); border-color: var(--text-dim); }
+
+/* Contacts tab */
+.contact-card {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.55rem 0.75rem;
+  margin-bottom: 0.4rem;
+  cursor: default;
+}
+.contact-card:not(.keeper-contact-card):hover { border-color: rgba(58,181,176,0.4); }
+.contact-name { font-family: 'Barlow Condensed', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--text-bright); text-transform: uppercase; letter-spacing: 0.04em; }
+.contact-role { font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; color: var(--text-dim); margin: 0.1rem 0 0.3rem; }
+.contact-desc { font-family: 'Barlow', sans-serif; font-size: 0.8rem; color: var(--text); line-height: 1.45; }
+.contact-note {
+  margin-top: 0.4rem;
+  padding: 0.3rem 0.5rem;
+  border-left: 2px solid rgba(58,181,176,0.5);
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  font-style: italic;
+  white-space: pre-wrap;
+}
+.contact-note-hint {
+  margin-top: 0.35rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  color: rgba(58,181,176,0.35);
+  letter-spacing: 0.06em;
+}
+.contact-note-editor {
+  margin-top: 0.4rem;
+  width: 100%;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(58,181,176,0.4);
+  border-radius: 3px;
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.78rem;
+  padding: 0.3rem 0.4rem;
+  resize: vertical;
+  min-height: 3.5rem;
+  box-sizing: border-box;
+}
+.contact-note-editor:focus { outline: none; border-color: rgba(58,181,176,0.7); }
+.contact-note-actions { display: flex; gap: 0.4rem; margin-top: 0.3rem; }
+.contact-note-save, .contact-note-cancel {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  border: 1px solid;
+  cursor: pointer;
+  background: none;
+  letter-spacing: 0.06em;
+}
+.contact-note-save   { border-color: rgba(58,181,176,0.6); color: #3ab5b0; }
+.contact-note-save:hover { background: rgba(58,181,176,0.15); }
+.contact-note-cancel { border-color: var(--border); color: var(--text-dim); }
+.contact-note-cancel:hover { background: rgba(255,255,255,0.05); }
+
+/* Keeper mode */
+.keeper-active .feed-header-label::after { content: ' [KEEPER]'; color: #a78bfa; }
+/* Hide player controls in keeper mode */
+.keeper-active .panel-header { display: none; }
+.keeper-active .panel-tabs   { display: none; }
+/* Show keeper controls only in keeper mode */
+.keeper-mode-header { display: none; flex-shrink: 0; padding: 0.55rem 1rem; border-bottom: 1px solid var(--border); background: rgba(167,139,250,0.04); align-items: center; gap: 0.5rem; }
+.keeper-active .keeper-mode-header { display: flex; }
+.keeper-mode-label { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; color: #a78bfa; flex: 1; }
+.keeper-mode-tabs { display: none; flex-shrink: 0; border-bottom: 1px solid var(--border); overflow-x: auto; flex-wrap: nowrap; }
+.keeper-active .keeper-mode-tabs { display: flex; }
+.keeper-tab {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 0.85rem;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.keeper-tab:hover { color: var(--text); }
+.keeper-tab.active { color: #a78bfa; border-bottom-color: #a78bfa; }
+.keeper-mode-tabs::-webkit-scrollbar { height: 3px; }
+.keeper-mode-tabs::-webkit-scrollbar-track { background: transparent; }
+.keeper-mode-tabs::-webkit-scrollbar-thumb { background: rgba(167,139,250,0.25); border-radius: 2px; }
+.keeper-mode-tabs::-webkit-scrollbar-thumb:hover { background: rgba(167,139,250,0.5); }
+.keeper-mode-tabs { scrollbar-width: thin; scrollbar-color: rgba(167,139,250,0.25) transparent; }
+
+/* Keeper operative pills */
+.keeper-ops-row { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-bottom: 0.85rem; }
+.keeper-op-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.keeper-op-btn:hover { color: var(--text); border-color: var(--text-dim); }
+.keeper-op-btn.active { color: #a78bfa; border-color: #a78bfa; background: rgba(167,139,250,0.06); }
+
+/* Session filter pills */
+.session-filter { display: flex; gap: 0.3rem; margin-bottom: 0.85rem; }
+.session-pill {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.session-pill:hover { color: var(--text); border-color: var(--text-dim); }
+.session-pill.active { color: #a78bfa; border-color: #a78bfa; background: rgba(167,139,250,0.06); }
+
+/* NPC row in keeper contacts */
+.npc-row {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+.npc-row-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.65rem;
+}
+.npc-row-name { font-family: 'Barlow Condensed', sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text-bright); text-transform: uppercase; letter-spacing: 0.04em; flex: 1; }
+.npc-row-role { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: var(--text-dim); }
+.npc-vis-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+  padding: 0.15rem 0.4rem;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: transparent;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+}
+.npc-vis-btn.visible  { color: var(--green); border-color: rgba(46,204,113,0.3); }
+.npc-vis-btn.hidden   { color: var(--text-dim); border-color: var(--border); }
+.npc-vis-btn:hover    { opacity: 0.8; }
+.npc-row-desc {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  line-height: 1.45;
+  padding: 0 0.65rem 0.55rem;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  padding-top: 0.4rem;
+}
+
+/* Keeper references */
+.ref-section { margin-bottom: 1.1rem; }
+.ref-label { font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em; color: #a78bfa; margin-bottom: 0.4rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--border); }
+.ref-row { font-family: 'Share Tech Mono', monospace; font-size: 0.73rem; color: var(--text-dim); line-height: 1.7; }
+.ref-row strong { color: var(--text); }
+.ref-list { margin: 0; padding: 0; list-style: none; }
+.ref-list li { font-family: 'Share Tech Mono', monospace; font-size: 0.71rem; color: var(--text-dim); line-height: 1.65; padding-left: 0.9rem; position: relative; }
+.ref-list li::before { content: '·'; position: absolute; left: 0.1rem; color: #a78bfa; }
+.ref-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; }
+.ref-note { font-family: 'Barlow', sans-serif; font-size: 0.8rem; color: var(--text-dim); font-style: italic; margin-top: 0.3rem; line-height: 1.45; }
+
+/* Data tab */
+.data-session-selector { display: flex; gap: 0.4rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.data-sess-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+.data-sess-btn:hover { color: var(--text); border-color: rgba(167,139,250,0.5); }
+.data-sess-btn.active { color: #a78bfa; border-color: #a78bfa; background: rgba(167,139,250,0.08); }
+.data-entity-block { border-left: 2px solid rgba(167,139,250,0.3); padding-left: 0.7rem; }
+.data-entity-desc { font-family: 'Barlow', sans-serif; font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; margin-bottom: 0.5rem; }
+.data-stat-row { font-family: 'Share Tech Mono', monospace; font-size: 0.63rem; color: var(--text); margin-bottom: 0.35rem; }
+.data-stat-label { font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; color: #a78bfa; }
+.data-field { font-family: 'Share Tech Mono', monospace; font-size: 0.63rem; color: var(--text-dim); line-height: 1.55; }
+.data-readaloud {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.8rem;
+  color: var(--text);
+  line-height: 1.6;
+  font-style: italic;
+  background: rgba(167,139,250,0.05);
+  border-left: 2px solid rgba(167,139,250,0.4);
+  padding: 0.5rem 0.7rem;
+  white-space: pre-wrap;
+}
+.data-threat-block { border-left: 2px solid rgba(248,113,113,0.35); padding-left: 0.7rem; }
+.data-threat-type { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; color: #f87171; margin-bottom: 0.25rem; }
+.data-equip-block { margin-bottom: 0.75rem; padding-left: 0.7rem; border-left: 1px solid var(--border); }
+.data-equip-block:last-child { margin-bottom: 0; }
+.data-equip-name { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 600; color: var(--text-bright); text-transform: uppercase; letter-spacing: 0.04em; }
+.data-equip-sub { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: var(--text-dim); font-weight: 400; text-transform: none; letter-spacing: 0.02em; }
+
+.keeper-panel-note {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  padding: 1rem 0;
+  text-align: center;
+}
+
+/* ── MAP GRID ── */
+.map-wrap { padding: 0.75rem 0 0; }
+.map-header { margin-bottom: 0.75rem; }
+.map-title { font-family: 'Share Tech Mono', monospace; font-size: 0.73rem; letter-spacing: 0.18em; color: var(--green-dim); margin-bottom: 2px; }
+.map-subtitle { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: var(--text-dim); }
+.map-grid { display: grid; grid-template-columns: 1fr 12px 1fr 12px 1fr 12px 1fr; }
+.map-cell-loc {
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  padding: 7px 8px;
+  min-height: 72px;
+  font-family: 'Share Tech Mono', monospace;
+  cursor: default;
+  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+}
+.map-loc-order {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  color: var(--text-dim);
+  opacity: 0.55;
+  line-height: 1;
+}
+.map-cell-loc.unlocked .map-loc-order { color: var(--green-dim); opacity: 0.8; }
+.map-cell-loc.unlocked { border-color: var(--green-dim); cursor: pointer; }
+.map-cell-loc.unlocked:hover { border-color: var(--green); background: var(--bg3); }
+.map-cell-loc.selected { border-color: var(--green); background: rgba(46,204,113,0.06); }
+.map-loc-label { font-size: 0.65rem; letter-spacing: 0.08em; color: var(--green); line-height: 1.35; }
+.map-cell-loc.locked .map-loc-label { color: var(--border); }
+.map-loc-sublabel { font-size: 0.57rem; letter-spacing: 0.06em; color: var(--text-dim); margin-top: 2px; line-height: 1.3; }
+.map-loc-redacted { font-size: 0.72rem; color: var(--border); line-height: 1.15; margin-top: 4px; opacity: 0.55; }
+.map-loc-classified { font-size: 0.49rem; color: var(--border); letter-spacing: 0.1em; margin-top: 3px; }
+.map-loc-toggle { font-size: 0.6rem; letter-spacing: 0.06em; margin-top: 6px; }
+.map-cell-loc.unlocked .map-loc-toggle { color: var(--green-dim); }
+.map-cell-loc.locked .map-loc-toggle { color: var(--text-dim); }
+.map-loc-keepernote { font-size: 0.58rem; color: var(--amber-dim); letter-spacing: 0.03em; margin-top: 4px; line-height: 1.4; }
+.map-loc-npc-row { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 5px; }
+.map-loc-npc { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; letter-spacing: 0.05em; color: var(--amber); border: 1px solid var(--amber-dim); padding: 1px 5px; border-radius: 2px; }
+.map-loc-visited-btn { display: block; width: 100%; margin-top: 5px; padding: 2px 4px; background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; letter-spacing: 0.08em; cursor: pointer; text-align: left; }
+.map-loc-visited-btn:hover { border-color: var(--green-dim); color: var(--green-dim); }
+.map-cell-loc.visited .map-loc-visited-btn { border-color: rgba(46,204,113,0.35); color: var(--green-dim); }
+.map-bulk-btns { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.75rem; padding-top: 0.6rem; border-top: 1px solid var(--border); }
+.map-bulk-btn { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; padding: 3px 8px; background: transparent; border: 1px solid var(--border); color: var(--text-dim); cursor: pointer; border-radius: 2px; }
+.map-bulk-btn:hover { border-color: rgba(167,139,250,0.45); color: #a78bfa; }
+.map-cell-street-h {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  gap: 6px;
+}
+.map-cell-street-h::before, .map-cell-street-h::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.map-street-label { font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; letter-spacing: 0.14em; color: var(--text-dim); white-space: nowrap; flex-shrink: 0; }
+.map-cell-street-v { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+.map-cell-empty { min-height: 72px; background: var(--bg); border: 1px solid transparent; }
+.map-detail-card { margin-top: 0.6rem; border: 1px solid var(--green-dim); background: rgba(46,204,113,0.03); padding: 10px 12px; font-family: 'Share Tech Mono', monospace; }
+.map-detail-label { font-size: 0.62rem; letter-spacing: 0.1em; color: var(--green); margin-bottom: 2px; }
+.map-detail-sublabel { font-size: 0.54rem; letter-spacing: 0.07em; color: var(--green-dim); margin-bottom: 7px; }
+.map-detail-desc { font-family: 'Barlow', sans-serif; font-size: 0.82rem; color: var(--text-dim); line-height: 1.65; }
+.map-sync-btn { display: block; width: 100%; margin-top: 0.6rem; padding: 5px; background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; cursor: pointer; }
+.map-sync-btn:hover { border-color: var(--green-dim); color: var(--green-dim); }
+
+/* ── CONNECTION MAP ─────────────────────────────────────────────────── */
+.conn-map-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 0.5rem; }
+.conn-node { position: relative; border: 1px solid var(--border); padding: 8px; min-height: 68px; cursor: pointer; transition: border-color 0.15s; }
+.conn-node.unlocked { border-color: var(--green-dim); background: rgba(46,204,113,0.04); }
+.conn-node.locked { cursor: default; background: var(--bg); }
+.conn-node.selected { border-color: var(--green); background: rgba(46,204,113,0.09); }
+.conn-node-badges { display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: 4px; }
+.conn-route-badge { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; letter-spacing: 0.06em; padding: 1px 5px; border-radius: 2px; font-weight: bold; }
+.conn-route-A { background: rgba(167,139,250,0.18); color: #a78bfa; border: 1px solid rgba(167,139,250,0.35); }
+.conn-route-B { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+.conn-route-C { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+.conn-order-badge { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; color: var(--amber-dim); border: 1px solid var(--border); padding: 1px 4px; border-radius: 2px; }
+.conn-node-label { font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; color: var(--text); line-height: 1.3; }
+.conn-node-sublabel { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; letter-spacing: 0.05em; color: var(--text-dim); margin-top: 2px; }
+.conn-node-keepernote { font-size: 0.55rem; color: var(--amber-dim); letter-spacing: 0.03em; margin-top: 4px; line-height: 1.4; }
+.conn-node-toggle { font-family: 'Share Tech Mono', monospace; font-size: 0.48rem; letter-spacing: 0.08em; margin-top: 5px; color: var(--text-dim); }
+.conn-node.unlocked .conn-node-toggle { color: var(--green-dim); }
+.conn-node-redacted { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; color: var(--border); line-height: 1.4; }
+.conn-node-classified { font-size: 0.48rem; letter-spacing: 0.1em; color: var(--border); margin-top: 3px; }
+.conn-node-npc-row { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 5px; }
+.conn-node-npc { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; letter-spacing: 0.05em; color: var(--amber); border: 1px solid var(--amber-dim); padding: 1px 5px; border-radius: 2px; }
+.conn-detail-edges { margin-top: 8px; border-top: 1px solid var(--border); padding-top: 6px; }
+.conn-detail-edge { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: var(--text-dim); padding: 2px 0; letter-spacing: 0.04em; }
+.conn-detail-edge .conn-edge-target { color: var(--green-dim); }
+
+/* Keeper message composer */
+.msg-composer { margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.75rem; }
+.msg-composer-label { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--green-dim); margin-bottom: 0.4rem; letter-spacing: 0.1em; }
+.msg-sender-select, .msg-textarea {
+  width: 100%;
+  background: var(--input-bg, rgba(0,0,0,0.3));
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 3px;
+  box-sizing: border-box;
+  margin-bottom: 0.4rem;
+}
+.msg-sender-select:focus, .msg-textarea:focus { outline: none; border-color: var(--green-dim); }
+.msg-textarea { resize: vertical; min-height: 70px; font-family: 'Barlow', sans-serif; font-size: 0.82rem; }
+.msg-send-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: #a78bfa;
+  background: rgba(167,139,250,0.07);
+  border: 1px solid rgba(167,139,250,0.3);
+  padding: 0.35rem 0.85rem;
+  border-radius: 3px;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  transition: background 0.15s;
+}
+.msg-send-btn:hover { background: rgba(167,139,250,0.14); }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</a>
+  <nav id="player-nav"></nav>
+  <script src="player-nav.js"></script>
+</header>
+
+<div class="feed-layout">
+
+  <!-- ── LEFT: FEED ── -->
+  <div class="feed-col">
+    <div class="feed-header">
+      <span class="feed-header-label">// OPERATIONS FEED</span>
+    </div>
+    <div class="feed-entries" id="feed-entries">
+      <!-- "load earlier" at top of scroll area — click to page back in history -->
+      <div class="feed-load-more-wrap">
+        <button class="feed-load-more" id="load-more-btn" onclick="loadOlderEntries()">↑ LOAD EARLIER HISTORY</button>
+      </div>
+      <!-- entries injected here, oldest at top newest at bottom -->
+    </div>
+    <!-- anyone can post a message -->
+    <div class="feed-composer">
+      <input type="text" class="composer-name" id="composer-name" placeholder="Name…" maxlength="40">
+      <input type="text" class="composer-msg" id="composer-msg" placeholder="Write something to the feed…">
+      <button class="composer-send" onclick="sendFeedMessage()">↵</button>
+    </div>
+  </div>
+
+  <!-- ── RESIZE HANDLE ── -->
+  <div class="panel-resize-handle" id="panel-resize-handle"></div>
+
+  <!-- ── RIGHT: PANEL ── -->
+  <div class="panel-col" id="panel-col">
+    <!-- Player controls (hidden in keeper mode) -->
+    <div class="panel-header">
+      <select class="hunter-select" id="hunter-select" onchange="onHunterChange(this.value)">
+        <option value="">— Select operative —</option>
+        <option value="rex">Rex Bangley</option>
+        <option value="reed">Reed Atwood</option>
+        <option value="alan">Alan Frazier</option>
+        <option value="sven">Sven</option>
+        <option value="john">John Johnson</option>
+      </select>
+    </div>
+    <div class="panel-tabs" id="panel-tabs">
+      <button class="panel-tab active" data-tab="moves" onclick="switchTab('moves')">// MOVES</button>
+      <button class="panel-tab" data-tab="contacts" onclick="switchTab('contacts')">// CONTACTS</button>
+      <button class="panel-tab" data-tab="handouts" onclick="switchTab('handouts')">// HANDOUTS</button>
+      <button class="panel-tab" data-tab="map" onclick="switchTab('map')">// MAP</button>
+    </div>
+
+    <!-- Keeper controls (hidden unless keeper-active) -->
+    <div class="keeper-mode-header">
+      <span class="keeper-mode-label">// KEEPER COMMAND</span>
+    </div>
+    <div class="keeper-mode-tabs" id="keeper-mode-tabs">
+      <button class="keeper-tab active" data-ktab="operatives" onclick="switchKeeperTab('operatives')">// OPERATIVES</button>
+      <button class="keeper-tab" data-ktab="contacts" onclick="switchKeeperTab('contacts')">// CONTACTS</button>
+      <button class="keeper-tab" data-ktab="references" onclick="switchKeeperTab('references')">// REFERENCES</button>
+      <button class="keeper-tab" data-ktab="threats" onclick="switchKeeperTab('threats')">// THREATS</button>
+      <button class="keeper-tab" data-ktab="handouts" onclick="switchKeeperTab('handouts')">// HANDOUTS</button>
+      <button class="keeper-tab" data-ktab="map" onclick="switchKeeperTab('map')">// MAP</button>
+    </div>
+
+    <div class="panel-body" id="panel-body">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);padding:2rem 0;text-align:center">
+        // SELECT OPERATIVE TO LOAD MOVES
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Lightbox overlay — shown when any image/map handout is clicked -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+
+<script>
+(function () {
+
+  // ── STATE ─────────────────────────────────────────────────────────────────
+  var hunterId       = null;
+  var hunterSheet    = null;
+  var playbook_moves = null;
+  var basic_moves    = null;
+  var npcs_data      = null;
+  var entities_data  = null;
+  var session_data   = null;   // lightweight index [{id, session_key, label, doc}]
+  var session_cache  = {};     // id → full session data (loaded on demand)
+  var keeperDataSession = null;   // currently selected session in THREATS tab
+  var activeTab      = 'moves';
+  var keeperMode          = false;
+  var keeperViewHunter    = null;
+  var keeperTab           = 'operatives';  // 'operatives' | 'contacts' | 'references'
+  var keeperSessionFilter = 'S02';         // 'S01' | 'S02' | 'ALL'
+  var npcVisibilityOverrides = {};         // { npc_id: bool } — loaded from localStorage
+  var contactNotes = {};                   // { npc_id: string } — loaded from localStorage
+  var maps_data        = null;               // loaded from portal-maps.json
+  var hunters_meta     = null;               // loaded from hunters.json
+  var mapState         = { u: {}, v: {} };   // u = unlocked (player-visible), v = visited (keeper-only)
+  var selectedMapLoc   = null;               // currently expanded location in player MAP tab
+  var playerMapSession = null;               // session id selected in player MAP tab
+  var keeperMapSession = null;               // session id selected in keeper MAP tab
+
+  var feedEntries    = [];   // combined rolls + messages, sorted by timestamp
+  var lastRollId     = 0;
+  var lastMsgId      = 0;
+  var feedOffset     = 0;
+  var FEED_PAGE      = 200;
+  var pollTimer      = null;
+  var saveTimer      = null;
+  var sheetDirty     = false;
+  var autoScroll     = true;
+
+  // Expand-on-click mode (default). ?mouseover=true restores legacy hover behaviour.
+  var hoverMode = new URLSearchParams(location.search).get('mouseover') === 'true';
+  if (!hoverMode) document.body.classList.add('no-hover');
+
+  // Click anywhere on a feed entry (not on a button) to expand it; collapses any other open entry.
+  document.getElementById('feed-entries').addEventListener('click', function (e) {
+    if (hoverMode) return;
+    if (e.target.closest('button')) return;
+    var entry = e.target.closest('.feed-entry');
+    if (!entry) return;
+    var wasExpanded = entry.classList.contains('expanded');
+    document.querySelectorAll('#feed-entries .feed-entry.expanded').forEach(function (el) {
+      el.classList.remove('expanded');
+    });
+    if (!wasExpanded) entry.classList.add('expanded');
+  });
+
+  var HUNTER_NAMES  = { rex: 'Rex Bangley', reed: 'Reed Atwood', alan: 'Alan Frazier', sven: 'Sven', john: 'John Johnson' };
+  var HUNTER_COLORS = { rex: '#f0a500', reed: '#3ab5b0', alan: '#3ab5b0', sven: '#a78bfa', john: '#c8ddd0' };
+  var STAT_NAMES    = { charm: 'CHM', cool: 'COL', sharp: 'SHP', tough: 'TGH', weird: 'WRD' };
+
+  // ── KEEPER MODE — activated by admin login (auth replaces 5× click for the feed) ──
+  function activateKeeperMode() {
+    keeperMode = true;
+    document.body.classList.add('keeper-active');
+    document.querySelectorAll('.keeper-tab').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.ktab === keeperTab);
+    });
+  }
+
+  function applyAuthState() {
+    var auth = window.portalAuth;
+    var user = auth ? auth.getUser() : null;
+    if (user && user.role === 'admin' && !keeperMode) {
+      activateKeeperMode();
+    }
+    // Auto-select the logged-in player's hunter if none is selected
+    if (user && user.role === 'player' && !hunterId) {
+      var sel = document.getElementById('hunter-select');
+      if (sel && user.username) {
+        sel.value = user.username;
+        window.onHunterChange(user.username);
+      }
+    }
+  }
+
+  // ── HUNTER SELECTION ─────────────────────────────────────────────────────
+  try {
+    var saved = localStorage.getItem('portal_feed_hunter');
+    if (saved) {
+      document.getElementById('hunter-select').value = saved;
+      hunterId = saved;
+      var nameEl = document.getElementById('composer-name');
+      if (nameEl && saved) nameEl.value = HUNTER_NAMES[saved] || '';
+    }
+    var savedVis = localStorage.getItem('portal_npc_visibility');
+    if (savedVis) npcVisibilityOverrides = JSON.parse(savedVis);
+    var savedNotes = localStorage.getItem('portal_contact_notes');
+    if (savedNotes) contactNotes = JSON.parse(savedNotes);
+  } catch (e) {}
+
+  window.onHunterChange = function (id) {
+    hunterId = id || null;
+    try { if (id) localStorage.setItem('portal_feed_hunter', id); } catch (e) {}
+    var nameEl = document.getElementById('composer-name');
+    if (nameEl) nameEl.value = id ? (HUNTER_NAMES[id] || '') : '';
+    hunterSheet = null;
+    refreshLinecardEntries();
+    if (id) loadHunterSheet(id).then(renderPanel);
+    else renderPanel();
+  };
+
+  // Re-render all linecard entries in the feed when hunterId changes.
+  // Linecards are recipient-sensitive — the same entry renders differently
+  // depending on which hunter the player has selected.
+  function refreshLinecardEntries() {
+    var container = document.getElementById('feed-entries');
+    if (!container) return;
+    var lcEntries = feedEntries.filter(function (e) { return e.type === 'linecard'; });
+    var lcDoms    = container.querySelectorAll('.feed-linecard');
+    if (lcEntries.length !== lcDoms.length) return;
+    lcEntries.forEach(function (entry, i) {
+      var tmp = document.createElement('div');
+      tmp.innerHTML = buildFeedEntryHtml(entry);
+      lcDoms[i].parentNode.replaceChild(tmp.firstElementChild, lcDoms[i]);
+    });
+  }
+
+  function loadHunterSheet(id) {
+    return fetch('/api/v1/hunters/' + id + '/sheet')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        hunterSheet = (data && Object.keys(data).length > 0) ? data : null;
+      })
+      .catch(function () { hunterSheet = null; });
+  }
+
+  // ── DATA LOADING ──────────────────────────────────────────────────────────
+  function loadStaticData() {
+    return Promise.all([
+      fetch('/data/playbook-moves.json').then(function (r) { return r.ok ? r.json() : null; }),
+      fetch('/data/motw-basic-moves.json').then(function (r) { return r.ok ? r.json() : null; }),
+      fetch('/data/portal-npcs.json').then(function (r) { return r.ok ? r.json() : null; }),
+      fetch('/data/portal-entities.json').then(function (r) { return r.ok ? r.json() : null; }),
+      fetch('/data/sessions/index.json').then(function (r) { return r.ok ? r.json() : null; }),
+      fetch('/data/portal-maps.json').then(function (r) { return r.ok ? r.json() : null; }),
+      fetch('/data/hunters.json').then(function (r) { return r.ok ? r.json() : null; })
+    ]).then(function (results) {
+      playbook_moves = results[0];
+      basic_moves    = results[1];
+      npcs_data      = results[2];
+      entities_data  = results[3];
+      session_data   = results[4];
+      maps_data      = results[5];
+      hunters_meta   = results[6];
+    });
+  }
+
+  // ── SESSION FULL DATA LOADER ──────────────────────────────────────────────
+  // Fetches /data/sessions/s0N.json on first access, caches in session_cache.
+  // Uses session_key (e.g. "M01") to derive filename ("s01.json").
+  function loadSessionFull(id, callback) {
+    if (session_cache[id]) { callback(session_cache[id]); return; }
+    var entry = (session_data || []).filter(function (s) { return s.id === id; })[0];
+    if (!entry) { callback(null); return; }
+    var num = entry.session_key.replace(/\D/g, '');
+    fetch('/data/sessions/s' + num + '.json')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (data) session_cache[id] = data;
+        callback(data);
+      })
+      .catch(function () { callback(null); });
+  }
+
+  // ── TAB SWITCHING ─────────────────────────────────────────────────────────
+  window.switchTab = function (tab) {
+    activeTab = tab;
+    document.querySelectorAll('.panel-tab').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.tab === tab);
+    });
+    renderPanel();
+  };
+
+  // ── PANEL RENDER ──────────────────────────────────────────────────────────
+  function renderPanel() {
+    if (keeperMode) { renderKeeperPanel(); return; }
+    if (activeTab === 'moves')    renderMovesPanel();
+    if (activeTab === 'contacts') renderContactsPanel();
+    if (activeTab === 'handouts') renderHandoutsPanel();
+    if (activeTab === 'map')      renderMapPanel();
+  }
+
+  // ── MOVES PANEL ───────────────────────────────────────────────────────────
+  function renderMovesPanel() {
+    var body = document.getElementById('panel-body');
+    if (!hunterId) {
+      body.innerHTML = '<div style="font-family:\'Share Tech Mono\',monospace;font-size:0.7rem;color:var(--text-dim);padding:2rem 0;text-align:center">// SELECT OPERATIVE TO LOAD MOVES</div>';
+      return;
+    }
+
+    var html = '';
+
+    // Stats + tracks
+    if (hunterSheet && hunterSheet.stats) {
+      html += '<div class="stats-bar">';
+      ['charm','cool','sharp','tough','weird'].forEach(function (s) {
+        var v = hunterSheet.stats[s];
+        if (v === undefined || v === null || v === '') return;
+        var val = parseInt(v, 10);
+        var str = (val > 0 ? '+' : '') + val;
+        html += '<div class="stat-chip">' + STAT_NAMES[s] + ' <strong>' + str + '</strong></div>';
+      });
+      html += '</div>';
+
+      // Clickable harm / luck / xp tracks
+      html += renderTrack('harm', 7, 'on-harm', hunterSheet.harm || 0, false);
+      html += renderTrack('luck', 7, 'on-luck', hunterSheet.luck || 0, false);
+      html += renderTrack('xp',   5, 'on-xp',   hunterSheet.xp  || 0, true);
+      html += '<div style="margin-bottom:0.5rem"></div>';
+      html += '<a class="operative-page-link" href="/hunters/' + hunterId + '.html" target="_blank">// OPERATIVE DOSSIER ↗</a>';
+      html += '<div style="margin-bottom:0.25rem"></div>';
+    }
+
+    // Always-active moves (e.g. Violence for Rex)
+    if (playbook_moves && playbook_moves.always_active_moves && playbook_moves.always_active_moves[hunterId]) {
+      var always = playbook_moves.always_active_moves[hunterId];
+      if (always.length > 0) {
+        html += '<div class="move-section-label">// ALWAYS ACTIVE</div>';
+        always.forEach(function (m) { html += renderMoveCard(m); });
+      }
+    }
+
+    // Playbook moves (checked in D1)
+    if (playbook_moves && hunterSheet && hunterSheet.checks) {
+      var checks = hunterSheet.checks;
+      var _hMeta = hunters_meta && hunters_meta.hunters &&
+        hunters_meta.hunters.filter(function (h) { return h.id === hunterId; })[0];
+      var _hPlaybook = _hMeta ? _hMeta.playbook : null;
+      var active = Object.keys(checks).filter(function (k) {
+        return checks[k] === true && playbook_moves.moves[k] && (
+          (_hPlaybook && playbook_moves.moves[k].playbook === _hPlaybook) ||
+          playbook_moves.moves[k].hunter === hunterId  // fallback
+        );
+      });
+      if (active.length > 0) {
+        html += '<div class="move-section-label">// PLAYBOOK MOVES</div>';
+        active.forEach(function (k) { html += renderMoveCard(playbook_moves.moves[k], k); });
+      }
+    }
+
+    // Basic moves
+    if (basic_moves && basic_moves.basic_moves) {
+      html += '<div class="move-section-label">// BASIC MOVES</div>';
+      basic_moves.basic_moves.forEach(function (m) {
+        if (!m.roll) return; // skip passive
+        html += renderMoveCard({
+          name: m.name,
+          roll: '+' + m.roll.charAt(0).toUpperCase() + m.roll.slice(1),
+          description: m.trigger,
+          outcomes: m.outcomes,
+          _basic_id: m.id
+        }, m.id);
+      });
+    }
+
+    body.innerHTML = html;
+    wireMoveCards(body);
+  }
+
+  // ── TRACK RENDERING ───────────────────────────────────────────────────────
+  function renderTrack(name, max, cls, value, showBump) {
+    var display  = Math.min(value, max);
+    var overflow = value > max ? value - max : 0;
+    var html = '<div class="track-mini"><span class="track-mini-label">' + name.toUpperCase() + '</span><div class="track-mini-pips">';
+    for (var i = 0; i < max; i++) {
+      html += '<div class="track-mini-pip' + (i < display ? ' ' + cls : '') +
+        '" onclick="setTrack(\'' + name + '\',' + i + ')"></div>';
+    }
+    html += '</div>';
+    if (showBump) {
+      html += '<button class="track-bump" onclick="bumpTrack(\'' + name + '\')">+</button>';
+    }
+    if (overflow > 0) {
+      html += '<span class="xp-overflow">+' + overflow + '</span>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function _canEditTracker() {
+    var auth = window.portalAuth;
+    var user = auth ? auth.getUser() : null;
+    if (!user) return false;
+    if (user.role === 'admin') return true;
+    return user.username === hunterId;
+  }
+
+  window.setTrack = function (name, pipIndex) {
+    if (!hunterId || !hunterSheet) return;
+    if (!_canEditTracker()) return;
+    var current = hunterSheet[name] || 0;
+    hunterSheet[name] = current > pipIndex ? pipIndex : pipIndex + 1;
+    sheetDirty = true;
+    renderMovesPanel();
+  };
+
+  window.bumpTrack = function (name) {
+    if (!hunterId || !hunterSheet) return;
+    if (!_canEditTracker()) return;
+    hunterSheet[name] = (hunterSheet[name] || 0) + 1;
+    sheetDirty = true;
+    renderMovesPanel();
+  };
+
+  function saveSheet() {
+    if (!hunterId || !hunterSheet || !sheetDirty) return;
+    sheetDirty = false; // clear before fetch; re-set on failure
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/hunters/' + hunterId + '/sheet', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(hunterSheet)
+    }).catch(function () { sheetDirty = true; });
+  }
+
+  // ── MOVE CARDS ────────────────────────────────────────────────────────────
+  function renderMoveCard(move, key) {
+    var hasRoll = move.roll && move.roll !== null;
+    var rollBadge = hasRoll
+      ? '<span class="move-card-roll">' + move.roll + '</span>'
+      : '<span class="move-card-roll passive">PASSIVE</span>';
+    var cardKey = key || move.id || move.name.replace(/\s+/g,'-').toLowerCase();
+
+    var rollUi = hasRoll ? (
+      '<div class="move-roll-ui">' +
+        '<span class="mod-label">mod</span>' +
+        '<input class="mod-input" type="number" value="0" min="-9" max="9">' +
+        '<button class="roll-btn" onclick="doRoll(this)">// ROLL</button>' +
+      '</div>'
+    ) : '';
+
+    // ── Description block ──
+    var descHtml = '';
+    var o = move.outcomes;   // structured outcomes (basic moves)
+    var d = move.description; // free-text description (playbook moves)
+
+    if (o && (o['12_plus'] || o['10_plus'] || o['7_9'] || o.miss)) {
+      // Basic move: trigger + structured outcomes
+      if (move.trigger || d) {
+        descHtml += '<div class="move-desc-trigger">' + escHtml(move.trigger || d) + '</div>';
+      }
+      // Custom thresholds: 12_plus→ADV(13+), 10_plus→HIT(11–12), 7_9→PARTIAL(7–10), miss→FAILURE(6–)
+      var rows = [
+        { cls: 'adv',     label: '⚡ 13+',    text: o['12_plus'] },
+        { cls: 'hit',     label: '✓ 11–12',  text: o['10_plus'] },
+        { cls: 'partial', label: '~ 7–10',   text: o['7_9']     },
+        { cls: 'miss',    label: '✗ 6–',     text: o.miss       }
+      ];
+      descHtml += '<div class="move-outcomes">';
+      rows.forEach(function (r) {
+        if (!r.text) return;
+        descHtml += '<div class="move-outcome">' +
+          '<span class="outcome-label ' + r.cls + '">' + r.label + '</span>' +
+          '<span class="outcome-text">' + escHtml(r.text) + '</span>' +
+        '</div>';
+      });
+      descHtml += '</div>';
+      // Questions list (Investigate a Mystery, Read a Bad Situation)
+      if (o.questions && o.questions.length) {
+        descHtml += '<div class="move-questions">' +
+          '<div class="move-questions-label">// QUESTIONS</div>' +
+          '<ul class="ref-list">';
+        o.questions.forEach(function (q) { descHtml += '<li>' + escHtml(q) + '</li>'; });
+        descHtml += '</ul></div>';
+      }
+    } else if (d) {
+      // Playbook / always-active move: free-text description covers everything
+      descHtml = '<div class="move-desc-text">' + escHtml(d) + '</div>';
+    }
+
+    var descBlock = descHtml ? '<div class="move-desc">' + descHtml + '</div>' : '';
+
+    return '<div class="move-card" data-move-key="' + cardKey + '" data-move-name="' + escHtml(move.name) + '" data-roll="' + (move.roll||'') + '">' +
+      '<div class="move-card-top">' +
+        '<span class="move-card-name">' + escHtml(move.name) + '</span>' +
+        rollBadge +
+      '</div>' +
+      rollUi +
+      descBlock +
+    '</div>';
+  }
+
+  function wireMoveCards(container) {
+    container.querySelectorAll('.move-card').forEach(function (card) {
+      var inp = card.querySelector('.mod-input');
+      if (inp) inp.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') card.querySelector('.roll-btn').click();
+      });
+      // Click card header area (not buttons/inputs) to expand description exclusively
+      card.querySelector('.move-card-top').addEventListener('click', function (e) {
+        if (!document.body.classList.contains('no-hover')) return; // hover mode handles it
+        if (e.target.closest('button') || e.target.closest('input')) return;
+        var wasExpanded = card.classList.contains('expanded');
+        container.querySelectorAll('.move-card.expanded').forEach(function (el) {
+          el.classList.remove('expanded');
+        });
+        if (!wasExpanded) card.classList.add('expanded');
+      });
+    });
+  }
+
+  window.doRoll = function (btn) {
+    var card     = btn.closest('.move-card');
+    var moveName = card.dataset.moveName;
+    var rollStat = card.dataset.roll; // e.g. "+Sharp"
+    var modifier = parseInt(card.querySelector('.mod-input').value, 10) || 0;
+
+    // Determine stat value from sheet
+    var statKey = rollStat ? rollStat.replace(/[+-]/g, '').toLowerCase() : null;
+    var statVal = 0;
+    if (statKey && hunterSheet && hunterSheet.stats && hunterSheet.stats[statKey] !== undefined) {
+      statVal = parseInt(hunterSheet.stats[statKey], 10) || 0;
+    }
+
+    // Find outcomes for hover display
+    var outcomeData = findOutcomes(card.dataset.moveKey);
+
+    // Roll
+    var d1    = Math.ceil(Math.random() * 6);
+    var d2    = Math.ceil(Math.random() * 6);
+    var total = d1 + d2 + statVal + modifier;
+
+    // Custom thresholds: 13+ advanced, 11-12 success, 7-10 partial, 6- failure
+    var outcome = total >= 13 ? 'advanced' : total >= 11 ? 'hit' : total >= 7 ? 'partial' : 'miss';
+
+    // Brief animate
+    btn.textContent = d1 + ' + ' + d2 + '…';
+    btn.classList.add('rolling-anim');
+
+    setTimeout(function () {
+      btn.textContent = '// ROLL';
+      btn.classList.remove('rolling-anim');
+      // Reset modifier to 0 after rolling
+      card.querySelector('.mod-input').value = '0';
+
+      // Build feed entry locally
+      var entry = {
+        _local: true,
+        hunter_id: hunterId,
+        move_name: moveName,
+        stat_used: statKey,
+        stat_val: statVal,
+        roll_1: d1,
+        roll_2: d2,
+        modifier: modifier,
+        total: total,
+        outcome: outcome,
+        outcomes: outcomeData,
+        timestamp: new Date().toISOString()
+      };
+      appendFeedEntry(entry);
+      scrollFeedToBottom();
+
+      // POST to D1
+      var session = getCurrentSession();
+      var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+        ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+      authFetch('/api/v1/rolls', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          hunter_id: hunterId,
+          session:   session,
+          move_name: moveName,
+          stat_used: statKey,
+          roll_1:    d1,
+          roll_2:    d2,
+          modifier:  modifier,
+          total:     total
+        })
+      }).then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data.id) entry._id = data.id;
+          if (data.id > lastRollId) lastRollId = data.id;
+        })
+        .catch(function () {});
+    }, 350);
+  };
+
+  function findOutcomes(moveKey) {
+    // Check always_active_moves — may have a basic_move_ref to delegate to
+    if (playbook_moves && playbook_moves.always_active_moves) {
+      for (var h in playbook_moves.always_active_moves) {
+        var list = playbook_moves.always_active_moves[h];
+        for (var i = 0; i < list.length; i++) {
+          if (list[i].id === moveKey) {
+            if (list[i].basic_move_ref) {
+              return findBasicMoveOutcomes(list[i].basic_move_ref);
+            }
+            return null;
+          }
+        }
+      }
+    }
+    // Check playbook moves — no structured outcomes
+    if (playbook_moves && playbook_moves.moves && playbook_moves.moves[moveKey]) {
+      return null;
+    }
+    // Check basic moves by id
+    return findBasicMoveOutcomes(moveKey);
+  }
+
+  function findBasicMoveOutcomes(id) {
+    if (!basic_moves || !basic_moves.basic_moves) return null;
+    var bm = basic_moves.basic_moves.filter(function (m) { return m.id === id; })[0];
+    return (bm && bm.outcomes) ? bm.outcomes : null;
+  }
+
+  // ── CONTACTS PANEL ────────────────────────────────────────────────────────
+  function renderContactsPanel() {
+    var body = document.getElementById('panel-body');
+    if (!npcs_data) { body.innerHTML = '<div class="keeper-panel-note">// LOADING…</div>'; return; }
+
+    var visible = npcs_data.npcs.filter(function (n) {
+      return keeperMode || n.visible_to_players;
+    });
+
+    if (visible.length === 0) { body.innerHTML = '<div class="keeper-panel-note">// NO CONTACTS CLEARED FOR DISPLAY</div>'; return; }
+
+    var groups = {};
+    visible.forEach(function (n) {
+      var a = n.affiliation || 'unknown';
+      if (!groups[a]) groups[a] = [];
+      groups[a].push(n);
+    });
+
+    var html = '';
+    ['PORTAL','civilian','MESA','unknown'].forEach(function (affil) {
+      if (!groups[affil]) return;
+      html += '<div class="move-section-label">// ' + affil.toUpperCase() + '</div>';
+      var hunterNotes = !keeperMode ? getHunterNotes() : {};
+      groups[affil].forEach(function (n) {
+        var note = hunterNotes[n.id] || '';
+        var noteHtml = note
+          ? '<div class="contact-note">' + escHtml(note) + '</div>'
+          : (!keeperMode && hunterId ? '<div class="contact-note-hint">// double-click to add a note</div>' : '');
+        var dblclick = (!keeperMode && hunterId) ? ' ondblclick="openContactNoteEditor(\'' + escHtml(n.id) + '\')"' : '';
+        html += '<div class="contact-card" id="cc-' + escHtml(n.id) + '"' + dblclick + '>' +
+          '<div class="contact-name">' + escHtml(n.name) + '</div>' +
+          '<div class="contact-role">' + escHtml(n.role) + '</div>' +
+          '<div class="contact-desc">' + escHtml(keeperMode && n.keeper_description ? n.keeper_description : n.player_description) + '</div>' +
+          noteHtml +
+        '</div>';
+      });
+    });
+    body.innerHTML = html;
+  }
+
+  // ── CONTACT NOTE EDITOR ───────────────────────────────────────────────────
+  // contactNotes shape: { hunter_id: { npc_id: "text" } }
+  function getHunterNotes() {
+    if (!hunterId) return {};
+    return contactNotes[hunterId] || {};
+  }
+  function persistContactNotes() {
+    try { localStorage.setItem('portal_contact_notes', JSON.stringify(contactNotes)); } catch (e) {}
+  }
+
+  window.openContactNoteEditor = function (npcId) {
+    if (!hunterId) return; // must have a hunter selected to take notes
+    var card = document.getElementById('cc-' + npcId);
+    if (!card) return;
+    // Remove any existing editor in other cards
+    document.querySelectorAll('.contact-note-editor-wrap').forEach(function (el) { el.remove(); });
+    // Remove hint/existing note display temporarily
+    card.querySelectorAll('.contact-note, .contact-note-hint').forEach(function (el) { el.remove(); });
+
+    var existing = getHunterNotes()[npcId] || '';
+    var wrap = document.createElement('div');
+    wrap.className = 'contact-note-editor-wrap';
+    wrap.innerHTML =
+      '<textarea class="contact-note-editor" id="cne-' + npcId + '" placeholder="Personal note…">' + escHtml(existing) + '</textarea>' +
+      '<div class="contact-note-actions">' +
+        '<button class="contact-note-save" onclick="saveContactNote(\'' + npcId + '\')">SAVE</button>' +
+        '<button class="contact-note-cancel" onclick="cancelContactNote(\'' + npcId + '\')">CANCEL</button>' +
+        (existing ? '<button class="contact-note-cancel" onclick="deleteContactNote(\'' + npcId + '\')" style="margin-left:auto;color:#f87171;border-color:rgba(248,113,113,0.4)">CLEAR</button>' : '') +
+      '</div>';
+    card.appendChild(wrap);
+    var ta = document.getElementById('cne-' + npcId);
+    if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
+    wrap.ondblclick = function (e) { e.stopPropagation(); };
+  };
+
+  window.saveContactNote = function (npcId) {
+    if (!hunterId) return;
+    var ta = document.getElementById('cne-' + npcId);
+    if (!ta) return;
+    var val = ta.value.trim();
+    if (!contactNotes[hunterId]) contactNotes[hunterId] = {};
+    if (val) contactNotes[hunterId][npcId] = val;
+    else delete contactNotes[hunterId][npcId];
+    persistContactNotes();
+    renderContactsPanel();
+  };
+
+  window.cancelContactNote = function (npcId) {
+    renderContactsPanel();
+  };
+
+  window.deleteContactNote = function (npcId) {
+    if (!hunterId) return;
+    if (contactNotes[hunterId]) delete contactNotes[hunterId][npcId];
+    persistContactNotes();
+    renderContactsPanel();
+  };
+
+  // ── PLAYER HANDOUTS PANEL ─────────────────────────────────────────────────
+  // Shows keeper-shared images as a gallery, filtered by session tab.
+  // Readalouds and PDAs are feed-only — not shown here.
+  // Deduplicates: same image posted twice appears once.
+  var playerHandoutSession = null;
+
+  window.switchPlayerHandoutSession = function (id) {
+    playerHandoutSession = id;
+    renderHandoutsPanel();
+  };
+
+  function renderHandoutsPanel() {
+    var body = document.getElementById('panel-body');
+    if (!session_data) { body.innerHTML = '<div class="keeper-panel-note">// LOADING…</div>'; return; }
+
+    // Default to last session
+    if (!playerHandoutSession) playerHandoutSession = session_data[session_data.length - 1].id;
+
+    // Session tabs
+    var html = '<div class="handout-panel-tabs">';
+    session_data.forEach(function (s) {
+      var active = s.id === playerHandoutSession ? ' active' : '';
+      html += '<button class="handout-panel-tab' + active + '" onclick="switchPlayerHandoutSession(\'' + s.id + '\')">' + escHtml(s.session_key) + '</button>';
+    });
+    html += '</div>';
+
+    var sess = session_data.filter(function (s) { return s.id === playerHandoutSession; })[0];
+    var sessKey = sess ? sess.session_key : null;
+
+    // Images/maps only, matching session, dedup by src
+    var seen = {};
+    var images = feedEntries.filter(function (e) {
+      if (e.type !== 'image' && e.type !== 'map') return false;
+      if (sessKey && e.session_id !== sessKey) return false;
+      var p = {};
+      try { p = typeof e.payload === 'string' ? JSON.parse(e.payload) : (e.payload || {}); } catch (x) {}
+      var src = p.src || '';
+      if (!src || seen[src]) return false;
+      seen[src] = true;
+      return true;
+    });
+
+    if (images.length === 0) {
+      body.innerHTML = html + '<div class="keeper-panel-note">// NO IMAGES SHARED YET</div>';
+      return;
+    }
+
+    html += '<div class="handout-gallery">';
+    images.forEach(function (e) {
+      var p = {};
+      try { p = typeof e.payload === 'string' ? JSON.parse(e.payload) : (e.payload || {}); } catch (x) {}
+      var src   = p.src || '';
+      var label = p.label || e.subject || '';
+      html += '<div class="handout-gallery-item" onclick="openLightbox(\'' + escHtml(src) + '\',\'' + escHtml(label) + '\')">' +
+        '<img src="' + escHtml(src) + '" alt="' + escHtml(label) + '">' +
+        (label ? '<div class="handout-gallery-label">' + escHtml(label) + '</div>' : '') +
+      '</div>';
+    });
+    html += '</div>';
+    body.innerHTML = html;
+  }
+
+  // ── KEEPER HANDOUTS TAB ───────────────────────────────────────────────────
+  // Shows all handouts defined for the selected session, with POST buttons.
+  // Posted handouts are tracked in localStorage; readalouds can be re-posted.
+  var keeperHandoutSession = null;
+
+  window.keeperSelectHandoutSession = function (id) {
+    keeperHandoutSession = id;
+    renderKeeperHandoutsTab();
+  };
+
+  function renderKeeperHandoutsTab() {
+    var body = document.getElementById('panel-body');
+    if (!session_data) { body.innerHTML = '<div class="keeper-panel-note">// LOADING…</div>'; return; }
+    if (!keeperHandoutSession) keeperHandoutSession = session_data[session_data.length - 1].id;
+
+    // Session selector
+    var html = '<div class="data-session-selector">';
+    session_data.forEach(function (s) {
+      var active = s.id === keeperHandoutSession ? ' active' : '';
+      html += '<button class="data-sess-btn' + active + '" onclick="keeperSelectHandoutSession(\'' + s.id + '\')">' + escHtml(s.session_key) + '</button>';
+    });
+    html += '</div>';
+
+    body.innerHTML = html + '<div class="keeper-panel-note">// LOADING…</div>';
+    loadSessionFull(keeperHandoutSession, function (sess) {
+      if (!sess || !sess.handouts || sess.handouts.length === 0) {
+        body.innerHTML = html + '<div class="keeper-panel-note">// NO HANDOUTS FOR THIS SESSION</div>';
+        return;
+      }
+
+      var posted = {};
+      try { posted = JSON.parse(localStorage.getItem('portal_posted_handouts') || '{}'); } catch (x) {}
+
+      html += '<div class="handout-list">';
+      sess.handouts.forEach(function (h) {
+        var isPosted = !!posted[h.id];
+        var pipClass  = 'pip-' + h.type;
+        var typeLabel = h.type.toUpperCase();
+        var itemClass = isPosted ? 'handout-item posted' : 'handout-item';
+        var btnLabel = isPosted ? '↺ RE-POST' : '▶ POST';
+        var btnClass = isPosted ? 'handout-post-btn repost' : 'handout-post-btn';
+        // Linecard: show recipient name beneath handout label
+        var recipientNote = (h.type === 'linecard' && h.recipient)
+          ? '<div class="handout-posted-time">→ ' + escHtml(h.recipient.toUpperCase()) + '</div>'
+          : '';
+        html += '<div class="' + itemClass + '">' +
+          '<span class="handout-type-pip ' + pipClass + '">' + escHtml(typeLabel) + '</span>' +
+          '<div class="handout-meta">' +
+            '<div class="handout-label">' + escHtml(h.label || h.character || h.subject || h.id) + '</div>' +
+            recipientNote +
+            (isPosted ? '<div class="handout-posted-time">POSTED ' + escHtml(posted[h.id]) + '</div>' : '') +
+          '</div>' +
+          '<button class="' + btnClass + '" id="hbtn-' + escHtml(h.id) + '" onclick="postHandout(\'' + escHtml(h.id) + '\')">' + btnLabel + '</button>' +
+        '</div>';
+      });
+      html += '</div>';
+      // Quick Scan form — for improvised Rex scans
+      html += '<div class="quick-scan-form">' +
+        '<div class="quick-scan-title">⚡ QUICK SCAN</div>' +
+        '<div class="quick-scan-field"><label class="quick-scan-label">OBJECT / LOCATION</label>' +
+          '<input class="quick-scan-input" id="qs-label" placeholder="e.g. Victorian Wig Stand"></div>' +
+        '<div class="quick-scan-field"><label class="quick-scan-label">DESCRIPTION</label>' +
+          '<input class="quick-scan-input" id="qs-sublabel" placeholder="Brief description"></div>' +
+        '<div class="quick-scan-field"><label class="quick-scan-label">STATUS</label>' +
+          '<select class="quick-scan-select" id="qs-status" onchange="qsSyncReading()">' +
+            '<option value="nominal">NOMINAL</option>' +
+            '<option value="trace">TRACE</option>' +
+            '<option value="alert">ALERT</option>' +
+            '<option value="critical">CRITICAL</option>' +
+          '</select></div>' +
+        '<div class="quick-scan-field"><label class="quick-scan-label">READING</label>' +
+          '<input class="quick-scan-input" id="qs-reading" placeholder="e.g. 0.00 BIM"></div>' +
+        '<div class="quick-scan-field"><label class="quick-scan-label">NOTE (optional)</label>' +
+          '<input class="quick-scan-input" id="qs-note" placeholder=""></div>' +
+        '<button class="quick-scan-submit" onclick="postQuickScan()">▶ POST SCAN</button>' +
+      '</div>';
+      html += '<button class="handout-clear-btn" onclick="clearSessionHandouts()">// CLEAR HANDOUTS — ' + escHtml(sess.session_key) + '</button>';
+      body.innerHTML = html;
+    });
+  }
+
+  window.clearSessionHandouts = function () {
+    var sess = session_cache[keeperHandoutSession] || null;
+    if (!sess) return;
+
+    // Clear localStorage and re-render immediately — no waiting for D1
+    var posted = {};
+    try { posted = JSON.parse(localStorage.getItem('portal_posted_handouts') || '{}'); } catch (x) {}
+    (sess.handouts || []).forEach(function (h) { delete posted[h.id]; });
+    localStorage.setItem('portal_posted_handouts', JSON.stringify(posted));
+    // Remove handout entries from local cache and DOM for this session
+    feedEntries = feedEntries.filter(function (e) {
+      return !(e.session_id === sess.session_key && e.type && e.type !== 'message');
+    });
+    var feedContainer = document.getElementById('feed-entries');
+    feedContainer.querySelectorAll('.feed-readaloud, .feed-pda, .feed-image, .feed-document, .feed-classified, .feed-redacted, .feed-tone, .feed-linecard, .feed-scan').forEach(function (el) {
+      el.remove();
+    });
+    renderKeeperHandoutsTab();
+    // Refresh player gallery if open
+    if (activeTab === 'handouts') renderHandoutsPanel();
+
+    // Also delete from D1 in background (ensures cleared state survives reload)
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/messages?session_id=' + encodeURIComponent(sess.session_key), {
+      method: 'DELETE'
+    }).then(function (r) { return r.json(); })
+      .catch(function (err) { console.error('clearSessionHandouts D1 delete failed', err); });
+  };
+
+  // Quick Scan status → default reading_display helper
+  var QS_READING_DEFAULTS = { nominal: '0.00 BIM', trace: '0.04–0.12 BIM', alert: '0.38 BIM', critical: '1.20+ BIM' };
+  window.qsSyncReading = function () {
+    var sel = document.getElementById('qs-status');
+    var inp = document.getElementById('qs-reading');
+    if (sel && inp && !inp.dataset.userEdited) inp.value = QS_READING_DEFAULTS[sel.value] || '';
+  };
+
+  window.postQuickScan = function () {
+    var label    = (document.getElementById('qs-label')    || {}).value || '';
+    var sublabel = (document.getElementById('qs-sublabel') || {}).value || '';
+    var status   = (document.getElementById('qs-status')   || {}).value || 'nominal';
+    var reading  = (document.getElementById('qs-reading')  || {}).value || QS_READING_DEFAULTS[status];
+    var note     = (document.getElementById('qs-note')     || {}).value || '';
+    if (!label) { var el = document.getElementById('qs-label'); if (el) el.focus(); return; }
+    var sess = session_cache[keeperHandoutSession] || null;
+    var payload = { label: label, sublabel: sublabel, status: status, reading: reading, reading_display: reading, note: note || null };
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        session_id: sess ? sess.session_key : null,
+        sender: 'KEEPER',
+        subject: label,
+        body: reading,
+        type: 'scan',
+        payload: payload
+      })
+    }).then(function (r) { return r.json(); }).then(function (res) {
+      if (!res.ok) { console.error('postQuickScan failed', res); return; }
+      // Clear form
+      ['qs-label','qs-sublabel','qs-reading','qs-note'].forEach(function (id) {
+        var el = document.getElementById(id); if (el) { el.value = ''; delete el.dataset.userEdited; }
+      });
+      var sel = document.getElementById('qs-status'); if (sel) sel.value = 'nominal';
+    }).catch(function (err) { console.error('postQuickScan error', err); });
+  };
+
+  window.postHandout = function (handoutId) {
+    var sess = session_cache[keeperHandoutSession] || null;
+    if (!sess) return;
+    var h = (sess.handouts || []).filter(function (x) { return x.id === handoutId; })[0];
+    if (!h) return;
+    var bodyText = h.text || h.body || h.label ||
+      (h.type === 'linecard' ? '[LINECARD — ' + (h.character || '?') + ' → ' + (h.recipient || '?') + ']' : '');
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        session_id: sess ? sess.session_key : null,
+        sender:     h.from || 'KEEPER',
+        subject:    h.label || h.subject || null,
+        body:       bodyText,
+        type:       h.type,
+        payload:    h
+      })
+    }).then(function (r) { return r.json(); }).then(function (res) {
+      if (!res.ok) {
+        console.error('postHandout failed', res);
+        var errBtn = document.getElementById('hbtn-' + handoutId);
+        if (errBtn) { errBtn.textContent = 'ERR'; errBtn.style.color = '#e74c3c'; }
+        return;
+      }
+      var posted = {};
+      try { posted = JSON.parse(localStorage.getItem('portal_posted_handouts') || '{}'); } catch (x) {}
+      var now = new Date();
+      posted[h.id] = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+      localStorage.setItem('portal_posted_handouts', JSON.stringify(posted));
+      renderKeeperHandoutsTab();
+    }).catch(function (err) {
+      console.error('postHandout error', err);
+      var errBtn = document.getElementById('hbtn-' + handoutId);
+      if (errBtn) { errBtn.textContent = 'ERR'; errBtn.style.color = '#e74c3c'; }
+    });
+  };
+
+  // ── KEEPER TAB SWITCHING ─────────────────────────────────────────────────
+  window.switchKeeperTab = function (tab) {
+    keeperTab = tab;
+    document.querySelectorAll('.keeper-tab').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.ktab === tab);
+    });
+    renderKeeperPanel();
+  };
+
+  // ── KEEPER PANEL DISPATCHER ───────────────────────────────────────────────
+  function renderKeeperPanel() {
+    if (keeperTab === 'operatives') renderKeeperOperativesTab();
+    if (keeperTab === 'contacts')   renderKeeperContactsTab();
+    if (keeperTab === 'references') renderKeeperReferencesTab();
+    if (keeperTab === 'threats')    renderKeeperDataTab();
+    if (keeperTab === 'handouts')   renderKeeperHandoutsTab();
+    if (keeperTab === 'map')        renderKeeperMapTab();
+  }
+
+  // ── KEEPER: OPERATIVES TAB ────────────────────────────────────────────────
+  var KEEPER_OP_LABELS = { rex: 'REX', reed: 'REED', alan: 'ALAN', sven: 'SVEN', john: 'JOHN' };
+
+  window.keeperSwitchHunter = function (id) {
+    keeperViewHunter = keeperViewHunter === id ? null : id;
+    if (keeperViewHunter) {
+      // Set global hunterId so renderMovesPanel + doRoll work correctly
+      hunterId   = keeperViewHunter;
+      hunterSheet = null;
+      loadHunterSheet(keeperViewHunter).then(function () { renderKeeperPanel(); });
+    } else {
+      renderKeeperPanel();
+    }
+  };
+
+  function renderKeeperOperativesTab() {
+    var body = document.getElementById('panel-body');
+
+    // Operative selector row
+    var html = '<div class="keeper-ops-row">';
+    Object.keys(KEEPER_OP_LABELS).forEach(function (id) {
+      var active = keeperViewHunter === id ? ' active' : '';
+      html += '<button class="keeper-op-btn' + active + '" onclick="keeperSwitchHunter(\'' + id + '\')">' + KEEPER_OP_LABELS[id] + '</button>';
+    });
+    html += '</div>';
+
+    // Transmit bar
+    html += '<div style="display:flex;gap:0.5rem;margin-bottom:0.85rem">' +
+      '<button class="cancel-btn" onclick="keeperClearFeed()" style="color:#e74c3c;border-color:rgba(231,76,60,0.3);font-size:0.6rem;letter-spacing:0.08em;padding:0.25rem 0.6rem">// CLEAR FEED VIEW</button>' +
+    '</div>';
+
+    // Message composer
+    html += '<div class="msg-composer">' +
+      '<div class="msg-composer-label">// SEND MESSAGE AS</div>' +
+      '<select class="msg-sender-select" id="msg-sender">' +
+        '<option value="CAMPBELL">CAMPBELL</option>' +
+        '<option value="DIRECTOR">DIRECTOR</option>' +
+        '<option value="MESA">MESA</option>' +
+        '<option value="SYSTEM">SYSTEM</option>' +
+      '</select>' +
+      '<textarea class="msg-textarea" id="msg-body" placeholder="Message text…"></textarea>' +
+      '<button class="msg-send-btn" onclick="sendKeeperMessage()">// TRANSMIT</button>' +
+    '</div>';
+
+    body.innerHTML = html;
+
+    // If an operative is selected, render their moves panel below the header
+    if (keeperViewHunter && hunterSheet) {
+      // Build moves panel HTML and append to body
+      var movesDiv = document.createElement('div');
+      movesDiv.style.borderTop = '1px solid var(--border)';
+      movesDiv.style.marginTop = '0.75rem';
+      movesDiv.style.paddingTop = '0.75rem';
+      // Temporarily render into body for wireMoveCards to work
+      var savedHtml = body.innerHTML;
+      body.innerHTML = '';
+      renderMovesPanel(); // renders into panel-body
+      movesDiv.innerHTML = body.innerHTML;
+      body.innerHTML = savedHtml;
+      body.appendChild(movesDiv);
+      wireMoveCards(movesDiv);
+    } else if (keeperViewHunter && !hunterSheet) {
+      var note = document.createElement('div');
+      note.className = 'keeper-panel-note';
+      note.textContent = '// NO SHEET DATA FOR THIS OPERATIVE';
+      body.appendChild(note);
+    }
+  }
+
+  // ── KEEPER: CONTACTS TAB ──────────────────────────────────────────────────
+  window.setKeeperSession = function (s) {
+    keeperSessionFilter = s;
+    renderKeeperContactsTab();
+  };
+
+  window.toggleNpcVisibility = function (id) {
+    var current = npcIsVisible(id);
+    npcVisibilityOverrides[id] = !current;
+    try { localStorage.setItem('portal_npc_visibility', JSON.stringify(npcVisibilityOverrides)); } catch (e) {}
+    renderKeeperContactsTab();
+  };
+
+  function npcIsVisible(id) {
+    if (npcVisibilityOverrides.hasOwnProperty(id)) return npcVisibilityOverrides[id];
+    if (!npcs_data) return false;
+    var npc = npcs_data.npcs.filter(function (n) { return n.id === id; })[0];
+    return npc ? !!npc.visible_to_players : false;
+  }
+
+  function npcMatchesSession(npc) {
+    if (keeperSessionFilter === 'ALL') return true;
+    if (npc.affiliation === 'PORTAL') return true; // Lab contacts always shown
+    return npc.first_session === keeperSessionFilter;
+  }
+
+  function renderKeeperContactsTab() {
+    var body = document.getElementById('panel-body');
+    if (!npcs_data) { body.innerHTML = '<div class="keeper-panel-note">// LOADING…</div>'; return; }
+
+    // Session filter pills
+    var html = '<div class="session-filter">';
+    ['S01','S02','ALL'].forEach(function (s) {
+      html += '<button class="session-pill' + (keeperSessionFilter === s ? ' active' : '') +
+        '" onclick="setKeeperSession(\'' + s + '\')">' + s + '</button>';
+    });
+    html += '</div>';
+
+    var filtered = npcs_data.npcs.filter(npcMatchesSession);
+    var groups = {};
+    filtered.forEach(function (n) {
+      var a = n.affiliation || 'unknown';
+      if (!groups[a]) groups[a] = [];
+      groups[a].push(n);
+    });
+
+    ['PORTAL','civilian','MESA','unknown'].forEach(function (affil) {
+      if (!groups[affil]) return;
+      html += '<div class="move-section-label">// ' + affil.toUpperCase() + '</div>';
+      groups[affil].forEach(function (n) {
+        var vis = npcIsVisible(n.id);
+        html += '<div class="npc-row">' +
+          '<div class="npc-row-head">' +
+            '<span class="npc-row-name">' + escHtml(n.name) + '</span>' +
+            '<span class="npc-row-role">' + escHtml(n.role) + '</span>' +
+            '<button class="npc-vis-btn ' + (vis ? 'visible' : 'hidden') + '" onclick="toggleNpcVisibility(\'' + n.id + '\')">' +
+              (vis ? '● VISIBLE' : '○ HIDDEN') +
+            '</button>' +
+          '</div>' +
+          '<div class="npc-row-desc">' + escHtml(n.keeper_description || n.player_description || '') + '</div>' +
+        '</div>';
+      });
+    });
+
+    body.innerHTML = html;
+  }
+
+  // ── KEEPER: REFERENCES TAB ────────────────────────────────────────────────
+  function renderKeeperReferencesTab() {
+    var body = document.getElementById('panel-body');
+    body.innerHTML =
+
+      // ── ROLL OUTCOMES ──────────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// ROLL OUTCOMES</div>' +
+        '<div class="ref-row"><strong>13+</strong> &nbsp;Advanced success — best possible result</div>' +
+        '<div class="ref-row"><strong>11–12</strong> Success — full effect, no strings</div>' +
+        '<div class="ref-row"><strong>7–10</strong> &nbsp;Partial — succeed with cost or complication</div>' +
+        '<div class="ref-row"><strong>6–</strong> &nbsp;&nbsp;&nbsp;Failure — suffer harm or things go wrong</div>' +
+      '</div>' +
+
+      // ── HARM ──────────────────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// HARM MOVES — use one every time anyone is hurt</div>' +
+        '<div class="ref-row" style="color:var(--text);margin-bottom:0.2rem">0-harm or more</div>' +
+        '<ul class="ref-list">' +
+          '<li>Momentarily inhibited</li>' +
+          '<li>Drop something</li>' +
+          '<li>Take −1 forward</li>' +
+        '</ul>' +
+        '<div class="ref-row" style="color:var(--text);margin:0.35rem 0 0.2rem">1-harm or more</div>' +
+        '<ul class="ref-list">' +
+          '<li>Fall down</li>' +
+          '<li>Take −1 ongoing</li>' +
+          '<li>Pass out</li>' +
+          '<li>Intense pain</li>' +
+        '</ul>' +
+        '<div class="ref-row" style="color:var(--text);margin:0.35rem 0 0.2rem">Unstable wounds</div>' +
+        '<ul class="ref-list"><li>+1 harm</li></ul>' +
+        '<div class="ref-row" style="color:var(--text);margin:0.35rem 0 0.2rem">8-harm or more</div>' +
+        '<ul class="ref-list"><li>Dying or dead</li></ul>' +
+      '</div>' +
+
+      // ── LUCK ──────────────────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// LUCK (max 7)</div>' +
+        '<ul class="ref-list">' +
+          '<li>Spend to change a miss → 7–9, or 7–9 → 10+</li>' +
+          '<li>Spend to survive what should kill you</li>' +
+          '<li>Each hunter\'s luck special triggers on spend</li>' +
+          '<li><strong style="color:var(--text)">0 luck</strong> = doomed — Keeper can kill you at any time</li>' +
+        '</ul>' +
+      '</div>' +
+
+      // ── XP ────────────────────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// XP &amp; ADVANCES</div>' +
+        '<ul class="ref-list">' +
+          '<li>Mark XP when a highlighted stat is used on a roll</li>' +
+          '<li>At 5 XP → choose an advance, reset to 0</li>' +
+          '<li>FOR THE LAB: "Did we find safe and beneficial applications for the dangerous things we learned about?"</li>' +
+        '</ul>' +
+      '</div>' +
+
+      // ── END OF SESSION ────────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// END OF SESSION — ask each question, mark XP</div>' +
+        '<ul class="ref-list">' +
+          '<li>Did we conclude the current mystery?</li>' +
+          '<li>Did we save someone from certain death (or worse)?</li>' +
+          '<li>Did we learn something new and important about the world?</li>' +
+          '<li>Did we learn something new and important about one of the hunters?</li>' +
+        '</ul>' +
+        '<div class="ref-note">1–2 yes → mark 1 XP &nbsp;|&nbsp; 3–4 yes → mark 2 XP</div>' +
+      '</div>' +
+
+      // ── KEEPER PRINCIPLES ─────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// KEEPER PRINCIPLES</div>' +
+        '<ul class="ref-list">' +
+          '<li>Put horror in everyday situations</li>' +
+          '<li>Address the hunters, not the players</li>' +
+          '<li>Use the Keeper moves, without names</li>' +
+          '<li>Be a fan of the hunters</li>' +
+          '<li>Build a coherent mythology in play</li>' +
+          '<li>Nothing is safe</li>' +
+          '<li>Name everyone they meet — make them seem like normal folks</li>' +
+          '<li>Ask questions and build on the answers</li>' +
+          '<li>Sometimes give them exactly what they earned, rather than all they wanted</li>' +
+          '<li>What\'s happening off-screen?</li>' +
+          '<li>Don\'t always decide what happens</li>' +
+          '<li>Everything is a threat</li>' +
+        '</ul>' +
+      '</div>' +
+
+      // ── BASIC KEEPER MOVES ────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// BASIC KEEPER MOVES — after every move, ask what they do next</div>' +
+        '<div class="ref-two-col">' +
+          '<ul class="ref-list">' +
+            '<li>Separate them</li>' +
+            '<li>Reveal future badness</li>' +
+            '<li>Reveal off-screen badness</li>' +
+            '<li>Inflict harm, as established</li>' +
+            '<li>Make them investigate</li>' +
+            '<li>Make them acquire stuff</li>' +
+            '<li>Tell the possible consequences, ask if they proceed</li>' +
+          '</ul>' +
+          '<ul class="ref-list">' +
+            '<li>Turn their move back on them</li>' +
+            '<li>Offer an opportunity, &amp; maybe a cost</li>' +
+            '<li>Take away some of their stuff</li>' +
+            '<li>Put someone in trouble</li>' +
+            '<li>Make a threat move</li>' +
+          '</ul>' +
+        '</div>' +
+      '</div>' +
+
+      // ── MONSTER MOVES ─────────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// MONSTER MOVES</div>' +
+        '<div class="ref-two-col">' +
+          '<ul class="ref-list">' +
+            '<li>Hint at its presence</li>' +
+            '<li>Display its full might</li>' +
+            '<li>Appear suddenly</li>' +
+            '<li>Attack with great force and fury</li>' +
+            '<li>Seize someone or something</li>' +
+            '<li>Attack with stealth and calculation</li>' +
+          '</ul>' +
+          '<ul class="ref-list">' +
+            '<li>Order underlings to terrible acts</li>' +
+            '<li>Destroy something</li>' +
+            '<li>Escape, no matter how contained</li>' +
+            '<li>Give chase</li>' +
+            '<li>Return to home ground</li>' +
+            '<li>Boast and gloat, maybe revealing a secret</li>' +
+          '</ul>' +
+        '</div>' +
+      '</div>' +
+
+      // ── PHENOMENA MOVES ───────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// PHENOMENA THREAT MOVES</div>' +
+        '<div class="ref-two-col">' +
+          '<ul class="ref-list">' +
+            '<li>Hint at its effects</li>' +
+            '<li>Show its effects directly and undeniably</li>' +
+            '<li>Break the world\'s laws</li>' +
+            '<li>Increase or decrease in size or intensity</li>' +
+            '<li>Create some new weirdness</li>' +
+            '<li>Harm or destroy someone or something</li>' +
+          '</ul>' +
+          '<ul class="ref-list">' +
+            '<li>React unexpectedly</li>' +
+            '<li>Escape from containment</li>' +
+            '<li>Hold something in place</li>' +
+            '<li>Grant an unnatural ability</li>' +
+            '<li>Hinder movement</li>' +
+            '<li>Subvert a bystander\'s motivation</li>' +
+          '</ul>' +
+        '</div>' +
+      '</div>' +
+
+      // ── INVESTIGATE A MYSTERY ─────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// INVESTIGATING PHENOMENA — extra questions</div>' +
+        '<ul class="ref-list">' +
+          '<li>How is this phenomenon doing this?</li>' +
+          '<li>What could fix it, cure it, or slow it down?</li>' +
+          '<li>How far does the effect reach?</li>' +
+          '<li>What will be affected next?</li>' +
+        '</ul>' +
+      '</div>' +
+
+      // ── KEEPER PAGES ──────────────────────────────────────────────────────
+      '<div class="ref-section">' +
+        '<div class="ref-label">// KEEPER PAGES</div>' +
+        '<div class="ref-row"><a href="missions/keeper.html" target="_blank" style="color:#a78bfa">Keeper Index →</a></div>' +
+        '<div class="ref-row"><a href="missions/report.html" target="_blank" style="color:#a78bfa">Field Report →</a></div>' +
+        '<div class="ref-row"><a href="missions/entities.html" target="_blank" style="color:#a78bfa">Entity Bestiary →</a></div>' +
+      '</div>';
+  }
+
+  // ── KEEPER: THREATS TAB ───────────────────────────────────────────────────
+  window.keeperSelectDataSession = function (id) {
+    keeperDataSession = id;
+    renderKeeperDataTab();
+  };
+
+  function renderKeeperDataTab() {
+    var body = document.getElementById('panel-body');
+    if (!session_data) { body.innerHTML = '<div class="keeper-panel-note">// LOADING…</div>'; return; }
+
+    // default to first session
+    if (!keeperDataSession) keeperDataSession = session_data[0].id;
+
+    // ── session selector ──
+    var selHtml = '<div class="data-session-selector">';
+    session_data.forEach(function (s) {
+      var active = s.id === keeperDataSession ? ' active' : '';
+      selHtml += '<button class="data-sess-btn' + active + '" onclick="keeperSelectDataSession(\'' + s.id + '\')">' + escHtml(s.session_key) + '</button>';
+    });
+    selHtml += '</div>';
+
+    body.innerHTML = selHtml + '<div class="keeper-panel-note">// LOADING…</div>';
+    loadSessionFull(keeperDataSession, function (sess) {
+    if (!sess) { body.innerHTML = selHtml + '<div class="keeper-panel-note">// NO DATA</div>'; return; }
+
+    var html = selHtml;
+
+    // ── session title + doc link ──
+    html += '<div class="ref-section">' +
+      '<div class="ref-label">// ' + escHtml(sess.label) + '</div>' +
+      '<div class="ref-row"><a href="' + escHtml(sess.doc) + '" target="_blank" style="color:#a78bfa">Session Document →</a></div>' +
+    '</div>';
+
+    // ── entities ──
+    if (sess.entity_ids && sess.entity_ids.length && entities_data) {
+      sess.entity_ids.forEach(function (eid) {
+        var e = entities_data.entities.filter(function (x) { return x.id === eid; })[0];
+        if (!e) return;
+
+        html += '<div class="ref-section data-entity-block">';
+
+        // header
+        html += '<div class="ref-label">// ' + escHtml(e.name).toUpperCase() +
+          ' &nbsp;<span style="opacity:0.55;font-weight:400">' + escHtml(e.designation) + ' · ' + escHtml(e.classification) + '</span></div>';
+
+        // description
+        html += '<div class="data-entity-desc">' + escHtml(e.keeper_description) + '</div>';
+
+        // stat row
+        var statParts = [];
+        if (e.harm)          statParts.push('<span class="data-stat-label">HARM</span> ' + escHtml(e.harm));
+        if (e.armour)        statParts.push('<span class="data-stat-label">ARMOUR</span> ' + escHtml(e.armour));
+        if (e.harm_capacity) statParts.push('<span class="data-stat-label">HP</span> ' + escHtml(String(e.harm_capacity)));
+        if (statParts.length) html += '<div class="data-stat-row">' + statParts.join(' &nbsp;·&nbsp; ') + '</div>';
+
+        // weakness
+        if (e.weakness) {
+          html += '<div class="data-field"><span class="data-stat-label">WEAKNESS</span> ' + escHtml(e.weakness) + '</div>';
+        }
+
+        // powers
+        if (e.powers && e.powers.length) {
+          html += '<div class="data-stat-label" style="margin-top:0.45rem">POWERS</div>';
+          html += '<ul class="ref-list">';
+          e.powers.forEach(function (p) { html += '<li>' + escHtml(p) + '</li>'; });
+          html += '</ul>';
+        }
+
+        // keeper moves
+        if (e.keeper_moves && e.keeper_moves.length) {
+          html += '<div class="data-stat-label" style="margin-top:0.45rem">MOVES</div>';
+          html += '<ul class="ref-list">';
+          e.keeper_moves.forEach(function (m) { html += '<li>' + escHtml(m) + '</li>'; });
+          html += '</ul>';
+        }
+
+        // resolution conditions
+        if (e.resolution_conditions && e.resolution_conditions.length) {
+          html += '<div class="data-stat-label" style="margin-top:0.45rem">RESOLUTION</div>';
+          html += '<ul class="ref-list">';
+          e.resolution_conditions.forEach(function (r) { html += '<li>' + escHtml(r) + '</li>'; });
+          html += '</ul>';
+        }
+
+        // extra notes (bim, anchor spike, alan note, etc.)
+        ['bim_note','anchor_spike_effect','alan_note','campbell_private'].forEach(function (key) {
+          if (!e[key]) return;
+          var labels = { bim_note: 'BIM NOTE', anchor_spike_effect: 'ANCHOR SPIKE', alan_note: 'ALAN NOTE', campbell_private: 'CAMPBELL PRIVATE' };
+          html += '<div class="data-field" style="margin-top:0.3rem"><span class="data-stat-label">' + labels[key] + '</span> ' + escHtml(e[key]) + '</div>';
+        });
+
+        html += '</div>'; // end entity block
+      });
+    }
+
+    // ── threats (minions, bystanders, villains) ──
+    if (sess.threats && sess.threats.length) {
+      sess.threats.forEach(function (t) {
+        html += '<div class="ref-section data-threat-block">';
+
+        // header
+        html += '<div class="ref-label">// ' + escHtml(t.name).toUpperCase();
+        if (t.subtitle) html += ' &nbsp;<span style="opacity:0.55;font-weight:400">' + escHtml(t.subtitle) + '</span>';
+        html += '</div>';
+
+        // type + motivation
+        html += '<div class="data-threat-type">' + escHtml(t.type) + '</div>';
+        if (t.motivation) html += '<div class="data-field"><span class="data-stat-label">MOTIVATION</span> ' + escHtml(t.motivation) + '</div>';
+
+        // stat row
+        var statParts = [];
+        if (t.harm)          statParts.push('<span class="data-stat-label">HARM</span> ' + escHtml(t.harm));
+        if (t.armour)        statParts.push('<span class="data-stat-label">ARMOUR</span> ' + escHtml(String(t.armour)));
+        if (t.harm_capacity) statParts.push('<span class="data-stat-label">HP</span> ' + escHtml(String(t.harm_capacity)));
+        if (statParts.length) html += '<div class="data-stat-row" style="margin-top:0.35rem">' + statParts.join(' &nbsp;·&nbsp; ') + '</div>';
+
+        // moves
+        if (t.moves && t.moves.length) {
+          html += '<div class="data-stat-label" style="margin-top:0.45rem">MOVES</div>';
+          html += '<ul class="ref-list">';
+          t.moves.forEach(function (m) { html += '<li>' + escHtml(m) + '</li>'; });
+          html += '</ul>';
+        }
+
+        // notes
+        if (t.notes) html += '<div class="data-field" style="margin-top:0.4rem"><span class="data-stat-label">NOTES</span> ' + escHtml(t.notes) + '</div>';
+
+        html += '</div>';
+      });
+    }
+
+    // ── equipment ──
+    if (sess.equipment && sess.equipment.length) {
+      html += '<div class="ref-section">';
+      html += '<div class="ref-label">// FIELD EQUIPMENT</div>';
+      sess.equipment.forEach(function (eq) {
+        html += '<div class="data-equip-block">';
+        html += '<div class="data-equip-name">' + escHtml(eq.name);
+        if (eq.subtitle) html += ' <span class="data-equip-sub">' + escHtml(eq.subtitle) + '</span>';
+        html += '</div>';
+        if (eq.description)        html += '<div class="data-field" style="margin-top:0.2rem">' + escHtml(eq.description) + '</div>';
+        if (eq.hunter_interaction) html += '<div class="data-field" style="margin-top:0.25rem"><span class="data-stat-label">HUNTER USE</span> ' + escHtml(eq.hunter_interaction) + '</div>';
+        if (eq.plot_note)          html += '<div class="data-field" style="margin-top:0.25rem"><span class="data-stat-label">PLOT NOTE</span> ' + escHtml(eq.plot_note) + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    // ── readaloud ──
+    var reads = (sess.readaloud || []).filter(function (r) { return r.text && r.text.trim(); });
+    if (reads.length) {
+      reads.forEach(function (r) {
+        html += '<div class="ref-section">' +
+          '<div class="ref-label">// READALOUD — ' + escHtml(r.label).toUpperCase() + '</div>' +
+          '<div class="data-readaloud">' + escHtml(r.text) + '</div>' +
+        '</div>';
+      });
+    }
+
+    body.innerHTML = html;
+    }); // end loadSessionFull
+  }
+
+  // ── FEED MESSAGES ─────────────────────────────────────────────────────────
+  // Any player: text box at bottom of feed
+  window.sendFeedMessage = function () {
+    var nameEl = document.getElementById('composer-name');
+    var msgEl  = document.getElementById('composer-msg');
+    var name   = (nameEl.value.trim() || (hunterId ? HUNTER_NAMES[hunterId] : null) || 'OPERATIVE').toUpperCase();
+    var body   = msgEl.value.trim();
+    if (!body) return;
+
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sender: name, body: body, session_id: getCurrentSession() })
+    }).then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.id) {
+          msgEl.value = '';
+          var entry = { _msg: true, id: data.id, sender: name, body: body, delivered_at: new Date().toISOString() };
+          appendFeedEntry(entry);
+          scrollFeedToBottom();
+          if (data.id > lastMsgId) lastMsgId = data.id;
+        }
+      }).catch(function () {});
+  };
+
+  // Keeper: clear the visible feed for all connected clients.
+  // Posts a 'clear' sentinel to D1 — all clients wipe their feed when they receive it via polling.
+  // History is preserved in D1 and still accessible via "↑ LOAD EARLIER HISTORY".
+  window.keeperClearFeed = function () {
+    // Clear this client's view immediately
+    feedEntries = [];
+    var container = document.getElementById('feed-entries');
+    var loadWrap  = document.getElementById('feed-load-more-wrap');
+    while (container.lastChild && container.lastChild !== loadWrap) {
+      container.removeChild(container.lastChild);
+    }
+    // Post clear sentinel — other clients wipe on next poll; reloads start fresh
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sender: 'KEEPER', body: '// FEED CLEARED', type: 'clear', session_id: getCurrentSession() })
+    }).then(function (r) { return r.json(); }).then(function (data) {
+      if (data.id) lastMsgId = data.id;
+    }).catch(function () {});
+  };
+
+  // Keeper: send as CAMPBELL / DIRECTOR / etc.
+  window.sendKeeperMessage = function () {
+    var sender = document.getElementById('msg-sender').value;
+    var body   = document.getElementById('msg-body').value.trim();
+    if (!body) return;
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sender: sender, body: body, session_id: getCurrentSession(), type: 'message' })
+    }).then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.id) {
+          document.getElementById('msg-body').value = '';
+          var entry = { _msg: true, id: data.id, sender: sender, body: body, delivered_at: new Date().toISOString() };
+          appendFeedEntry(entry);
+          scrollFeedToBottom();
+          if (data.id > lastMsgId) lastMsgId = data.id;
+        }
+      }).catch(function () {});
+  };
+
+  // Enter key in feed composer
+  document.getElementById('composer-msg').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendFeedMessage(); }
+  });
+
+  // ── FEED RENDERING ────────────────────────────────────────────────────────
+  function fmtTime(ts) {
+    if (!ts) return '';
+    try {
+      var d = new Date(ts.includes('T') ? ts : ts.replace(' ','T') + 'Z');
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } catch(e) { return ''; }
+  }
+
+  // Resolve the outcomes object for an entry — from the entry itself (local rolls)
+  // or by looking up the move name in loaded data (polled rolls from D1).
+  function resolveOutcomes(entry) {
+    if (entry.outcomes) return entry.outcomes;
+    var name = (entry.move_name || '').toLowerCase().trim();
+    if (!name) return null;
+    // Search basic moves by name
+    if (basic_moves && basic_moves.basic_moves) {
+      var bm = basic_moves.basic_moves.filter(function (m) {
+        return m.name.toLowerCase() === name;
+      })[0];
+      if (bm && bm.outcomes) return bm.outcomes;
+    }
+    // Search playbook moves by name
+    if (playbook_moves) {
+      if (playbook_moves.moves) {
+        var keys = Object.keys(playbook_moves.moves);
+        for (var i = 0; i < keys.length; i++) {
+          var pm = playbook_moves.moves[keys[i]];
+          if (pm.name.toLowerCase() === name) return pm;
+        }
+      }
+      if (playbook_moves.always_active_moves) {
+        var hunters = Object.keys(playbook_moves.always_active_moves);
+        for (var h = 0; h < hunters.length; h++) {
+          var list = playbook_moves.always_active_moves[hunters[h]];
+          for (var j = 0; j < list.length; j++) {
+            if (list[j].name.toLowerCase() === name) return list[j];
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  // Build the hover detail HTML: questions (if any) on top, then the specific outcome text.
+  function buildDetailHtml(entry) {
+    var outcomes = resolveOutcomes(entry);
+    if (!outcomes) return '';
+
+    var outcomeKey = entry.outcome === 'advanced' ? '12_plus'
+                   : entry.outcome === 'hit'      ? '10_plus'
+                   : entry.outcome === 'partial'  ? '7_9'
+                   : 'miss';
+    var text = outcomes[outcomeKey] || outcomes['general'] || outcomes['description'] || '';
+    if (!text && !outcomes.questions) return '';
+
+    var html = '';
+    // Questions list first (Investigate a Mystery, Read a Bad Situation)
+    if (outcomes.questions && outcomes.questions.length) {
+      html += '<div class="feed-detail-questions">';
+      html += '<div class="feed-detail-qlabel">// QUESTIONS — spend hold to ask one</div>';
+      html += '<ul class="feed-detail-qlist">';
+      outcomes.questions.forEach(function (q) {
+        html += '<li>' + escHtml(q) + '</li>';
+      });
+      html += '</ul></div>';
+    }
+    // Specific outcome text
+    if (text) {
+      html += '<div class="feed-detail-text">' + escHtml(text) + '</div>';
+    }
+    return html;
+  }
+
+  function buildBreakdown(entry) {
+    var parts = '[<span class="die">' + entry.roll_1 + '</span> + <span class="die">' + entry.roll_2 + '</span>';
+    if (entry.stat_val !== undefined && entry.stat_val !== null && entry.stat_val !== 0) {
+      parts += ' + <span class="stat-val">' + (entry.stat_val > 0 ? '+' : '') + entry.stat_val + '</span>';
+    } else if (entry.stat_used && hunterSheet && hunterSheet.stats) {
+      var sv = parseInt(hunterSheet.stats[entry.stat_used] || 0, 10);
+      if (sv !== 0) parts += ' + <span class="stat-val">' + (sv > 0 ? '+' : '') + sv + '</span>';
+    }
+    if (entry.modifier && entry.modifier !== 0) {
+      parts += ' + <span class="mod-val">' + (entry.modifier > 0 ? '+' : '') + entry.modifier + '</span>';
+    }
+    parts += ' = <span class="total">' + entry.total + '</span>]';
+    return parts;
+  }
+
+  function buildFeedEntryHtml(entry) {
+    var entryType = entry.type || (entry._msg || entry.sender ? 'message' : null);
+
+    // ── Clear sentinel — never rendered ────────────────────────────────────
+    if (entryType === 'clear') return '';
+
+    // ── Readaloud ──────────────────────────────────────────────────────────
+    if (entryType === 'readaloud') {
+      var payload = {};
+      try { payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      var label = payload.label || entry.subject || '';
+      var text  = payload.text  || entry.body    || '';
+      return '<div class="feed-entry feed-readaloud">' +
+        '<div class="feed-readaloud-eyebrow">// KEEPER READALOUD' + (label ? ' — ' + escHtml(label).toUpperCase() : '') + '</div>' +
+        '<div class="feed-readaloud-text">' + escHtml(text) + '</div>' +
+        '<div class="feed-time" style="margin-top:0.4rem">' + fmtTime(entry.delivered_at || entry.created_at) + '</div>' +
+      '</div>';
+    }
+
+    // ── PDA message ────────────────────────────────────────────────────────
+    if (entryType === 'pda') {
+      var payload = {};
+      try { payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      var from    = payload.from    || entry.sender  || 'UNKNOWN';
+      var subject = payload.subject || entry.subject || '';
+      var body    = payload.body    || entry.body    || '';
+      var isCamp  = from.toUpperCase().indexOf('CAMPBELL') !== -1;
+      var pdaClass = isCamp ? 'pda-campbell' : 'pda-other';
+      var valClass = 'pda-field-value';
+      return '<div class="feed-entry feed-pda ' + pdaClass + '">' +
+        '<div class="pda-chrome">' +
+          '<span class="pda-chrome-label">P.O.R.T.A.L FIELD COMMS · SECURE</span>' +
+          '<span class="pda-chrome-status">' + fmtTime(entry.delivered_at || entry.created_at) + '</span>' +
+        '</div>' +
+        '<div class="pda-body">' +
+          '<div class="pda-header-row"><span class="pda-field-label">FROM:</span><span class="' + valClass + '">' + escHtml(from) + '</span></div>' +
+          (subject ? '<div class="pda-header-row"><span class="pda-field-label">SUBJ:</span><span class="' + valClass + '">' + escHtml(subject) + '</span></div>' : '') +
+          '<div class="pda-message-text">' + escHtml(body) + '</div>' +
+          '<div class="pda-footer">// MSG DELIVERED · ENCRYPT 128 · P.O.R.T.A.L CAMPBELL RELAY</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    // ── Document ───────────────────────────────────────────────────────────
+    if (entryType === 'document') {
+      var payload = {};
+      try { payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      var label          = payload.label          || entry.subject || '';
+      var classification = payload.classification || 'FIELD EVIDENCE';
+      var body           = payload.body           || entry.body    || '';
+      var link           = payload.link           || '';
+      return '<div class="feed-entry feed-document">' +
+        '<div class="document-chrome">' +
+          '<span class="document-classification">// ' + escHtml(classification) + '</span>' +
+          '<span class="document-classification">' + fmtTime(entry.delivered_at || entry.created_at) + '</span>' +
+        '</div>' +
+        (label ? '<div class="document-title">' + escHtml(label) + '</div>' : '') +
+        '<div class="document-body">' + escHtml(body) + '</div>' +
+        (link ? '<a class="document-link" href="/' + escHtml(link) + '" target="_blank" rel="noopener">→ VIEW FULL DOCUMENT</a>' : '') +
+      '</div>';
+    }
+
+    // ── Classified (keeper-only) ────────────────────────────────────────────
+    if (entryType === 'classified') {
+      var payload = {};
+      try { payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      var label = payload.label || entry.subject || '';
+      var body  = payload.body  || entry.body    || '';
+      if (keeperMode) {
+        return '<div class="feed-entry feed-classified">' +
+          '<div class="classified-chrome">' +
+            '<span class="classified-eyebrow">// KEEPER CLASSIFIED — RESTRICTED ACCESS</span>' +
+            '<span class="classified-time">' + fmtTime(entry.delivered_at || entry.created_at) + '</span>' +
+          '</div>' +
+          (label ? '<div class="classified-title">' + escHtml(label) + '</div>' : '') +
+          '<div class="classified-body">' + escHtml(body) + '</div>' +
+        '</div>';
+      } else {
+        return '<div class="feed-entry feed-redacted">' +
+          '<div class="redacted-chrome">' +
+            '<span class="redacted-label">// INCOMING TRANSMISSION — CLASSIFICATION: RESTRICTED</span>' +
+            '<span class="redacted-label">' + fmtTime(entry.delivered_at || entry.created_at) + '</span>' +
+          '</div>' +
+          '<div class="redacted-body">' +
+            '<div class="redacted-bar"></div>' +
+            '<div class="redacted-bar"></div>' +
+            '<div class="redacted-bar"></div>' +
+            '<div class="redacted-footer">[ CLASSIFIED — KEEPER ACCESS ONLY ]</div>' +
+          '</div>' +
+        '</div>';
+      }
+    }
+
+    // ── Image / Map ────────────────────────────────────────────────────────
+    if (entryType === 'image' || entryType === 'map') {
+      var payload = {};
+      try { payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      var src   = payload.src   || '';
+      var label = payload.label || entry.subject || '';
+      var isMap = entryType === 'map';
+      return '<div class="feed-entry feed-image">' +
+        '<div class="feed-image-type-tag">// ' + (isMap ? 'MAP' : 'IMAGE') + ' SHARED BY KEEPER</div>' +
+        (src ? '<div class="feed-image-card" onclick="openLightbox(\'' + escHtml(src) + '\',\'' + escHtml(label) + '\')">' +
+          '<img src="' + escHtml(src) + '" alt="' + escHtml(label) + '" loading="lazy">' +
+        '</div>' : '') +
+        (label ? '<div class="feed-image-label">' + escHtml(label) + '</div>' : '') +
+      '</div>';
+    }
+
+    // ── Tone card ──────────────────────────────────────────────────────────
+    if (entryType === 'tone') {
+      var payload = {};
+      try { payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      var text = payload.text || entry.body || '';
+      return '<div class="feed-entry feed-tone">' +
+        '<div class="feed-tone-text">' + escHtml(text) + '</div>' +
+      '</div>';
+    }
+
+    // ── Linecard ───────────────────────────────────────────────────────────
+    if (entryType === 'linecard') {
+      var payload = {};
+      try { payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      var recipient     = (payload.recipient || '').toLowerCase();
+      var character     = payload.character    || 'UNKNOWN';
+      var context       = payload.context      || '';
+      var lines         = Array.isArray(payload.lines) ? payload.lines : [];
+      var intensity     = payload.intensity    || 'normal';
+      var stageDir      = payload.stage_direction || '';
+      var isRecipient   = keeperMode || (recipient && hunterId && hunterId.toLowerCase() === recipient);
+      // Non-recipients see a compact redacted notice
+      if (!isRecipient) {
+        return '<div class="feed-entry feed-linecard">' +
+          '<div class="linecard-header">' +
+            '<span class="linecard-header-character">// LINECARD — ' + escHtml(character.toUpperCase()) + '</span>' +
+            '<span class="linecard-header-recipient">→ ' + escHtml(recipient.toUpperCase()) + '</span>' +
+          '</div>' +
+          '<div class="linecard-redacted">[ LINECARD DELIVERED — ' + escHtml(character.toUpperCase()) + ' → ' + escHtml(recipient.toUpperCase()) + ' ]</div>' +
+        '</div>';
+      }
+      var intensityClass = intensity === 'high' ? 'lc-intensity-high'
+                         : intensity === 'clear' ? '' : 'lc-intensity-normal';
+      var bleedText = intensity === 'high'
+        ? 'Upon the heath;\nthere to meet with\nMacbeth. I come, Graymalkin!\nPaddock calls. Anon!'
+        : '';
+      var linesHtml = '';
+      lines.forEach(function (ln) {
+        var cueHtml  = ln.cue ? '<div class="linecard-cue">' + escHtml(ln.cue) + '</div>' : '';
+        var textAttr = bleedText ? ' data-bleed="' + escHtml(bleedText) + '"' : '';
+        linesHtml += '<div class="linecard-line">' + cueHtml +
+          '<div class="linecard-text"' + textAttr + '>' + escHtml(ln.text || '') + '</div>' +
+        '</div>';
+      });
+      return '<div class="feed-entry feed-linecard ' + intensityClass + '" id="lc-' + escHtml(entry.id || '') + '">' +
+        '<div class="linecard-header">' +
+          '<span class="linecard-header-character">// ' + escHtml(character.toUpperCase()) + '</span>' +
+          '<span class="linecard-header-recipient">→ ' + escHtml(recipient.toUpperCase()) + '</span>' +
+        '</div>' +
+        '<div class="linecard-body">' +
+          (context ? '<div class="linecard-context">' + escHtml(context) + '</div>' : '') +
+          '<div class="linecard-lines">' + linesHtml + '</div>' +
+          (stageDir ? '<div class="linecard-stage-dir">(' + escHtml(stageDir) + ')</div>' : '') +
+        '</div>' +
+      '</div>';
+    }
+
+    // ── Scan result ────────────────────────────────────────────────────────
+    if (entryType === 'scan') {
+      var payload = {};
+      try { payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      var label    = payload.label           || entry.subject || '';
+      var sublabel = payload.sublabel        || '';
+      var reading  = payload.reading_display || payload.reading || '—';
+      var status   = payload.status          || 'nominal';
+      var note     = payload.note            || '';
+      var statusClass = (status === 'alert' || status === 'critical') ? ' scan-' + status : '';
+      var statusLabel = status.toUpperCase();
+      return '<div class="feed-entry feed-scan' + statusClass + '">' +
+        '<div class="scan-chrome">' +
+          '<span class="scan-chrome-label">// PORTAL SCANNER · BIM ANALYSIS</span>' +
+          '<span class="scan-chrome-time">' + fmtTime(entry.delivered_at || entry.created_at) + '</span>' +
+        '</div>' +
+        '<div class="scan-body">' +
+          (label    ? '<div class="scan-label">'    + escHtml(label)    + '</div>' : '') +
+          (sublabel ? '<div class="scan-sublabel">' + escHtml(sublabel) + '</div>' : '') +
+          '<div class="scan-reading-row">' +
+            '<span class="scan-reading-value">' + escHtml(reading) + '</span>' +
+            '<span class="scan-status-pip">' + escHtml(statusLabel) + '</span>' +
+          '</div>' +
+          (note ? '<div class="scan-note">' + escHtml(note) + '</div>' : '') +
+        '</div>' +
+      '</div>';
+    }
+
+    // ── Standard chat / CAMPBELL message ──────────────────────────────────
+    if (entryType === 'message' || entry._msg || entry.sender) {
+      return '<div class="feed-entry msg-entry">' +
+        '<div class="feed-msg-sender">// ' + escHtml(entry.sender || 'SYSTEM') + '</div>' +
+        '<div class="feed-msg-body">' + escHtml(entry.body || '') + '</div>' +
+        '<div class="feed-time">' + fmtTime(entry.delivered_at || entry.created_at || entry.timestamp) + '</div>' +
+      '</div>';
+    }
+
+    var hid      = entry.hunter_id || '?';
+    var color    = HUNTER_COLORS[hid] || '#aaa';
+    var hunterName = HUNTER_NAMES[hid] || hid;
+    var outcome  = entry.outcome || 'miss';
+    var badgeText = outcome === 'advanced' ? '⚡ ADVANCED'
+                  : outcome === 'hit'      ? '✓ SUCCESS'
+                  : outcome === 'partial'  ? '~ PARTIAL'
+                  : '✗ FAILURE';
+    var detail   = buildDetailHtml(entry);
+
+    return '<div class="feed-entry">' +
+      '<div class="feed-entry-meta">' +
+        '<span class="feed-hunter-tag" style="color:' + color + ';border-color:' + color + '30;background:' + color + '10">' + hunterName.toUpperCase() + '</span>' +
+        '<span class="feed-move-name">' + escHtml(entry.move_name || '') + '</span>' +
+        '<span class="feed-time">' + fmtTime(entry.rolled_at || entry.timestamp) + '</span>' +
+      '</div>' +
+      '<div class="feed-roll-line">' +
+        '<span class="feed-breakdown">' + buildBreakdown(entry) + '</span>' +
+        '<span class="feed-badge ' + outcome + '">' + badgeText + '</span>' +
+      '</div>' +
+      (detail ? '<div class="feed-outcome-detail">' + detail + '</div>' : '') +
+    '</div>';
+  }
+
+  // Linecard high-intensity auto-revert — one timer per page (cancelled on new post).
+  var _linecardRevertTimer = null;
+
+  function appendFeedEntry(entry) {
+    var container = document.getElementById('feed-entries');
+    var div = document.createElement('div');
+    div.innerHTML = buildFeedEntryHtml(entry);
+    container.appendChild(div.firstElementChild);
+    feedEntries.push(entry);
+
+    // Linecard high-intensity → auto-revert to normal after 45s.
+    if (entry.type === 'linecard') {
+      var lc_payload = {};
+      try { lc_payload = typeof entry.payload === 'string' ? JSON.parse(entry.payload) : (entry.payload || {}); } catch (x) {}
+      if (lc_payload.intensity === 'high') {
+        if (_linecardRevertTimer) clearTimeout(_linecardRevertTimer);
+        _linecardRevertTimer = setTimeout(function () {
+          var el = document.getElementById('lc-' + (entry.id || ''));
+          if (el) {
+            el.classList.remove('lc-intensity-high');
+            el.classList.add('lc-intensity-normal');
+          }
+          _linecardRevertTimer = null;
+        }, 45000);
+      }
+    }
+
+    // If the player has the HANDOUTS tab open, refresh it so new reveals appear immediately.
+    // Guard keeperMode — in keeper mode the panel body belongs to renderKeeperPanel(),
+    // and calling renderHandoutsPanel() here would wipe the keeper's handout list.
+    if (!keeperMode && activeTab === 'handouts' && entry.type && entry.type !== 'message') {
+      renderHandoutsPanel();
+    }
+  }
+
+  function prependFeedEntries(entries) {
+    var container = document.getElementById('feed-entries');
+    var loadWrap  = document.getElementById('feed-load-more-wrap');
+    var savedScroll = container.scrollHeight - container.scrollTop;
+    entries.forEach(function (entry) {
+      var div = document.createElement('div');
+      div.innerHTML = buildFeedEntryHtml(entry);
+      // Insert after the load-more-wrap (at position 1, not 0)
+      container.insertBefore(div.firstElementChild, loadWrap ? loadWrap.nextSibling : container.firstChild);
+    });
+    container.scrollTop = container.scrollHeight - savedScroll;
+  }
+
+  function scrollFeedToBottom() {
+    var c = document.getElementById('feed-entries');
+    c.scrollTop = c.scrollHeight;
+  }
+
+  document.getElementById('feed-entries').addEventListener('scroll', function () {
+    var c = this;
+    autoScroll = c.scrollTop + c.clientHeight >= c.scrollHeight - 40;
+  });
+
+  // ── FEED LOADING ──────────────────────────────────────────────────────────
+  function mergeAndSort(rolls, msgs) {
+    var all = [];
+    (rolls || []).forEach(function (r) { r._type = 'roll'; all.push(r); });
+    (msgs  || []).forEach(function (m) { m._type = 'msg';  all.push(m); });
+    all.sort(function (a, b) {
+      var ta = new Date(((a.rolled_at || a.delivered_at || a.timestamp || '')).replace(' ', 'T')).getTime();
+      var tb = new Date(((b.rolled_at || b.delivered_at || b.timestamp || '')).replace(' ', 'T')).getTime();
+      return ta - tb;
+    });
+    return all;
+  }
+
+  function initialLoad() {
+    Promise.all([
+      fetch('/api/v1/rolls?limit=' + FEED_PAGE).then(function (r) { return r.ok ? r.json() : []; }),
+      fetch('/api/v1/messages?limit=100').then(function (r) { return r.ok ? r.json() : []; })
+    ]).then(function (results) {
+      var rolls = results[0].reverse();
+      var msgs  = results[1].reverse();
+
+      // Apply clear floor: if a 'clear' sentinel exists, discard everything before it
+      var lastClear = null;
+      msgs.forEach(function (m) { if (m.type === 'clear') lastClear = m; });
+      if (lastClear) {
+        var clearTime = new Date((lastClear.delivered_at || '').replace(' ', 'T')).getTime();
+        msgs  = msgs.filter(function (m) { return m.id > lastClear.id; });
+        // Advance lastRollId past ALL fetched rolls before filtering — critical to prevent
+        // the poll cursor resetting to 0 when no rolls survive the clear filter.
+        // Without this, the next poll uses after=0, which the API treats as "initial load"
+        // and returns all historical rolls, bypassing the clear.
+        rolls.forEach(function (r) { if (r.id > lastRollId) lastRollId = r.id; });
+        rolls = rolls.filter(function (r) {
+          var rt = new Date((r.rolled_at || r.timestamp || '').replace(' ', 'T')).getTime();
+          return rt > clearTime;
+        });
+      }
+
+      rolls.forEach(function (r) { if (r.id > lastRollId) lastRollId = r.id; });
+      msgs.forEach(function  (m) { if (m.id > lastMsgId)  lastMsgId  = m.id; });
+
+      var combined = mergeAndSort(rolls, msgs);
+      combined.forEach(function (e) { appendFeedEntry(e); });
+      scrollFeedToBottom();
+
+      feedOffset = rolls.length;
+      lastPollTime = Date.now();
+      startPolling();
+    }).catch(function () { startPolling(); });
+  }
+
+  window.loadOlderEntries = function () {
+    var btn = document.getElementById('load-more-btn');
+    btn.disabled = true;
+    btn.textContent = '// LOADING…';
+    fetch('/api/v1/rolls?limit=' + FEED_PAGE + '&offset=' + feedOffset)
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (rolls) {
+        if (rolls.length === 0) {
+          btn.textContent = '↑ NONE OLDER';
+          return;
+        }
+        rolls.reverse();
+        rolls.forEach(function (r) { if (r.id > lastRollId) lastRollId = r.id; });
+        prependFeedEntries(rolls);
+        feedOffset += rolls.length;
+        btn.disabled = false;
+        btn.textContent = '↑ LOAD EARLIER HISTORY';
+      })
+      .catch(function () { btn.disabled = false; btn.textContent = '↑ LOAD EARLIER HISTORY'; });
+  };
+
+  // ── POLLING ───────────────────────────────────────────────────────────────
+  var POLL_ACTIVE  = 6000;   // interval when page is visible
+  var POLL_PASSIVE = 60000;  // interval when tab is hidden (CF free-tier budget)
+  var lastPollTime = 0;
+  var pollInFlight = false;  // guard against concurrent polls (visibilitychange + focus fire together)
+
+  function startPolling() {
+    if (pollTimer) clearInterval(pollTimer);
+    pollTimer = setInterval(poll, POLL_ACTIVE);
+    if (saveTimer) clearInterval(saveTimer);
+    saveTimer = setInterval(saveSheet, 5000);
+  }
+
+  function stopPolling() {
+    if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    if (saveTimer) { clearInterval(saveTimer); saveTimer = null; }
+  }
+
+  // Switches between fast (6s) and slow (60s) polling based on visibility + OS window focus.
+  // Called by both visibilitychange and window blur/focus events.
+  function updatePollingMode() {
+    var active = !document.hidden && document.hasFocus();
+    if (pollTimer) clearInterval(pollTimer);
+    if (active) {
+      if (Date.now() - lastPollTime > POLL_ACTIVE) poll();
+      pollTimer = setInterval(poll, POLL_ACTIVE);
+    } else {
+      pollTimer = setInterval(poll, POLL_PASSIVE);
+    }
+  }
+
+  document.addEventListener('visibilitychange', updatePollingMode);
+  window.addEventListener('blur',  updatePollingMode);
+  window.addEventListener('focus', updatePollingMode);
+
+  function poll() {
+    if (pollInFlight) return;
+    pollInFlight = true;
+    lastPollTime = Date.now();
+    Promise.all([
+      fetch('/api/v1/rolls?after=' + lastRollId).then(function (r) { return r.ok ? r.json() : []; }),
+      fetch('/api/v1/messages?after=' + lastMsgId).then(function (r) { return r.ok ? r.json() : []; })
+    ]).then(function (results) {
+      pollInFlight = false;
+      var newRolls = results[0];
+      var newMsgs  = results[1];
+      newRolls.forEach(function (r) { if (r.id > lastRollId) lastRollId = r.id; });
+      newMsgs.forEach(function  (m) { if (m.id > lastMsgId)  lastMsgId  = m.id; });
+
+      // Handle feed-clear signal: if a 'clear' message arrives, wipe the feed
+      var clearMsg = newMsgs.filter(function (m) { return m.type === 'clear'; })[0];
+      if (clearMsg) {
+        feedEntries = [];
+        var container = document.getElementById('feed-entries');
+        var loadWrap  = document.getElementById('feed-load-more-wrap');
+        while (container.lastChild && container.lastChild !== loadWrap) {
+          container.removeChild(container.lastChild);
+        }
+        // Only render messages that arrived strictly after the clear sentinel
+        newMsgs  = newMsgs.filter(function (m) { return m.id > clearMsg.id; });
+        newRolls = [];
+      }
+
+      var combined = mergeAndSort(newRolls, newMsgs);
+      combined.forEach(function (e) {
+        var alreadyIn = feedEntries.some(function (fe) { return fe._id === e.id && e._type === 'roll'; });
+        if (!alreadyIn) appendFeedEntry(e);
+      });
+      if (combined.length > 0 && autoScroll) scrollFeedToBottom();
+    }).catch(function () { pollInFlight = false; });
+  }
+
+  // ── HELPERS ───────────────────────────────────────────────────────────────
+  function getCurrentSession() {
+    return null;
+  }
+
+  function escHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── LIGHTBOX ───────────────────────────────────────────────────────────────
+  window.openLightbox = function (src, caption) {
+    var lb  = document.getElementById('lightbox');
+    var img = document.getElementById('lightbox-img');
+    var cap = document.getElementById('lightbox-caption');
+    img.src     = src;
+    cap.textContent = caption || '';
+    lb.classList.add('open');
+    requestAnimationFrame(function () { lb.classList.add('visible'); });
+  };
+  window.closeLightbox = function () {
+    var lb = document.getElementById('lightbox');
+    lb.classList.remove('visible');
+    setTimeout(function () { lb.classList.remove('open'); }, 150);
+  };
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // ── BOOT ──────────────────────────────────────────────────────────────────
+  loadStaticData().then(function () {
+    // Apply auth state (keeper mode or player auto-select).
+    // portalAuth is loaded async from player-nav.js; use event fallback.
+    if (window.portalAuth) {
+      applyAuthState();
+    } else {
+      window.addEventListener('portalAuthReady', applyAuthState, { once: true });
+    }
+
+    if (hunterId) {
+      loadHunterSheet(hunterId).then(function () {
+        renderPanel();
+        initialLoad();
+      });
+    } else {
+      renderPanel();
+      initialLoad();
+    }
+  });
+
+  // ── MAP STATE HELPERS ────────────────────────────────────────────────────────
+  function _normaliseMapState(raw) {
+    if (!raw) return { u: {}, v: {} };
+    if (raw.u !== undefined || raw.v !== undefined) return { u: raw.u || {}, v: raw.v || {} };
+    return { u: raw, v: {} }; // legacy flat format — treat as unlocked
+  }
+
+  function _saveMapState(mapId) {
+    var authFetch = (window.portalAuth && window.portalAuth.isLoggedIn())
+      ? window.portalAuth.fetch.bind(window.portalAuth) : fetch;
+    authFetch('/api/v1/maps/' + mapId + '/state', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(mapState)
+    });
+  }
+
+  function _findAllLocs(map) {
+    if (map.type === 'connection') return map.nodes || [];
+    var locs = [];
+    map.grid.forEach(function (row) {
+      row.forEach(function (cell) { if (cell && cell.type === 'loc') locs.push(cell); });
+    });
+    return locs;
+  }
+
+  function _findMapById(mapId) {
+    var grids = (maps_data && maps_data.maps) || [];
+    var conn  = (maps_data && maps_data.connection_maps) || [];
+    return grids.find(function (m) { return m.id === mapId; }) ||
+           conn.find(function (m) { return m.id === mapId; }) || null;
+  }
+
+  function _findMapForSession(sessId) {
+    var grids = (maps_data && maps_data.maps) || [];
+    var conn  = (maps_data && maps_data.connection_maps) || [];
+    return grids.find(function (m) { return m.session_id === sessId; }) ||
+           conn.find(function (m) { return m.session_id === sessId; }) || null;
+  }
+
+  // ── MAP SESSION SELECTOR HELPERS ────────────────────────────────────────────
+  function _buildPlayerMapSelHtml() {
+    if (!session_data || !session_data.length) return '';
+    var html = '<div class="handout-panel-tabs">';
+    session_data.forEach(function (s) {
+      var active = playerMapSession === s.id ? ' active' : '';
+      html += '<button class="handout-panel-tab' + active + '" onclick="switchPlayerMapSession(\'' + s.id + '\')">' + escHtml(s.session_key) + '</button>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  function _buildKeeperMapSelHtml() {
+    if (!session_data || !session_data.length) return '';
+    var html = '<div class="data-session-selector">';
+    session_data.forEach(function (s) {
+      var active = keeperMapSession === s.id ? ' active' : '';
+      html += '<button class="data-sess-btn' + active + '" onclick="keeperSelectMapSession(\'' + s.id + '\')">' + escHtml(s.session_key) + '</button>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  // ── MAP PANEL (player) ──────────────────────────────────────────────────────
+  function renderMapPanel() {
+    var body = document.getElementById('panel-body');
+    if (!session_data || !session_data.length) {
+      body.innerHTML = '<div class="keeper-panel-note">// NO MAP DATA</div>';
+      return;
+    }
+    if (!playerMapSession) playerMapSession = session_data[session_data.length - 1].id;
+    var selHtml = _buildPlayerMapSelHtml();
+    var map = _findMapForSession(playerMapSession);
+    if (!map) {
+      body.innerHTML = selHtml + '<div class="keeper-panel-note">// NO MAP FOR THIS MISSION</div>';
+      return;
+    }
+    body.innerHTML = selHtml + '<div class="keeper-panel-note">// SYNCING MAP STATE…</div>';
+    fetch('/api/v1/maps/' + map.id + '/state')
+      .then(function (r) { return r.ok ? r.json() : {}; })
+      .then(function (state) {
+        mapState = _normaliseMapState(state);
+        _renderAnyMap(body, map, false, selHtml);
+      })
+      .catch(function () {
+        mapState = { u: {}, v: {} };
+        _renderAnyMap(body, map, false, selHtml);
+      });
+  }
+
+  window.switchPlayerMapSession = function (sessId) {
+    playerMapSession = sessId;
+    selectedMapLoc = null;
+    renderMapPanel();
+  };
+
+  // ── MAP TAB (keeper) ────────────────────────────────────────────────────────
+  function renderKeeperMapTab() {
+    var body = document.getElementById('panel-body');
+    if (!session_data || !session_data.length) {
+      body.innerHTML = '<div class="keeper-panel-note">// NO MAP DATA</div>';
+      return;
+    }
+    if (!keeperMapSession) keeperMapSession = session_data[session_data.length - 1].id;
+    var selHtml = _buildKeeperMapSelHtml();
+    var map = _findMapForSession(keeperMapSession);
+    if (!map) {
+      body.innerHTML = selHtml + '<div class="keeper-panel-note">// NO MAP FOR THIS MISSION</div>';
+      return;
+    }
+    body.innerHTML = selHtml + '<div class="keeper-panel-note">// LOADING MAP STATE…</div>';
+    fetch('/api/v1/maps/' + map.id + '/state')
+      .then(function (r) { return r.ok ? r.json() : {}; })
+      .then(function (state) {
+        mapState = _normaliseMapState(state);
+        _renderAnyMap(body, map, true, selHtml);
+      })
+      .catch(function () {
+        mapState = { u: {}, v: {} };
+        _renderAnyMap(body, map, true, selHtml);
+      });
+  }
+
+  window.keeperSelectMapSession = function (sessId) {
+    keeperMapSession = sessId;
+    selectedMapLoc = null;
+    renderKeeperMapTab();
+  };
+
+  // ── SHARED MAP GRID RENDERER ────────────────────────────────────────────────
+  function _renderMapGrid(body, map, keeperView, prefixHtml) {
+    var html = (prefixHtml || '') + '<div class="map-wrap">';
+    html += '<div class="map-header">';
+    html += '<div class="map-title">// ' + escHtml(map.title) + '</div>';
+    html += '<div class="map-subtitle">' + escHtml(map.subtitle) + '</div>';
+    html += '</div>';
+
+    html += '<div class="map-grid">';
+    map.grid.forEach(function (row) {
+      row.forEach(function (cell) {
+        if (!cell) return;
+        if (cell.type === 'street-h') {
+          html += '<div class="map-cell-street-h">' +
+            '<span class="map-street-label">' + escHtml(cell.label) + '</span>' +
+            '</div>';
+        } else if (cell.type === 'street-v') {
+          html += '<div class="map-cell-street-v"></div>';
+        } else if (cell.type === 'loc') {
+          var unlocked = !!(mapState.u && mapState.u[cell.id]);
+          var visited  = !!(mapState.v && mapState.v[cell.id]);
+          var isSelected = !keeperView && selectedMapLoc === cell.id;
+          var cls = 'map-cell-loc' +
+            (unlocked ? ' unlocked' : ' locked') +
+            (visited  ? ' visited'  : '') +
+            (isSelected ? ' selected' : '');
+          var orderBadge = (keeperView && cell.order) ? '<div class="map-loc-order">' + cell.order + '</div>' : '';
+          if (keeperView) {
+            html += '<div class="' + cls + '" onclick="toggleMapLocation(\'' +
+              escHtml(map.id) + '\',\'' + escHtml(cell.id) + '\')">';
+            html += orderBadge;
+            html += '<div class="map-loc-label">' + escHtml(cell.label) + '</div>';
+            html += '<div class="map-loc-sublabel">' + escHtml(cell.sublabel) + '</div>';
+            if (cell.npcs && cell.npcs.length) {
+              html += '<div class="map-loc-npc-row">';
+              cell.npcs.forEach(function (n) { html += '<span class="map-loc-npc">' + escHtml(n) + '</span>'; });
+              html += '</div>';
+            }
+            if (cell.keeper_note) {
+              html += '<div class="map-loc-keepernote">↳ ' + escHtml(cell.keeper_note) + '</div>';
+            }
+            html += '<div class="map-loc-toggle">' + (unlocked ? '● VISIBLE' : '○ LOCKED') + '</div>';
+            html += '<button class="map-loc-visited-btn" onclick="toggleMapVisited(\'' +
+              escHtml(map.id) + '\',\'' + escHtml(cell.id) + '\');event.stopPropagation()">' +
+              (visited ? '✓ VISITED' : '○ NOT VISITED') + '</button>';
+            html += '</div>';
+          } else if (unlocked) {
+            html += '<div class="' + cls + '" onclick="showMapDetail(\'' + escHtml(cell.id) + '\')">';
+            html += '<div class="map-loc-label">' + escHtml(cell.label) + '</div>';
+            html += '<div class="map-loc-sublabel">' + escHtml(cell.sublabel) + '</div>';
+            html += '</div>';
+          } else {
+            html += '<div class="' + cls + '">';
+            html += '<div class="map-loc-redacted">░░░░░░<br>░░░░░░<br>░░░░░░</div>';
+            html += '<div class="map-loc-classified">// CLASSIFIED</div>';
+            html += '</div>';
+          }
+        } else {
+          html += '<div class="map-cell-empty"></div>';
+        }
+      });
+    });
+    html += '</div>'; // .map-grid
+
+    if (keeperView) {
+      html += '<div class="map-bulk-btns">' +
+        '<button class="map-bulk-btn" onclick="toggleAllMap(\'' + escHtml(map.id) + '\',true)">// REVEAL ALL</button>' +
+        '<button class="map-bulk-btn" onclick="toggleAllMap(\'' + escHtml(map.id) + '\',false)">// RESET MAP</button>' +
+        '<button class="map-bulk-btn" onclick="toggleAllVisited(\'' + escHtml(map.id) + '\',true)">// ALL VISITED</button>' +
+        '<button class="map-bulk-btn" onclick="toggleAllVisited(\'' + escHtml(map.id) + '\',false)">// CLEAR VISITED</button>' +
+        '</div>';
+    } else {
+      html += '<div id="map-detail">';
+      if (selectedMapLoc) {
+        var locData = _findMapLoc(map, selectedMapLoc);
+        if (locData && mapState.u && mapState.u[locData.id]) {
+          html += _buildMapDetail(locData);
+        }
+      }
+      html += '</div>';
+      html += '<button class="map-sync-btn" onclick="renderMapPanel()">// SYNC MAP</button>';
+    }
+
+    html += '</div>'; // .map-wrap
+    body.innerHTML = html;
+  }
+
+  // ── MAP TYPE DISPATCHER ──────────────────────────────────────────────────────
+  function _renderAnyMap(body, map, keeperView, prefixHtml) {
+    if (map.type === 'connection') {
+      _renderConnectionMap(body, map, keeperView, prefixHtml);
+    } else {
+      _renderMapGrid(body, map, keeperView, prefixHtml);
+    }
+  }
+
+  // ── CONNECTION MAP RENDERER ──────────────────────────────────────────────────
+  function _renderConnectionMap(body, map, keeperView, prefixHtml) {
+    var html = (prefixHtml || '') + '<div class="map-wrap">';
+    html += '<div class="map-header">';
+    html += '<div class="map-title">// ' + escHtml(map.title) + '</div>';
+    html += '<div class="map-subtitle">' + escHtml(map.subtitle) + '</div>';
+    html += '</div>';
+
+    html += '<div class="conn-map-grid">';
+    (map.nodes || []).forEach(function (node) {
+      var unlocked = !!(mapState.u && mapState.u[node.id]);
+      var isSelected = !keeperView && selectedMapLoc === node.id;
+      var cls = 'conn-node' +
+        (unlocked ? ' unlocked' : ' locked') +
+        (isSelected ? ' selected' : '');
+
+      if (keeperView) {
+        html += '<div class="' + cls + '" onclick="toggleMapLocation(\'' +
+          escHtml(map.id) + '\',\'' + escHtml(node.id) + '\')">';
+        html += '<div class="conn-node-badges">';
+        if (node.order) html += '<span class="conn-order-badge">' + node.order + '</span>';
+        if (node.route) html += '<span class="conn-route-badge conn-route-' + escHtml(node.route) + '">' + escHtml(node.route) + '</span>';
+        html += '</div>';
+        html += '<div class="conn-node-label">' + escHtml(node.label) + '</div>';
+        html += '<div class="conn-node-sublabel">' + escHtml(node.sublabel) + '</div>';
+        if (node.npcs && node.npcs.length) {
+          html += '<div class="conn-node-npc-row">';
+          node.npcs.forEach(function (n) { html += '<span class="conn-node-npc">' + escHtml(n) + '</span>'; });
+          html += '</div>';
+        }
+        if (node.keeper_note) {
+          html += '<div class="conn-node-keepernote">↳ ' + escHtml(node.keeper_note) + '</div>';
+        }
+        html += '<div class="conn-node-toggle">' + (unlocked ? '● VISIBLE' : '○ LOCKED') + '</div>';
+        html += '</div>';
+      } else if (unlocked) {
+        html += '<div class="' + cls + '" onclick="showMapDetail(\'' + escHtml(node.id) + '\')">';
+        html += '<div class="conn-node-label">' + escHtml(node.label) + '</div>';
+        html += '<div class="conn-node-sublabel">' + escHtml(node.sublabel) + '</div>';
+        html += '</div>';
+      } else {
+        html += '<div class="' + cls + '">';
+        html += '<div class="conn-node-redacted">░░░░░░<br>░░░░░░<br>░░░░░░</div>';
+        html += '<div class="conn-node-classified">// CLASSIFIED</div>';
+        html += '</div>';
+      }
+    });
+    html += '</div>'; // .conn-map-grid
+
+    if (keeperView) {
+      html += '<div class="map-bulk-btns">' +
+        '<button class="map-bulk-btn" onclick="toggleAllMap(\'' + escHtml(map.id) + '\',true)">// REVEAL ALL</button>' +
+        '<button class="map-bulk-btn" onclick="toggleAllMap(\'' + escHtml(map.id) + '\',false)">// RESET MAP</button>' +
+        '</div>';
+    } else {
+      html += '<div id="map-detail">';
+      if (selectedMapLoc) {
+        var nodeData = (map.nodes || []).find(function (n) { return n.id === selectedMapLoc; });
+        if (nodeData && mapState.u && mapState.u[nodeData.id]) {
+          html += _buildConnDetail(nodeData, map);
+        }
+      }
+      html += '</div>';
+      html += '<button class="map-sync-btn" onclick="renderMapPanel()">// SYNC MAP</button>';
+    }
+
+    html += '</div>'; // .map-wrap
+    body.innerHTML = html;
+  }
+
+  function _buildConnDetail(node, map) {
+    var edges = map.edges || [];
+    var connected = edges.filter(function (e) { return e.from === node.id || e.to === node.id; });
+    var unlockedConnected = connected.filter(function (e) {
+      var otherId = e.from === node.id ? e.to : e.from;
+      return mapState.u && mapState.u[otherId];
+    });
+    var html = '<div class="map-detail-card">' +
+      '<div class="map-detail-label">' + escHtml(node.label) + '</div>' +
+      '<div class="map-detail-sublabel">' + escHtml(node.sublabel) + '</div>' +
+      '<div class="map-detail-desc">' + escHtml(node.player_desc) + '</div>';
+    if (unlockedConnected.length) {
+      html += '<div class="conn-detail-edges">';
+      unlockedConnected.forEach(function (e) {
+        var otherId = e.from === node.id ? e.to : e.from;
+        var otherNode = (map.nodes || []).find(function (n) { return n.id === otherId; });
+        var otherLabel = otherNode ? otherNode.label : otherId;
+        var edgeLabel = e.label ? ' — ' + e.label : '';
+        html += '<div class="conn-detail-edge">→ <span class="conn-edge-target">' +
+          escHtml(otherLabel) + '</span>' + escHtml(edgeLabel) + '</div>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  window.showMapDetail = function (locId) {
+    selectedMapLoc = (selectedMapLoc === locId) ? null : locId;
+    var map = _findMapForSession(playerMapSession);
+    if (!map) return;
+    _renderAnyMap(document.getElementById('panel-body'), map, false, _buildPlayerMapSelHtml());
+  };
+
+  window.toggleMapLocation = function (mapId, locId) {
+    mapState.u = mapState.u || {};
+    mapState.u[locId] = !mapState.u[locId];
+    _saveMapState(mapId);
+    var map = _findMapById(mapId);
+    if (map) _renderAnyMap(document.getElementById('panel-body'), map, true, _buildKeeperMapSelHtml());
+  };
+
+  window.toggleMapVisited = function (mapId, locId) {
+    mapState.v = mapState.v || {};
+    mapState.v[locId] = !mapState.v[locId];
+    _saveMapState(mapId);
+    var map = _findMapById(mapId);
+    if (map) _renderAnyMap(document.getElementById('panel-body'), map, true, _buildKeeperMapSelHtml());
+  };
+
+  window.toggleAllMap = function (mapId, unlock) {
+    var map = _findMapById(mapId);
+    if (!map) return;
+    mapState.u = mapState.u || {};
+    _findAllLocs(map).forEach(function (cell) { mapState.u[cell.id] = unlock || undefined; });
+    if (!unlock) mapState.u = {};
+    _saveMapState(mapId);
+    _renderAnyMap(document.getElementById('panel-body'), map, true, _buildKeeperMapSelHtml());
+  };
+
+  window.toggleAllVisited = function (mapId, mark) {
+    var map = _findMapById(mapId);
+    if (!map) return;
+    mapState.v = mapState.v || {};
+    _findAllLocs(map).forEach(function (cell) { mapState.v[cell.id] = mark || undefined; });
+    if (!mark) mapState.v = {};
+    _saveMapState(mapId);
+    _renderAnyMap(document.getElementById('panel-body'), map, true, _buildKeeperMapSelHtml());
+  };
+
+  function _findMapLoc(map, locId) {
+    if (map.type === 'connection') {
+      return (map.nodes || []).find(function (n) { return n.id === locId; }) || null;
+    }
+    for (var r = 0; r < map.grid.length; r++) {
+      for (var c = 0; c < map.grid[r].length; c++) {
+        var cell = map.grid[r][c];
+        if (cell && cell.type === 'loc' && cell.id === locId) return cell;
+      }
+    }
+    return null;
+  }
+
+  function _buildMapDetail(loc) {
+    return '<div class="map-detail-card">' +
+      '<div class="map-detail-label">' + escHtml(loc.label) + '</div>' +
+      '<div class="map-detail-sublabel">' + escHtml(loc.sublabel) + '</div>' +
+      '<div class="map-detail-desc">' + escHtml(loc.player_desc) + '</div>' +
+      '</div>';
+  }
+
+  // ── PANEL RESIZE ─────────────────────────────────────────────────────────────
+  (function () {
+    var handle   = document.getElementById('panel-resize-handle');
+    var panelCol = document.getElementById('panel-col');
+    var MIN_W = 280, MAX_W = 760;
+    var dragging = false, startX, startW;
+
+    var saved = parseInt(localStorage.getItem('portal_panel_width'), 10);
+    if (saved && saved >= MIN_W && saved <= MAX_W) panelCol.style.width = saved + 'px';
+
+    handle.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      dragging = true;
+      startX = e.clientX;
+      startW = panelCol.offsetWidth;
+      handle.classList.add('dragging');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', function (e) {
+      if (!dragging) return;
+      var newW = Math.min(MAX_W, Math.max(MIN_W, startW - (e.clientX - startX)));
+      panelCol.style.width = newW + 'px';
+    });
+
+    document.addEventListener('mouseup', function () {
+      if (!dragging) return;
+      dragging = false;
+      handle.classList.remove('dragging');
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      localStorage.setItem('portal_panel_width', panelCol.offsetWidth);
+    });
+  }());
+
+}());
+</script>
+</body>
+</html>

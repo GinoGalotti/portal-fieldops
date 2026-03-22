@@ -8,13 +8,13 @@
 
   var items = [
     { label: 'Player Site',     href: '../index.html' },
-    { label: 'Public Missions', href: 'missions.html',   match: 'missions.html' },
     { label: 'Keeper Index',    href: 'keeper.html',     match: 'keeper.html' },
     { label: 'Field Report',    href: 'report.html',     match: 'report.html' },
     { label: 'Field Debrief',   href: 'debrief.html',    match: 'debrief.html' },
     { label: 'References',      href: 'references.html', match: 'references.html' },
     { label: 'Entities',        href: 'entities.html',   match: 'entities.html' },
     { label: 'Arcs',            href: 'arcs.html',       match: 'arcs.html' },
+    { label: 'Threads',         href: 'threads.html',    match: 'threads.html' },
     { label: 'Gallery',         href: 'gallery.html',    match: 'gallery.html' },
   ];
 
@@ -44,4 +44,10 @@
       toggle.textContent = '≡';
     }
   });
+
+  // Site credit footer
+  var footer = document.createElement('footer');
+  footer.style.cssText = 'text-align:center;padding:1.5rem 1rem;font-size:0.7rem;color:var(--text-dim);letter-spacing:0.05em;border-top:1px solid var(--border);margin-top:2rem;';
+  footer.innerHTML = 'Made by Gino with Claude &nbsp;·&nbsp; <a href="https://github.com/GinoGalotti/portal-fieldops" target="_blank" rel="noopener" style="color:var(--text-dim);text-decoration:underline;">GitHub</a>';
+  document.body.appendChild(footer);
 }());

@@ -120,6 +120,9 @@ nav a:hover, nav a.active { color: var(--green); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ── ANCHOR SCROLL OFFSET — accounts for sticky header (64px) ── */
+section[id] { scroll-margin-top: 72px; }
+
 /* ── SECTION HEADER ── */
 .section-header {
   display: flex;
@@ -266,7 +269,7 @@ main { position: relative; z-index: 10; max-width: 1100px; margin: 0 auto; paddi
 .nav-toggle:hover { color: var(--green); border-color: var(--green-dim); }
 
 /* ── MOBILE ── */
-@media (max-width: 640px) {
+@media (max-width: 900px) {
   nav { display: none; }
   nav.open {
     display: flex;

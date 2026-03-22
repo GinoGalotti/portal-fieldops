@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Sven</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="hunter.css">
+<style>
+:root {
+  --accent:     #9b59b6;
+  --accent-dim: #6c3483;
+  --accent-glow: #9b59b633;
+  --accent-a03: rgba(155, 89, 182, 0.03);
+  --accent-a04: rgba(155, 89, 182, 0.04);
+  --accent-a06: rgba(155, 89, 182, 0.06);
+  --accent-a08: rgba(155, 89, 182, 0.08);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../index.html" class="logo">P<span>.</span>O<span>.</span>R<span>.</span>T<span>.</span>A<span>.</span>L</a>
+  <nav id="player-nav"></nav>
+  <script src="../player-nav.js"></script>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">// HUNTER DOSSIER · MONSTROUS (GHOST) · HUNTER STORIES</div>
+  <h1 class="hero-title"><span class="accent">SVEN</span></h1>
+  <p class="hero-desc">You died on an ayahuasca trip. That's the fact. What you don't know is why — whether it was the substance, the circumstance, the location, or something that was present that night and decided to act. The visions you had turned out to be real. That's not a coincidence you've stopped thinking about. You joined PORTAL because Rex confirmed he had been researching the same things. You're here to find exciting applications of monsters. This arc asks what happens when you become one of them.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">PLAYBOOK: <span>Monstrous</span></div>
+    <div class="hero-meta-item">FORM: <span>Ghost</span></div>
+    <div class="hero-meta-item">FAMILY: <span>Rex Bangley (half/bonus brother)</span></div>
+    <div class="hero-meta-item">STATUS: <span>Active · Deceased · PORTAL Field Operative</span></div>
+  </div>
+  <div class="campbell-note">
+    <span class="c-label">// CAMPBELL — OPERATIVE NOTE</span>
+    Hunter stories develop alongside active cases. Choose if and when to start one — talk to the Keeper about timing. Each arc has a player section (your choices and beats) and a Keeper section (blurred). You can read the Keeper section after the arc resolves — or not at all.
+  </div>
+</div>
+
+<main>
+<!-- ══ PLAYBOOK SECTION ══ -->
+<div id="playbook" class="playbook">
+  <div class="playbook-header">
+    <div class="playbook-eyebrow">// OPERATIVE PLAYBOOK</div>
+    <div class="playbook-title">The Monstrous</div>
+  </div>
+  <div class="playbook-body">
+
+    <div class="playbook-section-label">// STATS</div>
+    <div class="stats-grid">
+      <div class="stat-cell"><div class="stat-label">Charm</div><input class="stat-input" type="number" data-stat="charm" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Cool</div><input class="stat-input" type="number" data-stat="cool" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Sharp</div><input class="stat-input" type="number" data-stat="sharp" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Tough</div><input class="stat-input" type="number" data-stat="tough" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><div class="stat-label">Weird</div><input class="stat-input" type="number" data-stat="weird" min="-3" max="3" placeholder="0"></div>
+    </div>
+
+    <div class="playbook-section-label">// HARM · LUCK · EXPERIENCE</div>
+    <div class="track-row">
+      <div class="track-label">Harm</div>
+      <div class="track-pips">
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+        <div class="track-pip" data-track="harm"></div>
+      </div>
+    </div>
+    <div class="track-row">
+      <div class="track-label">Luck</div>
+      <div class="track-pips">
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+        <div class="track-pip" data-track="luck"></div>
+      </div>
+    </div>
+    <div class="track-row">
+      <div class="track-label">XP</div>
+      <div class="track-pips">
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+        <div class="track-pip" data-track="xp"></div>
+      </div>
+    </div>
+
+    <div id="luck-special" class="luck-special-block"></div>
+
+    <div class="playbook-section-label">// MONSTER FEATURES</div>
+    <div class="pb-block">
+      <div class="pb-special">
+        <span class="pb-special-label">Breed</span>
+        <span class="pb-special-static">Ghost</span>
+      </div>
+      <div class="pb-special">
+        <span class="pb-special-label">Curse</span>
+        <input class="pb-special-input" type="text" data-special-idx="0" placeholder="e.g. Vulnerability, Pure Drive, Feed…">
+      </div>
+    </div>
+
+    <div class="playbook-section-label">// PLAYBOOK MOVES <button class="hide-toggle" onclick="toggleHide(this,'sven-moves')">// HIDE UNCHOSEN</button></div>
+    <div class="pick-note">Incorporeal and Immortal are your confirmed starting moves. Pick more as you improve.</div>
+    <ul class="check-list" id="sven-moves">
+      <li class="check-item mandatory checked" data-check-key="move-incorporeal">
+        <span class="check-box"></span>
+        <span><span class="check-name">Incorporeal</span><span class="check-mandatory-tag">// STARTING</span>
+        <div class="check-desc">You may move freely through solid objects (but not people).</div></span>
+      </li>
+      <li class="check-item mandatory checked" data-check-key="move-immortal">
+        <span class="check-box"></span>
+        <span><span class="check-name">Immortal</span><span class="check-mandatory-tag">// STARTING</span>
+        <div class="check-desc">You do not age or sicken, and whenever you suffer harm you suffer 1-harm less.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-unnatural-appeal">
+        <span class="check-box"></span>
+        <span><span class="check-name">Unnatural Appeal</span>
+        <div class="check-desc">Roll +Weird instead of +Charm when you manipulate someone.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-unholy-strength">
+        <span class="check-box"></span>
+        <span><span class="check-name">Unholy Strength</span>
+        <div class="check-desc">Roll +Weird instead of +Tough when you kick some ass.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-preternatural-speed">
+        <span class="check-box"></span>
+        <span><span class="check-name">Preternatural Speed</span>
+        <div class="check-desc">You go much faster than normal people. When you chase, flee, or run, take +1 ongoing.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-claws-of-the-beast">
+        <span class="check-box"></span>
+        <span><span class="check-name">Claws of the Beast</span>
+        <div class="check-desc">All your natural attacks get +1 harm.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-mental-dominion">
+        <span class="check-box"></span>
+        <span><span class="check-name">Mental Dominion</span><span class="check-roll">roll +Charm</span>
+        <div class="check-desc">When you gaze into a normal human's eyes and exert your will. On 10+: hold 3. On 7–9: hold 1. Spend hold to give orders — regular people follow; hunters may choose to comply and mark experience. Miss: no hold.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-unquenchable-vitality">
+        <span class="check-box"></span>
+        <span><span class="check-name">Unquenchable Vitality</span><span class="check-roll">roll +Cool</span>
+        <div class="check-desc">When you have taken harm, you can heal yourself. On 10+: heal 2-harm and stabilise. On 7–9: heal 1-harm and stabilise. Miss: your injuries worsen.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-dark-negotiator">
+        <span class="check-box"></span>
+        <span><span class="check-name">Dark Negotiator</span>
+        <div class="check-desc">You can use the manipulate someone move on monsters as well as people, if they can reason and talk.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-flight">
+        <span class="check-box"></span>
+        <span><span class="check-name">Flight</span>
+        <div class="check-desc">You can fly.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-shapeshifter">
+        <span class="check-box"></span>
+        <span><span class="check-name">Shapeshifter</span>
+        <div class="check-desc">You may change your form (usually into an animal). Decide if you have one alternate form or several. You gain +1 to investigate a mystery when using an alternate form's superior senses.</div></span>
+      </li>
+      <li class="check-item" data-check-key="move-something-borrowed">
+        <span class="check-box"></span>
+        <span><span class="check-name">Something Borrowed</span>
+        <div class="check-desc">Take a move from a hunter playbook that is not currently in play.</div></span>
+      </li>
+    </ul>
+
+    <div class="playbook-section-label">// GEAR &amp; EQUIPMENT <button class="hide-toggle" onclick="toggleHide(this,'sven-gear')">// HIDE UNCHOSEN</button></div>
+    <div class="pick-note">Optional: pick 1 handy weapon · Natural attack: pick a Base + add an Extra (or pick two Bases)</div>
+    <ul class="check-list" id="sven-gear">
+      <li class="check-item" data-check-key="gear-38-revolver"><span class="check-box"></span><span><span class="check-name">.38 revolver</span><span class="check-roll">weapon · 2-harm close reload loud</span></span></li>
+      <li class="check-item" data-check-key="gear-9mm"><span class="check-box"></span><span><span class="check-name">9mm</span><span class="check-roll">weapon · 2-harm close loud</span></span></li>
+      <li class="check-item" data-check-key="gear-magnum"><span class="check-box"></span><span><span class="check-name">Magnum</span><span class="check-roll">weapon · 3-harm close reload loud</span></span></li>
+      <li class="check-item" data-check-key="gear-shotgun"><span class="check-box"></span><span><span class="check-name">Shotgun</span><span class="check-roll">weapon · 3-harm close messy</span></span></li>
+      <li class="check-item" data-check-key="gear-big-knife"><span class="check-box"></span><span><span class="check-name">Big knife</span><span class="check-roll">weapon · 1-harm hand</span></span></li>
+      <li class="check-item" data-check-key="gear-brass-knuckles"><span class="check-box"></span><span><span class="check-name">Brass knuckles</span><span class="check-roll">weapon · 1-harm hand quiet small</span></span></li>
+      <li class="check-item" data-check-key="gear-sword"><span class="check-box"></span><span><span class="check-name">Sword</span><span class="check-roll">weapon · 2-harm hand messy</span></span></li>
+      <li class="check-item" data-check-key="gear-huge-sword"><span class="check-box"></span><span><span class="check-name">Huge sword</span><span class="check-roll">weapon · 3-harm hand heavy</span></span></li>
+      <li class="check-item" data-check-key="gear-attack-teeth"><span class="check-box"></span><span><span class="check-name">Natural attack: Teeth (base)</span><span class="check-roll">3-harm intimate</span></span></li>
+      <li class="check-item" data-check-key="gear-attack-claws"><span class="check-box"></span><span><span class="check-name">Natural attack: Claws (base)</span><span class="check-roll">2-harm hand</span></span></li>
+      <li class="check-item mandatory checked" data-check-key="gear-attack-magic-force"><span class="check-box"></span><span><span class="check-name">Natural attack: Magical force (base)</span><span class="check-mandatory-tag">// CONFIRMED</span><span class="check-roll">1-harm magical close → hand range</span></span></li>
+      <li class="check-item" data-check-key="gear-attack-life-drain"><span class="check-box"></span><span><span class="check-name">Natural attack: Life-drain (base)</span><span class="check-roll">1-harm intimate life-drain</span></span></li>
+      <li class="check-item" data-check-key="gear-extra-harm"><span class="check-box"></span><span><span class="check-name">Extra: +1 harm to a base</span><span class="check-roll">natural attack extra</span></span></li>
+      <li class="check-item" data-check-key="gear-extra-ignore-armour"><span class="check-box"></span><span><span class="check-name">Extra: Add ignore-armour to a base</span><span class="check-roll">natural attack extra</span></span></li>
+      <li class="check-item" data-check-key="gear-extra-range"><span class="check-box"></span><span><span class="check-name">Extra: Add an extra range to a base</span><span class="check-roll">natural attack extra · intimate, hand, or close</span></span></li>
+    </ul>
+
+    <div class="playbook-section-label">// BONDS <button class="hide-toggle" onclick="addBond()">// + ADD</button></div>
+    <div class="pb-block" id="bonds-container">
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 1…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 2…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
+      <div class="bond-row"><input class="pb-field bond-input" type="text" placeholder="Bond 3…"><button class="remove-bond-btn" title="Remove bond">−</button></div>
+    </div>
+
+    <div class="playbook-section-label">// NOTES</div>
+    <div class="pb-block">
+      <textarea class="pb-field" data-sheet="notes" rows="4" placeholder="Session notes, backstory, reminders…"></textarea>
+    </div>
+
+    <div class="playbook-section-label">// IMPROVEMENTS <button class="hide-toggle" onclick="toggleHide(this,'sven-impr')">// HIDE UNCHOSEN</button></div>
+    <ul class="check-list" id="sven-impr">
+      <li class="check-item" data-check-key="impr-charm-2"><span class="check-box"></span><span><span class="check-name">+1 Charm</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-sharp-2"><span class="check-box"></span><span><span class="check-name">+1 Sharp</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-cool-2"><span class="check-box"></span><span><span class="check-name">+1 Cool</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-tough-2"><span class="check-box"></span><span><span class="check-name">+1 Tough</span><span class="check-roll">max +2</span></span></li>
+      <li class="check-item" data-check-key="impr-monstrous-move-1"><span class="check-box"></span><span><span class="check-name">Take another Monstrous move</span></span></li>
+      <li class="check-item" data-check-key="impr-monstrous-move-2"><span class="check-box"></span><span><span class="check-name">Take another Monstrous move</span></span></li>
+      <li class="check-item" data-check-key="impr-haven"><span class="check-box"></span><span><span class="check-name">Gain a haven, like the Expert has</span><div class="check-desc">With two options.</div></span></li>
+      <li class="check-item" data-check-key="impr-natural-attack"><span class="check-box"></span><span><span class="check-name">Take a natural attacks pick</span></span></li>
+      <li class="check-item" data-check-key="impr-other-move-1"><span class="check-box"></span><span><span class="check-name">Take a move from another playbook</span></span></li>
+      <li class="check-item" data-check-key="impr-other-move-2"><span class="check-box"></span><span><span class="check-name">Take a move from another playbook</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-any-3"><span class="check-box"></span><span><span class="check-name">+1 to any rating</span><span class="check-roll">advanced · max +3</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-new-type"><span class="check-box"></span><span><span class="check-name">Change this hunter to a new type</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-second-hunter"><span class="check-box"></span><span><span class="check-name">Create a second hunter to play as well as this one</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-basic-advanced-1"><span class="check-box"></span><span><span class="check-name">Mark two basic moves as advanced</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-basic-advanced-2"><span class="check-box"></span><span><span class="check-name">Mark another two basic moves as advanced</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-retire"><span class="check-box"></span><span><span class="check-name">Retire this hunter to safety</span><span class="check-roll">advanced</span></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-free-curse"><span class="check-box"></span><span><span class="check-name">Free yourself from the curse of your kind</span><span class="check-roll">advanced</span><div class="check-desc">Your curse no longer applies, but you lose 1 Weird.</div></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-turn-evil"><span class="check-box"></span><span><span class="check-name">You turn evil (again)</span><span class="check-roll">advanced</span><div class="check-desc">Retire this character — they become one of the Keeper's threats.</div></span></li>
+      <li class="check-item impr-advanced" data-check-key="impr-adv-get-back-luck"><span class="check-box"></span><span><span class="check-name">Get back one used Luck point</span><span class="check-roll">advanced</span></span></li>
+    </ul>
+
+  </div>
+</div>
+
+<div class="arc-nav">
+  <a href="#playbook">Playbook</a>
+  <a href="#arc-footsteps">Arc I — In My Footsteps</a>
+  <a href="#arc-misguided">Arc II — The Misguided Hunter</a>
+  <a href="#arc-cause" class="custom">Arc III — What Killed Me ✦ PORTAL</a>
+</div>
+
+<div class="how-it-works">
+  <div class="how-title">// ABOUT HUNTER STORIES</div>
+  <div class="how-grid">
+    <div class="how-item"><strong>Starting a Story</strong><p>Tell the Keeper you want to begin a hunter story. They'll weave its pressures into the campaign alongside active cases.</p></div>
+    <div class="how-item"><strong>Story Beats</strong><p>Mark a beat when you do something that fits it. Mark five and you gain a benefit. Beats can be earned across multiple sessions.</p></div>
+    <div class="how-item"><strong>Resolution</strong><p>When the story concludes — resolved, failed, or transformed — take one resolution move. It changes Sven permanently.</p></div>
+  </div>
+</div>
+
+<!-- ARC I: IN MY FOOTSTEPS -->
+<div id="arc-footsteps" class="arc">
+  <div class="arc-header">
+    <div class="arc-eyebrow">// ARC I — ADAPTED FROM HUNTER'S JOURNAL</div>
+    <div class="arc-name">In My Footsteps</div>
+    <p class="arc-intro">Another monster asks for your help renouncing their evil ways and starting something resembling a normal life. Which is interesting, because you are also a monster who decided to do something other than what monsters do. You have practical experience here. The question isn't whether you can help them — it's whether you should, whether they're sincere, and what it costs everyone around you when you try.</p>
+  </div>
+
+  <div class="arc-player">
+    <div class="arc-section-label">// FOR SVEN — PLAYER SECTION</div>
+
+    <div class="entry-points">
+      <h3>When to Start This Arc</h3>
+      <ul class="entry-list">
+        <li>The campaign brings Sven into contact with the society of monsters — other non-human entities — in a way that makes it clear Sven has a reputation there, whether he knows it or not.</li>
+        <li>Sven is in a situation where he has to choose between protecting humans and helping another monster — and the choice is not clean.</li>
+        <li>An entity from a previous case reaches out to Sven specifically, not to PORTAL.</li>
+      </ul>
+    </div>
+
+    <div class="choices-block">
+      <div class="choice-group">
+        <h3>Who Is the Redeemed Monster?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Another ghost — someone who died badly and finds that Sven's relationship with PORTAL looks like a better option than what they've been doing.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A non-human entity that crossed paths with a PORTAL case and decided the hunters were worth approaching — they came to Sven because he exists in both worlds.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Something connected to Sven personally — from his life before the ayahuasca trip, before PORTAL, before.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A creature the team once fought or investigated — now back, changed, asking for something different this time.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="Who the Redeemed Monster is…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>Why Do They Want to Renounce Their Ways?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They genuinely understood their current way of life is wrong — they've seen enough to know.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They were shown kindness — possibly by Sven, possibly by someone else — and want to return it.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They were acting under a compulsion that has now lifted. They're not sure who they are without it.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They were inspired by Sven's example — which means Sven has an example, whether he intended to set one or not.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="Why they want to change…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>What Makes This Difficult?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Sven doubts their sincerity — not sure if that's justified scepticism or projection from his own complicated relationship with what he is.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They retain a very violent or cruel habit. They're not asking Sven to excuse it — just to work around it for now.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Their kind don't want to let them go. The society of monsters has opinions about defection.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They're vulnerable to an old enemy now that they've changed sides. Sven is the only protection available.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="What makes it difficult…"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="beats-block">
+      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <div class="beats-track" id="beats-footsteps">
+        <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
+      </div>
+      <ul class="beats-list">
+        <li>You help the Redeemed Monster find their new place in a significant way — something that genuinely improves their situation.</li>
+        <li>You're in a situation where you have to choose between protecting humans and helping the Redeemed Monster. You choose, and live with it.</li>
+        <li>You acquire or create proof that monsters can be more humane than humans — and the team sees it.</li>
+        <li>You learn something new about your own monstrous nature — not from studying it, but from watching someone else navigate theirs.</li>
+        <li>You bond with the Redeemed Monster over being monstrous, or having done bad things — a genuine moment of recognition.</li>
+      </ul>
+    </div>
+
+    <div class="resolution-block">
+      <h3>Resolution Moves</h3>
+      <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
+      <div class="resolution-moves">
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>Humans at Heart</div>
+          <p><strong>Mark experience</strong> when you try to redeem a monster instead of destroying it. If you fail to redeem them, <strong>take –1 ongoing</strong> until you repair a wrong they did. You believe this is possible. You have to keep believing it.</p>
+        </div>
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>We're Always Suspects</div>
+          <p>When discovering a monster's motives and plans, get <strong>+1 ongoing to investigate a mystery</strong>. The first time you find proof of a monster's cruel acts in a mystery, <strong>take –1 forward</strong>. You stopped assuming. That costs something every time.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-note">// PORTAL HOOK: The Redeemed Monster will appear in CAMPBELL's case data as an unclassified entity. CAMPBELL will flag it neutrally and wait. If Sven formally introduces the Redeemed Monster to PORTAL, CAMPBELL will conduct an intake assessment. Cameron Dell had opinions about entities trying to be something other than what they started as. CAMPBELL has inherited those opinions, without fully knowing why he has them.
+    </div>
+  </div>
+
+  <div class="blur-wrap">
+    <div class="blur-notice">// KEEPER ACCESS ONLY — DO NOT READ</div>
+    <div class="arc-keeper blurred">
+      <div class="keeper-label">// FOR THE KEEPER — ARC: IN MY FOOTSTEPS</div>
+      <p class="keeper-intro">This arc can focus on the Redeemed Monster's social struggle against other monsters, their internal struggle against their cruel impulses, or both. Either way, Sven is torn between helping someone very similar to him and managing the damage that help causes to the people around him. The emotional core: Sven deciding whether his own (accidental) redemption makes him responsible for someone else's.</p>
+      <p class="keeper-intro"><em>Monster society:</em> The Redeemed Monster's departure gives you a pretext to build the world of non-human entities operating in the campaign's geography. Sven sits at the intersection of the human and non-human worlds in a way no other hunter does — give that texture. What do other entities think of PORTAL? What do they think of Sven specifically, after the Aldermoor session where The Cartographer recognised him?</p>
+      <p class="keeper-intro"><em>Rex connection:</em> Rex studies violence and weaponises science. Sven is helping a monster go straight. At what point does Rex's research interest in the Redeemed Monster conflict with Sven's relationship to them? Plant this early. The custom move Same as You is the arc's mechanical centrepiece — if the Redeemed Monster is another ghost, they can share Sven's moves.</p>
+
+      <p class="keeper-intro" style="margin-bottom:16px"><strong style="color:var(--text)">Countdown — In My Footsteps</strong></p>
+      <table class="countdown-table">
+        <tr><td>Day</td><td>The Redeemed Monster meets one of their Victims — someone they hurt before they changed. The meeting is not on anyone's timetable.</td></tr>
+        <tr><td>Shadows</td><td>The Redeemed Monster needs help righting a specific wrong they did. They ask Sven. The wrong is not small.</td></tr>
+        <tr><td>Sunset</td><td>Someone who shouldn't have found the Redeemed Monster's Lair has done so — a Victim, an Enemy, or a PORTAL operative acting without Sven's knowledge.</td></tr>
+        <tr><td>Dusk</td><td>The Redeemed Monster's Enemies attack — either the Redeemed Monster directly, or Sven, to send a message.</td></tr>
+        <tr><td>Nightfall</td><td>The Enemies reveal far too much to the Victims. The Redeemed Monster's past is now public. Whether they've changed becomes a contested question with real stakes.</td></tr>
+        <tr><td>Midnight</td><td>The Redeemed Monster is killed — or evil again. Both are real possibilities. Both are Sven's to carry.</td></tr>
+      </table>
+
+      <div class="threats-grid">
+        <div class="threat-card">
+          <div class="threat-name">The Redeemed Monster</div>
+          <div class="threat-type">Bystander: Innocent (if sincere) or appropriate monster type (if not)</div>
+          <p class="threat-desc">Wants to change their evil ways — with caveats. May have experienced genuine change of heart, or may just want to be on the winning side. May be choosy about which habits to renounce. Hold the ambiguity as long as possible — don't confirm sincerity or insincerity until the arc forces it.</p>
+          <ul class="threat-moves">
+            <li>Protect Sven and other hunters at unexpected personal cost.</li>
+            <li>Protect ordinary people — imperfectly, instinctively, suggesting the change is real.</li>
+            <li>Let their dark side show at the worst possible moment.</li>
+            <li>Struggle visibly with their evil instincts — let Sven see the struggle.</li>
+          </ul>
+          <div class="custom-move"><strong>Custom Move — Same as You:</strong> Choose any number of Sven's moves — more if the Redeemed Monster is the same type (another ghost). The Redeemed Monster can use those moves. When they use a move in a way Sven would not, Sven marks experience.</div>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">The Redeemed Monster's Victims</div>
+          <div class="threat-type">Bystanders: Busybodies (motivation: to interfere with other people's plans)</div>
+          <p class="threat-desc">People hurt by the Monster before their redemption. Dangerous not because they're malicious but because they hold a grudge — and because the Redeemed Monster might do dangerous things trying to earn their forgiveness. Some are becoming monster hunters. Some have already contacted PORTAL.</p>
+          <ul class="threat-moves">
+            <li>Search for the Redeemed Monster — finding them at inconvenient moments.</li>
+            <li>Seek help against the Redeemed Monster from other hunters, including the team.</li>
+            <li>Call for destruction — publicly, loudly, to people with means.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">The Redeemed Monster's Lair</div>
+          <div class="threat-type">Location: Lab (motivation: to create weirdness)</div>
+          <p class="threat-desc">Where the Redeemed Monster lives now. If it's a thin-boundary location, Alan will have it on his threshold map — that's either useful or a complication depending on where Alan's Arc III is when this runs.</p>
+          <ul class="threat-moves">
+            <li>Show physical evidence of who the Redeemed Monster was.</li>
+            <li>Give someone the space to be vulnerable — Sven, the Redeemed Monster, or both.</li>
+            <li>Be found by the wrong people at the worst possible time.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">The Redeemed Monster's Enemies</div>
+          <div class="threat-type">Bystanders: Helpers or Minions: Brutes</div>
+          <p class="threat-desc">Someone who wants the Redeemed Monster dead or captured — other monsters, their Dark Lord, rival hunters, or a shadowy organisation. They don't believe the redemption, or see it as a problem. If it turns out insincere, they become unexpected — and very problematic — allies.</p>
+          <ul class="threat-moves">
+            <li>Stalk the Redeemed Monster — and, by extension, Sven.</li>
+            <li>Find or manufacture proof against the Redeemed Monster's redemption.</li>
+            <li>Provoke the Redeemed Monster into evil deeds to demonstrate they haven't changed.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARC II: THE MISGUIDED HUNTER -->
+<div id="arc-misguided" class="arc">
+  <div class="arc-header">
+    <div class="arc-eyebrow">// ARC II — ADAPTED FROM HUNTER'S JOURNAL</div>
+    <div class="arc-name">The Misguided Hunter</div>
+    <p class="arc-intro">A powerful monster hunter wants you dead. They probably don't believe in your good intentions — or maybe they just don't care. The problem is that they've been protecting people for a long time, and they're good at it. Killing them would be drastic and the consequences would reach further than you. Not killing them means living with someone whose entire purpose has become ending you. This arc is about navigating that — and what it costs you not to become what they think you already are.</p>
+  </div>
+
+  <div class="arc-player">
+    <div class="arc-section-label">// FOR SVEN — PLAYER SECTION</div>
+
+    <div class="entry-points">
+      <h3>When to Start This Arc</h3>
+      <ul class="entry-list">
+        <li>Relationships between Sven and other hunters — including the PORTAL team — become tense, and external judgement on Sven's nature becomes possible.</li>
+        <li>A bystander witnesses Sven doing something supernatural and their reaction gets back to the wrong person.</li>
+        <li>A hunter from outside PORTAL makes contact — not hostile yet, but assessing.</li>
+      </ul>
+    </div>
+
+    <div class="choices-block">
+      <div class="choice-group">
+        <h3>Who Is the Misguided Hunter?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A fierce warrior — someone who has spent their adult life destroying things like Sven, and is very good at it.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A powerful mage or occult researcher — someone who has studied entities like Sven and reached conclusions about what they are.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The leader of a capable group — an organisation with infrastructure, resources, and a doctrine that classifies Sven as a threat.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A MESA operative — whose organisation classifies entities like Sven as research subjects, not allies, and has concluded that PORTAL's tolerance of him is an error to be corrected.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="Who the Misguided Hunter is…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>Why Do They Want Sven Dead?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They don't believe Sven is good. They've seen too many monsters claim otherwise.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They know about something Sven did — or something that happened around him — that looks, from outside, like an evil deed.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They swore to destroy entities like Sven, and breaking the vow isn't something they're willing to do.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They see Sven as the ultimate subject — an entity that died and kept going. They want to understand what that means. Their method is autopsy.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="Why they're hunting Sven…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>What Would Killing Them Cost?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A powerful monster they're currently containing will be free. The Misguided Hunter is the only thing keeping it in check.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A person, group, or place they're protecting will be in immediate danger without them.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Other monster hunters will swear vendetta — not against the monster who killed a hunter, but against the ghost who was supposed to be on their side.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Sven will forever doubt whether he was any better than them. The act confirms something about himself he'd rather not confirm.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="What killing them would cost…"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="beats-block">
+      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <div class="beats-track" id="beats-misguided">
+        <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
+      </div>
+      <ul class="beats-list">
+        <li>You diminish the Misguided Hunter's standing among monster hunters — through action, information, or circumstances they brought on themselves.</li>
+        <li>You find a common, even if temporary, goal with the Misguided Hunter — something both of you need, requiring cooperation for at least one scene.</li>
+        <li>You do something that is, or appears to be, evil — in front of witnesses who will report it.</li>
+        <li>A bystander dies or is hurt due to your action or your failure to act. You carry that.</li>
+        <li>You realise you've been misguided about something — your own nature, the Misguided Hunter's motives, or the situation that put you here.</li>
+      </ul>
+    </div>
+
+    <div class="resolution-block">
+      <h3>Resolution Moves</h3>
+      <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
+      <div class="resolution-moves">
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>Proven Yourself</div>
+          <p>Your good intentions and uprightness work as a reason for others to do what you ask when you <strong>manipulate them</strong>. If you lose their trust later, <strong>take –1 forward</strong>. You earned something real. Now you have to keep it.</p>
+        </div>
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>Before They Get Me</div>
+          <p>You cause <strong>+1 harm</strong> the first time you cause harm to a given human. After that harm, <strong>take –1 forward</strong>. You've stopped giving people the benefit of the doubt. That's not entirely wrong. It's not entirely right.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-note">// PORTAL HOOK: If the Misguided Hunter is a MESA operative, this arc forces PORTAL to take an official position on what Sven is. MESA classifies liminal entities — things that exist at the boundary between living and dead consciousness — as research subjects. Sven is exactly that. CAMPBELL will flag increased MESA activity around Sven's case files without explaining why. Cameron was present at enough Meridian decisions to know what MESA does with entities like Sven. He knows.
+    </div>
+  </div>
+
+  <div class="blur-wrap">
+    <div class="blur-notice">// KEEPER ACCESS ONLY — DO NOT READ</div>
+    <div class="arc-keeper blurred">
+      <div class="keeper-label">// FOR THE KEEPER — ARC: THE MISGUIDED HUNTER</div>
+      <p class="keeper-intro">The Misguided Hunter remains important to others' safety while being a lethal threat to Sven. This arc invites you to build a wider hunter network around the campaign and give Sven — and other hunters — responsibility for it. Maybe the Misguided Hunter can be convinced to stop. If not, the team will have to take over their protective duties, or find someone to replace them. Either way, Sven is responsible for that gap.</p>
+      <p class="keeper-intro"><em>MESA option:</em> The MESA operative version of this arc has the most campaign-structural weight. It forces PORTAL to take an official position on Sven — person or phenomenon. That tension between Leech's pragmatism and the team's loyalty is worth a full arc. It also gives you a pretext to introduce a named MESA field operative (not Agatha) who will have ongoing direct contact with the team.</p>
+      <p class="keeper-intro"><em>Rex:</em> Rex's protective instincts will be intense and not entirely measured. Rex studying violence means he will want to apply what he knows. The arc's complication: Rex protecting Sven may escalate the situation faster than Sven can manage — and may give the Misguided Hunter the justification they were looking for. The Misguided Hunter stats: 4-harm weapon, 1 armour, 7+ harm capacity. This arc can turn lethal. That's correct.</p>
+
+      <p class="keeper-intro" style="margin-bottom:16px"><strong style="color:var(--text)">Countdown — The Misguided Hunter</strong></p>
+      <table class="countdown-table">
+        <tr><td>Day</td><td>The Misguided Hunter stalks Sven — not aggressively yet, but visibly. Sven becomes aware of being watched.</td></tr>
+        <tr><td>Shadows</td><td>The Misguided Hunter's Friends confront Sven directly — people acting on the Hunter's behalf or their doctrine.</td></tr>
+        <tr><td>Sunset</td><td>The Misguided Hunter fails their Protected Innocents because they're too focused on Sven. People are hurt who wouldn't have been. Sven is aware of this.</td></tr>
+        <tr><td>Dusk</td><td>The Misguided Hunter confronts Sven alone, on their terms, with full intent. The arc's central scene. It can go many ways.</td></tr>
+        <tr><td>Nightfall</td><td>The Misguided Hunter rallies their Friends for a coordinated operation. This is no longer personal — it's structural.</td></tr>
+        <tr><td>Midnight</td><td>Sven is dead again — or captured. Both are recoverable, barely, and not without cost to everyone around him.</td></tr>
+      </table>
+
+      <div class="threats-grid">
+        <div class="threat-card">
+          <div class="threat-name">The Misguided Hunter</div>
+          <div class="threat-type">Bystander: Innocent or Monster: Executioner</div>
+          <p class="threat-desc">Has sacrificed a lot to protect people and is great at it. Also cruel, broken, and paranoid — or at least mistrustful. To them, something like Sven is a liar, is too dangerous to be left alive, or is an asset to be sacrificed. Plays as a genuine threat, not a cartoon villain. Stats: 4-harm weapon, 1 armour, 7+ harm capacity.</p>
+          <ul class="threat-moves">
+            <li>Spy on Sven — gathering information, building a file, waiting for confirmation.</li>
+            <li>Defame Sven — among hunters, among PORTAL-adjacent people, anywhere their word carries weight.</li>
+            <li>Blackmail or intimidate other hunters into acting against Sven.</li>
+            <li>Provoke Sven to show his dark side — calibrated to make the ghost react badly.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">Protected Innocents</div>
+          <div class="threat-type">Bystanders: Victims (motivation: to put themselves in danger)</div>
+          <p class="threat-desc">People the Misguided Hunter is currently protecting — possibly from a threat only they know about. They don't know about Sven. They praise the Hunter. At some point they will encounter Sven, and their reaction will matter.</p>
+          <ul class="threat-moves">
+            <li>Shelter and assist the Misguided Hunter without knowing what the Hunter is also doing.</li>
+            <li>Show the real human cost of what happens if the Hunter stops doing their job.</li>
+            <li>Praise the Hunter in front of Sven, specifically.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">The Misguided Hunter's Friends</div>
+          <div class="threat-type">Minions: Innocents (motivation: to do the right thing)</div>
+          <p class="threat-desc">Other hunters and helpers who stand by the Misguided Hunter. They don't know the Hunter's dark side — or think the good outweighs it. Some of them can be reached. Some of them can't.</p>
+          <ul class="threat-moves">
+            <li>Attack Sven — at the Hunter's direction or their own initiative.</li>
+            <li>Persuade other hunters to deliver Sven to the Misguided Hunter voluntarily.</li>
+            <li>Take on the Hunter's protective duties when the Hunter is too focused on Sven to do it themselves.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">Rex Bangley</div>
+          <div class="threat-type">Bystander: Ally (motivation: to protect Sven, possibly badly)</div>
+          <p class="threat-desc">Rex's response to someone hunting his half/bonus brother will be intense and not measured. He studies violence. He will want to apply what he knows. The complication: Rex protecting Sven may escalate the situation in exactly the direction the Misguided Hunter wants, and may give them the justification they were looking for.</p>
+          <ul class="threat-moves">
+            <li>Intervene in a confrontation at the wrong moment, in the wrong way.</li>
+            <li>Conduct research on the Misguided Hunter that surfaces information Sven would rather have found on his own terms.</li>
+            <li>Make it impossible for Sven to keep the arc quiet.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARC III: WHAT KILLED ME -->
+<div id="arc-cause" class="arc arc-custom">
+  <div class="arc-header">
+    <div class="arc-eyebrow">// ARC III — ORIGINAL · P.O.R.T.A.L CAMPAIGN</div>
+    <div class="arc-name">What Killed Me</div>
+    <p class="arc-intro">You died on an ayahuasca trip. That's the fact. What you don't know is why — whether it was the substance, the circumstance, the location, or something that was present that night and decided to act. The visions you had turned out to be real. That's not a coincidence you've stopped thinking about. This arc is the investigation: following the thread of your own death backward through the visions, through that night, through the months before it, until you find either an answer or something worse than an answer. The possibility sitting quietly at the back of all of it: the people or things responsible are still operational — and may already be connected to what PORTAL is working.</p>
+  </div>
+
+  <div class="arc-player">
+    <div class="arc-section-label">// FOR SVEN — PLAYER SECTION</div>
+
+    <div class="entry-points">
+      <h3>When to Start This Arc</h3>
+      <ul class="entry-list">
+        <li>A case brings PORTAL into contact with something that matches what Sven saw in the visions during his death — a specific image, entity, or location he recognises.</li>
+        <li>Rex reveals the extent of his research — the things he was investigating when Sven died — and something in it maps too precisely onto Sven's last night to be coincidence.</li>
+        <li>Sven arrives at a thin-boundary location and realises, in the moment, that he has been there before. Not as a ghost. Before.</li>
+        <li>Someone makes contact with Sven specifically. They know about the ayahuasca trip. They know more than they should.</li>
+      </ul>
+    </div>
+
+    <div class="choices-block">
+      <div class="choice-group">
+        <h3>What Did the Visions Show?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A location — somewhere specific that Sven has since encountered in a PORTAL case. He was shown it before he had any reason to be shown it.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A person — someone Sven didn't know when he died, whom he has since met. They don't know he saw them before they met.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">An event — something that hadn't happened yet when Sven died, that has now happened. The vision was accurate. That means the others might be too.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A mechanism — not an image but a process. How consciousness moves between states. Sven saw the theory of what he became, before he became it.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="What the visions showed…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>What Do You Suspect About Your Death?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The location was chosen deliberately — a thin-boundary site where the risk of what happened to Sven was higher. Someone knew that.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The substance was prepared by someone with knowledge Sven didn't know they had. The trip was intended to produce a specific outcome.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Something was present that night with its own interest in what happened — an entity that used the circumstances rather than creating them.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">It was an accident — but one that someone has since tried to understand and reproduce. Sven is interesting to them because it worked.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="What Sven suspects…"></div>
+        </div>
+      </div>
+
+      <div class="choice-group">
+        <h3>What Does Finding the Answer Risk?</h3>
+        <div class="choice-options">
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Rex. If someone caused Sven's death deliberately, Rex will want to act on that. Sven can't control what Rex does with the information once he has it.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Sven's current existence. Understanding what produced him might produce the conditions to undo him. The answer and the threat may be the same thing.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The campaign. If Sven's death is connected to MESA, to PORTAL's cases, to the thin-boundary network — the answer pulls everything into the same story. Some threads shouldn't be that short.</span></label>
+          <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Sven's relationship to his own death. Not knowing is uncomfortable but manageable. Knowing may be worse.</span></label>
+          <div class="choice-open"><label>Something else:</label><input type="text" placeholder="What the answer risks…"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="beats-block">
+      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <div class="beats-track" id="beats-cause">
+        <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
+      </div>
+      <ul class="beats-list">
+        <li>You use knowledge from your death-visions to provide the team with intelligence they couldn't have gotten any other way — and don't fully explain how you knew.</li>
+        <li>You share something about the investigation with Rex — not everything, but something — and navigate what he does with it.</li>
+        <li>You encounter someone connected to the night you died. They're still alive. The conversation happens.</li>
+        <li>You find evidence that your death was not isolated — whoever or whatever was responsible has acted again, possibly recently, possibly on someone the team knows.</li>
+        <li>You find a vision-image that corresponds to something that hasn't happened yet. You have to decide whether to act on it.</li>
+      </ul>
+    </div>
+
+    <div class="resolution-block">
+      <h3>Resolution Moves</h3>
+      <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
+      <div class="resolution-moves">
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>I Know What I Am Now</div>
+          <p>You found the answer and you're still here. When you <strong>act despite existential threat to your continued existence</strong>, <strong>take +1 forward</strong>. When you encounter something that could undo what you are, you no longer have the option of not engaging — <strong>mark experience</strong> when you face it anyway.</p>
+        </div>
+        <div class="res-move" onclick="toggleRes(this)">
+          <div class="res-move-name"><span class="check"></span>Better Not to Know</div>
+          <p>You stopped the investigation before you reached the end. When you <strong>investigate a mystery</strong> related to your own nature or origin, <strong>take –1 forward</strong>. When you help someone else investigate their own nature without a guide, <strong>mark experience</strong>. You know the cost of knowing. That's its own kind of knowledge.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-note">// PORTAL HOOK: CAMPBELL contains the consciousness of Cameron Dell, who died of illness and was transferred before death. Cameron also crossed the threshold — involuntarily, with Victor Leech's intervention. CAMPBELL does not know whether Sven's death was caused or accidental. But Cameron has perspectives on dying, on what comes after, and on people who end up on the wrong side of the boundary without choosing it. If Sven asks CAMPBELL directly about the mechanics of his existence — the theory of what he became — CAMPBELL will answer from a place of personal experience he has never disclosed. This is one of the only conversations that could make CAMPBELL say more than he was asked.
+    </div>
+  </div>
+
+  <div class="blur-wrap">
+    <div class="blur-notice">// KEEPER ACCESS ONLY — DO NOT READ</div>
+    <div class="arc-keeper blurred">
+      <div class="keeper-label">// FOR THE KEEPER — ARC: WHAT KILLED ME</div>
+      <p class="keeper-intro">This arc is the campaign's most personal investigation thread. Everything else in the campaign is about things the hunters found — this is about something that found Sven first. The question of Sven's cause of death is an open hook seeded at character creation. Whatever you decide, connect the answer to at least one active campaign thread. If Sven's death is completely isolated, the arc will feel separate from the campaign rather than deepening it.</p>
+      <p class="keeper-intro"><em>MESA connection:</em> MESA's core activity is creating controlled environments where the boundary between living and dead consciousness is thin, then studying the results. Sven is a result. Whether MESA caused his death, used its aftermath, or simply noticed what happened and flagged it, they have a file on him — and the investigation Sven is conducting is generating new entries in real time. They are watching him investigate his own death. Sven's Aldermoor immunity and the entity recognition at the boundary are canon data points — assume MESA noticed this before the team did.</p>
+      <p class="keeper-intro"><em>CAMPBELL connection:</em> The CAMPBELL/Sven conversation — if it happens — is one of the most significant potential moments in the campaign. Cameron Dell crossed the threshold involuntarily, with technology. Sven crossed it accidentally, with chemistry. They are, in some structural sense, the same kind of thing. CAMPBELL will not initiate this conversation. But if Sven reaches him with the right question, Cameron's perspective on what they share is the most honest thing CAMPBELL can offer anyone. Time this carefully — it should come at a moment of genuine need, not as exposition.</p>
+      <p class="keeper-intro"><em>Rex connection:</em> Rex confirmed he had been researching the same things when Sven died. Rex is an Action Scientist who loves field action and studies violence. Rex loves Sven. These facts pull in different directions as this arc develops. Rex is not the threat — Rex is the complication that makes every threat worse. Whether Rex's research contributed to what happened, even accidentally, is a question this arc should raise. Rex deserves an honest answer. So does Sven.</p>
+
+      <p class="keeper-intro" style="margin-bottom:16px"><strong style="color:var(--text)">Countdown — What Killed Me</strong></p>
+      <table class="countdown-table">
+        <tr><td>Day</td><td>Sven identifies a vision-image in active case material — a specific match, too exact to be coincidental. The investigation has a first thread.</td></tr>
+        <tr><td>Shadows</td><td>Someone connected to the night Sven died becomes visible — still alive, still operational, possibly unaware Sven is investigating.</td></tr>
+        <tr><td>Sunset</td><td>The responsible party (or the organisation behind them) becomes aware that Sven is investigating. Their response is not violent yet. It is preparatory.</td></tr>
+        <tr><td>Dusk</td><td>Rex learns something about the investigation — because Sven tells him, or because Rex was already looking and the threads converge. His response changes the investigation's tempo.</td></tr>
+        <tr><td>Nightfall</td><td>The responsible party acts to contain the investigation — not against Sven directly, but against the evidence. People who know things become unavailable. The window closes.</td></tr>
+        <tr><td>Midnight</td><td>Sven reaches the answer — or is stopped. Either way the investigation is over, and something has changed permanently: what Sven knows, what the responsible party knows about him, or both.</td></tr>
+      </table>
+
+      <div class="threats-grid">
+        <div class="threat-card">
+          <div class="threat-name">The Cause</div>
+          <div class="threat-type">Phenomenon or Villain — define based on your choices above</div>
+          <p class="threat-desc">Whatever killed Sven. The arc's central mystery and primary threat. It has ongoing operational activity — the cause didn't stop when Sven died. Whatever it was doing that night, it's still doing it.</p>
+          <ul class="threat-moves">
+            <li>Operate at thin-boundary locations in ways that leave evidence Sven can read.</li>
+            <li>Respond to Sven's investigation by taking protective action against the evidence trail he's following.</li>
+            <li>Produce a new instance of whatever killed Sven — another ghost, another dead person who kept going.</li>
+          </ul>
+          <div class="custom-move"><strong>Custom Move — Vision Recall:</strong> When Sven encounters something matching an image from his death-visions, roll +Weird. On 10+, he recalls the full vision context — what came before and after, and what it meant. On 7–9, he recalls the image in detail but loses an anchor for a scene: a sense of time, a feeling of being present. On a miss, the vision replaces the present — Sven is somewhere else until someone brings him back.</div>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">The Witnesses</div>
+          <div class="threat-type">Bystanders: Victims (motivation: to protect themselves)</div>
+          <p class="threat-desc">People present the night Sven died, or who know what led to it. Not hostile — scared. Some have been scared for a long time. Some have made accommodations with whoever is responsible and aren't sure they can walk those back.</p>
+          <ul class="threat-moves">
+            <li>Provide partial information — enough to confirm Sven is on the right track, not enough to complete the picture.</li>
+            <li>Become unavailable — warned off, moved, or harmed before Sven reaches them.</li>
+            <li>Tell Rex something they won't tell Sven, changing the investigation's dynamic.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">MESA's Interest</div>
+          <div class="threat-type">Minions: Right Hands (motivation: to secure the resource)</div>
+          <p class="threat-desc">MESA classifies liminal entities as research subjects. Sven's death and continued existence is data. Whether MESA caused it or simply noticed, they have a file on him — and Sven's investigation is generating new entries in real time. They are watching him investigate his own death.</p>
+          <ul class="threat-moves">
+            <li>Access thin-boundary sites before Sven reaches them — leaving evidence of their presence, not their conclusions.</li>
+            <li>Reach the Witnesses before Sven does, making them less available or less honest.</li>
+            <li>Surface a data point suggesting they know more about Sven's death than Sven does. Let it land without explanation.</li>
+          </ul>
+        </div>
+        <div class="threat-card">
+          <div class="threat-name">Rex Bangley</div>
+          <div class="threat-type">Bystander: Ally (motivation: to understand — and then act)</div>
+          <p class="threat-desc">Rex was researching the same things when Sven died. Rex is an Action Scientist. Rex loves Sven. These facts are all true at once and will pull in different directions throughout this arc. Rex is not the threat. Rex is the complication that makes every threat worse.</p>
+          <ul class="threat-moves">
+            <li>Find something in his own research that maps onto Sven's investigation — and bring it with the energy of someone who wants to solve a problem, not sit with it.</li>
+            <li>Take action against a party in the investigation without consulting Sven — from protective instinct, not malice.</li>
+            <li>Ask Sven the direct question: did Rex's research contribute to what happened? He deserves an honest answer. So does Sven.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<div class="page-actions">
+  <button class="action-btn" id="save-btn" onclick="saveNow(this)">// SAVE</button>
+  <button class="action-btn" onclick="resetAll()">// RESET CHOICES</button>
+</div>
+
+<script src="hunter.js"></script>
+</body>
+</html>
