@@ -15,6 +15,7 @@
     { label: 'Arcs',            href: 'arcs.html',       match: 'arcs.html' },
     { label: 'Threads',         href: 'threads.html',    match: 'threads.html' },
     { label: 'Gallery',         href: 'gallery.html',    match: 'gallery.html' },
+    { label: 'Journals',        href: 'journal.html',    match: 'journal.html' },
   ];
 
   items.forEach(function (item) {

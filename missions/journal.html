@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P.O.R.T.A.L — Field Journals</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../keeper.css">
+<style>
+
+/* ── LAYOUT ── */
+.journal-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── PAGE HEADER ── */
+.page-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  color: var(--keeper-dim);
+  margin-bottom: 10px;
+}
+.page-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.page-sub {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-bottom: 48px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── JOURNAL SELECTOR ── */
+.journal-tabs {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+.journal-tab {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.journal-tab:hover { border-color: var(--text-dim); color: var(--text); }
+.journal-tab.active { border-color: var(--keeper); color: var(--keeper); background: var(--keeper-glow); }
+
+/* ── AUTHOR BIO ── */
+.author-bio {
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  padding: 22px 26px;
+  margin-bottom: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.author-bio::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--author-accent, var(--keeper-dim));
+}
+.author-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+  color: var(--author-accent, var(--text));
+}
+.author-role {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+.author-tagline {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text-dim);
+}
+
+/* ── ENTRY DIVIDER ── */
+.entry-header {
+  margin: 56px 0 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.entry-header:first-child { margin-top: 0; }
+.entry-case-num {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  color: var(--keeper-dim);
+  margin-bottom: 6px;
+}
+.entry-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  margin-bottom: 4px;
+  line-height: 1.1;
+}
+.entry-subtitle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: var(--text-dim);
+}
+
+/* ── PREAMBLE ENTRY ── */
+.entry-preamble .entry-case-num { color: var(--text-dim); }
+.entry-preamble .entry-title { font-size: 1.3rem; font-style: italic; font-weight: 400; color: var(--text-dim); }
+
+/* ── CLOSING ENTRY ── */
+.entry-closing .entry-title { font-size: 1.1rem; font-style: italic; font-weight: 300; }
+
+/* ── BLOCKS ── */
+.block { margin-bottom: 28px; }
+.block:last-child { margin-bottom: 0; }
+
+/* prose */
+.block-prose p {
+  margin-bottom: 1em;
+  color: var(--text);
+  line-height: 1.8;
+  font-size: 0.95rem;
+}
+.block-prose p:last-child { margin-bottom: 0; }
+
+/* editorial */
+.block-editorial {
+  padding: 2px 0 2px 20px;
+  margin: 24px 0 28px;
+  border-left: 2px solid;
+}
+.block-editorial p {
+  font-style: italic;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+/* scene */
+.block-scene { margin-bottom: 32px; }
+.scene-heading {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--keeper-dim);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.scene-subheading {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+}
+.block-scene p {
+  margin-bottom: 1em;
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+.block-scene p:last-child { margin-bottom: 0; }
+
+/* questionnaire */
+.block-questionnaire { margin-bottom: 36px; }
+.qblock-heading {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--keeper-dim);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.qblock-subheading {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--text-dim);
+  margin-bottom: 18px;
+}
+.qblock-question {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  margin-bottom: 20px;
+  font-style: italic;
+}
+.qblock-responses { display: flex; flex-direction: column; gap: 14px; }
+.q-response {
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  padding: 14px 18px 14px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.q-response::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--op-accent, var(--keeper-dim));
+}
+.q-operative {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  margin-bottom: 8px;
+  color: var(--op-accent, var(--text-dim));
+}
+.q-text {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.7;
+  margin-bottom: 0;
+}
+.q-annotation {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+/* pull-quote */
+.block-pull-quote {
+  margin: 32px 0;
+  padding: 20px 24px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  position: relative;
+}
+.pull-text {
+  font-family: 'Barlow', sans-serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1.65;
+  margin-bottom: 10px;
+}
+.pull-text::before { content: '\201C'; }
+.pull-text::after  { content: '\201D'; }
+.pull-speaker {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+}
+.pull-speaker::before { content: '— '; }
+
+/* thread */
+.block-thread {
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  padding: 18px 22px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.block-thread::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--keeper-dim);
+}
+.thread-num {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+.thread-heading {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--keeper);
+  margin-bottom: 14px;
+}
+.block-thread p {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  line-height: 1.8;
+  margin-bottom: 0.8em;
+}
+.block-thread p:last-child { margin-bottom: 0; }
+
+/* closing block */
+.entry-closing .block-prose p {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text-dim);
+}
+
+/* ── LOADING / ERROR ── */
+#journals-container.loading {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  padding: 60px 0;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .journal-wrap { padding: 32px 16px 60px; }
+  .page-title { font-size: 2rem; }
+  .entry-title { font-size: 1.5rem; }
+  .pull-text { font-size: 1rem; }
+}
+
+</style>
+</head>
+<body>
+<div class="keeper-banner">KEEPER EYES ONLY — RESTRICTED ACCESS</div>
+<header>
+  <nav id="keeper-nav"></nav>
+</header>
+
+<main class="journal-wrap">
+
+  <div class="page-eyebrow">PORTAL INTERNAL — PERSONAL RECORD</div>
+  <h1 class="page-title">Field Journals</h1>
+  <p class="page-sub">Personal accounts compiled outside official reporting channels</p>
+
+  <div id="journals-container" class="loading">LOADING JOURNALS...</div>
+
+</main>
+
+<script src="keeper-nav.js"></script>
+<script>
+(function () {
+
+  /* ── MARKDOWN HELPER ── */
+  function md(text) {
+    if (!text) return '';
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>');
+  }
+
+  /* ── PARAGRAPH HELPER ── */
+  function paras(lines, cls) {
+    return (Array.isArray(lines) ? lines : [lines])
+      .map(function (t) { return '<p>' + md(t) + '</p>'; })
+      .join('');
+  }
+
+  /* ── BLOCK RENDERERS ── */
+  function renderBlock(block, accentColor) {
+    var el = document.createElement('div');
+    el.className = 'block';
+    el.dataset.blockId = block.id;
+
+    switch (block.type) {
+
+      case 'prose':
+        el.classList.add('block-prose');
+        el.innerHTML = paras(block.text);
+        break;
+
+      case 'editorial':
+        el.classList.add('block-editorial');
+        el.style.borderLeftColor = accentColor || 'var(--keeper-dim)';
+        el.innerHTML = '<p>' + md(block.text) + '</p>';
+        break;
+
+      case 'scene':
+        el.classList.add('block-scene');
+        var sh = block.subheading
+          ? '<div class="scene-subheading">' + md(block.subheading) + '</div>'
+          : '';
+        el.innerHTML =
+          '<div class="scene-heading">' + (block.heading || '') + '</div>' +
+          sh +
+          paras(block.text);
+        break;
+
+      case 'questionnaire':
+        el.classList.add('block-questionnaire');
+        var responses = (block.responses || []).map(function (r) {
+          var ann = r.annotation
+            ? '<div class="q-annotation">' + md(r.annotation) + '</div>'
+            : '';
+          return '<div class="q-response" style="--op-accent:' + (r.accent || '#888') + '">' +
+            '<div class="q-operative">' + (r.name || r.operative_id) + '</div>' +
+            '<div class="q-text">' + md(r.text) + '</div>' +
+            ann +
+            '</div>';
+        }).join('');
+        el.innerHTML =
+          '<div class="qblock-heading">' + (block.heading || '') + '</div>' +
+          (block.subheading ? '<div class="qblock-subheading">' + md(block.subheading) + '</div>' : '') +
+          '<div class="qblock-question">' + md(block.question || '') + '</div>' +
+          '<div class="qblock-responses">' + responses + '</div>';
+        break;
+
+      case 'pull-quote':
+        el.classList.add('block-pull-quote');
+        el.innerHTML =
+          '<div class="pull-text">' + md(block.text) + '</div>' +
+          (block.speaker ? '<div class="pull-speaker">' + block.speaker + '</div>' : '');
+        break;
+
+      case 'thread':
+        el.classList.add('block-thread');
+        el.innerHTML =
+          '<div class="thread-num">THREAD ' + (block.number || '') + '</div>' +
+          '<div class="thread-heading">' + (block.heading || '') + '</div>' +
+          paras(block.text);
+        break;
+
+      default:
+        el.classList.add('block-prose');
+        if (block.text) el.innerHTML = paras(block.text);
+        break;
+    }
+
+    return el;
+  }
+
+  /* ── ENTRY RENDERERS ── */
+  function renderEntry(entry, accent) {
+    var wrap = document.createElement('section');
+    wrap.className = 'journal-entry entry-' + entry.type;
+    wrap.id = entry.id;
+
+    /* header */
+    var hdr = document.createElement('div');
+    hdr.className = 'entry-header';
+
+    if (entry.type === 'preamble') {
+      hdr.innerHTML =
+        '<div class="entry-case-num">PERSONAL RECORD</div>' +
+        '<div class="entry-title">Foreword</div>';
+
+    } else if (entry.type === 'case-file') {
+      hdr.innerHTML =
+        '<div class="entry-case-num">CASE FILE #' + (entry.case_number || '') +
+        (entry.session ? ' &nbsp;·&nbsp; SESSION ' + entry.session.toUpperCase() : '') + '</div>' +
+        '<div class="entry-title">' + (entry.title || '') + '</div>' +
+        (entry.subtitle ? '<div class="entry-subtitle">' + entry.subtitle + '</div>' : '');
+
+    } else if (entry.type === 'threads') {
+      hdr.innerHTML =
+        '<div class="entry-case-num">ONGOING OBSERVATIONS</div>' +
+        '<div class="entry-title">' + (entry.title || 'Threads') + '</div>' +
+        (entry.subtitle ? '<div class="entry-subtitle">' + entry.subtitle + '</div>' : '');
+
+    } else if (entry.type === 'closing') {
+      hdr.innerHTML =
+        '<div class="entry-case-num">END OF RECORD</div>' +
+        '<div class="entry-title">Closing Note</div>';
+    }
+
+    wrap.appendChild(hdr);
+
+    /* blocks */
+    (entry.blocks || []).forEach(function (block) {
+      wrap.appendChild(renderBlock(block, accent));
+    });
+
+    return wrap;
+  }
+
+  /* ── JOURNAL RENDERER ── */
+  function renderJournal(journal) {
+    var container = document.getElementById('journals-container');
+    container.className = '';
+    container.innerHTML = '';
+
+    /* author bio */
+    var bio = document.createElement('div');
+    bio.className = 'author-bio';
+    bio.style.setProperty('--author-accent', journal.accent || '#c8ddd0');
+    bio.innerHTML =
+      '<div class="author-name">' + journal.author + '</div>' +
+      '<div class="author-role">' + (journal.role || '') + '</div>' +
+      (journal.tagline ? '<div class="author-tagline">' + md(journal.tagline) + '</div>' : '');
+    container.appendChild(bio);
+
+    /* entries */
+    (journal.entries || []).forEach(function (entry) {
+      container.appendChild(renderEntry(entry, journal.accent));
+    });
+  }
+
+  /* ── MULTI-JOURNAL TABS ── */
+  function renderTabs(journals, activeIdx) {
+    var existing = document.querySelector('.journal-tabs');
+    if (existing) existing.remove();
+
+    if (journals.length <= 1) return;
+
+    var tabs = document.createElement('div');
+    tabs.className = 'journal-tabs';
+
+    journals.forEach(function (j, i) {
+      var btn = document.createElement('button');
+      btn.className = 'journal-tab' + (i === activeIdx ? ' active' : '');
+      btn.textContent = j.author;
+      btn.addEventListener('click', function () {
+        renderTabs(journals, i);
+        renderJournal(j);
+      });
+      tabs.appendChild(btn);
+    });
+
+    var container = document.getElementById('journals-container');
+    container.parentNode.insertBefore(tabs, container);
+  }
+
+  /* ── FETCH + INIT ── */
+  fetch('../data/journals.json')
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function (data) {
+      var journals = data.journals || [];
+      if (!journals.length) {
+        document.getElementById('journals-container').textContent = 'No journal entries found.';
+        return;
+      }
+      renderTabs(journals, 0);
+      renderJournal(journals[0]);
+    })
+    .catch(function (err) {
+      var c = document.getElementById('journals-container');
+      c.className = 'loading';
+      c.textContent = 'ERROR LOADING JOURNALS — ' + err.message;
+    });
+
+}());
+</script>
+
+</body>
+</html>
