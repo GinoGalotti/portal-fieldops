@@ -1,10 +1,17 @@
 # CLAUDE-activeContext.md
 *Current session state, recent changes, and immediate next steps.*
-*Last updated: 2026-03-20*
+*Last updated: 2026-03-24*
 
 ---
 
 ## Most Recent Work
+
+### Field Journals page — data-driven (2026-03-24)
+- **`data/journals.json`** — new data file. Block-based journal system with stable `id` per block (hook for future D1 comments). Author object: `id, author, role, tagline, accent`. Entries: `preamble`, `case-file`, `threads`, `closing`. Block types: `prose`, `editorial`, `scene`, `questionnaire`, `pull-quote`, `thread`.
+- **`missions/journal.html`** — keeper-facing renderer. Fetches `../data/journals.json`, renders all block types with `data-block-id`. CSS custom properties for per-operative accent colors (`--op-accent`, `--author-accent`). Multi-journal tab switcher (shows if >1 journal). MD helper for `*italic*`/`**bold**` in prose.
+- **`missions/keeper-nav.js`** — "Journals" link added.
+- **Content:** John Johnson (Flake/Lab Analyst) archive notes for Sessions 01–02 fully authored. Reconstructed from second-hand accounts; block IDs follow `jj-[section]-[name]` pattern.
+- **Temp files cleaned up:** `john-archive.md` + `john-archive-working.md` deleted.
 
 ### Nav cleanup + anchor scroll fix (2026-03-20)
 - **`player-nav.js`** — Removed "The Lab" (12 items now). Lab lore + team playbook link remain on `index.html` directly after `#operatives`.

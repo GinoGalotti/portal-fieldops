@@ -1,3 +1,40 @@
 temp-message.txt
 .env
 .dev.vars
+# Environment & secrets
+.env
+.env.local
+.dev.vars
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+
+# Vite / TypeScript
+*.local
+*.tsbuildinfo
+
+# Test output
+coverage/
+playwright-report/
+test-results/
+
+# Simulation reports (generated, not committed)
+reports/*.json
+reports/*.html
+
+# Cloudflare
+.wrangler/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp
+temp-message.txt
+
+.claude/
+__pycache__/
