@@ -28,6 +28,12 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── FOCUS-VISIBLE — keyboard-only focus ring (WCAG 2.4.7) ── */
+*:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
 html { scroll-behavior: smooth; }
 
 body {
@@ -79,7 +85,7 @@ body::before {
   background: linear-gradient(90deg, transparent, var(--green-dim), transparent);
 }
 .page-header .note {
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   color: var(--amber-dim);
   letter-spacing: 0.14em;
   border: 1px solid var(--amber-dim);
@@ -140,7 +146,7 @@ body::before {
   align-items: start;
 }
 .report-id {
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   color: var(--text-dim);
   letter-spacing: 0.18em;
   margin-bottom: 6px;
@@ -159,7 +165,7 @@ body::before {
 .briefing.case-e .report-title { color: var(--rose); }
 
 .report-subtitle {
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   color: var(--text-dim);
   letter-spacing: 0.14em;
   margin-top: 4px;
@@ -190,7 +196,7 @@ body::before {
   background: var(--card);
 }
 .t-label {
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   color: var(--text-dim);
   letter-spacing: 0.2em;
   border-bottom: 1px solid var(--border);
@@ -327,7 +333,7 @@ body::before {
 .campbell-note .cn-text { color: var(--green-dim); line-height: 2; }
 .campbell-note .cn-sig {
   margin-top: 12px;
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   color: var(--text-dim);
   letter-spacing: 0.18em;
 }
@@ -338,4 +344,13 @@ body::before {
   .card-header { grid-template-columns: 1fr; }
   .priority-badge { display: inline-block; }
   .card-footer { flex-direction: column; gap: 4px; text-align: center; }
+}
+
+/* ── REDUCED MOTION — respect vestibular-disorder preferences ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

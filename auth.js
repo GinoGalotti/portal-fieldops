@@ -126,7 +126,7 @@
         'padding:0.35rem 0.5rem;cursor:pointer;text-transform:uppercase;margin-top:0.1rem}',
       '.auth-submit-btn:hover{background:var(--green,#2ecc71)}',
       '.auth-submit-btn:disabled{opacity:0.5;cursor:default}',
-      '.auth-login-error{font-family:"Share Tech Mono",monospace;font-size:0.62rem;',
+      '.auth-login-error{font-family:"Share Tech Mono",monospace;font-size:0.68rem;',
         'color:var(--red,#e05050);margin-top:0.4rem;display:none}',
     ].join('');
     document.head.appendChild(s);
@@ -143,7 +143,7 @@
     popover.innerHTML =
       '<input id="auth-un" type="text" placeholder="USERNAME" autocomplete="username" spellcheck="false">' +
       '<input id="auth-pw" type="password" placeholder="PASSWORD" autocomplete="current-password">' +
-      '<div class="auth-login-error" id="auth-err"></div>' +
+      '<div class="auth-login-error" id="auth-err" role="alert"></div>' +
       '<button class="auth-submit-btn" id="auth-go">ENTER</button>';
 
     container.appendChild(btn);

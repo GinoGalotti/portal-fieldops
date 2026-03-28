@@ -1472,6 +1472,15 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
   transition: background 0.15s;
 }
 .msg-send-btn:hover { background: rgba(167,139,250,0.14); }
+
+/* ── REDUCED MOTION — respect vestibular-disorder preferences ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -1596,17 +1605,32 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
   var hoverMode = new URLSearchParams(location.search).get('mouseover') === 'true';
   if (!hoverMode) document.body.classList.add('no-hover');
 
-  // Click anywhere on a feed entry (not on a button) to expand it; collapses any other open entry.
+  // Click/keyboard anywhere on a feed entry (not on a button) to expand it.
+  function toggleFeedEntry(entry) {
+    var wasExpanded = entry.classList.contains('expanded');
+    document.querySelectorAll('#feed-entries .feed-entry.expanded').forEach(function (el) {
+      el.classList.remove('expanded');
+      el.setAttribute('aria-expanded', 'false');
+    });
+    if (!wasExpanded) {
+      entry.classList.add('expanded');
+      entry.setAttribute('aria-expanded', 'true');
+    }
+  }
   document.getElementById('feed-entries').addEventListener('click', function (e) {
     if (hoverMode) return;
     if (e.target.closest('button')) return;
     var entry = e.target.closest('.feed-entry');
     if (!entry) return;
-    var wasExpanded = entry.classList.contains('expanded');
-    document.querySelectorAll('#feed-entries .feed-entry.expanded').forEach(function (el) {
-      el.classList.remove('expanded');
-    });
-    if (!wasExpanded) entry.classList.add('expanded');
+    toggleFeedEntry(entry);
+  });
+  document.getElementById('feed-entries').addEventListener('keydown', function (e) {
+    if (hoverMode) return;
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var entry = e.target.closest('.feed-entry');
+    if (!entry || e.target.closest('button') || e.target.closest('input')) return;
+    e.preventDefault();
+    toggleFeedEntry(entry);
   });
 
   var HUNTER_NAMES  = { rex: 'Rex Bangley', reed: 'Reed Atwood', alan: 'Alan Frazier', sven: 'Sven', john: 'John Johnson' };
@@ -1952,16 +1976,34 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
       if (inp) inp.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') card.querySelector('.roll-btn').click();
       });
-      // Click card header area (not buttons/inputs) to expand description exclusively
-      card.querySelector('.move-card-top').addEventListener('click', function (e) {
-        if (!document.body.classList.contains('no-hover')) return; // hover mode handles it
+      // Make move card header keyboard-accessible
+      var top = card.querySelector('.move-card-top');
+      if (top) {
+        top.setAttribute('tabindex', '0');
+        top.setAttribute('role', 'button');
+        top.setAttribute('aria-expanded', 'false');
+      }
+      // Click/keyboard card header area (not buttons/inputs) to expand description
+      function toggleMoveCard(e) {
+        if (!document.body.classList.contains('no-hover')) return;
         if (e.target.closest('button') || e.target.closest('input')) return;
         var wasExpanded = card.classList.contains('expanded');
         container.querySelectorAll('.move-card.expanded').forEach(function (el) {
           el.classList.remove('expanded');
+          var t = el.querySelector('.move-card-top');
+          if (t) t.setAttribute('aria-expanded', 'false');
         });
-        if (!wasExpanded) card.classList.add('expanded');
-      });
+        if (!wasExpanded) {
+          card.classList.add('expanded');
+          if (top) top.setAttribute('aria-expanded', 'true');
+        }
+      }
+      if (top) {
+        top.addEventListener('click', toggleMoveCard);
+        top.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleMoveCard(e); }
+        });
+      }
     });
   }
 
@@ -3354,8 +3396,15 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     entries.forEach(function (entry) {
       var div = document.createElement('div');
       div.innerHTML = buildFeedEntryHtml(entry);
+      var el = div.firstElementChild;
+      // Make feed entries keyboard-accessible
+      if (el && el.classList.contains('feed-entry')) {
+        el.setAttribute('tabindex', '0');
+        el.setAttribute('role', 'button');
+        el.setAttribute('aria-expanded', 'false');
+      }
       // Insert after the load-more-wrap (at position 1, not 0)
-      container.insertBefore(div.firstElementChild, loadWrap ? loadWrap.nextSibling : container.firstChild);
+      container.insertBefore(el, loadWrap ? loadWrap.nextSibling : container.firstChild);
     });
     container.scrollTop = container.scrollHeight - savedScroll;
   }

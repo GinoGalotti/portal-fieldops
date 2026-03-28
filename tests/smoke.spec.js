@@ -17,8 +17,8 @@ test.describe('Smoke tests — pages load without errors', () => {
   test('lab-incidents.html returns 200 and has <main>', async ({ page }) => {
     const response = await page.goto('/lab-incidents.html');
     expect(response.status()).toBe(200);
-    // #incidents-main is the dynamically-populated container rendered by JS
-    await expect(page.locator('#incidents-main')).toBeAttached();
+    // #main-content is the dynamically-populated container rendered by JS
+    await expect(page.locator('#main-content')).toBeAttached();
   });
 
   test('contacts.html returns 200', async ({ page }) => {
