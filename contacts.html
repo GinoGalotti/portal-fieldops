@@ -159,7 +159,7 @@
     var statusClass = npc.status === 'deceased' ? ' npc-status-deceased' : '';
     var session = npc.first_session ? '<div class="npc-session">// ' + sessionLabel(npc.first_session) + '</div>' : '';
 
-    return '<div class="npc-card affil-' + ac + statusClass + '">' +
+    return '<article class="npc-card affil-' + ac + statusClass + '">' +
       '<div class="npc-header">' +
         '<div class="npc-name">' + npc.name + '</div>' +
         '<div class="npc-meta">' +
@@ -171,7 +171,7 @@
         '<div class="npc-desc">' + npc.player_description + '</div>' +
         session +
       '</div>' +
-    '</div>';
+    '</article>';
   }
 
   function render(npcs) {

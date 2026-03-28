@@ -485,7 +485,7 @@
     entriesList.className = 'entries-list';
 
     batch.entries.forEach(function (entry) {
-      var row = document.createElement('div');
+      var row = document.createElement('article');
       row.className = 'log-entry' + (entry.flags.indexOf('anomaly') !== -1 ? ' anomaly' : '');
       row.setAttribute('data-content', entry.content); // used by search
 

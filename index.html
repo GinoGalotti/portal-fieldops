@@ -573,7 +573,7 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
         if (phase.threat) attrs += ' data-threat="' + esc(phase.threat) + '"';
         var blurAll = !!phase.blur_all;
         var blurClassified = blurAll || !!phase.classified_blurred;
-        html += '<div class="beast-card"' + attrs + '>';
+        html += '<article class="beast-card"' + attrs + '>';
         html += '<div class="beast-name' + (blurAll ? ' blurred' : '') + '">' + esc(entity.name) + '</div>';
         html += '<div class="beast-type' + (blurAll ? ' blurred' : '') + '">// CLASS: ' + esc(phase.class) + '</div>';
         html += '<div class="beast-desc' + (blurAll ? ' blurred' : '') + '">' + esc(phase.description) + '</div>';
@@ -581,7 +581,7 @@ a.operative-card:hover .operative-arc { opacity: 1; color: var(--green); }
         if (phase.blur_notice) {
           html += '<div class="blur-notice">' + esc(phase.blur_notice) + '</div>';
         }
-        html += '</div>';
+        html += '</article>';
       });
     });
     grid.innerHTML = html;

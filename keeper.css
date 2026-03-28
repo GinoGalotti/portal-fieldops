@@ -30,8 +30,8 @@
 
 /* ── SKIP LINK — hidden until focused (WCAG 2.4.1) ── */
 .skip-link {
-  position: absolute;
-  top: -100%;
+  position: fixed;
+  top: -200px;
   left: 16px;
   z-index: 200;
   padding: 8px 16px;

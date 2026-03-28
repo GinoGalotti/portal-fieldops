@@ -282,3 +282,10 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── PRINT ── */
+@media print {
+  body { background: white; color: black; padding: 1rem; }
+  .keeper-toolbar { display: none; }
+  .notebook-entry { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+}

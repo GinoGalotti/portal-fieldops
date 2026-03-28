@@ -54,13 +54,14 @@
   <div class="playbook-body">
 
     <div class="playbook-section-label">// STATS</div>
-    <div class="stats-grid">
-      <div class="stat-cell"><div class="stat-label">Charm</div><input class="stat-input" type="number" data-stat="charm" min="-3" max="3" placeholder="0"></div>
-      <div class="stat-cell"><div class="stat-label">Cool</div><input class="stat-input" type="number" data-stat="cool" min="-3" max="3" placeholder="0"></div>
-      <div class="stat-cell"><div class="stat-label">Sharp</div><input class="stat-input" type="number" data-stat="sharp" min="-3" max="3" placeholder="0"></div>
-      <div class="stat-cell"><div class="stat-label">Tough</div><input class="stat-input" type="number" data-stat="tough" min="-3" max="3" placeholder="0"></div>
-      <div class="stat-cell"><div class="stat-label">Weird</div><input class="stat-input" type="number" data-stat="weird" min="-3" max="3" placeholder="0"></div>
-    </div>
+    <fieldset class="stats-grid">
+      <legend class="sr-only">Character Stats</legend>
+      <div class="stat-cell"><label class="stat-label" for="stat-charm">Charm</label><input class="stat-input" id="stat-charm" type="number" data-stat="charm" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><label class="stat-label" for="stat-cool">Cool</label><input class="stat-input" id="stat-cool" type="number" data-stat="cool" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><label class="stat-label" for="stat-sharp">Sharp</label><input class="stat-input" id="stat-sharp" type="number" data-stat="sharp" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><label class="stat-label" for="stat-tough">Tough</label><input class="stat-input" id="stat-tough" type="number" data-stat="tough" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><label class="stat-label" for="stat-weird">Weird</label><input class="stat-input" id="stat-weird" type="number" data-stat="weird" min="-3" max="3" placeholder="0"></div>
+    </fieldset>
 
     <div class="playbook-section-label">// HARM · LUCK · EXPERIENCE</div>
     <div class="track-row">
@@ -245,7 +246,7 @@
     <div class="arc-section-label">// FOR REX — PLAYER SECTION</div>
 
     <div class="entry-points">
-      <h3>When to Start This Arc</h3>
+      <h2>When to Start This Arc</h2>
       <ul class="entry-list">
         <li>You encounter evidence that someone has been studying your methods — cases you've worked, gadgets you've built, experiments PORTAL has logged.</li>
         <li>The team's investigations start pointing towards strange science mysteries with a deliberately designed feel, as though someone is running parallel experiments.</li>
@@ -255,7 +256,7 @@
 
     <div class="choices-block">
       <div class="choice-group">
-        <h3>Who is the Nemesis?</h3>
+        <h2>Who is the Nemesis?</h2>
         <div class="choice-options">
           <label class="choice-opt">
             <span class="choice-box"></span>
@@ -285,7 +286,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>What's Their Goal?</h3>
+        <h2>What's Their Goal?</h2>
         <div class="choice-options">
           <label class="choice-opt">
             <span class="choice-box"></span>
@@ -311,7 +312,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>How Do They Operate?</h3>
+        <h2>How Do They Operate?</h2>
         <div class="choice-options">
           <label class="choice-opt">
             <span class="choice-box"></span>
@@ -338,7 +339,7 @@
     </div>
 
     <div class="beats-block">
-      <h3>Story Beats <span style="font-weight:300;font-size:0.8rem;color:var(--text-dim)">&nbsp;— mark five to gain a benefit</span></h3>
+      <h2>Story Beats <span style="font-weight:300;font-size:0.8rem;color:var(--text-dim)">&nbsp;— mark five to gain a benefit</span></h2>
       <div class="beats-track" id="beats-nemesis">
         <div class="beat-box">1</div>
         <div class="beat-box">2</div>
@@ -356,7 +357,7 @@
     </div>
 
     <div class="resolution-block">
-      <h3>Resolution Moves</h3>
+      <h2>Resolution Moves</h2>
       <p class="resolution-intro">When the arc concludes, take one — or neither — to reflect how it changed you.</p>
       <div class="resolution-moves">
         <div class="res-move" onclick="toggleRes(this)">
@@ -443,7 +444,7 @@
     <div class="arc-section-label">// FOR REX — PLAYER SECTION</div>
 
     <div class="entry-points">
-      <h3>When to Start This Arc</h3>
+      <h2>When to Start This Arc</h2>
       <ul class="entry-list">
         <li>The team fails to prevent a terrible outcome during a case — and you know your research could have changed the result if it had been further along.</li>
         <li>You encounter evidence of what properly-funded, ethically-unconstrained research in your area can do — either brilliantly or catastrophically.</li>
@@ -454,7 +455,7 @@
 
     <div class="choices-block">
       <div class="choice-group">
-        <h3>What Could Your Research Achieve — If You Focused?</h3>
+        <h2>What Could Your Research Achieve — If You Focused?</h2>
         <div class="choice-options">
           <label class="choice-opt">
             <span class="choice-box"></span>
@@ -480,7 +481,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>What Made You Start Questioning?</h3>
+        <h2>What Made You Start Questioning?</h2>
         <div class="choice-options">
           <label class="choice-opt">
             <span class="choice-box"></span>
@@ -506,7 +507,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>What Keeps You From Walking Away?</h3>
+        <h2>What Keeps You From Walking Away?</h2>
         <div class="choice-options">
           <label class="choice-opt">
             <span class="choice-box"></span>
@@ -533,7 +534,7 @@
     </div>
 
     <div class="beats-block">
-      <h3>Story Beats <span style="font-weight:300;font-size:0.8rem;color:var(--text-dim)">&nbsp;— mark five to gain a benefit</span></h3>
+      <h2>Story Beats <span style="font-weight:300;font-size:0.8rem;color:var(--text-dim)">&nbsp;— mark five to gain a benefit</span></h2>
       <div class="beats-track" id="beats-greater-good">
         <div class="beat-box">1</div>
         <div class="beat-box">2</div>
@@ -551,7 +552,7 @@
     </div>
 
     <div class="resolution-block">
-      <h3>Resolution Moves</h3>
+      <h2>Resolution Moves</h2>
       <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
       <div class="resolution-moves">
         <div class="res-move" onclick="toggleRes(this)">
@@ -648,7 +649,7 @@
     <div class="arc-section-label">// FOR REX — PLAYER SECTION</div>
 
     <div class="entry-points">
-      <h3>When to Start This Arc</h3>
+      <h2>When to Start This Arc</h2>
       <ul class="entry-list">
         <li>CAMPBELL flags an anomalous pattern in your Project Veil logs — the ash data is interacting with something it shouldn't be able to reach.</li>
         <li>A gadget you built using Veil-adjacent research behaves in a way you didn't design — and the result isn't catastrophic. It's interesting.</li>
@@ -659,7 +660,7 @@
 
     <div class="choices-block">
       <div class="choice-group">
-        <h3>What Has the Veil Ash Done?</h3>
+        <h2>What Has the Veil Ash Done?</h2>
         <div class="choice-options">
           <label class="choice-opt">
             <span class="choice-box"></span>
@@ -685,7 +686,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>What Does the Research Tempt You Toward?</h3>
+        <h2>What Does the Research Tempt You Toward?</h2>
         <div class="choice-options">
           <label class="choice-opt">
             <span class="choice-box"></span>
@@ -711,7 +712,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>Who Doesn't Know What You Know?</h3>
+        <h2>Who Doesn't Know What You Know?</h2>
         <div class="choice-options">
           <label class="choice-opt">
             <span class="choice-box"></span>
@@ -738,7 +739,7 @@
     </div>
 
     <div class="beats-block">
-      <h3>Story Beats <span style="font-weight:300;font-size:0.8rem;color:var(--text-dim)">&nbsp;— mark five to gain a benefit</span></h3>
+      <h2>Story Beats <span style="font-weight:300;font-size:0.8rem;color:var(--text-dim)">&nbsp;— mark five to gain a benefit</span></h2>
       <div class="beats-track" id="beats-veil">
         <div class="beat-box">1</div>
         <div class="beat-box">2</div>
@@ -756,7 +757,7 @@
     </div>
 
     <div class="resolution-block">
-      <h3>Resolution Moves</h3>
+      <h2>Resolution Moves</h2>
       <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
       <div class="resolution-moves">
         <div class="res-move" onclick="toggleRes(this)">
