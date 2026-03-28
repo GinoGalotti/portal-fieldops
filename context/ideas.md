@@ -48,10 +48,31 @@
 ## WORLD / SETTING IDEAS
 
 ### Demonic Contract Law
-**Status:** UNREVIEWED
+**Status:** DISCUSSED
 **What it is:** If the Soul Fraud case gets developed, it implies that demonic contracts are a real legal framework in this world — with terms, violations, appeals processes, and presumably a body that adjudicates disputes. PORTAL has probably encountered the edges of this before without recognising it.
 **Possible angle:** John Johnson (the Flake) is the natural character to become obsessed with this. He would immediately connect it to everything else. He would be wrong about most of the connections and right about one of them.
 **Tone:** Best kept light and bureaucratic — the horror is that it's mundane, not that it's terrifying.
+
+### The Soul Fraud — Azrameth / Expanded Mechanics
+**Status:** DISCUSSED
+**Type:** Comic one-off. No BIM connection. Standalone.
+**The demon:** Azrameth, designation "Junior Acquisitions, Northeast Sector." About five foot six, polo shirt, sweaty, clipboard. Desperate to meet quarterly targets. Not evil — incompetent and poorly supervised. Offered Terry Hobbs a standard soul deal outside a Subway restaurant at 11:47pm. Terry said no. Azrameth signed the contract unilaterally and committed soul fraud.
+**The victim:** Terry Hobbs, 42, accountant. Mild, bewildered, keeping a spreadsheet of his impossible luck. Knows something is wrong. Doesn't know what.
+**The escalation:** Every win for Terry is a loss for someone nearby. Scratch cards → free parking → avoided accidents → buildings collapsing → the debt demands lives. Zero-sum probability. The comedy becomes horror when the operatives do the maths.
+
+**Combat mechanics — DISCUSSED:**
+- *Azrameth is pathetic in a fight:* Harm 2 at best (throws filing cabinets, flails). Not a combat threat. The real danger is the luck mechanism — while the contract exists, Terry's proximity is lethal to bystanders.
+- *Document-based weakness:* The contract is the anchor. Three resolution paths, all delightful:
+  - **Fire** — burn the physical contract. Severs the connection immediately. Azrameth panics. The demonic hierarchy notices. Consequences are real but delayed (collections department, which is much worse than acquisitions).
+  - **Shredding** — physically destroying the document. Same effect as fire but less dramatic. Azrameth weeps.
+  - **Filing it incorrectly / introducing typos** — the bureaucratic nuclear option. Deliberately corrupting the contract's terms so it no longer describes Terry Hobbs (misspell his name, change the date, alter the clause numbers). The demonic system processes the corrupted filing and rejects it as invalid. Azrameth is cited for the original fraud AND the corrupted filing. He is recalled to the Office of Acquisitions for disciplinary review. This is the *funniest* resolution and the *safest* — no hierarchy reprisal because it looks like Azrameth's own incompetence.
+- *Bureaucratic damage bypasses armour:* When the operatives use the correct demonic procedure against Azrameth — formal objections, filing references, citing clause numbers — the damage ignores his armour entirely. He is contractually obligated to comply with valid procedural actions. A demon can resist a sword. A demon cannot resist a correctly filed Form 12-B. This is the mechanical joke: the scariest weapon in this mystery is a pen and the right paperwork.
+- *The Appeals Office:* A liminal space that looks like a DMV. There is a queue. The clerk has done this ten thousand times. Processing takes "three to six business centuries" unless expedited. Expediting requires Azrameth's personal seal (on his clipboard). Getting the clipboard is the physical challenge of the mystery.
+
+**Custom move (draft):**
+> **File a Formal Objection:** When you present a correctly completed demonic procedural form to Azrameth or the Appeals Office, roll +Sharp. On a 10+: the filing is accepted. Azrameth takes 3-harm (ignore-armour, bureaucratic) and is compelled to comply with the ruling. On a 7–9: the filing has a procedural error — the clerk identifies it and gives you one chance to correct it, but Azrameth has time to act before the correction is processed. On a miss: the filing is rejected. The appeals process notes that PORTAL has "engaged with the contractual framework" — which, technically, makes you a party to the dispute. Azrameth grins for the first time.
+
+**John Johnson note:** John is the natural character to discover that PORTAL's database contains two previous cases filed as "contractual anomaly" and marked "DO NOT PURSUE" by Leech. He would be right that this is significant. He would be wrong about why.
 
 ### The Fey Court's Interest in Alan
 **Status:** UNREVIEWED
@@ -93,6 +114,15 @@
 - *Sven:* the wild card. What does the Shōjō perceive when it tries to drink from someone who is dead? Does it taste grief? Nothing? Does it recoil? This is a Sven reflection moment — his nature matters in a way it hasn't before.
 
 **Resolution:** It can be fought directly — this is the palate cleanser, there should be a real fight with a weakness to discover. But it can also be reasoned with if someone approaches it with genuine emotional honesty. Both paths are valid. The fight path requires discovering its weakness. The diplomacy path requires someone being truly, uncomfortably honest about what they feel. Neither is easy.
+
+**Combat mechanics — DISCUSSED:**
+- *Hard to hurt:* The Shōjō has armour 2 and sees through pretence. Hunters need moves or gear dealing >2 harm to actually damage it. Rex's gadgets are the natural answer — first proper gadget-focused combat. Standard sidearms and blunt force barely register.
+- *Knowing the weakness reduces armour:* Once the hunters identify the ceremonial sake as the Shōjō's vulnerability (from Yuki Tanaka or the cask itself), its armour drops by 1. The creature becomes readable — its movements predictable because the hunters understand what it is. Stack with the sake-circle ritual for full effect.
+- *Drunk = better perception:* The Shōjō exists in an emotional frequency humans can't normally perceive clearly. Alcohol lowers the filter. Hunters who are genuinely drunk gain +1 to Investigate and Act Under Pressure rolls involving the Shōjō — they can *see* it properly, track its feeding patterns, predict where it moves. The downside: -1 to Tough rolls (coordination) and any miss while drunk deals 1 extra harm to the hunter. Being drunk in a monster fight is an advantage and a liability simultaneously. This is the kind of mechanical weirdness MoTW thrives on.
+- *Sven interaction:* What does the Shōjō taste when it tries to drink from someone who is already dead? If it recoils, that's information. If it doesn't recoil — if it tastes something — that's a different kind of information. Either way, Sven is immune to the emotional drain but the creature's reaction tells him something about his own nature.
+
+**Custom move (draft):**
+> **Drink With the Spirit:** When you share sake with the Shōjō (or are genuinely, properly drunk in its presence), roll +Weird. On a 10+: you perceive the creature fully — its emotional frequency, its feeding pattern, its sadness. Take +1 forward against it and ask the Keeper one question about its nature. On a 7–9: you see it, but it sees you too. It knows what you feel. The Keeper tells you what it perceives in you. On a miss: it drinks from you. Take 2-harm (ignore-armour) as it consumes whatever you were feeling most intensely.
 
 ---
 
