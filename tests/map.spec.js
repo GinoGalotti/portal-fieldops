@@ -397,16 +397,18 @@ test.describe('feed.html — connection MAP (M03)', () => {
     await expect(page.locator('.map-detail-card')).toHaveCount(0);
   });
 
-  test('player M03 — connected unlocked nodes appear as edges in detail card', async ({ page }) => {
-    // Unlock the first node + one of its neighbours (loc-foyer, linked via "Investigation Route A")
+  test('player M03 — detail card shows description but NOT edge labels (keeper-only)', async ({ page }) => {
+    // Unlock the first node + one of its neighbours
     const neighbour = theatreMap.edges.find(e => e.from === firstNode.id || e.to === firstNode.id);
     const neighbourId = neighbour.from === firstNode.id ? neighbour.to : neighbour.from;
     await mockMapApis(page, { mapState: { u: { [firstNode.id]: true, [neighbourId]: true }, v: {} } });
     await page.goto('/feed.html');
     await openPlayerConnMap(page);
     await page.locator('.conn-node.unlocked').first().click();
-    await expect(page.locator('.conn-detail-edges')).toBeVisible();
-    await expect(page.locator('.conn-detail-edge').first()).toBeVisible();
+    // Detail card shows player_desc
+    await expect(page.locator('.map-detail-desc')).toBeVisible();
+    // Edge labels must NOT be shown to players — they contain keeper narrative
+    await expect(page.locator('.conn-detail-edges')).toHaveCount(0);
   });
 
   test('keeper M03 — renders all nodes as .conn-node cells', async ({ page }) => {

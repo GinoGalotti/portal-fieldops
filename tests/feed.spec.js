@@ -856,6 +856,14 @@ test.describe('feed.html — handout coexistence', () => {
     await expect(page.locator('.feed-entry')).toHaveCount(2);
     await expect(page.locator('.feed-pda')).toHaveCount(1);
     await expect(page.locator('.feed-image')).toHaveCount(1);
+
+    // Regression: PDA body text must remain visible (not squished to 0 height by flex)
+    // The original bug: .feed-pda had overflow:hidden inside a flex column, which let
+    // flexbox shrink it to 0px when other entries filled the space.
+    const pdaBody = page.locator('.pda-message-text');
+    await expect(pdaBody).toBeVisible();
+    const box = await pdaBody.boundingBox();
+    expect(box.height).toBeGreaterThan(10);
   });
 
 });

@@ -3679,7 +3679,7 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
   }
 
   // ── MAP PANEL (player) ──────────────────────────────────────────────────────
-  function renderMapPanel() {
+  window.renderMapPanel = function () {
     var body = document.getElementById('panel-body');
     if (!session_data || !session_data.length) {
       body.innerHTML = '<div class="keeper-panel-note">// NO MAP DATA</div>';
@@ -3911,28 +3911,10 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
   }
 
   function _buildConnDetail(node, map) {
-    var edges = map.edges || [];
-    var connected = edges.filter(function (e) { return e.from === node.id || e.to === node.id; });
-    var unlockedConnected = connected.filter(function (e) {
-      var otherId = e.from === node.id ? e.to : e.from;
-      return mapState.u && mapState.u[otherId];
-    });
     var html = '<div class="map-detail-card">' +
       '<div class="map-detail-label">' + escHtml(node.label) + '</div>' +
       '<div class="map-detail-sublabel">' + escHtml(node.sublabel) + '</div>' +
       '<div class="map-detail-desc">' + escHtml(node.player_desc) + '</div>';
-    if (unlockedConnected.length) {
-      html += '<div class="conn-detail-edges">';
-      unlockedConnected.forEach(function (e) {
-        var otherId = e.from === node.id ? e.to : e.from;
-        var otherNode = (map.nodes || []).find(function (n) { return n.id === otherId; });
-        var otherLabel = otherNode ? otherNode.label : otherId;
-        var edgeLabel = e.label ? ' — ' + e.label : '';
-        html += '<div class="conn-detail-edge">→ <span class="conn-edge-target">' +
-          escHtml(otherLabel) + '</span>' + escHtml(edgeLabel) + '</div>';
-      });
-      html += '</div>';
-    }
     html += '</div>';
     return html;
   }
