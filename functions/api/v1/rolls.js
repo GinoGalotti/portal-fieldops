@@ -35,8 +35,8 @@ export async function onRequestPost({ request, env }) {
     return Response.json({ error: 'invalid body' }, { status: 400 });
   }
 
-  // Custom thresholds: 13+ advanced, 11-12 hit, 7-10 partial, 6- miss
-  const outcome = body.total >= 13 ? 'advanced' : body.total >= 11 ? 'hit' : body.total >= 7 ? 'partial' : 'miss';
+  // Custom thresholds: 13+ advanced, 10-12 hit, 7-9 partial, 6- miss
+  const outcome = body.total >= 13 ? 'advanced' : body.total >= 10 ? 'hit' : body.total >= 7 ? 'partial' : 'miss';
 
   const result = await env.portal_db
     .prepare(`INSERT INTO rolls
