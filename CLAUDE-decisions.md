@@ -1,6 +1,6 @@
 # CLAUDE-decisions.md
 *Architecture decisions and rationale for this project.*
-*Last updated: 2026-03-13*
+*Last updated: 2026-03-28*
 
 ---
 
@@ -84,10 +84,20 @@
 
 ---
 
-## No Auth
+## JWT Auth — Server-Side Write Gating
 
-**Decision:** No login, no passwords, no session tokens.
+**Decision:** JWT-based auth with server-side write gating. No third-party auth service.
 
-**Why:** This is a campaign tool for a known group of 5 players. The threat model is "someone stumbles across the URL" not "adversarial attacker". Adding auth would require a third-party service (Clerk etc.), add complexity, and create friction for players at the table.
+**Why:** The site needed write protection so only the keeper can modify state (session data, visibility flags, etc.) while players can read freely. A lightweight JWT approach avoids external dependencies (Clerk, Auth0) while still gating D1 writes.
 
-**Implication:** Keeper mode is activated by a 5× logo click easter egg. `classified` handouts rely on this client-side flag. This is acceptable for the trust model of a private campaign site.
+**Implication:** Keeper mode still activates via 5× logo click easter egg for UI features. Server-side write endpoints validate JWT before allowing mutations. Read endpoints remain open. `classified` handouts still use client-side `keeperMode` flag for rendering (no server-side access control on reads — acceptable for trusted group).
+
+---
+
+## Accessibility — WCAG AA Compliance
+
+**Decision:** WCAG AA compliance across all pages. Focus-visible, reduced motion, contrast ratios, keyboard navigation, ARIA roles/states, semantic HTML, skip links.
+
+**Why:** Accessibility is a baseline quality standard. Even for a private campaign site, keyboard navigation and screen reader support benefit all users (e.g. playing at the table with reduced visibility, using keyboard shortcuts during live sessions).
+
+**Implication:** Every new interactive element must be keyboard-accessible (`tabindex="0"`, Enter/Space handler). All text must meet 4.5:1 contrast ratio against its background. All collapsible/expandable elements need `aria-expanded`. Print stylesheets on keeper documents.

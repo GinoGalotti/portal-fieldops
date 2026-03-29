@@ -4,6 +4,7 @@
 > **Safety commit:** `5e4ed0f` on `dev` (pushed to origin)
 > **Scope:** Accessibility, UX, contrast, semantic HTML, responsive polish
 > **Principle:** Preserve the existing military-surveillance aesthetic — fix gaps, don't redesign
+> **Status:** Phases 1–5 COMPLETE (2026-03-28). Commits: `9c9ebe3` (Phase 1–2), `46a8757` (Phase 3–5). Only 5.3 (responsive breakpoints) deferred.
 
 ---
 
