@@ -56,7 +56,7 @@ When working on Claude Code features (hooks, skills, subagents, MCP servers, etc
 
 ## Project Overview
 
-P.O.R.T.A.L — a Monster of the Week TTRPG campaign website. Static HTML/CSS/JS site hosted on **Cloudflare Pages** (`dev` branch). Uses **Cloudflare D1** (SQLite) for persistence via **Cloudflare Pages Functions** (`functions/api/v1/`).
+P.O.R.T.A.L — a Monster of the Week TTRPG campaign website. Static HTML/CSS/JS site hosted on **Cloudflare Pages** (`main` branch). Uses **Cloudflare D1** (SQLite) for persistence via **Cloudflare Pages Functions** (`functions/api/v1/`).
 
 - Stack: HTML + vanilla JS + CSS. No build step. No npm. No framework.
 - D1 binding: `portal_db` | database: `portal-db`
@@ -86,7 +86,7 @@ wrangler login
 python generate_images.py
 ```
 
-No build step, no npm, no compilation. Deployment = push to `dev` branch → Cloudflare Pages auto-deploys.
+No build step, no npm, no compilation. Deployment = push to `main` branch → Cloudflare Pages auto-deploys.
 
 ## Architecture
 
