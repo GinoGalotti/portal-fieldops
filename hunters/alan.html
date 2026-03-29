@@ -31,7 +31,7 @@
   </div>
 </div>
 
-<main>
+<main id="main-content">
 <!-- ══ PLAYBOOK SECTION ══ -->
 <div id="playbook" class="playbook">
   <div class="playbook-header">
@@ -41,13 +41,14 @@
   <div class="playbook-body">
 
     <div class="playbook-section-label">// STATS</div>
-    <div class="stats-grid">
-      <div class="stat-cell"><div class="stat-label">Charm</div><input class="stat-input" type="number" data-stat="charm" min="-3" max="3" placeholder="0"></div>
-      <div class="stat-cell"><div class="stat-label">Cool</div><input class="stat-input" type="number" data-stat="cool" min="-3" max="3" placeholder="0"></div>
-      <div class="stat-cell"><div class="stat-label">Sharp</div><input class="stat-input" type="number" data-stat="sharp" min="-3" max="3" placeholder="0"></div>
-      <div class="stat-cell"><div class="stat-label">Tough</div><input class="stat-input" type="number" data-stat="tough" min="-3" max="3" placeholder="0"></div>
-      <div class="stat-cell"><div class="stat-label">Weird</div><input class="stat-input" type="number" data-stat="weird" min="-3" max="3" placeholder="0"></div>
-    </div>
+    <fieldset class="stats-grid">
+      <legend class="sr-only">Character Stats</legend>
+      <div class="stat-cell"><label class="stat-label" for="stat-charm">Charm</label><input class="stat-input" id="stat-charm" type="number" data-stat="charm" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><label class="stat-label" for="stat-cool">Cool</label><input class="stat-input" id="stat-cool" type="number" data-stat="cool" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><label class="stat-label" for="stat-sharp">Sharp</label><input class="stat-input" id="stat-sharp" type="number" data-stat="sharp" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><label class="stat-label" for="stat-tough">Tough</label><input class="stat-input" id="stat-tough" type="number" data-stat="tough" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><label class="stat-label" for="stat-weird">Weird</label><input class="stat-input" id="stat-weird" type="number" data-stat="weird" min="-3" max="3" placeholder="0"></div>
+    </fieldset>
 
     <div class="playbook-section-label">// HARM · LUCK · EXPERIENCE</div>
     <div class="track-row">
@@ -241,7 +242,7 @@
   <div class="arc-player">
     <div class="arc-section-label">// FOR ALAN — PLAYER SECTION</div>
     <div class="entry-points">
-      <h3>When to Start This Arc</h3>
+      <h2>When to Start This Arc</h2>
       <ul class="entry-list">
         <li>The team encounters a creature with properties that echo your own — something about how it moves through space, how it relates to the human world, or what it wants from it.</li>
         <li>Something you do gets called into question by another hunter — not accusingly, but as a genuine question about your nature.</li>
@@ -250,7 +251,7 @@
     </div>
     <div class="choices-block">
       <div class="choice-group">
-        <h3>What Villainy Are They Engaged In?</h3>
+        <h2>What Villainy Are They Engaged In?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Preying on people's life-force, memory, or sense of self — the specific currency of fey exchange.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Kidnapping people — specifically taking children or young adults and leaving something in their place.</span></label>
@@ -260,7 +261,7 @@
         </div>
       </div>
       <div class="choice-group">
-        <h3>How Are They Connected to You?</h3>
+        <h2>How Are They Connected to You?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They're the ones who left you with your human family. They know exactly what you are and they've been watching.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">You're part of the same nest, breed, or lineage — which means their actions have implications for your nature.</span></label>
@@ -270,7 +271,7 @@
         </div>
       </div>
       <div class="choice-group">
-        <h3>How Do Their Actions Target You Specifically?</h3>
+        <h2>How Do Their Actions Target You Specifically?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They want to convince or force you to join them. What they're doing, they want Alan's skills and access to do better.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They make other dangerous people hunt your kind — including people who might otherwise help you.</span></label>
@@ -281,7 +282,7 @@
       </div>
     </div>
     <div class="beats-block">
-      <h3>Story Beats <span style="font-weight:300;font-size:0.8rem;color:var(--text-dim)">&nbsp;— mark five to gain a benefit</span></h3>
+      <h2>Story Beats <span style="font-weight:300;font-size:0.8rem;color:var(--text-dim)">&nbsp;— mark five to gain a benefit</span></h2>
       <div class="beats-track"><div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div></div>
       <ul class="beats-list">
         <li>You behave similarly to the Villains — not maliciously, but in a way another hunter might notice and not say.</li>
@@ -292,7 +293,7 @@
       </ul>
     </div>
     <div class="resolution-block">
-      <h3>Resolution Moves</h3>
+      <h2>Resolution Moves</h2>
       <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
       <div class="resolution-moves">
         <div class="res-move" onclick="toggleRes(this)">
@@ -379,7 +380,7 @@
   <div class="arc-player">
     <div class="arc-section-label">// FOR ALAN — PLAYER SECTION</div>
     <div class="entry-points">
-      <h3>When to Start This Arc</h3>
+      <h2>When to Start This Arc</h2>
       <ul class="entry-list">
         <li>The team meets a bystander during a case who responds to the anomalous environment in a way that isn't quite right — too calm, or too aware.</li>
         <li>Alan has a moment of feeling entirely alone in what he is — and then encounters evidence that he isn't.</li>
@@ -388,7 +389,7 @@
     </div>
     <div class="choices-block">
       <div class="choice-group">
-        <h3>Who Is the Awakened One?</h3>
+        <h2>Who Is the Awakened One?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Someone from Alan's human family — a cousin, a sibling of the family that raised him, someone he hasn't seen in years.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A professional contact — someone who works adjacent to PORTAL's operational area and has been noticing things.</span></label>
@@ -398,7 +399,7 @@
         </div>
       </div>
       <div class="choice-group">
-        <h3>What Power Woke in Them?</h3>
+        <h2>What Power Woke in Them?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They're a changeling — similar to Alan. Maybe from the same lineage. The resemblance is uncomfortable.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They're a changeling — different kind entirely. Their powers and Alan's are not the same language. Understanding each other will take work.</span></label>
@@ -408,7 +409,7 @@
         </div>
       </div>
       <div class="choice-group">
-        <h3>What Danger Are They In?</h3>
+        <h2>What Danger Are They In?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Their powers attract entities — specifically entities associated with thin-boundary locations. They've been a beacon without knowing.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Their powers can make them into something dangerous — not evil, but genuinely harmful to people around them.</span></label>
@@ -419,7 +420,7 @@
       </div>
     </div>
     <div class="beats-block">
-      <h3>Story Beats <span style="font-weight:300;font-size:0.8rem;color:var(--text-dim)">&nbsp;— mark five to gain a benefit</span></h3>
+      <h2>Story Beats <span style="font-weight:300;font-size:0.8rem;color:var(--text-dim)">&nbsp;— mark five to gain a benefit</span></h2>
       <div class="beats-track"><div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div></div>
       <ul class="beats-list">
         <li>You devote significant time to the Awakened One — time that costs you in terms of cases or team availability.</li>
@@ -430,7 +431,7 @@
       </ul>
     </div>
     <div class="resolution-block">
-      <h3>Resolution Moves</h3>
+      <h2>Resolution Moves</h2>
       <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
       <div class="resolution-moves">
         <div class="res-move" onclick="toggleRes(this)">
@@ -507,7 +508,7 @@
   <div class="arc-player">
     <div class="arc-section-label">// FOR ALAN — PLAYER SECTION</div>
     <div class="entry-points">
-      <h3>When to Start This Arc</h3>
+      <h2>When to Start This Arc</h2>
       <ul class="entry-list">
         <li>Alan recognises a pattern in the thin-boundary locations that couldn't be coincidental — they're arranged, not discovered.</li>
         <li>Diane Marsh's notebook sketch appears in a case, and Alan notices the threshold diagram before anyone else understands what they're looking at.</li>
@@ -517,7 +518,7 @@
     </div>
     <div class="choices-block">
       <div class="choice-group">
-        <h3>What Does Alan's Evidence Currently Show?</h3>
+        <h2>What Does Alan's Evidence Currently Show?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The locations form a geometric pattern when mapped — not perfect, but deliberate. Something is being enclosed or connected.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The locations correspond to sites of historical significance — not to humans, but to something older. The district history doesn't explain them.</span></label>
@@ -527,7 +528,7 @@
         </div>
       </div>
       <div class="choice-group">
-        <h3>What Does Alan Fear the Map Is For?</h3>
+        <h2>What Does Alan Fear the Map Is For?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">It's a door. Something is using the thin-boundary locations as points of entry into this world — or exit from it.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">It's a hunting ground. The thin-boundary locations attract entities that then harm people — and the map ensures those entities arrive in predictable places.</span></label>
@@ -537,7 +538,7 @@
         </div>
       </div>
       <div class="choice-group">
-        <h3>What Could Knowing the Truth Cost?</h3>
+        <h2>What Could Knowing the Truth Cost?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Alan's fey origin. The map's creator may be the same entity or lineage that put Alan in this world in the first place. Knowing who made the map means knowing who made Alan.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Reed. If the map was drawn by something that has been watching the team, Reed's presence in Alan's life may not be coincidental. Alan uses Reed as a moral compass. What if Reed was placed there?</span></label>
@@ -548,7 +549,7 @@
       </div>
     </div>
     <div class="beats-block">
-      <h3>Story Beats <span style="font-weight:300;font-size:0.8rem;color:var(--text-dim)">&nbsp;— mark five to gain a benefit</span></h3>
+      <h2>Story Beats <span style="font-weight:300;font-size:0.8rem;color:var(--text-dim)">&nbsp;— mark five to gain a benefit</span></h2>
       <div class="beats-track"><div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div></div>
       <ul class="beats-list">
         <li>Alan successfully identifies a new thin-boundary location — and finds evidence it was known before PORTAL arrived.</li>
@@ -559,7 +560,7 @@
       </ul>
     </div>
     <div class="resolution-block">
-      <h3>Resolution Moves</h3>
+      <h2>Resolution Moves</h2>
       <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
       <div class="resolution-moves">
         <div class="res-move" onclick="toggleRes(this)">

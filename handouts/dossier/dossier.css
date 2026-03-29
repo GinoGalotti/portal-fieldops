@@ -89,6 +89,12 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* ── FOCUS-VISIBLE — keyboard-only focus ring (WCAG 2.4.7) ── */
+*:focus-visible {
+  outline: 2px solid var(--accent, var(--green, #2ecc71));
+  outline-offset: 2px;
+}
+
 body {
   background: var(--dossier-bg);
   color: var(--ink);
@@ -266,4 +272,20 @@ body {
   .entry-body { font-size: 0.95rem; }
   .keeper-toolbar { bottom: 0.5rem; right: 0.5rem; }
   .keeper-btn, .keeper-status { padding: 0.4rem 0.6rem; font-size: 0.6rem; }
+}
+
+/* ── REDUCED MOTION — respect vestibular-disorder preferences ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── PRINT ── */
+@media print {
+  body { background: white; color: black; padding: 1rem; }
+  .keeper-toolbar { display: none; }
+  .notebook-entry { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
 }

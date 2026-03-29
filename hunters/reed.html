@@ -42,7 +42,7 @@
   </div>
 </div>
 
-<main>
+<main id="main-content">
 <!-- ══ PLAYBOOK SECTION ══ -->
 <div id="playbook" class="playbook">
   <div class="playbook-header">
@@ -52,13 +52,14 @@
   <div class="playbook-body">
 
     <div class="playbook-section-label">// STATS</div>
-    <div class="stats-grid">
-      <div class="stat-cell"><div class="stat-label">Charm</div><input class="stat-input" type="number" data-stat="charm" min="-3" max="3" placeholder="0"></div>
-      <div class="stat-cell"><div class="stat-label">Cool</div><input class="stat-input" type="number" data-stat="cool" min="-3" max="3" placeholder="0"></div>
-      <div class="stat-cell"><div class="stat-label">Sharp</div><input class="stat-input" type="number" data-stat="sharp" min="-3" max="3" placeholder="0"></div>
-      <div class="stat-cell"><div class="stat-label">Tough</div><input class="stat-input" type="number" data-stat="tough" min="-3" max="3" placeholder="0"></div>
-      <div class="stat-cell"><div class="stat-label">Weird</div><input class="stat-input" type="number" data-stat="weird" min="-3" max="3" placeholder="0"></div>
-    </div>
+    <fieldset class="stats-grid">
+      <legend class="sr-only">Character Stats</legend>
+      <div class="stat-cell"><label class="stat-label" for="stat-charm">Charm</label><input class="stat-input" id="stat-charm" type="number" data-stat="charm" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><label class="stat-label" for="stat-cool">Cool</label><input class="stat-input" id="stat-cool" type="number" data-stat="cool" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><label class="stat-label" for="stat-sharp">Sharp</label><input class="stat-input" id="stat-sharp" type="number" data-stat="sharp" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><label class="stat-label" for="stat-tough">Tough</label><input class="stat-input" id="stat-tough" type="number" data-stat="tough" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><label class="stat-label" for="stat-weird">Weird</label><input class="stat-input" id="stat-weird" type="number" data-stat="weird" min="-3" max="3" placeholder="0"></div>
+    </fieldset>
 
     <div class="playbook-section-label">// HARM · LUCK · EXPERIENCE</div>
     <div class="track-row">
@@ -227,7 +228,7 @@
     <div class="arc-section-label">// FOR REED — PLAYER SECTION</div>
 
     <div class="entry-points">
-      <h3>When to Start This Arc</h3>
+      <h2>When to Start This Arc</h2>
       <ul class="entry-list">
         <li>Emulating Rex in the field puts Reed in genuine danger — not because of incompetence, but because Rex's approach works for Rex specifically, and Reed is not Rex.</li>
         <li>Rex reveals something about how he sees Reed — a moment of honest appraisal — that makes the dynamic between them suddenly legible.</li>
@@ -237,7 +238,7 @@
 
     <div class="choices-block">
       <div class="choice-group">
-        <h3>Which Weakness Does Reed Find Awesome?</h3>
+        <h2>Which Weakness Does Reed Find Awesome?</h2>
         <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:10px">Ask Rex's player to name weaknesses Rex owns. Choose one Reed wants to emulate:</p>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The tendency to solve problems by escalating them — treating every situation as a field test.</span></label>
@@ -249,7 +250,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>What Problem Does the Weakness Create?</h3>
+        <h2>What Problem Does the Weakness Create?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">It puts Reed in dangerous situations Rex didn't intend and can't fully protect him from.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">It makes Reed reluctant to ask for help — compounding his already-existing tendency not to burden the team.</span></label>
@@ -260,7 +261,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>What Supernatural Problem Exploits This?</h3>
+        <h2>What Supernatural Problem Exploits This?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">An entity that feeds on the specific kind of recklessness this weakness produces — and gets stronger when Reed gives in.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A dangerous piece of Rex's past — consequences still moving in the world — that now has a path to Reed.</span></label>
@@ -272,7 +273,7 @@
     </div>
 
     <div class="beats-block">
-      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <h2>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h2>
       <div class="beats-track" id="beats-weakness">
         <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
       </div>
@@ -286,7 +287,7 @@
     </div>
 
     <div class="resolution-block">
-      <h3>Resolution Moves</h3>
+      <h2>Resolution Moves</h2>
       <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
       <div class="resolution-moves">
         <div class="res-move" onclick="toggleRes(this)">
@@ -381,7 +382,7 @@
     <div class="arc-section-label">// FOR REED — PLAYER SECTION</div>
 
     <div class="entry-points">
-      <h3>When to Start This Arc</h3>
+      <h2>When to Start This Arc</h2>
       <ul class="entry-list">
         <li>A bystander demonstrates an understanding of the supernatural they shouldn't have — and they're looking to Reed for an explanation, not to Rex.</li>
         <li>Reed has a run of genuine successes in the field — moments where he acted independently and it worked — and feels, briefly, like someone who knows what they're doing.</li>
@@ -391,7 +392,7 @@
 
     <div class="choices-block">
       <div class="choice-group">
-        <h3>Who Is the Mentee?</h3>
+        <h2>Who Is the Mentee?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A bystander from a previous case who got too close to something and didn't come out the same. They've been handling it alone.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Someone from Reed's personal life — a friend from before PORTAL who has noticed Reed changing and wants to understand why.</span></label>
@@ -402,7 +403,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>Why Do They Come to Reed, Not Rex?</h3>
+        <h2>Why Do They Come to Reed, Not Rex?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Reed is less intimidating. Rex is a force of nature; Reed is a person you can actually talk to.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Reed has a unique skill or perspective that applies to what the Mentee is dealing with — something Rex doesn't have.</span></label>
@@ -413,7 +414,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>How Does Helping Them Put Reed in Danger?</h3>
+        <h2>How Does Helping Them Put Reed in Danger?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Reed has to think of their needs when handling cases — carrying a second person's safety without asking the team to carry it too.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The Mentee's situation attracts attention from forces that now also target Reed.</span></label>
@@ -425,7 +426,7 @@
     </div>
 
     <div class="beats-block">
-      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <h2>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h2>
       <div class="beats-track" id="beats-torch">
         <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
       </div>
@@ -439,7 +440,7 @@
     </div>
 
     <div class="resolution-block">
-      <h3>Resolution Moves</h3>
+      <h2>Resolution Moves</h2>
       <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
       <div class="resolution-moves">
         <div class="res-move" onclick="toggleRes(this)">
@@ -533,7 +534,7 @@
     <div class="arc-section-label">// FOR REED — PLAYER SECTION</div>
 
     <div class="entry-points">
-      <h3>When to Start This Arc</h3>
+      <h2>When to Start This Arc</h2>
       <ul class="entry-list">
         <li>Dr. Leech asks Reed something specific — about Rex, about the team, about a case detail — that Reed realises he's been unconsciously tracking on PORTAL's behalf without meaning to.</li>
         <li>Reed notices that information he shared privately with PORTAL has had a downstream effect he didn't anticipate — a case priority shifted, a resource appeared, a person was contacted.</li>
@@ -544,7 +545,7 @@
 
     <div class="choices-block">
       <div class="choice-group">
-        <h3>What Has Leech Asked Reed to Do?</h3>
+        <h2>What Has Leech Asked Reed to Do?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Monitor Rex's field decisions and flag anything suggesting Rex is pursuing personal research goals on PORTAL time.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Report on the team's emotional state and interpersonal dynamics — framed as welfare, but functionally intelligence.</span></label>
@@ -555,7 +556,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>Why Did Reed Agree?</h3>
+        <h2>Why Did Reed Agree?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Leech framed it as protecting Rex — Reed was told the monitoring was protective, not extractive.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Reed wanted to be valuable to PORTAL independent of Rex, and this was the first time someone in authority had asked him directly for something.</span></label>
@@ -566,7 +567,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>What Does Reed Stand to Lose?</h3>
+        <h2>What Does Reed Stand to Lose?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Rex. If Rex finds out, the question is not whether he'll be angry — it's whether Reed could give him a reason to trust him again.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">His read on Leech. Reed has decided Leech is good. This arc will complicate that — and whatever replaces it will be harder to hold.</span></label>
@@ -578,7 +579,7 @@
     </div>
 
     <div class="beats-block">
-      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <h2>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h2>
       <div class="beats-track" id="beats-directive">
         <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
       </div>
@@ -592,7 +593,7 @@
     </div>
 
     <div class="resolution-block">
-      <h3>Resolution Moves</h3>
+      <h2>Resolution Moves</h2>
       <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
       <div class="resolution-moves">
         <div class="res-move" onclick="toggleRes(this)">

@@ -1,37 +1,58 @@
 # CLAUDE-activeContext.md
 *Current session state, recent changes, and immediate next steps.*
-*Last updated: 2026-03-20*
+*Last updated: 2026-03-28*
 
 ---
 
 ## Most Recent Work
 
-### Nav cleanup + anchor scroll fix (2026-03-20)
-- **`player-nav.js`** — Removed "The Lab" (12 items now). Lab lore + team playbook link remain on `index.html` directly after `#operatives`.
-- **`player.css`** — Hamburger breakpoint raised from 640px → 900px (13 items overflowed at intermediate widths).
-- **`index.html`** — `#lab` section moved after `#operatives`; section top padding reduced 80px → 24px so anchored headings land near viewport top.
+### Frontend Accessibility Improvement — Phases 1–5 (2026-03-28)
+Implemented full `context/frontend-improvement-plan.md`. Two commits: `9c9ebe3` (Phase 1–2) + `46a8757` (Phase 3–5).
 
-### VIEW FULL LOGS link — lab-incidents.html (2026-03-20)
-- **`data/incidents.json`** — `link` field added to both CAMPBELL-LOG teaser items.
-- **`lab-incidents.html`** — `renderTeaser()` conditionally renders `.log-full-link a` → `campbell-logs.html`.
+**Phase 1 — Global CSS accessibility:**
+- `:focus-visible` on all 5 CSS files (player/keeper/hunter/briefing/dossier)
+- `prefers-reduced-motion` media query on all CSS files + `feed.html` inline styles
+- Text size bumps: all sub-0.7rem fonts raised (0.55→0.65, 0.62→0.68, 0.65→0.7rem)
+- Touch target padding on mobile (nav toggle, filter buttons)
 
-### Test suite expansion (2026-03-20)
-- `feed.spec.js` 45 → 53 (readaloud + document handout types)
-- `campbell-logs.spec.js` 35 → 37 (clue pre-revealed D1 load)
-- `keeper-review.spec.js` new — 11 tests
-- `playwright.config.js` — `retries: 1` for d1-round-trip stability under parallel load
+**Phase 2 — ARIA + keyboard support (JS):**
+- `hunters/hunter.js`: `makeKeyboardAccessible(el, role)` helper — track pips, beat boxes, choice opts, check items all keyboard-navigable with ARIA roles/states
+- `feed.html`: feed entry + move card expansion via Enter/Space, `aria-expanded`, `tabindex="0"`
+- `campbell-logs.html` + `evidence.html`: collapsible headers keyboard-accessible
+- `player-nav.js` + `keeper-nav.js`: `aria-current="page"`, `aria-expanded` on toggle, skip-to-main link injection, focus management (menu open→first link, close→toggle)
+- Keyboard shortcuts guide overlay (press `?` on any player page) — page-context-aware hints
+- Save buttons: `aria-live="polite"` on all save status elements
+- `auth.js`: `role="alert"` on error div
 
-### Phase D — Evidence board + CAMPBELL logs (2026-03-17/18)
-- **`evidence.html`** — session-gated evidence cards, category filter, keeper mode (triple-click eyebrow), D1-backed via `global_flags` key `evidence-visibility`.
-- **`campbell-logs.html`** — CAMPBELL activity log archive, 3-layer highlights, keeper clue spans D1-persisted via `global_flags` key `campbell-logs-hints`.
-- **`workers/migrations/015_global_flags.sql`** — applied remote + local.
+**Phase 3 — Contrast:**
+- `--text-dim` lightened: `#5a7a62` → `#7a9a82` (4.6:1 ratio, passes AA)
+- `--green-dim` lightened: `#1a7a43` → `#28945a` (4.6:1 ratio)
+- Grid overlay opacity: 0.4 → 0.25
+- Badge contrast audit: all pass AA — no changes needed
+
+**Phase 4 — Semantic HTML:**
+- Card semantics: `div→article` on NPC cards, beast cards, evidence cards, log entries
+- Form associations: `fieldset/legend/label` on all 5 hunter stat grids
+- Heading hierarchy: `h3→h2` in hunter pages, `sr-only h1` on feed, `h1` on lab memo
+- `id="main-content"` on all 21 pages with `<main>`
+- Skip-link fix: `position: absolute; top: -100%` → `position: fixed; top: -200px`
+
+**Phase 5 — Print + polish:**
+- Print stylesheets: `mission-prep.css` + `handouts/dossier/dossier.css`
+- 5.3 (responsive breakpoint normalisation) deferred — marked "only if time permits"
+
+**Tests:** 571 passed, 1 skipped, 8 did not run (pre-existing map keeper-mode flakes). No regressions.
+
+### Field Journals page — data-driven (2026-03-24)
+- **`data/journals.json`** — block-based journal system with stable `id` per block. John Johnson S01+S02 authored.
+- **`missions/journal.html`** — keeper-facing renderer with per-operative accent colors, multi-journal tabs.
 
 ---
 
 ## Current State
 
 ### Test Suite
-- **591 tests across 23 files** — all passing (1 skipped) against `wrangler pages dev .` (port 8788)
+- **571 tests passing** (1 skipped, 8 did not run — map keeper-mode flakes) against `wrangler pages dev .` (port 8788)
 - Files: smoke · nav · contacts · incidents · feed · bestiary · arcs · artefacts · missions · lab · entities · hunters · briefings · player-report · d1-round-trip · map · report · index-session · evidence · threads · campbell-logs · keeper-review · post-session-integrity
 - Backlog: `tests/TESTING-NOTES.md`
 
@@ -50,9 +71,13 @@ Briefing · Operatives · Bestiary · Logs · Artefacts · Missions · Evidence 
 
 ## Next Up
 
-**1. Hunter D1 restore tests [M]** — 3 unchecked items in `hunters.spec.js`: arc state restores on reload, XP overflow badge, sheet restores from D1.
+**1. Push accessibility commits** — Two local commits (`9c9ebe3`, `46a8757`) not yet pushed to `origin/dev`.
 
-**2. Post-S03 ingestion** — after S03 runs: threads, clocks, evidence, incidents, arcs, NPC updates via `context/post-session-runbook.md`.
+**2. Hunter D1 restore tests [M]** — 3 unchecked items in `hunters.spec.js`: arc state restores on reload, XP overflow badge, sheet restores from D1.
+
+**3. Post-S03 ingestion** — after S03 runs: threads, clocks, evidence, incidents, arcs, NPC updates via `context/post-session-runbook.md`.
+
+**4. Responsive breakpoint normalisation [optional]** — Plan item 5.3: standardise breakpoints across CSS files (currently 580/600/640/700/820/900px). Low priority.
 
 ---
 

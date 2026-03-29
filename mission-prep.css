@@ -418,3 +418,12 @@ hr { border: none; border-top: 1px solid var(--mp-border); margin: 28px 0; }
   .title-block h1 { font-size: 1.5rem; }
   .section-header { margin-left: -22px; margin-right: -22px; }
 }
+
+/* ── PRINT ── */
+@media print {
+  body { background: white; color: black; }
+  body::before, body::after { display: none; }
+  .keeper-nav, .keeper-banner, footer { display: none; }
+  .page { box-shadow: none; border: none; max-width: 100%; }
+  a[href]::after { content: " (" attr(href) ")"; font-size: 0.8em; }
+}

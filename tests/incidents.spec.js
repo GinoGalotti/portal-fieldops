@@ -94,7 +94,7 @@ test.describe('Lab Incidents page', () => {
     // .empty-state div with the text "// NO INCIDENTS LOGGED — THIS PERIOD IS CLOSED."
     const w1Tab = page.locator('.week-tab').filter({ hasText: w1Week.label });
     await w1Tab.click();
-    // The empty-state element replaces #incidents-main content
+    // The empty-state element replaces #main-content content
     await expect(page.locator('.empty-state')).toBeVisible();
     await expect(page.locator('.empty-state')).toContainText('NO INCIDENTS LOGGED');
   });

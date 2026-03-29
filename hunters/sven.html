@@ -42,7 +42,7 @@
   </div>
 </div>
 
-<main>
+<main id="main-content">
 <!-- ══ PLAYBOOK SECTION ══ -->
 <div id="playbook" class="playbook">
   <div class="playbook-header">
@@ -52,13 +52,14 @@
   <div class="playbook-body">
 
     <div class="playbook-section-label">// STATS</div>
-    <div class="stats-grid">
-      <div class="stat-cell"><div class="stat-label">Charm</div><input class="stat-input" type="number" data-stat="charm" min="-3" max="3" placeholder="0"></div>
-      <div class="stat-cell"><div class="stat-label">Cool</div><input class="stat-input" type="number" data-stat="cool" min="-3" max="3" placeholder="0"></div>
-      <div class="stat-cell"><div class="stat-label">Sharp</div><input class="stat-input" type="number" data-stat="sharp" min="-3" max="3" placeholder="0"></div>
-      <div class="stat-cell"><div class="stat-label">Tough</div><input class="stat-input" type="number" data-stat="tough" min="-3" max="3" placeholder="0"></div>
-      <div class="stat-cell"><div class="stat-label">Weird</div><input class="stat-input" type="number" data-stat="weird" min="-3" max="3" placeholder="0"></div>
-    </div>
+    <fieldset class="stats-grid">
+      <legend class="sr-only">Character Stats</legend>
+      <div class="stat-cell"><label class="stat-label" for="stat-charm">Charm</label><input class="stat-input" id="stat-charm" type="number" data-stat="charm" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><label class="stat-label" for="stat-cool">Cool</label><input class="stat-input" id="stat-cool" type="number" data-stat="cool" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><label class="stat-label" for="stat-sharp">Sharp</label><input class="stat-input" id="stat-sharp" type="number" data-stat="sharp" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><label class="stat-label" for="stat-tough">Tough</label><input class="stat-input" id="stat-tough" type="number" data-stat="tough" min="-3" max="3" placeholder="0"></div>
+      <div class="stat-cell"><label class="stat-label" for="stat-weird">Weird</label><input class="stat-input" id="stat-weird" type="number" data-stat="weird" min="-3" max="3" placeholder="0"></div>
+    </fieldset>
 
     <div class="playbook-section-label">// HARM · LUCK · EXPERIENCE</div>
     <div class="track-row">
@@ -261,7 +262,7 @@
     <div class="arc-section-label">// FOR SVEN — PLAYER SECTION</div>
 
     <div class="entry-points">
-      <h3>When to Start This Arc</h3>
+      <h2>When to Start This Arc</h2>
       <ul class="entry-list">
         <li>The campaign brings Sven into contact with the society of monsters — other non-human entities — in a way that makes it clear Sven has a reputation there, whether he knows it or not.</li>
         <li>Sven is in a situation where he has to choose between protecting humans and helping another monster — and the choice is not clean.</li>
@@ -271,7 +272,7 @@
 
     <div class="choices-block">
       <div class="choice-group">
-        <h3>Who Is the Redeemed Monster?</h3>
+        <h2>Who Is the Redeemed Monster?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Another ghost — someone who died badly and finds that Sven's relationship with PORTAL looks like a better option than what they've been doing.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A non-human entity that crossed paths with a PORTAL case and decided the hunters were worth approaching — they came to Sven because he exists in both worlds.</span></label>
@@ -282,7 +283,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>Why Do They Want to Renounce Their Ways?</h3>
+        <h2>Why Do They Want to Renounce Their Ways?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They genuinely understood their current way of life is wrong — they've seen enough to know.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They were shown kindness — possibly by Sven, possibly by someone else — and want to return it.</span></label>
@@ -293,7 +294,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>What Makes This Difficult?</h3>
+        <h2>What Makes This Difficult?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Sven doubts their sincerity — not sure if that's justified scepticism or projection from his own complicated relationship with what he is.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They retain a very violent or cruel habit. They're not asking Sven to excuse it — just to work around it for now.</span></label>
@@ -305,7 +306,7 @@
     </div>
 
     <div class="beats-block">
-      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <h2>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h2>
       <div class="beats-track" id="beats-footsteps">
         <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
       </div>
@@ -319,7 +320,7 @@
     </div>
 
     <div class="resolution-block">
-      <h3>Resolution Moves</h3>
+      <h2>Resolution Moves</h2>
       <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
       <div class="resolution-moves">
         <div class="res-move" onclick="toggleRes(this)">
@@ -415,7 +416,7 @@
     <div class="arc-section-label">// FOR SVEN — PLAYER SECTION</div>
 
     <div class="entry-points">
-      <h3>When to Start This Arc</h3>
+      <h2>When to Start This Arc</h2>
       <ul class="entry-list">
         <li>Relationships between Sven and other hunters — including the PORTAL team — become tense, and external judgement on Sven's nature becomes possible.</li>
         <li>A bystander witnesses Sven doing something supernatural and their reaction gets back to the wrong person.</li>
@@ -425,7 +426,7 @@
 
     <div class="choices-block">
       <div class="choice-group">
-        <h3>Who Is the Misguided Hunter?</h3>
+        <h2>Who Is the Misguided Hunter?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A fierce warrior — someone who has spent their adult life destroying things like Sven, and is very good at it.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A powerful mage or occult researcher — someone who has studied entities like Sven and reached conclusions about what they are.</span></label>
@@ -436,7 +437,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>Why Do They Want Sven Dead?</h3>
+        <h2>Why Do They Want Sven Dead?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They don't believe Sven is good. They've seen too many monsters claim otherwise.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">They know about something Sven did — or something that happened around him — that looks, from outside, like an evil deed.</span></label>
@@ -447,7 +448,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>What Would Killing Them Cost?</h3>
+        <h2>What Would Killing Them Cost?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A powerful monster they're currently containing will be free. The Misguided Hunter is the only thing keeping it in check.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A person, group, or place they're protecting will be in immediate danger without them.</span></label>
@@ -459,7 +460,7 @@
     </div>
 
     <div class="beats-block">
-      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <h2>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h2>
       <div class="beats-track" id="beats-misguided">
         <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
       </div>
@@ -473,7 +474,7 @@
     </div>
 
     <div class="resolution-block">
-      <h3>Resolution Moves</h3>
+      <h2>Resolution Moves</h2>
       <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
       <div class="resolution-moves">
         <div class="res-move" onclick="toggleRes(this)">
@@ -568,7 +569,7 @@
     <div class="arc-section-label">// FOR SVEN — PLAYER SECTION</div>
 
     <div class="entry-points">
-      <h3>When to Start This Arc</h3>
+      <h2>When to Start This Arc</h2>
       <ul class="entry-list">
         <li>A case brings PORTAL into contact with something that matches what Sven saw in the visions during his death — a specific image, entity, or location he recognises.</li>
         <li>Rex reveals the extent of his research — the things he was investigating when Sven died — and something in it maps too precisely onto Sven's last night to be coincidence.</li>
@@ -579,7 +580,7 @@
 
     <div class="choices-block">
       <div class="choice-group">
-        <h3>What Did the Visions Show?</h3>
+        <h2>What Did the Visions Show?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A location — somewhere specific that Sven has since encountered in a PORTAL case. He was shown it before he had any reason to be shown it.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">A person — someone Sven didn't know when he died, whom he has since met. They don't know he saw them before they met.</span></label>
@@ -590,7 +591,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>What Do You Suspect About Your Death?</h3>
+        <h2>What Do You Suspect About Your Death?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The location was chosen deliberately — a thin-boundary site where the risk of what happened to Sven was higher. Someone knew that.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">The substance was prepared by someone with knowledge Sven didn't know they had. The trip was intended to produce a specific outcome.</span></label>
@@ -601,7 +602,7 @@
       </div>
 
       <div class="choice-group">
-        <h3>What Does Finding the Answer Risk?</h3>
+        <h2>What Does Finding the Answer Risk?</h2>
         <div class="choice-options">
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Rex. If someone caused Sven's death deliberately, Rex will want to act on that. Sven can't control what Rex does with the information once he has it.</span></label>
           <label class="choice-opt"><span class="choice-box"></span><span class="choice-text">Sven's current existence. Understanding what produced him might produce the conditions to undo him. The answer and the threat may be the same thing.</span></label>
@@ -613,7 +614,7 @@
     </div>
 
     <div class="beats-block">
-      <h3>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h3>
+      <h2>Story Beats <span style="font-weight:300;font-size:.8rem;color:var(--text-dim)"> — mark five to gain a benefit</span></h2>
       <div class="beats-track" id="beats-cause">
         <div class="beat-box">1</div><div class="beat-box">2</div><div class="beat-box">3</div><div class="beat-box">4</div><div class="beat-box">5</div>
       </div>
@@ -627,7 +628,7 @@
     </div>
 
     <div class="resolution-block">
-      <h3>Resolution Moves</h3>
+      <h2>Resolution Moves</h2>
       <p class="resolution-intro">When the arc concludes, take one — or neither.</p>
       <div class="resolution-moves">
         <div class="res-move" onclick="toggleRes(this)">

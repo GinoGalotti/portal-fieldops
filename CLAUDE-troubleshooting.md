@@ -1,6 +1,6 @@
 # CLAUDE-troubleshooting.md
 *Common issues and proven solutions for this project.*
-*Last updated: 2026-03-13*
+*Last updated: 2026-03-28*
 
 ---
 
@@ -143,3 +143,23 @@ node -e "JSON.parse(require('fs').readFileSync('data/sessions/s03.json', 'utf8')
 ```
 
 Common causes: trailing comma, unescaped quote in string content, missing closing bracket after editing.
+
+---
+
+## Skip-to-Content Link Visible on Page
+
+**Symptom:** "Skip to content" text appears in the top-left corner of a page.
+
+**Fix:** The skip-link must use `position: fixed; top: -200px;` — NOT `position: absolute; top: -100%`. Percentage-based positioning is relative to the parent element (often a 64px header), so `top: -100%` only moves the link up 64px — still within the viewport.
+
+**Files:** `player.css`, `keeper.css` (`.skip-link` class)
+
+---
+
+## Hunter Pip Tests Flaky (Playwright)
+
+**Symptom:** Hunter page tests (pips, checkboxes) fail on first attempt with "element not stable" or "pointer events intercepted", then pass on retry.
+
+**Cause:** Auth gating sets `tabindex="-1"` on non-authenticated elements during page load. Playwright may try to click before auth state resolves.
+
+**Fix:** Pre-existing flake — not a regression. Tests pass with `retries: 1` in playwright config. Exit code 1 from Playwright indicates retries occurred, not total failure. Check the summary line for actual pass count.

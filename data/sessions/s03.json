@@ -127,14 +127,20 @@
       "id": "s03-recap",
       "type": "readaloud",
       "label": "Previously On — Operation #0099-D",
-      "text": "Aldermoor is quieter now. The entity is still there — in the ground, in the street names — but it pulled back when the team showed it something it recognised. Alan painted on a wall. The neighbourhood started to remember itself. Diane Marsh walked out of the construction site with nine days of notes and a drawing of something she couldn't explain.\n\nThe team sent PORTAL interns to help the residents. Within two days, two strangers arrived with equipment the interns didn't recognise. Greyfield Assets. Veritas Realty. They were there for the BIM, not the entity. They are still there.\n\nMeanwhile: the Eszter particulate is orienting. Priya paused the study at level 4. Three pieces of lab equipment are running faster than their hardware allows. Teddy has been pulling CAMPBELL's logs every morning and has found entries she can't account for. She is not raising it with the Director yet.\n\nAnd Marcus Finch — quiet, careful Marcus — brought something to the Director three days ago. His brother's wife's brother, Daniel Ashworth, has been in a hospital ward for eleven days. Daniel is an actor at a small theatre in Fredericksburg. He has not answered to his own name once. He says his name is Edmund.\n\nEdmund Farrow died eight months ago.\n\nThe clock is at three-quarters. Saturday's performance is tomorrow."
+      "text": "Aldermoor is quieter now. The entity is still there — in the ground, in the street names — but it pulled back when the team showed it something it recognised. Alan painted on a wall. The neighbourhood started to remember itself. Diane Marsh walked out of the construction site with nine days of notes and a drawing of something she couldn't explain.\n\nThe team sent PORTAL interns to help the residents. Within two days, two strangers arrived with equipment the interns didn't recognise. Greyfield Assets. Veritas Realty. They were there for the BIM, not the entity. They are still there.\n\nMeanwhile: the Eszter particulate is orienting. Priya paused the study at level 4. Three pieces of lab equipment are running faster than their hardware allows. Teddy has been pulling CAMPBELL's logs every morning and has found entries she can't account for. She is not raising it with the Director yet.\n\nAnd Marcus Finch — quiet, careful Marcus — brought something to the Director three days ago. His brother's wife's brother, Daniel Ashworth, has been in a hospital ward for eleven days. Daniel is an actor at a small theatre in Fredericksburg. He has not answered to his own name once. He says his name is Edmund.\n\nEdmund Farrow died eight months ago.\n\nSaturday's performance is tomorrow."
     },
     {
       "id": "s03-pda-01",
       "type": "pda",
       "from": "CAMPBELL",
-      "subject": "ANOMALY REPORT #0099-D — MERIDIAN THEATRE // CLOCK 3/4",
-      "body": "MECHANISM: Role-anchored consciousness transfer. Entity source: deceased lead actors Clara Voss and Edmund Farrow.\n\nCLINICAL STATUS: 3 understudies hospitalised — complete identity loss, persistent 11 days, no organic cause. 4 active understudies at risk. Saturday performance: tomorrow.\n\nFINANCIAL FLAG: Grant source — Solstice Property Group. Same beneficial owner chain as Aldermoor acquisitions.\n\nCAMPBELL NOTE: The deceased actors may be present in the performances. The understudies are not acting.\n\nDIRECTOR NOTE: Same shell company structure as Aldermoor. Get eyes on this before the performance. Find out if the actors chose this or if it was done to them.\n\n// Sven should be in the room for this one. — Director"
+      "subject": "ANOMALY REPORT #0099-D — MERIDIAN THEATRE",
+      "body": "MECHANISM: Role-anchored consciousness transfer. Entity source: deceased lead actors Clara Voss and Edmund Farrow.\n\nCLINICAL STATUS: 3 understudies hospitalised — complete identity loss, persistent 11 days, no organic cause. 4 active understudies at risk. Saturday performance: tomorrow.\n\nCAMPBELL NOTE: The deceased actors may be present in the performances. The understudies are not acting.\n\nDIRECTOR NOTE: I pulled the theatre's grant history myself. The funding source is Solstice Property Group — same shell company structure as Aldermoor. CAMPBELL did not flag this. I want to know why not.\n\nGet eyes on this before Saturday. Find out if the actors chose this or if it was done to them.\n\n// Sven should be in the room for this one. — Director"
+    },
+    {
+      "id": "s03-nadia-post",
+      "type": "readaloud",
+      "label": "Nadia Osei — Blog Post (timestamped six hours from now)",
+      "text": "I don't know where it was. A small theatre — old seats, old wood, the kind of building that holds onto what happens inside it. Saturday night, sold out. I think it was a Shakespeare. I think it was a goodbye.\n\nTwo people had been there a long time. Longer than anyone knew. And someone stood up in front of four hundred strangers and said the only thing that needed saying — that holding on and loving something are not the same thing.\n\nThe audience cried. They didn't know why. They thought it was the play.\n\nIt was the most beautiful thing I have ever seen happen in a room."
     },
     {
       "id": "s03-ra-01",
@@ -158,7 +164,7 @@
       "id": "s03-doc-01",
       "type": "document",
       "label": "Solstice Property Group — Grant Documentation",
-      "classification": "FIELD EVIDENCE — S03 — ROUTE C",
+      "classification": "FIELD EVIDENCE — S03 — RECOVERED FROM ARTISTIC DIRECTOR'S OFFICE",
       "body": "Arts grant award to Meridian Theatre Company. $47,000 from Solstice Property Group Arts Foundation, Wilmington, Delaware. Conditions require active programming. Acquisition appendix includes a $2,000 Victorian prompt book.",
       "link": "handouts/dossier/s03-grant-documentation.html"
     },
@@ -191,7 +197,7 @@
       "id": "s03-doc-02",
       "type": "document",
       "label": "Clara Voss — Rehearsal Notebooks (Recovered)",
-      "classification": "FIELD EVIDENCE — S03 — ROUTE A",
+      "classification": "FIELD EVIDENCE — S03 — RECOVERED BY REED ATWOOD",
       "body": "Three Moleskine notebooks spanning eighteen months. Later entries show a shift in voice and register that does not appear to be deliberate.",
       "link": "handouts/dossier/s03-clara-notebooks.html"
     },

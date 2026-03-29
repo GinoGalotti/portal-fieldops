@@ -4,6 +4,13 @@
   var nav = document.getElementById('keeper-nav');
   if (!nav) return;
 
+  // Skip-to-main link (WCAG 2.4.1) — visually hidden until focused
+  var skip = document.createElement('a');
+  skip.href = '#main-content';
+  skip.className = 'skip-link';
+  skip.textContent = 'Skip to content';
+  nav.parentNode.insertBefore(skip, nav.parentNode.firstChild);
+
   var file = window.location.pathname.split('/').pop() || '';
 
   var items = [
@@ -16,13 +23,17 @@
     { label: 'Arcs',            href: 'arcs.html',       match: 'arcs.html' },
     { label: 'Threads',         href: 'threads.html',    match: 'threads.html' },
     { label: 'Gallery',         href: 'gallery.html',    match: 'gallery.html' },
+    { label: 'Journals',        href: 'journal.html',    match: 'journal.html' },
   ];
 
   items.forEach(function (item) {
     var a = document.createElement('a');
     a.href = item.href;
     a.textContent = item.label;
-    if (item.match && file === item.match) a.className = 'active';
+    if (item.match && file === item.match) {
+      a.className = 'active';
+      a.setAttribute('aria-current', 'page');
+    }
     nav.appendChild(a);
   });
 
@@ -31,17 +42,25 @@
   toggle.className = 'nav-toggle';
   toggle.textContent = '≡';
   toggle.setAttribute('aria-label', 'Toggle navigation');
+  toggle.setAttribute('aria-expanded', 'false');
   toggle.addEventListener('click', function () {
     var open = nav.classList.toggle('open');
     toggle.textContent = open ? '✕' : '≡';
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) {
+      var first = nav.querySelector('a');
+      if (first) first.focus();
+    }
   });
   nav.parentNode.appendChild(toggle);
 
-  // Close menu when a nav link is clicked
+  // Close menu when a nav link is clicked — return focus to toggle
   nav.addEventListener('click', function (e) {
     if (e.target.tagName === 'A') {
       nav.classList.remove('open');
       toggle.textContent = '≡';
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.focus();
     }
   });
 

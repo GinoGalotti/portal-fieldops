@@ -1,6 +1,6 @@
 # CLAUDE-patterns.md
 *Established code patterns and conventions for this project.*
-*Last updated: 2026-03-13*
+*Last updated: 2026-03-28*
 
 ---
 
@@ -168,3 +168,49 @@ wrangler d1 execute portal-db --remote --file=workers/migrations/012_example.sql
 | Partial success | 7–10 |
 | Success | 11–12 |
 | Advanced success | 13+ |
+
+---
+
+## Accessibility Patterns (added 2026-03-28)
+
+### Keyboard-Accessible Clickable Elements
+
+For any `<div>` or `<span>` that acts as a button/checkbox, use the helper pattern from `hunters/hunter.js`:
+
+```js
+function makeKeyboardAccessible(el, role) {
+  el.setAttribute('tabindex', '0');
+  if (role) el.setAttribute('role', role);
+  el.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      el.click();
+    }
+  });
+}
+```
+
+- `role="button"` for toggle/action elements (track pips, feed entries, move cards)
+- `role="checkbox"` + `aria-checked` for checkable elements (beat boxes, choice opts)
+- `aria-expanded` for collapsible sections (feed entries, campbell batch headers, evidence groups)
+- Auth gating: set `tabindex="-1"` on non-editable elements when auth restricts interaction
+
+### Focus-Visible Convention
+
+Each CSS file uses its own accent variable for the focus ring:
+- `player.css` → `var(--green)`
+- `keeper.css` → `var(--keeper)`
+- `hunters/hunter.css` → `var(--accent)`
+- `handouts/dossier/dossier.css` → `var(--accent, var(--green, #2ecc71))` (fallback chain)
+
+### Skip-to-Main Link
+
+Injected by `player-nav.js` / `keeper-nav.js`. CSS: `position: fixed; top: -200px` (not `absolute` or percentage — those can be visible in short headers). All pages must have `<main id="main-content">`.
+
+### Save Button Live Regions
+
+All save buttons use `aria-live="polite"` so screen readers announce status changes (SAVING / SAVED / OFFLINE / ERROR).
+
+### Keyboard Shortcuts Guide
+
+Press `?` on any player page to open shortcuts overlay. Injected by `player-nav.js`. Page-context-aware: shows different hints for feed, hunter pages, evidence/logs pages.

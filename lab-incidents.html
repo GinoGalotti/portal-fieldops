@@ -539,7 +539,7 @@
   <p class="hero-desc" id="hero-desc"></p>
 </div>
 
-<main id="incidents-main">
+<main id="main-content">
   <div class="loading">// LOADING INCIDENT DATA...</div>
 </main>
 
@@ -565,7 +565,7 @@
       activateWeek((fromHash || defWeek).id);
     })
     .catch(function () {
-      document.getElementById('incidents-main').innerHTML =
+      document.getElementById('main-content').innerHTML =
         '<p class="narrative" style="color:var(--red);">// ERROR — Failed to load incident data.</p>';
     });
 
@@ -609,7 +609,7 @@
 
   // ── RENDER WEEK ───────────────────────────────────────────────────────
   function renderWeek(week) {
-    var main = document.getElementById('incidents-main');
+    var main = document.getElementById('main-content');
     if (!week.incidents || week.incidents.length === 0) {
       main.innerHTML = '<div class="empty-state">// NO INCIDENTS LOGGED — THIS PERIOD IS CLOSED.</div>';
       return;
@@ -620,8 +620,8 @@
     var choiceIncs = week.incidents.filter(function (inc) { return inc.type === 'choice'; });
     if (choiceIncs.length > 0) {
       html += '<div class="save-bar" id="save-bar">'
-            + '<button class="save-btn" id="save-btn" disabled>SAVE RESPONSES</button>'
-            + '<span class="save-status" id="save-status">— select a direction to enable save</span>'
+            + '<button class="save-btn" id="save-btn" disabled aria-live="polite">SAVE RESPONSES</button>'
+            + '<span class="save-status" id="save-status" aria-live="polite">— select a direction to enable save</span>'
             + '</div>';
     }
 

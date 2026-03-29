@@ -1,5 +1,19 @@
 (function () {
 
+  // ── KEYBOARD ACTIVATION HELPER ────────────────────────────────────────────
+  // Makes a non-interactive element (div/span) keyboard-accessible:
+  // adds tabindex, role, and Enter/Space keydown handler that triggers click.
+  function makeKeyboardAccessible(el, role) {
+    el.setAttribute('tabindex', '0');
+    if (role) el.setAttribute('role', role);
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        el.click();
+      }
+    });
+  }
+
   // ── KEEPER TOGGLE ─────────────────────────────────────────────────────────
   // 5 rapid clicks on .hero-eyebrow reveals/re-blurs keeper content.
   var unlocked    = false;
@@ -306,6 +320,8 @@
       document.querySelectorAll('.track-pip[data-track="' + name + '"]')
     );
     pips.forEach(function (pip, i) {
+      makeKeyboardAccessible(pip, 'button');
+      pip.setAttribute('aria-label', name.charAt(0).toUpperCase() + name.slice(1) + ' pip ' + (i + 1) + ' of ' + pips.length);
       pip.addEventListener('click', function () {
         var currentFill = 0;
         pips.forEach(function (p, j) { if (p.classList.contains('filled-' + name)) currentFill = j + 1; });
@@ -349,6 +365,7 @@
     ).forEach(function (el) {
       el.style.pointerEvents = editable ? '' : 'none';
       if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.disabled = !editable;
+      if (el.hasAttribute('tabindex')) el.setAttribute('tabindex', editable ? '0' : '-1');
     });
 
     // Show/hide explicit save buttons
@@ -391,6 +408,10 @@
     af(API_BASE,  { method: 'PUT', body: JSON.stringify(arcState),   headers: { 'Content-Type': 'application/json' } }).catch(function () {});
     af(SHEET_API, { method: 'PUT', body: JSON.stringify(sheetState), headers: { 'Content-Type': 'application/json' } }).catch(function () {});
   }
+
+  // Add aria-live to save button so screen readers announce status changes
+  var saveBtn = document.getElementById('save-btn');
+  if (saveBtn) saveBtn.setAttribute('aria-live', 'polite');
 
   window.saveNow = function (btn) {
     if (!_canEdit()) return;
@@ -469,8 +490,11 @@
 
   // Arc: choice options
   document.querySelectorAll('.choice-opt').forEach(function (opt) {
+    makeKeyboardAccessible(opt, 'checkbox');
+    opt.setAttribute('aria-checked', opt.classList.contains('selected') ? 'true' : 'false');
     opt.addEventListener('click', function () {
       this.classList.toggle('selected');
+      this.setAttribute('aria-checked', this.classList.contains('selected') ? 'true' : 'false');
       save();
     });
   });
@@ -484,11 +508,14 @@
   document.querySelectorAll('.beats-track').forEach(function (track) {
     var boxes = track.querySelectorAll('.beat-box');
     boxes.forEach(function (box, i) {
+      makeKeyboardAccessible(box, 'checkbox');
+      box.setAttribute('aria-label', 'Beat ' + (i + 1) + ' of ' + boxes.length);
+      box.setAttribute('aria-checked', box.classList.contains('filled') ? 'true' : 'false');
       box.addEventListener('click', function () {
         if (this.classList.contains('filled')) {
-          boxes.forEach(function (b, j) { if (j >= i) b.classList.remove('filled'); });
+          boxes.forEach(function (b, j) { if (j >= i) { b.classList.remove('filled'); b.setAttribute('aria-checked', 'false'); } });
         } else {
-          boxes.forEach(function (b, j) { if (j <= i) b.classList.add('filled'); });
+          boxes.forEach(function (b, j) { if (j <= i) { b.classList.add('filled'); b.setAttribute('aria-checked', 'true'); } });
         }
         save();
       });
@@ -550,8 +577,11 @@
 
   // Checklists: move, gear, improvement items
   document.querySelectorAll('.check-item:not(.mandatory)').forEach(function (el) {
+    makeKeyboardAccessible(el, 'checkbox');
+    el.setAttribute('aria-checked', el.classList.contains('checked') ? 'true' : 'false');
     el.addEventListener('click', function () {
       el.classList.toggle('checked');
+      el.setAttribute('aria-checked', el.classList.contains('checked') ? 'true' : 'false');
       save();
     });
   });

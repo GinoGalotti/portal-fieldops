@@ -314,7 +314,7 @@
   <nav id="player-nav"></nav>
 </header>
 
-<main>
+<main id="main-content">
   <section class="page-header">
     <div class="page-header-inner">
       <div class="page-eyebrow" id="page-eyebrow">// CAMPBELL ACTIVITY LOGS — ANOMALY REVIEW</div>
@@ -455,9 +455,17 @@
 
     header.appendChild(label);
     header.appendChild(toggle);
-    header.addEventListener('click', function () {
+    header.setAttribute('tabindex', '0');
+    header.setAttribute('role', 'button');
+    header.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    function toggleBatch() {
       var nowCollapsed = section.classList.toggle('collapsed');
       toggle.textContent = nowCollapsed ? '▶' : '▼';
+      header.setAttribute('aria-expanded', nowCollapsed ? 'false' : 'true');
+    }
+    header.addEventListener('click', toggleBatch);
+    header.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleBatch(); }
     });
 
     section.appendChild(header);
@@ -477,7 +485,7 @@
     entriesList.className = 'entries-list';
 
     batch.entries.forEach(function (entry) {
-      var row = document.createElement('div');
+      var row = document.createElement('article');
       row.className = 'log-entry' + (entry.flags.indexOf('anomaly') !== -1 ? ' anomaly' : '');
       row.setAttribute('data-content', entry.content); // used by search
 

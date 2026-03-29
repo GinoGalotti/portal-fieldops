@@ -805,7 +805,7 @@
   }
 
   function buildEvidenceCard(item, lookup) {
-    var card = document.createElement('div');
+    var card = document.createElement('article');
     card.className = 'evidence-card';
     card.setAttribute('data-id',       item.id);
     card.setAttribute('data-category', item.category);
@@ -1004,10 +1004,18 @@
     var header = document.getElementById(headerId);
     var group  = document.getElementById(groupId);
     if (!header || !group) return;
-    header.addEventListener('click', function () {
+    header.setAttribute('tabindex', '0');
+    header.setAttribute('role', 'button');
+    header.setAttribute('aria-expanded', group.classList.contains('collapsed') ? 'false' : 'true');
+    function toggle() {
       var isCollapsed = group.classList.toggle('collapsed');
-      var toggle = header.querySelector('.thread-group-toggle');
-      if (toggle) toggle.textContent = isCollapsed ? '▶' : '▼';
+      var toggleEl = header.querySelector('.thread-group-toggle');
+      if (toggleEl) toggleEl.textContent = isCollapsed ? '▶' : '▼';
+      header.setAttribute('aria-expanded', isCollapsed ? 'false' : 'true');
+    }
+    header.addEventListener('click', toggle);
+    header.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
     });
   }
 
