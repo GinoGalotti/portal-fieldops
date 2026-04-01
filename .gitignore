@@ -38,3 +38,21 @@ temp-message.txt
 
 .claude/
 __pycache__/
+
+# claude-flow runtime (data, logs, sessions, learning — config/docs ARE committed)
+.claude-flow/data/
+.claude-flow/logs/
+.claude-flow/sessions/
+.claude-flow/learning/
+.claude-flow/metrics/
+.claude-flow/neural/
+.claude-flow/security/
+
+# ruflo swarm runtime (HNSW vector index, memory DB — auto-rebuilt on first run)
+.swarm/
+
+# Session audio recordings (large binary files)
+audio/
+
+# Generated one-off SQL scripts (applied, not needed for setup)
+fix_roll_timestamps.sql

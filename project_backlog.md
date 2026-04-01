@@ -148,3 +148,14 @@ Player + keeper connection map tab for M03 theatre investigation board. See RECE
 - ~~John Johnson hunter page~~ — `hunters/john.html`, arcs in `hunter-arcs.json`, Flake moves wired.
 - ~~Nav breakpoint~~ — raised to 900px, hamburger shows at ≤900px.
 - ~~The Lab removed from player nav~~ — lab lore + team playbook link remain on `index.html` after `#operatives`.
+
+---
+
+### ~~Add `created_at` + `outcome_text` to rolls — migrations 016 + 017~~ — ✅ DONE (2026-03-29)
+
+- `workers/migrations/016_rolls_created_at.sql` — `ALTER TABLE rolls ADD COLUMN created_at TEXT DEFAULT NULL` — applied local + remote
+- `workers/migrations/017_rolls_outcome_text.sql` — `ALTER TABLE rolls ADD COLUMN outcome_text TEXT DEFAULT NULL` — applied local + remote
+- `functions/api/v1/rolls.js` — INSERT now writes `created_at` (via `datetime('now')`) and `outcome_text` (from POST body)
+- `feed.html` — roll POST body now includes `outcome_text`: looks up the structured outcome text from `motw-basic-moves.json` outcomes object using the tier key (`12_plus`/`10_plus`/`7_9`/`miss`); NULL for playbook moves that only have a flat description
+- `fix_roll_timestamps.py` — backfill script for existing M03 rolls (all 17 had NULL `created_at`); transcript keyword matching (17/17 matched); applied SQL to both local + remote
+- **Pending:** `transcribe_session.py` → `write_merged_timeline` should merge rolls with non-NULL `created_at` into the events list alongside messages (non-urgent; leave for session summary work)

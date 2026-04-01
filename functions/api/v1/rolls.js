@@ -40,19 +40,20 @@ export async function onRequestPost({ request, env }) {
 
   const result = await env.portal_db
     .prepare(`INSERT INTO rolls
-      (hunter_id, session, move_name, stat_used, roll_1, roll_2, modifier, total, outcome, note)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+      (hunter_id, session, move_name, stat_used, roll_1, roll_2, modifier, total, outcome, outcome_text, note, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`)
     .bind(
-      body.hunter_id  || null,
-      body.session    || null,
+      body.hunter_id    || null,
+      body.session      || null,
       body.move_name,
-      body.stat_used  || null,
+      body.stat_used    || null,
       body.roll_1,
       body.roll_2,
-      body.modifier   || 0,
+      body.modifier     || 0,
       body.total,
       outcome,
-      body.note       || null
+      body.outcome_text || null,
+      body.note         || null
     )
     .run();
 

@@ -13,7 +13,7 @@
 .lab-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 0;
   margin-bottom: 1.5rem;
   overflow: hidden;
 }
@@ -21,7 +21,7 @@
   content: '';
   display: block;
   height: 3px;
-  background: var(--green);
+  background: linear-gradient(90deg, var(--green-dim), transparent);
 }
 .lab-card-header {
   padding: 1rem 1.5rem 0.5rem;
@@ -47,7 +47,7 @@
   font-family: 'Share Tech Mono', monospace;
   font-size: 0.65rem;
   letter-spacing: 0.12em;
-  color: var(--green);
+  color: var(--green-dim);
   margin: 1.2rem 0 0.5rem;
   padding-bottom: 0.3rem;
   border-bottom: 1px solid var(--border);
@@ -187,7 +187,7 @@ textarea.lab-field { resize: vertical; }
 .hide-toggle {
   float: right;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.58rem;
+  font-size: 0.65rem;
   letter-spacing: 0.08em;
   color: var(--green-dim);
   background: transparent;

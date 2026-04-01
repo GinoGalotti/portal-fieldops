@@ -10,10 +10,13 @@
   --amber:     #f0a500;
   --amber-dim: #7a5200;
   --red:       #e05050;
-  --text:      #c8ddd0;
-  --text-dim:  #7a9a82;
+  --text:      #dcd8d2;
+  --text-dim:  #8a9898;
   --border:    #1e3428;
   --border-bright: #2ecc7155;
+  --card-bg:   #0d1410;
+  --text-bright: #dcd8d2;
+  --text-mid:  #8a9898;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

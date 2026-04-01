@@ -42,7 +42,7 @@
   font-size: 2rem;
   font-weight: 600;
   letter-spacing: 0.05em;
-  color: #e8f5ee;
+  color: var(--text);
   text-transform: uppercase;
   margin-bottom: 8px;
 }
@@ -325,7 +325,7 @@
 
   <div class="content-area">
     <div class="search-bar-wrap">
-      <input type="text" id="log-search" class="log-search" placeholder="// SEARCH ALL ENTRIES..." autocomplete="off" spellcheck="false">
+      <input type="text" id="log-search" class="log-search" placeholder="// SEARCH ALL ENTRIES..." autocomplete="off" spellcheck="false" aria-label="Search logs">
       <button id="search-clear" class="search-clear" style="display:none" aria-label="Clear search">✕</button>
     </div>
 

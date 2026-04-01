@@ -231,13 +231,13 @@ Mission-prep pages:
 --bg2: #0d1410         /* card/panel backgrounds */
 --bg3: #111a14         /* secondary surface */
 --green: #2ecc71       /* primary accent — active states, logo */
---green-dim: #1a7a43   /* subdued green — borders, eyebrows */
+--green-dim: #28945a   /* subdued green — borders, eyebrows (raised for contrast) */
 --green-glow: #2ecc7133
 --amber: #f0a500       /* warning, partial states */
 --amber-dim: #7a5200   /* subdued amber — blur notices */
 --red: #e05050
---text: #c8ddd0        /* primary body text */
---text-dim: #5a7a62    /* secondary/dim text */
+--text: #dcd8d2        /* primary body text — warm off-white, intentionally NOT green (avoids green-on-green readability issue for players) */
+--text-dim: #8a9898    /* secondary/dim text — blue-grey, distinct hue from green chrome to create visual hierarchy */
 --border: #1e3428
 --border-bright: #2ecc7155
 ```
@@ -263,6 +263,16 @@ Each hunter story page uses a character-specific accent in addition to the base 
 | Sven | Violet | `#a78bfa` / dim `#4c1d95` |
 
 These are defined as `--teal`, `--teal-dim`, `--teal-glow` or `--violet`, `--violet-dim`, `--violet-glow` in each page's inline `<style>` block.
+
+### Typography & Readability Baseline
+
+As of 2026-03-29, body font-size is **17px** (raised from 16px) and line-height is **1.8** (raised from 1.7) across all four CSS files. This was prompted by player feedback that text was too small to read comfortably, especially on the feed.
+
+**Do not lower these values.** If adding new CSS classes with small font-sizes, minimum is **0.65rem** for any player-visible text.
+
+**Do not make --text green.** The original `#c8ddd0` created a green-on-green readability problem (green text on green-black background). The current `#dcd8d2` is a warm off-white that reads as distinct from the green UI chrome. Keep primary text in the warm-neutral or cool-neutral range — never a clearly green hue.
+
+**Do not make --text-dim green.** The current `#8a9898` is blue-grey. This creates a deliberate two-tier hierarchy: green = interactive/structural chrome; blue-grey = secondary/metadata text. If you shift --text-dim, keep it in the grey-blue range, not back toward green.
 
 ---
 

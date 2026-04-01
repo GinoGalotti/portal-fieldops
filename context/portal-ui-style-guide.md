@@ -40,9 +40,9 @@ Three Google Fonts, each with a strict role:
 
 | Font | Role | Usage |
 |------|------|-------|
-| **Share Tech Mono** | System / machine voice | Labels, eyebrows, tags, status indicators, CAMPBELL text, monospace UI elements. Always uppercase, wide letter-spacing (0.12em–0.3em). Sizes typically 0.55rem–0.72rem — deliberately small. |
+| **Share Tech Mono** | System / machine voice | Labels, eyebrows, tags, status indicators, CAMPBELL text, monospace UI elements. Always uppercase, wide letter-spacing (0.12em–0.3em). Minimum **0.65rem** for any player-visible text — do not go smaller. Decorative chrome labels may be as small as 0.65rem; functional labels 0.68rem+. |
 | **Barlow Condensed** | Headlines / structural | Page titles, section headers, card names, navigation. Weights 600–700. Uppercase, letter-spacing 0.04em–0.15em. Sizes clamp from 1.2rem to 5rem. |
-| **Barlow** | Body / prose | Descriptions, notes, paragraph text. Weight 300 (light). Normal case. 0.85rem–1rem. Line-height 1.65–1.8. |
+| **Barlow** | Body / prose | Descriptions, notes, paragraph text. Weight 300 (light). Normal case. **Base 17px body**, prose at 0.85rem–1rem. **Line-height 1.8** minimum — dark backgrounds need more air than typical light-mode sites. |
 
 The hierarchy is enforced rigidly: if text is a label or system indicator, it's Share Tech Mono. If it's a name or heading, it's Barlow Condensed. If it's prose, it's Barlow light. No exceptions, no mixing.
 
@@ -55,13 +55,13 @@ The palette is built on **CSS custom properties** defined in `:root`. Every colo
 | Variable | Hex | Role |
 |----------|-----|------|
 | `--green` | `#2ecc71` | Primary player accent. Status dots, active states, links, borders. |
-| `--green-dim` | `#1a7a43` | Subdued green. Labels, eyebrows, dim borders, inactive states. |
+| `--green-dim` | `#28945a` | Subdued green. Labels, eyebrows, dim borders, inactive states. |
 | `--green-glow` | `#2ecc7133` | Green at ~20% alpha. `text-shadow` and `box-shadow` glow effects. |
 | `--amber` | `#f0a500` | Warning / keeper-in-player-context. Blur notices, PORTAL-original arcs, custom moves. |
 | `--amber-dim` | `#7a5200` | Subdued amber. Keeper labels within player pages. |
 | `--red` | `#e05050` | Danger / harm. Harm pips, deceased status, critical alerts. |
-| `--text` | `#c8ddd0` | Primary text. Green-tinted off-white. Never pure white. |
-| `--text-dim` | `#5a7a62` | Secondary text. Green-tinted mid-grey. Used heavily. |
+| `--text` | `#dcd8d2` | Primary text. Warm off-white — intentionally **not green**. See readability note below. |
+| `--text-dim` | `#8a9898` | Secondary text. Blue-grey — intentionally **not green**. See readability note below. |
 | `--border` | `#1e3428` | Default border. Dark green-tinted. |
 | `--border-bright` | `#2ecc7155` | Highlighted border. Green at ~33% alpha. |
 
@@ -307,7 +307,8 @@ Lab-themed content (incidents, research notes, scanner readouts) uses the same v
 - Maintain the 40×40px grid overlay on every page
 - Use `clamp()` for fluid heading sizes
 - Stagger `fadeUp` animations on page load (0.1s increments)
-- Keep all text green-tinted, even "white" text (`#c8ddd0`, not `#ffffff`)
+- Keep body text **warm-neutral** (`--text: #dcd8d2`) and secondary text **blue-grey** (`--text-dim: #8a9898`) — the green palette belongs to UI chrome, not reading text
+- Minimum font size for player-visible text: **0.65rem**. Body: **17px**. Line-height: **1.8**
 
 ### Don't:
 - Use pure black (`#000`) or pure white (`#fff`) anywhere
@@ -320,7 +321,42 @@ Lab-themed content (incidents, research notes, scanner readouts) uses the same v
 
 ---
 
-## 7. Font Loading
+## 7. Readability on Dark Backgrounds
+
+The PORTAL site is used at a table during play, often on a laptop or phone in varied lighting. Readability is a real constraint, not a secondary concern.
+
+### The Green-on-Green Problem
+
+The backgrounds are green-tinted (`--bg: #080c0a`). If body text is also green-tinted, readers are parsing **hue similarity** on top of luminance contrast — even at technically-passing WCAG ratios, the text feels like it "disappears into" the background. This is especially hard for middle-aged readers, in low light, or on low-quality screens.
+
+**The fix:** Primary text is warm off-white (`--text: #dcd8d2`). Secondary text is blue-grey (`--text-dim: #8a9898`). Both are deliberately non-green, which creates a clear perceptual separation from the green UI chrome.
+
+**The principle:** Green = the system. Off-white / blue-grey = the information. A player reading a PDA message should feel like they're reading white text on a dark terminal, with green borders framing it — not reading green text inside a green frame.
+
+### Hierarchy via Hue, Not Just Lightness
+
+| Layer | Colour | Hue family | Role |
+|-------|--------|------------|------|
+| UI chrome (borders, labels, active states) | `--green` / `--green-dim` | Green | System structure |
+| Primary reading text | `--text: #dcd8d2` | Warm off-white | Prose, descriptions, card content |
+| Secondary / metadata text | `--text-dim: #8a9898` | Blue-grey | Labels, timestamps, hints, eyebrows |
+| Amber elements | `--amber: #f0a500` | Amber | Warnings, keeper-in-player |
+
+Using two distinct hue families for the text tiers (warm vs. cool) means a reader can immediately sense whether something is "content" or "chrome" before their eye has fully resolved the text.
+
+### Minimum Sizes (never go below these)
+
+| Context | Minimum |
+|---------|---------|
+| Body font-size | 17px |
+| Line-height (dark bg) | 1.8 |
+| Any player-visible text | 0.65rem |
+| Functional labels / timestamps | 0.68rem |
+| Prose / descriptions | 0.82rem+ |
+
+---
+
+## 8. Font Loading
 
 ```html
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
@@ -330,7 +366,7 @@ Always include all three families. The `display=swap` ensures content is visible
 
 ---
 
-## 8. Responsive Approach
+## 9. Responsive Approach
 
 - Max content width: 1100px, centred with `margin: 0 auto`
 - Cards: CSS Grid with `repeat(auto-fill, minmax(Npx, 1fr))` or explicit column counts that collapse at breakpoints

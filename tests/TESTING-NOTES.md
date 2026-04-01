@@ -40,7 +40,10 @@
 
 1. **Hunter D1 restore tests** [M] — arc state restore on reload, XP overflow badge, sheet restore from D1. 3 unchecked items in `hunters.spec.js`.
 2. **Hunter page D1 round-trip for John** [L] — add john to `d1-round-trip.spec.js` once John's sheet is confirmed stable in play.
-3. **`classified` feed type** [L] — client-side only, purely cosmetic, low priority.
+3. **Evidence D1 round-trip** [H] — keeper reveal → D1 persists → player reload shows revealed cards.
+4. **Offline fallback** [H] — mock D1 returning 500; verify localStorage state renders instead of empty page.
+5. **Player report locked state** [M] — mock `{ locked: true }` API response; assert inputs are disabled.
+6. **`classified` feed type** [L] — client-side only, purely cosmetic, low priority.
 
 ---
 
@@ -129,6 +132,9 @@ Priority: **H** = high (core features, likely to break), **M** = medium, **L** =
 - [x] Full save→reload→restore cycle for incident choice state → `d1-round-trip.spec.js`
 - [x] Full save→reload→restore cycle for player report (rating pip + textarea) → `d1-round-trip.spec.js`
 - [ ] Offline fallback: when D1 is unreachable, localStorage state is used
+- [ ] **evidence.html D1 round-trip** [H] — `POST /api/v1/evidence/visibility` saves revealed set; reload re-fetches and re-renders correct cards as visible. Route `page.route()` the endpoint to validate the PUT payload and test the localStorage fallback path.
+- [ ] **player-report.html locked state** [M] — when a report is locked (week in past, no edits allowed), pips and textareas are `disabled`; Save button is hidden or disabled. Needs a mock API route returning `{ locked: true }`.
+- [ ] **feed.html connection map keeper bulk actions** [M] — REVEAL ALL unlocks all nodes; RESET MAP re-locks all; verify D1 write fires for each bulk action (assert `page.route()` intercept received a PUT with expected payload).
 
 ### Nav injection correctness [M]
 - [x] Mobile hamburger toggle: visible at ≤900px, click opens/closes nav → `nav.spec.js`
