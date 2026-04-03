@@ -1056,13 +1056,13 @@ test.describe('feed.html — keeper tabs', () => {
     await expect(page.locator('.ref-label').first()).toContainText('ROLL OUTCOMES');
   });
 
-  test('REFERENCES tab shows 13+ advanced success threshold', async ({ page }) => {
+  test('REFERENCES tab shows 12+ advanced success threshold', async ({ page }) => {
     await injectAdminToken(page);
     await mockFeedApis(page);
     await page.goto('/feed.html');
     await activateKeeper(page);
     await page.locator('[data-ktab="references"]').click();
-    await expect(page.locator('.ref-row').first()).toContainText('13+');
+    await expect(page.locator('.ref-row').first()).toContainText('12+');
   });
 
   test('THREATS tab shows session selector with all sessions', async ({ page }) => {

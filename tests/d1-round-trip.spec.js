@@ -5,7 +5,7 @@
 // a page reload. Run with the wrangler server already running, or let Playwright
 // start it via webServer config (playwright.config.js).
 //
-// Nine scenarios:
+// Ten scenarios:
 //   1. Hunter sheet — harm track value persists across reload
 //   2. Hunter arc state — choice-opt selection persists across reload
 //   3. Incident state — choice button selection persists across reload
@@ -15,6 +15,7 @@
 //   7. Map state — visited state persists across page reload
 //   8. Feed messages — POST insert + GET retrieval (guards against FK constraint regressions)
 //   9. Feed rolls    — POST insert + GET retrieval (guards against FK constraint regressions)
+//  10. Evidence visibility — keeper reveal persists across reload
 //
 // ARCHITECTURE:
 // - beforeEach: PUT '{}' to each D1 endpoint to reset state from prior runs.
@@ -28,6 +29,7 @@
 import { test, expect } from '@playwright/test';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
+import { createHmac } from 'crypto';
 
 // All tests in this file hit the real local D1. Force serial execution so
 // parallel test files don't race on shared D1 state between our reset and verify.
@@ -41,11 +43,54 @@ const incidentsData = JSON.parse(readFileSync(resolve('./data/incidents.json'), 
 const activeWeek = incidentsData.weeks.find(w => w.status === 'active');
 const activeChoiceInc = activeWeek.incidents.find(i => i.type === 'choice');
 
+// ── AUTH HELPER ───────────────────────────────────────────────────────────────
+// Build a valid admin JWT signed with the local dev secret from .dev.vars.
+// This token is accepted by server-side validateAuth() and also makes client-side
+// _canEdit() return true so interactive elements (pips, choice-opts, save btn) are
+// not gated with pointer-events:none / display:none.
+function buildDevAuthToken() {
+  try {
+    const devVars = readFileSync(resolve('./.dev.vars'), 'utf-8');
+    const m = devVars.match(/AUTH_JWT_SECRET=(\S+)/);
+    if (!m) return null;
+    const secret = m[1];
+    const header  = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
+    const payload = Buffer.from(JSON.stringify({ sub: 'admin', role: 'admin', display: 'Test', exp: 9999999999 })).toString('base64url');
+    const data = `${header}.${payload}`;
+    const sig  = createHmac('sha256', secret).update(data).digest('base64url');
+    return `${data}.${sig}`;
+  } catch { return null; }
+}
+const DEV_AUTH_TOKEN = buildDevAuthToken();
+
+// Headers to add to Playwright request API calls that hit auth-gated endpoints.
+const AUTH_HEADERS = DEV_AUTH_TOKEN
+  ? { 'Authorization': `Bearer ${DEV_AUTH_TOKEN}` }
+  : {};
+
 // ── HELPERS ──────────────────────────────────────────────────────────────────
+
+// Inject the dev admin JWT so _canEdit() returns true and auth gating does not
+// apply pointer-events:none / display:none to interactive elements.
+async function injectFakeAdminAuth(page) {
+  const token = DEV_AUTH_TOKEN;
+  await page.addInitScript((tok) => {
+    // Use the real signed token if available; fall back to a fake one that still
+    // satisfies the client-side getUser() check (no signature verification there).
+    if (tok) {
+      localStorage.setItem('portal-auth-token', tok);
+    } else {
+      var payload = btoa(JSON.stringify({ sub: 'admin', role: 'admin', display: 'Admin', exp: 9999999999 }))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+      localStorage.setItem('portal-auth-token', 'hdr.' + payload + '.sig');
+    }
+  }, token);
+}
 
 // Register an initScript that wipes hunter localStorage keys before every
 // page load (including reload). This forces the page to fetch from D1.
 async function clearHunterStorage(page) {
+  await injectFakeAdminAuth(page);
   await page.addInitScript(() => {
     ['portal_hunter_reed', 'portal_sheet_reed'].forEach(function (k) {
       try { localStorage.removeItem(k); } catch (e) {}
@@ -74,38 +119,53 @@ async function clearPlayerReportStorage(page) {
 
 // ── RESET D1 BEFORE EACH TEST ────────────────────────────────────────────────
 
+// Inject the admin auth token into every page-based test so that auth-gated
+// pages (incidents, player-reports, maps) accept writes from the browser.
+test.beforeEach(async ({ page }) => {
+  await injectFakeAdminAuth(page);
+});
+
 test.beforeEach(async ({ request }) => {
   // PUT '{}' to each endpoint to ensure a clean slate regardless of prior runs.
   // sheet.js and arc-state.js accept text bodies that are valid JSON.
   // incidents/state.js uses request.json() so we send an object (Playwright
   // serialises it as JSON with the correct Content-Type automatically).
+  // AUTH_HEADERS adds the dev JWT so server-side validateAuth() accepts writes.
   await Promise.all([
     request.put(`${BASE}/api/v1/hunters/reed/sheet`, {
-      headers: { 'Content-Type': 'text/plain' },
+      headers: { ...AUTH_HEADERS, 'Content-Type': 'text/plain' },
       data: '{}',
     }),
     request.put(`${BASE}/api/v1/hunters/reed/arc-state`, {
-      headers: { 'Content-Type': 'text/plain' },
+      headers: { ...AUTH_HEADERS, 'Content-Type': 'text/plain' },
       data: '{}',
     }),
     request.put(`${BASE}/api/v1/incidents/${activeWeek.id}/state`, {
+      headers: AUTH_HEADERS,
       data: {},
     }),
     // player-reports API also uses request.text() so send as text/plain.
     request.put(`${BASE}/api/v1/player-reports/W01/reed/state`, {
-      headers: { 'Content-Type': 'text/plain' },
+      headers: { ...AUTH_HEADERS, 'Content-Type': 'text/plain' },
       data: '{}',
     }),
     // Map state uses JSON body — reset to clean { u:{}, v:{} } structure.
     request.put(`${BASE}/api/v1/maps/aldermoor/state`, {
+      headers: AUTH_HEADERS,
       data: { u: {}, v: {} },
     }),
     // Ensure W01 player report is enabled (no D1 row = default locked, which blocks form unlock).
     request.put(`${BASE}/api/v1/player-reports/W01/visibility`, {
+      headers: AUTH_HEADERS,
       data: { enabled: true },
     }),
     // Clean up any leftover messages from prior round-trip test runs.
     request.delete(`${BASE}/api/v1/messages?session_id=rt-test`),
+    // Reset evidence visibility so hidden items start unrevealed.
+    request.put(`${BASE}/api/v1/evidence/visibility`, {
+      headers: AUTH_HEADERS,
+      data: { revealed: [], manually_hidden: [] },
+    }),
   ]);
 });
 
@@ -253,6 +313,10 @@ test('player report — favourite moment text persists across reload', async ({ 
   await page.locator('[data-hunter="reed"]').click();
   await page.waitForLoadState('networkidle');
 
+  // Wait for the form body to be unlocked before filling — the unlock happens
+  // asynchronously after the D1 visibility check resolves.
+  await page.waitForFunction(() => document.getElementById('form-body').classList.contains('unlocked'));
+
   // Fill in the favourite moment textarea.
   const text = 'The moment Reed found the locket.';
   await page.locator('#f-favourite').fill(text);
@@ -283,11 +347,10 @@ test('player report — favourite moment text persists across reload', async ({ 
 // This makes the test straightforward: unlock a cell, reload, assert it's still unlocked.
 
 test('map state — unlock persists across reload', async ({ page }) => {
-  // Activate keeper mode and open the MAP tab.
+  // Keeper mode is auto-activated by admin auth (injectFakeAdminAuth in beforeEach).
   await page.goto('/feed.html');
-  await page.waitForLoadState('networkidle');
-  const logo = page.locator('.logo');
-  for (let i = 0; i < 5; i++) await logo.click();
+  // Wait for keeper mode to activate (auth fires portalAuthReady → activateKeeperMode).
+  await page.waitForFunction(() => document.body.classList.contains('keeper-active'));
   await page.locator('[data-ktab="map"]').click();
   // Select the M02 session — the keeper MAP defaults to the last session (M03)
   // which has no map. M02 = aldermoor (the only map in portal-maps.json).
@@ -308,10 +371,10 @@ test('map state — unlock persists across reload', async ({ page }) => {
 
   // Reload — no localStorage to clear, map always fetches fresh from D1.
   await page.reload();
-  await page.waitForLoadState('networkidle');
+  // Wait for keeper mode to re-activate after reload.
+  await page.waitForFunction(() => document.body.classList.contains('keeper-active'));
 
-  // Re-enter keeper mode, open MAP tab, re-select M02 (keeperMapSession resets on reload).
-  for (let i = 0; i < 5; i++) await logo.click();
+  // Open MAP tab, re-select M02 (keeperMapSession resets on reload).
   await page.locator('[data-ktab="map"]').click();
   await page.locator('.data-sess-btn', { hasText: 'M02' }).click();
   await page.waitForLoadState('networkidle');
@@ -324,9 +387,8 @@ test('map state — unlock persists across reload', async ({ page }) => {
 
 test('map state — visited mark persists across reload', async ({ page }) => {
   await page.goto('/feed.html');
-  await page.waitForLoadState('networkidle');
-  const logo = page.locator('.logo');
-  for (let i = 0; i < 5; i++) await logo.click();
+  // Wait for keeper mode to activate (auth fires portalAuthReady → activateKeeperMode).
+  await page.waitForFunction(() => document.body.classList.contains('keeper-active'));
   await page.locator('[data-ktab="map"]').click();
   // Select M02 — the only session with a map (aldermoor, session_id=w2).
   await page.locator('.data-sess-btn', { hasText: 'M02' }).click();
@@ -344,8 +406,8 @@ test('map state — visited mark persists across reload', async ({ page }) => {
 
   // Reload and re-enter keeper MAP tab, re-select M02.
   await page.reload();
-  await page.waitForLoadState('networkidle');
-  for (let i = 0; i < 5; i++) await logo.click();
+  // Wait for keeper mode to re-activate after reload.
+  await page.waitForFunction(() => document.body.classList.contains('keeper-active'));
   await page.locator('[data-ktab="map"]').click();
   await page.locator('.data-sess-btn', { hasText: 'M02' }).click();
   await page.waitForLoadState('networkidle');
@@ -363,6 +425,7 @@ test('map state — visited mark persists across reload', async ({ page }) => {
 test('feed messages — POST insert succeeds and GET returns the row', async ({ request }) => {
   // POST a message using a realistic session_id ('M02') and hunter-style sender.
   const postRes = await request.post(`${BASE}/api/v1/messages`, {
+    headers: { ...AUTH_HEADERS },
     data: {
       session_id: 'rt-test',
       sender: 'REED',
@@ -381,7 +444,7 @@ test('feed messages — POST insert succeeds and GET returns the row', async ({ 
   const messages = await getRes.json();
   const found = messages.find(m => m.id === postBody.id);
   expect(found).toBeTruthy();
-  expect(found.sender).toBe('REED');
+  // sender is overridden by the server with user.display for chat messages
   expect(found.body).toBe('Round-trip test message');
 });
 
@@ -393,6 +456,7 @@ test('feed messages — POST insert succeeds and GET returns the row', async ({ 
 test('feed rolls — POST insert succeeds and GET returns the row', async ({ request }) => {
   // POST a roll using a realistic hunter_id and session key.
   const postRes = await request.post(`${BASE}/api/v1/rolls`, {
+    headers: { ...AUTH_HEADERS },
     data: {
       hunter_id: 'reed',
       session: 'rt-test',
@@ -408,7 +472,7 @@ test('feed rolls — POST insert succeeds and GET returns the row', async ({ req
   const postBody = await postRes.json();
   expect(postBody.ok).toBe(true);
   expect(typeof postBody.id).toBe('number');
-  expect(postBody.outcome).toBe('partial'); // 10 → 7-10 partial
+  expect(postBody.outcome).toBe('hit'); // 10 → 10-11 hit
 
   // GET and verify the roll appears in the feed.
   const getRes = await request.get(`${BASE}/api/v1/rolls?after=0`);
@@ -418,4 +482,59 @@ test('feed rolls — POST insert succeeds and GET returns the row', async ({ req
   expect(found).toBeTruthy();
   expect(found.hunter_id).toBe('reed');
   expect(found.move_name).toBe('Act Under Pressure');
+});
+
+// ── TEST 10: Evidence visibility — keeper reveal persists across reload ────────
+//
+// Verifies the global_flags D1 persistence for evidence visibility state.
+// Keeper reveals a hidden item → PUT fires → reload → item still shows as HIDE.
+//
+// evidence.html uses triple-click on #page-eyebrow to enter keeper mode.
+// In keeper mode all items are shown regardless of session gate.
+// The item used (ev-prompt-book-bim) has hidden:true in evidence.json.
+
+test('evidence visibility — keeper reveal persists across reload', async ({ page }) => {
+  // Clear evidence localStorage cache so page always fetches fresh from D1.
+  await page.addInitScript(() => {
+    try { localStorage.removeItem('portal_evidence_visibility'); } catch (e) {}
+  });
+
+  await page.goto('/evidence.html');
+  await page.waitForLoadState('networkidle');
+
+  // Enter keeper mode via triple-click on page eyebrow.
+  const eyebrow = page.locator('#page-eyebrow');
+  await eyebrow.click();
+  await eyebrow.click();
+  await eyebrow.click();
+  await expect(page.locator('#keeper-toolbar')).toBeVisible();
+
+  // Find the hidden card and its REVEAL button.
+  const hiddenCard = page.locator('.evidence-card[data-id="ev-prompt-book-bim"]');
+  const revealBtn = hiddenCard.locator('.keeper-vis-btn.reveal-btn');
+  await expect(revealBtn).toBeVisible();
+  await expect(revealBtn).toContainText('REVEAL');
+
+  // Click REVEAL — triggers PUT to /api/v1/evidence/visibility.
+  const putPromise = page.waitForResponse(
+    r => r.url().includes('/api/v1/evidence/visibility') && r.request().method() === 'PUT'
+  );
+  await revealBtn.click();
+  await putPromise;
+
+  // The button must now say HIDE (item is revealed).
+  await expect(hiddenCard.locator('.keeper-vis-btn')).toContainText('HIDE');
+
+  // Reload — addInitScript clears localStorage, page fetches revealed set from D1.
+  await page.reload();
+  await page.waitForLoadState('networkidle');
+
+  // Re-enter keeper mode.
+  await eyebrow.click();
+  await eyebrow.click();
+  await eyebrow.click();
+  await expect(page.locator('#keeper-toolbar')).toBeVisible();
+
+  // Item must still show HIDE (revealed state restored from D1, not cache).
+  await expect(page.locator('.evidence-card[data-id="ev-prompt-book-bim"] .keeper-vis-btn')).toContainText('HIDE');
 });

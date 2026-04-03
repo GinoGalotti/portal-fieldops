@@ -29,8 +29,19 @@ async function mockHunterApis(page) {
   });
 }
 
+// Inject a fake admin JWT so _canEdit() returns true and auth gating does not
+// apply pointer-events:none / display:none to interactive elements.
+function injectFakeAdminAuth(page) {
+  return page.addInitScript(() => {
+    var payload = btoa(JSON.stringify({ sub: 'admin', role: 'admin', display: 'Admin', exp: 9999999999 }))
+      .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    localStorage.setItem('portal-auth-token', 'hdr.' + payload + '.sig');
+  });
+}
+
 // Clear hunter-related localStorage keys before each test so state is clean.
 function clearHunterStorage(page) {
+  injectFakeAdminAuth(page);
   return page.addInitScript(() => {
     ['portal_hunter_reed', 'portal_sheet_reed', 'portal_hunter_rex', 'portal_sheet_rex'].forEach(function (k) {
       try { localStorage.removeItem(k); } catch (e) {}
@@ -208,6 +219,7 @@ test.describe('Hunter pages — save button', () => {
 test.describe('Hunter pages — john.html smoke', () => {
 
   test.beforeEach(async ({ page }) => {
+    injectFakeAdminAuth(page);
     await page.addInitScript(() => {
       ['portal_hunter_john', 'portal_sheet_john'].forEach(function (k) {
         try { localStorage.removeItem(k); } catch (e) {}
@@ -297,6 +309,173 @@ test.describe('Hunter pages — john.html smoke', () => {
     await saveBtn.click();
     await expect(saveBtn).toHaveText('// SAVING…');
     await expect(saveBtn).toHaveText('// SAVED ✓', { timeout: 4000 });
+  });
+
+});
+
+// ── D1 RESTORE — sheet ───────────────────────────────────────────────────────
+//
+// Mock the GET /api/v1/hunters/reed/sheet endpoint to return a known sheet state.
+// Page must apply that state on load without any Save interaction.
+
+test.describe('Hunter pages — sheet restore from D1', () => {
+
+  test('harm pips restore from D1 sheet on load', async ({ page }) => {
+    // Seed localStorage with empty so the page always goes to D1 first.
+    await page.addInitScript(() => {
+      try { localStorage.removeItem('portal_sheet_reed'); } catch (e) {}
+    });
+    await page.route('**/api/v1/hunters/reed/sheet', async route => {
+      if (route.request().method() === 'GET') {
+        return route.fulfill({
+          contentType: 'application/json',
+          body: JSON.stringify({ harm: 3, luck: 0, xp: 0, pendingImprovements: 0 }),
+        });
+      }
+      return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+    });
+    await page.route('**/api/v1/hunters/reed/arc-state', async route => {
+      return route.fulfill({ contentType: 'application/json', body: '{}' });
+    });
+
+    await page.goto('/hunters/reed.html');
+    await page.waitForLoadState('networkidle');
+
+    // harm=3 means pips 0, 1, 2 filled; pip 3 not filled.
+    const harmPips = page.locator('.track-pip[data-track="harm"]');
+    await expect(harmPips.nth(0)).toHaveClass(/filled-harm/);
+    await expect(harmPips.nth(1)).toHaveClass(/filled-harm/);
+    await expect(harmPips.nth(2)).toHaveClass(/filled-harm/);
+    await expect(harmPips.nth(3)).not.toHaveClass(/filled-harm/);
+  });
+
+  test('pending improvements counter shows when D1 sheet returns pendingImprovements > 0', async ({ page }) => {
+    await page.addInitScript(() => {
+      try { localStorage.removeItem('portal_sheet_reed'); } catch (e) {}
+    });
+    await page.route('**/api/v1/hunters/reed/sheet', async route => {
+      if (route.request().method() === 'GET') {
+        return route.fulfill({
+          contentType: 'application/json',
+          body: JSON.stringify({ harm: 0, luck: 0, xp: 0, pendingImprovements: 2 }),
+        });
+      }
+      return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+    });
+    await page.route('**/api/v1/hunters/reed/arc-state', async route => {
+      return route.fulfill({ contentType: 'application/json', body: '{}' });
+    });
+
+    await page.goto('/hunters/reed.html');
+    await page.waitForLoadState('networkidle');
+
+    // #pending-improvements-counter must be visible with count = 2.
+    const counter = page.locator('#pending-improvements-counter');
+    await expect(counter).toBeVisible();
+    await expect(counter.locator('.pi-count')).toHaveText('2');
+  });
+
+});
+
+// ── D1 RESTORE — arc state ────────────────────────────────────────────────────
+
+test.describe('Hunter pages — arc state restore from D1', () => {
+
+  test('choice-opt restored as selected when D1 arc-state returns it chosen', async ({ page }) => {
+    await page.addInitScript(() => {
+      try { localStorage.removeItem('portal_hunter_reed'); } catch (e) {}
+    });
+
+    // Mock arc-state GET to return the first choice in arc-weakness group 0 as selected.
+    await page.route('**/api/v1/hunters/reed/arc-state', async route => {
+      if (route.request().method() === 'GET') {
+        return route.fulfill({
+          contentType: 'application/json',
+          // Arc state structure: { arcId: { choices: { 'groupIdx-optIdx': true } } }
+          // '0-0' selects the first option of the first choice-group in arc-weakness.
+          body: JSON.stringify({ 'arc-weakness': { choices: { '0-0': true }, texts: {}, beats: 0, resolution: null } }),
+        });
+      }
+      return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+    });
+    await page.route('**/api/v1/hunters/reed/sheet', async route => {
+      return route.fulfill({ contentType: 'application/json', body: '{}' });
+    });
+
+    await page.goto('/hunters/reed.html');
+    await page.waitForLoadState('networkidle');
+
+    // The first .choice-opt inside #arc-weakness must be selected.
+    const firstOpt = page.locator('#arc-weakness .choice-opt').first();
+    await expect(firstOpt).toHaveClass(/selected/);
+
+    // And the second option (0-1) must NOT be selected (wasn't in state).
+    const secondOpt = page.locator('#arc-weakness .choice-opt').nth(1);
+    await expect(secondOpt).not.toHaveClass(/selected/);
+  });
+
+});
+
+// ── OFFLINE FALLBACK ─────────────────────────────────────────────────────────
+//
+// When D1 endpoints return 500, hunter.js falls back to localStorage for both
+// arc state and sheet state. This test seeds localStorage with known state,
+// mocks both APIs to fail, then asserts that the stored state is applied.
+
+test.describe('Hunter pages — offline fallback to localStorage', () => {
+
+  test('sheet renders from localStorage when D1 sheet endpoint returns 500', async ({ page }) => {
+    // Seed localStorage with harm=4 before the page loads.
+    await page.addInitScript(() => {
+      try {
+        localStorage.setItem('portal_sheet_reed', JSON.stringify({
+          harm: 4, luck: 0, xp: 0, pendingImprovements: 0,
+        }));
+        localStorage.removeItem('portal_hunter_reed'); // clear arc cache
+      } catch (e) {}
+    });
+
+    // Both D1 endpoints return 500 (simulates offline).
+    await page.route('**/api/v1/hunters/reed/sheet', async route => {
+      return route.fulfill({ status: 500, body: 'Service Unavailable' });
+    });
+    await page.route('**/api/v1/hunters/reed/arc-state', async route => {
+      return route.fulfill({ status: 500, body: 'Service Unavailable' });
+    });
+
+    await page.goto('/hunters/reed.html');
+    await page.waitForLoadState('networkidle');
+
+    // harm=4 → pips 0-3 filled (restored from localStorage, not D1).
+    const harmPips = page.locator('.track-pip[data-track="harm"]');
+    await expect(harmPips.nth(0)).toHaveClass(/filled-harm/);
+    await expect(harmPips.nth(3)).toHaveClass(/filled-harm/);
+    await expect(harmPips.nth(4)).not.toHaveClass(/filled-harm/);
+  });
+
+  test('arc state renders from localStorage when D1 arc endpoint returns 500', async ({ page }) => {
+    // Seed localStorage with arc state: first choice-opt in arc-weakness selected.
+    await page.addInitScript(() => {
+      try {
+        localStorage.setItem('portal_hunter_reed', JSON.stringify({
+          'arc-weakness': { choices: { '0-0': true }, texts: {}, beats: 0, resolution: null },
+        }));
+        localStorage.removeItem('portal_sheet_reed');
+      } catch (e) {}
+    });
+
+    await page.route('**/api/v1/hunters/reed/arc-state', async route => {
+      return route.fulfill({ status: 500, body: 'Service Unavailable' });
+    });
+    await page.route('**/api/v1/hunters/reed/sheet', async route => {
+      return route.fulfill({ status: 500, body: 'Service Unavailable' });
+    });
+
+    await page.goto('/hunters/reed.html');
+    await page.waitForLoadState('networkidle');
+
+    // First choice-opt in arc-weakness must be selected (from localStorage fallback).
+    await expect(page.locator('#arc-weakness .choice-opt').first()).toHaveClass(/selected/);
   });
 
 });
