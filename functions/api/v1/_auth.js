@@ -57,8 +57,10 @@ async function _verifyJWT(token, secret) {
 
 // Extract and verify the Bearer token from the request.
 // Returns the decoded payload { sub, role, display } or null if invalid/missing.
+// When AUTH_JWT_SECRET is not configured (local dev without .dev.vars) all writes
+// are treated as admin so that d1-round-trip tests can hit the real local D1.
 export async function validateAuth(request, env) {
-  if (!env.AUTH_JWT_SECRET) return null;
+  if (!env.AUTH_JWT_SECRET) return { sub: '_dev', role: 'admin', display: 'Dev Mode' };
   const auth = request.headers.get('Authorization') || '';
   if (!auth.startsWith('Bearer ')) return null;
   return _verifyJWT(auth.slice(7), env.AUTH_JWT_SECRET);

@@ -3,8 +3,8 @@ Session audio transcription script using OpenAI Whisper.
 Transcribes split tracks individually, then merges into a single interleaved transcript.
 Also transcribes the mixed track for quality comparison.
 Fetches rolls + messages for the session from D1 (via wrangler CLI) and writes feed-log.txt.
-If RECORDING_START is set, also writes merged-timeline.txt interleaving feed messages into
-the transcript by wall-clock offset.
+If RECORDING_START is set, also writes merged-timeline.txt interleaving feed messages AND rolls
+(those with a non-NULL created_at) into the transcript by wall-clock offset.
 
 Usage: python transcribe_session.py
 Edit the config block below as needed.
@@ -85,8 +85,8 @@ def transcribe_file(model, audio_path: str, output_path: str, speaker: str = Non
 # ---------------------------------------------------------------------------
 
 _OUTCOME_LABEL = {
-    "advanced": "★ ADVANCED (13+)",
-    "hit":      "✓ HIT (10-12)",
+    "advanced": "★ ADVANCED (12+)",
+    "hit":      "✓ HIT (10-11)",
     "partial":  "~ PARTIAL (7-9)",
     "miss":     "✗ MISS (6-)",
 }
@@ -161,8 +161,8 @@ def write_feed_log(rolls: list, messages: list) -> None:
     print(f"  → Saved: {FEED_LOG_OUTPUT}")
 
 
-def write_merged_timeline(all_segments: list, messages: list) -> None:
-    """Interleave transcript segments with feed messages using wall-clock offsets."""
+def write_merged_timeline(all_segments: list, messages: list, rolls: list = None) -> None:
+    """Interleave transcript segments with feed messages and timestamped rolls."""
     start_dt = datetime.strptime(RECORDING_START, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
     start_ts = start_dt.timestamp()
 
@@ -185,6 +185,19 @@ def write_merged_timeline(all_segments: list, messages: list) -> None:
         label = _format_message(m).split("] ", 1)[-1]  # strip the [timestamp] prefix
         events.append((dt.timestamp(), "feed", None, label, offset_sec))
 
+    # Rolls with non-NULL created_at (backfilled via fix_roll_timestamps.py)
+    for r in (rolls or []):
+        ts_str = r.get("created_at", "")
+        if not ts_str:
+            continue
+        try:
+            dt = datetime.strptime(ts_str, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+        offset_sec = dt.timestamp() - start_ts
+        label = _format_roll(r)
+        events.append((dt.timestamp(), "roll", None, label, offset_sec))
+
     events.sort(key=lambda x: x[0])
 
     lines = []
@@ -194,6 +207,8 @@ def write_merged_timeline(all_segments: list, messages: list) -> None:
         ts = format_timestamp(max(0, offset_sec))
         if kind == "transcript":
             lines.append(f"[{ts}] [{speaker}] {text}")
+        elif kind == "roll":
+            lines.append(f"[{ts}] [ROLL] {text}")
         else:
             lines.append(f"[{ts}] [FEED] {text}")
 
@@ -255,8 +270,9 @@ def main():
     write_feed_log(rolls, messages)
 
     if RECORDING_START:
-        print("Building merged timeline (transcript + feed messages)...")
-        write_merged_timeline(all_segments, messages)
+        timestamped_rolls = [r for r in rolls if r.get("created_at")]
+        print(f"Building merged timeline (transcript + feed messages + {len(timestamped_rolls)} timestamped rolls)...")
+        write_merged_timeline(all_segments, messages, rolls)
         print()
 
     print("\nDone!")

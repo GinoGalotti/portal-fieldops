@@ -1941,11 +1941,11 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
       if (move.trigger || d) {
         descHtml += '<div class="move-desc-trigger">' + escHtml(move.trigger || d) + '</div>';
       }
-      // Custom thresholds: 12_plus→ADV(13+), 10_plus→HIT(11–12), 7_9→PARTIAL(7–10), miss→FAILURE(6–)
+      // Custom thresholds: 12_plus→ADV(12+), 10_plus→HIT(10–11), 7_9→PARTIAL(7–9), miss→FAILURE(6–)
       var rows = [
-        { cls: 'adv',     label: '⚡ 13+',    text: o['12_plus'] },
-        { cls: 'hit',     label: '✓ 11–12',  text: o['10_plus'] },
-        { cls: 'partial', label: '~ 7–10',   text: o['7_9']     },
+        { cls: 'adv',     label: '⚡ 12+',    text: o['12_plus'] },
+        { cls: 'hit',     label: '✓ 10–11',  text: o['10_plus'] },
+        { cls: 'partial', label: '~ 7–9',    text: o['7_9']     },
         { cls: 'miss',    label: '✗ 6–',     text: o.miss       }
       ];
       descHtml += '<div class="move-outcomes">';
@@ -2040,8 +2040,8 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
     var d2    = Math.ceil(Math.random() * 6);
     var total = d1 + d2 + statVal + modifier;
 
-    // Custom thresholds: 13+ advanced, 10-12 success, 7-9 partial, 6- failure
-    var outcome = total >= 13 ? 'advanced' : total >= 10 ? 'hit' : total >= 7 ? 'partial' : 'miss';
+    // Custom thresholds: 12+ advanced, 10-11 success, 7-9 partial, 6- failure
+    var outcome = total >= 12 ? 'advanced' : total >= 10 ? 'hit' : total >= 7 ? 'partial' : 'miss';
 
     // Brief animate
     btn.textContent = d1 + ' + ' + d2 + '…';
@@ -2645,9 +2645,9 @@ body.no-hover .move-card.expanded .move-desc { display: block; }
       // ── ROLL OUTCOMES ──────────────────────────────────────────────────────
       '<div class="ref-section">' +
         '<div class="ref-label">// ROLL OUTCOMES</div>' +
-        '<div class="ref-row"><strong>13+</strong> &nbsp;Advanced success — best possible result</div>' +
-        '<div class="ref-row"><strong>11–12</strong> Success — full effect, no strings</div>' +
-        '<div class="ref-row"><strong>7–10</strong> &nbsp;Partial — succeed with cost or complication</div>' +
+        '<div class="ref-row"><strong>12+</strong> &nbsp;Advanced success — best possible result</div>' +
+        '<div class="ref-row"><strong>10–11</strong> Success — full effect, no strings</div>' +
+        '<div class="ref-row"><strong>7–9</strong> &nbsp;&nbsp;Partial — succeed with cost or complication</div>' +
         '<div class="ref-row"><strong>6–</strong> &nbsp;&nbsp;&nbsp;Failure — suffer harm or things go wrong</div>' +
       '</div>' +
 

@@ -272,7 +272,7 @@ CREATE TABLE rolls (
   roll_2    INTEGER NOT NULL,
   modifier  INTEGER DEFAULT 0,
   total     INTEGER NOT NULL,
-  outcome   TEXT NOT NULL,             -- custom thresholds: 'advanced' (13+) | 'hit' (11-12) | 'partial' (7-10) | 'miss' (6-)
+  outcome   TEXT NOT NULL,             -- custom thresholds: 'advanced' (12+) | 'hit' (10-11) | 'partial' (7-9) | 'miss' (6-)
   note      TEXT,
   rolled_at TEXT DEFAULT (datetime('now'))
   -- append-only: never UPDATE or DELETE rows
