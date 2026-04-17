@@ -511,6 +511,40 @@
       "type": "classified",
       "label": "CAMPBELL — Post-Resolution Private Flag",
       "body": "// CAMPBELL — PRIVATE FLAG — DR. V. LEECH — POST-OPERATION M03\n\nOPERATION #0099-D STATUS: RESOLVED (conditional).\n\nMECHANISM CONFIRMED: Performance-context BIM amplification via audience belief vector. Prompt book identified as primary conduit.\n\nPROJECT VEIL FLAG: Audience belief as BIM amplifier is a replicable mechanism. I am noting this. I have not included it in the operational report.\n\nPRIVACY PROTOCOL 7 — NOTE: The mechanism's resolution required consent, not force. The actors chose the ending. I do not know whether they had already seen it coming.\n\n// I think it matters. I am not yet certain why."
+    },
+    {
+      "id": "s03-director-veritas-debrief",
+      "type": "pda",
+      "label": "Director Leech — Post-Mission",
+      "from": "Dr. Victor Leech",
+      "body": "Good work out there. At least they are at peace. Veritas has been involved in every case we've tracked — sometimes observing, sometimes funding. They have more resources than us and they're always six months ahead. I need to know: are you going to share the resolution with them as they requested? And I want everything you have on that prompt book. The catalyst mechanics could be significant.",
+      "classification": "portal-internal"
+    },
+    {
+      "id": "s03-clara-notebooks-recovered",
+      "type": "document",
+      "label": "Clara Voss — Rehearsal Notebooks",
+      "body": "Recovered from Miriam Okafor's bedside table at the hospital. Clara had told Miriam where to find them. The notebooks document the mechanism from the inside: early entries are normal rehearsal notes, but the voice shifts over time. Clara recorded thoughts she didn't think, blocking decisions she didn't make, a growing sense of being inhabited.",
+      "link": "handouts/dossier/s03-clara-notebooks.html",
+      "classification": "Recovered by the team from Miriam Okafor's hospital room"
+    },
+    {
+      "id": "s03-campbell-prompt-book",
+      "type": "pda",
+      "label": "CAMPBELL — Prompt Book Analysis",
+      "from": "CAMPBELL",
+      "body": "BIM readings on the prompt book are significant — consistent with previous catalyst artefacts (cf. Aldermoor substrate). The writing shifts partway through: annotations stop being performance instructions and become something else. Key phrases identified: 'the audience is not watching, the audience is participating,' 'belief is the medium through which transfer occurs,' 'without them the performer is alone with the character; with them the character has somewhere to arrive from.' This is not a spell book. It is a record of discovery.",
+      "classification": "portal-internal"
+    },
+    {
+      "id": "s03-scan-performance-peak",
+      "type": "scan",
+      "label": "BIM Reading — Saturday Matinee, Act IV Peak",
+      "sublabel": "Rex Bangley — field scanner, Saturday matinee",
+      "reading": "CRITICAL",
+      "reading_display": "2.31 BIM",
+      "status": "critical",
+      "note": "Stage centre during Act IV: readings spiked to highest recorded levels. Actors on stage read significantly higher than the same individuals offstage. Audience emotional engagement correlates directly with BIM amplitude. The prompt book (in Reed's backpack, audience seating) showed resonance — not physically vibrating but a felt charge. Readings dropped sharply after Edmund's departure."
     }
   ]
 }
