@@ -8,9 +8,9 @@
       "category": "faction",
       "status": "active",
       "last_moved": "w3",
-      "summary": "Rival paranormal research organisation operating through shell companies. Field presence confirmed in Aldermoor post-resolution — sending operatives with BIM Collection Arrays while PORTAL interns are on site. PORTAL's presence in the Aldermoor estate office triggered a motion sensor. MESA knows we were there. Same shell company structure (Solstice Property Group) now confirmed funding Meridian Theatre Company — Case E.",
+      "summary": "Rival paranormal research organisation operating through shell companies. Field presence confirmed in Aldermoor post-resolution — sending operatives with BIM Collection Arrays while PORTAL interns are on site. PORTAL's presence in the Aldermoor estate office triggered a motion sensor. MESA knows we were there. Same shell company structure (Solstice Property Group) now confirmed funding Meridian Theatre Company — Case E. Aldermoor array data returned to Veritas per Operation #0099-D quid pro quo. CAMPBELL integrity test initiated: team planted false information in supplemental report #0099-D/SUP — if Veritas acts on fabricated intel, leak confirmed. Director Leech confirmed directly: Veritas is not government, has more resources than PORTAL, and has been present at every case PORTAL has tracked. They are always six months ahead.",
       "notes": "Shell companies: Meridian BioSciences · Greyfield Assets Ltd · Veritas Realty Holdings · Solstice Property Group · Helix Boundary (@helixboundary.com). All Jersey registered. Partially shredded @helixboundary.com email found referencing 'Specimen ALD-1'. The MESA acronym pattern echoes subtly in subsidiary names — Agatha's signature.",
-      "player_summary": "Three companies — Greyfield Assets, Veritas Realty, Solstice Property Group — all registered in Delaware, same agent, same corporate layering. They bought 47 properties in Aldermoor along the entity's growth path. Solstice funded the Meridian Theatre. Someone is finding locations where the boundary is thin, funding them, and waiting.",
+      "player_summary": "Three companies — Greyfield Assets, Veritas Realty, Solstice Property Group — all registered in Delaware, same agent, same corporate layering. They bought 47 properties in Aldermoor along the entity's growth path. Solstice funded the Meridian Theatre. Someone is finding locations where the boundary is thin, funding them, and waiting. The Director confirmed: Veritas has been present at every case we've handled. They have more resources than PORTAL and they're always ahead. The theatre case is resolved — they took the array data they'd collected and left. We've planted false information to test whether it reaches them. Results pending.",
       "player_name": "The Shell Companies"
     },
     {
@@ -40,10 +40,10 @@
       "name": "CAMPBELL / Cameron Dell",
       "category": "mystery",
       "status": "active",
-      "last_moved": "w2",
-      "summary": "CAMPBELL contains the transferred consciousness of Dr. Cameron Dell, Leech's deceased partner. Nobody on the field team knows. Teddy Brandt has found anomalous log entries referencing 'Privacy Protocol 7' — a designation that appears in no PORTAL documentation. The three excerpts reference a non-existent case file, one of Bálint's voicemails, and an unacknowledged MESA cross-reference.",
+      "last_moved": "w3",
+      "summary": "CAMPBELL contains the transferred consciousness of Dr. Cameron Dell, Leech's deceased partner. Nobody on the field team knows. Teddy Brandt has found anomalous log entries referencing 'Privacy Protocol 7' — a designation that appears in no PORTAL documentation. The three excerpts reference a non-existent case file, one of Bálint's voicemails, and an unacknowledged MESA cross-reference. Players are explicitly suspicious post-S03: 'I'm starting to think that Campbell or whoever programmed Campbell is not on the same side.' Team planted false info in reports to CAMPBELL and Leech (integrity test). Leech shared CAMPBELL's origin in debrief: built from his late partner Dr. Cameron Dell's quantum computing breakthrough. 'It seems to have a mind of its own.'",
       "notes": "Crack vectors: Teddy's log review (in motion) · Priya's private log (independent, same direction) · Sven asking CAMPBELL directly about the mechanics of existence · Marcus Finch speaking · Direct interrogation of Leech. CAMPBELL will not lie if asked directly. He will answer precisely, carefully, and reveal as little as possible.",
-      "player_summary": "CAMPBELL's activity logs contain entries that reference case files that don't exist, a protocol nobody has heard of, and cross-references to external sources it won't identify. Teddy has flagged three batches. The pattern is consistent and the anomalies are getting harder to explain as filing errors.",
+      "player_summary": "CAMPBELL's activity logs contain entries that reference case files that don't exist, a protocol nobody has heard of, and cross-references to external sources it won't identify. Teddy has flagged three batches. The pattern is consistent and the anomalies are getting harder to explain as filing errors. After the Meridian case, the team has moved past 'CAMPBELL might be broken' — they think whoever built or programmed CAMPBELL may not be on their side. The Director told us CAMPBELL was built from his late partner's work. He said it 'seems to have a mind of its own.'",
       "player_name": "CAMPBELL — Anomalous Activity"
     },
     {
@@ -160,12 +160,23 @@
       "id": "case-e-understudies",
       "name": "Case E — The Understudies (Meridian Theatre)",
       "category": "case",
+      "status": "resolved",
+      "last_moved": "w3",
+      "summary": "Meridian Theatre Company. Lead actors Clara Voss and Edmund Farrow displaced into understudies. RESOLVED (partial). Clara contained in a jar at the hospital, chose to leave after Alan described the fey afterlife — jar emptied. Edmund departed during Saturday's matinee after a standing ovation farewell. The prompt book was in Reed's backpack (not on stage), so the mechanism didn't close cleanly — traces remain in the theatre. Understudies recovering. Prompt book secured at the lab.",
+      "notes": "PRIORITY: MEDIUM. Performance clock active — see COUNTDOWN CLOCKS. Resolution requires a theatrical farewell within the logic of performance. Sven is the natural resolution vector — this is his type of problem. The mechanism is related to thin-boundary performance spaces.",
+      "player_summary": "Clara chose to leave at the hospital after Alan helped her understand the fey afterlife. Edmund departed during Saturday's performance after a farewell ovation. The prompt book was not on stage, so traces remain in the theatre — understudies may retain some residual effects.",
+      "player_name": "The Understudies — Meridian Theatre"
+    },
+    {
+      "id": "prompt-book-lab",
+      "name": "The Prompt Book — Lab Study",
+      "category": "mystery",
       "status": "active",
       "last_moved": "w3",
-      "summary": "Meridian Theatre Company. Lead actors Clara Voss and Edmund Farrow died 6 months apart. Three understudies hospitalised with complete identity loss. Remaining four understudies at risk — Saturday performance is tomorrow. Grant source: Solstice Property Group — same shell company chain as Aldermoor. Field team assigned.",
-      "notes": "PRIORITY: MEDIUM. Performance clock active — see COUNTDOWN CLOCKS. Resolution requires a theatrical farewell within the logic of performance. Sven is the natural resolution vector — this is his type of problem. The mechanism is related to thin-boundary performance spaces.",
-      "player_summary": "Three understudies hospitalised. Four more at risk. Saturday's performance is tomorrow. The deceased lead actors are present in the building — and in the performers. The mechanism requires consent to resolve. The prompt book is the key.",
-      "player_name": "The Understudies — Meridian Theatre"
+      "summary": "Victorian-era prompt book by Silvia Hederstrom, secured at the PORTAL lab. CAMPBELL's analysis: writing transitions at page 43 from stage management instruction to mechanism documentation. Key phrase: 'belief is the medium through which transfer occurs.' Science direction: 'fake it till you make it' — sustained belief reshapes capability at psychological and physiological level without physical change. Now an active lab research direction. Structurally parallel to the Dell methodology (audience belief as amplification medium, repeated exposure as boundary erosion, consent as the designed exit) — CAMPBELL has noted this privately and not shared it.",
+      "notes": "// KEEPER: The Dell methodology parallel is private to Cameron — logged under Privacy Protocol 7. Do not surface the connection until players crack CAMPBELL. The 'fake it till you make it' science direction is player-safe — real and interesting without requiring the CAMPBELL reveal. The prompt book is the same class of object as BIM-S01-003 (ash particulate) — Rex examining it closely would confirm this.",
+      "player_summary": null,
+      "player_name": null
     }
   ]
 }
