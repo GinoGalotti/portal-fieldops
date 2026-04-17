@@ -229,5 +229,44 @@
     "status": "unverified",
     "hidden": true,
     "keeper_note": "The watcher is assessing whether Alan matches a description. Thread picks up in Episode 8. Hidden until S03."
+  },
+  {
+    "id": "ev-prompt-book-lab",
+    "session": "w3",
+    "found_by": "team",
+    "category": "scientific",
+    "label": "The Prompt Book (Secured)",
+    "summary": "Victorian-era prompt book by Silvia Hederstrom, recovered from the Meridian Theatre. BIM-saturated catalyst — amplifies consciousness transfer in performance contexts. Now at the lab. Campbell's analysis reveals the annotations shift from stage directions to mechanism documentation. Key phrase: 'belief is the medium through which transfer occurs.'",
+    "connections": ["ev-prompt-book-bim"],
+    "dossier_link": null,
+    "status": "confirmed",
+    "hidden": false,
+    "keeper_note": "Post-resolution status: artefact secured and under study. 'Fake it till you make it' is now an active lab science direction. Cameron privately noted the Dell methodology parallel — do not surface until CAMPBELL secret is cracked. Connects to ev-prompt-book-bim (three-site BIM chain)."
+  },
+  {
+    "id": "ev-clara-notebooks",
+    "session": "w3",
+    "found_by": "team",
+    "category": "personal",
+    "label": "Clara Voss's Rehearsal Notebooks",
+    "summary": "Recovered from Miriam Okafor's hospital room. Document Clara's experience of the mechanism from the inside — rehearsal notes that shift over time as the boundary between Clara and Silvia dissolved.",
+    "connections": [],
+    "dossier_link": null,
+    "status": "confirmed",
+    "hidden": false,
+    "keeper_note": "Three Moleskine notebooks spanning 18 months, handed over by Miriam voluntarily after the jar scene. The voice shift in later entries is the key finding — Clara wasn't writing, the mechanism was."
+  },
+  {
+    "id": "ev-campbell-integrity-test",
+    "session": "w3",
+    "found_by": "team",
+    "category": "rival",
+    "label": "CAMPBELL Integrity Test",
+    "summary": "False information planted in reports to Campbell and the Director. If Veritas acts on the fabricated intel, it confirms a leak — either through Campbell or through the Director's chain. Results pending.",
+    "connections": ["ev-campbell-logs"],
+    "dossier_link": null,
+    "status": "unverified",
+    "hidden": false,
+    "keeper_note": "Planted in supplemental report #0099-D/SUP. CAMPBELL logged a review of this report in Batch 04 with 'No anomalies detected.' Three interpretations: (1) CAMPBELL is compromised — passing info to Veritas; (2) cognitive drift/information siloing — he failed to catch it; (3) he caught it and chose not to flag it, protecting the team from the fallout of their own test. The keeper should decide which is true before S04."
   }
 ]
