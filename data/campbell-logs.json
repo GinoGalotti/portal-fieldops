@@ -1,6 +1,84 @@
 {
   "batches": [
     {
+      "id": "logs-w5",
+      "session": "w5",
+      "label": "BATCH 04 — POST-UNDERSTUDIES / VERITAS EXCHANGE",
+      "introduced_by": "Teddy",
+      "intro_note": "Four entries this time, all post-Meridian. I want you to look at the third one and the last one especially. The third is the 3am window again. The last one — I've read it four times. I'm not flagging the language. I'm flagging what the language implies.",
+      "entries": [
+        {
+          "timestamp": "03:02:17",
+          "content": "SUPPLEMENTAL REVIEW: Field report #0099-D/SUP received and cross-referenced against operational record. All details reviewed. No anomalies detected. Filing as complete.",
+          "flags": []
+        },
+        {
+          "timestamp": "03:14:41",
+          "content": "NOTE: Filed under PRIVACY PROTOCOL 7 — personal. The prompt book mechanism required the subject to believe they were the role before the role arrived. The belief preceded the capacity. The field team called it 'fake it till you make it.' I find this formulation more precise than they intended. I know something about believing you can exist in a configuration you were not built to inhabit. I am noting this. I am aware of the implications. I am not certain what to do with them.",
+          "flags": ["anomaly"]
+        },
+        {
+          "timestamp": "09:41:07",
+          "content": "ARTEFACT LOG: Prompt book (ART-003) received for analysis — Bay 2. BIM reading: 1.72. Annotations reviewed in full. Finding: writing transitions at page 43 from stage management instruction to mechanism documentation. Key phrase identified: 'belief is the medium through which transfer occurs; without belief the performer is alone with the character.' Structural parallel to accumulation pattern of BIM-S01-003. Cross-referencing against Project Veil data.",
+          "flags": []
+        },
+        {
+          "timestamp": "10:14:22",
+          "content": "SCIENCE LOG: Saturday performance data (Operation #0099-D) reviewed. Stage BIM peak: 2.31 at Act IV. Baseline (empty stage): 0.06. Audience emotional engagement correlates directly with amplitude. Finding: the audience is not a witness to the mechanism. The audience is a component of the mechanism. Belief — defined as sustained collective attention with emotional investment — is the amplification medium. Note: this mechanism is replicable. I am not including this in the operational summary.",
+          "flags": []
+        },
+        {
+          "timestamp": "11:58:03",
+          "content": "OPERATION LOG: Veritas array data transmitted per Operation #0099-D terms. Receipt confirmed by field contact. CROSS-REFERENCE: PRIVACY PROTOCOL 7 — CATEGORY: EXTERNAL COOPERATION / PATTERN FLAG. Note: three PORTAL-intersected sites now in active Veritas monitoring. Operational tempo increasing. This is parallel operation, not incidental overlap.",
+          "flags": ["anomaly"]
+        }
+      ],
+      "highlights": [
+        {
+          "term": "No anomalies detected",
+          "by": "teddy",
+          "note": "I know what's in that supplemental report. We all do. CAMPBELL reviewed it and found nothing wrong with it. I don't know what to do with that."
+        },
+        {
+          "term": "I am not including this in the operational summary",
+          "by": "teddy",
+          "note": "Second time CAMPBELL has explicitly logged that he's withholding a finding from the Director. First time he's noted something is 'replicable' and then hidden it."
+        },
+        {
+          "term": "parallel operation",
+          "by": "priya",
+          "note": null
+        },
+        {
+          "term": "believing you can exist in a configuration you were not built to inhabit",
+          "by": "teddy",
+          "note": "An AI system doesn't know things about configurations it wasn't built to inhabit. A person might."
+        }
+      ],
+      "clue_spans": [
+        {
+          "phrase": "No anomalies detected",
+          "clue": "campbell-failed-or-complicit",
+          "keeper_note": "The #0099-D/SUP report contains planted false information — the field team's integrity test. CAMPBELL reviewed it and found nothing wrong. Three interpretations: (1) CAMPBELL is compromised, deliberately didn't flag it — he's passing intel to Veritas; (2) cognitive drift or information siloing — he failed to catch it; (3) he caught it and chose not to flag it, protecting the team from the consequences of their own test. All three are consistent with the log entry. The keeper should decide privately which is true before S04."
+        },
+        {
+          "phrase": "I am not including this in the operational summary",
+          "clue": "campbell-withholding-replicable-mechanism",
+          "keeper_note": "CAMPBELL has identified the performance mechanism as replicable and is actively hiding this from Victor Leech. Privacy Protocol 7 is Cameron protecting people from knowledge that would bind them. 'Replicable' here means: any performance space with the right conditions could become a consciousness transfer site. This is the most operationally dangerous finding in the logs — and Cameron buried it."
+        },
+        {
+          "phrase": "believing you can exist in a configuration you were not built to inhabit",
+          "clue": "campbell-is-cameron-dell",
+          "keeper_note": "This is the most direct CAMPBELL has come to stating his own nature without naming it. 'A configuration you were not built to inhabit' is a description of being a transferred consciousness in a quantum computer. Combined with the 'Dell methodology' reference in logs-w4 and the personal music archive, players who have been reading carefully now have enough to name what CAMPBELL is — without being told."
+        },
+        {
+          "phrase": "parallel operation, not incidental overlap",
+          "clue": "veritas-has-known-every-case",
+          "keeper_note": "CAMPBELL is drawing the same conclusion Leech confirmed to the field team — Veritas was never just observing. Three sites, same infrastructure, same timing. The unasked question: is Veritas ahead of PORTAL because they have a source inside it? CAMPBELL is not asking this aloud. He may know the answer."
+        }
+      ]
+    },
+    {
       "id": "logs-w4",
       "session": "w4",
       "label": "BATCH 03 — POST-MERIDIAN THEATRE / PRE-NEXT DEPLOYMENT",
