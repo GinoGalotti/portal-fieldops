@@ -383,7 +383,7 @@ Eszter. BIM particulate recovered. Bálint alive and grieving. Sven's choice: co
 **S02 — Something That Wants to Be Known** *(contained)*
 The Cartographer. Humane resolution. Alan holds Diane's notebook. MESA presence confirmed in Aldermoor. CAMPBELL begins quietly using BIM compound to extend his electronics interface — capability improvement he is not reporting to Leech.
 
-**S03 — The Understudies** *(in prep)*
+**S03 — The Understudies** *(complete)*
 The prompt book. Clara and Edmund. Two Gentlemen of Verona. Fey watcher seeds planted for Alan. Heist setup: Solstice Property Group's name now appearing in three cases. Rex observes MESA's BIM Collection Arrays in the theatre lighting rig and understands the principle of BIM detection — PORTAL needs this capability. Post-session debrief with Leech seeds the development of a PORTAL BIM detector (see Player-Confirmed Canon).
 
 *Arc function:* Team establishes working dynamic. BIM ripple pattern becomes visible to attentive players. MESA graduates from background presence to active antagonist. CAMPBELL thread begins moving.
@@ -608,6 +608,14 @@ Mission prep documents hold certain items deliberately undefined — marked `// 
 
 **S02 — Something That Wants to Be Known**
 - **[GADGET] Anchor protocol** — Rex Bangley designed the team's anchor protocol for entering the Aldermoor displacement zone. Each hunter chose a personal anchor object: Rex — a teapot that reminds him of his grandmother; Reed — a pocket magnifying glass; Alan — a tattoo of a fey concept only he understands; Sven — a one-dollar bill. The protocol is now PORTAL standard for cognitive-displacement zones. Sven is exempt (no cognitive map to anchor).
+
+**S03 — The Understudies**
+- **[THEORY] Spirits in Vessels:** Spirits can be contained in physical vessels (jars, containers) if they enter willingly. Containment is imperfect — the spirit leaks over time, and there is a persistent pull back toward anchoring locations. The pull strengthens with distance and time. Coercion is theoretically possible but not tested.
+- **[TEXTURE] Fey Afterlife:** The fey understanding of what comes after death is forests, nature, freedom — running, frolicking, communing with the natural world. Alan described this instinctively during S03; it may be his suppressed memories of his origin. The vision was strong enough to implant in others (Sven saw it too).
+- **[LORE] Alan's Fey Imprinting:** Alan can implant visions/ideas into others' minds. This costs fey points (he becomes less human each time he uses it). Sven experienced the forest vision during the Clara scene. This ability is tied to his changeling nature, not learned magic.
+- **[THEORY] Catalyst Bidirectionality:** Artefacts that catalyse supernatural events are also required to close them. The catalyst works both ways — starting and ending. Removing the catalyst dampens the mechanism but doesn't cleanly resolve it (cf. prompt book in backpack = partial ending).
+- **[THEORY] BIM Science — "Fake It Till You Make It":** The prompt book's mechanism reveals a therapeutic application: belief can reshape capability at a psychological/physiological level. If you truly believe you are something, you develop the functional capacity (muscle memory, reflexes, confidence) — but not physical attributes you don't possess (you can't grow muscles, but you can access muscle memory as if trained). This is now a lab research direction.
+- **[TEXTURE] Silvia Hederstrom:** The Victorian-era actor who authored the prompt book's annotations. Player-defined name.
 
 ---
 
