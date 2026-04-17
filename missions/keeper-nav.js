@@ -17,7 +17,6 @@
     { label: 'Player Site',     href: '../index.html' },
     { label: 'Keeper Index',    href: 'keeper.html',     match: 'keeper.html' },
     { label: 'Field Report',    href: 'report.html',     match: 'report.html' },
-    { label: 'Field Debrief',   href: 'debrief.html',    match: 'debrief.html' },
     { label: 'References',      href: 'references.html', match: 'references.html' },
     { label: 'Entities',        href: 'entities.html',   match: 'entities.html' },
     { label: 'Arcs',            href: 'arcs.html',       match: 'arcs.html' },
