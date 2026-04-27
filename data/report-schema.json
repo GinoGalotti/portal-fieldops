@@ -205,5 +205,114 @@
         "prompt": "If any player developed a theory about the relationship between audience belief and BIM amplification — or about what Clara and Edmund actually are — and the keeper adopted it, note it here."
       }
     ]
+  },
+  {
+    "session_id": "S04",
+    "week_id": "W04",
+    "week_label": "Week 04",
+    "week_subtitle": "The Shōjō",
+    "keeper_threads": [
+      "CASE D — THE SHŌJŌ (BALTIMORE)",
+      "VERITAS — OP. WHITECEDAR",
+      "MOB PRE-SHAPING (OFFICER M.K.)",
+      "THE CASK — TACHIBANA TARU",
+      "SVEN — PARALLEL DEPLOYMENT",
+      "CAMPBELL / CAMERON DELL — INTEGRITY TEST RESULTS",
+      "PROJECT VEIL — NATURAL BIM SOURCE",
+      "CASE A — GORDON AVERY",
+      "CASE C — NADIA OSEI",
+      "REED'S PRIVATE DIRECTIVE",
+      "ALAN'S THRESHOLD MAPS"
+    ],
+    "keeper_clocks": [
+      { "id": "clock-stirring",          "label": "Stirring Clock" },
+      { "id": "clock-mob",               "label": "Mob Clock" },
+      { "id": "clock-veritas-encounter", "label": "MESA/Veritas Encounter Clock" },
+      { "id": "clock-shojo-encounter",   "label": "Shōjō Encounter Clock" }
+    ],
+    "keeper_scenes": [
+      {
+        "id": "arrival-investigation",
+        "label": "ARRIVAL & INVESTIGATION",
+        "prompt": "Which investigation routes did the team pursue — Pulaski (case file), Mariana (witness), Yuki (cask + letter), Rex's scanner? How did they identify the cursed cask? What was the Stirring Clock state going into dusk? What did they miss or skip?"
+      },
+      {
+        "id": "dusk-confrontation",
+        "label": "DUSK: MOB, VERITAS, AND THE SHŌJŌ",
+        "prompt": "How did the three-way scene unfold — mob on the quay, Veritas arriving for the cask, the Shōjō surfacing at dusk? Which thread did the team address first? Final cask disposition: returned to sea / contained at lab / taken by Veritas / destroyed? Were there civilian casualties?"
+      },
+      {
+        "id": "resolution-outcome",
+        "label": "RESOLUTION & DRIVE HOME",
+        "prompt": "Best ending (Drink With the Spirit) / strong ending (containment) / partial (Veritas takes it) / bad (destroyed)? Final state of each clock? What did Leech say on the radio? What happened to Sven? What seeds did you plant for S05?"
+      }
+    ],
+    "player_scenes": [
+      {
+        "id": "the-harbor",
+        "label": "THE HARBOR BY DAY",
+        "prompt": "Pulaski has been on the job forty years. He has seen every kind of dead face. He had never seen ecstasy before this week. What did that land like for your operative when you first heard it?"
+      },
+      {
+        "id": "the-shojo",
+        "label": "THE SHŌJŌ",
+        "prompt": "Tall. Red-haired. Swaying. Singing in Japanese in the fog over the harbour. What did your operative actually see? Was there a moment in the encounter where you felt something shift — not fear, something else?"
+      },
+      {
+        "id": "your-moment",
+        "label": "YOUR OPERATIVE'S MOMENT",
+        "prompt": "Was there a moment this session where your operative felt fully themselves — or fully out of their depth? A decision, a line, a choice under pressure. What was it?"
+      }
+    ],
+    "canon_slots": [
+      {
+        "id": "rex-sake-device",
+        "category": "GADGET",
+        "label": "Rex's Sake Deployment Device",
+        "prompt": "Rex had to turn sake into a weapon or a tool. What did he build — an atomiser, coated rounds, a spray bottle, an aerosol grenade? What did he call it? Whatever the player described is now canon."
+      },
+      {
+        "id": "scanner-name",
+        "category": "GADGET",
+        "label": "Rex's BIM Scanner — Name",
+        "prompt": "The scanner has been in the field for four sessions. Does it have a name now? Whatever the player called it is canon."
+      },
+      {
+        "id": "hisako-texture",
+        "category": "TEXTURE",
+        "label": "Hisako Tachibana",
+        "prompt": "Akira Tachibana's daughter, who died of leukaemia while the sake was brewing. How old was she? What was she like? The brewer's letter doesn't say. If the table conjured her or speculated about her, lock it in."
+      },
+      {
+        "id": "shojo-appearance",
+        "category": "TEXTURE",
+        "label": "The Shōjō's Exact Appearance",
+        "prompt": "Tall. Red-haired. Swaying. Singing in Japanese. What else — how tall exactly, did it have a face, what did the singing sound like up close? What the players described and the keeper riffed on is canon."
+      },
+      {
+        "id": "cask-disposition",
+        "category": "THEORY",
+        "label": "What PORTAL Did With the Cask",
+        "prompt": "If the cask returned to the lab — what does PORTAL do with a vessel that held a sea spirit? What does Cameron think? If it went to the sea, who threw it? If Veritas took it, what does the team think that means long-term?"
+      },
+      {
+        "id": "bim-taxonomy",
+        "category": "THEORY",
+        "label": "Natural vs. Engineered BIM",
+        "prompt": "The Shōjō is a natural BIM source — no arrays, no infrastructure, just grief. The Aldermoor entity and the Meridian mechanism were different. If a player developed a taxonomy and the keeper adopted it, note it here."
+      },
+      {
+        "id": "veritas-cask-intent",
+        "category": "THEORY",
+        "label": "Did Veritas Engineer the Cask's US Landing?",
+        "prompt": "The tablet says 'natural source priority' but not how long Veritas has known. Did they know before the cask shipped, or find it in Baltimore? If the team formed a theory and acted on it, note it."
+      },
+      {
+        "id": "sven-deployment-outcome",
+        "category": "THEORY",
+        "label": "What Happened to Sven on the Parallel Deployment",
+        "prompt": "Leech said 'safe. Ish.' — what did Sven actually find? Who was at the location? What did Veritas have waiting for him? Lock the Drive Home choice here."
+      }
+    ]
   }
 ]
