@@ -8,7 +8,7 @@
       "label": "Case C — Nadia's Window",
       "description": "Nadia Osei's consciousness is tethered to information infrastructure. The tether frays with time. When it goes, she disperses — and the MESA pattern she assembled goes with her.",
       "segments": 4,
-      "filled": 2,
+      "filled": 3,
       "status": "active",
       "segment_labels": [
         "Window open — contact possible",
@@ -44,8 +44,8 @@
       "label": "Case E — Saturday's Performance",
       "description": "The remaining four understudies are rehearsing. The performance space has a thin-boundary resonance — the same mechanism that took the first three. After Saturday's show, four more identities may be lost.",
       "segments": 4,
-      "filled": 3,
-      "status": "active",
+      "filled": 4,
+      "status": "resolved",
       "segment_labels": [
         "Rehearsals ongoing — window open",
         "Opening night approaches — dress rehearsal complete",
@@ -53,7 +53,7 @@
         "Saturday's show — four understudies lost"
       ],
       "advancement_note": "Advance 1 tick when Saturday approaches in the fiction. At 4/4: four understudies lose their identities; Case E closes as a failure. Sven is the natural resolution vector — prioritise if clock reaches 3.",
-      "notes": "Grant source: Solstice Property Group (MESA shell company). The mechanism requires a theatrical farewell within the logic of performance. Clara Voss and Edmund Farrow's deaths are the anchoring event."
+      "notes": "RESOLVED S03. Clara Voss and Edmund Farrow both departed peacefully. Clara released via Alan's stage-direction script ('Clara, exit stage left'). Edmund released at the Saturday matinee after watching the performance. Four understudies at risk; none were lost. The entity is contained. The prompt book remains at the lab under study."
     },
 
     {

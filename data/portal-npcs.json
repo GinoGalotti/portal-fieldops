@@ -327,6 +327,32 @@
       "keeper_description": "9 years old. Named in Martin Wentworth's most recent letter as a planned target. 14-day window from current date. No connection to PORTAL or MESA \u2014 she is a completely innocent bystander caught in Wentworth's obligation-anchored logic.",
       "case": "case-d",
       "secrets_involved": []
+    },
+    {
+      "id": "daniel-farrow",
+      "name": "Daniel Farrow",
+      "affiliation": "civilian",
+      "role": "Drama student — former host of Edmund Farrow's residual consciousness",
+      "status": "recovering",
+      "visible_to_players": false,
+      "first_session": "S03",
+      "player_description": "A drama student connected to the Meridian Theatre case. Met the team during the investigation.",
+      "keeper_description": "Played Edmund Farrow in the Meridian production. Edmund's residual consciousness inhabited him — he was cooperative, warm, stoic in a way beyond his years. Edmund departed voluntarily at the Saturday matinee. Daniel is now recovering: overwhelmed, lost, but himself again. He doesn't fully understand what he hosted. He was moved by the performance he finally got to watch. Secondary NPC — could resurface if the Meridian thread is revisited or if MESA follows up on the Meridian data.",
+      "case": "case-e",
+      "secrets_involved": []
+    },
+    {
+      "id": "miriam",
+      "name": "Miriam",
+      "affiliation": "civilian",
+      "role": "Hospital patient — former vessel for Clara Voss's residual consciousness",
+      "status": "recovering",
+      "visible_to_players": false,
+      "first_session": "S03",
+      "player_description": "A patient at Hargrove Medical Centre connected to the Meridian Theatre case.",
+      "keeper_description": "A hospital patient who Clara Voss's consciousness used as a channel — she was more responsive than the other patients, with episodes of shifting demeanour. Sven held her hand and channelled Clara's presence through her. After Clara's departure ('Clara, exit stage left'), Miriam returned fully: different face, different demeanour, speaking as herself — 'I cannot feel her... I feel the peace of finally letting go.' She had gathered Clara's rehearsal notebooks on Clara's instruction. She is recovering. Secondary NPC — available if the team revisits Hargrove or the Meridian aftermath.",
+      "case": "case-e",
+      "secrets_involved": []
     }
   ]
 }

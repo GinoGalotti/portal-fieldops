@@ -132,7 +132,7 @@
         },
         {
           "show_from": "w3",
-          "show_until": null,
+          "show_until": "w3",
           "anchor": null,
           "placeholder": true,
           "status": "active",
@@ -150,6 +150,29 @@
           "archive_redacted": null,
           "outcome": null,
           "actions": []
+        },
+        {
+          "show_from": "w4",
+          "show_until": null,
+          "anchor": "mission-03-resolved",
+          "placeholder": false,
+          "status": "completed",
+          "title": "The Understudies",
+          "subtitle": "// CAMPBELL ANOMALY REPORT #0099-D — IDENTITY DISPLACEMENT, ROLE-ANCHORED",
+          "excerpt": "The field team attended a Saturday matinee. They did not stop the performance. They were part of it. Two spirits found what they had been waiting for and chose to leave.",
+          "summary": "Three performers at Meridian Theatre Company were hospitalised with complete identity loss. The lead actors whose roles they inherited had died months apart — and hadn't left. The field team intervened across two sites, working both spirits toward a voluntary departure. Clara Voss chose to exit before the curtain. Edmund Farrow waited for the standing ovation. No understudies were lost.",
+          "index_redacted": "LOCATION: Meridian Theatre Company · ENTITY TYPE: Residual Identity Displacement — Catalyst-Anchored · DIRECTIVE STATUS: Contained — both spirits departed voluntarily",
+          "meta_tags": [
+            { "label": "LOCATION: MERIDIAN THEATRE", "class": "" },
+            { "label": "ENTITY: IDENTITY DISPLACEMENT — CATALYST CLASS", "class": "rose" },
+            { "label": "CONTAINED", "class": "green" },
+            { "label": "CASUALTIES: NONE", "class": "" }
+          ],
+          "archive_redacted": "ENTITY CLASS: Residual Consciousness — Performance-Anchored · CATALYST: Victorian prompt book (Silvia Hederstrom, author) — secured at lab · DIRECTIVE OUTCOME: Contained — voluntary departure achieved via theatrical farewell logic",
+          "outcome": "DEBRIEF FILED: POST-SESSION 03 · REPORT #0099-D CLOSED\nENTITY OUTCOME: Both residual consciousnesses departed voluntarily. Clara Voss: released at Hargrove Medical Centre — Alan Frazier authored a stage-direction script; she exited on cue. Edmund Farrow: released at Saturday's matinee performance — watched the play he had been waiting for, then chose to leave.\nCASUALTIES: None. Hospitalised understudies expected to recover.\nCATALYST: Prompt book (signed Silvia Hederstrom) secured at PORTAL lab. High BIM readings. Writing shifts from performance direction to something else mid-volume. Under study.\nOUTSTANDING: MESA funded the Solstice Property Group grant that created the conditions. They observed but did not intervene. The quid-pro-quo array exchange with Veritas completed.",
+          "actions": [
+            { "label": "→ FILE A FIELD REPORT", "href": "../reports/player-report.html" }
+          ]
         }
       ]
     }
