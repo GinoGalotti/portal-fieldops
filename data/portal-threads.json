@@ -177,6 +177,61 @@
       "notes": "// KEEPER: The Dell methodology parallel is private to Cameron — logged under Privacy Protocol 7. Do not surface the connection until players crack CAMPBELL. The 'fake it till you make it' science direction is player-safe — real and interesting without requiring the CAMPBELL reveal. The prompt book is the same class of object as BIM-S01-003 (ash particulate) — Rex examining it closely would confirm this.",
       "player_summary": null,
       "player_name": null
+    },
+    {
+      "id": "case-d-shojo-baltimore",
+      "name": "Case D — The Shōjō (Baltimore)",
+      "category": "case",
+      "status": "active",
+      "last_moved": "w4",
+      "summary": "Baltimore Inner Harbor. A Shōjō — Japanese sea spirit — arrived eight weeks ago in a grief-brewed sake cask shipped by Hosokawa Shipping from Hyōgo Prefecture. Three civilians dead: Marcus Schroeder (Rusty's), Eleanor Walsh (Pier 5), Frank Delgado (dockside). ME no-cause on all three. Fourth victim expected tonight. The spirit is vessel-bound — cannot leave the cask, cannot stop drinking. When sake runs low it feeds on human emotion instead. The brewer's letter (Akira Tachibana, sealed, in Japanese, in Yuki Matsunaga's possession) identifies the cask and the resolution path. Case D is active at session start.",
+      "notes": "PRIORITY: URGENT. Fourth victim tonight if unresolved. Six casks on the Hosokawa barge — one cursed. Veritas (Op. WHITECEDAR) is also on-site, wants the cask as a natural BIM source. Resolution: give the sake to the sea, or Drink With the Spirit using the brewer's letter. See 04-the-shojo.html.",
+      "player_summary": null,
+      "player_name": null
+    },
+    {
+      "id": "veritas-op-whitecedar",
+      "name": "Veritas — Op. WHITECEDAR",
+      "category": "faction",
+      "status": "active",
+      "last_moved": "w4",
+      "summary": "Veritas operational brief (recovered tablet) — WHITECEDAR is their Baltimore operation. Target: the Tachibana cask. Objective: acquire a natural BIM source before PORTAL resolves the case. Officer M.K. pre-shaped dockworker sentiment on the waterfront before PORTAL arrived. Officer C.V. (Rook) is confirmed elsewhere — the person the team encounters in Baltimore is not Rook. CAMPBELL's attention to Case D was accelerated by Veritas specifically to pull the field team out of position. Veritas modelled Case D six weeks before PORTAL was briefed.",
+      "notes": "KEY: 'natural source priority' — Veritas considers natural BIM sources categorically more significant than manufactured ones. The longshoremen mob is orchestrated, not organic. Officer M.K.'s cover identity is unknown. Post-session: CAMPBELL integrity test results (planted in #0099-D/SUP) should show whether fabricated intel reached Veritas through this operation.",
+      "player_summary": null,
+      "player_name": null
+    },
+    {
+      "id": "the-cask",
+      "name": "The Cask — Tachibana Taru",
+      "category": "mystery",
+      "status": "active",
+      "last_moved": "w4",
+      "summary": "A traditional cedar taru from Tachibana Brewery, Hyōgo Prefecture. Brewer Akira Tachibana's daughter Hisako died of leukaemia during the brewing; the cask carries her residue. The Shōjō is bound to it. The cask is 60 litres, half-full, painted with the Tachibana brewery's mon — one of six ceremonial casks in Storage Hold A aboard the Hosokawa barge. Visually indistinguishable from the others without the brewer's letter or Rex's scanner at close range. Disposition pending session resolution.",
+      "notes": "Same class of object as the Meridian prompt book (S03) — a catalyst that both summons and resolves. Destroying the cask releases the spirit unbound. Using it correctly (sake offering + genuine emotion + brewer's letter) is the best ending. Veritas wants it alive. Post-session: lock cask disposition canon slot.",
+      "player_summary": null,
+      "player_name": null
+    },
+    {
+      "id": "sven-parallel-deployment",
+      "name": "Sven — Parallel Deployment",
+      "category": "personal",
+      "status": "active",
+      "last_moved": "w4",
+      "summary": "Sven was pulled aside for a parallel operation before the Baltimore deployment. He is not with the field team in S04. Veritas is aware of Sven specifically and has prepared for his presence (per Op. WHITECEDAR tablet — 'sven-contingency'). The parallel deployment target and outcome are player-defined post-session. The Baltimore team receives radio updates from Leech during the session; Leech's final call: 'safe. Ish.'",
+      "notes": "Drive Home choice determines what Sven was doing and what he found. Lock post-session. The Veritas contingency for Sven is documented in the recovered tablet but not detailed — leave the specifics open for player discovery in S05.",
+      "player_summary": null,
+      "player_name": null
+    },
+    {
+      "id": "mob-preshaped-mk",
+      "name": "Mob Pre-Shaping — Officer M.K.",
+      "category": "faction",
+      "status": "active",
+      "last_moved": "w4",
+      "summary": "Veritas tablet confirms Officer M.K. pre-shaped dockworker union sentiment on the Baltimore waterfront before the PORTAL team arrived. The longshoremen who may threaten the barge believe they are acting on genuine grievances — they do not know they were manipulated. Officer M.K.'s cover identity is unknown to PORTAL. The pre-shaping was designed to create a mob escalation threat that would complicate PORTAL's operation and potentially force civilian casualties.",
+      "notes": "M.K. is not Rook (C.V. is confirmed elsewhere per the tablet). M.K.'s cover identity is a live investigative thread for future sessions. The dockworkers are victims of manipulation — player framing matters here for tone.",
+      "player_summary": null,
+      "player_name": null
     }
   ]
 }
