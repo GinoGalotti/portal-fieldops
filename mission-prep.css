@@ -427,3 +427,40 @@ hr { border: none; border-top: 1px solid var(--mp-border); margin: 28px 0; }
   .page { box-shadow: none; border: none; max-width: 100%; }
   a[href]::after { content: " (" attr(href) ")"; font-size: 0.8em; }
 }
+
+/* ── DIFFICULTY LABELS (S04+) ── */
+.diff { font-family: 'Share Tech Mono', monospace; font-size: 0.85em; padding: 1px 6px; border-radius: 3px; background: #d4e4dc; color: #14242c; margin-right: 6px; }
+.diff.trivial  { background: #c8e0d0; }
+.diff.easy     { background: #c8e0d0; }
+.diff.moderate { background: #e8d8a8; }
+.diff.hard     { background: #e8b8a8; }
+.diff.deadly   { background: #d8a8a8; color: #4a0000; }
+
+/* ── LOCATION BOX (S04+) ── */
+.location-box { border: 1px solid var(--mp-border); border-left: 4px solid var(--mp-accent); background: var(--mp-light-1); padding: 12px 16px; margin: 12px 0; border-radius: 3px; }
+.location-box h4 { margin: 0 0 6px 0; color: var(--mp-accent); font-family: 'Cinzel', serif; font-size: 1.05em; letter-spacing: 0.05em; }
+
+/* ── VICTIM CARD (S04+) ── */
+.victim-card { border: 1px solid var(--mp-border); background: var(--mp-light-2); padding: 10px 14px; margin: 8px 0; border-radius: 3px; }
+.victim-card h4 { margin: 0 0 4px 0; color: var(--mp-accent); font-family: 'Cinzel', serif; font-size: 1em; }
+.victim-card p { margin: 4px 0; }
+
+/* ── LETTER BLOCK (S04+) ── */
+.letter-block { background: #f8f4ec; border: 1px solid #c8b890; padding: 18px 24px; margin: 12px 0; font-family: 'Crimson Text', serif; font-style: italic; line-height: 1.6; }
+
+/* ── RADIO CALL (S04+) ── */
+.radio-call { background: var(--mp-clock-bg); color: var(--mp-dark-text); padding: 12px 16px; margin: 10px 0; border-left: 3px solid #d8a8a8; font-family: 'Share Tech Mono', monospace; font-size: 0.92em; }
+.radio-call .rc-label { color: #d8a8a8; font-weight: bold; display: block; margin-bottom: 6px; letter-spacing: 0.08em; }
+
+/* ── COMBAT CLOCK (S04+) ── */
+.combat-clock { background: #1a0a1a; color: #e8d8d0; padding: 14px 18px; margin: 12px 0; border-left: 4px solid #8a3a2a; border-radius: 3px; font-family: 'Crimson Text', serif; }
+.combat-clock h4 { color: #d8a8a8; font-family: 'Cinzel', serif; margin: 0 0 8px 0; letter-spacing: 0.06em; font-size: 1em; }
+.combat-clock .seg { display: block; padding: 5px 0 5px 28px; position: relative; line-height: 1.5; }
+.combat-clock .seg::before { content: ""; position: absolute; left: 0; top: 7px; width: 16px; height: 16px; border-radius: 50%; border: 2px solid #d8a8a8; background: transparent; }
+.combat-clock .seg .label { color: #d8a8a8; font-weight: bold; letter-spacing: 0.05em; font-family: 'Share Tech Mono', monospace; font-size: 0.88em; }
+
+/* ── TERRAIN GRID (S04+) ── */
+.terrain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+.terrain-grid .t-feat { background: var(--mp-light-1); border: 1px solid var(--mp-border); border-left: 3px solid var(--mp-accent); padding: 8px 12px; border-radius: 2px; font-size: 0.95em; }
+.terrain-grid .t-feat strong { color: var(--mp-accent); display: block; font-family: 'Cinzel', serif; letter-spacing: 0.04em; margin-bottom: 3px; font-size: 0.9em; }
+@media (max-width: 700px) { .terrain-grid { grid-template-columns: 1fr; } }
