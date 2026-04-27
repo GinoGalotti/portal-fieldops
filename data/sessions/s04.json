@@ -1,0 +1,368 @@
+{
+  "session": "s04",
+  "title": "The Sh\u014dj\u014d",
+  "subtitle": "Mission 04 \u2014 Baltimore Inner Harbor",
+  "case_id": "Case D",
+  "campaign_date": "Friday, 21 October 2005",
+  "synopsis": "A drunk sea spirit is feeding on human emotion at the Baltimore Inner Harbor. Three civilians dead in five days. The spirit came over with a grief-soaked sake cask shipped by Hosokawa Shipping; it is bound to the cask and cannot stop drinking. Veritas modelled the case six weeks ago and has accelerated CAMPBELL\u2019s attention to it specifically to pull the field team out of position.",
+
+  "previously_on": "After the events at the Meridian Theatre, Daniel Ashworth was discharged this morning, recovering. The prompt book is in shielded study at the lab. The MESA BIM array was returned per the Aldermoor agreement. Dr. Leech is uneasy about the weekend ahead; multiple campaign threads are coming due. Sven was assigned earlier today to support a parallel deployment, leaving the field team three-handed for the new case.",
+
+  "readaloud": [
+    {
+      "id": "s04-cold-open",
+      "scene": "cold-open",
+      "title": "Theresa\u2019s Statement \u2014 The Third Stool",
+      "body": "Five days ago. Tuesday night. Rusty\u2019s, on Pratt Street. The bartender is named Theresa and she has been working this bar for nineteen years. The man on the third stool got a call at 8:47pm. He held the phone away from his ear, looked at it like it was a small bird, and started laughing. Theresa thought he\u2019d won the lottery. She brought him a beer he hadn\u2019t ordered. He laughed harder. By 8:52, the people at the bar were laughing with him. By 8:54, the people at the booths had come over. Nobody knew what was funny. Everybody was laughing. The man on the third stool laughed for almost six minutes. The crowd laughed with him. The man\u2019s face was red and then it was wet and then he slumped forward onto the bar still smiling. They all said the same thing afterwards. They had never been happier."
+    },
+    {
+      "id": "s04-arrival",
+      "scene": "scene-1",
+      "title": "Arrival at the Inner Harbor",
+      "body": "The Inner Harbor is working on a Friday afternoon. Tourists at the aquarium, joggers on the promenade, a cluster of corporate types queuing at the Hosokawa barge for the evening reception. Further east, the commercial quays grind through the day shift \u2014 container cranes, diesel trucks, the smell of salt and bunker fuel. There is fog off the water. It is earlier than usual for the season. Nobody local has noticed yet. They will."
+    },
+    {
+      "id": "s04-dusk-onset",
+      "scene": "scene-2",
+      "title": "Dusk \u2014 The Field Activates",
+      "body": "The fog comes in faster than it should. The temperature drops six degrees in twenty minutes. The sodium lights along the quay flicker on one by one, and each one is haloed in amber for longer than it should be. Whatever you were feeling a moment ago, you are about to feel more of it."
+    },
+    {
+      "id": "s04-first-sight",
+      "scene": "scene-2",
+      "title": "First Sight \u2014 Between the Containers",
+      "body": "Between the container stacks at the eastern end of the Hosokawa quay, in the densest part of the fog, something moves. Tall. Taller than the containers, almost. Red \u2014 not blood-red, not fire-red, the red of weathered cinnabar. Swaying. Singing in a voice that is too low for the throat that should be making it. The fog around it is sweeter than fog should be. The air thickens. Whatever you were about to feel, you are about to feel more of it."
+    },
+    {
+      "id": "s04-veritas-arrives",
+      "scene": "scene-3",
+      "title": "Veritas Arrives",
+      "body": "Headlights cut through the fog at the western end of the quay. Two transit vans. They park in formation, doors open in sequence, and four people in plain dark tactical gear get out without hurry. They have moved like this before. They are armed. They are also professional, which means they walk forward instead of running, and they hold their hands visible until they are within speaking distance. The lead operative \u2014 short, broad, thirties, a comm earpiece you can see \u2014 stops ten metres out and lifts a tablet. \u201cPORTAL field team. We are authorised to take possession of the cedar cask in your custody. Step away from the artefact and we\u2019ll be out of here in five minutes. We are not here for you. We are here for the object.\u201d"
+    },
+    {
+      "id": "s04-climax-open",
+      "scene": "climax",
+      "title": "The Confrontation",
+      "body": "Late evening. The fog has thickened to the point where the sodium lights of the dockyard are amber smears. The Sh\u014dj\u014d is in the fog, swaying. Singing. The song is different now \u2014 slower, with more silence inside it. If the cask is with you, it hums in answer. If not, the Sh\u014dj\u014d is moving, looking for the only thing that tasted right. Whatever is going to happen has to happen here."
+    }
+  ],
+
+  "handouts": [
+    {
+      "id": "previously-on",
+      "type": "readaloud",
+      "title": "Previously on PORTAL",
+      "body": "Daniel Ashworth was discharged this morning. He doesn\u2019t remember most of the last fortnight. The prompt book is in Lab 3 under shielded study. Sven was pulled aside by Dr. Leech earlier today and assigned to a separate deployment. The MESA BIM array was returned per the Aldermoor agreement. The CAMPBELL integrity test from last week has not yet yielded a signal. The other threads are not quiet."
+    },
+    {
+      "id": "campbell-case-d",
+      "type": "pda",
+      "title": "CAMPBELL // Priority Override \u2014 Case D",
+      "body": "LOCATION: Baltimore Inner Harbor \u2014 within 400m of waterfront. TRIGGER: 3 civilian deaths in 5 days, pattern clinical. CLINICAL PRESENTATION: All three victims observed in extreme emotional state immediately before death. No physical trauma. No toxin. No organic cause. BIM SIGNATURE: Confirmed. Atypical. Does not match any recorded class. No engineered markers. CAMPBELL ASSESSMENT: Entity presence highly probable. Pattern suggests escalation. Recommend immediate field deployment. CONFIDENCE: 73%.",
+      "classification": "CAMPBELL // Anomaly Report \u2014 Case D \u2014 IMMINENT"
+    },
+    {
+      "id": "leech-verbal",
+      "type": "pda",
+      "title": "Director\u2019s Note (verbal, in person)",
+      "body": "Two hours each way. Get there before sundown if you can. The deaths are getting closer together \u2014 if a fourth happens tonight, it\u2019ll be on us. Resolve it fast. And get back \u2014 I need you here this weekend. The other threads are not quiet. I\u2019d rather not say more on the open channel.",
+      "classification": "DR. V. LEECH \u2014 in person, lab common room, 14:30 EST"
+    },
+    {
+      "id": "pulaski-case-file",
+      "type": "document",
+      "title": "BPD Case File 2005-1147 \u2014 Inner Harbor Cluster",
+      "body": "Detective Pulaski\u2019s working file. Three victims, witness statements, ME reports. ME has no cause of death for any of the three. Pulaski has attached Mariana Costa\u2019s statement against captain\u2019s instruction.",
+      "link": "handouts/dossier/s04-pulaski-case-file.html",
+      "classification": "Recovered from Det. R. Pulaski, Central District precinct"
+    },
+    {
+      "id": "mariana-statement",
+      "type": "document",
+      "title": "M. Costa \u2014 Witness Statement &amp; Sketch",
+      "body": "Mariana\u2019s account in her own hand, with a ballpoint sketch of the figure she saw between D-7 and D-8. Three sighting locations marked, each closer to the barge than the last.",
+      "link": "handouts/dossier/s04-mariana-statement.html",
+      "classification": "Recovered from M. Costa, Hosokawa quay"
+    },
+    {
+      "id": "brewer-letter",
+      "type": "document",
+      "title": "Letter from Akira Tachibana \u2014 Tachibana Brewery",
+      "body": "Personal letter sent with the shipment, addressed to the Hosokawa cultural attach\u00e9. Sealed until Yuki opens it. Translated by Yuki Tanaka. The brewer wrote it knowing the cask was charged.",
+      "link": "handouts/dossier/s04-brewer-letter.html",
+      "classification": "Opened by Y. Tanaka, Hosokawa barge"
+    },
+    {
+      "id": "harbor-map",
+      "type": "document",
+      "title": "Inner Harbor \u2014 Death Site Map",
+      "body": "Hand-marked map showing the three death sites, Mariana\u2019s sightings, the Hosokawa barge, and the Sh\u014dj\u014d\u2019s estimated 400m field range.",
+      "link": "handouts/dossier/s04-harbor-map.html",
+      "classification": "Compiled by team during investigation"
+    },
+    {
+      "id": "veritas-tablet",
+      "type": "document",
+      "title": "Recovered Tablet \u2014 Op. WHITECEDAR",
+      "body": "Veritas operational brief recovered from a downed grunt. Confirms the orchestration: PORTAL was lured to Baltimore, the dockworker mob was pre-shaped by Veritas months earlier, parallel ops were running concurrent with the Baltimore deployment.",
+      "link": "handouts/dossier/s04-veritas-tablet.html",
+      "classification": "Recovered, Hosokawa quay loading bay \u2014 only available if team takes a grunt down"
+    },
+    {
+      "id": "leech-call-1",
+      "type": "pda",
+      "title": "Long-range radio \u2014 Leech",
+      "body": "Field team, Leech. The secondary deployment \u2014 they\u2019re on the ground from the mission. Veritas is already there with paperwork. Sven is with them. They\u2019re holding. If you finish in Baltimore tonight, we may still be able to act. Acknowledge.",
+      "classification": "Suburban long-range radio, mid-evening"
+    },
+    {
+      "id": "leech-call-2",
+      "type": "pda",
+      "title": "Long-range radio \u2014 Leech (second call)",
+      "body": "Field team, Leech. We\u2019ve lost contact with the secondary team. Last we heard, Veritas had brought a second shift on-site. Sven is still in the building, last reported. I don\u2019t have confirmation of anyone else. Resolve Baltimore and come home. I do not want to be saying this twice.",
+      "classification": "Suburban long-range radio, late evening"
+    },
+    {
+      "id": "leech-call-3",
+      "type": "pda",
+      "title": "Long-range radio \u2014 Leech (drive home)",
+      "body": "Field team. Welcome back. The secondary deployment is over. I\u2019ll brief you in person. Sven is \u2014 Sven is safe. Ish. We have things to discuss. Drive carefully. We\u2019ve all earned the morning.",
+      "classification": "Suburban long-range radio, early morning, driving north"
+    },
+    {
+      "id": "campbell-post-resolution",
+      "type": "classified",
+      "title": "CAMPBELL \u2014 Post-resolution Note",
+      "body": "Case D resolved. Sh\u014dj\u014d incident logged as natural-source BIM event, first of its class on file. Cask retained / released [adjust per resolution]. Field team report attached. Note: Case D timing analysis underway. Acceleration of CAMPBELL alert window appears irregular. Investigating internally.",
+      "classification": "CAMPBELL // Internal note, not in field summary"
+    }
+  ],
+
+  "scans": [
+    {
+      "id": "scan-rustys-stool",
+      "title": "Rusty\u2019s \u2014 Third Stool",
+      "status": "trace",
+      "body": "Atypical signature. Residual class. Faint. Five-day fade. Same class as Pier 5, weaker. Cross-reference: same entity.",
+      "scene": "scene-1"
+    },
+    {
+      "id": "scan-pier5-bench",
+      "title": "Pier 5 \u2014 Eleanor Whitmore\u2019s Bench",
+      "status": "alert",
+      "body": "Atypical signature. Residual class. Mid-strength. Three-day fade. Same class as Rusty\u2019s, stronger. Cross-reference: same entity.",
+      "scene": "scene-1"
+    },
+    {
+      "id": "scan-d78",
+      "title": "Hosokawa Quay \u2014 D-7/D-8",
+      "status": "alert",
+      "body": "Atypical signature. Residual class. Strongest of the three sites. One-day fade. Closest match to active cask reading. Cross-reference: same entity, three deaths.",
+      "scene": "scene-1"
+    },
+    {
+      "id": "scan-cask-1",
+      "title": "Storage Hold A \u2014 Cask 1 (Yamamoto)",
+      "status": "nominal",
+      "body": "No BIM activity. Standard ceremonial sake.",
+      "scene": "scene-1"
+    },
+    {
+      "id": "scan-cask-2",
+      "title": "Storage Hold A \u2014 Cask 2 (Kojima)",
+      "status": "nominal",
+      "body": "No BIM activity. Standard ceremonial sake.",
+      "scene": "scene-1"
+    },
+    {
+      "id": "scan-cask-3",
+      "title": "Storage Hold A \u2014 Cask 3 (Tachibana)",
+      "status": "alert",
+      "body": "Atypical signature, active source. Class unprecedented. Broadband, low fundamental, rough \u2014 unlike Aldermoor or prompt-book signatures. Two-way connection detected (cask \u2194 entity, ~700m range). This is the cursed cask.",
+      "scene": "scene-1"
+    },
+    {
+      "id": "scan-cask-4",
+      "title": "Storage Hold A \u2014 Cask 4 (Nakamura)",
+      "status": "nominal",
+      "body": "No BIM activity. Standard ceremonial sake.",
+      "scene": "scene-1"
+    },
+    {
+      "id": "scan-cask-5",
+      "title": "Storage Hold A \u2014 Cask 5 (Iwasaki)",
+      "status": "nominal",
+      "body": "No BIM activity. Standard ceremonial sake.",
+      "scene": "scene-1"
+    },
+    {
+      "id": "scan-cask-6",
+      "title": "Storage Hold A \u2014 Cask 6 (Honda)",
+      "status": "nominal",
+      "body": "No BIM activity. Standard ceremonial sake.",
+      "scene": "scene-1"
+    },
+    {
+      "id": "scan-tachibana-dusk",
+      "title": "Tachibana Cask \u2014 Dusk Spike",
+      "status": "critical",
+      "body": "Cask signature spikes ~6x baseline at sunset. Field activation event. Entity surfacing.",
+      "scene": "scene-2"
+    },
+    {
+      "id": "scan-shojo-close",
+      "title": "Sh\u014dj\u014d \u2014 First Close-Range Read",
+      "status": "critical",
+      "body": "Broadband, low fundamental frequency, near-noise. Matches the cask\u2019s low fundamental. First natural-source BIM signature on file. Recording.",
+      "scene": "scene-2"
+    }
+  ],
+
+  "tone": [
+    "The fog comes in faster than it should.",
+    "Whatever you were feeling a moment ago, you are about to feel more of it.",
+    "The third stool is unoccupied. Nobody sits on it. Nobody will say why.",
+    "The bench wants you to stay.",
+    "Pulaski\u2019s manila folder has fingerprint smudges along the edges. He has been reading it for five days.",
+    "Mariana\u2019s cigarette has burned down without her noticing.",
+    "Yuki\u2019s clipboard is impeccably organised and her hands are steady. Her eyes are not.",
+    "Six casks in a wooden cradle. Five of them silent. One of them humming.",
+    "The sodium lights are haloed in amber for too long.",
+    "The fog smells like rice.",
+    "A bottle shatters on the canvas of the reception tent.",
+    "The lead operative\u2019s hands are visible. They have been visible from the moment he stepped out of the van.",
+    "The Sh\u014dj\u014d sits down on the dockyard concrete and the fight is over.",
+    "Yuki cries quietly, holding the empty cup."
+  ],
+
+  "threats": [
+    {
+      "id": "shojo",
+      "name": "The Sh\u014dj\u014d",
+      "subtitle": "Sea spirit \u2014 Inner Harbor, Baltimore",
+      "type": "Monster: Beast",
+      "motivation": "To consume \u2014 feeds on intense emotion",
+      "harm_capacity": 12,
+      "armour": "2 (drops to 1 when folklore is understood and brewer\u2019s letter is read; rises to 3 if Stirring Clock fills to 4/4)",
+      "harm": "3-harm close (Staggering Blow). 2-harm close, ignore-armour, weird (Emotional Drain). +1 harm vs drunk hunters.",
+      "moves": [
+        "Staggering Blow \u2014 3-harm close, wide swing, slow telegraph.",
+        "Emotional Drain \u2014 2-harm close, ignore-armour, weird.",
+        "The Singing \u2014 soft move; Act Under Pressure or be pulled one move toward the creature.",
+        "Amplify the Room \u2014 once per fight; intensifies whatever everyone present is feeling.",
+        "Drinks what is real \u2014 transparent to performed emotion, illusion, glamour. Genuine emotion is visible and drinkable."
+      ],
+      "custom_moves": [
+        {
+          "name": "Drink With the Spirit",
+          "trigger": "When you share sake with the Sh\u014dj\u014d with genuine emotion, roll +Weird.",
+          "ten_plus": "It drinks, it understands, it accepts. It returns to the sea. Ask the keeper one question about what it perceived in you.",
+          "seven_nine": "It drinks, but it\u2019s not satisfied. The keeper tells you its grief. Take \u22121 forward. The Sh\u014dj\u014d is calmer. +1 forward on your next attempt.",
+          "miss": "It drinks from you instead. 3-harm (ignore-armour). It found something in you it needed more than sake."
+        },
+        {
+          "name": "Share the Cup",
+          "trigger": "If you stay within close range of the Sh\u014dj\u014d for more than one round, roll +Cool.",
+          "ten_plus": "You feel its grief but hold yourself.",
+          "seven_nine": "The sorrow is overwhelming. Take \u22121 forward.",
+          "miss": "You\u2019re inside it. 2-harm (ignore-armour, weird). Cannot act against it until pulled out."
+        }
+      ],
+      "notes": "Bound to the Tachibana cask. Tracks the cask wherever it goes. Distance does not break the bond. Stirring Clock tracks pre-climax agitation; Encounter Clock tracks fight progression. Best resolution: Drink With the Spirit using the brewer\u2019s sake and letter. Strong resolution: containment in the cask. Bad: cask destroyed, spirit loose."
+    },
+    {
+      "id": "veritas-grunts",
+      "name": "Veritas Field Squad",
+      "subtitle": "Four operatives, prophylactic Substance \u0398",
+      "type": "Minions: Soldiers",
+      "motivation": "Complete the objective, withdraw clean, no incident report.",
+      "harm_capacity": 4,
+      "armour": "1 (tactical vest)",
+      "harm": "2-harm close (baton, restraint). 3-harm close (Anchor Spike, lead only). 3-harm close/far (firearm, only if team draws first).",
+      "moves": [
+        "Overwhelm \u2014 two grunts together count as 3-harm; Act Under Pressure to avoid restraint.",
+        "Hold the Line \u2014 don\u2019t break, one down others close.",
+        "\u0398 prophylactic \u2014 immune to the Sh\u014dj\u014d\u2019s field; peripheral artefacts near active BIM, exploitable.",
+        "Flank for the Cask \u2014 two grunts disengage to reach the cask, mission first.",
+        "Anchor Spike (lead only, one use) \u2014 3-harm close vs entities, forces contact break."
+      ],
+      "notes": "Will negotiate within a narrow band. Will not destroy the cask. Will withdraw if the situation is unwinnable, even without the cask. The lead carries the operational tablet."
+    },
+    {
+      "id": "longshoremen-mob",
+      "name": "The Mob",
+      "subtitle": "Six amplified longshoremen",
+      "type": "Minions: Brawlers",
+      "motivation": "Drive the foreigners off our docks.",
+      "harm_capacity": 3,
+      "armour": "0 (work clothes)",
+      "harm": "1-harm close (fists, bottles). 2-harm close (tire iron, broken bottle, dropped chain).",
+      "moves": [
+        "Pile On \u2014 two together count as 2-harm; three or more as 3-harm.",
+        "Field-Amplified \u2014 inside the Sh\u014dj\u014d\u2019s field, ignore the first 1-harm taken (adrenaline + dreamlike conviction).",
+        "Righteous Conviction \u2014 \u22121 to Manipulate Someone if Mob Clock at 3/4 or 4/4.",
+        "Break Point \u2014 dragged 30m+ outside the field, snap out within a round, will not re-engage."
+      ],
+      "notes": "Real human beings under field-induced aggression. Lethal force kills civilian victims; the session does not punish, but it notes. Subdue, don\u2019t kill. Pre-shaped by Veritas (see WHITECEDAR brief)."
+    }
+  ],
+
+  "scenes": [
+    {
+      "id": "hook",
+      "name": "Hook \u2014 Emergency Override",
+      "synopsis": "Friday afternoon, the lab. CAMPBELL flags Case D, Director overrides whatever was planned. Sven was pulled aside earlier today for the parallel deployment. Two-hour drive to Baltimore."
+    },
+    {
+      "id": "scene-1",
+      "name": "Scene 1 \u2014 The Inner Harbor by Day",
+      "synopsis": "Investigation. Pulaski (the pattern), Mariana (the sighting), Yuki (the folklore + six casks), Rex\u2019s scanner (residuals + the cursed cask). Click moment: it\u2019s a Sh\u014dj\u014d, anchored to the cask, the cask is the lever."
+    },
+    {
+      "id": "scene-2",
+      "name": "Scene 2 \u2014 Dusk: Mob and First Sight",
+      "synopsis": "Field activates at 5:47pm. Civilian crises (Olivia, Marcus, the Parks). The mob (six longshoremen, Kowalski with a tire iron). The Sh\u014dj\u014d visible between D-7 and D-8. First engagement humbles the team."
+    },
+    {
+      "id": "scene-3",
+      "name": "Scene 3 \u2014 Veritas Arrives for the Cask",
+      "synopsis": "Four grunts arrive in two transit vans. Negotiate, fight, or hand the cask over. Orchestration revelation lands here. Sven advantage absent (he\u2019s elsewhere); Alan\u2019s fey imprinting is the team\u2019s diplomacy lever now."
+    },
+    {
+      "id": "investigation-beat",
+      "name": "Investigation Beat \u2014 The Brewer\u2019s Letter",
+      "synopsis": "Yuki opens and translates the letter. Rex deploys the sake. Tactical preparation. The team chooses fight, diplomacy, or both."
+    },
+    {
+      "id": "climax",
+      "name": "Climax \u2014 The Confrontation",
+      "synopsis": "Loading-bay concrete pad. Sake circle, the cask, the brewer\u2019s letter. Three phases. Drink With the Spirit is the best ending; containment is the strong ending."
+    },
+    {
+      "id": "drive-home",
+      "name": "The Drive Home",
+      "synopsis": "Cell coverage returns. Leech on the radio. Sven is \u2018safe. Ish.\u2019 The case is closed; the campaign is not. Plant for S05."
+    }
+  ],
+
+  "tools_in_play": [
+    "Rex\u2019s BIM scanner (built S03, still unnamed). First natural-source signature this session.",
+    "Spirit containment in willing vessels (S03 canon \u2014 Clara jar). Open question whether it works on Sh\u014dj\u014d.",
+    "Catalyst bidirectionality (S03 canon \u2014 prompt book). Directly applies to the cask.",
+    "Alan\u2019s fey imprinting (S03 canon, costs Fey points). Primary diplomacy lever in Sven\u2019s absence.",
+    "Alan\u2019s glamour and shapeshifting. Works on humans. Does not work on the Sh\u014dj\u014d.",
+    "Suburban long-range radio. Leech\u2019s three calls.",
+    "CAMPBELL integrity test (pending S03). No signal yet."
+  ],
+
+  "open_slots": [
+    "[GADGET] Rex\u2019s sake-deployment device \u2014 atomiser, dipped rounds, spray bottle, aerosol grenade.",
+    "[NAME] Rex\u2019s scanner.",
+    "[TEXTURE] Hisako Tachibana \u2014 age, what she was like.",
+    "[TEXTURE] The Sh\u014dj\u014d\u2019s exact appearance beyond \u2018tall, red-haired, swaying, singing.\u2019",
+    "[CANON] If contained, what PORTAL does with the cask back at the lab.",
+    "[THEORY] The natural-vs-engineered BIM taxonomy.",
+    "[FUTURE] Whether Veritas engineered the cask\u2019s US landing or merely exploited it.",
+    "[NEXT SESSION] What happened to Sven on the parallel deployment."
+  ]
+}
