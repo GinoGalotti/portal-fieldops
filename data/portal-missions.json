@@ -175,6 +175,57 @@
           ]
         }
       ]
+    },
+    {
+      "id": "mission-04",
+      "num": "04",
+      "location_short": "INNER HARBOR\nBALTIMORE",
+      "phases": [
+        {
+          "show_from": "w4",
+          "show_until": "w4",
+          "anchor": null,
+          "placeholder": false,
+          "status": "active",
+          "title": "The Shōjō",
+          "subtitle": "// CAMPBELL ANOMALY REPORT #0104-A — RESIDUAL CONSCIOUSNESS, NATURAL BIM SOURCE",
+          "excerpt": "Three civilians dead in five days at Baltimore's Inner Harbor. ME finding: no cause. A fourth death expected tonight. CAMPBELL has never seen a signature like this — no engineered markers, no array architecture. Whatever it is, it came over from somewhere else.",
+          "summary": "Three civilians have died at Baltimore's Inner Harbor in five days. The medical examiner has no cause of death for any of them. A fourth victim is expected tonight. CAMPBELL flagged a BIM signature unlike anything on record — no engineered markers, no array architecture, no match in the database. The field team is deployed. Whatever is in the harbour came from somewhere else and cannot be stopped with anything the lab has used before.",
+          "index_redacted": "LOCATION: Baltimore Inner Harbor · ENTITY TYPE: [REDACT] · DIRECTIVE STATUS: ACTIVE — FOURTH VICTIM IMMINENT",
+          "meta_tags": [
+            { "label": "LOCATION: INNER HARBOR, BALTIMORE", "class": "" },
+            { "label": "ENTITY: [REDACT]", "class": "red" },
+            { "label": "DIRECTIVE: ACTIVE", "class": "amber" },
+            { "label": "CASUALTIES: 3 CONFIRMED — 4TH IMMINENT", "class": "" }
+          ],
+          "archive_redacted": null,
+          "outcome": null,
+          "actions": []
+        },
+        {
+          "show_from": "w5",
+          "show_until": null,
+          "anchor": "mission-04-resolved",
+          "placeholder": false,
+          "status": "completed",
+          "title": "The Shōjō",
+          "subtitle": "// CAMPBELL ANOMALY REPORT #0104-A — RESIDUAL CONSCIOUSNESS, NATURAL BIM SOURCE",
+          "excerpt": "The field team deployed to Baltimore's Inner Harbor. Three civilians were already dead. A fourth was not.",
+          "summary": "Three civilians died at Baltimore's Inner Harbor before the field team arrived. The entity — a Shōjō, a sea spirit from Japanese folklore — had crossed the Pacific in a sake cask and could not stop drinking. The field team located the cask, read a dead brewer's letter, and gave the spirit what it had been waiting for.",
+          "index_redacted": "LOCATION: Inner Harbor, Baltimore · ENTITY TYPE: Shōjō — Vessel-Bound Sea Spirit · DIRECTIVE STATUS: Resolved",
+          "meta_tags": [
+            { "label": "LOCATION: INNER HARBOR, BALTIMORE", "class": "" },
+            { "label": "ENTITY: SHŌJŌ — SEA SPIRIT", "class": "teal" },
+            { "label": "RESOLVED", "class": "green" },
+            { "label": "CASUALTIES: 3 (PRE-DEPLOYMENT)", "class": "" }
+          ],
+          "archive_redacted": "ENTITY CLASS: Residual Consciousness — Vessel-Bound · ANCHOR OBJECT: Tachibana sake cask · DIRECTIVE OUTCOME: [TO BE FILLED POST-SESSION]",
+          "outcome": "[TO BE FILLED POST-SESSION]",
+          "actions": [
+            { "label": "→ FILE A FIELD REPORT", "href": "../reports/player-report.html" }
+          ]
+        }
+      ]
     }
   ]
 }
