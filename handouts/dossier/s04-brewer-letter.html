@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Letter from Akira Tachibana — Tachibana Brewery, Hyōgo</title>
+<link rel="stylesheet" href="../dossier.css">
+<script>const DOSSIER_ID = "s04-brewer-letter";</script>
+<script src="../dossier.js" defer></script>
+<style>
+  :root {
+    --letter-paper: #f4ede0;
+    --letter-edge: #d8c8a8;
+    --letter-ink: #1a1714;
+    --letter-rule: #8a7560;
+  }
+  body { background: #1a1410; padding: 32px 0; font-family: 'Crimson Text', serif; }
+  .envelope { max-width: 700px; margin: 0 auto; }
+  .letter { background: var(--letter-paper); color: var(--letter-ink); padding: 56px 64px; box-shadow: 0 4px 32px rgba(0,0,0,0.5); position: relative; }
+  .letter::before, .letter::after { content: ""; position: absolute; left: 0; right: 0; height: 16px; background: linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.08) 100%); }
+  .letter::before { top: 0; transform: scaleY(-1); }
+  .letter::after { bottom: 0; }
+  .meta-band { padding: 14px 64px; background: rgba(255,255,255,0.04); color: #c8b890; font-size: 0.78em; letter-spacing: 0.1em; text-align: center; font-family: 'Share Tech Mono', monospace; border-top: 1px solid #3a2a20; }
+  .original { font-style: italic; opacity: 0.55; margin-bottom: 32px; line-height: 1.7; font-size: 0.95em; }
+  .original-label { font-size: 0.78em; letter-spacing: 0.1em; opacity: 0.6; margin-bottom: 6px; font-family: 'Share Tech Mono', monospace; }
+  .translation-label { font-size: 0.78em; letter-spacing: 0.1em; opacity: 0.7; margin: 16px 0 8px 0; font-family: 'Share Tech Mono', monospace; border-top: 1px dashed var(--letter-rule); padding-top: 16px; }
+  .body-text { line-height: 1.85; font-size: 1.08em; }
+  .body-text p { margin: 14px 0; }
+  .signature { margin-top: 28px; font-size: 1em; }
+  .seal { display: inline-block; border: 2px solid var(--letter-rule); padding: 4px 8px; font-family: 'Share Tech Mono', monospace; font-size: 0.78em; letter-spacing: 0.1em; opacity: 0.7; margin-top: 12px; }
+  .keeper-note { background: #1a1410; color: #c8b890; padding: 14px 24px; margin-top: 16px; font-family: 'Share Tech Mono', monospace; font-size: 0.85em; line-height: 1.6; max-width: 700px; margin-left: auto; margin-right: auto; border-left: 3px solid #8a3a2a; }
+  .keeper-note strong { color: #d8a8a8; letter-spacing: 0.08em; }
+</style>
+</head>
+<body>
+<div class="envelope">
+  <div class="letter">
+    <div class="original-label">原文 — JAPANESE ORIGINAL (excerpt, paraphrased):</div>
+    <div class="original">
+      松田様<br><br>
+      この樽をお送りするにあたり、ご厚情への感謝と、お詫びを申し上げねばなりません。仕込みは清くありませんでした。娘の久子が病に伏せていた間に造られたもので、米を絞る前に逝ってしまいました。私は止められませんでした。止めるべきでした。この樽は娘を運んでいると、私は思います。
+    </div>
+
+    <div class="translation-label">— English translation by Y. Tanaka, Hosokawa Cultural Coordinator —</div>
+
+    <div class="body-text">
+      <p>To Matsuda-san,</p>
+
+      <p>I send this cask with thanks for your hospitality and with apologies. The brewing was not clean.</p>
+
+      <p><span class="clue-hint" data-clue="hisako-name">My daughter Hisako was sick during the months I made it, and she died before the rice was pressed.</span> I could not stop. I should have stopped.</p>
+
+      <p><span class="clue-hint" data-clue="cask-carries-her">The cask carries her, I think.</span> I do not know how to say this in language fit for a business letter. Please use it gently. Or do not use it. Whichever feels right.</p>
+
+      <p><span class="clue-hint" data-clue="give-to-the-sea">If you find it strange, give it to the sea. The sea took my father and his father. It will know what to do.</span></p>
+
+      <p>I am sorry. Thank you. I am sorry.</p>
+
+      <div class="signature">
+        — Akira Tachibana<br>
+        Tachibana Brewery, Hyōgo Prefecture<br>
+        八月二十二日 / 22 August 2005
+      </div>
+
+      <div class="seal">SEAL: 立花酒造 / TACHIBANA-SHUZŌ</div>
+    </div>
+  </div>
+
+  <div class="meta-band">
+    SEALED ON ARRIVAL &middot; OPENED 21 OCT 2005 &middot; TRANSLATION BY Y. TANAKA<br>
+    DELIVERED WITH SHIPMENT 2005-HSK-0612 &middot; CASK NO. 6 OF 6 &middot; TACHIBANA MON
+  </div>
+</div>
+
+<div class="keeper-note">
+  <strong>KEEPER NOTE</strong> — This handout is delivered when Yuki opens and translates the letter (Investigation Beat, or earlier if the team convinces her). Reading it aloud at the climax gives +1 forward to Drink With the Spirit. The "give it to the sea" line is the implicit instruction for the best ending. The original Japanese excerpt is paraphrased — adjust if you have a player who reads Japanese and wants more accuracy.
+</div>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recovered Tablet — Operational Brief</title>
+<link rel="stylesheet" href="../dossier.css">
+<script>const DOSSIER_ID = "s04-veritas-tablet";</script>
+<script src="../dossier.js" defer></script>
+<style>
+  body { background: #050a0e; padding: 24px 0; font-family: 'Share Tech Mono', monospace; color: #b0d4d8; margin: 0; }
+  .device { max-width: 640px; margin: 0 auto; background: #0a1418; border: 8px solid #1a1f24; border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.7); overflow: hidden; }
+  .status-bar { background: #0a1418; padding: 8px 16px; display: flex; justify-content: space-between; font-size: 0.78em; opacity: 0.7; border-bottom: 1px solid #1a3038; }
+  .header { padding: 18px 22px; background: linear-gradient(180deg, #0e1a20 0%, #0a1418 100%); border-bottom: 1px solid #1a3038; }
+  .org { font-size: 0.78em; letter-spacing: 0.18em; color: #8aa8ac; }
+  .doc-title { font-size: 1.15em; color: #d4ece0; margin-top: 4px; letter-spacing: 0.05em; }
+  .classification { display: inline-block; background: #4a1a1a; color: #e8a8a8; padding: 3px 10px; font-size: 0.72em; letter-spacing: 0.15em; margin-top: 8px; border: 1px solid #8a3a3a; }
+  .body { padding: 20px 24px; line-height: 1.65; font-size: 0.92em; }
+  .field { margin: 10px 0; display: grid; grid-template-columns: 130px 1fr; gap: 10px; }
+  .field .k { color: #6a9098; font-size: 0.78em; letter-spacing: 0.08em; padding-top: 2px; }
+  .field .v { color: #d4ece0; }
+  .section-head { color: #8aa8ac; font-size: 0.82em; letter-spacing: 0.15em; margin: 22px 0 10px 0; padding-bottom: 4px; border-bottom: 1px solid #1a3038; }
+  .objective { background: #0e1a20; border-left: 3px solid #4a8a8a; padding: 10px 14px; margin: 8px 0; }
+  .objective .obj-label { color: #6a9098; font-size: 0.75em; letter-spacing: 0.12em; margin-bottom: 4px; }
+  .alert-row { background: #1a0e0e; border-left: 3px solid #8a3a3a; padding: 10px 14px; margin: 8px 0; color: #e8c8c8; }
+  .table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 0.85em; }
+  .table th { text-align: left; padding: 6px 10px; background: #0e1a20; color: #6a9098; font-size: 0.72em; letter-spacing: 0.1em; font-weight: normal; border-bottom: 1px solid #1a3038; }
+  .table td { padding: 6px 10px; border-bottom: 1px solid #142028; color: #b0d4d8; }
+  .timestamp { color: #6a9098; font-size: 0.78em; }
+  .redacted { background: #1a3038; color: #1a3038; user-select: none; padding: 0 4px; letter-spacing: 0.05em; }
+  .footer { padding: 12px 22px; background: #0a1418; border-top: 1px solid #1a3038; font-size: 0.72em; opacity: 0.55; letter-spacing: 0.08em; text-align: center; }
+  .keeper-note { background: #1a1410; color: #c8b890; padding: 14px 24px; margin-top: 16px; font-size: 0.85em; line-height: 1.6; max-width: 640px; margin-left: auto; margin-right: auto; border-left: 3px solid #8a3a2a; }
+  .keeper-note strong { color: #d8a8a8; letter-spacing: 0.08em; }
+</style>
+</head>
+<body>
+<div class="device">
+  <div class="status-bar">
+    <span>21:47 EST &middot; 21 OCT 2005</span>
+    <span>SECURE / OFFLINE</span>
+  </div>
+
+  <div class="header">
+    <div class="org">VERITAS — OPERATIONAL DIVISION</div>
+    <div class="doc-title">Field Brief — Op. WHITECEDAR</div>
+    <div class="classification">RESTRICTED &middot; FIELD ONLY</div>
+  </div>
+
+  <div class="body">
+
+    <div class="field"><span class="k">OPERATION</span><span class="v">WHITECEDAR</span></div>
+    <div class="field"><span class="k">TARGET</span><span class="v"><span class="clue-hint" data-clue="target-tachibana-cask">Cedar cask, Tachibana mon, ~60L, half-full. Hosokawa Shipping, Inner Harbor, Baltimore.</span></span></div>
+    <div class="field"><span class="k">PRIORITY</span><span class="v">High &middot; <span class="clue-hint" data-clue="natural-source-priority">sample-of-opportunity, non-replicable</span></span></div>
+    <div class="field"><span class="k">WINDOW</span><span class="v">21 Oct, 18:00–06:00 EST &middot; <span class="clue-hint" data-clue="parallel-ops">concurrent with parallel ops <span class="redacted">[REDACTED]</span> and <span class="redacted">[REDACTED]</span></span></span></div>
+    <div class="field"><span class="k">FIELD LEAD</span><span class="v">— &middot; squad of four, prophylactic Θ administered 16:00</span></div>
+    <div class="field"><span class="k">SUPERVISING</span><span class="v"><span class="clue-hint" data-clue="cv-elsewhere">Officer C.V. (off-site, parallel op <span class="redacted">[REDACTED]</span>)</span></span></div>
+
+    <div class="section-head">PRIMARY OBJECTIVES</div>
+
+    <div class="objective">
+      <div class="obj-label">OBJ 1 &middot; ACQUIRE</div>
+      Secure the Tachibana cask intact. Cedar wood structurally fragile under impact; bind to entity is BIM-class, not material. Cask must remain physically intact for sample integrity.
+    </div>
+
+    <div class="objective">
+      <div class="obj-label">OBJ 2 &middot; CONTAIN HOST ACTIVITY</div>
+      Engage entity only if necessary to acquire cask. Anchor Spike issued to field lead, single use. Avoid harm to entity itself — entity is desired specimen, ideally bonded and intact.
+    </div>
+
+    <div class="objective">
+      <div class="obj-label">OBJ 3 &middot; KEEP RIVAL TEAM ENGAGED</div>
+      <span class="clue-hint" data-clue="orchestration-confession"><strong>PORTAL field team is en route, est. arrival 16:00 EST.</strong> Mission secondary objective: keep PORTAL field team engaged in Baltimore through Saturday morning. Lab assets are the primary target of parallel ops; field team must not redeploy north before 06:00 EST.</span>
+    </div>
+
+    <div class="alert-row">
+      <strong>ROE NOTE:</strong> Non-lethal preferred. Lethal force authorised in defence of objective only. <strong>No incident report — no PD contact, no press, no civilian casualties attributable to the team.</strong> Withdraw clean.
+    </div>
+
+    <div class="section-head">SUPPORTING ASSETS — DOCKWORKER NETWORK</div>
+
+    <p style="font-size: 0.85em; opacity: 0.8;"><span class="clue-hint" data-clue="mob-pre-shaping">Pre-deployment shaping. Subjects briefed by intermediary (Officer M.K., Sept-Oct visits) under cover of labour-organising consultation. Subjects unaware of supernatural element. All grievances pre-existing and verifiable; intermediary provided supporting documentation only.</span></p>
+
+    <table class="table">
+      <thead>
+        <tr><th>SUBJECT</th><th>PROFILE</th><th>STATUS</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>KOWALSKI, G.</td><td>Crane op., displaced 09/04. Vocal grievance. Tire iron habitual.</td><td>Amenable to reframing. Likely lead.</td></tr>
+        <tr><td>HARTLEY, B.</td><td>Foreman, ILA 333. Resentful of Hosokawa subcontract chain.</td><td>Will follow.</td></tr>
+        <tr><td>DOWD, T.</td><td>Forklift op. Brother displaced 03/05.</td><td>Will follow.</td></tr>
+        <tr><td>VARGAS, R.</td><td>Driver. Personal animus toward Matsuda (verified).</td><td>Will follow.</td></tr>
+        <tr><td>DELANEY, P.</td><td>Casual labour. Drinking partner.</td><td>Will follow.</td></tr>
+        <tr><td>MORRISSEY, J.</td><td>Casual labour. Drinking partner.</td><td>Will follow.</td></tr>
+      </tbody>
+    </table>
+
+    <p style="font-size: 0.82em; opacity: 0.75;"><em>Subjects expected to act independently between 17:30–19:30 EST under field-amplification effect of host entity. No operational contact required after pre-shaping.</em></p>
+
+    <div class="section-head">CONTINGENCIES</div>
+
+    <ul style="font-size: 0.85em; line-height: 1.6;">
+      <li><strong>If PORTAL acquires cask before 19:00:</strong> hold position, assess intent, attempt acquisition by negotiation. Avoid open conflict before dusk.</li>
+      <li><strong>If PORTAL secures cask post-dusk:</strong> standard acquisition protocol. Target the regrouping window (estimated 19:30–20:30 EST).</li>
+      <li><strong>If host entity engages PORTAL:</strong> hold position. Allow PORTAL to absorb host attention. Move on cask during conflict.</li>
+      <li><strong>If host entity becomes uncontainable (cask compromised, host loose):</strong> withdraw. Sample is forfeit. Report immediately.</li>
+      <li><span class="clue-hint" data-clue="sven-contingency"><strong>If sub-1 (PORTAL Monstrous) is in Baltimore:</strong> deploy Anchor Spike. Confirm and report. <em>Latest intel suggests sub-1 redirected to <span class="redacted">[REDACTED]</span> — verify on contact.</em></span></li>
+    </ul>
+
+    <div class="section-head">EXTRACTION</div>
+
+    <div class="field"><span class="k">PRIMARY</span><span class="v">Two transit vans. Hosokawa quay, west loading entrance. Egress via Caroline Street, then I-95 N.</span></div>
+    <div class="field"><span class="k">FALLBACK</span><span class="v">Single van + foot extraction to staging facility on <span class="redacted">[REDACTED]</span>. ~6 min.</span></div>
+    <div class="field"><span class="k">CASK TRANSPORT</span><span class="v">Insulated crate, BIM-shielded, prepped in van 1.</span></div>
+
+    <div class="section-head">REPORTING</div>
+
+    <p style="font-size: 0.85em;">Encrypted comms only. Channel TANGENT-9. Officer C.V. monitoring. Status checks 30-min intervals. Full report by 06:00 EST 22 Oct.</p>
+
+  </div>
+
+  <div class="footer">VERITAS &middot; OP-WHITECEDAR &middot; FIELD COPY &middot; DESTROY ON COMPLETION</div>
+</div>
+
+<div class="keeper-note">
+  <strong>KEEPER NOTE</strong> — Recovered if the team takes a Veritas grunt down and grabs the tablet. The bracketed [REDACTED] sections protect parallel-op specifics (Gordon, Nadia) — flesh out depending on which Drive Home option you're using for S05. The Officer M.K. reference is the "woman in a long coat" Kowalski couldn't remember — Veritas's labour-organiser cover identity. The "sub-1 Monstrous" reference confirms Veritas knows about Sven and was prepared to deploy the Anchor Spike on him; with Sven elsewhere, the Spike is held for the Shōjō or a hunter doing visible supernatural work.
+</div>
+</body>
+</html>

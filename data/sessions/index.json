@@ -16,5 +16,11 @@
     "session_key": "M03",
     "label": "WEEK 03 — The Understudies",
     "doc": "missions/03-the-understudies.html"
+  },
+  {
+    "id": "w4",
+    "session_key": "M04",
+    "label": "WEEK 04 — The Shōjō",
+    "doc": "missions/04-the-shojo.html"
   }
 ]
