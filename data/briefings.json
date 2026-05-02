@@ -326,7 +326,7 @@
     {
       "id": "w03",
       "label": "WEEK 03",
-      "status": "active",
+      "status": "closed",
       "title": "Post-Operation #0094-B (Aldermoor District)",
       "summary": "3 cases active · 1 high · 2 medium · 1 assigned",
       "header_note": "⚠ 3 CASES ACTIVE — UNDERSTUDIES ASSIGNED · PERFORMANCE TOMORROW",
@@ -452,6 +452,192 @@
           "",
           "NOTE: THE RECORDER (POST 4) REFERENCES THIS ORGANISATION DIRECTLY.",
           "FIELD TEAM SHOULD TREAT ALL FOUR CASES AS RELATED UNTIL DISPROVED."
+        ],
+        "sig": "// END TRANSMISSION — CAMPBELL · P.O.R.T.A.L ANOMALY DETECTION SYSTEM"
+      }
+    },
+    {
+      "id": "w04",
+      "label": "WEEK 04",
+      "status": "active",
+      "title": "Pre-Operation Inner Harbor (S04) — Baltimore Deployment",
+      "summary": "4 cases · 1 imminent · 2 standing/watch · 1 closed",
+      "header_note": "⚠ CASE D IMMINENT — FIELD TEAM DEPLOYING FRIDAY 21 OCT",
+      "header_timestamp": "// QUEUE UPDATE ISSUED 21 OCT 2005 · 14:30",
+      "items": [
+        {
+          "type": "case",
+          "id": "case-d-baltimore",
+          "report_id": "// CAMPBELL — ANOMALY REPORT #0115-H · IMMINENT",
+          "title": "INNER HARBOR CLUSTER",
+          "subtitle": "BALTIMORE · UNEXPLAINED DEATHS · NATURAL-SOURCE BIM PATTERN",
+          "priority": "imminent",
+          "priority_label": "PRIORITY: IMMINENT",
+          "rows": [
+            { "k": "LOCATION",       "v": "Inner Harbor, Baltimore MD — Central District waterfront" },
+            { "k": "PATTERN",        "v": "3 civilian deaths · 5 days · all within 400m of waterfront", "color": "red" },
+            { "k": "BIM SIGNATURE",  "v": "Atypical · no engineered markers · natural-source class", "color": "alert" },
+            { "k": "DATE FLAGGED",   "v": "2005-10-20", "note": "// low-priority; held for additional data" },
+            { "k": "DATE ESCALATED", "v": "2005-10-21 // third event confirmed, threshold met", "color": "alert" },
+            { "divider": true },
+            { "k": "CONFIDENCE",     "v": "73%" },
+            { "k": "PATTERN NOTE",   "v": "Escalation rate suggests active entity, not residual effect. Window: open.", "color": "alert" },
+            { "k": "STATUS",         "v": "Field team deploying today", "color": "alert" }
+          ],
+          "directive": {
+            "label": "// DIRECTOR'S NOTE — 21 OCT 2005",
+            "paragraphs": [
+              "Three deaths in five days. The signature is unlike anything we have catalogued from engineered sources — CAMPBELL is reading this as natural origin. If confirmed, this is the first natural-source BIM entity the field team will encounter.",
+              "Sven is not available for this deployment. Field team proceeds with current roster. Debrief 21:00 at the earliest."
+            ]
+          },
+          "footer_status": "ACTIVE — FIELD TEAM DEPLOYING",
+          "footer_ref": "REPORT #0115-H",
+          "footer_class": "BALTIMORE · INNER HARBOR · NATURAL-SOURCE CLASS"
+        },
+        {
+          "type": "section-label",
+          "css_class": "carry-over",
+          "text": "// STANDING CASES — ACTIVE PRIOR TO DEPLOYMENT"
+        },
+        {
+          "type": "case",
+          "id": "case-a",
+          "report_id": "// CAMPBELL — ANOMALY REPORT #0091-F · UPDATED",
+          "title": "THE VOLUNTEER",
+          "subtitle": "SUBJECT: GORDON AVERY · VITALITY DISPLACEMENT · SECONDARY TEAM ACTIVE",
+          "priority": "medium",
+          "priority_label": "PRIORITY: STANDING",
+          "rows": [
+            { "k": "SUBJECT",        "v": "Gordon Avery — family residence, address on file" },
+            { "k": "SECONDARY TEAM", "v": "On standby — observation and containment only", "color": "dim" },
+            { "k": "VERITAS NOTE",   "v": "Surveillance interest confirmed via parallel reporting. Secondary team briefed.", "color": "alert" },
+            { "divider": true },
+            { "k": "ENERGY SIG",     "v": "Class 3 Vitality Displacement" },
+            { "k": "STATUS",         "v": "Stable — no new anomalous behaviour reported" },
+            { "k": "FIELD TEAM",     "v": "// not deployed to this case — secondary team handling", "color": "dim" }
+          ],
+          "directive": {
+            "label": "// DIRECTOR'S NOTE — STANDING",
+            "paragraphs": [
+              "Veritas interest is confirmed. Secondary team is aware and on standby for protective deployment. Long-term subject — weekly check pattern maintained.",
+              "Field team is not assigned to this case at this time. Monitor secondary team reports."
+            ],
+            "dim_note": "// The subject still doesn't know what they are. That problem hasn't gone away. — Director"
+          },
+          "footer_status": "STANDING — SECONDARY TEAM ON STANDBY",
+          "footer_ref": "REPORT #0091-F",
+          "footer_class": "HARGROVE MEDICAL · BIOLOGICAL CLASS 3"
+        },
+        {
+          "type": "case",
+          "id": "case-c",
+          "report_id": "// CAMPBELL — ANOMALY REPORT #0088-A · UPDATED",
+          "title": "THE RECORDER",
+          "subtitle": "BYLINE: NADIA OSEI · TETHER DEGRADATION · WINDOW CLOSING",
+          "priority": "info",
+          "priority_label": "PRIORITY: WATCH",
+          "rows": [
+            { "k": "SUBJECT",      "v": "Nadia Osei — consciousness anchored to information infrastructure" },
+            { "k": "TETHER",       "v": "47% stability — down from 71% three weeks ago", "color": "red" },
+            { "k": "WINDOW NOTE",  "v": "Direct contact window narrowing. Action recommended within 7 days.", "color": "alert" },
+            { "divider": true },
+            { "k": "VERITAS NOTE", "v": "No confirmed Veritas contact to date" },
+            { "k": "STATUS",       "v": "Watch — window closing", "color": "alert" }
+          ],
+          "directive": {
+            "label": "// DIRECTOR'S NOTE — UPDATED",
+            "paragraphs": [
+              "The tether is degrading faster than modelled. If we don't make contact within the week, the window closes and she disperses. Baltimore takes priority today — but this cannot wait past next week.",
+              "Whatever she found before she died, she's found more since. I want to know what she knows before the tether goes."
+            ],
+            "dim_note": "// 7 days. — Director"
+          },
+          "footer_status": "WATCH — WINDOW CLOSING — 7 DAYS",
+          "footer_ref": "REPORT #0088-A",
+          "footer_class": "INFORMATIONAL CLASS · PRECOGNITIVE · TETHER DEGRADING"
+        },
+        {
+          "type": "section-label",
+          "css_class": "closed-label",
+          "text": "// CLOSED — POST-RESOLUTION MONITORING"
+        },
+        {
+          "type": "case",
+          "id": "case-b-meridian",
+          "report_id": "// CAMPBELL — ANOMALY REPORT #0099-D · RESOLVED",
+          "title": "THE UNDERSTUDIES",
+          "subtitle": "MERIDIAN THEATRE COMPANY · RESOLVED 12 OCT 2005 · MONITORING ONGOING",
+          "priority": "closed",
+          "priority_label": "PRIORITY: CLOSED",
+          "rows": [
+            { "k": "RESOLUTION DATE", "v": "2005-10-12" },
+            { "k": "SUBJECTS",        "v": "Hospitalisations resolved. Daniel Ashworth discharged 17 Oct." },
+            { "k": "ARTEFACT",        "v": "Prompt book secured at Lab 3 — shielded study underway" },
+            { "divider": true },
+            { "k": "RESIDUAL CHECK",  "v": "Remaining understudies checked — no residual effects reported as of 20 Oct" },
+            { "k": "STATUS",          "v": "Closed — passive monitoring", "color": "dim" }
+          ],
+          "footer_status": "CLOSED — PASSIVE MONITORING",
+          "footer_ref": "REPORT #0099-D",
+          "footer_class": "MERIDIAN THEATRE · RESOLVED"
+        },
+        {
+          "type": "case",
+          "id": "internal-integrity-test",
+          "report_id": "// CAMPBELL — INTERNAL MEMO #0099-D/SUP",
+          "title": "CAMPBELL INTEGRITY MONITOR",
+          "subtitle": "CHANNEL INTEGRITY TEST · ONGOING · KEEPER REFERENCE ONLY",
+          "priority": "internal",
+          "priority_label": "PRIORITY: INTERNAL",
+          "keeper_only": true,
+          "rows": [
+            { "k": "REFERENCE",     "v": "Memo #0099-D/SUP — transmitted 12 Oct 2005" },
+            { "k": "TEST TYPE",     "v": "Fabricated intelligence package — Aldermoor substrate decay pattern" },
+            { "k": "STATUS",        "v": "No observed external action to date" },
+            { "divider": true },
+            { "k": "CONFIDENCE",    "v": "91% channel integrity (no evidence either way)" },
+            { "k": "FIRST FLAGGED", "v": "2005-10-12" },
+            { "k": "TEST STATUS",   "v": "Ongoing — no signal" }
+          ],
+          "footer_status": "ONGOING — NO SIGNAL",
+          "footer_ref": "MEMO #0099-D/SUP",
+          "footer_class": "INTERNAL · KEEPER REFERENCE"
+        },
+        {
+          "type": "case",
+          "id": "reed-directive",
+          "report_id": "// CAMPBELL — DIRECTIVE — RESTRICTED",
+          "title": "DIRECTIVE — R. ATWOOD",
+          "subtitle": "STANDING DIRECTIVE · ORIGINATOR RESTRICTED · REED'S EYES ONLY",
+          "priority": "private",
+          "priority_label": "PRIORITY: PRIVATE",
+          "visibility": "reed-only",
+          "rows": [
+            { "k": "STATUS",     "v": "No new movement as of 21 Oct" },
+            { "k": "LAST ACK.",  "v": "R. Atwood — 14 Oct 2005" },
+            { "divider": true },
+            { "k": "SUBJECT",    "v": "Under passive monitoring — standing directive" },
+            { "k": "ORIGINATOR", "v": "Restricted" }
+          ],
+          "footer_status": "ONGOING — REED'S EYES ONLY",
+          "footer_ref": "RESTRICTED",
+          "footer_class": "PRIVATE · RESTRICTED"
+        }
+      ],
+      "closing_note": {
+        "header": "// CAMPBELL — PRE-DEPLOYMENT QUEUE UPDATE",
+        "count": "4 ITEMS · 1 IMMINENT · 2 STANDING/WATCH · 1 CLOSED",
+        "lines": [
+          "OPERATION #0099-D (MERIDIAN THEATRE) CLOSED — RESOLVED 12 OCT 2005.",
+          "CASE #0115-H (INNER HARBOR CLUSTER) ESCALATED TO IMMINENT — FIELD TEAM DEPLOYING TODAY.",
+          "",
+          "CASE #0091-F (VOLUNTEER) — SECONDARY TEAM ACTIVE. VERITAS SURVEILLANCE CONFIRMED.",
+          "CASE #0088-A (RECORDER) — TETHER AT 47%. WINDOW CLOSING. ACTION REQUIRED WITHIN 7 DAYS.",
+          "",
+          "CAMPBELL NOTES: FIELD TEAM DEPLOYING TO FIRST CONFIRMED NATURAL-SOURCE BIM EVENT.",
+          "NO ENGINEERED MARKERS DETECTED. ENTITY CLASS UNKNOWN.",
+          "RECOMMEND STANDARD PROTOCOLS WITH FIELD ADAPTATION AS REQUIRED."
         ],
         "sig": "// END TRANSMISSION — CAMPBELL · P.O.R.T.A.L ANOMALY DETECTION SYSTEM"
       }

@@ -289,7 +289,7 @@
     {
       "id": "W3",
       "label": "WEEK 03",
-      "status": "active",
+      "status": "closed",
       "hero_eyebrow": "// BETWEEN-SESSION — POST-S02 STAFF COMMUNIQUÉS",
       "hero_desc": "Two items require field operative input following Operation #0094-B (Aldermoor). Case status digest and CAMPBELL activity logs attached.",
       "incidents": [
@@ -541,6 +541,113 @@
             }
           ],
           "link": "campbell-logs.html"
+        }
+      ]
+    },
+    {
+      "id": "W4",
+      "label": "WEEK 04",
+      "status": "active",
+      "hero_eyebrow": "// BETWEEN-SESSION — POST-S03 STAFF COMMUNIQUÉS",
+      "hero_desc": "Four items logged during the post-Meridian recovery week. Prompt book analysis underway. CAMPBELL integrity test in quiet phase. One item accepts operative input.",
+      "incidents": [
+        {
+          "id": "w4-i1",
+          "type": "informational",
+          "color": "dim",
+          "title": "Prompt Book — Initial Analysis, Lab 3",
+          "badge": "INFORMATIONAL",
+          "badge_color": "dim",
+          "item_label": "// INCIDENT LOG — POST-SESSION 03 — ITEM 01 OF 04",
+          "stamps": [
+            "LOGGED: 2005-10-17",
+            "CATEGORY: ARTEFACT ANALYSIS / LAB INTERNAL",
+            "SOURCE: DR. V. LEECH"
+          ],
+          "blocks": [
+            {
+              "type": "log-excerpt",
+              "label": "// DR. V. LEECH — INTERNAL LAB LOG — LAB 3 — 17 OCT 2005",
+              "lines": [
+                "Tachibana — sorry, Tachibana later. The Meridian prompt book has been moved to Lab 3 under shielded study.",
+                "BIM signature consistent with engineered class. Annotations cross-reference Victorian theatrical practice with what I would conservatively call applied resonance theory.",
+                "R. Bangley has been quiet about it, which I read as productive. The artefact is stable. We will not be opening it again this week.",
+                "Daniel Ashworth was discharged Monday morning; I have spoken to his family."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w4-i2",
+          "type": "open",
+          "color": "purple",
+          "title": "CAMPBELL // Integrity Monitor — Status Quo",
+          "badge": "ONGOING — NO ACTION REQUIRED",
+          "badge_color": "purple",
+          "item_label": "// INCIDENT LOG — POST-SESSION 03 — ITEM 02 OF 04",
+          "stamps": [
+            "LOGGED: 2005-10-18",
+            "CATEGORY: CHANNEL INTEGRITY / INTERNAL",
+            "SOURCE: CAMPBELL AUTOMATED CHECK"
+          ],
+          "blocks": [
+            {
+              "type": "campbell",
+              "label": "// CAMPBELL — INTEGRITY MONITOR — STATUS UPDATE — 18 OCT 2005",
+              "paragraphs": [
+                "Reference: Memorandum #0099-D/SUP, transmitted 12 Oct 2005. Fabricated intelligence package re. Aldermoor substrate decay pattern.",
+                "Status: no observed external action. No signal in Veritas open-source channels. No anomalous queries against PORTAL infrastructure.",
+                "Test continues. Confidence in CAMPBELL channel integrity holding at 91% (no evidence either way)."
+              ],
+              "flag": "// STATUS: Test ongoing. No action required. Monitoring continues."
+            }
+          ],
+          "form_hint": "Note your read on the channel integrity status — reassured, suspicious, or something else. No formal response required.",
+          "name_optional": true
+        },
+        {
+          "id": "w4-i3",
+          "type": "teaser",
+          "title": "Baltimore — Pattern Emerging",
+          "badge": "PASSIVE MONITORING",
+          "badge_color": "amber",
+          "item_label": "// CAMPBELL ANOMALY QUEUE — 20 OCT 2005",
+          "blocks": [
+            {
+              "type": "callout",
+              "color": "amber",
+              "from": "// CAMPBELL — ANOMALY QUEUE — LOW-PRIORITY FLAG",
+              "text": "BPD Central District homicide log surfaced two unexplained deaths within three days, both Inner Harbor proximate. No COD on either. CAMPBELL has flagged but is holding for additional data.\n\nA third event would push the cluster above briefing threshold. Suggest passive monitoring."
+            }
+          ]
+        },
+        {
+          "id": "w4-i4",
+          "type": "informational",
+          "color": "dim",
+          "title": "Sven — Separate Assignment",
+          "badge": "INFORMATIONAL",
+          "badge_color": "dim",
+          "item_label": "// INCIDENT LOG — POST-SESSION 03 — ITEM 04 OF 04",
+          "stamps": [
+            "LOGGED: 2005-10-21",
+            "CATEGORY: PERSONNEL / FIELD ASSIGNMENT"
+          ],
+          "blocks": [
+            {
+              "type": "narrative",
+              "text": "Dr. Leech took Sven aside in the common room before lunch. The conversation was short and not visible from the rest of the team's positions. Sven returned to his desk, packed a small kit including the modified field harness, and left at 13:00 with one of the junior agents driving. He did not say where he was going."
+            },
+            {
+              "type": "narrative",
+              "text": "He told Reed, on his way past: 'I'll be back. Tell the others I had to take a separate one this time.'"
+            },
+            {
+              "type": "narrative",
+              "text": "The Suburban was still in the lot. Whatever he was doing, it was not Baltimore.",
+              "dim": true
+            }
+          ]
         }
       ]
     }
