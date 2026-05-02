@@ -239,7 +239,7 @@ Replace with:
           <span class="kbody-label">// THE ENTITY — THE SHŌJŌ</span>
           <div class="kbody-text">
             Cannot leave the cask. Cannot stop drinking. When sake runs low, it feeds on human emotion — the bystander cascade produces extreme euphoria, then cardiac arrest. BIM signature: muted by day, readable at close range only; spikes at dusk when it surfaces from the harbour.<br><br>
-            <strong>Resolution key:</strong> The brewer's letter (Akira Tachibana, sealed, in Japanese). Yuki Matsunaga — cultural coordinator — has it. Reading it aloud with genuine understanding of what Tachibana lost reduces the creature's armour and opens the Drink With the Spirit move. Best ending: offer sake in a cup with real emotion. The Shōjō departs. Hisako goes with it.
+            <strong>Resolution key:</strong> The brewer's letter (Akira Tachibana, sealed, in Japanese). Yuki Tanaka — cultural coordinator — has it. Reading it aloud with genuine understanding of what Tachibana lost reduces the creature's armour and opens the Drink With the Spirit move. Best ending: offer sake in a cup with real emotion. The Shōjō departs. Hisako goes with it.
           </div>
         </div>
 
@@ -348,7 +348,7 @@ Find the closing `]` of the `threads` array (after the current last entry `promp
       "category": "case",
       "status": "active",
       "last_moved": "w4",
-      "summary": "Baltimore Inner Harbor. A Shōjō — Japanese sea spirit — arrived eight weeks ago in a grief-brewed sake cask shipped by Hosokawa Shipping from Hyōgo Prefecture. Three civilians dead: Marcus Schroeder (Rusty's), Eleanor Walsh (Pier 5), Frank Delgado (dockside). ME no-cause on all three. Fourth victim expected tonight. The spirit is vessel-bound — cannot leave the cask, cannot stop drinking. When sake runs low it feeds on human emotion instead. The brewer's letter (Akira Tachibana, sealed, in Japanese, in Yuki Matsunaga's possession) identifies the cask and the resolution path. Case D is active at session start.",
+      "summary": "Baltimore Inner Harbor. A Shōjō — Japanese sea spirit — arrived eight weeks ago in a grief-brewed sake cask shipped by Hosokawa Shipping from Hyōgo Prefecture. Three civilians dead: Marcus Schroeder (Rusty's), Eleanor Walsh (Pier 5), Frank Delgado (dockside). ME no-cause on all three. Fourth victim expected tonight. The spirit is vessel-bound — cannot leave the cask, cannot stop drinking. When sake runs low it feeds on human emotion instead. The brewer's letter (Akira Tachibana, sealed, in Japanese, in Yuki Tanaka's possession) identifies the cask and the resolution path. Case D is active at session start.",
       "notes": "PRIORITY: URGENT. Fourth victim tonight if unresolved. Six casks on the Hosokawa barge — one cursed. Veritas (Op. WHITECEDAR) is also on-site, wants the cask as a natural BIM source. Resolution: give the sake to the sea, or Drink With the Spirit using the brewer's letter. See 04-the-shojo.html.",
       "player_summary": null,
       "player_name": null
