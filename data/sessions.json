@@ -15,6 +15,12 @@
     "id": "w3",
     "label": "WEEK 03",
     "title": "The Understudies",
+    "status": "closed"
+  },
+  {
+    "id": "w4",
+    "label": "WEEK 04",
+    "title": "The Shōjō",
     "status": "active"
   }
 ]
