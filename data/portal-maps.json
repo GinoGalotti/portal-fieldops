@@ -240,6 +240,121 @@
           "label": "Financial documents confirm MESA funded the theatre"
         }
       ]
+    },
+    {
+      "id": "map-m04-inner-harbor",
+      "session_id": "w4",
+      "type": "connection",
+      "label": "Baltimore Inner Harbor — Investigation Map",
+      "nodes": [
+        {
+          "id": "loc-precinct",
+          "order": 1,
+          "route": "A",
+          "label": "CENTRAL DISTRICT PRECINCT",
+          "sublabel": "DET. PULASKI",
+          "npcs": ["raymond-pulaski"],
+          "player_desc": "BPD Central District. Det. Pulaski has been working the harbor deaths for five days. He has the full case file. Cooperative if you seem credible.",
+          "keeper_note": "Route A. Pulaski gives the team the case file and Mariana's details. He has visited Pier 5 off-duty and heard the singing — he has not written that in the file. Will not follow the team to the docks. His confession is a Scene 2 beat if they return."
+        },
+        {
+          "id": "loc-rustys",
+          "order": 2,
+          "route": "A",
+          "label": "RUSTY'S TAVERN",
+          "sublabel": "PRATT ST — SUBJECT 1",
+          "npcs": ["theresa-halloway"],
+          "player_desc": "Bar on Pratt St. The bartender, Theresa, has worked here nineteen years. The third stool has been empty since Tuesday. Nobody sits on it. Nobody says why.",
+          "keeper_note": "In person Theresa adds: the dispatcher was laughing too, she dialled three times. She dreams about it — dreams she was happy. She is disturbed by how good it felt. Rex scanner: trace residual (5-day fade). Same class as Pier 5 and D-7/D-8 — first cross-reference that it's one entity."
+        },
+        {
+          "id": "loc-pier5",
+          "order": 3,
+          "route": "A",
+          "label": "PIER 5",
+          "sublabel": "ELEANOR'S BENCH — SUBJECT 2",
+          "npcs": [],
+          "player_desc": "End of Pier 5. A bench with a bronze plaque: 'for those who watch the water.' She came here every Friday to talk to her husband. She came on Wednesday because her week moved.",
+          "keeper_note": "No NPC — Eleanor is gone. The bench is the contact. Rex scanner: alert residual (3-day fade), stronger than Rusty's. Spatial pattern starts here: Rusty's (north shore) → Pier 5 (south peninsula) → D-7/D-8 (east quay). Each death closer to the barge mooring."
+        },
+        {
+          "id": "loc-barge",
+          "order": 4,
+          "route": "B",
+          "label": "HOSOKAWA BARGE",
+          "sublabel": "STORAGE HOLD A — SIX CASKS",
+          "npcs": ["yuki-tanaka"],
+          "player_desc": "Ceremonial sake barge moored at the eastern quay. Six casks in wooden cradles in Storage Hold A. Yuki Tanaka is the cultural coordinator. She reads Japanese.",
+          "keeper_note": "Route B. Yuki has the brewer's letters and manifests. The Tachibana letter is unopened — she'll open it if asked. Scanner: five casks nominal; Cask 3 (Tachibana) alert, active, two-way BIM connection detected (cask ↔ entity, ~700m range). This is the lever. Investigation beat: Yuki translates the letter, Rex deploys the sake."
+        },
+        {
+          "id": "loc-d78",
+          "order": 5,
+          "route": "B",
+          "label": "HOSOKAWA QUAY",
+          "sublabel": "D-7 TO D-8 — SUBJECT 3 / SHŌJŌ",
+          "npcs": ["mariana-costa"],
+          "player_desc": "Commercial dockyard, container stacks D-7 and D-8. The alley between them is where Pete Halloran died. Mariana Costa is on shift nearby — she will talk if approached carefully.",
+          "keeper_note": "Mariana has seen the Shōjō three times, each sighting closer to the barge. Scanner: alert residual at D-7/D-8 — strongest of the three sites. Scene 2: Shōjō visible here at dusk. Mob activates near the loading bay and moves east. Entity is tracking the cask, not the deaths."
+        },
+        {
+          "id": "loc-loading-bay",
+          "order": 6,
+          "route": null,
+          "label": "HOSOKAWA LOADING BAY",
+          "sublabel": "SCENE 3 — VERITAS / CLIMAX",
+          "npcs": [],
+          "player_desc": "West loading entrance. Two transit vans. Four operatives in dark tactical gear. They have a tablet. They know about the cask.",
+          "keeper_note": "Scene 3. Veritas lead has the OP-WHITECEDAR tablet — recoverable if a grunt goes down. Three-phase confrontation: negotiate, the mob forcing a decision, the Shōjō's field affecting everyone. Climax on the concrete pad: cask in play, brewer's letter, Drink With the Spirit is the best ending."
+        }
+      ],
+      "edges": [
+        {
+          "from": "loc-precinct",
+          "to": "loc-rustys",
+          "label": "Case file — victim 1, Theresa's statement"
+        },
+        {
+          "from": "loc-precinct",
+          "to": "loc-pier5",
+          "label": "Case file — victim 2, Eleanor Whitmore"
+        },
+        {
+          "from": "loc-precinct",
+          "to": "loc-d78",
+          "label": "Case file — victim 3 + Mariana's statement"
+        },
+        {
+          "from": "loc-rustys",
+          "to": "loc-pier5",
+          "label": "Scanner: same residual class — same entity"
+        },
+        {
+          "from": "loc-pier5",
+          "to": "loc-d78",
+          "label": "Spatial convergence — deaths moving east toward the barge"
+        },
+        {
+          "from": "loc-d78",
+          "to": "loc-barge",
+          "label": "Mariana: each sighting closer to the barge"
+        },
+        {
+          "from": "loc-barge",
+          "to": "loc-d78",
+          "label": "Tachibana cask active — two-way connection to entity"
+        },
+        {
+          "from": "loc-barge",
+          "to": "loc-loading-bay",
+          "label": "Veritas arrives for the cask"
+        },
+        {
+          "from": "loc-d78",
+          "to": "loc-loading-bay",
+          "label": "Shōjō field and mob converge on the loading bay"
+        }
+      ]
     }
   ]
 }

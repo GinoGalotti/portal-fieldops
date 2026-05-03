@@ -353,6 +353,58 @@
       "keeper_description": "A hospital patient who Clara Voss's consciousness used as a channel — she was more responsive than the other patients, with episodes of shifting demeanour. Sven held her hand and channelled Clara's presence through her. After Clara's departure ('Clara, exit stage left'), Miriam returned fully: different face, different demeanour, speaking as herself — 'I cannot feel her... I feel the peace of finally letting go.' She had gathered Clara's rehearsal notebooks on Clara's instruction. She is recovering. Secondary NPC — available if the team revisits Hargrove or the Meridian aftermath.",
       "case": "case-e",
       "secrets_involved": []
+    },
+    {
+      "id": "raymond-pulaski",
+      "name": "Det. Raymond Pulaski",
+      "affiliation": "Baltimore PD",
+      "role": "Homicide detective — lead investigator, Case 2005-1147",
+      "status": "alive",
+      "visible_to_players": true,
+      "first_session": "S04",
+      "player_description": "BPD Central District Homicide. Badge 4488. Has been working the Inner Harbor cluster for five days. Cooperative if you seem credible. Has the full case file. He has visited the sites off-duty. He doesn't recommend others do the same.",
+      "keeper_description": "Haunted. He has heard the singing from Pier 5 during an off-duty visit and has not written it in the file. He believes Mariana completely. He is afraid of what further exposure will do to him and will not follow the team to the docks. His confession — that he has heard the song — is a Scene 2 beat if the team returns. Not a threat. A man who has seen too much and is managing it alone.",
+      "case": "case-d",
+      "secrets_involved": []
+    },
+    {
+      "id": "yuki-tanaka",
+      "name": "Yuki Tanaka",
+      "affiliation": "Hosokawa Shipping",
+      "role": "Cultural Coordinator — Hosokawa barge, Baltimore",
+      "status": "alive",
+      "visible_to_players": true,
+      "first_session": "S04",
+      "player_description": "Hosokawa's cultural liaison for the ceremonial sake shipment. Manages the barge and the six casks in Storage Hold A. Meticulous clipboard. Steady hands. Uneasy eyes. She reads Japanese.",
+      "keeper_description": "Has the brewer's letters and shipping manifests. Has not opened the Tachibana letter — it was addressed to the previous cultural attaché who retired, and she's been waiting for instruction. Will open it if the team asks and gives any credible reason. Quietly frightened by the deaths and the fog. Cries holding the empty cup if the Shōjō resolution goes well.",
+      "case": "case-d",
+      "secrets_involved": []
+    },
+    {
+      "id": "mariana-costa",
+      "name": "Mariana Costa",
+      "affiliation": "ILA Local 333",
+      "role": "Dockworker — Hosokawa quay, night shift",
+      "status": "alive",
+      "visible_to_players": true,
+      "first_session": "S04",
+      "player_description": "Dockworker on the Hosokawa quay. Has seen the figure three times — each time further east, each time closer to the barge. She has not been back to D-7 since Thursday. She will talk if you find her.",
+      "keeper_description": "Full statement in the Pulaski case file. In person she adds: 'It looked at me. I want to write that down because I haven't said it out loud. It looked at me. Not threatening.' Has a rough ballpoint sketch of the figure. Not fragile — a dockworker who witnessed something and told the truth about it. Her cigarette burns down without her noticing.",
+      "case": "case-d",
+      "secrets_involved": []
+    },
+    {
+      "id": "theresa-halloway",
+      "name": "Theresa Halloway",
+      "affiliation": "civilian",
+      "role": "Bartender — Rusty's Tavern, Pratt St",
+      "status": "alive",
+      "visible_to_players": true,
+      "first_session": "S04",
+      "player_description": "Bartender at Rusty's on Pratt Street. Nineteen years. She was there when Daniel Schroeder died laughing on Tuesday. The third stool has been empty since. Nobody sits on it. Nobody says why.",
+      "keeper_description": "Statement is in the case file. In person she adds: the dispatcher was laughing too, she dialled three times. She dreams about it — dreams she was happy. Disturbed by how good it felt, not the tragedy of it. Will not approach the third stool while the team is there. Will not say why.",
+      "case": "case-d",
+      "secrets_involved": []
     }
   ]
 }
