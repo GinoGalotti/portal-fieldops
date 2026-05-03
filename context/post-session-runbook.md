@@ -95,7 +95,10 @@ For each session that just resolved, player pages need post-resolution variants.
 - **`data/portal-missions.json`** — for the resolved mission, cap the active phase with `"show_until": "wN"` and append a new completed phase with `"show_from": "wN+1"`, `"status": "completed"`, revealed `index_redacted` text (no `[REDACT]`), proper `meta_tags` (green CONTAINED/RESOLVED tag), and a filled `outcome` string. For the upcoming mission, cap the upcoming phase with `"show_until": "wN"` and append a new active phase with `"show_from": "wN+1"`, `"status": "active"`, and the confirmed title, subtitle, excerpt, and meta_tags.
 
 **HTML edits still required:**
-- **`index.html`** — add COMPLETED variants for any recovered artefact cards with `data-session-from="wN+1"`. **Mission archive and bestiary are now data-driven — do NOT add HTML cards for these.**
+- **`index.html` — CAMPBELL oracle-readout**: the CAMPBELL status widget at the top of the homepage is a set of `<div class="oracle-readout">` blocks each with `data-session-from` / `data-session-until`. The last block has no upper bound and will show indefinitely unless capped. For every new session:
+  1. Add `data-session-until="wN"` to the previously-last oracle-readout (caps it to the just-completed session)
+  2. Add a new `<div class="oracle-readout" data-session-from="wN+1">` block with updated CAMPBELL STATUS figures (active cases, anomalies, substances, LAST DIRECTIVE ISSUED referencing the new deployment)
+- **`index.html` — artefacts**: add COMPLETED variants for any recovered artefact cards with `data-session-from="wN+1"`. **Mission archive and bestiary are now data-driven — do NOT add HTML cards for these.**
 - **`missions/contacts.html`** — add `data-session-from="wN+1"` wrappers for any NPCs now visible for the first time
 
 The pattern is always: old card/phase gets `show_until: "wN"`, new card/phase gets `show_from: "wN+1"`.
