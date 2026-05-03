@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>M. Costa — Witness Statement &amp; Sketch</title>
-<link rel="stylesheet" href="../dossier.css">
+<link rel="stylesheet" href="dossier.css">
 <script>const DOSSIER_ID = "s04-mariana-statement";</script>
-<script src="../dossier.js" defer></script>
+<script src="dossier.js" defer></script>
 <style>
   body { background: #2a2418; padding: 32px 0; font-family: 'Crimson Text', serif; }
   .page { max-width: 720px; margin: 0 auto; background: #f0e8d4; padding: 36px 48px; box-shadow: 0 4px 24px rgba(0,0,0,0.5); position: relative; color: #1a1714; line-height: 1.65; }
@@ -27,8 +27,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<div class="page">
-  <div class="header">
+<div class="page dossier-wrapper">
+  <div class="header classification">
     HOSOKAWA QUAY &middot; OFFICE TRAILER &middot; M. COSTA, NIGHT SHIFT<br>
     WRITTEN 21 OCT 2005 &middot; AT THE REQUEST OF DET. R. PULASKI
   </div>
@@ -117,10 +117,15 @@
     — Mariana Costa<br>
     21 Oct 2005
   </div>
+
+  <div class="keeper-note">
+  <strong>KEEPER NOTE</strong> — This handout is delivered when Mariana gives her account in Scene 1. The sketch is rough on purpose — the figure is "tall, red, swaying, singing," but specific features (kimono, hair, eyes, exactly how it moves) remain undefined. The first hunter to describe a specific feature locks it as canon. The map of sightings establishes the spatial pattern: the Shōjō has been moving toward the barge, where the cask is.
 </div>
 
-<div class="keeper-note">
-  <strong>KEEPER NOTE</strong> — This handout is delivered when Mariana gives her account in Scene 1. The sketch is rough on purpose — the figure is "tall, red, swaying, singing," but specific features (kimono, hair, eyes, exactly how it moves) remain undefined. The first hunter to describe a specific feature locks it as canon. The map of sightings establishes the spatial pattern: the Shōjō has been moving toward the barge, where the cask is.
+  <div class="keeper-toolbar">
+    <span class="keeper-status" id="hint-status">clues: hidden</span>
+    <button class="keeper-btn" id="toggle-hints">REVEAL CLUES</button>
+  </div>
 </div>
 </body>
 </html>

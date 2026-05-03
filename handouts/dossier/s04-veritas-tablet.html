@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Recovered Tablet — Operational Brief</title>
-<link rel="stylesheet" href="../dossier.css">
+<link rel="stylesheet" href="dossier.css">
 <script>const DOSSIER_ID = "s04-veritas-tablet";</script>
-<script src="../dossier.js" defer></script>
+<script src="dossier.js" defer></script>
 <style>
   body { background: #050a0e; padding: 24px 0; font-family: 'Share Tech Mono', monospace; color: #b0d4d8; margin: 0; }
   .device { max-width: 640px; margin: 0 auto; background: #0a1418; border: 8px solid #1a1f24; border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.7); overflow: hidden; }
@@ -34,7 +34,7 @@
 </style>
 </head>
 <body>
-<div class="device">
+<div class="device dossier-wrapper">
   <div class="status-bar">
     <span>21:47 EST &middot; 21 OCT 2005</span>
     <span>SECURE / OFFLINE</span>
@@ -119,10 +119,15 @@
   </div>
 
   <div class="footer">VERITAS &middot; OP-WHITECEDAR &middot; FIELD COPY &middot; DESTROY ON COMPLETION</div>
+
+  <div class="keeper-note">
+  <strong>KEEPER NOTE</strong> — Recovered if the team takes a Veritas grunt down and grabs the tablet. The bracketed [REDACTED] sections protect parallel-op specifics (Gordon, Nadia) — flesh out depending on which Drive Home option you're using for S05. The Officer M.K. reference is the "woman in a long coat" Kowalski couldn't remember — Veritas's labour-organiser cover identity. The "sub-1 Monstrous" reference confirms Veritas knows about Sven and was prepared to deploy the Anchor Spike on him; with Sven elsewhere, the Spike is held for the Shōjō or a hunter doing visible supernatural work.
 </div>
 
-<div class="keeper-note">
-  <strong>KEEPER NOTE</strong> — Recovered if the team takes a Veritas grunt down and grabs the tablet. The bracketed [REDACTED] sections protect parallel-op specifics (Gordon, Nadia) — flesh out depending on which Drive Home option you're using for S05. The Officer M.K. reference is the "woman in a long coat" Kowalski couldn't remember — Veritas's labour-organiser cover identity. The "sub-1 Monstrous" reference confirms Veritas knows about Sven and was prepared to deploy the Anchor Spike on him; with Sven elsewhere, the Spike is held for the Shōjō or a hunter doing visible supernatural work.
+  <div class="keeper-toolbar">
+    <span class="keeper-status" id="hint-status">clues: hidden</span>
+    <button class="keeper-btn" id="toggle-hints">REVEAL CLUES</button>
+  </div>
 </div>
 </body>
 </html>

@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Letter from Akira Tachibana — Tachibana Brewery, Hyōgo</title>
-<link rel="stylesheet" href="../dossier.css">
+<link rel="stylesheet" href="dossier.css">
 <script>const DOSSIER_ID = "s04-brewer-letter";</script>
-<script src="../dossier.js" defer></script>
+<script src="dossier.js" defer></script>
 <style>
   :root {
     --letter-paper: #f4ede0;
@@ -33,7 +33,7 @@
 </style>
 </head>
 <body>
-<div class="envelope">
+<div class="envelope dossier-wrapper">
   <div class="letter">
     <div class="original-label">原文 — JAPANESE ORIGINAL (excerpt, paraphrased):</div>
     <div class="original">
@@ -66,14 +66,19 @@
     </div>
   </div>
 
-  <div class="meta-band">
+  <div class="meta-band classification">
     SEALED ON ARRIVAL &middot; OPENED 21 OCT 2005 &middot; TRANSLATION BY Y. TANAKA<br>
     DELIVERED WITH SHIPMENT 2005-HSK-0612 &middot; CASK NO. 6 OF 6 &middot; TACHIBANA MON
   </div>
+
+  <div class="keeper-note">
+  <strong>KEEPER NOTE</strong> — This handout is delivered when Yuki opens and translates the letter (Investigation Beat, or earlier if the team convinces her). Reading it aloud at the climax gives +1 forward to Drink With the Spirit. The "give it to the sea" line is the implicit instruction for the best ending. The original Japanese excerpt is paraphrased — adjust if you have a player who reads Japanese and wants more accuracy.
 </div>
 
-<div class="keeper-note">
-  <strong>KEEPER NOTE</strong> — This handout is delivered when Yuki opens and translates the letter (Investigation Beat, or earlier if the team convinces her). Reading it aloud at the climax gives +1 forward to Drink With the Spirit. The "give it to the sea" line is the implicit instruction for the best ending. The original Japanese excerpt is paraphrased — adjust if you have a player who reads Japanese and wants more accuracy.
+  <div class="keeper-toolbar">
+    <span class="keeper-status" id="hint-status">clues: hidden</span>
+    <button class="keeper-btn" id="toggle-hints">REVEAL CLUES</button>
+  </div>
 </div>
 </body>
 </html>

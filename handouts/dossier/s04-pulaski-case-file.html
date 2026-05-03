@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Case File 2005-1147 — Inner Harbor Cluster</title>
-<link rel="stylesheet" href="../dossier.css">
+<link rel="stylesheet" href="dossier.css">
 <script>const DOSSIER_ID = "s04-pulaski-case-file";</script>
-<script src="../dossier.js" defer></script>
+<script src="dossier.js" defer></script>
 <style>
   :root {
     --doss-paper: #f4ede0;
@@ -39,10 +39,10 @@
 </style>
 </head>
 <body>
-<div class="file">
+<div class="file dossier-wrapper">
   <div class="stamp">UNRESOLVED</div>
   <div class="header-band">
-    <div class="agency">BALTIMORE POLICE DEPARTMENT &middot; CENTRAL DISTRICT &middot; HOMICIDE</div>
+    <div class="agency classification">BALTIMORE POLICE DEPARTMENT &middot; CENTRAL DISTRICT &middot; HOMICIDE</div>
     <div class="case-no">CASE FILE 2005-1147</div>
     <div class="case-title">Inner Harbor Death Cluster — three subjects, no apparent cause</div>
   </div>
@@ -97,6 +97,11 @@
   </div>
 
   <div class="footer-band">CASE 2005-1147 &middot; CONFIDENTIAL &middot; INTERNAL USE ONLY</div>
+
+  <div class="keeper-toolbar">
+    <span class="keeper-status" id="hint-status">clues: hidden</span>
+    <button class="keeper-btn" id="toggle-hints">REVEAL CLUES</button>
+  </div>
 </div>
 </body>
 </html>
