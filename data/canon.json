@@ -1,1 +1,38 @@
-[]
+[
+  {
+    "id": "canon-s04-rex-sake-device",
+    "session": "s04",
+    "category": "GADGET",
+    "label": "Rex's Sake Deployment Device — The Cure",
+    "value": "The sake from the Tachibana cask is being developed into an alcohol product called The Cure — a drink designed to help people process grief using the residual BIM charge. Rex's reasoning: people will drink anyway, and if there's something supernatural that helps find closure, that's better than nothing. Research ongoing at Lab 3.",
+    "source_slot": "rex-sake-device",
+    "related_evidence": ["ev-s04-natural-source-reading", "ev-s04-the-cure-prototype"]
+  },
+  {
+    "id": "canon-s04-cask-disposition",
+    "session": "s04",
+    "category": "THEORY",
+    "label": "What PORTAL Did With the Cask",
+    "value": "The Tachibana cask was brought back to PORTAL Lab 3. The Shōjō departed voluntarily — it did not need to be contained or driven into the sea. The cask is now an empty natural-source BIM vessel, structurally intact, with ~28L of residual BIM-charged sake. Primary research material for The Cure project.",
+    "source_slot": "cask-disposition",
+    "related_evidence": ["ev-s04-brewer-letter"]
+  },
+  {
+    "id": "canon-s04-veritas-cask-intent",
+    "session": "s04",
+    "category": "THEORY",
+    "label": "Did Veritas Engineer the Cask's US Landing?",
+    "value": "No. The team concluded Veritas did not orchestrate the cask's arrival — they found it once it was already in Baltimore and moved to acquire it. Their presence was opportunistic, not the origin of the event.",
+    "source_slot": "veritas-cask-intent",
+    "related_evidence": []
+  },
+  {
+    "id": "canon-s04-alan-age",
+    "session": "s04",
+    "category": "TEXTURE",
+    "label": "Alan Frazier — Age",
+    "value": "Alan is 80 years old and simply doesn't age. This came up at the table during S04 and is now confirmed campaign canon.",
+    "source_slot": null,
+    "related_evidence": []
+  }
+]
